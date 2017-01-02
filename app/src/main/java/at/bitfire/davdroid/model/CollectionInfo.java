@@ -10,36 +10,25 @@ package at.bitfire.davdroid.model;
 
 import android.content.ContentValues;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 
-import at.bitfire.dav4android.DavResource;
-import at.bitfire.dav4android.Property;
-import at.bitfire.dav4android.property.AddressbookDescription;
-import at.bitfire.dav4android.property.CalendarColor;
-import at.bitfire.dav4android.property.CalendarDescription;
-import at.bitfire.dav4android.property.CalendarTimezone;
-import at.bitfire.dav4android.property.CurrentUserPrivilegeSet;
-import at.bitfire.dav4android.property.DisplayName;
-import at.bitfire.dav4android.property.ResourceType;
-import at.bitfire.dav4android.property.SupportedAddressData;
-import at.bitfire.dav4android.property.SupportedCalendarComponentSet;
+import at.bitfire.davdroid.GsonHelper;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
 import lombok.ToString;
 
 @ToString
 public class CollectionInfo implements Serializable {
-    public long id;
-    public Long serviceID;
+    public transient long id;
+    public transient Long serviceID;
 
     public enum Type {
         ADDRESS_BOOK,
         CALENDAR
     }
+
     public Type type;
 
-    public String url;
+    public transient String url; // Essentially the uuid
 
     public boolean readOnly;
     public String displayName, description;
@@ -51,68 +40,29 @@ public class CollectionInfo implements Serializable {
 
     public boolean selected;
 
-    // non-persistent properties
-    public boolean confirmed;
+    public CollectionInfo() {
+    }
 
-
-    public static final Property.Name[] DAV_PROPERTIES = {
-            ResourceType.NAME,
-            CurrentUserPrivilegeSet.NAME,
-            DisplayName.NAME,
-            AddressbookDescription.NAME, SupportedAddressData.NAME,
-            CalendarDescription.NAME, CalendarColor.NAME, SupportedCalendarComponentSet.NAME
-    };
-
-    public static CollectionInfo fromDavResource(DavResource dav) {
+    public static CollectionInfo defaultForService(String sService) {
+        Type service = Type.valueOf(sService);
         CollectionInfo info = new CollectionInfo();
-        info.url = dav.location.toString();
-
-        ResourceType type = (ResourceType)dav.properties.get(ResourceType.NAME);
-        if (type != null) {
-            if (type.types.contains(ResourceType.ADDRESSBOOK))
-                info.type = Type.ADDRESS_BOOK;
-            else if (type.types.contains(ResourceType.CALENDAR))
-                info.type = Type.CALENDAR;
-        }
-
+        info.displayName = "Default";
+        info.selected = true;
         info.readOnly = false;
-        CurrentUserPrivilegeSet privilegeSet = (CurrentUserPrivilegeSet)dav.properties.get(CurrentUserPrivilegeSet.NAME);
-        if (privilegeSet != null)
-            info.readOnly = !privilegeSet.mayWriteContent;
+        info.type = service;
 
-        DisplayName displayName = (DisplayName)dav.properties.get(DisplayName.NAME);
-        if (displayName != null && !StringUtils.isEmpty(displayName.displayName))
-            info.displayName = displayName.displayName;
-
-        if (info.type == Type.ADDRESS_BOOK) {
-            AddressbookDescription addressbookDescription = (AddressbookDescription)dav.properties.get(AddressbookDescription.NAME);
-            if (addressbookDescription != null)
-                info.description = addressbookDescription.description;
-
-        } else if (info.type == Type.CALENDAR) {
-            CalendarDescription calendarDescription = (CalendarDescription)dav.properties.get(CalendarDescription.NAME);
-            if (calendarDescription != null)
-                info.description = calendarDescription.description;
-
-            CalendarColor calendarColor = (CalendarColor)dav.properties.get(CalendarColor.NAME);
-            if (calendarColor != null)
-                info.color = calendarColor.color;
-
-            CalendarTimezone timeZone = (CalendarTimezone)dav.properties.get(CalendarTimezone.NAME);
-            if (timeZone != null)
-                info.timeZone = timeZone.vTimeZone;
-
-            info.supportsVEVENT = info.supportsVTODO = true;
-            SupportedCalendarComponentSet supportedCalendarComponentSet = (SupportedCalendarComponentSet)dav.properties.get(SupportedCalendarComponentSet.NAME);
-            if (supportedCalendarComponentSet != null) {
-                info.supportsVEVENT = supportedCalendarComponentSet.supportsEvents;
-                info.supportsVTODO = supportedCalendarComponentSet.supportsTasks;
-            }
+        if (service.equals(Type.CALENDAR)) {
+            info.supportsVEVENT =  true;
+            // info.supportsVTODO = true;
+        } else {
+            // Carddav
         }
-
         return info;
     }
 
+    public boolean isOfTypeService(String service) {
+        return service.equals(type.toString());
+    }
 
     public static CollectionInfo fromDB(ContentValues values) {
         CollectionInfo info = new CollectionInfo();
@@ -154,6 +104,13 @@ public class CollectionInfo implements Serializable {
         return values;
     }
 
+    public static CollectionInfo fromJson(String json) {
+        return GsonHelper.gson.fromJson(json, CollectionInfo.class);
+    }
+
+    public String toJson() {
+        return GsonHelper.gson.toJson(this, CollectionInfo.class);
+    }
 
     private static Boolean getAsBooleanOrNull(ContentValues values, String field) {
         Integer i = values.getAsInteger(field);

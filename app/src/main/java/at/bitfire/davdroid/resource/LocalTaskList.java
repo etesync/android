@@ -18,14 +18,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import java.io.FileNotFoundException;
 
-import at.bitfire.davdroid.DavUtils;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.ical4android.AndroidTaskList;
 import at.bitfire.ical4android.AndroidTaskListFactory;
@@ -71,7 +69,7 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
     private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
         ContentValues values = new ContentValues();
         values.put(TaskLists._SYNC_ID, info.url);
-        values.put(TaskLists.LIST_NAME, !TextUtils.isEmpty(info.displayName) ? info.displayName : DavUtils.lastSegmentOfUrl(info.url));
+        values.put(TaskLists.LIST_NAME, info.displayName);
 
         if (withColor)
             values.put(TaskLists.LIST_COLOR, info.color != null ? info.color : defaultColor);
@@ -97,7 +95,7 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
 
     @Override
     public LocalResource[] getDirty() throws CalendarStorageException, FileNotFoundException {
-        LocalTask[] tasks = (LocalTask[])queryTasks(Tasks._DIRTY + "!=0", null);
+        LocalTask[] tasks = (LocalTask[])queryTasks(Tasks._DIRTY + "!=0 AND " + Tasks._DELETED + "== 0", null);
         if (tasks != null)
         for (LocalTask task : tasks) {
             if (task.getTask().sequence == null)    // sequence has not been assigned yet (i.e. this task was just locally created)

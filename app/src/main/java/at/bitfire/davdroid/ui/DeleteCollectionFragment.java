@@ -24,17 +24,15 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
-import java.io.IOException;
-
-import at.bitfire.dav4android.DavResource;
-import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.HttpClient;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.journalmanager.Exceptions;
+import at.bitfire.davdroid.journalmanager.JournalManager;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB;
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 public class DeleteCollectionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Exception> {
     protected static final String
@@ -67,7 +65,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
     @Override
     public Loader<Exception> onCreateLoader(int id, Bundle args) {
         account = args.getParcelable(ARG_ACCOUNT);
-        collectionInfo = (CollectionInfo)args.getSerializable(ARG_COLLECTION_INFO);
+        collectionInfo = (CollectionInfo) args.getSerializable(ARG_COLLECTION_INFO);
         return new DeleteCollectionLoader(getContext(), account, collectionInfo);
     }
 
@@ -82,7 +80,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
         else {
             Activity activity = getActivity();
             if (activity instanceof AccountActivity)
-                ((AccountActivity)activity).reload();
+                ((AccountActivity) activity).reload();
         }
     }
 
@@ -111,18 +109,21 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
         @Override
         public Exception loadInBackground() {
             try {
-                OkHttpClient httpClient = HttpClient.create(getContext(), account);
-                DavResource collection = new DavResource(httpClient, HttpUrl.parse(collectionInfo.url));
-
-                // delete collection from server
-                collection.delete(null);
-
                 // delete collection locally
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(ServiceDB.Collections._TABLE, ServiceDB.Collections.ID + "=?", new String[] { String.valueOf(collectionInfo.id) });
+
+                AccountSettings settings = new AccountSettings(getContext(), account);
+                HttpUrl principal = HttpUrl.get(settings.getUri());
+
+                JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
+                journalManager.deleteJournal(new JournalManager.Journal(settings.password(), collectionInfo.toJson(), collectionInfo.url));
+
+                db.delete(ServiceDB.Collections._TABLE, ServiceDB.Collections.ID + "=?", new String[]{String.valueOf(collectionInfo.id)});
 
                 return null;
-            } catch (InvalidAccountException|IOException|HttpException e) {
+            } catch (Exceptions.HttpException e) {
+                return e;
+            } catch (InvalidAccountException e) {
                 return e;
             } finally {
                 dbHelper.close();
@@ -145,7 +146,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            CollectionInfo collectionInfo = (CollectionInfo)getArguments().getSerializable(ARG_COLLECTION_INFO);
+            CollectionInfo collectionInfo = (CollectionInfo) getArguments().getSerializable(ARG_COLLECTION_INFO);
             String name = TextUtils.isEmpty(collectionInfo.displayName) ? collectionInfo.url : collectionInfo.displayName;
 
             return new AlertDialog.Builder(getContext())

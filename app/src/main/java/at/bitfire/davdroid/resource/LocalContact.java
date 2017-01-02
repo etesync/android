@@ -15,12 +15,16 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.RawContacts.Data;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
-import at.bitfire.davdroid.BuildConfig;
+import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.model.UnknownProperties;
 import at.bitfire.vcard4android.AndroidAddressBook;
 import at.bitfire.vcard4android.AndroidContact;
@@ -29,24 +33,32 @@ import at.bitfire.vcard4android.BatchOperation;
 import at.bitfire.vcard4android.CachedGroupMembership;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
-import ezvcard.Ezvcard;
+import ezvcard.VCardVersion;
+
+import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 public class LocalContact extends AndroidContact implements LocalResource {
-    static {
-        Contact.productID = "+//IDN bitfire.at//DAVdroid/" + BuildConfig.VERSION_NAME + " vcard4android ez-vcard/" + Ezvcard.VERSION;
-    }
-
     protected final Set<Long>
             cachedGroupMemberships = new HashSet<>(),
             groupMemberships = new HashSet<>();
 
 
-    protected LocalContact(AndroidAddressBook addressBook, long id, String fileName, String eTag) {
-        super(addressBook, id, fileName, eTag);
+    protected LocalContact(AndroidAddressBook addressBook, long id, String uuid, String eTag) {
+        super(addressBook, id, uuid, eTag);
     }
 
-    public LocalContact(AndroidAddressBook addressBook, Contact contact, String fileName, String eTag) {
-        super(addressBook, contact, fileName, eTag);
+    public LocalContact(AndroidAddressBook addressBook, Contact contact, String uuid, String eTag) {
+        super(addressBook, contact, uuid, eTag);
+    }
+
+    public String getUuid() {
+        // The same now
+        return getFileName();
+    }
+
+    @Override
+    public boolean isLocalOnly() {
+        return TextUtils.isEmpty(getETag());
     }
 
     public void clearDirty(String eTag) throws ContactsStorageException {
@@ -64,7 +76,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
 
     public void updateFileNameAndUID(String uid) throws ContactsStorageException {
         try {
-            String newFileName = uid + ".vcf";
+            String newFileName = uid;
 
             ContentValues values = new ContentValues(2);
             values.put(COLUMN_FILENAME, newFileName);
@@ -77,6 +89,18 @@ public class LocalContact extends AndroidContact implements LocalResource {
         }
     }
 
+    @Override
+    public String getContent() throws IOException, ContactsStorageException {
+        final Contact contact;
+        contact = getContact();
+
+        App.log.log(Level.FINE, "Preparing upload of VCard " + getUuid(), contact);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        contact.write(VCardVersion.V4_0, GROUP_VCARDS, os);
+
+        return os.toString();
+    }
 
     @Override
     protected void populateData(String mimeType, ContentValues row) {
@@ -179,11 +203,6 @@ public class LocalContact extends AndroidContact implements LocalResource {
         @Override
         public LocalContact newInstance(AndroidAddressBook addressBook, long id, String fileName, String eTag) {
             return new LocalContact(addressBook, id, fileName, eTag);
-        }
-
-        @Override
-        public LocalContact newInstance(AndroidAddressBook addressBook, Contact contact, String fileName, String eTag) {
-            return new LocalContact(addressBook, contact, fileName, eTag);
         }
 
         @Override

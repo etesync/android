@@ -7,7 +7,6 @@
  */
 
 include ':app'
-include ':dav4android'
 include ':ical4android'
 include ':vcard4android'
 include ':cert4android'

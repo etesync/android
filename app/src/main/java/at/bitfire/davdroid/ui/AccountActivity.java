@@ -57,10 +57,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
-
-import org.apache.commons.lang3.BooleanUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -106,15 +103,14 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         // CardDAV toolbar
         tbCardDAV = (Toolbar)findViewById(R.id.carddav_menu);
-        tbCardDAV.setOverflowIcon(icMenu);
-        tbCardDAV.inflateMenu(R.menu.carddav_actions);
-        tbCardDAV.setOnMenuItemClickListener(this);
+        tbCardDAV.setTitle(R.string.settings_carddav);
 
         // CalDAV toolbar
         tbCalDAV = (Toolbar)findViewById(R.id.caldav_menu);
         tbCalDAV.setOverflowIcon(icMenu);
         tbCalDAV.inflateMenu(R.menu.caldav_actions);
         tbCalDAV.setOnMenuItemClickListener(this);
+        tbCalDAV.setTitle(R.string.settings_caldav);
 
         // load CardDAV/CalDAV collections
         getLoaderManager().initLoader(0, getIntent().getExtras(), this);
@@ -143,14 +139,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem itemRename = menu.findItem(R.id.rename_account);
-        // renameAccount is available for API level 21+
-        itemRename.setVisible(Build.VERSION.SDK_INT >= 21);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sync_now:
@@ -160,9 +148,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 Intent intent = new Intent(this, AccountSettingsActivity.class);
                 intent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
                 startActivity(intent);
-                break;
-            case R.id.rename_account:
-                RenameAccountFragment.newInstance(account).show(getSupportFragmentManager(), null);
                 break;
             case R.id.delete_account:
                 new AlertDialog.Builder(AccountActivity.this)
@@ -297,7 +282,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             long id;
             boolean refreshing;
 
-            boolean hasHomeSets;
             List<CollectionInfo> collections;
         }
     }
@@ -324,13 +308,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCardDAV.setEnabled(!info.carddav.refreshing);
             listCardDAV.setAlpha(info.carddav.refreshing ? 0.5f : 1);
 
-            tbCardDAV.getMenu().findItem(R.id.create_address_book).setEnabled(info.carddav.hasHomeSets);
-
             AddressBookAdapter adapter = new AddressBookAdapter(this);
             adapter.addAll(info.carddav.collections);
             listCardDAV.setAdapter(adapter);
-            listCardDAV.setOnItemClickListener(onItemClickListener);
-            listCardDAV.setOnItemLongClickListener(onItemLongClickListener);
         } else
             card.setVisibility(View.GONE);
 
@@ -342,8 +322,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCalDAV = (ListView)findViewById(R.id.calendars);
             listCalDAV.setEnabled(!info.caldav.refreshing);
             listCalDAV.setAlpha(info.caldav.refreshing ? 0.5f : 1);
-
-            tbCalDAV.getMenu().findItem(R.id.create_calendar).setEnabled(info.caldav.hasHomeSets);
 
             final CalendarAdapter adapter = new CalendarAdapter(this);
             adapter.addAll(info.caldav.collections);
@@ -433,7 +411,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
                     info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
-                    info.carddav.hasHomeSets = hasHomeSets(db, id);
                     info.carddav.collections = readCollections(db, id);
 
                 } else if (Services.SERVICE_CALDAV.equals(service)) {
@@ -442,17 +419,10 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                     info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
-                    info.caldav.hasHomeSets = hasHomeSets(db, id);
                     info.caldav.collections = readCollections(db, id);
                 }
             }
             return info;
-        }
-
-        private boolean hasHomeSets(@NonNull SQLiteDatabase db, long service) {
-            @Cleanup Cursor cursor = db.query(ServiceDB.HomeSets._TABLE, null, ServiceDB.HomeSets.SERVICE_ID + "=?",
-                    new String[] { String.valueOf(service) }, null, null, null);
-            return cursor.getCount() > 0;
         }
 
         private List<CollectionInfo> readCollections(@NonNull SQLiteDatabase db, long service) {
@@ -483,9 +453,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 v = LayoutInflater.from(getContext()).inflate(R.layout.account_carddav_item, parent, false);
 
             final CollectionInfo info = getItem(position);
-
-            RadioButton checked = (RadioButton)v.findViewById(R.id.checked);
-            checked.setChecked(info.selected);
 
             TextView tv = (TextView)v.findViewById(R.id.title);
             tv.setText(TextUtils.isEmpty(info.displayName) ? info.url : info.displayName);
@@ -541,98 +508,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             tv = (TextView)v.findViewById(R.id.read_only);
             tv.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
 
-            tv = (TextView)v.findViewById(R.id.events);
-            tv.setVisibility(BooleanUtils.isTrue(info.supportsVEVENT) ? View.VISIBLE : View.GONE);
-
-            tv = (TextView)v.findViewById(R.id.tasks);
-            tv.setVisibility(BooleanUtils.isTrue(info.supportsVTODO) ? View.VISIBLE : View.GONE);
-
             return v;
         }
     }
-
-
-    /* DIALOG FRAGMENTS */
-
-    public static class RenameAccountFragment extends DialogFragment {
-
-        private final static String ARG_ACCOUNT = "account";
-
-        static RenameAccountFragment newInstance(@NonNull Account account) {
-            RenameAccountFragment fragment = new RenameAccountFragment();
-            Bundle args = new Bundle(1);
-            args.putParcelable(ARG_ACCOUNT, account);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Account oldAccount = getArguments().getParcelable(ARG_ACCOUNT);
-
-            final EditText editText = new EditText(getContext());
-            editText.setText(oldAccount.name);
-
-            return new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.account_rename)
-                    .setMessage(R.string.account_rename_new_name)
-                    .setView(editText)
-                    .setPositiveButton(R.string.account_rename_rename, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            final String newName = editText.getText().toString();
-
-                            if (newName.equals(oldAccount.name))
-                                return;
-
-                            final AccountManager accountManager = AccountManager.get(getContext());
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                accountManager.renameAccount(oldAccount, newName,
-                                        new AccountManagerCallback<Account>() {
-                                            @Override
-                                            public void run(AccountManagerFuture<Account> future) {
-                                                App.log.info("Updating account name references");
-
-                                                // cancel running synchronization
-                                                ContentResolver.cancelSync(oldAccount, null);
-
-                                                // update account name references in database
-                                                @Cleanup OpenHelper dbHelper = new OpenHelper(getContext());
-                                                ServiceDB.onRenameAccount(dbHelper.getWritableDatabase(), oldAccount.name, newName);
-
-                                                // update account_name of local contacts
-                                                try {
-                                                    LocalAddressBook.onRenameAccount(getContext().getContentResolver(), oldAccount.name, newName);
-                                                } catch(RemoteException e) {
-                                                    App.log.log(Level.SEVERE, "Couldn't propagate new account name to contacts provider");
-                                                }
-
-                                                // calendar provider doesn't allow changing account_name of Events
-
-                                                // update account_name of local tasks
-                                                try {
-                                                    LocalTaskList.onRenameAccount(getContext().getContentResolver(), oldAccount.name, newName);
-                                                } catch(RemoteException e) {
-                                                    App.log.log(Level.SEVERE, "Couldn't propagate new account name to tasks provider");
-                                                }
-
-                                                // synchronize again
-                                                requestSync(new Account(newName, oldAccount.type));
-                                            }
-                                        }, null
-                                );
-                            getActivity().finish();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .create();
-        }
-    }
-
 
     /* USER ACTIONS */
 

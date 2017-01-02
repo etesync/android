@@ -14,9 +14,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,7 +25,6 @@ import android.support.v7.app.AlertDialog;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.BuildConfig;
@@ -139,7 +135,7 @@ public class StartupDialogFragment extends DialogFragment {
                         .setNeutralButton(R.string.startup_development_version_give_feedback, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Constants.webUri.buildUpon().appendEncodedPath("forums/").build()));
+                                startActivity(new Intent(Intent.ACTION_VIEW, Constants.feedbackUri));
                             }
                         })
                         .create();

@@ -64,7 +64,7 @@ public class DetectConfigurationFragment extends DialogFragment implements Loade
     @Override
     public void onLoadFinished(Loader<Configuration> loader, Configuration data) {
         if (data != null) {
-            if (data.calDAV == null && data.cardDAV == null)
+            if (data.isFailed())
                 // no service found: show error message
                 getFragmentManager().beginTransaction()
                         .add(NothingDetectedFragment.newInstance(data.logs), null)
@@ -72,7 +72,7 @@ public class DetectConfigurationFragment extends DialogFragment implements Loade
             else
                 // service found: continue
                 getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, AccountDetailsFragment.newInstance(data))
+                        .replace(android.R.id.content, EncryptionDetailsFragment.newInstance(data))
                         .addToBackStack(null)
                         .commitAllowingStateLoss();
         } else

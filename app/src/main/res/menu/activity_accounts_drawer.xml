@@ -19,16 +19,6 @@
         android:icon="@drawable/ic_settings_dark"
         android:title="@string/navigation_drawer_settings"/>
 
-    <item android:title="@string/navigation_drawer_news_updates">
-        <menu>
-            <item
-                android:id="@+id/nav_twitter"
-                android:icon="@drawable/twitter"
-                android:title="\@davdroidapp"
-                tools:ignore="HardcodedText"/>
-        </menu>
-    </item>
-
     <item android:title="@string/navigation_drawer_external_links">
         <menu>
             <item
@@ -40,13 +30,13 @@
                 android:icon="@drawable/ic_help_dark"
                 android:title="@string/navigation_drawer_faq"/>
             <item
-                android:id="@+id/nav_forums"
-                android:icon="@drawable/ic_forum_dark"
-                android:title="@string/navigation_drawer_forums"/>
+                android:id="@+id/nav_report_issue"
+                android:icon="@drawable/ic_bug_report"
+                android:title="@string/navigation_drawer_report_issue"/>
             <item
-                android:id="@+id/nav_donate"
-                android:icon="@drawable/ic_attach_money_dark"
-                android:title="@string/navigation_drawer_donate"/>
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_email_black"
+                android:title="@string/navigation_drawer_contact"/>
         </menu>
     </item>
 

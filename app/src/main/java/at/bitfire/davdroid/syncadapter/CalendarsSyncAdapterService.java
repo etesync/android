@@ -18,11 +18,9 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,6 +36,7 @@ import at.bitfire.davdroid.model.ServiceDB.Services;
 import at.bitfire.davdroid.resource.LocalCalendar;
 import at.bitfire.ical4android.CalendarStorageException;
 import lombok.Cleanup;
+import okhttp3.HttpUrl;
 
 public class CalendarsSyncAdapterService extends SyncAdapterService {
 
@@ -47,7 +46,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
     }
 
 
-	private static class SyncAdapter extends SyncAdapterService.SyncAdapter {
+    private static class SyncAdapter extends SyncAdapterService.SyncAdapter {
 
         public SyncAdapter(Context context) {
             super(context);
@@ -62,29 +61,33 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
                     return;
 
-                updateLocalCalendars(provider, account, settings);
+                HttpUrl principal = updateLocalCalendars(provider, account, settings);
 
-                for (LocalCalendar calendar : (LocalCalendar[])LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
-                    App.log.info("Synchronizing calendar #"  + calendar.getId() + ", URL: " + calendar.getName());
-                    CalendarSyncManager syncManager = new CalendarSyncManager(getContext(), account, settings, extras, authority, syncResult, calendar);
+                for (LocalCalendar calendar : (LocalCalendar[]) LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
+                    App.log.info("Synchronizing calendar #" + calendar.getId() + ", URL: " + calendar.getName());
+                    CalendarSyncManager syncManager = new CalendarSyncManager(getContext(), account, settings, extras, authority, syncResult, calendar, principal);
                     syncManager.performSync();
                 }
-            } catch(CalendarStorageException|SQLiteException e) {
+            } catch (CalendarStorageException | SQLiteException e) {
                 App.log.log(Level.SEVERE, "Couldn't prepare local calendars", e);
                 syncResult.databaseError = true;
-            } catch(InvalidAccountException e) {
+            } catch (InvalidAccountException e) {
                 App.log.log(Level.SEVERE, "Couldn't get account settings", e);
             }
 
             App.log.info("Calendar sync complete");
         }
 
-        private void updateLocalCalendars(ContentProviderClient provider, Account account, AccountSettings settings) throws CalendarStorageException {
-            SQLiteOpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
+        private HttpUrl updateLocalCalendars(ContentProviderClient provider, Account account, AccountSettings settings) throws CalendarStorageException {
+            HttpUrl ret = null;
+            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
             try {
                 // enumerate remote and local calendars
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
-                Long service = getService(db, account);
+                Long service = dbHelper.getService(db, account, Services.SERVICE_CALDAV);
+
+                ret = HttpUrl.get(settings.getUri());
+
                 Map<String, CollectionInfo> remote = remoteCalendars(db, service);
 
                 LocalCalendar[] local = (LocalCalendar[])LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, null, null);
@@ -116,16 +119,8 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
             } finally {
                 dbHelper.close();
             }
-        }
 
-        @Nullable
-        Long getService(@NonNull SQLiteDatabase db, @NonNull Account account) {
-            @Cleanup Cursor c = db.query(Services._TABLE, new String[] { Services.ID },
-                    Services.ACCOUNT_NAME + "=? AND " + Services.SERVICE + "=?", new String[] { account.name, Services.SERVICE_CALDAV }, null, null, null);
-            if (c.moveToNext())
-                return c.getLong(0);
-            else
-                return null;
+            return ret;
         }
 
         @NonNull
@@ -134,7 +129,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
             if (service != null) {
                 @Cleanup Cursor cursor = db.query(Collections._TABLE, null,
                         Collections.SERVICE_ID + "=? AND " + Collections.SUPPORTS_VEVENT + "!=0 AND " + Collections.SYNC,
-                        new String[] { String.valueOf(service) }, null, null, null);
+                        new String[]{String.valueOf(service)}, null, null, null);
                 while (cursor.moveToNext()) {
                     ContentValues values = new ContentValues();
                     DatabaseUtils.cursorRowToContentValues(cursor, values);

@@ -14,26 +14,24 @@ import android.os.RemoteException;
 import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
 
-import net.fortuna.ical4j.model.property.ProdId;
-
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 
-import at.bitfire.davdroid.BuildConfig;
 import at.bitfire.ical4android.AndroidTask;
 import at.bitfire.ical4android.AndroidTaskFactory;
 import at.bitfire.ical4android.AndroidTaskList;
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Task;
+import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Getter;
 import lombok.Setter;
 
 public class LocalTask extends AndroidTask implements LocalResource {
-    static {
-        Task.prodId = new ProdId("+//IDN bitfire.at//DAVdroid/" + BuildConfig.VERSION_NAME + " ical4android ical4j/2.x");
-    }
+    @Getter
+    protected String uuid;
 
     static final String COLUMN_ETAG = Tasks.SYNC1,
                         COLUMN_UID = Tasks.SYNC2,
@@ -56,6 +54,15 @@ public class LocalTask extends AndroidTask implements LocalResource {
         }
     }
 
+    @Override
+    public String getContent() throws IOException, ContactsStorageException {
+        return null;
+    }
+
+    @Override
+    public boolean isLocalOnly() {
+        return false;
+    }
 
     /* process LocalTask-specific fields */
 

@@ -12,55 +12,38 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
-import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.PeriodicSync;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 
-import at.bitfire.davdroid.model.ServiceDB;
-import at.bitfire.davdroid.model.ServiceDB.Collections;
-import at.bitfire.davdroid.model.ServiceDB.HomeSets;
-import at.bitfire.davdroid.model.ServiceDB.Services;
-import at.bitfire.davdroid.resource.LocalAddressBook;
-import at.bitfire.davdroid.resource.LocalCalendar;
-import at.bitfire.davdroid.resource.LocalTaskList;
-import at.bitfire.ical4android.CalendarStorageException;
-import at.bitfire.ical4android.TaskProvider;
-import at.bitfire.vcard4android.ContactsStorageException;
 import at.bitfire.vcard4android.GroupMethod;
-import lombok.Cleanup;
-import okhttp3.HttpUrl;
 
 public class AccountSettings {
-    private final static int CURRENT_VERSION = 5;
+    private final static int CURRENT_VERSION = 1;
     private final static String
             KEY_SETTINGS_VERSION = "version",
-
+            KEY_URI = "uri",
             KEY_USERNAME = "user_name",
-
+            KEY_TOKEN = "auth_token",
             KEY_WIFI_ONLY = "wifi_only",            // sync on WiFi only (default: false)
             KEY_WIFI_ONLY_SSID = "wifi_only_ssid";  // restrict sync to specific WiFi SSID
 
-    /** Time range limitation to the past [in days]
-        value = null            default value (DEFAULT_TIME_RANGE_PAST_DAYS)
-              < 0 (-1)          no limit
-              >= 0              entries more than n days in the past won't be synchronized
+    /**
+     * Time range limitation to the past [in days]
+     * value = null            default value (DEFAULT_TIME_RANGE_PAST_DAYS)
+     * < 0 (-1)          no limit
+     * >= 0              entries more than n days in the past won't be synchronized
      */
     private final static String KEY_TIME_RANGE_PAST_DAYS = "time_range_past_days";
     private final static int DEFAULT_TIME_RANGE_PAST_DAYS = 90;
@@ -70,10 +53,11 @@ public class AccountSettings {
                "0"                     false */
     private final static String KEY_MANAGE_CALENDAR_COLORS = "manage_calendar_colors";
 
-    /** Contact group method:
-        value = null (not existing)     groups as separate VCards (default)
-                "CATEGORIES"            groups are per-contact CATEGORIES
-    */
+    /**
+     * Contact group method:
+     * value = null (not existing)     groups as separate VCards (default)
+     * "CATEGORIES"            groups are per-contact CATEGORIES
+     */
     private final static String KEY_CONTACT_GROUP_METHOD = "contact_group_method";
 
     public final static long SYNC_INTERVAL_MANUALLY = -1;
@@ -90,7 +74,7 @@ public class AccountSettings {
 
         accountManager = AccountManager.get(context);
 
-        synchronized(AccountSettings.class) {
+        synchronized (AccountSettings.class) {
             String versionStr = accountManager.getUserData(account, KEY_SETTINGS_VERSION);
             if (versionStr == null)
                 throw new InvalidAccountException(account);
@@ -107,21 +91,52 @@ public class AccountSettings {
         }
     }
 
-    public static Bundle initialUserData(String userName) {
+    public static Bundle initialUserData(URI uri, String userName) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_SETTINGS_VERSION, String.valueOf(CURRENT_VERSION));
         bundle.putString(KEY_USERNAME, userName);
+        bundle.putString(KEY_URI, uri.toString());
         return bundle;
     }
 
 
     // authentication settings
 
-    public String username() { return accountManager.getUserData(account, KEY_USERNAME); }
-    public void username(@NonNull String userName) { accountManager.setUserData(account, KEY_USERNAME, userName); }
+    public URI getUri() {
+        try {
+            return new URI(accountManager.getUserData(account, KEY_URI));
+        } catch (URISyntaxException e) {
+            return null;
+        }
+    }
 
-    public String password() { return accountManager.getPassword(account); }
-    public void password(@NonNull String password) { accountManager.setPassword(account, password); }
+    public void setUri(@NonNull URI uri) {
+        accountManager.setUserData(account, KEY_URI, uri.toString());
+    }
+
+    public String getAuthToken() {
+        return accountManager.getUserData(account, KEY_TOKEN);
+    }
+
+    public void setAuthToken(@NonNull String token) {
+        accountManager.setUserData(account, KEY_TOKEN, token);
+    }
+
+    public String username() {
+        return accountManager.getUserData(account, KEY_USERNAME);
+    }
+
+    public void username(@NonNull String userName) {
+        accountManager.setUserData(account, KEY_USERNAME, userName);
+    }
+
+    public String password() {
+        return accountManager.getPassword(account);
+    }
+
+    public void password(@NonNull String password) {
+        accountManager.setPassword(account, password);
+    }
 
 
     // sync. settings
@@ -223,175 +238,6 @@ public class AccountSettings {
             fromVersion = toVersion;
         }
     }
-
-    @SuppressWarnings({ "Recycle", "unused" })
-    private void update_1_2() throws ContactsStorageException {
-        /* - KEY_ADDRESSBOOK_URL ("addressbook_url"),
-           - KEY_ADDRESSBOOK_CTAG ("addressbook_ctag"),
-           - KEY_ADDRESSBOOK_VCARD_VERSION ("addressbook_vcard_version") are not used anymore (now stored in ContactsContract.SyncState)
-           - KEY_LAST_ANDROID_VERSION ("last_android_version") has been added
-        */
-
-        // move previous address book info to ContactsContract.SyncState
-        @Cleanup("release") ContentProviderClient provider = context.getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
-        if (provider == null)
-            throw new ContactsStorageException("Couldn't access Contacts provider");
-
-        LocalAddressBook addr = new LocalAddressBook(account, provider);
-
-        // until now, ContactsContract.Settings.UNGROUPED_VISIBLE was not set explicitly
-        ContentValues values = new ContentValues();
-        values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1);
-        addr.updateSettings(values);
-
-        String url = accountManager.getUserData(account, "addressbook_url");
-        if (!TextUtils.isEmpty(url))
-            addr.setURL(url);
-        accountManager.setUserData(account, "addressbook_url", null);
-
-        String cTag = accountManager.getUserData(account, "addressbook_ctag");
-        if (!TextUtils.isEmpty(cTag))
-            addr.setCTag(cTag);
-        accountManager.setUserData(account, "addressbook_ctag", null);
-    }
-
-    @SuppressWarnings({ "Recycle", "unused" })
-    private void update_2_3() {
-        // Don't show a warning for Android updates anymore
-        accountManager.setUserData(account, "last_android_version", null);
-
-        Long serviceCardDAV = null, serviceCalDAV = null;
-
-        ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(context);
-        try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            // we have to create the WebDAV Service database only from the old address book, calendar and task list URLs
-
-            // CardDAV: migrate address books
-            ContentProviderClient client = context.getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
-            if (client != null)
-                try {
-                    LocalAddressBook addrBook = new LocalAddressBook(account, client);
-                    String url = addrBook.getURL();
-                    if (url != null) {
-                        App.log.fine("Migrating address book " + url);
-
-                        // insert CardDAV service
-                        ContentValues values = new ContentValues();
-                        values.put(Services.ACCOUNT_NAME, account.name);
-                        values.put(Services.SERVICE, Services.SERVICE_CARDDAV);
-                        serviceCardDAV = db.insert(Services._TABLE, null, values);
-
-                        // insert address book
-                        values.clear();
-                        values.put(Collections.SERVICE_ID, serviceCardDAV);
-                        values.put(Collections.URL, url);
-                        values.put(Collections.SYNC, 1);
-                        db.insert(Collections._TABLE, null, values);
-
-                        // insert home set
-                        HttpUrl homeSet = HttpUrl.parse(url).resolve("../");
-                        values.clear();
-                        values.put(HomeSets.SERVICE_ID, serviceCardDAV);
-                        values.put(HomeSets.URL, homeSet.toString());
-                        db.insert(HomeSets._TABLE, null, values);
-                    }
-
-                } catch (ContactsStorageException e) {
-                    App.log.log(Level.SEVERE, "Couldn't migrate address book", e);
-                } finally {
-                    client.release();
-                }
-
-            // CalDAV: migrate calendars + task lists
-            Set<String> collections = new HashSet<>();
-            Set<HttpUrl> homeSets = new HashSet<>();
-
-            client = context.getContentResolver().acquireContentProviderClient(CalendarContract.AUTHORITY);
-            if (client != null)
-                try {
-                    LocalCalendar calendars[] = (LocalCalendar[])LocalCalendar.find(account, client, LocalCalendar.Factory.INSTANCE, null, null);
-                    for (LocalCalendar calendar : calendars) {
-                        String url = calendar.getName();
-                        App.log.fine("Migrating calendar " + url);
-                        collections.add(url);
-                        homeSets.add(HttpUrl.parse(url).resolve("../"));
-                    }
-                } catch (CalendarStorageException e) {
-                    App.log.log(Level.SEVERE, "Couldn't migrate calendars", e);
-                } finally {
-                    client.release();
-                }
-
-            TaskProvider provider = LocalTaskList.acquireTaskProvider(context.getContentResolver());
-            if (provider != null)
-                try {
-                    LocalTaskList[] taskLists = (LocalTaskList[])LocalTaskList.find(account, provider, LocalTaskList.Factory.INSTANCE, null, null);
-                    for (LocalTaskList taskList : taskLists) {
-                        String url = taskList.getSyncId();
-                        App.log.fine("Migrating task list " + url);
-                        collections.add(url);
-                        homeSets.add(HttpUrl.parse(url).resolve("../"));
-                    }
-                } catch (CalendarStorageException e) {
-                    App.log.log(Level.SEVERE, "Couldn't migrate task lists", e);
-                } finally {
-                    provider.close();
-                }
-
-            if (!collections.isEmpty()) {
-                // insert CalDAV service
-                ContentValues values = new ContentValues();
-                values.put(Services.ACCOUNT_NAME, account.name);
-                values.put(Services.SERVICE, Services.SERVICE_CALDAV);
-                serviceCalDAV = db.insert(Services._TABLE, null, values);
-
-                // insert collections
-                for (String url : collections) {
-                    values.clear();
-                    values.put(Collections.SERVICE_ID, serviceCalDAV);
-                    values.put(Collections.URL, url);
-                    values.put(Collections.SYNC, 1);
-                    db.insert(Collections._TABLE, null, values);
-                }
-
-                // insert home sets
-                for (HttpUrl homeSet : homeSets) {
-                    values.clear();
-                    values.put(HomeSets.SERVICE_ID, serviceCalDAV);
-                    values.put(HomeSets.URL, homeSet.toString());
-                    db.insert(HomeSets._TABLE, null, values);
-                }
-            }
-        } finally {
-            dbHelper.close();
-        }
-
-        // initiate service detection (refresh) to get display names, colors etc.
-        Intent refresh = new Intent(context, DavService.class);
-        refresh.setAction(DavService.ACTION_REFRESH_COLLECTIONS);
-        if (serviceCardDAV != null) {
-            refresh.putExtra(DavService.EXTRA_DAV_SERVICE_ID, serviceCardDAV);
-            context.startService(refresh);
-        }
-        if (serviceCalDAV != null) {
-            refresh.putExtra(DavService.EXTRA_DAV_SERVICE_ID, serviceCalDAV);
-            context.startService(refresh);
-        }
-    }
-
-    @SuppressWarnings({ "Recycle", "unused" })
-    private void update_3_4() {
-        setGroupMethod(GroupMethod.CATEGORIES);
-    }
-
-    /* Android 7.1.1 OpenTasks fix */
-    @SuppressWarnings({ "Recycle", "unused" })
-    private void update_4_5() {
-        // call PackageChangedReceiver which then enables/disables OpenTasks sync when it's (not) available
-        PackageChangedReceiver.updateTaskSync(context);
-    }
-
 
     public static class AppUpdatedReceiver extends BroadcastReceiver {
 

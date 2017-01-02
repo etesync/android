@@ -10,14 +10,15 @@
 
     <!-- colors -->
 
-    <color name="green700">#388e3c</color>
+    <!-- FIXME: Colours are no longer correctly named. -->
+    <color name="green700">#ffa100</color>
 
-    <color name="light_green300">#aed581</color>
-    <color name="light_green500">#8bc34a</color>
-    <color name="light_green700">#689f38</color>
+    <color name="light_green300">#ffd54f</color>
+    <color name="light_green500">#ffc107</color>
+    <color name="light_green700">#ffa100</color>
 
-    <color name="orange400">#ffa726</color>
-    <color name="orangeA700">#ff6d00</color>
+    <color name="orange400">#29b6f6</color>
+    <color name="orangeA700">#0288d1</color>
 
     <color name="grey200">#eeeeee</color>
     <color name="grey700">#616161</color>

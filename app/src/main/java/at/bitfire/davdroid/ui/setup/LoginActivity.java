@@ -23,16 +23,8 @@ import at.bitfire.davdroid.R;
  * Fields for server/user data can be pre-filled with extras in the Intent.
  */
 public class LoginActivity extends AppCompatActivity {
-
-    /**
-     * When set, "login by URL" will be activated by default, and the URL field will be set to this value.
-     * When not set, "login by email" will be activated by default.
-     */
-    public static final String EXTRA_URL = "url";
-
     /**
      * When set, and {@link #EXTRA_PASSWORD} is set too, the user name field will be set to this value.
-     * When set, and {@link #EXTRA_URL} is not set, the email address field will be set to this value.
      */
     public static final String EXTRA_USERNAME = "username";
 
@@ -79,6 +71,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void showHelp(MenuItem item) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Constants.webUri.buildUpon().appendEncodedPath("configuration/").build()));
+        startActivity(new Intent(Intent.ACTION_VIEW, Constants.helpUri));
     }
 }

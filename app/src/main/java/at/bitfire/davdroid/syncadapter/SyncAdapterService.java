@@ -65,7 +65,7 @@ public abstract class SyncAdapterService extends Service {
 
         @Override
         public void onSecurityException(Account account, Bundle extras, String authority, SyncResult syncResult) {
-            App.log.log(Level.WARNING, "Security exception when opening content provider for " +  authority);
+            App.log.log(Level.WARNING, "Security exception when opening content provider for " + authority);
             syncResult.databaseError = true;
 
             Intent intent = new Intent(getContext(), PermissionsActivity.class);
@@ -85,7 +85,7 @@ public abstract class SyncAdapterService extends Service {
 
         protected boolean checkSyncConditions(@NonNull AccountSettings settings) {
             if (settings.getSyncWifiOnly()) {
-                ConnectivityManager cm = (ConnectivityManager)getContext().getSystemService(CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo network = cm.getActiveNetworkInfo();
                 if (network == null) {
                     App.log.info("No network available, stopping");
@@ -99,7 +99,7 @@ public abstract class SyncAdapterService extends Service {
                 String onlySSID = settings.getSyncWifiOnlySSID();
                 if (onlySSID != null) {
                     onlySSID = "\"" + onlySSID + "\"";
-                    WifiManager wifi = (WifiManager)getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
+                    WifiManager wifi = (WifiManager) getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
                     WifiInfo info = wifi.getConnectionInfo();
                     if (info == null || !onlySSID.equals(info.getSSID())) {
                         App.log.info("Connected to wrong WiFi network (" + info.getSSID() + ", required: " + onlySSID + "), ignoring");
@@ -109,7 +109,6 @@ public abstract class SyncAdapterService extends Service {
             }
             return true;
         }
-
     }
 
 }

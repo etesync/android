@@ -123,7 +123,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     }
 
     public LocalContact[] getDirtyContacts() throws ContactsStorageException {
-        return (LocalContact[])queryContacts(RawContacts.DIRTY + "!= 0", null);
+        return (LocalContact[])queryContacts(RawContacts.DIRTY + "!= 0 AND " + RawContacts.DELETED + "== 0", null);
     }
 
     public LocalGroup[] getDeletedGroups() throws ContactsStorageException {
@@ -131,7 +131,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     }
 
     public LocalGroup[] getDirtyGroups() throws ContactsStorageException {
-        return (LocalGroup[])queryGroups(Groups.DIRTY + "!= 0", null);
+        return (LocalGroup[])queryGroups(Groups.DIRTY + "!= 0 AND " + Groups.DELETED + "== 0", null);
     }
 
 

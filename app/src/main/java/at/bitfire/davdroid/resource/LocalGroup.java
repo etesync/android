@@ -23,11 +23,12 @@ import android.provider.ContactsContract.RawContacts.Data;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
-import at.bitfire.dav4android.Constants;
+import at.bitfire.davdroid.App;
 import at.bitfire.vcard4android.AndroidAddressBook;
 import at.bitfire.vcard4android.AndroidGroup;
 import at.bitfire.vcard4android.AndroidGroupFactory;
@@ -36,10 +37,13 @@ import at.bitfire.vcard4android.CachedGroupMembership;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Cleanup;
+import lombok.Getter;
 import lombok.ToString;
 
 @ToString(callSuper=true)
 public class LocalGroup extends AndroidGroup implements LocalResource {
+    @Getter
+    protected String uuid;
     /** marshalled list of member UIDs, as sent by server */
     public static final String COLUMN_PENDING_MEMBERS = Groups.SYNC3;
 
@@ -51,6 +55,15 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
         super(addressBook, contact, fileName, eTag);
     }
 
+    @Override
+    public String getContent() throws IOException, ContactsStorageException {
+        return null;
+    }
+
+    @Override
+    public boolean isLocalOnly() {
+        return false;
+    }
 
     @Override
     public void clearDirty(String eTag) throws ContactsStorageException {
@@ -145,7 +158,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
             BatchOperation batch = new BatchOperation(addressBook.provider);
             while (cursor != null && cursor.moveToNext()) {
                 long id = cursor.getLong(0);
-                Constants.log.fine("Assigning members to group " + id);
+                App.log.fine("Assigning members to group " + id);
 
                 // delete all memberships and cached memberships for this group
                 batch.enqueue(new BatchOperation.Operation(
@@ -167,12 +180,12 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
 
                 // insert memberships
                 for (String uid : members) {
-                    Constants.log.fine("Assigning member: " + uid);
+                    App.log.fine("Assigning member: " + uid);
                     try {
                         LocalContact member = addressBook.findContactByUID(uid);
                         member.addToGroup(batch, id);
                     } catch(FileNotFoundException e) {
-                        Constants.log.log(Level.WARNING, "Group member not found: " + uid, e);
+                        App.log.log(Level.WARNING, "Group member not found: " + uid, e);
                     }
                 }
 

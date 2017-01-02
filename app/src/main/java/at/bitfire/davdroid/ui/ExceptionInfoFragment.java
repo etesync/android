@@ -19,8 +19,8 @@ import android.support.v7.app.AlertDialog;
 
 import java.io.IOException;
 
-import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.journalmanager.Exceptions.HttpException;
 
 public class ExceptionInfoFragment extends DialogFragment {
     protected static final String

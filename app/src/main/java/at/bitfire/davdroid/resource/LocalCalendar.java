@@ -32,7 +32,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import at.bitfire.davdroid.App;
-import at.bitfire.davdroid.DavUtils;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.ical4android.AndroidCalendar;
 import at.bitfire.ical4android.AndroidCalendarFactory;
@@ -86,7 +85,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
     private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
         ContentValues values = new ContentValues();
         values.put(Calendars.NAME, info.url);
-        values.put(Calendars.CALENDAR_DISPLAY_NAME, !TextUtils.isEmpty(info.displayName) ? info.displayName : DavUtils.lastSegmentOfUrl(info.url));
+        values.put(Calendars.CALENDAR_DISPLAY_NAME, info.displayName);
 
         if (withColor)
             values.put(Calendars.CALENDAR_COLOR, info.color != null ? info.color : defaultColor);
@@ -131,7 +130,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         List<LocalResource> dirty = new LinkedList<>();
 
         // get dirty events which are required to have an increased SEQUENCE value
-        for (LocalEvent event : (LocalEvent[])queryEvents(Events.DIRTY + "!=0 AND " + Events.ORIGINAL_ID + " IS NULL", null)) {
+        for (LocalEvent event : (LocalEvent[])queryEvents(Events.DIRTY + "!=0 AND " + Events.DELETED + "==0 AND " + Events.ORIGINAL_ID + " IS NULL", null)) {
             if (event.getEvent().sequence == null)      // sequence has not been assigned yet (i.e. this event was just locally created)
                 event.getEvent().sequence = 0;
             else if (event.weAreOrganizer)

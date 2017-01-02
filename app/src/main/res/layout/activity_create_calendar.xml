@@ -19,22 +19,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_calendar"
-            android:textAppearance="@style/TextView.Heading"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_collection_home_set"/>
-        <Spinner
-            android:id="@+id/home_sets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/create_collection_display_name"/>
         <EditText
             android:id="@+id/display_name"
@@ -84,38 +68,6 @@
             android:id="@+id/time_zone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_calendar_type"
-            android:textAppearance="@style/TextView.Heading"/>
-
-        <RadioGroup
-            android:id="@+id/type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/type_events"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/create_calendar_type_only_events"/>
-
-            <RadioButton
-                android:id="@+id/type_tasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/create_calendar_type_only_tasks"/>
-
-            <RadioButton
-                android:id="@+id/type_events_and_tasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/create_calendar_type_events_and_tasks"/>
-
-        </RadioGroup>
 
     </LinearLayout>
 

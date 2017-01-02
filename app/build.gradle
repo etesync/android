@@ -32,11 +32,25 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+            /*
+             * To override the server's url (for example when developing),
+             * create file gradle.properties in ~/.gradle/ with this content:
+             *
+             * appDebugRemoteUrl="http://localserver:8080/"
+             */
+            if (project.hasProperty('appDebugRemoteUrl')) {
+                 buildConfigField 'String', 'DEBUG_REMOTE_URL', appDebugRemoteUrl
+            } else {
+                 buildConfigField 'String', 'DEBUG_REMOTE_URL', 'null'
+            }
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            buildConfigField 'String', 'DEBUG_REMOTE_URL', 'null'
         }
     }
 
@@ -55,6 +69,14 @@ android {
         disable 'Typos'
         disable "RestrictedApi"		// https://code.google.com/p/android/issues/detail?id=230387
     }
+
+    dexOptions {
+        preDexLibraries = true
+        // dexInProcess requires much RAM, which is not available on all dev systems
+        dexInProcess = false
+        javaMaxHeapSize "2g"
+    }
+
     packagingOptions {
         exclude 'LICENSE'
         exclude 'META-INF/LICENSE.txt'
@@ -68,7 +90,6 @@ android {
 
 dependencies {
     compile project(':cert4android')
-    compile project(':dav4android')
     compile project(':ical4android')
     compile project(':vcard4android')
 
@@ -79,11 +100,10 @@ dependencies {
 
     compile 'com.github.yukuku:ambilwarna:2.0.1'
 
+    compile group: 'com.madgag.spongycastle', name: 'core', version: '1.54.0.0'
+    compile group: 'com.madgag.spongycastle', name: 'prov', version: '1.54.0.0'
+    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile 'commons-io:commons-io:2.5'
-    compile 'dnsjava:dnsjava:2.1.7'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'org.apache.commons:commons-collections4:4.1'
     provided 'org.projectlombok:lombok:1.16.12'
 
     // for tests

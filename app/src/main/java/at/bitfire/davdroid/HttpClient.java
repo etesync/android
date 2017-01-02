@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import at.bitfire.dav4android.BasicDigestAuthHandler;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.Settings;
 import okhttp3.Interceptor;
@@ -39,9 +38,10 @@ public class HttpClient {
     private static final UserAgentInterceptor userAgentInterceptor = new UserAgentInterceptor();
 
     private static final String userAgent;
+
     static {
         String date = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date(BuildConfig.buildTime));
-        userAgent = "DAVdroid/" + BuildConfig.VERSION_NAME + " (" + date + "; dav4android; okhttp3) Android/" + Build.VERSION.RELEASE;
+        userAgent = "DAVdroid/" + BuildConfig.VERSION_NAME + " (" + date + "; okhttp3) Android/" + Build.VERSION.RELEASE;
     }
 
     private HttpClient() {
@@ -52,7 +52,7 @@ public class HttpClient {
 
         // use account settings for authentication
         AccountSettings settings = new AccountSettings(context, account);
-        builder = addAuthentication(builder, null, settings.username(), settings.password());
+        builder = addAuthentication(builder, null, settings.getAuthToken());
 
         return builder.build();
     }
@@ -75,7 +75,7 @@ public class HttpClient {
 
         // use MemorizingTrustManager to manage self-signed certificates
         if (context != null) {
-            App app = (App)context.getApplicationContext();
+            App app = (App) context.getApplicationContext();
             if (App.getSslSocketFactoryCompat() != null && app.getCertManager() != null)
                 builder.sslSocketFactory(App.getSslSocketFactoryCompat(), app.getCertManager());
             if (App.getHostnameVerifier() != null)
@@ -86,9 +86,6 @@ public class HttpClient {
         builder.connectTimeout(30, TimeUnit.SECONDS);
         builder.writeTimeout(30, TimeUnit.SECONDS);
         builder.readTimeout(120, TimeUnit.SECONDS);
-
-        // don't allow redirects, because it would break PROPFIND handling
-        builder.followRedirects(false);
 
         // custom proxy support
         if (context != null) {
@@ -105,7 +102,7 @@ public class HttpClient {
                     builder.proxy(proxy);
                     App.log.log(Level.INFO, "Using proxy", proxy);
                 }
-            } catch(IllegalArgumentException|NullPointerException e) {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 App.log.log(Level.SEVERE, "Can't set proxy, ignoring", e);
             } finally {
                 dbHelper.close();
@@ -115,9 +112,6 @@ public class HttpClient {
         // add User-Agent to every request
         builder.addNetworkInterceptor(userAgentInterceptor);
 
-        // add cookie store for non-persistent cookies (some services like Horde use cookies for session tracking)
-        builder.cookieJar(new MemoryCookieStore());
-
         // add network logging, if requested
         if (logger.isLoggable(Level.FINEST)) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -126,32 +120,46 @@ public class HttpClient {
                     logger.finest(message);
                 }
             });
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
             builder.addInterceptor(loggingInterceptor);
         }
 
         return builder;
     }
 
-    private static OkHttpClient.Builder addAuthentication(@NonNull OkHttpClient.Builder builder, @Nullable String host, @NonNull String username, @NonNull String password) {
-        BasicDigestAuthHandler authHandler = new BasicDigestAuthHandler(host, username, password);
-        return builder
-                .addNetworkInterceptor(authHandler)
-                .authenticator(authHandler);
+    private static OkHttpClient.Builder addAuthentication(@NonNull OkHttpClient.Builder builder, @Nullable String host, @NonNull String token) {
+        TokenAuthenticator authHandler = new TokenAuthenticator(host, token);
+
+        return builder.addNetworkInterceptor(authHandler);
     }
 
-    public static OkHttpClient addAuthentication(@NonNull OkHttpClient client, @NonNull String username, @NonNull String password) {
-        OkHttpClient.Builder builder = client.newBuilder();
-        addAuthentication(builder, null, username, password);
-        return builder.build();
-    }
+    private static class TokenAuthenticator implements Interceptor {
+        protected static final String
+                HEADER_AUTHORIZATION = "Authorization";
 
-    public static OkHttpClient addAuthentication(@NonNull OkHttpClient client, @NonNull String host, @NonNull String username, @NonNull String password) {
-        OkHttpClient.Builder builder = client.newBuilder();
-        addAuthentication(builder, host, username, password);
-        return builder.build();
-    }
+        // FIXME: Host is not used
+        final String host, token;
 
+
+        private TokenAuthenticator(String host, String token) {
+            this.host = host;
+            this.token = token;
+        }
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+
+            if ((token != null)
+                    && (request.header(HEADER_AUTHORIZATION) == null)) {
+                request = request.newBuilder()
+                        .header(HEADER_AUTHORIZATION, "Token " + token)
+                        .build();
+            }
+
+            return chain.proceed(request);
+        }
+    }
 
     static class UserAgentInterceptor implements Interceptor {
         @Override

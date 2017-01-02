@@ -16,30 +16,33 @@ import android.os.RemoteException;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
-import net.fortuna.ical4j.model.property.ProdId;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
 
-import at.bitfire.davdroid.BuildConfig;
+import at.bitfire.davdroid.App;
 import at.bitfire.ical4android.AndroidCalendar;
 import at.bitfire.ical4android.AndroidEvent;
 import at.bitfire.ical4android.AndroidEventFactory;
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
+import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Getter;
 import lombok.Setter;
 
 @TargetApi(17)
 public class LocalEvent extends AndroidEvent implements LocalResource {
-    static {
-        Event.prodId = new ProdId("+//IDN bitfire.at//DAVdroid/" + BuildConfig.VERSION_NAME + " ical4android ical4j/2.x");
-    }
-
     static final String COLUMN_ETAG = CalendarContract.Events.SYNC_DATA1,
-                        COLUMN_UID = Build.VERSION.SDK_INT >= 17 ? Events.UID_2445 : Events.SYNC_DATA2,
-                        COLUMN_SEQUENCE = CalendarContract.Events.SYNC_DATA3;
+            COLUMN_UID = Build.VERSION.SDK_INT >= 17 ? Events.UID_2445 : Events.SYNC_DATA2,
+            COLUMN_SEQUENCE = CalendarContract.Events.SYNC_DATA3;
 
-    @Getter protected String fileName;
-    @Getter @Setter protected String eTag;
+    @Getter
+    protected String fileName;
+    @Getter
+    @Setter
+    protected String eTag;
 
     public boolean weAreOrganizer = true;
 
@@ -57,6 +60,26 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
         }
     }
 
+    @Override
+    public String getContent() throws IOException, ContactsStorageException, CalendarStorageException {
+        App.log.log(Level.FINE, "Preparing upload of event " + getFileName(), getEvent());
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        getEvent().write(os);
+
+        return os.toString();
+    }
+
+    @Override
+    public boolean isLocalOnly() {
+        return TextUtils.isEmpty(getETag());
+    }
+
+    @Override
+    public String getUuid() {
+        // Now the same
+        return getFileName();
+    }
 
     /* process LocalEvent-specific fields */
 
@@ -83,7 +106,7 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
         boolean buildException = recurrence != null;
         Event eventToBuild = buildException ? recurrence : event;
 
-        builder .withValue(COLUMN_UID, event.uid)
+        builder.withValue(COLUMN_UID, event.uid)
                 .withValue(COLUMN_SEQUENCE, eventToBuild.sequence)
                 .withValue(CalendarContract.Events.DIRTY, 0)
                 .withValue(CalendarContract.Events.DELETED, 0);
@@ -91,7 +114,7 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
         if (buildException)
             builder.withValue(Events.ORIGINAL_SYNC_ID, fileName);
         else
-            builder .withValue(Events._SYNC_ID, fileName)
+            builder.withValue(Events._SYNC_ID, fileName)
                     .withValue(COLUMN_ETAG, eTag);
     }
 
@@ -100,7 +123,7 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
 
     public void updateFileNameAndUID(String uid) throws CalendarStorageException {
         try {
-            String newFileName = uid + ".ics";
+            String newFileName = uid;
 
             ContentValues values = new ContentValues(2);
             values.put(Events._SYNC_ID, newFileName);

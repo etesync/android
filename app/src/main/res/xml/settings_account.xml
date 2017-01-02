@@ -12,18 +12,25 @@
     <PreferenceCategory android:title="@string/settings_authentication">
 
         <EditTextPreference
-            android:key="username"
-            android:title="@string/settings_username"
-            android:persistent="false"
-            android:dialogTitle="@string/settings_enter_username" />
-
-        <EditTextPreference
             android:key="password"
             android:title="@string/settings_password"
             android:persistent="false"
             android:inputType="textPassword"
             android:summary="@string/settings_password_summary"
             android:dialogTitle="@string/settings_enter_password" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_encryption">
+
+        <EditTextPreference
+            android:key="encryption_password"
+            android:title="@string/settings_encryption_password"
+            android:persistent="false"
+            android:inputType="textPassword"
+            android:enabled="false"
+            android:summary="@string/settings_encryption_password_summary"
+            android:dialogTitle="@string/settings_enter_encryption_password" />
 
     </PreferenceCategory>
 
@@ -66,34 +73,4 @@
             android:dialogMessage="@string/settings_sync_wifi_only_ssid_message"/>
 
     </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/settings_carddav">
-
-        <ListPreference
-            android:key="contact_group_method"
-            android:persistent="false"
-            android:title="@string/settings_contact_group_method"
-            android:entries="@array/settings_contact_group_method_entries"
-            android:entryValues="@array/settings_contact_group_method_values"/>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/settings_caldav">
-
-        <EditTextPreference
-            android:key="time_range_past_days"
-            android:persistent="false"
-            android:title="@string/settings_sync_time_range_past"
-            android:dialogMessage="@string/settings_sync_time_range_past_message"
-            android:inputType="number"/>
-
-        <SwitchPreferenceCompat
-            android:key="manage_calendar_colors"
-            android:persistent="false"
-            android:title="@string/settings_manage_calendar_colors"
-            android:summaryOn="@string/settings_manage_calendar_colors_on"
-            android:summaryOff="@string/settings_manage_calendar_colors_off"/>
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

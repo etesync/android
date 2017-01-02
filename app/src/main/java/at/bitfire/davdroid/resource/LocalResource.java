@@ -8,15 +8,20 @@
 
 package at.bitfire.davdroid.resource;
 
+import java.io.IOException;
+
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 
 public interface LocalResource {
-
+    String getUuid();
     Long getId();
 
-    String getFileName();
-    String getETag();
+    /** True if doesn't exist on server yet, false otherwise. */
+    boolean isLocalOnly();
+
+    /** Returns a string of how this should be represented for example: vCard. */
+    String getContent() throws IOException, ContactsStorageException, CalendarStorageException;
 
     int delete() throws CalendarStorageException, ContactsStorageException;
 

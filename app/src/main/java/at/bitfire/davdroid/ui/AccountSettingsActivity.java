@@ -92,23 +92,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
 
             // category: authentication
-            final EditTextPreference prefUserName = (EditTextPreference)findPreference("username");
-            prefUserName.setSummary(settings.username());
-            prefUserName.setText(settings.username());
-            prefUserName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    settings.username((String)newValue);
-                    refresh();
-                    return false;
-                }
-            });
-
             final EditTextPreference prefPassword = (EditTextPreference)findPreference("password");
             prefPassword.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    settings.password((String)newValue);
+                    settings.setAuthToken((String)newValue);
                     refresh();
                     return false;
                 }
@@ -205,66 +193,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
-
-            // category: CardDAV
-            final ListPreference prefGroupMethod = (ListPreference)findPreference("contact_group_method");
-            if (syncIntervalContacts != null) {
-                prefGroupMethod.setValue(settings.getGroupMethod().name());
-                prefGroupMethod.setSummary(prefGroupMethod.getEntry());
-                prefGroupMethod.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object o) {
-                        String name = (String)o;
-                        settings.setGroupMethod(GroupMethod.valueOf(name));
-                        refresh();
-                        return false;
-                    }
-                });
-            } else
-                prefGroupMethod.setEnabled(false);
-
-            // category: CalDAV
-            final EditTextPreference prefTimeRangePastDays = (EditTextPreference)findPreference("time_range_past_days");
-            if (syncIntervalCalendars != null) {
-                Integer pastDays = settings.getTimeRangePastDays();
-                if (pastDays != null) {
-                    prefTimeRangePastDays.setText(pastDays.toString());
-                    prefTimeRangePastDays.setSummary(getResources().getQuantityString(R.plurals.settings_sync_time_range_past_days, pastDays, pastDays));
-                } else {
-                    prefTimeRangePastDays.setText(null);
-                    prefTimeRangePastDays.setSummary(R.string.settings_sync_time_range_past_none);
-                }
-                prefTimeRangePastDays.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        int days;
-                        try {
-                            days = Integer.parseInt((String)newValue);
-                        } catch(NumberFormatException ignored) {
-                            days = -1;
-                        }
-                        settings.setTimeRangePastDays(days < 0 ? null : days);
-                        refresh();
-                        return false;
-                    }
-                });
-            } else
-                prefTimeRangePastDays.setEnabled(false);
-
-            final SwitchPreferenceCompat prefManageColors = (SwitchPreferenceCompat)findPreference("manage_calendar_colors");
-            if (syncIntervalCalendars != null || syncIntervalTasks != null) {
-                prefManageColors.setChecked(settings.getManageCalendarColors());
-                prefManageColors.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        settings.setManageCalendarColors((Boolean)newValue);
-                        refresh();
-                        return false;
-                    }
-                });
-            } else
-                prefManageColors.setEnabled(false);
-
         }
     }
 

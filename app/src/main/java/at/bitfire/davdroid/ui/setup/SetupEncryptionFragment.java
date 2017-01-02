@@ -11,23 +11,22 @@ package at.bitfire.davdroid.ui.setup;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 
-import java.net.URI;
 import java.util.logging.Level;
 
 import at.bitfire.davdroid.AccountSettings;
@@ -36,78 +35,93 @@ import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.DavService;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.journalmanager.Helpers;
 import at.bitfire.davdroid.model.CollectionInfo;
-import at.bitfire.davdroid.model.ServiceDB.Collections;
-import at.bitfire.davdroid.model.ServiceDB.HomeSets;
-import at.bitfire.davdroid.model.ServiceDB.OpenHelper;
-import at.bitfire.davdroid.model.ServiceDB.Services;
+import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.resource.LocalTaskList;
+import at.bitfire.davdroid.ui.setup.DavResourceFinder.Configuration;
 import at.bitfire.ical4android.TaskProvider;
-import at.bitfire.vcard4android.GroupMethod;
 import lombok.Cleanup;
 
-public class AccountDetailsFragment extends Fragment {
-
+public class SetupEncryptionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Configuration> {
     private static final String KEY_CONFIG = "config";
 
-    Spinner spnrGroupMethod;
-
-
-    public static AccountDetailsFragment newInstance(DavResourceFinder.Configuration config) {
-        AccountDetailsFragment frag = new AccountDetailsFragment();
+    public static SetupEncryptionFragment newInstance(DavResourceFinder.Configuration config) {
+        SetupEncryptionFragment frag = new SetupEncryptionFragment();
         Bundle args = new Bundle(1);
         args.putSerializable(KEY_CONFIG, config);
         frag.setArguments(args);
         return frag;
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        ProgressDialog progress = new ProgressDialog(getActivity());
+        progress.setTitle(R.string.login_encryption_setup_title);
+        progress.setMessage(getString(R.string.login_encryption_setup));
+        progress.setIndeterminate(true);
+        progress.setCanceledOnTouchOutside(false);
+        setCancelable(false);
+        return progress;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.login_account_details, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        Button btnBack = (Button)v.findViewById(R.id.back);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        DavResourceFinder.Configuration config = (DavResourceFinder.Configuration)getArguments().getSerializable(KEY_CONFIG);
-
-        final EditText editName = (EditText)v.findViewById(R.id.account_name);
-        editName.setText((config.calDAV != null && config.calDAV.email != null) ? config.calDAV.email : config.userName);
-
-        // CardDAV-specific
-        v.findViewById(R.id.carddav).setVisibility(config.cardDAV != null ? View.VISIBLE : View.GONE);
-        spnrGroupMethod = (Spinner)v.findViewById(R.id.contact_group_method);
-
-        Button btnCreate = (Button)v.findViewById(R.id.create_account);
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = editName.getText().toString();
-                if (name.isEmpty())
-                    editName.setError(getString(R.string.login_account_name_required));
-                else {
-                    if (createAccount(name, (DavResourceFinder.Configuration)getArguments().getSerializable(KEY_CONFIG))) {
-                        getActivity().setResult(Activity.RESULT_OK);
-                        getActivity().finish();
-                    } else
-                        Snackbar.make(v, R.string.login_account_not_created, Snackbar.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        return v;
+        getLoaderManager().initLoader(0, getArguments(), this);
     }
+
+    @Override
+    public Loader<Configuration> onCreateLoader(int id, Bundle args) {
+        return new SetupEncryptionLoader(getContext(), (Configuration)args.getSerializable(KEY_CONFIG));
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Configuration> loader, Configuration config) {
+        if (createAccount(config.userName, config)) {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+        } else {
+            App.log.severe("Account creation failed!");
+        }
+
+        dismissAllowingStateLoss();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Configuration> loader) {
+    }
+
+    static class SetupEncryptionLoader extends AsyncTaskLoader<Configuration> {
+        final Context context;
+        final Configuration config;
+
+        public SetupEncryptionLoader(Context context, Configuration config) {
+            super(context);
+            this.context = context;
+            this.config = config;
+        }
+
+        @Override
+        protected void onStartLoading() {
+            forceLoad();
+        }
+
+        @Override
+        public Configuration loadInBackground() {
+            config.password = Helpers.deriveKey(config.userName, config.rawPassword);
+            return config;
+        }
+    }
+
 
     protected boolean createAccount(String accountName, DavResourceFinder.Configuration config) {
         Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
 
         // create Android account
-        Bundle userData = AccountSettings.initialUserData(config.userName);
+        Bundle userData = AccountSettings.initialUserData(config.url, config.userName);
         App.log.log(Level.INFO, "Creating Android account with initial config", new Object[] { account, userData });
 
         AccountManager accountManager = AccountManager.get(getContext());
@@ -116,7 +130,7 @@ public class AccountDetailsFragment extends Fragment {
 
         // add entries for account to service DB
         App.log.log(Level.INFO, "Writing account configuration to database", config);
-        @Cleanup OpenHelper dbHelper = new OpenHelper(getContext());
+        @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
             AccountSettings settings = new AccountSettings(getContext(), account);
@@ -124,18 +138,15 @@ public class AccountDetailsFragment extends Fragment {
             Intent refreshIntent = new Intent(getActivity(), DavService.class);
             refreshIntent.setAction(DavService.ACTION_REFRESH_COLLECTIONS);
 
+            settings.setAuthToken(config.authtoken);
+
             if (config.cardDAV != null) {
                 // insert CardDAV service
-                long id = insertService(db, accountName, Services.SERVICE_CARDDAV, config.cardDAV);
+                long id = insertService(db, accountName, ServiceDB.Services.SERVICE_CARDDAV, config.cardDAV);
 
                 // start CardDAV service detection (refresh collections)
                 refreshIntent.putExtra(DavService.EXTRA_DAV_SERVICE_ID, id);
                 getActivity().startService(refreshIntent);
-
-                // initial CardDAV account settings
-                int idx = spnrGroupMethod.getSelectedItemPosition();
-                String groupMethodName = getResources().getStringArray(R.array.settings_contact_group_method_values)[idx];
-                settings.setGroupMethod(GroupMethod.valueOf(groupMethodName));
 
                 // enable contact sync
                 ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 1);
@@ -144,7 +155,7 @@ public class AccountDetailsFragment extends Fragment {
 
             if (config.calDAV != null) {
                 // insert CalDAV service
-                long id = insertService(db, accountName, Services.SERVICE_CALDAV, config.calDAV);
+                long id = insertService(db, accountName, ServiceDB.Services.SERVICE_CALDAV, config.calDAV);
 
                 // start CalDAV service detection (refresh collections)
                 refreshIntent.putExtra(DavService.EXTRA_DAV_SERVICE_ID, id);
@@ -173,28 +184,17 @@ public class AccountDetailsFragment extends Fragment {
         ContentValues values = new ContentValues();
 
         // insert service
-        values.put(Services.ACCOUNT_NAME, accountName);
-        values.put(Services.SERVICE, service);
-        if (info.principal != null)
-            values.put(Services.PRINCIPAL, info.principal.toString());
-        long serviceID = db.insertWithOnConflict(Services._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-
-        // insert home sets
-        for (URI homeSet : info.homeSets) {
-            values.clear();
-            values.put(HomeSets.SERVICE_ID, serviceID);
-            values.put(HomeSets.URL, homeSet.toString());
-            db.insertWithOnConflict(HomeSets._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        }
+        values.put(ServiceDB.Services.ACCOUNT_NAME, accountName);
+        values.put(ServiceDB.Services.SERVICE, service);
+        long serviceID = db.insertWithOnConflict(ServiceDB.Services._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
         // insert collections
         for (CollectionInfo collection : info.collections.values()) {
             values = collection.toDB();
-            values.put(Collections.SERVICE_ID, serviceID);
-            db.insertWithOnConflict(Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            values.put(ServiceDB.Collections.SERVICE_ID, serviceID);
+            db.insertWithOnConflict(ServiceDB.Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
 
         return serviceID;
     }
-
 }

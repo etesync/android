@@ -30,8 +30,23 @@
 -dontwarn java.nio.file.**   # not available on Android
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
-# dnsjava
--dontwarn sun.net.spi.nameservice.**   # not available on Android
-
 # DAVdroid + libs
 -keep class at.bitfire.** { *; }       # all DAVdroid code is required
+
+# Spongcastle
+-dontwarn org.spongycastle.jce.provider.X509LDAPCertStoreSpi
+-dontwarn org.spongycastle.x509.util.LDAPStoreHelper
+-keep class org.spongycastle.crypto.BufferedBlockCipher
+-keep class org.spongycastle.crypto.CipherParameters
+-keep class org.spongycastle.crypto.InvalidCipherTextException
+-keep class org.spongycastle.crypto.digests.SHA256Digest
+-keep class org.spongycastle.crypto.engines.AESEngine
+-keep class org.spongycastle.crypto.generators.SCrypt
+-keep class org.spongycastle.crypto.macs.HMac
+-keep class org.spongycastle.crypto.modes.CBCBlockCipher
+-keep class org.spongycastle.crypto.paddings.BlockCipherPadding
+-keep class org.spongycastle.crypto.paddings.PKCS7Padding
+-keep class org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher
+-keep class org.spongycastle.crypto.params.KeyParameter
+-keep class org.spongycastle.crypto.params.ParametersWithIV
+-keep class org.spongycastle.util.encoders.Hex

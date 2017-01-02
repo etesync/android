@@ -38,13 +38,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Level;
 
-import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.BuildConfig;
 import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.journalmanager.Exceptions.HttpException;
 import at.bitfire.davdroid.model.ServiceDB;
 import lombok.Cleanup;
 
@@ -159,21 +159,21 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
             String  logs = null,
                     authority = null;
             Account account = null;
-            int phase = -1;
+            String phase = null;
 
             if (extras != null) {
                 throwable = (Throwable)extras.getSerializable(KEY_THROWABLE);
                 logs = extras.getString(KEY_LOGS);
                 account = extras.getParcelable(KEY_ACCOUNT);
                 authority = extras.getString(KEY_AUTHORITY);
-                phase = extras.getInt(KEY_PHASE, -1);
+                phase = extras.getString(KEY_PHASE, null);
             }
 
             StringBuilder report = new StringBuilder();
 
             // begin with most specific information
 
-            if (phase != -1)
+            if (phase != null)
                 report.append("SYNCHRONIZATION INFO\nSynchronization phase: ").append(phase).append("\n");
             if (account != null)
                 report.append("Account name: ").append(account.name).append("\n");
@@ -181,11 +181,13 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
                 report.append("Authority: ").append(authority).append("\n");
 
             if (throwable instanceof HttpException) {
+                /* FIXME
                 HttpException http = (HttpException)throwable;
                 if (http.request != null)
                     report.append("\nHTTP REQUEST:\n").append(http.request).append("\n\n");
                 if (http.response != null)
                     report.append("HTTP RESPONSE:\n").append(http.response).append("\n");
+                    */
             }
 
             if (throwable != null)

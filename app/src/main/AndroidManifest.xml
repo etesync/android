@@ -102,26 +102,14 @@
             android:process=":sync"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
 
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_calendars"/>
+                android:resource="@xml/sync_calendars" />
         </service>
-        <service
-            android:name=".syncadapter.TasksSyncAdapterService"
-            android:exported="true"
-            android:process=":sync"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
-            </intent-filter>
 
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_tasks"/>
-        </service>
 
         <service
             android:name=".DavService"

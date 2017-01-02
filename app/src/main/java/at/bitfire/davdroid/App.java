@@ -68,7 +68,6 @@ public class App extends Application {
 
     public final static Logger log = Logger.getLogger("davdroid");
     static {
-        at.bitfire.dav4android.Constants.log = Logger.getLogger("davdroid.dav4android");
         at.bitfire.cert4android.Constants.log = Logger.getLogger("davdroid.cert4android");
     }
 

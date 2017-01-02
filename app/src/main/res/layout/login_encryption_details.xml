@@ -27,42 +27,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/login_type_headline"
-                android:text="@string/login_create_account"
+                android:text="@string/login_enter_encryption_details"
                 android:layout_marginBottom="14dp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/account_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/login_account_name"
-                android:inputType="textEmailAddress"/>
+                android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/account_email_hint"
+            <at.bitfire.davdroid.ui.widget.EditPassword
+                android:id="@+id/encryption_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/login_account_name_info"/>
-
-            <LinearLayout
-                android:id="@+id/carddav"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/login_account_contact_group_method"/>
-
-                <Spinner
-                    android:id="@+id/contact_group_method"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/settings_contact_group_method_entries"/>
-
-            </LinearLayout>
+                android:hint="@string/login_encryption_password"/>
 
         </LinearLayout>
     </ScrollView>
@@ -85,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="@string/login_create_account"
+            android:text="@string/login_signup"
             style="@style/stepper_nav_button"/>
 
     </LinearLayout>

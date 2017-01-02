@@ -17,32 +17,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.IDN;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 
-import at.bitfire.dav4android.Constants;
+import at.bitfire.davdroid.App;
+import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.ui.widget.EditPassword;
 
-public class LoginCredentialsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
-
-    RadioButton radioUseEmail;
-    LinearLayout emailDetails;
-    EditText editEmailAddress;
-    EditPassword editEmailPassword;
-
-    RadioButton radioUseURL;
-    LinearLayout urlDetails;
-    EditText editBaseURL, editUserName;
+public class LoginCredentialsFragment extends Fragment {
+    EditText editUserName;
     EditPassword editUrlPassword;
 
 
@@ -50,47 +42,33 @@ public class LoginCredentialsFragment extends Fragment implements CompoundButton
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.login_credentials_fragment, container, false);
 
-        radioUseEmail = (RadioButton)v.findViewById(R.id.login_type_email);
-        emailDetails = (LinearLayout)v.findViewById(R.id.login_type_email_details);
-        editEmailAddress = (EditText)v.findViewById(R.id.email_address);
-        editEmailPassword = (EditPassword)v.findViewById(R.id.email_password);
-
-        radioUseURL = (RadioButton)v.findViewById(R.id.login_type_url);
-        urlDetails = (LinearLayout)v.findViewById(R.id.login_type_url_details);
-        editBaseURL = (EditText)v.findViewById(R.id.base_url);
-        editUserName = (EditText)v.findViewById(R.id.user_name);
-        editUrlPassword = (EditPassword)v.findViewById(R.id.url_password);
-
-        radioUseEmail.setOnCheckedChangeListener(this);
-        radioUseURL.setOnCheckedChangeListener(this);
+        editUserName = (EditText) v.findViewById(R.id.user_name);
+        editUrlPassword = (EditPassword) v.findViewById(R.id.url_password);
 
         if (savedInstanceState == null) {
-            // first call
-
             Activity activity = getActivity();
             Intent intent = (activity != null) ? activity.getIntent() : null;
             if (intent != null) {
                 // we've got initial login data
-                String  url = intent.getStringExtra(LoginActivity.EXTRA_URL),
-                        username = intent.getStringExtra(LoginActivity.EXTRA_USERNAME),
+                String username = intent.getStringExtra(LoginActivity.EXTRA_USERNAME),
                         password = intent.getStringExtra(LoginActivity.EXTRA_PASSWORD);
 
-                if (url != null) {
-                    radioUseURL.setChecked(true);
-                    editBaseURL.setText(url);
-                    editUserName.setText(username);
-                    editUrlPassword.setText(password);
-                } else {
-                    radioUseEmail.setChecked(true);
-                    editEmailAddress.setText(username);
-                    editEmailPassword.setText(password);
-                }
-
-            } else
-                radioUseEmail.setChecked(true);
+                editUserName.setText(username);
+                editUrlPassword.setText(password);
+            }
         }
 
-        final Button login = (Button)v.findViewById(R.id.login);
+        final Button createAccount = (Button) v.findViewById(R.id.create_account);
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri createUri = Constants.registrationUrl.buildUpon().appendQueryParameter("email", editUserName.getText().toString()).build();
+                Intent intent = new Intent(Intent.ACTION_VIEW, createUri);
+                startActivity(intent);
+            }
+        });
+
+        final Button login = (Button) v.findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,88 +81,29 @@ public class LoginCredentialsFragment extends Fragment implements CompoundButton
         return v;
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            boolean loginByEmail = buttonView == radioUseEmail;
-            emailDetails.setVisibility(loginByEmail ? View.VISIBLE : View.GONE);
-            urlDetails.setVisibility(loginByEmail ? View.GONE : View.VISIBLE);
-            (loginByEmail ? editEmailAddress : editBaseURL).requestFocus();
-        }
-    }
-
     protected LoginCredentials validateLoginData() {
-        if (radioUseEmail.isChecked()) {
-            URI uri = null;
-            boolean valid = true;
+        boolean valid = true;
 
-            String email = editEmailAddress.getText().toString();
-            if (!email.matches(".+@.+")) {
-                editEmailAddress.setError(getString(R.string.login_email_address_error));
-                valid = false;
-            } else
-                try {
-                    uri = new URI("mailto", email, null);
-                } catch (URISyntaxException e) {
-                    editEmailAddress.setError(e.getLocalizedMessage());
-                    valid = false;
-                }
-
-            String password = editEmailPassword.getText().toString();
-            if (password.isEmpty()) {
-                editEmailPassword.setError(getString(R.string.login_password_required));
-                valid = false;
-            }
-
-            return valid ? new LoginCredentials(uri, email, password) : null;
-
-        } else if (radioUseURL.isChecked()) {
-            URI uri = null;
-            boolean valid = true;
-
-            Uri baseUrl = Uri.parse(editBaseURL.getText().toString());
-            String scheme = baseUrl.getScheme();
-            if ("https".equalsIgnoreCase(scheme) || "http".equalsIgnoreCase(scheme)) {
-                String host = baseUrl.getHost();
-                if (StringUtils.isEmpty(host)) {
-                    editBaseURL.setError(getString(R.string.login_url_host_name_required));
-                    valid = false;
-                } else
-                    try {
-                        host = IDN.toASCII(host);
-                    } catch(IllegalArgumentException e) {
-                        Constants.log.log(Level.WARNING, "Host name not conforming to RFC 3490", e);
-                    }
-
-                String path = baseUrl.getEncodedPath();
-                int port = baseUrl.getPort();
-                try {
-                    uri = new URI(baseUrl.getScheme(), null, host, port, path, null, null);
-                } catch (URISyntaxException e) {
-                    editBaseURL.setError(e.getLocalizedMessage());
-                    valid = false;
-                }
-            } else {
-                editBaseURL.setError(getString(R.string.login_url_must_be_http_or_https));
-                valid = false;
-            }
-
-            String userName = editUserName.getText().toString();
-            if (userName.isEmpty()) {
-                editUserName.setError(getString(R.string.login_user_name_required));
-                valid = false;
-            }
-
-            String password = editUrlPassword.getText().toString();
-            if (password.isEmpty()) {
-                editUrlPassword.setError(getString(R.string.login_password_required));
-                valid = false;
-            }
-
-            return valid ? new LoginCredentials(uri, userName, password) : null;
+        URI uri = null;
+        try {
+            uri = new URI(Constants.serviceUrl.toString());
+        } catch (URISyntaxException e) {
+            App.log.severe("Should never happen, it's a constant");
         }
 
-        return null;
+        String userName = editUserName.getText().toString();
+        if (userName.isEmpty()) {
+            editUserName.setError(getString(R.string.login_user_name_required));
+            valid = false;
+        }
+
+        String password = editUrlPassword.getText().toString();
+        if (password.isEmpty()) {
+            editUrlPassword.setError(getString(R.string.login_password_required));
+            valid = false;
+        }
+
+        return valid ? new LoginCredentials(uri, userName, password) : null;
     }
 
 }
