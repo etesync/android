@@ -75,7 +75,7 @@ public class ContactsSyncManager extends SyncManager {
     }
 
     @Override
-    protected void prepare() throws ContactsStorageException, CalendarStorageException {
+    protected boolean prepare() throws ContactsStorageException, CalendarStorageException {
         // prepare local address book
         localCollection = new LocalAddressBook(account, provider);
         LocalAddressBook localAddressBook = localAddressBook();
@@ -88,6 +88,8 @@ public class ContactsSyncManager extends SyncManager {
         localAddressBook.updateSettings(values);
 
         journal = new JournalEntryManager(httpClient, remote, info.url);
+
+        return true;
     }
 
     @Override

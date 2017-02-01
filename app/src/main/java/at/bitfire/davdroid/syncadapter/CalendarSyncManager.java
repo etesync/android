@@ -61,8 +61,9 @@ public class CalendarSyncManager extends SyncManager {
     }
 
     @Override
-    protected void prepare() throws ContactsStorageException {
+    protected boolean prepare() throws ContactsStorageException {
         journal = new JournalEntryManager(httpClient, remote, localCalendar().getName());
+        return true;
     }
 
     @Override
