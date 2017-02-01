@@ -10,6 +10,7 @@ package at.bitfire.davdroid.syncadapter;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
@@ -80,6 +81,12 @@ public class ContactsSyncManager extends SyncManager {
         localCollection = new LocalAddressBook(account, provider);
         LocalAddressBook localAddressBook = localAddressBook();
         localAddressBook.setURL(info.url);
+
+        int reallyDirty = localAddressBook.verifyDirty();
+        if (extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD) && reallyDirty == 0) {
+            App.log.info("This sync was called to upload dirty contacts, but no contact data have been changed");
+            return false;
+        }
 
         // set up Contacts Provider Settings
         ContentValues values = new ContentValues(2);
