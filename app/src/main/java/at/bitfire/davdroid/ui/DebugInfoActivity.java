@@ -207,7 +207,7 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
                     workaroundInstalled = pm.getPackageInfo("at.bitfire.davdroid.jbworkaround", 0) != null;
                 } catch(PackageManager.NameNotFoundException ignored) {}
                 report.append("\nSOFTWARE INFORMATION\n" +
-                                "DAVdroid version: ").append(BuildConfig.VERSION_NAME).append(" (").append(BuildConfig.VERSION_CODE).append(") ").append(new Date(BuildConfig.buildTime)).append("\n")
+                                "EteSync version: ").append(BuildConfig.VERSION_NAME).append(" (").append(BuildConfig.VERSION_CODE).append(") ").append(new Date(BuildConfig.buildTime)).append("\n")
                                 .append("Installed from: ").append(installedFrom).append("\n")
                                 .append("JB Workaround installed: ").append(workaroundInstalled ? "yes" : "no").append("\n\n");
             } catch(Exception ex) {
