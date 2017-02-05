@@ -14,6 +14,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 
@@ -82,10 +83,13 @@ public class ContactsSyncManager extends SyncManager {
         LocalAddressBook localAddressBook = localAddressBook();
         localAddressBook.setURL(info.url);
 
-        int reallyDirty = localAddressBook.verifyDirty();
-        if (extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD) && reallyDirty == 0) {
-            App.log.info("This sync was called to upload dirty contacts, but no contact data have been changed");
-            return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
+            int reallyDirty = localAddressBook.verifyDirty();
+            if (extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD) && reallyDirty == 0) {
+                App.log.info("This sync was called to upload dirty contacts, but no contact data have been changed");
+                return false;
+            }
         }
 
         // set up Contacts Provider Settings
