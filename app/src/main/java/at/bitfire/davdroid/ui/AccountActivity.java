@@ -173,26 +173,10 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
     public boolean onMenuItemClick(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.refresh_address_books:
-                if (accountInfo != null && accountInfo.carddav != null) {
-                    intent = new Intent(this, DavService.class);
-                    intent.setAction(DavService.ACTION_REFRESH_COLLECTIONS);
-                    intent.putExtra(DavService.EXTRA_DAV_SERVICE_ID, accountInfo.carddav.id);
-                    startService(intent);
-                }
-                break;
             case R.id.create_address_book:
                 intent = new Intent(this, CreateAddressBookActivity.class);
                 intent.putExtra(CreateAddressBookActivity.EXTRA_ACCOUNT, account);
                 startActivity(intent);
-                break;
-            case R.id.refresh_calendars:
-                if (accountInfo != null && accountInfo.caldav != null) {
-                    intent = new Intent(this, DavService.class);
-                    intent.setAction(DavService.ACTION_REFRESH_COLLECTIONS);
-                    intent.putExtra(DavService.EXTRA_DAV_SERVICE_ID, accountInfo.caldav.id);
-                    startService(intent);
-                }
                 break;
             case R.id.create_calendar:
                 intent = new Intent(this, CreateCalendarActivity.class);
