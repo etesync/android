@@ -13,6 +13,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -21,6 +22,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationManagerCompat;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,13 +30,17 @@ import java.util.logging.Level;
 
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
-import at.bitfire.davdroid.InvalidAccountException;
+import at.bitfire.davdroid.Constants;
+import at.bitfire.davdroid.NotificationHelper;
+import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
 import at.bitfire.davdroid.model.ServiceDB.Services;
 import at.bitfire.davdroid.resource.LocalCalendar;
+import at.bitfire.davdroid.ui.AccountSettingsActivity;
+import at.bitfire.davdroid.ui.DebugInfoActivity;
 import at.bitfire.ical4android.CalendarStorageException;
 import lombok.Cleanup;
 import okhttp3.HttpUrl;
@@ -57,6 +63,9 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             super.onPerformSync(account, extras, authority, provider, syncResult);
 
+            NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals", Constants.NOTIFICATION_CALENDAR_SYNC);
+            notificationManager.cancel();
+
             try {
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
@@ -71,15 +80,27 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                     CalendarSyncManager syncManager = new CalendarSyncManager(getContext(), account, settings, extras, authority, syncResult, calendar, principal);
                     syncManager.performSync();
                 }
-            } catch (CalendarStorageException | SQLiteException e) {
-                App.log.log(Level.SEVERE, "Couldn't prepare local calendars", e);
-                syncResult.databaseError = true;
-            } catch (InvalidAccountException e) {
-                App.log.log(Level.SEVERE, "Couldn't get account settings", e);
-            } catch (Exceptions.HttpException e) {
-                e.printStackTrace();
-            } catch (Exceptions.IntegrityException e) {
-                e.printStackTrace();
+            } catch (Exception | OutOfMemoryError e) {
+                if (e instanceof CalendarStorageException || e instanceof SQLiteException) {
+                    App.log.log(Level.SEVERE, "Couldn't prepare local calendars", e);
+                    syncResult.databaseError = true;
+                }
+
+                String syncPhase = SyncManager.SYNC_PHASE_JOURNALS;
+                String title = getContext().getString(R.string.sync_error_calendar, account.name);
+
+                notificationManager.setThrowable(e);
+
+                final Intent detailsIntent = notificationManager.getDetailsIntent();
+                if (e instanceof Exceptions.UnauthorizedException) {
+                    detailsIntent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
+                } else {
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
+                }
+
+                notificationManager.notify(title, syncPhase);
             }
 
             App.log.info("Calendar sync complete");

@@ -9,14 +9,11 @@ package at.bitfire.davdroid.syncadapter;
 
 import android.accounts.Account;
 import android.annotation.TargetApi;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.NotificationCompat;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +31,7 @@ import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.GsonHelper;
 import at.bitfire.davdroid.HttpClient;
 import at.bitfire.davdroid.InvalidAccountException;
-import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.NotificationHelper;
 import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.journalmanager.JournalEntryManager;
 import at.bitfire.davdroid.model.CollectionInfo;
@@ -50,7 +47,8 @@ import okhttp3.OkHttpClient;
 
 abstract public class SyncManager {
 
-    protected final String SYNC_PHASE_PREPARE = "sync_phase_prepare",
+    final static String SYNC_PHASE_PREPARE = "sync_phase_prepare",
+            SYNC_PHASE_JOURNALS = "sync_phase_journals",
             SYNC_PHASE_QUERY_CAPABILITIES = "sync_phase_query_capabilities",
             SYNC_PHASE_PREPARE_LOCAL = "sync_phase_prepare_local",
             SYNC_PHASE_CREATE_LOCAL_ENTRIES = "sync_phase_create_local_entries",
@@ -62,7 +60,7 @@ abstract public class SyncManager {
             SYNC_PHASE_SAVE_SYNC_TAG = "sync_phase_save_sync_tag";
 
 
-    protected final NotificationManagerCompat notificationManager;
+    protected final NotificationHelper notificationManager;
     protected final String uniqueCollectionId;
 
     protected final Context context;
@@ -113,8 +111,8 @@ abstract public class SyncManager {
 
         // dismiss previous error notifications
         this.uniqueCollectionId = uniqueCollectionId;
-        notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.cancel(uniqueCollectionId, notificationId());
+        notificationManager = new NotificationHelper(context, uniqueCollectionId, notificationId());
+        notificationManager.cancel();
     }
 
     protected abstract int notificationId();
@@ -193,57 +191,30 @@ abstract public class SyncManager {
                     // syncResult.delayUntil = (retryAfter.getTime() - new Date().getTime()) / 1000;
                 }
         } catch (Exception | OutOfMemoryError e) {
-            final int messageString;
-
             if (e instanceof Exceptions.UnauthorizedException) {
-                App.log.log(Level.SEVERE, "Not authorized anymore", e);
-                messageString = R.string.sync_error_unauthorized;
                 syncResult.stats.numAuthExceptions++;
             } else if (e instanceof Exceptions.HttpException) {
-                App.log.log(Level.SEVERE, "HTTP Exception during sync", e);
-                messageString = R.string.sync_error_http_dav;
                 syncResult.stats.numParseExceptions++;
             } else if (e instanceof CalendarStorageException || e instanceof ContactsStorageException) {
-                App.log.log(Level.SEVERE, "Couldn't access local storage", e);
-                messageString = R.string.sync_error_local_storage;
                 syncResult.databaseError = true;
             } else if (e instanceof Exceptions.IntegrityException) {
-                App.log.log(Level.SEVERE, "Integrity error", e);
-                messageString = R.string.sync_error_integrity;
                 syncResult.stats.numParseExceptions++;
             } else {
-                App.log.log(Level.SEVERE, "Unknown sync error", e);
-                messageString = R.string.sync_error;
                 syncResult.stats.numParseExceptions++;
             }
 
-            final Intent detailsIntent;
+            notificationManager.setThrowable(e);
+
+            final Intent detailsIntent = notificationManager.getDetailsIntent();
             if (e instanceof Exceptions.UnauthorizedException) {
-                detailsIntent = new Intent(context, AccountSettingsActivity.class);
                 detailsIntent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
             } else {
-                detailsIntent = new Intent(context, DebugInfoActivity.class);
-                detailsIntent.putExtra(DebugInfoActivity.KEY_THROWABLE, e);
                 detailsIntent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
                 detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
                 detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
             }
 
-            // to make the PendingIntent unique
-            detailsIntent.setData(Uri.parse("uri://" + getClass().getName() + "/" + uniqueCollectionId));
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-            builder.setSmallIcon(R.drawable.ic_error_light)
-                    .setLargeIcon(App.getLauncherBitmap(context))
-                    .setContentTitle(getSyncErrorTitle())
-                    .setContentIntent(PendingIntent.getActivity(context, 0, detailsIntent, PendingIntent.FLAG_CANCEL_CURRENT))
-                    .setCategory(NotificationCompat.CATEGORY_ERROR);
-
-            String message = context.getString(messageString, syncPhase);
-            builder.setContentText(message);
-
-
-            notificationManager.notify(uniqueCollectionId, notificationId(), builder.build());
+            notificationManager.notify(getSyncErrorTitle(), syncPhase);
         }
     }
 

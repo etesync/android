@@ -13,6 +13,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -20,16 +21,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 
 import java.util.logging.Level;
 
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
+import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.InvalidAccountException;
+import at.bitfire.davdroid.NotificationHelper;
+import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
+import at.bitfire.davdroid.ui.AccountSettingsActivity;
+import at.bitfire.davdroid.ui.DebugInfoActivity;
 import lombok.Cleanup;
 import okhttp3.HttpUrl;
 
@@ -50,6 +57,8 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             super.onPerformSync(account, extras, authority, provider, syncResult);
+            NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals", Constants.NOTIFICATION_CONTACTS_SYNC);
+            notificationManager.cancel();
 
             ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
             try {
@@ -72,12 +81,21 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                     }
                 } else
                     App.log.info("No CardDAV service found in DB");
-            } catch (InvalidAccountException e) {
-                App.log.log(Level.SEVERE, "Couldn't get account settings", e);
-            } catch (Exceptions.HttpException e) {
-                e.printStackTrace();
-            } catch (Exceptions.IntegrityException e) {
-                e.printStackTrace();
+            } catch (Exception | OutOfMemoryError e) {
+                String syncPhase = SyncManager.SYNC_PHASE_JOURNALS;
+                String title = getContext().getString(R.string.sync_error_contacts, account.name);
+
+                notificationManager.setThrowable(e);
+
+                final Intent detailsIntent = notificationManager.getDetailsIntent();
+                if (e instanceof Exceptions.UnauthorizedException) {
+                    detailsIntent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
+                } else {
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
+                }
+                notificationManager.notify(title, syncPhase);
             } finally {
                 dbHelper.close();
             }
