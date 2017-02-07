@@ -46,14 +46,6 @@ public class ServiceDB {
                 SERVICE_CARDDAV = CollectionInfo.Type.ADDRESS_BOOK.toString();
     }
 
-    public static class HomeSets {
-        public static final String
-                _TABLE = "homesets",
-                ID = "_id",
-                SERVICE_ID = "serviceID",
-                URL = "url";
-    }
-
     public static class Collections {
         public static final String
                 _TABLE = "collections",
@@ -108,13 +100,6 @@ public class ServiceDB {
                     Services.SERVICE + " TEXT NOT NULL" +
             ")");
             db.execSQL("CREATE UNIQUE INDEX services_account ON " + Services._TABLE + " (" + Services.ACCOUNT_NAME + "," + Services.SERVICE + ")");
-
-            db.execSQL("CREATE TABLE " + HomeSets._TABLE + "(" +
-                    HomeSets.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    HomeSets.SERVICE_ID + " INTEGER NOT NULL REFERENCES " + Services._TABLE +" ON DELETE CASCADE," +
-                    HomeSets.URL + " TEXT NOT NULL" +
-             ")");
-            db.execSQL("CREATE UNIQUE INDEX homesets_service_url ON " + HomeSets._TABLE + "(" + HomeSets.SERVICE_ID + "," + HomeSets.URL + ")");
 
             db.execSQL("CREATE TABLE " + Collections._TABLE + "(" +
                     Collections.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
