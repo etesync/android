@@ -62,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="@string/login_signup"
+            android:text="@string/login_finish"
             style="@style/stepper_nav_button"/>
 
     </LinearLayout>
