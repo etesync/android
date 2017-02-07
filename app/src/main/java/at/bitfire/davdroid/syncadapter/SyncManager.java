@@ -37,6 +37,7 @@ import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.journalmanager.JournalEntryManager;
+import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.resource.LocalCollection;
 import at.bitfire.davdroid.resource.LocalResource;
 import at.bitfire.davdroid.ui.AccountSettingsActivity;
@@ -69,6 +70,7 @@ abstract public class SyncManager {
     protected final Bundle extras;
     protected final String authority;
     protected final SyncResult syncResult;
+    protected final CollectionInfo.Type serviceType;
 
     protected final AccountSettings settings;
     protected LocalCollection localCollection;
@@ -97,13 +99,14 @@ abstract public class SyncManager {
      */
     protected Map<String, LocalResource> localResources;
 
-    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String uniqueCollectionId) throws InvalidAccountException {
+    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String uniqueCollectionId, CollectionInfo.Type serviceType) throws InvalidAccountException {
         this.context = context;
         this.account = account;
         this.settings = settings;
         this.extras = extras;
         this.authority = authority;
         this.syncResult = syncResult;
+        this.serviceType = serviceType;
 
         // create HttpClient with given logger
         httpClient = HttpClient.create(context, account);

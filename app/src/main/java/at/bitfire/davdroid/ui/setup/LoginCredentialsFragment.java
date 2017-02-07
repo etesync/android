@@ -19,14 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.net.IDN;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.logging.Level;
 
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.Constants;

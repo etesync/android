@@ -14,9 +14,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -28,13 +32,26 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.Constants;
+import at.bitfire.davdroid.HttpClient;
+import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.journalmanager.Exceptions;
+import at.bitfire.davdroid.journalmanager.JournalManager;
+import at.bitfire.davdroid.model.CollectionInfo;
+import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.ui.PermissionsActivity;
+import lombok.Cleanup;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 
 //import com.android.vending.billing.IInAppBillingService;
 
@@ -109,6 +126,90 @@ public abstract class SyncAdapterService extends Service {
             }
             return true;
         }
-    }
 
+        protected class RefreshCollections {
+            final private ServiceDB.OpenHelper dbHelper;
+            final private Account account;
+            final private Context context;
+            final private CollectionInfo.Type serviceType;
+
+            RefreshCollections(Account account, CollectionInfo.Type serviceType) {
+                this.account = account;
+                this.serviceType = serviceType;
+                context = getContext();
+                dbHelper = new ServiceDB.OpenHelper(context);
+            }
+
+            void run() throws Exceptions.HttpException, Exceptions.IntegrityException {
+                try {
+                    @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                    App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString());
+
+                    OkHttpClient httpClient = HttpClient.create(context, account);
+
+                    AccountSettings settings = new AccountSettings(context, account);
+                    JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
+
+                    List<CollectionInfo> collections = new LinkedList<>();
+
+                    for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
+                        CollectionInfo info = CollectionInfo.fromJson(journal.getContent(settings.password()));
+                        info.url = journal.getUuid();
+                        if (info.type.equals(serviceType)) {
+                            collections.add(info);
+                        }
+                    }
+
+                    // FIXME: handle deletion from server
+
+                    if (collections.isEmpty()) {
+                        CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
+                        JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
+                        journalsManager.putJournal(journal);
+                        info.url = journal.getUuid();
+                        collections.add(info);
+                    }
+
+                    db.beginTransactionNonExclusive();
+                    try {
+                        saveCollections(db, collections);
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                } catch (InvalidAccountException e) {
+                    // FIXME: Do something
+                    e.printStackTrace();
+                } finally {
+                    dbHelper.close();
+                }
+            }
+
+            @NonNull
+            private Map<String, CollectionInfo> readCollections(SQLiteDatabase db) {
+                Long service = dbHelper.getService(db, account, serviceType.toString());
+                Map<String, CollectionInfo> collections = new LinkedHashMap<>();
+                @Cleanup Cursor cursor = db.query(ServiceDB.Collections._TABLE, null, ServiceDB.Collections.SERVICE_ID + "=?", new String[]{String.valueOf(service)}, null, null, null);
+                while (cursor.moveToNext()) {
+                    ContentValues values = new ContentValues();
+                    DatabaseUtils.cursorRowToContentValues(cursor, values);
+                    collections.put(values.getAsString(ServiceDB.Collections.URL), CollectionInfo.fromDB(values));
+                }
+                return collections;
+            }
+
+            private void saveCollections(SQLiteDatabase db, Iterable<CollectionInfo> collections) {
+                Long service = dbHelper.getService(db, account, serviceType.toString());
+                db.delete(ServiceDB.Collections._TABLE, ServiceDB.Collections.SERVICE_ID + "=?", new String[]{String.valueOf(service)});
+                for (CollectionInfo collection : collections) {
+                    ContentValues values = collection.toDB();
+                    App.log.log(Level.FINE, "Saving collection", values);
+                    values.put(ServiceDB.Collections.SERVICE_ID, service);
+                    db.insertWithOnConflict(ServiceDB.Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                }
+            }
+        }
+    }
 }

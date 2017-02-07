@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.InvalidAccountException;
+import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
@@ -56,6 +57,8 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
                     return;
 
+                new RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run();
+
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 Long service = dbHelper.getService(db, account, ServiceDB.Services.SERVICE_CARDDAV);
                 if (service != null) {
@@ -71,6 +74,10 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                     App.log.info("No CardDAV service found in DB");
             } catch (InvalidAccountException e) {
                 App.log.log(Level.SEVERE, "Couldn't get account settings", e);
+            } catch (Exceptions.HttpException e) {
+                e.printStackTrace();
+            } catch (Exceptions.IntegrityException e) {
+                e.printStackTrace();
             } finally {
                 dbHelper.close();
             }

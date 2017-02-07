@@ -16,7 +16,6 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -32,7 +31,6 @@ import java.util.logging.Level;
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.Constants;
-import at.bitfire.davdroid.DavService;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Helpers;
@@ -135,18 +133,11 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         try {
             AccountSettings settings = new AccountSettings(getContext(), account);
 
-            Intent refreshIntent = new Intent(getActivity(), DavService.class);
-            refreshIntent.setAction(DavService.ACTION_REFRESH_COLLECTIONS);
-
             settings.setAuthToken(config.authtoken);
 
             if (config.cardDAV != null) {
                 // insert CardDAV service
-                long id = insertService(db, accountName, ServiceDB.Services.SERVICE_CARDDAV, config.cardDAV);
-
-                // start CardDAV service detection (refresh collections)
-                refreshIntent.putExtra(DavService.EXTRA_DAV_SERVICE_ID, id);
-                getActivity().startService(refreshIntent);
+                insertService(db, accountName, ServiceDB.Services.SERVICE_CARDDAV, config.cardDAV);
 
                 // enable contact sync
                 ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 1);
@@ -155,11 +146,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
             if (config.calDAV != null) {
                 // insert CalDAV service
-                long id = insertService(db, accountName, ServiceDB.Services.SERVICE_CALDAV, config.calDAV);
-
-                // start CalDAV service detection (refresh collections)
-                refreshIntent.putExtra(DavService.EXTRA_DAV_SERVICE_ID, id);
-                getActivity().startService(refreshIntent);
+                insertService(db, accountName, ServiceDB.Services.SERVICE_CALDAV, config.calDAV);
 
                 // enable calendar sync
                 ContentResolver.setIsSyncable(account, CalendarContract.AUTHORITY, 1);

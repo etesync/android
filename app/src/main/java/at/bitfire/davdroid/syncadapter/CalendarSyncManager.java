@@ -26,6 +26,7 @@ import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.journalmanager.JournalEntryManager;
+import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.resource.LocalCalendar;
 import at.bitfire.davdroid.resource.LocalEvent;
 import at.bitfire.davdroid.resource.LocalResource;
@@ -44,7 +45,7 @@ public class CalendarSyncManager extends SyncManager {
     final private HttpUrl remote;
 
     public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws InvalidAccountException {
-        super(context, account, settings, extras, authority, result, "calendar/" + calendar.getId());
+        super(context, account, settings, extras, authority, result, "calendar/" + calendar.getId(), CollectionInfo.Type.CALENDAR);
         localCollection = calendar;
         this.remote = remote;
     }

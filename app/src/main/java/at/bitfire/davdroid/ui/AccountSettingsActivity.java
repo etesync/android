@@ -30,7 +30,6 @@ import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
 import at.bitfire.ical4android.TaskProvider;
-import at.bitfire.vcard4android.GroupMethod;
 
 public class AccountSettingsActivity extends AppCompatActivity {
     public final static String EXTRA_ACCOUNT = "account";

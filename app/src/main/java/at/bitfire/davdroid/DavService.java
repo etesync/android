@@ -12,9 +12,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Service;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
@@ -25,29 +23,17 @@ import android.text.TextUtils;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
-import at.bitfire.davdroid.journalmanager.Exceptions;
-import at.bitfire.davdroid.journalmanager.JournalManager;
-import at.bitfire.davdroid.model.CollectionInfo;
-import at.bitfire.davdroid.model.ServiceDB.Collections;
-import at.bitfire.davdroid.model.ServiceDB.HomeSets;
 import at.bitfire.davdroid.model.ServiceDB.OpenHelper;
 import at.bitfire.davdroid.model.ServiceDB.Services;
-import lombok.Cleanup;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 public class DavService extends Service {
 
     public static final String
             ACTION_ACCOUNTS_UPDATED = "accountsUpdated",
-            ACTION_REFRESH_COLLECTIONS = "refreshCollections",
             EXTRA_DAV_SERVICE_ID = "davServiceID";
 
     private final IBinder binder = new InfoBinder();
@@ -65,16 +51,6 @@ public class DavService extends Service {
             switch (action) {
                 case ACTION_ACCOUNTS_UPDATED:
                     cleanupAccounts();
-                    break;
-                case ACTION_REFRESH_COLLECTIONS:
-                    if (runningRefresh.add(id)) {
-                        new Thread(new RefreshCollections(id)).start();
-                        for (WeakReference<RefreshingStatusListener> ref : refreshingStatusListeners) {
-                            RefreshingStatusListener listener = ref.get();
-                            if (listener != null)
-                                listener.onDavRefreshStatusChanged(id, true);
-                        }
-                    }
                     break;
             }
         }
@@ -143,104 +119,4 @@ public class DavService extends Service {
             dbHelper.close();
         }
     }
-
-    private class RefreshCollections implements Runnable {
-        final long service;
-        final OpenHelper dbHelper;
-
-        RefreshCollections(long davServiceId) {
-            this.service = davServiceId;
-            dbHelper = new OpenHelper(DavService.this);
-        }
-
-        @Override
-        public void run() {
-            Account account = null;
-
-            try {
-                @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-                String serviceType = dbHelper.getServiceType(db, service);
-                App.log.info("Refreshing " + serviceType + " collections of service #" + service);
-
-                // get account
-                account = dbHelper.getServiceAccount(db, service);
-
-                OkHttpClient httpClient = HttpClient.create(DavService.this, account);
-
-                AccountSettings settings = new AccountSettings(DavService.this, account);
-                JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
-
-                List<CollectionInfo> collections = new LinkedList<>();
-
-                for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
-                    CollectionInfo info = CollectionInfo.fromJson(journal.getContent(settings.password()));
-                    info.url = journal.getUuid();
-                    if (info.isOfTypeService(serviceType)) {
-                        collections.add(info);
-                    }
-                }
-
-                // FIXME: handle deletion from server
-
-                if (collections.isEmpty()) {
-                    CollectionInfo info = CollectionInfo.defaultForService(serviceType);
-                    JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
-                    journalsManager.putJournal(journal);
-                    info.url = journal.getUuid();
-                    collections.add(info);
-                }
-
-                db.beginTransactionNonExclusive();
-                try {
-                    saveCollections(db, collections);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-
-            } catch (InvalidAccountException e) {
-                // FIXME: Do something
-                e.printStackTrace();
-            } catch (Exceptions.HttpException e) {
-                // FIXME: do something
-                e.printStackTrace();
-            } catch (Exceptions.IntegrityException e) {
-                // FIXME: do something
-                e.printStackTrace();
-            } finally {
-                dbHelper.close();
-
-                runningRefresh.remove(service);
-                for (WeakReference<RefreshingStatusListener> ref : refreshingStatusListeners) {
-                    RefreshingStatusListener listener = ref.get();
-                    if (listener != null)
-                        listener.onDavRefreshStatusChanged(service, false);
-                }
-            }
-        }
-
-        @NonNull
-        private Map<String, CollectionInfo> readCollections(SQLiteDatabase db) {
-            Map<String, CollectionInfo> collections = new LinkedHashMap<>();
-            @Cleanup Cursor cursor = db.query(Collections._TABLE, null, Collections.SERVICE_ID + "=?", new String[]{String.valueOf(service)}, null, null, null);
-            while (cursor.moveToNext()) {
-                ContentValues values = new ContentValues();
-                DatabaseUtils.cursorRowToContentValues(cursor, values);
-                collections.put(values.getAsString(Collections.URL), CollectionInfo.fromDB(values));
-            }
-            return collections;
-        }
-
-        private void saveCollections(SQLiteDatabase db, Iterable<CollectionInfo> collections) {
-            db.delete(Collections._TABLE, HomeSets.SERVICE_ID + "=?", new String[]{String.valueOf(service)});
-            for (CollectionInfo collection : collections) {
-                ContentValues values = collection.toDB();
-                App.log.log(Level.FINE, "Saving collection", values);
-                values.put(Collections.SERVICE_ID, service);
-                db.insertWithOnConflict(Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-            }
-        }
-    }
-
 }

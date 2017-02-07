@@ -43,8 +43,7 @@ public class CollectionInfo implements Serializable {
     public CollectionInfo() {
     }
 
-    public static CollectionInfo defaultForService(String sService) {
-        Type service = Type.valueOf(sService);
+    public static CollectionInfo defaultForServiceType(Type service) {
         CollectionInfo info = new CollectionInfo();
         info.displayName = "Default";
         info.selected = true;
