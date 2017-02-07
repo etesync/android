@@ -209,8 +209,7 @@ abstract public class SyncManager {
                 syncResult.databaseError = true;
             } else if (e instanceof Exceptions.IntegrityException) {
                 App.log.log(Level.SEVERE, "Integrity error", e);
-                // FIXME: Make a proper error message
-                messageString = R.string.sync_error;
+                messageString = R.string.sync_error_integrity;
                 syncResult.stats.numParseExceptions++;
             } else {
                 App.log.log(Level.SEVERE, "Unknown sync error", e);
