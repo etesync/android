@@ -78,13 +78,6 @@ public class LoginCredentialsFragment extends Fragment {
     protected LoginCredentials validateLoginData() {
         boolean valid = true;
 
-        URI uri = null;
-        try {
-            uri = new URI(Constants.serviceUrl.toString());
-        } catch (URISyntaxException e) {
-            App.log.severe("Should never happen, it's a constant");
-        }
-
         String userName = editUserName.getText().toString();
         if (userName.isEmpty()) {
             editUserName.setError(getString(R.string.login_user_name_required));
@@ -97,7 +90,7 @@ public class LoginCredentialsFragment extends Fragment {
             valid = false;
         }
 
-        return valid ? new LoginCredentials(uri, userName, password) : null;
+        return valid ? new LoginCredentials(userName, password) : null;
     }
 
 }

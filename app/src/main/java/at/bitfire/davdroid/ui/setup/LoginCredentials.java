@@ -12,13 +12,29 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
+import at.bitfire.davdroid.App;
+import at.bitfire.davdroid.Constants;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class LoginCredentials implements Parcelable {
     public final URI uri;
     public final String userName, password;
+
+    public LoginCredentials(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+
+        URI uri = null;
+        try {
+            uri = new URI(Constants.serviceUrl.toString());
+        } catch (URISyntaxException e) {
+            App.log.severe("Should never happen, it's a constant");
+        }
+        this.uri = uri;
+    }
 
     @Override
     public int describeContents() {
