@@ -25,7 +25,7 @@ public class EncryptionDetailsFragment extends Fragment {
     EditPassword editPassword = null;
 
 
-    public static EncryptionDetailsFragment newInstance(DavResourceFinder.Configuration config) {
+    public static EncryptionDetailsFragment newInstance(BaseConfigurationFinder.Configuration config) {
         EncryptionDetailsFragment frag = new EncryptionDetailsFragment();
         Bundle args = new Bundle(1);
         args.putSerializable(KEY_CONFIG, config);
@@ -46,7 +46,7 @@ public class EncryptionDetailsFragment extends Fragment {
             }
         });
 
-        final DavResourceFinder.Configuration config = (DavResourceFinder.Configuration)getArguments().getSerializable(KEY_CONFIG);
+        final BaseConfigurationFinder.Configuration config = (BaseConfigurationFinder.Configuration)getArguments().getSerializable(KEY_CONFIG);
 
         TextView accountName = (TextView)v.findViewById(R.id.account_name);
         accountName.setText(getString(R.string.login_encryption_account_label) + " " + config.userName);
@@ -68,7 +68,7 @@ public class EncryptionDetailsFragment extends Fragment {
         return v;
     }
 
-    private DavResourceFinder.Configuration validateEncryptionData(DavResourceFinder.Configuration config) {
+    private BaseConfigurationFinder.Configuration validateEncryptionData(BaseConfigurationFinder.Configuration config) {
         boolean valid = true;
         String password = editPassword.getText().toString();
         if (password.isEmpty()) {

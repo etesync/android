@@ -27,7 +27,7 @@ public class DavResourceFinderTest {
 
     MockWebServer server = new MockWebServer();
 
-    DavResourceFinder finder;
+    BaseConfigurationFinder finder;
     OkHttpClient client;
     LoginCredentials credentials;
 
@@ -48,7 +48,7 @@ public class DavResourceFinderTest {
         server.start();
 
         credentials = new LoginCredentials(URI.create("/"), "mock", "12345");
-        finder = new DavResourceFinder(getTargetContext(), credentials);
+        finder = new BaseConfigurationFinder(getTargetContext(), credentials);
 
         client = HttpClient.create(null);
     }

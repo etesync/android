@@ -37,14 +37,14 @@ import at.bitfire.davdroid.journalmanager.Helpers;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.resource.LocalTaskList;
-import at.bitfire.davdroid.ui.setup.DavResourceFinder.Configuration;
+import at.bitfire.davdroid.ui.setup.BaseConfigurationFinder.Configuration;
 import at.bitfire.ical4android.TaskProvider;
 import lombok.Cleanup;
 
 public class SetupEncryptionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Configuration> {
     private static final String KEY_CONFIG = "config";
 
-    public static SetupEncryptionFragment newInstance(DavResourceFinder.Configuration config) {
+    public static SetupEncryptionFragment newInstance(BaseConfigurationFinder.Configuration config) {
         SetupEncryptionFragment frag = new SetupEncryptionFragment();
         Bundle args = new Bundle(1);
         args.putSerializable(KEY_CONFIG, config);
@@ -115,7 +115,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
     }
 
 
-    protected boolean createAccount(String accountName, DavResourceFinder.Configuration config) {
+    protected boolean createAccount(String accountName, BaseConfigurationFinder.Configuration config) {
         Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
 
         // create Android account
@@ -167,7 +167,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         return true;
     }
 
-    protected long insertService(SQLiteDatabase db, String accountName, String service, DavResourceFinder.Configuration.ServiceInfo info) {
+    protected long insertService(SQLiteDatabase db, String accountName, String service, BaseConfigurationFinder.Configuration.ServiceInfo info) {
         ContentValues values = new ContentValues();
 
         // insert service

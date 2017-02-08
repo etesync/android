@@ -28,7 +28,7 @@ import lombok.ToString;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
-public class DavResourceFinder {
+public class BaseConfigurationFinder {
     protected final Context context;
     protected final LoginCredentials credentials;
 
@@ -36,11 +36,11 @@ public class DavResourceFinder {
     protected final StringHandler logBuffer = new StringHandler();
     protected OkHttpClient httpClient;
 
-    public DavResourceFinder(@NonNull Context context, @NonNull LoginCredentials credentials) {
+    public BaseConfigurationFinder(@NonNull Context context, @NonNull LoginCredentials credentials) {
 		this.context = context;
         this.credentials = credentials;
 
-        log = Logger.getLogger("davdroid.DavResourceFinder");
+        log = Logger.getLogger("davdroid.BaseConfigurationFinder");
         log.setLevel(Level.FINEST);
         log.addHandler(logBuffer);
 

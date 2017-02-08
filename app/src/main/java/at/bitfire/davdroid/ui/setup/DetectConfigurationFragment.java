@@ -24,7 +24,7 @@ import android.support.v7.app.AlertDialog;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.ui.DebugInfoActivity;
-import at.bitfire.davdroid.ui.setup.DavResourceFinder.Configuration;
+import at.bitfire.davdroid.ui.setup.BaseConfigurationFinder.Configuration;
 
 public class DetectConfigurationFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Configuration> {
     protected static final String ARG_LOGIN_CREDENTIALS = "credentials";
@@ -139,7 +139,7 @@ public class DetectConfigurationFragment extends DialogFragment implements Loade
 
         @Override
         public Configuration loadInBackground() {
-            return new DavResourceFinder(context, credentials).findInitialConfiguration();
+            return new BaseConfigurationFinder(context, credentials).findInitialConfiguration();
         }
     }
 }
