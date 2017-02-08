@@ -29,6 +29,9 @@ import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
+import at.bitfire.davdroid.ui.setup.DetectConfigurationFragment;
+import at.bitfire.davdroid.ui.setup.LoginCredentials;
+import at.bitfire.davdroid.ui.setup.LoginCredentialsChangeFragment;
 import at.bitfire.ical4android.TaskProvider;
 
 public class AccountSettingsActivity extends AppCompatActivity {
@@ -95,7 +98,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
             prefPassword.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    settings.setAuthToken((String)newValue);
+                    LoginCredentials credentials = newValue != null ? new LoginCredentials(account.name, (String) newValue) : null;
+                    LoginCredentialsChangeFragment.newInstance(account, credentials).show(getFragmentManager(), null);
                     refresh();
                     return false;
                 }
