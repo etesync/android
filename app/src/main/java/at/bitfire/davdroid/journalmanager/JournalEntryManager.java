@@ -105,7 +105,7 @@ public class JournalEntryManager extends BaseManager {
                 uuid = previous.getUuid();
             }
 
-            return Hex.toHexString(calculateHmac(keyBase64, uuid));
+            return Helpers.toHex(calculateHmac(keyBase64, uuid));
         }
     }
 

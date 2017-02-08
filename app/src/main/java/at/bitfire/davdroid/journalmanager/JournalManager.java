@@ -19,6 +19,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import static at.bitfire.davdroid.journalmanager.Helpers.sha256;
+import static at.bitfire.davdroid.journalmanager.Helpers.toHex;
 
 public class JournalManager extends BaseManager {
     final static private Type journalType = new TypeToken<List<Journal>>() {
@@ -104,7 +105,7 @@ public class JournalManager extends BaseManager {
 
             byte[] correctHash = calculateHmac(keyBase64);
             if (!Arrays.areEqual(hmac, correctHash)) {
-                throw new Exceptions.IntegrityException("Bad HMAC. " + Hex.toHexString(hmac) + " != " + Hex.toHexString(correctHash));
+                throw new Exceptions.IntegrityException("Bad HMAC. " + toHex(hmac) + " != " + toHex(correctHash));
             }
         }
 

@@ -120,9 +120,13 @@ public class Helpers {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base);
-            return Hex.toHexString(hash);
+            return toHex(hash);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static String toHex(byte[] bytes) {
+        return Hex.toHexString(bytes).toLowerCase();
     }
 }
