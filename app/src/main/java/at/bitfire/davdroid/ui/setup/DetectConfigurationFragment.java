@@ -103,7 +103,7 @@ public class DetectConfigurationFragment extends DialogFragment implements Loade
             return new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.login_configuration_detection)
                     .setIcon(R.drawable.ic_error_dark)
-                    .setMessage(R.string.login_no_caldav_carddav)
+                    .setMessage(R.string.login_wrong_username_or_password)
                     .setNeutralButton(R.string.login_view_logs, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
