@@ -37,18 +37,14 @@ import lombok.Cleanup;
 
 public class StartupDialogFragment extends DialogFragment {
     public static final String
-            HINT_BATTERY_OPTIMIZATIONS = "hint_BatteryOptimizations",
-            HINT_GOOGLE_PLAY_ACCOUNTS_REMOVED = "hint_GooglePlayAccountsRemoved",
-            HINT_OPENTASKS_NOT_INSTALLED = "hint_OpenTasksNotInstalled";
+            HINT_BATTERY_OPTIMIZATIONS = "hint_BatteryOptimizations";
 
     private static final String ARGS_MODE = "mode";
 
     enum Mode {
         BATTERY_OPTIMIZATIONS,
         DEVELOPMENT_VERSION,
-        FDROID_DONATE,
         GOOGLE_PLAY_ACCOUNTS_REMOVED,
-        OPENTASKS_NOT_INSTALLED
     }
 
     public static StartupDialogFragment[] getStartupDialogs(Context context) {
@@ -59,8 +55,6 @@ public class StartupDialogFragment extends DialogFragment {
 
         if (BuildConfig.VERSION_NAME.contains("-alpha") || BuildConfig.VERSION_NAME.contains("-beta") || BuildConfig.VERSION_NAME.contains("-rc"))
             dialogs.add(StartupDialogFragment.instantiate(Mode.DEVELOPMENT_VERSION));
-        else
-            dialogs.add(StartupDialogFragment.instantiate(Mode.FDROID_DONATE));
 
         // battery optimization whitelisting
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && settings.getBoolean(HINT_BATTERY_OPTIMIZATIONS, true)) {
@@ -68,10 +62,6 @@ public class StartupDialogFragment extends DialogFragment {
             if (!powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID))
                 dialogs.add(StartupDialogFragment.instantiate(Mode.BATTERY_OPTIMIZATIONS));
         }
-
-        // OpenTasks information
-        if (!LocalTaskList.tasksProviderAvailable(context) && settings.getBoolean(HINT_OPENTASKS_NOT_INSTALLED, true))
-            dialogs.add(StartupDialogFragment.instantiate(Mode.OPENTASKS_NOT_INSTALLED));
 
         Collections.reverse(dialogs);
         return dialogs.toArray(new StartupDialogFragment[dialogs.size()]);
@@ -136,57 +126,6 @@ public class StartupDialogFragment extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Constants.feedbackUri));
-                            }
-                        })
-                        .create();
-
-            case FDROID_DONATE:
-                return new AlertDialog.Builder(getActivity())
-                        .setIcon(R.mipmap.ic_launcher)
-                        .setTitle(R.string.startup_donate)
-                        .setMessage(R.string.startup_donate_message)
-                        .setPositiveButton(R.string.startup_donate_now, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Constants.webUri.buildUpon().appendEncodedPath("donate/").build()));
-                            }
-                        })
-                        .setNegativeButton(R.string.startup_donate_later, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .create();
-
-            case OPENTASKS_NOT_INSTALLED:
-                StringBuilder builder = new StringBuilder(getString(R.string.startup_opentasks_not_installed_message));
-                if (Build.VERSION.SDK_INT < 23)
-                    builder.append("\n\n").append(getString(R.string.startup_opentasks_reinstall_davdroid));
-                return new AlertDialog.Builder(getActivity())
-                        .setIcon(R.drawable.ic_alarm_on_dark)
-                        .setTitle(R.string.startup_opentasks_not_installed)
-                        .setMessage(builder.toString())
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNeutralButton(R.string.startup_opentasks_not_installed_install, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=org.dmfs.tasks"));
-                                if (intent.resolveActivity(getContext().getPackageManager()) != null)
-                                    getContext().startActivity(intent);
-                                else
-                                    App.log.warning("No market app available, can't install OpenTasks");
-                            }
-                        })
-                        .setNegativeButton(R.string.startup_dont_show_again, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
-                                Settings settings = new Settings(dbHelper.getWritableDatabase());
-                                settings.putBoolean(HINT_OPENTASKS_NOT_INSTALLED, false);
                             }
                         })
                         .create();
