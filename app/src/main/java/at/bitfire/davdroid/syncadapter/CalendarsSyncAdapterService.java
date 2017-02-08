@@ -22,7 +22,6 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationManagerCompat;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

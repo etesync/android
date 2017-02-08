@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.support.v4.app.NotificationManagerCompat;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

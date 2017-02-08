@@ -26,13 +26,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.BuildConfig;
 import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.Settings;
-import at.bitfire.davdroid.resource.LocalTaskList;
 import lombok.Cleanup;
 
 public class StartupDialogFragment extends DialogFragment {

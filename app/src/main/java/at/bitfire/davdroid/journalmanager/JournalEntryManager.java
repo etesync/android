@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import aQute.lib.hex.Hex;
 import at.bitfire.davdroid.App;
 import at.bitfire.davdroid.GsonHelper;
 import okhttp3.HttpUrl;

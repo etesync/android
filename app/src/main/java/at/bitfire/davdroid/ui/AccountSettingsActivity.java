@@ -32,10 +32,8 @@ import android.view.MenuItem;
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.R;
-import at.bitfire.davdroid.ui.setup.DetectConfigurationFragment;
 import at.bitfire.davdroid.ui.setup.LoginCredentials;
 import at.bitfire.davdroid.ui.setup.LoginCredentialsChangeFragment;
-import at.bitfire.ical4android.TaskProvider;
 
 public class AccountSettingsActivity extends AppCompatActivity {
     public final static String EXTRA_ACCOUNT = "account";
