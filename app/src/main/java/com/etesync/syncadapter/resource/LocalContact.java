@@ -164,32 +164,9 @@ public class LocalContact extends AndroidContact implements LocalResource {
 
     }
 
-
-    @Override
-    public int update(Contact contact) throws ContactsStorageException {
-        int result = super.update(contact);
-
-        if (!saveAsDirty && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N))
-            // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
-            updateHashCode();
-
-        return result;
-    }
-
     public int updateAsDirty(Contact contact) throws ContactsStorageException {
         saveAsDirty = true;
         return this.update(contact);
-    }
-
-    @Override
-    public Uri create() throws ContactsStorageException {
-        Uri uri = super.create();
-
-        if (!saveAsDirty && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N))
-            // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
-            updateHashCode();
-
-        return uri;
     }
 
     public Uri createAsDirty() throws ContactsStorageException {
@@ -207,7 +184,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
      * Calculates a hash code from the contact's data (VCard) and group memberships.
      * @return hash code of contact data (including group memberships)
      */
-    public int dataHashCode() throws FileNotFoundException, ContactsStorageException {
+    protected int dataHashCode() throws FileNotFoundException, ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             App.log.severe("dataHashCode() should not be called on Android <7");
 
@@ -215,7 +192,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
         return getContact().hashCode() ^ groupMemberships.hashCode();
     }
 
-    protected void updateHashCode() throws ContactsStorageException {
+    public void updateHashCode() throws ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             App.log.severe("updateHashCode() should not be called on Android <7");
 
@@ -234,7 +211,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
         }
     }
 
-    int getLastHashCode() throws ContactsStorageException {
+    public int getLastHashCode() throws ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
             App.log.severe("getLastHashCode() should not be called on Android <7");
 
