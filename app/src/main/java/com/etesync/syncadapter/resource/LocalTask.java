@@ -14,6 +14,8 @@ import android.os.RemoteException;
 import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
 
+import com.etesync.syncadapter.App;
+
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import java.io.FileNotFoundException;
@@ -89,9 +91,10 @@ public class LocalTask extends AndroidTask implements LocalResource {
 
     /* custom queries */
 
-    public void updateFileNameAndUID(String uid) throws CalendarStorageException {
+    public void prepareForUpload() throws CalendarStorageException {
         try {
-            String newFileName = uid + ".ics";
+            final String uid = App.getUidGenerator().generateUid().getValue();
+            final String newFileName = uid + ".ics";
 
             ContentValues values = new ContentValues(2);
             values.put(Tasks._SYNC_ID, newFileName);

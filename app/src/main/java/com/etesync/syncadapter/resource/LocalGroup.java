@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import com.etesync.syncadapter.App;
@@ -100,8 +101,9 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
     }
 
     @Override
-    public void updateFileNameAndUID(String uid) throws ContactsStorageException {
-        String newFileName = uid + ".vcf";
+    public void prepareForUpload() throws ContactsStorageException {
+        final String uid = UUID.randomUUID().toString();
+        final String newFileName = uid + ".vcf";
 
         ContentValues values = new ContentValues(2);
         values.put(COLUMN_FILENAME, newFileName);

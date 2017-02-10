@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import at.bitfire.vcard4android.AndroidAddressBook;
@@ -101,9 +102,10 @@ public class LocalContact extends AndroidContact implements LocalResource {
         }
     }
 
-    public void updateFileNameAndUID(String uid) throws ContactsStorageException {
+    public void prepareForUpload() throws ContactsStorageException {
         try {
-            String newFileName = uid;
+            final String uid = UUID.randomUUID().toString();
+            final String newFileName = uid;
 
             ContentValues values = new ContentValues(2);
             values.put(COLUMN_FILENAME, newFileName);

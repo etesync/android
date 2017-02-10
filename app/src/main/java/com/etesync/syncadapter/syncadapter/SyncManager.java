@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.logging.Level;
 
 import at.bitfire.ical4android.CalendarStorageException;
@@ -428,9 +427,9 @@ abstract public class SyncManager {
             if (local.getUuid() != null) {
                 continue;
             }
-            String uuid = UUID.randomUUID().toString();
-            App.log.fine("Found local record #" + local.getId() + " without file name; assigning file name/UID based on " + uuid);
-            local.updateFileNameAndUID(uuid);
+
+            App.log.fine("Found local record #" + local.getId() + " without file name; generating file name/UID if necessary");
+            local.prepareForUpload();
         }
     }
 

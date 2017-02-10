@@ -45,6 +45,8 @@ import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
+import net.fortuna.ical4j.util.UidGenerator;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.File;
@@ -70,6 +72,7 @@ import lombok.Cleanup;
 import lombok.Getter;
 import okhttp3.internal.tls.OkHostnameVerifier;
 
+
 public class App extends Application {
     public static final String FLAVOR_GOOGLE_PLAY = "gplay";
 
@@ -92,18 +95,24 @@ public class App extends Application {
     @Getter
     private static HostnameVerifier hostnameVerifier;
 
+    @Getter
+    private static UidGenerator uidGenerator;
+
     public final static Logger log = Logger.getLogger("syncadapter");
     static {
         at.bitfire.cert4android.Constants.log = Logger.getLogger("syncadapter.cert4android");
     }
 
     @Override
+    @SuppressLint("HardwareIds")
     public void onCreate() {
         super.onCreate();
         reinitCertManager();
         reinitLogger();
         StrictMode.enableDefaults();
         initPrefVersion();
+
+        uidGenerator = new UidGenerator(null, android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
     }
 
     public void reinitCertManager() {
