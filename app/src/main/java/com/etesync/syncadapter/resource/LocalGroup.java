@@ -12,6 +12,7 @@ import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
@@ -20,16 +21,19 @@ import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.RawContacts.Data;
 
+import com.etesync.syncadapter.App;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import com.etesync.syncadapter.App;
 import at.bitfire.vcard4android.AndroidAddressBook;
 import at.bitfire.vcard4android.AndroidGroup;
 import at.bitfire.vcard4android.AndroidGroupFactory;
@@ -162,15 +166,14 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
                 long id = cursor.getLong(0);
                 App.log.fine("Assigning members to group " + id);
 
+                // required for workaround for Android 7 which sets DIRTY flag when only meta-data is changed
+                Set<Long> changeContactIDs = new HashSet<>();
+
                 // delete all memberships and cached memberships for this group
-                batch.enqueue(new BatchOperation.Operation(
-                        ContentProviderOperation.newDelete(addressBook.syncAdapterURI(ContactsContract.Data.CONTENT_URI))
-                                .withSelection(
-                                        "(" + GroupMembership.MIMETYPE + "=? AND " + GroupMembership.GROUP_ROW_ID + "=?) OR (" +
-                                              CachedGroupMembership.MIMETYPE + "=? AND " + CachedGroupMembership.GROUP_ID + "=?)",
-                                        new String[] { GroupMembership.CONTENT_ITEM_TYPE, String.valueOf(id), CachedGroupMembership.CONTENT_ITEM_TYPE, String.valueOf(id) })
-                                .withYieldAllowed(true)
-                ));
+                for (LocalContact contact : addressBook.getByGroupMembership(id)) {
+                    contact.removeGroupMemberships(batch);
+                    changeContactIDs.add(contact.getId());
+                }
 
                 // extract list of member UIDs
                 List<String> members = new LinkedList<>();
@@ -186,10 +189,18 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
                     try {
                         LocalContact member = addressBook.findContactByUID(uid);
                         member.addToGroup(batch, id);
+                        changeContactIDs.add(member.getId());
                     } catch(FileNotFoundException e) {
                         App.log.log(Level.WARNING, "Group member not found: " + uid, e);
                     }
                 }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
+                    for (Long contactID : changeContactIDs) {
+                        LocalContact contact = new LocalContact(addressBook, contactID, null, null);
+                        contact.updateHashCode(batch);
+                    }
 
                 // remove pending memberships
                 batch.enqueue(new BatchOperation.Operation(
