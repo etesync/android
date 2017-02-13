@@ -30,11 +30,10 @@ import java.util.Set;
 import at.bitfire.davdroid.model.ServiceDB.OpenHelper;
 import at.bitfire.davdroid.model.ServiceDB.Services;
 
-public class DavService extends Service {
+public class AccountUpdateService extends Service {
 
     public static final String
-            ACTION_ACCOUNTS_UPDATED = "accountsUpdated",
-            EXTRA_DAV_SERVICE_ID = "davServiceID";
+            ACTION_ACCOUNTS_UPDATED = "accountsUpdated";
 
     private final IBinder binder = new InfoBinder();
 
@@ -46,7 +45,6 @@ public class DavService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
-            long id = intent.getLongExtra(EXTRA_DAV_SERVICE_ID, -1);
 
             switch (action) {
                 case ACTION_ACCOUNTS_UPDATED:

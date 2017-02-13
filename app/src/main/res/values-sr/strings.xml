@@ -47,7 +47,7 @@
   <string name="navigation_drawer_forums">Заједница</string>
   <string name="navigation_drawer_donate">Донирај</string>
   <string name="account_list_empty">Добро дошли у ДАВдроид!\n\nМожете сада да додате КалДАВ/КардДАВ налог.</string>
-  <!--DavService-->
+  <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Откривање услуге није успело</string>
   <string name="dav_service_refresh_couldnt_refresh">Не могох да освежим списак збирки</string>
   <!--AppSettingsActivity-->

@@ -47,7 +47,7 @@
   <string name="navigation_drawer_forums">Komunita</string>
   <string name="navigation_drawer_donate">Obdarovat</string>
   <string name="account_list_empty">Vítejte v aplikaci DAVdroid!\n\nNyní můžete přidat CalDAV/CardDAV účet.</string>
-  <!--DavService-->
+  <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Vyhledání služby selhalo</string>
   <string name="dav_service_refresh_couldnt_refresh">Nelze obnovit seznam sbírky</string>
   <!--AppSettingsActivity-->

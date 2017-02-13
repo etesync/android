@@ -44,7 +44,7 @@
   <string name="navigation_drawer_forums">Community</string>
   <string name="navigation_drawer_donate">Donation</string>
   <string name="account_list_empty">Velkommen til DAVdroid!\n\nDu kan nu tilføje en CaDAV/CardDAV-konto.</string>
-  <!--DavService-->
+  <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Registrering af tjeneste kunne ikke foretages</string>
   <string name="dav_service_refresh_couldnt_refresh">Kunne opdatere liste over sæt</string>
   <!--AppSettingsActivity-->

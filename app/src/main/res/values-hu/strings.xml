@@ -47,7 +47,7 @@
   <string name="navigation_drawer_forums">Közösség</string>
   <string name="navigation_drawer_donate">Támogatás</string>
   <string name="account_list_empty">Üdvözöljük a DAVdroid felhasználók között!\n\nMost már felvehet CalDAV/CardDav fiókokat.</string>
-  <!--DavService-->
+  <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Szolgáltatások felderítése nem sikerült</string>
   <string name="dav_service_refresh_couldnt_refresh">Gyűjteménylista frissítése nem sikerült</string>
   <!--AppSettingsActivity-->

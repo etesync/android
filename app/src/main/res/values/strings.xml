@@ -64,7 +64,7 @@
 
     <string name="account_list_empty">Welcome to EteSync!\n\nAdd an account to start.</string>
 
-    <!-- DavService -->
+    <!-- AccountUpdateService -->
     <string name="dav_service_refresh_failed">Service detection failed</string>
     <string name="dav_service_refresh_couldnt_refresh">Couldn\'t refresh collection list</string>
 

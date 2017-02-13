@@ -45,7 +45,7 @@
   <string name="navigation_drawer_forums">Comunità</string>
   <string name="navigation_drawer_donate">Donazione</string>
   <string name="account_list_empty">Benvenuto a DAVdroid!\n\nÈ ora possibile aggiungere account CalDAV/CardDAV.</string>
-  <!--DavService-->
+  <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Fallita l\'individuazione dei servizi</string>
   <string name="dav_service_refresh_couldnt_refresh">Impossibile rinnovare la lista delle collezioni</string>
   <!--AppSettingsActivity-->

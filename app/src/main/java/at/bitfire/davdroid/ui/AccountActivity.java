@@ -61,8 +61,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import at.bitfire.cert4android.CustomCertManager;
+import at.bitfire.davdroid.AccountUpdateService;
 import at.bitfire.davdroid.App;
-import at.bitfire.davdroid.DavService;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
@@ -319,9 +319,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
     }
 
 
-    private static class AccountLoader extends AsyncTaskLoader<AccountInfo> implements DavService.RefreshingStatusListener, ServiceConnection, SyncStatusObserver {
+    private static class AccountLoader extends AsyncTaskLoader<AccountInfo> implements AccountUpdateService.RefreshingStatusListener, ServiceConnection, SyncStatusObserver {
         private final Account account;
-        private DavService.InfoBinder davService;
+        private AccountUpdateService.InfoBinder davService;
         private Object syncStatusListener;
 
         public AccountLoader(Context context, Account account) {
@@ -333,7 +333,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         protected void onStartLoading() {
             syncStatusListener = ContentResolver.addStatusChangeListener(SYNC_OBSERVER_TYPE_ACTIVE, this);
 
-            getContext().bindService(new Intent(getContext(), DavService.class), this, Context.BIND_AUTO_CREATE);
+            getContext().bindService(new Intent(getContext(), AccountUpdateService.class), this, Context.BIND_AUTO_CREATE);
         }
 
         @Override
@@ -347,7 +347,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            davService = (DavService.InfoBinder)service;
+            davService = (AccountUpdateService.InfoBinder)service;
             davService.addRefreshingStatusListener(this, false);
 
             forceLoad();

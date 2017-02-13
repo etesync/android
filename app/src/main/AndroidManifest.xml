@@ -112,7 +112,7 @@
 
 
         <service
-            android:name=".DavService"
+            android:name=".AccountUpdateService"
             android:enabled="true">
         </service>
 
