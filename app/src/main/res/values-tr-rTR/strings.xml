@@ -98,14 +98,12 @@
   <string name="login_base_url">Baz URL</string>
   <string name="login_login">Giriş</string>
   <string name="login_back">Geri</string>
-  <string name="login_create_account">Hesap yarat</string>
   <string name="login_account_name">Hesap adı</string>
   <string name="login_account_name_info">Hesap ismi olarak e-posta adresini kullan çünkü Android hesap ismini yarattığın olaylarda DÜZENLEYEN alanında kullanacaktır. Aynı isimde iki faklı hesabın olamaz.</string>
   <string name="login_account_name_required">Hesap adı zorunludur</string>
   <string name="login_account_not_created">Hesap yaratılamadı</string>
   <string name="login_configuration_detection">Konfigürasyon keşfi</string>
   <string name="login_querying_server">Lütfen bekle, sunucu sorgulanıyor...</string>
-  <string name="login_no_caldav_carddav">CalDAV veya CardDAV servisi bulunamadı.</string>
   <string name="login_view_logs">Jurnallere bak</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Ayarlar: %s</string>

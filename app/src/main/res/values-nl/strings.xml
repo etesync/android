@@ -106,7 +106,6 @@
   <string name="login_base_url">Basis URL</string>
   <string name="login_login">Login</string>
   <string name="login_back">Terug</string>
-  <string name="login_create_account">Maak een account</string>
   <string name="login_account_name">Accountnaam</string>
   <string name="login_account_name_info">Gebruik je email adres als account naam want Android zal je account naam gebruiken als ORGANIZER veld voor gemaakte afspraken. Je kunt geen 2 accounts met dezelfde naam hebben,</string>
   <string name="login_account_contact_group_method">Contact groep methode:</string>
@@ -114,7 +113,6 @@
   <string name="login_account_not_created">Account kon niet gemaakt worden.</string>
   <string name="login_configuration_detection">Configuratie detectie</string>
   <string name="login_querying_server">Even geduld, verzoek naar server...</string>
-  <string name="login_no_caldav_carddav">Kon geen CalDAV of CardDAV service vinden.</string>
   <string name="login_view_logs">Bekijk logs</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Instellingen: %s</string>

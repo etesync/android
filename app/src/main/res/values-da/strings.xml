@@ -97,7 +97,6 @@
   <string name="login_base_url">Basis-URL</string>
   <string name="login_login">Login</string>
   <string name="login_back">Tilbage</string>
-  <string name="login_create_account">Opret konto</string>
   <string name="login_account_name">Kontonavn</string>
   <string name="login_account_name_info">Brug emailadressen som kontonavn, for Android vil bruge kontonavnet til ORGANIZER-feltet for aktiviteter, som du opretter. Du kan ikke have to konti med samme navn.</string>
   <string name="login_account_contact_group_method">Gruppering af kontakter:</string>
@@ -105,7 +104,6 @@
   <string name="login_account_not_created">Konto kunne ikke oprettes</string>
   <string name="login_configuration_detection">Check konfiguration</string>
   <string name="login_querying_server">Vent, forespørger hos serveren...</string>
-  <string name="login_no_caldav_carddav">Kunne ikke finde CalDAV- eller CardDAV-tjeneste.</string>
   <string name="login_view_logs">Vis logs.</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Indstillinger: %s</string>

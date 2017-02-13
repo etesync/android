@@ -115,7 +115,6 @@
   <string name="login_base_url">Základní URL</string>
   <string name="login_login">Login</string>
   <string name="login_back">Zpět</string>
-  <string name="login_create_account">Vytvořit účet</string>
   <string name="login_account_name">Jméno účtu</string>
   <string name="login_account_name_info">Pro jméno účtu použijte svou emailovou adresu, protože Android bude brát jméno účtu jako údaj pro ORGANIZÁTORA vytvořených událostí. Nelze mít dva účty stejného jména.</string>
   <string name="login_account_contact_group_method">Metoda seskupování kontaktů:</string>
@@ -123,7 +122,6 @@
   <string name="login_account_not_created">Účet nelze vytvořit</string>
   <string name="login_configuration_detection">Vyhledání konfigurace</string>
   <string name="login_querying_server">Chvíli strpení, probíhá dotazování serveru...</string>
-  <string name="login_no_caldav_carddav">Nelze nalézt službu CalDAV nebo CardDAV.</string>
   <string name="login_view_logs">Prohlížet logy</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Nastavení: %s</string>

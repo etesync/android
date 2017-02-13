@@ -115,7 +115,6 @@
   <string name="login_base_url">Корени УРЛ</string>
   <string name="login_login">Пријава</string>
   <string name="login_back">Назад</string>
-  <string name="login_create_account">Направи налог</string>
   <string name="login_account_name">Назив налога</string>
   <string name="login_account_name_info">Користите вашу е-адресу за назив налога јер Андроид користи назив налога за поље ОРГАНИЗАТОР за догађаје које направите. Не можете имати два налога истог назива.</string>
   <string name="login_account_contact_group_method">Режим група контаката:</string>
@@ -123,7 +122,6 @@
   <string name="login_account_not_created">Не могох направити налог</string>
   <string name="login_configuration_detection">Откривање конфигурације</string>
   <string name="login_querying_server">Сачекајте, шаљем упит серверу…</string>
-  <string name="login_no_caldav_carddav">Не могох да нађем КалДАВ или КардДАВ услугу.</string>
   <string name="login_view_logs">Прикажи записе</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Поставке: %s</string>

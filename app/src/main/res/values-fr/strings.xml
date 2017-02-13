@@ -115,7 +115,6 @@
   <string name="login_base_url">URL de base</string>
   <string name="login_login">Se connecter</string>
   <string name="login_back">Retour</string>
-  <string name="login_create_account">Créer un compte</string>
   <string name="login_account_name">Nom du compte</string>
   <string name="login_account_name_info">Utilisez votre adresse e-mail comme nom de compte car Android utilisera ce nom en tant que champ ORGANISATEUR pour les événements que vous créerez. Vous ne pouvez pas avoir deux comptes avec le même nom.</string>
   <string name="login_account_contact_group_method">Méthode pour les contacts de type groupe :</string>
@@ -123,7 +122,6 @@
   <string name="login_account_not_created">Le compte n\'a pas pu être créé</string>
   <string name="login_configuration_detection">Détection de la configuration</string>
   <string name="login_querying_server">S\'il vous plaît patienter, nous interrogeons le serveur ...</string>
-  <string name="login_no_caldav_carddav">Aucun service CalDAV ou CardDAV trouvé.</string>
   <string name="login_view_logs">Voir infos de débogage</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Paramètres: %s</string>

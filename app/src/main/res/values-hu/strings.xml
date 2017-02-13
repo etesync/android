@@ -115,7 +115,6 @@
   <string name="login_base_url">URL-törzs</string>
   <string name="login_login">Bejelentkezés</string>
   <string name="login_back">Vissza</string>
-  <string name="login_create_account">Fiók létrehozása</string>
   <string name="login_account_name">A fiók neve</string>
   <string name="login_account_name_info">Használja az email címet fióknévként, mert később a létrehozandó események szervezőjeként (ORGANIZER mező) az Android ezt fogja használni. Két fiókot nem lehet azonos néven létrehozni.</string>
   <string name="login_account_contact_group_method">A csoportok kezelésének módja:</string>
@@ -123,7 +122,6 @@
   <string name="login_account_not_created">A fiók létrehozása nem sikerült</string>
   <string name="login_configuration_detection">A konfiguráció felderítése</string>
   <string name="login_querying_server">Kérjük, várjon, a szerver lekérdezése...</string>
-  <string name="login_no_caldav_carddav">Nem található CalDAV vagy CardDAV szolgáltatás.</string>
   <string name="login_view_logs">Naplóbejegyzések megtekintése</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Beállítások: %s</string>

@@ -115,7 +115,6 @@
   <string name="login_base_url">ベース URL</string>
   <string name="login_login">ログイン</string>
   <string name="login_back">戻る</string>
-  <string name="login_create_account">アカウントを作成</string>
   <string name="login_account_name">アカウント名</string>
   <string name="login_account_name_info">Android はあなたが作成した予定の ORGANIZER フィールドとしてアカウント名を使用するので、アカウント名としてメールアドレスを使用してください。同じ名前のアカウントを 2 つ持つことはできません。</string>
   <string name="login_account_contact_group_method">連絡先グループ方法:</string>
@@ -123,7 +122,6 @@
   <string name="login_account_not_created">アカウントを作成できません</string>
   <string name="login_configuration_detection">設定の検出</string>
   <string name="login_querying_server">しばらくお待ちください。サーバーに問い合わせ中…</string>
-  <string name="login_no_caldav_carddav">CalDAV または CardDAV サービスが見つかりません。</string>
   <string name="login_view_logs">ログを表示</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">設定: %s</string>

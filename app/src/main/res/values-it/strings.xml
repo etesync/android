@@ -110,7 +110,6 @@
   <string name="login_base_url">Base URL</string>
   <string name="login_login">Login</string>
   <string name="login_back">Indietro</string>
-  <string name="login_create_account">Crea account</string>
   <string name="login_account_name">Nome account</string>
   <string name="login_account_name_info">Inserisci il tuo indirizzo email come nome dell\'account in quanto Android userà il nome dell\'account nel campo ORGANIZER degli eventi creati. Non è possibile avere due account con nome uguale.</string>
   <string name="login_account_contact_group_method">Metodo del contact group:</string>
@@ -118,7 +117,6 @@
   <string name="login_account_not_created">L\'account non può essere creato</string>
   <string name="login_configuration_detection">Rilevazione configurazione</string>
   <string name="login_querying_server">Attendere, invio richiesta al server...</string>
-  <string name="login_no_caldav_carddav">Impossibile trovare servizi CalDAV o CardDAV.</string>
   <string name="login_view_logs">Vedi i log</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Impostazioni: %s</string>
