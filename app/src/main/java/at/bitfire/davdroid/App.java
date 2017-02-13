@@ -123,7 +123,7 @@ public class App extends Application {
             File dir = getExternalFilesDir(null);
             if (dir != null)
                 try {
-                    String fileName = new File(dir, "davdroid-" + Process.myPid() + "-" +
+                    String fileName = new File(dir, "etesync-" + Process.myPid() + "-" +
                             DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMdd-HHmmss") + ".txt").toString();
                     log.info("Logging to " + fileName);
 

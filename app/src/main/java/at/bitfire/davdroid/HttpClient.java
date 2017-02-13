@@ -41,7 +41,7 @@ public class HttpClient {
 
     static {
         String date = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date(BuildConfig.buildTime));
-        userAgent = "DAVdroid/" + BuildConfig.VERSION_NAME + " (" + date + "; okhttp3) Android/" + Build.VERSION.RELEASE;
+        userAgent = "EteSync/" + BuildConfig.VERSION_NAME + " (" + date + "; okhttp3) Android/" + Build.VERSION.RELEASE;
     }
 
     private HttpClient() {
