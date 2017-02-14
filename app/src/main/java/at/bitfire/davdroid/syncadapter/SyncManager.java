@@ -187,11 +187,11 @@ abstract public class SyncManager {
             syncResult.stats.numIoExceptions++;
 
         } catch (Exceptions.ServiceUnavailableException e) {
-                Date retryAfter =  null; // ((Exceptions.ServiceUnavailableException) e).retryAfter;
-                if (retryAfter != null) {
-                    // how many seconds to wait? getTime() returns ms, so divide by 1000
-                    // syncResult.delayUntil = (retryAfter.getTime() - new Date().getTime()) / 1000;
-                }
+            Date retryAfter = null; // ((Exceptions.ServiceUnavailableException) e).retryAfter;
+            if (retryAfter != null) {
+                // how many seconds to wait? getTime() returns ms, so divide by 1000
+                // syncResult.delayUntil = (retryAfter.getTime() - new Date().getTime()) / 1000;
+            }
         } catch (Exception | OutOfMemoryError e) {
             if (e instanceof Exceptions.UnauthorizedException) {
                 syncResult.stats.numAuthExceptions++;
@@ -221,9 +221,12 @@ abstract public class SyncManager {
     }
 
 
-    /** Prepares synchronization (for instance, allocates necessary resources).
+    /**
+     * Prepares synchronization (for instance, allocates necessary resources).
+     *
      * @return whether actual synchronization is required / can be made. true = synchronization
-     *         shall be continued, false = synchronization can be skipped */
+     * shall be continued, false = synchronization can be skipped
+     */
     abstract protected boolean prepare() throws ContactsStorageException, CalendarStorageException;
 
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
@@ -257,7 +260,7 @@ abstract public class SyncManager {
 
     protected void pushEntries() throws Exceptions.HttpException, IOException, ContactsStorageException, CalendarStorageException {
         // upload dirty contacts
-        // FIXME: Deal with failure
+        // FIXME: Deal with failure (someone else uploaded before we go here)
         if (!localEntries.isEmpty()) {
             journal.putEntries(localEntries, remoteCTag);
 
@@ -288,24 +291,19 @@ abstract public class SyncManager {
             localEntries.add(previousEntry);
         }
 
-        try {
-            for (LocalResource local : localCollection.getDirty()) {
-                SyncEntry.Actions action;
-                if (local.isLocalOnly()) {
-                    action = SyncEntry.Actions.ADD;
-                } else {
-                    action = SyncEntry.Actions.CHANGE;
-                }
-
-                SyncEntry entry = new SyncEntry(local.getContent(), action);
-                JournalEntryManager.Entry tmp = new JournalEntryManager.Entry();
-                tmp.update(settings.password(), entry.toJson(), previousEntry);
-                previousEntry = tmp;
-                localEntries.add(previousEntry);
+        for (LocalResource local : localCollection.getDirty()) {
+            SyncEntry.Actions action;
+            if (local.isLocalOnly()) {
+                action = SyncEntry.Actions.ADD;
+            } else {
+                action = SyncEntry.Actions.CHANGE;
             }
-        } catch (FileNotFoundException e) {
-            // FIXME: Do something
-            e.printStackTrace();
+
+            SyncEntry entry = new SyncEntry(local.getContent(), action);
+            JournalEntryManager.Entry tmp = new JournalEntryManager.Entry();
+            tmp.update(settings.password(), entry.toJson(), previousEntry);
+            previousEntry = tmp;
+            localEntries.add(previousEntry);
         }
     }
 
@@ -332,9 +330,6 @@ abstract public class SyncManager {
      * Checks Thread.interrupted() before each request to allow quick sync cancellation.
      */
     protected List<LocalResource> processLocallyDeleted() throws CalendarStorageException, ContactsStorageException {
-        // FIXME: This needs refactoring and fixing, it's just not true.
-        // Remove locally deleted entries from server (if they have a name, i.e. if they were uploaded before),
-        // but only if they don't have changed on the server. Then finally remove them from the local address book.
         LocalResource[] localList = localCollection.getDeleted();
         List<LocalResource> ret = new ArrayList<>(localList.length);
 
