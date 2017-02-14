@@ -22,6 +22,8 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+import at.bitfire.davdroid.App;
+
 public class Helpers {
     // FIXME: This should be somewhere else
     public static String deriveKey(String salt, String password) {
@@ -79,8 +81,9 @@ public class Helpers {
             try {
                 len += cipher.doFinal(buf, len);
             } catch (InvalidCipherTextException e) {
-                // FIXME: Fail!
                 e.printStackTrace();
+                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(_data, Base64.NO_WRAP));
+                return null;
             }
 
             // remove padding
@@ -102,20 +105,19 @@ public class Helpers {
             try {
                 cipher.doFinal(buf, len);
             } catch (InvalidCipherTextException e) {
-                // FIXME: Fail!
+                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(data, Base64.NO_WRAP));
                 e.printStackTrace();
+                return null;
             }
 
             return buf;
         }
     }
 
-    /* FIXME: Replace with bouncy-castle once available. */
     static String sha256(String base) {
         return sha256(base.getBytes(Charsets.UTF_8));
     }
 
-    /* FIXME: Replace with bouncy-castle once available. */
     static String sha256(byte[] base) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
