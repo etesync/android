@@ -139,10 +139,9 @@ public class ContactsSyncManager extends SyncManager {
 
     protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException {
         InputStream is = new ByteArrayInputStream(cEntry.getContent().getBytes(Charsets.UTF_8));
-        // FIXME: Probably cache this and enable it. prepare downloader which may be used to download external resource like contact photos
-        // Contact.Downloader downloader = new ResourceDownloader(collectionURL);
+        Contact.Downloader downloader = new ResourceDownloader();
 
-        Contact[] contacts = Contact.fromStream(is, Charsets.UTF_8, null);
+        Contact[] contacts = Contact.fromStream(is, Charsets.UTF_8, downloader);
         if (contacts.length == 0) {
             App.log.warning("Received VCard without data, ignoring");
             return;
@@ -222,8 +221,6 @@ public class ContactsSyncManager extends SyncManager {
 
     @RequiredArgsConstructor
     private class ResourceDownloader implements Contact.Downloader {
-        final HttpUrl baseUrl;
-
         @Override
         public byte[] download(String url, String accepts) {
             HttpUrl httpUrl = HttpUrl.parse(url);
