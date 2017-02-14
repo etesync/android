@@ -78,8 +78,8 @@ abstract class BaseManager {
 
                 hashContent.write(content);
             } catch (IOException e) {
-                // FIXME: Do something
-                e.printStackTrace();
+                // Can never happen, but just in case, return a bad hmac
+                return "DEADBEEFDEADBEEFDEADBEEFDEADBEEF".getBytes();
             }
 
             return hmac(keyBase64, hashContent.toByteArray());
