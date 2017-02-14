@@ -52,7 +52,7 @@ public class HttpClient {
 
         // use account settings for authentication
         AccountSettings settings = new AccountSettings(context, account);
-        builder = addAuthentication(builder, null, settings.getAuthToken());
+        builder = addAuthentication(builder, Constants.serviceUrl.getHost(), settings.getAuthToken());
 
         return builder.build();
     }
@@ -136,8 +136,6 @@ public class HttpClient {
     private static class TokenAuthenticator implements Interceptor {
         protected static final String
                 HEADER_AUTHORIZATION = "Authorization";
-
-        // FIXME: Host is not used
         final String host, token;
 
 
@@ -150,11 +148,15 @@ public class HttpClient {
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
 
-            if ((token != null)
-                    && (request.header(HEADER_AUTHORIZATION) == null)) {
-                request = request.newBuilder()
-                        .header(HEADER_AUTHORIZATION, "Token " + token)
-                        .build();
+            /* Only add to the host we want. */
+            if ((host == null)
+                    || (request.url().host().equals(host))) {
+                if ((token != null)
+                        && (request.header(HEADER_AUTHORIZATION) == null)) {
+                    request = request.newBuilder()
+                            .header(HEADER_AUTHORIZATION, "Token " + token)
+                            .build();
+                }
             }
 
             return chain.proceed(request);
