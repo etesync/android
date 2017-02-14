@@ -181,13 +181,11 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
                 report.append("Authority: ").append(authority).append("\n");
 
             if (throwable instanceof HttpException) {
-                /* FIXME
                 HttpException http = (HttpException)throwable;
                 if (http.request != null)
                     report.append("\nHTTP REQUEST:\n").append(http.request).append("\n\n");
                 if (http.response != null)
                     report.append("HTTP RESPONSE:\n").append(http.response).append("\n");
-                    */
             }
 
             if (throwable != null)

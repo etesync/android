@@ -1,6 +1,7 @@
 package at.bitfire.davdroid.journalmanager;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.logging.Level;
 
 import at.bitfire.davdroid.App;
@@ -44,10 +45,10 @@ public class JournalAuthenticator {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 return GsonHelper.gson.fromJson(response.body().charStream(), AuthResponse.class).token;
-            } else if (response.code() == 400) {
+            } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
                 throw new Exceptions.UnauthorizedException("Username or password incorrect");
             } else {
-                throw new Exceptions.HttpException("Error authenticating");
+                throw new Exceptions.HttpException(response);
             }
         } catch (IOException e) {
             App.log.log(Level.SEVERE, "Couldn't download external resource", e);

@@ -4,6 +4,7 @@ import org.apache.commons.codec.Charsets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.logging.Level;
 
 import at.bitfire.davdroid.App;
@@ -36,10 +37,10 @@ abstract class BaseManager {
 
         if (!response.isSuccessful()) {
             switch (response.code()) {
-                case 401:
+                case HttpURLConnection.HTTP_UNAUTHORIZED:
                     throw new Exceptions.UnauthorizedException("Failed to connect");
                 default:
-                    throw new Exceptions.HttpException("Error getting");
+                    throw new Exceptions.HttpException(response);
             }
         }
 
