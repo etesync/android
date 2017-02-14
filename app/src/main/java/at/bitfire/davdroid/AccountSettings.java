@@ -184,20 +184,6 @@ public class AccountSettings {
 
     // CalDAV settings
 
-    @Nullable
-    public Integer getTimeRangePastDays() {
-        String strDays = accountManager.getUserData(account, KEY_TIME_RANGE_PAST_DAYS);
-        if (strDays != null) {
-            int days = Integer.valueOf(strDays);
-            return days < 0 ? null : days;
-        } else
-            return DEFAULT_TIME_RANGE_PAST_DAYS;
-    }
-
-    public void setTimeRangePastDays(@Nullable Integer days) {
-        accountManager.setUserData(account, KEY_TIME_RANGE_PAST_DAYS, String.valueOf(days == null ? -1 : days));
-    }
-
     public boolean getManageCalendarColors() {
         return accountManager.getUserData(account, KEY_MANAGE_CALENDAR_COLORS) == null;
     }
