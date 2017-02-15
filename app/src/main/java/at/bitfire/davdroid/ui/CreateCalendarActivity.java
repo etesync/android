@@ -108,6 +108,7 @@ public class CreateCalendarActivity extends AppCompatActivity {
 
         if (ok) {
             info.type = CollectionInfo.Type.CALENDAR;
+            info.selected = true;
 
             CreateCollectionFragment.newInstance(account, info).show(getSupportFragmentManager(), null);
         }
