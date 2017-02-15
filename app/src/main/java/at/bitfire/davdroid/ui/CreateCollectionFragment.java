@@ -143,7 +143,10 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
-                journalManager.putJournal(new JournalManager.Journal(settings.password(), info.toJson(), info.url));
+                JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
+                // CollectionInfo doesn't have a url at this point, update it.
+                info.url = journal.getUuid();
+                journalManager.putJournal(journal);
 
                 // 2. add collection to service
                 ContentValues values = info.toDB();
