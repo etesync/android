@@ -161,8 +161,6 @@ public abstract class SyncAdapterService extends Service {
                         }
                     }
 
-                    // FIXME: handle deletion from server
-
                     if (collections.isEmpty()) {
                         CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
                         JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
