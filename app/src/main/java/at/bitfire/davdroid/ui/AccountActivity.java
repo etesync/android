@@ -236,7 +236,16 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.delete_collection:
-                            DeleteCollectionFragment.ConfirmDeleteCollectionFragment.newInstance(account, info).show(getSupportFragmentManager(), null);
+                            if (adapter.getCount() == 1) {
+                                new AlertDialog.Builder(AccountActivity.this)
+                                        .setIcon(R.drawable.ic_error_dark)
+                                        .setTitle(R.string.account_delete_collection_last_title)
+                                        .setMessage(R.string.account_delete_collection_last_text)
+                                        .setPositiveButton(android.R.string.ok, null)
+                                        .show();
+                            } else {
+                                DeleteCollectionFragment.ConfirmDeleteCollectionFragment.newInstance(account, info).show(getSupportFragmentManager(), null);
+                            }
                             break;
                     }
                     return true;
