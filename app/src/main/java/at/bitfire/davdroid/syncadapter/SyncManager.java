@@ -16,6 +16,7 @@ import android.os.Bundle;
 
 import org.apache.commons.collections4.ListUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,6 +92,12 @@ abstract public class SyncManager {
      * Syncable remote journal entries (fetch from server).
      */
     protected List<JournalEntryManager.Entry> remoteEntries;
+
+    /**
+     * Dirty and deleted resources. We need to save them so we safely ignore ones that were added after we started.
+     */
+    protected List<LocalResource> localDeleted;
+    protected LocalResource[] localDirty;
 
     public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String uniqueCollectionId, CollectionInfo.Type serviceType) throws InvalidAccountException {
         this.context = context;
@@ -264,14 +271,16 @@ abstract public class SyncManager {
                 remoteCTag = entries.get(entries.size() - 1).getUuid();
             }
 
-            for (LocalResource local : localCollection.getDirty()) {
+            for (LocalResource local : localDirty) {
                 App.log.info("Added/changed resource with UUID: " + local.getUuid());
                 local.clearDirty(local.getUuid());
             }
+            localDirty = null;
 
-            for (LocalResource local : localCollection.getDeleted()) {
+            for (LocalResource local : localDeleted) {
                 local.delete();
             }
+            localDeleted = null;
         }
     }
 
@@ -281,7 +290,7 @@ abstract public class SyncManager {
         // Not saving, just creating a fake one until we load it from a local db
         JournalEntryManager.Entry previousEntry = (remoteCTag != null) ? JournalEntryManager.Entry.getFakeWithUid(remoteCTag) : null;
 
-        for (LocalResource local : processLocallyDeleted()) {
+        for (LocalResource local : localDeleted) {
             SyncEntry entry = new SyncEntry(local.getContent(), SyncEntry.Actions.DELETE);
             JournalEntryManager.Entry tmp = new JournalEntryManager.Entry();
             tmp.update(settings.password(), entry.toJson(), previousEntry);
@@ -289,7 +298,7 @@ abstract public class SyncManager {
             localEntries.add(previousEntry);
         }
 
-        for (LocalResource local : localCollection.getDirty()) {
+        for (LocalResource local : localDirty) {
             SyncEntry.Actions action;
             if (local.isLocalOnly()) {
                 action = SyncEntry.Actions.ADD;
@@ -307,8 +316,10 @@ abstract public class SyncManager {
 
     /**
      */
-    protected void prepareLocal() throws CalendarStorageException, ContactsStorageException {
+    protected void prepareLocal() throws CalendarStorageException, ContactsStorageException, FileNotFoundException {
         prepareDirty();
+        localDeleted = processLocallyDeleted();
+        localDirty = localCollection.getDirty();
 
         remoteCTag = localCollection.getCTag();
     }
@@ -318,7 +329,7 @@ abstract public class SyncManager {
      * Delete unpublished locally deleted, and return the rest.
      * Checks Thread.interrupted() before each request to allow quick sync cancellation.
      */
-    protected List<LocalResource> processLocallyDeleted() throws CalendarStorageException, ContactsStorageException {
+    private List<LocalResource> processLocallyDeleted() throws CalendarStorageException, ContactsStorageException {
         LocalResource[] localList = localCollection.getDeleted();
         List<LocalResource> ret = new ArrayList<>(localList.length);
 
