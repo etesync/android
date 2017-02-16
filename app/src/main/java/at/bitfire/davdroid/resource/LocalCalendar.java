@@ -126,6 +126,15 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
     }
 
     @Override
+    public LocalEvent getByUid(String uid) throws CalendarStorageException {
+        LocalEvent[] ret = (LocalEvent[]) queryEvents(Events._SYNC_ID + " =? ", new String[]{uid});
+        if (ret != null && ret.length > 0) {
+            return ret[0];
+        }
+        return null;
+    }
+
+    @Override
     public LocalResource[] getDirty() throws CalendarStorageException, FileNotFoundException {
         List<LocalResource> dirty = new LinkedList<>();
 

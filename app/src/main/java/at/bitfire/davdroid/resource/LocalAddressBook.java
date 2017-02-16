@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import at.bitfire.davdroid.App;
+import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.AndroidAddressBook;
 import at.bitfire.vcard4android.AndroidContact;
 import at.bitfire.vcard4android.AndroidGroup;
@@ -147,6 +149,15 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         if (includeGroups)
             Collections.addAll(nameless, (LocalGroup[])queryGroups(AndroidGroup.COLUMN_FILENAME + " IS NULL", null));
         return nameless.toArray(new LocalResource[nameless.size()]);
+    }
+
+    @Override
+    public LocalResource getByUid(String uid) throws ContactsStorageException {
+        LocalContact[] ret = (LocalContact[]) queryContacts(AndroidContact.COLUMN_FILENAME + " =? ", new String[]{uid});
+        if (ret != null && ret.length > 0) {
+            return ret[0];
+        }
+        return null;
     }
 
     public void deleteAll() throws ContactsStorageException {

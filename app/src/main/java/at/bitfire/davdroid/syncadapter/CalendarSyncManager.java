@@ -96,25 +96,18 @@ public class CalendarSyncManager extends SyncManager {
             App.log.warning("Received multiple VCALs, using first one");
 
         Event event = events[0];
+        LocalEvent local = (LocalEvent) localCollection.getByUid(event.uid);
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
-            LocalResource local = processEvent(event);
-
-            if (local != null) {
-                localResources.put(local.getUuid(), local);
-            }
-
+            processEvent(event, local);
         } else {
-            LocalResource local = localResources.get(event.uid);
             App.log.info("Removing local record #" + local.getId() + " which has been deleted on the server");
-            localResources.remove(local.getUuid());
             local.delete();
         }
     }
 
-    private LocalResource processEvent(final Event newData) throws IOException, ContactsStorageException, CalendarStorageException {
+    private LocalResource processEvent(final Event newData, LocalEvent localEvent) throws IOException, ContactsStorageException, CalendarStorageException {
         // delete local event, if it exists
-        LocalEvent localEvent = (LocalEvent) localResources.get(newData.uid);
         if (localEvent != null) {
             App.log.info("Updating " + newData.uid + " in local calendar");
             localEvent.setETag(newData.uid);

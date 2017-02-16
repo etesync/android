@@ -21,6 +21,7 @@ public interface LocalCollection {
     LocalResource[] getDirty() throws CalendarStorageException, ContactsStorageException, FileNotFoundException;
 
     LocalResource[] getAll() throws CalendarStorageException, ContactsStorageException;
+    LocalResource getByUid(String uid) throws CalendarStorageException, ContactsStorageException;
 
     String getCTag() throws CalendarStorageException, ContactsStorageException;
     void setCTag(String cTag) throws CalendarStorageException, ContactsStorageException;

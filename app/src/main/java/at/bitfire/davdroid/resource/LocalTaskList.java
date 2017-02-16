@@ -17,6 +17,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.RemoteException;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
@@ -91,6 +92,15 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
     @Override
     public LocalTask[] getWithoutFileName() throws CalendarStorageException {
         return (LocalTask[])queryTasks(Tasks._SYNC_ID + " IS NULL", null);
+    }
+
+    @Override
+    public LocalTask getByUid(String uid) throws CalendarStorageException {
+        LocalTask[] ret = (LocalTask[]) queryTasks(Tasks._SYNC_ID + " =? ", new String[]{uid});
+        if (ret != null && ret.length > 0) {
+            return ret[0];
+        }
+        return null;
     }
 
     @Override

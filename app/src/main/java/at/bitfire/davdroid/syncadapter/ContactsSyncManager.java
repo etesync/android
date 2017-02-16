@@ -149,26 +149,20 @@ public class ContactsSyncManager extends SyncManager {
             App.log.warning("Received multiple VCards, using first one");
 
         Contact contact = contacts[0];
+        LocalResource local = (LocalResource) localCollection.getByUid(contact.uid);
+
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
-            LocalResource local = processContact(contact);
-
-            if (local != null) {
-                localResources.put(local.getUuid(), local);
-            }
-
+            processContact(contact, local);
         } else {
-            LocalResource local = localResources.get(contact.uid);
             App.log.info("Removing local record #" + local.getId() + " which has been deleted on the server");
-            localResources.remove(local.getUuid());
             local.delete();
         }
     }
 
-    private LocalResource processContact(final Contact newData) throws IOException, ContactsStorageException {
+    private LocalResource processContact(final Contact newData, LocalResource local) throws IOException, ContactsStorageException {
         String uuid = newData.uid;
         // update local contact, if it exists
-        LocalResource local = localResources.get(uuid);
         if (local != null) {
             App.log.log(Level.INFO, "Updating " + uuid + " in local address book", newData);
 

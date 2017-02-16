@@ -92,11 +92,6 @@ abstract public class SyncManager {
      */
     protected List<JournalEntryManager.Entry> remoteEntries;
 
-    /**
-     * sync-able resources in the local collection, as enumerated by {@link #prepareLocal()}
-     */
-    protected Map<String, LocalResource> localResources;
-
     public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String uniqueCollectionId, CollectionInfo.Type serviceType) throws InvalidAccountException {
         this.context = context;
         this.account = account;
@@ -311,18 +306,9 @@ abstract public class SyncManager {
     }
 
     /**
-     * Lists all local resources which should be taken into account for synchronization into {@link #localResources}.
      */
     protected void prepareLocal() throws CalendarStorageException, ContactsStorageException {
         prepareDirty();
-
-        // fetch list of local contacts and build hash table to index file name
-        LocalResource[] localList = localCollection.getAll();
-        localResources = new HashMap<>(localList.length);
-        for (LocalResource resource : localList) {
-            App.log.fine("Found local resource: " + resource.getUuid());
-            localResources.put(resource.getUuid(), resource);
-        }
 
         remoteCTag = localCollection.getCTag();
     }
