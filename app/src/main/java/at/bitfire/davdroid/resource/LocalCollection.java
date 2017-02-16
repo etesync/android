@@ -20,7 +20,6 @@ public interface LocalCollection {
     /** Dirty *non-deleted* entries */
     LocalResource[] getDirty() throws CalendarStorageException, ContactsStorageException, FileNotFoundException;
 
-    LocalResource[] getAll() throws CalendarStorageException, ContactsStorageException;
     LocalResource getByUid(String uid) throws CalendarStorageException, ContactsStorageException;
 
     String getCTag() throws CalendarStorageException, ContactsStorageException;

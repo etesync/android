@@ -109,12 +109,6 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         return values;
     }
 
-
-    @Override
-    public LocalResource[] getAll() throws CalendarStorageException, ContactsStorageException {
-        return (LocalEvent[])queryEvents(Events.ORIGINAL_ID + " IS NULL", null);
-    }
-
     @Override
     public LocalEvent[] getDeleted() throws CalendarStorageException {
         return (LocalEvent[])queryEvents(Events.DELETED + "!=0 AND " + Events.ORIGINAL_ID + " IS NULL", null);

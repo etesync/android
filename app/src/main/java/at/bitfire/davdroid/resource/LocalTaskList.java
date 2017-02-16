@@ -78,12 +78,6 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
         return values;
     }
 
-
-    @Override
-    public LocalTask[] getAll() throws CalendarStorageException {
-        return (LocalTask[])queryTasks(null, null);
-    }
-
     @Override
     public LocalTask[] getDeleted() throws CalendarStorageException {
         return (LocalTask[])queryTasks(Tasks._DELETED + "!=0", null);

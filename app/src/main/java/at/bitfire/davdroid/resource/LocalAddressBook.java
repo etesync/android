@@ -49,7 +49,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
 
     /**
      * Whether contact groups (LocalGroup resources) are included in query results for
-     * {@link #getAll()}, {@link #getDeleted()}, {@link #getDirty()} and
+     * {@link #getDeleted()}, {@link #getDirty()} and
      * {@link #getWithoutFileName()}.
      */
     public boolean includeGroups = true;
@@ -61,20 +61,10 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
 
     @NonNull
     public LocalContact findContactByUID(String uid) throws ContactsStorageException, FileNotFoundException {
-        LocalContact[] contacts = (LocalContact[])queryContacts(LocalContact.COLUMN_UID + "=?", new String[] { uid });
+        LocalContact[] contacts = (LocalContact[]) queryContacts(LocalContact.COLUMN_UID + "=?", new String[]{uid});
         if (contacts.length == 0)
             throw new FileNotFoundException();
         return contacts[0];
-    }
-
-    @Override
-    @NonNull
-    public LocalResource[] getAll() throws ContactsStorageException {
-        List<LocalResource> all = new LinkedList<>();
-        Collections.addAll(all, (LocalResource[])queryContacts(null, null));
-        if (includeGroups)
-            Collections.addAll(all, (LocalResource[])queryGroups(null, null));
-        return all.toArray(new LocalResource[all.size()]);
     }
 
     /**
