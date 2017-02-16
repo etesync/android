@@ -18,10 +18,12 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -60,6 +62,19 @@ public class CreateCalendarActivity extends AppCompatActivity {
                 }).show();
             }
         });
+
+        Spinner spinner = (Spinner) findViewById(R.id.time_zone);
+        String[] timeZones = TimeZone.getAvailableIDs();
+        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeZones));
+
+        // select system time zone
+        String defaultTimeZone = TimeZone.getDefault().getID();
+        for (int i = 0; i < timeZones.length; i++) {
+            if (timeZones[i].equals(defaultTimeZone)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
     }
 
     @Override
