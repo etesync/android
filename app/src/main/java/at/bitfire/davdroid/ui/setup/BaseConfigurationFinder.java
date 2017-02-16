@@ -10,6 +10,7 @@ package at.bitfire.davdroid.ui.setup;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class BaseConfigurationFinder {
         String authtoken = null;
         try {
             authtoken = authenticator.getAuthToken(credentials.userName, credentials.password);
-        } catch (Exceptions.HttpException e) {
+        } catch (Exceptions.HttpException|IOException e) {
             log.warning(e.getMessage());
 
             failed = true;

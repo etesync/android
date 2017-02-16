@@ -31,7 +31,7 @@ public class JournalAuthenticator {
         }
     }
 
-    public String getAuthToken(String username, String password) throws Exceptions.HttpException {
+    public String getAuthToken(String username, String password) throws Exceptions.HttpException, IOException {
         FormBody.Builder formBuilder = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password);
@@ -41,19 +41,13 @@ public class JournalAuthenticator {
                 .url(remote)
                 .build();
 
-        try {
-            Response response = client.newCall(request).execute();
-            if (response.isSuccessful()) {
-                return GsonHelper.gson.fromJson(response.body().charStream(), AuthResponse.class).token;
-            } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
-                throw new Exceptions.UnauthorizedException("Username or password incorrect");
-            } else {
-                throw new Exceptions.HttpException(response);
-            }
-        } catch (IOException e) {
-            App.log.log(Level.SEVERE, "Couldn't download external resource", e);
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            return GsonHelper.gson.fromJson(response.body().charStream(), AuthResponse.class).token;
+        } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
+            throw new Exceptions.UnauthorizedException("Username or password incorrect");
+        } else {
+            throw new Exceptions.HttpException(response);
         }
-
-        return null;
     }
 }
