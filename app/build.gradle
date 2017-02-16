@@ -86,6 +86,33 @@ android {
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    /*
+     * To sign release build, create file gradle.properties in ~/.gradle/ with this content:
+     *
+     * signingStoreLocation=/home/key.store
+     * signingKeyAlias=alias
+     *
+     * and set the KSTOREPWD env var to the store and key passwords (should be the same)
+     */
+    if (project.hasProperty('signingStoreLocation') &&
+            project.hasProperty('signingKeyAlias')) {
+         println "Found sign properties in gradle.properties! Signing build…"
+
+         signingConfigs {
+              release {
+                   storeFile file(signingStoreLocation)
+                   storePassword System.getenv("KSTOREPWD")
+                   keyAlias signingKeyAlias
+                   keyPassword System.getenv("KSTOREPWD")
+
+              }
+         }
+         buildTypes.release.signingConfig = signingConfigs.release
+    } else {
+         buildTypes.release.signingConfig = null
+    }
+
 }
 
 dependencies {
