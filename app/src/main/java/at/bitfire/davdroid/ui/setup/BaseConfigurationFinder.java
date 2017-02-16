@@ -85,7 +85,7 @@ public class BaseConfigurationFinder {
     // data classes
 
     @RequiredArgsConstructor
-    @ToString(exclude="logs")
+    @ToString(exclude={"logs", "authtoken", "rawPassword", "password"})
     public static class Configuration implements Serializable {
         // We have to use URI here because HttpUrl is not serializable!
 
