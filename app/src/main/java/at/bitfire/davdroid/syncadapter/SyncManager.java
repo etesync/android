@@ -14,7 +14,8 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-import java.io.FileNotFoundException;
+import org.apache.commons.collections4.ListUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -260,9 +261,13 @@ abstract public class SyncManager {
 
     protected void pushEntries() throws Exceptions.HttpException, IOException, ContactsStorageException, CalendarStorageException {
         // upload dirty contacts
+        final int MAX_PUSH = 30;
         // FIXME: Deal with failure (someone else uploaded before we go here)
         if (!localEntries.isEmpty()) {
-            journal.putEntries(localEntries, remoteCTag);
+            for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
+                journal.putEntries(entries, remoteCTag);
+                remoteCTag = entries.get(entries.size() - 1).getUuid();
+            }
 
             for (LocalResource local : localCollection.getDirty()) {
                 App.log.info("Added/changed resource with UUID: " + local.getUuid());
@@ -272,8 +277,6 @@ abstract public class SyncManager {
             for (LocalResource local : localCollection.getDeleted()) {
                 local.delete();
             }
-
-            remoteCTag = localEntries.get(localEntries.size() - 1).getUuid();
         }
     }
 
