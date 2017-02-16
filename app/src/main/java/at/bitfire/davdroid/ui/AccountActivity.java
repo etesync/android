@@ -68,6 +68,7 @@ import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
 import at.bitfire.davdroid.model.ServiceDB.OpenHelper;
 import at.bitfire.davdroid.model.ServiceDB.Services;
+import at.bitfire.davdroid.resource.LocalCalendar;
 import at.bitfire.ical4android.TaskProvider;
 import lombok.Cleanup;
 
@@ -470,15 +471,12 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
             final CollectionInfo info = getItem(position);
 
-            CheckBox checked = (CheckBox)v.findViewById(R.id.checked);
-            checked.setChecked(info.selected);
-
             View vColor = v.findViewById(R.id.color);
             if (info.color != null) {
-                vColor.setVisibility(View.VISIBLE);
                 vColor.setBackgroundColor(info.color);
-            } else
-                vColor.setVisibility(View.GONE);
+            } else {
+                vColor.setBackgroundColor(LocalCalendar.defaultColor);
+            }
 
             TextView tv = (TextView)v.findViewById(R.id.title);
             tv.setText(TextUtils.isEmpty(info.displayName) ? info.url : info.displayName);
