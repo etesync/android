@@ -31,8 +31,8 @@ abstract class BaseManager {
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
-            App.log.log(Level.SEVERE, "Couldn't download external resource", e);
-            throw new Exceptions.ServiceUnavailableException("Failed downloading");
+            App.log.log(Level.SEVERE, "Failed while connecting to server", e);
+            throw new Exceptions.ServiceUnavailableException("[" + e.getClass().getName() + "] " + e.getLocalizedMessage());
         }
 
         if (!response.isSuccessful()) {
