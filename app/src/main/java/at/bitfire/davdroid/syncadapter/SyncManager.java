@@ -143,13 +143,6 @@ abstract public class SyncManager {
             App.log.info("Sync phase: " + syncPhase);
             prepareLocal();
 
-            /* Create journal entries out of local changes. */
-            if (Thread.interrupted())
-                return;
-            syncPhase = SYNC_PHASE_CREATE_LOCAL_ENTRIES;
-            App.log.info("Sync phase: " + syncPhase);
-            createLocalEntries();
-
             if (Thread.interrupted())
                 return;
             syncPhase = SYNC_PHASE_FETCH_ENTRIES;
@@ -161,6 +154,13 @@ abstract public class SyncManager {
             syncPhase = SYNC_PHASE_APPLY_REMOTE_ENTRIES;
             App.log.info("Sync phase: " + syncPhase);
             applyRemoteEntries();
+
+            /* Create journal entries out of local changes. */
+            if (Thread.interrupted())
+                return;
+            syncPhase = SYNC_PHASE_CREATE_LOCAL_ENTRIES;
+            App.log.info("Sync phase: " + syncPhase);
+            createLocalEntries();
 
             if (Thread.interrupted())
                 return;
@@ -234,7 +234,24 @@ abstract public class SyncManager {
 
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
 
-    abstract protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException;
+    private void applyEntries(List<JournalEntryManager.Entry> entries) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException {
+        for (JournalEntryManager.Entry entry : entries) {
+            if (Thread.interrupted())
+                return;
+
+            App.log.info("Processing " + entry.toString());
+
+            SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+            App.log.info("Processing resource for journal entry " + entry.getUuid());
+            processSyncEntry(cEntry);
+        }
+    }
+
+    protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException {
+        // FIXME: Need a better strategy
+        // We re-apply local entries so our changes override whatever was written in the remote.
+        applyEntries(localEntries);
+    }
 
     protected void queryCapabilities() throws IOException, CalendarStorageException, ContactsStorageException {
     }
@@ -249,16 +266,7 @@ abstract public class SyncManager {
 
     protected void applyRemoteEntries() throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException {
         // Process new vcards from server
-        for (JournalEntryManager.Entry entry : remoteEntries) {
-            if (Thread.interrupted())
-                return;
-
-            App.log.info("Processing " + entry.toString());
-
-            SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
-            App.log.info("Processing resource for journal entry " + entry.getUuid());
-            processSyncEntry(cEntry);
-        }
+        applyEntries(remoteEntries);
     }
 
     protected void pushEntries() throws Exceptions.HttpException, IOException, ContactsStorageException, CalendarStorageException {

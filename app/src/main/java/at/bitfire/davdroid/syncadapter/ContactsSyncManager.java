@@ -105,11 +105,6 @@ public class ContactsSyncManager extends SyncManager {
     }
 
     @Override
-    protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException {
-
-    }
-
-    @Override
     protected void prepareDirty() throws CalendarStorageException, ContactsStorageException {
         super.prepareDirty();
 
