@@ -325,9 +325,10 @@ abstract public class SyncManager {
     /**
      */
     protected void prepareLocal() throws CalendarStorageException, ContactsStorageException, FileNotFoundException {
-        prepareDirty();
         localDeleted = processLocallyDeleted();
         localDirty = localCollection.getDirty();
+        // This is done after fetching the local dirty so all the ones we are using will be prepared
+        prepareDirty();
 
         remoteCTag = localCollection.getCTag();
     }
@@ -360,9 +361,12 @@ abstract public class SyncManager {
     }
 
     protected void prepareDirty() throws CalendarStorageException, ContactsStorageException {
-        // assign file names and UIDs to new contacts so that we can use the file name as an index
-        App.log.info("Looking for contacts/groups without file name");
-        for (LocalResource local : localCollection.getWithoutFileName()) {
+        // assign file names and UIDs to new entries
+        App.log.info("Looking for local entries without a uuid");
+        for (LocalResource local : localDirty) {
+            if (local.getUuid() != null) {
+                continue;
+            }
             String uuid = UUID.randomUUID().toString();
             App.log.fine("Found local record #" + local.getId() + " without file name; assigning file name/UID based on " + uuid);
             local.updateFileNameAndUID(uuid);
