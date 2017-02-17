@@ -14,7 +14,7 @@ import static at.bitfire.davdroid.BuildConfig.DEBUG_REMOTE_URL;
 public class Constants {
 
 	public static final String
-		ACCOUNT_TYPE = "etesync.com.syncadapter";
+		ACCOUNT_TYPE = "com.etesync.syncadapter";
 
     // notification IDs
     public final static int

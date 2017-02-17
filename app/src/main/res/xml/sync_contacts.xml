@@ -7,7 +7,7 @@
   -->
 
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="etesync.com.syncadapter"
+    android:accountType="com.etesync.syncadapter"
     android:contentAuthority="com.android.contacts"
     android:allowParallelSyncs="true"
     android:supportsUploading="true"
