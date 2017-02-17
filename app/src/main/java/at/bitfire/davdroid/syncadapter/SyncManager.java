@@ -81,23 +81,23 @@ abstract public class SyncManager {
     /**
      * remote CTag (uuid of the last entry on the server). We update it when we fetch/push and save when everything works.
      */
-    protected String remoteCTag = null;
+    private String remoteCTag = null;
 
     /**
      * Syncable local journal entries.
      */
-    protected List<JournalEntryManager.Entry> localEntries;
+    private List<JournalEntryManager.Entry> localEntries;
 
     /**
      * Syncable remote journal entries (fetch from server).
      */
-    protected List<JournalEntryManager.Entry> remoteEntries;
+    private List<JournalEntryManager.Entry> remoteEntries;
 
     /**
      * Dirty and deleted resources. We need to save them so we safely ignore ones that were added after we started.
      */
-    protected List<LocalResource> localDeleted;
-    protected LocalResource[] localDirty;
+    private List<LocalResource> localDeleted;
+    private LocalResource[] localDirty;
 
     public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String uniqueCollectionId, CollectionInfo.Type serviceType) throws InvalidAccountException {
         this.context = context;
@@ -277,6 +277,7 @@ abstract public class SyncManager {
             for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
                 journal.putEntries(entries, remoteCTag);
                 remoteCTag = entries.get(entries.size() - 1).getUuid();
+                saveSyncTag();
             }
 
             for (LocalResource local : localDirty) {
@@ -379,7 +380,7 @@ abstract public class SyncManager {
     protected void postProcess() throws CalendarStorageException, ContactsStorageException {
     }
 
-    protected void saveSyncTag() throws CalendarStorageException, ContactsStorageException {
+    private void saveSyncTag() throws CalendarStorageException, ContactsStorageException {
         App.log.info("Saving CTag=" + remoteCTag);
         localCollection.setCTag(remoteCTag);
     }
