@@ -120,6 +120,7 @@ public class ContactsSyncManager extends SyncManager {
 
     @Override
     protected void postProcess() throws CalendarStorageException, ContactsStorageException {
+        super.postProcess();
         /* VCard4 group handling: there are group contacts and individual contacts */
         App.log.info("Assigning memberships of downloaded contact groups");
         LocalGroup.applyPendingMemberships(localAddressBook());
