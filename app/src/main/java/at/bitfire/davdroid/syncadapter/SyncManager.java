@@ -228,17 +228,20 @@ abstract public class SyncManager {
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
 
     private void applyEntries(List<JournalEntryManager.Entry> entries, boolean noDelete) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException {
+        String strTotal = String.valueOf(entries.size());
+        int i = 0;
+
         for (JournalEntryManager.Entry entry : entries) {
             if (Thread.interrupted())
                 return;
-
-            App.log.info("Processing " + entry.toString());
+            i++;
+            App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
             SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
             if (noDelete && cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue;
             }
-            App.log.info("Processing resource for journal entry " + entry.getUuid());
+            App.log.info("Processing resource for journal entry");
             processSyncEntry(cEntry);
         }
     }
@@ -254,7 +257,7 @@ abstract public class SyncManager {
 
     protected void fetchEntries() throws Exceptions.HttpException, ContactsStorageException, CalendarStorageException, Exceptions.IntegrityException {
         remoteEntries = journal.getEntries(settings.password(), remoteCTag);
-        
+
         App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
 
         if (!remoteEntries.isEmpty()) {
