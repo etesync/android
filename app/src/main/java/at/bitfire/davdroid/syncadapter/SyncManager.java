@@ -57,9 +57,7 @@ abstract public class SyncManager {
             SYNC_PHASE_APPLY_REMOTE_ENTRIES = "sync_phase_apply_remote_entries",
             SYNC_PHASE_APPLY_LOCAL_ENTRIES = "sync_phase_apply_local_entries",
             SYNC_PHASE_PUSH_ENTRIES = "sync_phase_push_entries",
-            SYNC_PHASE_POST_PROCESSING = "sync_phase_post_processing",
-            SYNC_PHASE_SAVE_SYNC_TAG = "sync_phase_save_sync_tag";
-
+            SYNC_PHASE_POST_PROCESSING = "sync_phase_post_processing";
 
     protected final NotificationHelper notificationManager;
     protected final String uniqueCollectionId;
@@ -180,11 +178,6 @@ abstract public class SyncManager {
             syncPhase = SYNC_PHASE_POST_PROCESSING;
             App.log.info("Sync phase: " + syncPhase);
             postProcess();
-
-            syncPhase = SYNC_PHASE_SAVE_SYNC_TAG;
-            App.log.info("Sync phase: " + syncPhase);
-            saveSyncTag();
-
         } catch (IOException e) {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e);
             syncResult.stats.numIoExceptions++;
@@ -234,7 +227,7 @@ abstract public class SyncManager {
 
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
 
-    private void applyEntries(List<JournalEntryManager.Entry> entries) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException {
+    private void applyEntries(List<JournalEntryManager.Entry> entries, boolean noDelete) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException {
         for (JournalEntryManager.Entry entry : entries) {
             if (Thread.interrupted())
                 return;
@@ -242,6 +235,9 @@ abstract public class SyncManager {
             App.log.info("Processing " + entry.toString());
 
             SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+            if (noDelete && cEntry.isAction(SyncEntry.Actions.DELETE)) {
+                continue;
+            }
             App.log.info("Processing resource for journal entry " + entry.getUuid());
             processSyncEntry(cEntry);
         }
@@ -250,7 +246,7 @@ abstract public class SyncManager {
     protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException {
         // FIXME: Need a better strategy
         // We re-apply local entries so our changes override whatever was written in the remote.
-        applyEntries(localEntries);
+        applyEntries(localEntries, true);
     }
 
     protected void queryCapabilities() throws IOException, CalendarStorageException, ContactsStorageException {
@@ -266,30 +262,47 @@ abstract public class SyncManager {
 
     protected void applyRemoteEntries() throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException {
         // Process new vcards from server
-        applyEntries(remoteEntries);
+        applyEntries(remoteEntries, false);
     }
 
     protected void pushEntries() throws Exceptions.HttpException, IOException, ContactsStorageException, CalendarStorageException {
         // upload dirty contacts
         final int MAX_PUSH = 30;
+        int pushed = 0;
         // FIXME: Deal with failure (someone else uploaded before we go here)
-        if (!localEntries.isEmpty()) {
-            for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
-                journal.putEntries(entries, remoteCTag);
-                remoteCTag = entries.get(entries.size() - 1).getUuid();
-                saveSyncTag();
+        try {
+            if (!localEntries.isEmpty()) {
+                for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
+                    journal.putEntries(entries, remoteCTag);
+                    remoteCTag = entries.get(entries.size() - 1).getUuid();
+                    pushed += entries.size();
+                }
+            }
+        } finally {
+            // FIXME: A bit fragile, we assume the order in createLocalEntries
+            for (LocalResource local : localDeleted) {
+                if (pushed-- <= 0) {
+                    break;
+                }
+                local.delete();
             }
 
             for (LocalResource local : localDirty) {
+                if (pushed-- <= 0) {
+                    break;
+                }
                 App.log.info("Added/changed resource with UUID: " + local.getUuid());
                 local.clearDirty(local.getUuid());
             }
-            localDirty = null;
 
-            for (LocalResource local : localDeleted) {
-                local.delete();
+            if (pushed > 0) {
+                App.log.severe("Unprocessed localentries left, this should never happen!");
             }
+
+            localDirty = null;
             localDeleted = null;
+
+            saveSyncTag();
         }
     }
 
