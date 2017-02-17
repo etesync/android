@@ -254,6 +254,8 @@ abstract public class SyncManager {
 
     protected void fetchEntries() throws Exceptions.HttpException, ContactsStorageException, CalendarStorageException, Exceptions.IntegrityException {
         remoteEntries = journal.getEntries(settings.password(), remoteCTag);
+        
+        App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
 
         if (!remoteEntries.isEmpty()) {
             remoteCTag = remoteEntries.get(remoteEntries.size() - 1).getUuid();
