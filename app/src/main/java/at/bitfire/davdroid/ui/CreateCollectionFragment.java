@@ -12,11 +12,14 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
@@ -56,7 +59,7 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
         super.onCreate(savedInstanceState);
 
         account = getArguments().getParcelable(ARG_ACCOUNT);
-        info = (CollectionInfo)getArguments().getSerializable(ARG_COLLECTION_INFO);
+        info = (CollectionInfo) getArguments().getSerializable(ARG_COLLECTION_INFO);
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -120,20 +123,24 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
             ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
 
             try {
+                String authority = null;
                 // now insert collection into database:
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
 
                 // 1. find service ID
                 String serviceType;
-                if (info.type == CollectionInfo.Type.ADDRESS_BOOK)
+                if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
                     serviceType = ServiceDB.Services.SERVICE_CARDDAV;
-                else if (info.type == CollectionInfo.Type.CALENDAR)
+                    authority = ContactsContract.AUTHORITY;
+                } else if (info.type == CollectionInfo.Type.CALENDAR) {
                     serviceType = ServiceDB.Services.SERVICE_CALDAV;
-                else
+                    authority = CalendarContract.AUTHORITY;
+                } else {
                     throw new IllegalArgumentException("Collection must be an address book or calendar");
-                @Cleanup Cursor c = db.query(ServiceDB.Services._TABLE, new String[] { ServiceDB.Services.ID },
+                }
+                @Cleanup Cursor c = db.query(ServiceDB.Services._TABLE, new String[]{ServiceDB.Services.ID},
                         ServiceDB.Services.ACCOUNT_NAME + "=? AND " + ServiceDB.Services.SERVICE + "=?",
-                        new String[] { account.name, serviceType }, null, null, null
+                        new String[]{account.name, serviceType}, null, null, null
                 );
                 if (!c.moveToNext())
                     throw new IllegalStateException();
@@ -152,7 +159,9 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 ContentValues values = info.toDB();
                 values.put(ServiceDB.Collections.SERVICE_ID, serviceID);
                 db.insert(ServiceDB.Collections._TABLE, null, values);
-            } catch(IllegalStateException|Exceptions.HttpException e) {
+
+                requestSync(authority);
+            } catch (IllegalStateException | Exceptions.HttpException e) {
                 return e;
             } catch (InvalidAccountException e) {
                 return e;
@@ -161,6 +170,13 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
             }
 
             return null;
+        }
+
+        private void requestSync(String authority) {
+            Bundle extras = new Bundle();
+            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);        // manual sync
+            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);     // run immediately (don't queue)
+            ContentResolver.requestSync(account, authority, extras);
         }
     }
 
