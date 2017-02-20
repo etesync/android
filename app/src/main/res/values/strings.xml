@@ -114,13 +114,13 @@
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>
     <string name="permissions_calendar">Calendar permissions</string>
-    <string name="permissions_calendar_details">To synchronize CalDAV events with your local calendars, EteSync needs to access your calendars.</string>
+    <string name="permissions_calendar_details">To synchronize calendar events with your local calendars, EteSync needs to access your calendars.</string>
     <string name="permissions_calendar_request">Request calendar permissions</string>
     <string name="permissions_contacts">Contacts permissions</string>
-    <string name="permissions_contacts_details">To synchronize CardDAV address books with your local contacts, EteSync needs to access your contacts.</string>
+    <string name="permissions_contacts_details">To synchronize address books with your local contacts, EteSync needs to access your contacts.</string>
     <string name="permissions_contacts_request">Request contacts permissions</string>
     <string name="permissions_opentasks">OpenTasks permissions</string>
-    <string name="permissions_opentasks_details">To synchronize CalDAV tasks with your local task lists, EteSync needs to access OpenTasks.</string>
+    <string name="permissions_opentasks_details">To synchronize tasks with your local task lists, EteSync needs to access OpenTasks.</string>
     <string name="permissions_opentasks_request">Request OpenTasks permissions</string>
 
     <!-- AddAccountActivity -->
@@ -231,7 +231,7 @@
     <!-- collection management -->
     <string name="create_addressbook">Create address book</string>
     <string name="create_addressbook_display_name_hint">My Address Book</string>
-    <string name="create_calendar">Create CalDAV collection</string>
+    <string name="create_calendar">Create calendar</string>
     <string name="create_calendar_display_name_hint">My Calendar</string>
     <string name="create_calendar_time_zone">Time zone:</string>
     <string name="create_calendar_type">Collection type:</string>
