@@ -18,18 +18,12 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
-
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
 
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.model.CollectionInfo;
-import at.bitfire.ical4android.DateUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreateCalendarActivity extends AppCompatActivity {
@@ -62,19 +56,6 @@ public class CreateCalendarActivity extends AppCompatActivity {
                 }).show();
             }
         });
-
-        Spinner spinner = (Spinner) findViewById(R.id.time_zone);
-        String[] timeZones = TimeZone.getAvailableIDs();
-        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeZones));
-
-        // select system time zone
-        String defaultTimeZone = TimeZone.getDefault().getID();
-        for (int i = 0; i < timeZones.length; i++) {
-            if (timeZones[i].equals(defaultTimeZone)) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
     }
 
     @Override
@@ -98,8 +79,6 @@ public class CreateCalendarActivity extends AppCompatActivity {
         boolean ok = true;
         CollectionInfo info = new CollectionInfo();
 
-        Spinner spinner;
-
         EditText edit = (EditText) findViewById(R.id.display_name);
         info.displayName = edit.getText().toString();
         if (TextUtils.isEmpty(info.displayName)) {
@@ -112,14 +91,6 @@ public class CreateCalendarActivity extends AppCompatActivity {
 
         View view = findViewById(R.id.color);
         info.color = ((ColorDrawable) view.getBackground()).getColor();
-
-        spinner = (Spinner) findViewById(R.id.time_zone);
-        net.fortuna.ical4j.model.TimeZone tz = DateUtils.tzRegistry.getTimeZone((String) spinner.getSelectedItem());
-        if (tz != null) {
-            Calendar cal = new Calendar();
-            cal.getComponents().add(tz.getVTimeZone());
-            info.timeZone = cal.toString();
-        }
 
         if (ok) {
             info.type = CollectionInfo.Type.CALENDAR;

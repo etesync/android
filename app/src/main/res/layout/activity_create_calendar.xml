@@ -59,16 +59,6 @@
                 android:text="@string/create_collection_color"/>
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_calendar_time_zone"/>
-        <Spinner
-            android:id="@+id/time_zone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
     </LinearLayout>
 
 </ScrollView>
