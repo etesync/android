@@ -183,6 +183,7 @@ abstract public class SyncManager {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e);
             syncResult.stats.numIoExceptions++;
         } catch (Exceptions.ServiceUnavailableException e) {
+            syncResult.stats.numIoExceptions++;
             syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
         } catch (InterruptedException e) {
 

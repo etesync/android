@@ -80,6 +80,9 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                     }
                 } else
                     App.log.info("No CardDAV service found in DB");
+            } catch (Exceptions.ServiceUnavailableException e) {
+                syncResult.stats.numIoExceptions++;
+                syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
             } catch (Exception | OutOfMemoryError e) {
                 String syncPhase = SyncManager.SYNC_PHASE_JOURNALS;
                 String title = getContext().getString(R.string.sync_error_contacts, account.name);
