@@ -229,29 +229,26 @@ abstract public class SyncManager {
 
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
 
-    private void applyEntries(List<JournalEntryManager.Entry> entries, boolean noDelete) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException, InterruptedException {
-        String strTotal = String.valueOf(entries.size());
+    protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException, InterruptedException {
+        // FIXME: Need a better strategy
+        // We re-apply local entries so our changes override whatever was written in the remote.
+        String strTotal = String.valueOf(localEntries.size());
         int i = 0;
 
-        for (JournalEntryManager.Entry entry : entries) {
-            if (Thread.interrupted())
+        for (JournalEntryManager.Entry entry : localEntries) {
+            if (Thread.interrupted()) {
                 throw new InterruptedException();
+            }
             i++;
             App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
             SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
-            if (noDelete && cEntry.isAction(SyncEntry.Actions.DELETE)) {
+            if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue;
             }
             App.log.info("Processing resource for journal entry");
             processSyncEntry(cEntry);
         }
-    }
-
-    protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException, InterruptedException {
-        // FIXME: Need a better strategy
-        // We re-apply local entries so our changes override whatever was written in the remote.
-        applyEntries(localEntries, true);
     }
 
     protected void queryCapabilities() throws IOException, CalendarStorageException, ContactsStorageException {
@@ -261,15 +258,30 @@ abstract public class SyncManager {
         remoteEntries = journal.getEntries(settings.password(), remoteCTag);
 
         App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
-
-        if (!remoteEntries.isEmpty()) {
-            remoteCTag = remoteEntries.get(remoteEntries.size() - 1).getUuid();
-        }
     }
 
     protected void applyRemoteEntries() throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException, InterruptedException {
         // Process new vcards from server
-        applyEntries(remoteEntries, false);
+        String strTotal = String.valueOf(remoteEntries.size());
+        int i = 0;
+
+        try {
+            for (JournalEntryManager.Entry entry : remoteEntries) {
+                if (Thread.interrupted()) {
+                    throw new InterruptedException();
+                }
+                i++;
+                App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
+
+                SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+                App.log.info("Processing resource for journal entry");
+                processSyncEntry(cEntry);
+
+                remoteCTag = entry.getUuid();
+            }
+        } finally {
+            saveSyncTag();
+        }
     }
 
     protected void pushEntries() throws Exceptions.HttpException, IOException, ContactsStorageException, CalendarStorageException {
