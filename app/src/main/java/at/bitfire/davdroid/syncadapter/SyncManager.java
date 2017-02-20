@@ -34,6 +34,7 @@ import at.bitfire.davdroid.GsonHelper;
 import at.bitfire.davdroid.HttpClient;
 import at.bitfire.davdroid.InvalidAccountException;
 import at.bitfire.davdroid.NotificationHelper;
+import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.journalmanager.JournalEntryManager;
 import at.bitfire.davdroid.model.CollectionInfo;
@@ -48,18 +49,6 @@ import lombok.Getter;
 import okhttp3.OkHttpClient;
 
 abstract public class SyncManager {
-
-    final static String SYNC_PHASE_PREPARE = "sync_phase_prepare",
-            SYNC_PHASE_JOURNALS = "sync_phase_journals",
-            SYNC_PHASE_QUERY_CAPABILITIES = "sync_phase_query_capabilities",
-            SYNC_PHASE_PREPARE_LOCAL = "sync_phase_prepare_local",
-            SYNC_PHASE_CREATE_LOCAL_ENTRIES = "sync_phase_create_local_entries",
-            SYNC_PHASE_FETCH_ENTRIES = "sync_phase_fetch_entries",
-            SYNC_PHASE_APPLY_REMOTE_ENTRIES = "sync_phase_apply_remote_entries",
-            SYNC_PHASE_APPLY_LOCAL_ENTRIES = "sync_phase_apply_local_entries",
-            SYNC_PHASE_PUSH_ENTRIES = "sync_phase_push_entries",
-            SYNC_PHASE_POST_PROCESSING = "sync_phase_post_processing";
-
     protected final NotificationHelper notificationManager;
     protected final String uniqueCollectionId;
 
@@ -122,7 +111,7 @@ abstract public class SyncManager {
 
     @TargetApi(21)
     public void performSync() {
-        String syncPhase = SYNC_PHASE_PREPARE;
+        int syncPhase = R.string.sync_phase_prepare;
         try {
             App.log.info("Sync phase: " + syncPhase);
             if (!prepare()) {
@@ -132,51 +121,51 @@ abstract public class SyncManager {
 
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_QUERY_CAPABILITIES;
+            syncPhase = R.string.sync_phase_query_capabilities;
             App.log.info("Sync phase: " + syncPhase);
             queryCapabilities();
 
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_PREPARE_LOCAL;
+            syncPhase = R.string.sync_phase_prepare_local;
             App.log.info("Sync phase: " + syncPhase);
             prepareLocal();
 
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_FETCH_ENTRIES;
+            syncPhase = R.string.sync_phase_fetch_entries;
             App.log.info("Sync phase: " + syncPhase);
             fetchEntries();
 
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_APPLY_REMOTE_ENTRIES;
+            syncPhase = R.string.sync_phase_apply_remote_entries;
             App.log.info("Sync phase: " + syncPhase);
             applyRemoteEntries();
 
             /* Create journal entries out of local changes. */
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_CREATE_LOCAL_ENTRIES;
+            syncPhase = R.string.sync_phase_create_local_entries;
             App.log.info("Sync phase: " + syncPhase);
             createLocalEntries();
 
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_APPLY_LOCAL_ENTRIES;
+            syncPhase = R.string.sync_phase_apply_local_entries;
             App.log.info("Sync phase: " + syncPhase);
             applyLocalEntries();
 
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_PUSH_ENTRIES;
+            syncPhase = R.string.sync_phase_push_entries;
             App.log.info("Sync phase: " + syncPhase);
             pushEntries();
 
             /* Cleanup and finalize changes */
             if (Thread.interrupted())
                 return;
-            syncPhase = SYNC_PHASE_POST_PROCESSING;
+            syncPhase = R.string.sync_phase_post_processing;
             App.log.info("Sync phase: " + syncPhase);
             postProcess();
         } catch (IOException e) {
@@ -211,7 +200,7 @@ abstract public class SyncManager {
                 detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
             }
 
-            notificationManager.notify(getSyncErrorTitle(), syncPhase);
+            notificationManager.notify(getSyncErrorTitle(), context.getString(syncPhase));
         }
     }
 

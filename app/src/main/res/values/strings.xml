@@ -269,20 +269,16 @@
     <string name="sync_error_http_dav">Server error while %s</string>
     <string name="sync_error_unavailable">Could not connect to server while %s</string>
     <string name="sync_error_local_storage">Database error while %s</string>
-    <string-array name="sync_error_phases">
-        <item>preparing synchronization</item>
-        <item>querying capabilities</item>
-        <item>processing locally deleted entries</item>
-        <item>preparing created/modified entries</item>
-        <item>uploading created/modified entries</item>
-        <item>checking sync state</item>
-        <item>listing local entries</item>
-        <item>listing remote entries</item>
-        <item>comparing local/remote entries</item>
-        <item>downloading remote entries</item>
-        <item>post-processing</item>
-        <item>saving sync state</item>
-    </string-array>
+    <string name="sync_phase_prepare">preparing synchronization</string>
+    <string name="sync_phase_journals">syncronizing journals</string>
+    <string name="sync_phase_query_capabilities">querying capabilities</string>
+    <string name="sync_phase_prepare_local">preparing local entries</string>
+    <string name="sync_phase_create_local_entries">creating local entries</string>
+    <string name="sync_phase_fetch_entries">fetching remote entries</string>
+    <string name="sync_phase_apply_remote_entries">applying remote entries</string>
+    <string name="sync_phase_apply_local_entries">reapplying local entries</string>
+    <string name="sync_phase_push_entries">pushing entries</string>
+    <string name="sync_phase_post_processing">post processing</string>
     <string name="sync_error_unauthorized">Authentication failed</string>
 
     <!-- cert4android -->

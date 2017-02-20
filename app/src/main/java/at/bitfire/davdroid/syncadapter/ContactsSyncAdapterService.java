@@ -84,7 +84,7 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                 syncResult.stats.numIoExceptions++;
                 syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
             } catch (Exception | OutOfMemoryError e) {
-                String syncPhase = SyncManager.SYNC_PHASE_JOURNALS;
+                int syncPhase = R.string.sync_phase_journals;
                 String title = getContext().getString(R.string.sync_error_contacts, account.name);
 
                 notificationManager.setThrowable(e);
@@ -97,7 +97,7 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
                 }
-                notificationManager.notify(title, syncPhase);
+                notificationManager.notify(title, getContext().getString(syncPhase));
             } finally {
                 dbHelper.close();
             }

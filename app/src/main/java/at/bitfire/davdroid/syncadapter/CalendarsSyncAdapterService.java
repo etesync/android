@@ -88,7 +88,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                     syncResult.databaseError = true;
                 }
 
-                String syncPhase = SyncManager.SYNC_PHASE_JOURNALS;
+                int syncPhase = R.string.sync_phase_journals;
                 String title = getContext().getString(R.string.sync_error_calendar, account.name);
 
                 notificationManager.setThrowable(e);
@@ -102,7 +102,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
                 }
 
-                notificationManager.notify(title, syncPhase);
+                notificationManager.notify(title, getContext().getString(syncPhase));
             }
 
             App.log.info("Calendar sync complete");
