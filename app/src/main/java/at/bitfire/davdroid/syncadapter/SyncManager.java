@@ -182,12 +182,10 @@ abstract public class SyncManager {
         } catch (IOException e) {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e);
             syncResult.stats.numIoExceptions++;
-
         } catch (Exceptions.ServiceUnavailableException e) {
-            long retryAfter = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
-            syncResult.delayUntil = retryAfter;
+            syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
         } catch (InterruptedException e) {
-            return;
+
         } catch (Exception | OutOfMemoryError e) {
             if (e instanceof Exceptions.UnauthorizedException) {
                 syncResult.stats.numAuthExceptions++;
