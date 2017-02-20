@@ -188,6 +188,8 @@ abstract public class SyncManager {
                 // how many seconds to wait? getTime() returns ms, so divide by 1000
                 // syncResult.delayUntil = (retryAfter.getTime() - new Date().getTime()) / 1000;
             }
+        } catch (InterruptedException e) {
+            return;
         } catch (Exception | OutOfMemoryError e) {
             if (e instanceof Exceptions.UnauthorizedException) {
                 syncResult.stats.numAuthExceptions++;
@@ -227,13 +229,13 @@ abstract public class SyncManager {
 
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
 
-    private void applyEntries(List<JournalEntryManager.Entry> entries, boolean noDelete) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException {
+    private void applyEntries(List<JournalEntryManager.Entry> entries, boolean noDelete) throws CalendarStorageException, InvalidCalendarException, ContactsStorageException, IOException, InterruptedException {
         String strTotal = String.valueOf(entries.size());
         int i = 0;
 
         for (JournalEntryManager.Entry entry : entries) {
             if (Thread.interrupted())
-                return;
+                throw new InterruptedException();
             i++;
             App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
@@ -246,7 +248,7 @@ abstract public class SyncManager {
         }
     }
 
-    protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException {
+    protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException, InterruptedException {
         // FIXME: Need a better strategy
         // We re-apply local entries so our changes override whatever was written in the remote.
         applyEntries(localEntries, true);
@@ -265,7 +267,7 @@ abstract public class SyncManager {
         }
     }
 
-    protected void applyRemoteEntries() throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException {
+    protected void applyRemoteEntries() throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException, InterruptedException {
         // Process new vcards from server
         applyEntries(remoteEntries, false);
     }
