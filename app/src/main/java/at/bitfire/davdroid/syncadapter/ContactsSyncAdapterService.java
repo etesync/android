@@ -34,10 +34,11 @@ import at.bitfire.davdroid.journalmanager.Exceptions;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
-import at.bitfire.davdroid.ui.AccountSettingsActivity;
 import at.bitfire.davdroid.ui.DebugInfoActivity;
 import lombok.Cleanup;
 import okhttp3.HttpUrl;
+
+import static at.bitfire.davdroid.Constants.KEY_ACCOUNT;
 
 public class ContactsSyncAdapterService extends SyncAdapterService {
 
@@ -90,10 +91,8 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                 notificationManager.setThrowable(e);
 
                 final Intent detailsIntent = notificationManager.getDetailsIntent();
-                if (e instanceof Exceptions.UnauthorizedException) {
-                    detailsIntent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
-                } else {
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
+                detailsIntent.putExtra(KEY_ACCOUNT, account);
+                if (!(e instanceof Exceptions.UnauthorizedException)) {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
                 }

@@ -38,11 +38,12 @@ import at.bitfire.davdroid.model.ServiceDB;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
 import at.bitfire.davdroid.model.ServiceDB.Services;
 import at.bitfire.davdroid.resource.LocalCalendar;
-import at.bitfire.davdroid.ui.AccountSettingsActivity;
 import at.bitfire.davdroid.ui.DebugInfoActivity;
 import at.bitfire.ical4android.CalendarStorageException;
 import lombok.Cleanup;
 import okhttp3.HttpUrl;
+
+import static at.bitfire.davdroid.Constants.KEY_ACCOUNT;
 
 public class CalendarsSyncAdapterService extends SyncAdapterService {
 
@@ -94,10 +95,8 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                 notificationManager.setThrowable(e);
 
                 final Intent detailsIntent = notificationManager.getDetailsIntent();
-                if (e instanceof Exceptions.UnauthorizedException) {
-                    detailsIntent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
-                } else {
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
+                detailsIntent.putExtra(KEY_ACCOUNT, account);
+                if (!(e instanceof Exceptions.UnauthorizedException)) {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
                 }

@@ -48,11 +48,12 @@ import at.bitfire.davdroid.journalmanager.Exceptions.HttpException;
 import at.bitfire.davdroid.model.ServiceDB;
 import lombok.Cleanup;
 
+import static at.bitfire.davdroid.Constants.KEY_ACCOUNT;
+
 public class DebugInfoActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     public static final String
             KEY_THROWABLE = "throwable",
             KEY_LOGS = "logs",
-            KEY_ACCOUNT = "account",
             KEY_AUTHORITY = "authority",
             KEY_PHASE = "phase";
 

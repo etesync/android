@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 
 import java.io.IOException;
 
+import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.journalmanager.Exceptions.HttpException;
 
@@ -59,7 +60,7 @@ public class ExceptionInfoFragment extends DialogFragment {
                         Intent intent = new Intent(getContext(), DebugInfoActivity.class);
                         intent.putExtra(DebugInfoActivity.KEY_THROWABLE, exception);
                         if (account != null)
-                            intent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
+                            intent.putExtra(Constants.KEY_ACCOUNT, account);
                         startActivity(intent);
                     }
                 })

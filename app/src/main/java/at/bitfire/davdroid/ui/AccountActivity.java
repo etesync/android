@@ -49,7 +49,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -63,6 +62,7 @@ import java.util.logging.Level;
 import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.davdroid.AccountUpdateService;
 import at.bitfire.davdroid.App;
+import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.model.ServiceDB.Collections;
@@ -140,7 +140,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 break;
             case R.id.settings:
                 Intent intent = new Intent(this, AccountSettingsActivity.class);
-                intent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
+                intent.putExtra(Constants.KEY_ACCOUNT, account);
                 startActivity(intent);
                 break;
             case R.id.delete_account:

@@ -19,11 +19,8 @@ import org.apache.commons.collections4.ListUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -40,13 +37,14 @@ import at.bitfire.davdroid.journalmanager.JournalEntryManager;
 import at.bitfire.davdroid.model.CollectionInfo;
 import at.bitfire.davdroid.resource.LocalCollection;
 import at.bitfire.davdroid.resource.LocalResource;
-import at.bitfire.davdroid.ui.AccountSettingsActivity;
 import at.bitfire.davdroid.ui.DebugInfoActivity;
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.InvalidCalendarException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
+
+import static at.bitfire.davdroid.Constants.KEY_ACCOUNT;
 
 abstract public class SyncManager {
     protected final NotificationHelper notificationManager;
@@ -192,10 +190,8 @@ abstract public class SyncManager {
             notificationManager.setThrowable(e);
 
             final Intent detailsIntent = notificationManager.getDetailsIntent();
-            if (e instanceof Exceptions.UnauthorizedException) {
-                detailsIntent.putExtra(AccountSettingsActivity.EXTRA_ACCOUNT, account);
-            } else {
-                detailsIntent.putExtra(DebugInfoActivity.KEY_ACCOUNT, account);
+            detailsIntent.putExtra(KEY_ACCOUNT, account);
+            if (!(e instanceof Exceptions.UnauthorizedException)) {
                 detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority);
                 detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
             }

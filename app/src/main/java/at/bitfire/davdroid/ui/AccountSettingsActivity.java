@@ -35,16 +35,16 @@ import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.ui.setup.LoginCredentials;
 import at.bitfire.davdroid.ui.setup.LoginCredentialsChangeFragment;
 
-public class AccountSettingsActivity extends AppCompatActivity {
-    public final static String EXTRA_ACCOUNT = "account";
+import static at.bitfire.davdroid.Constants.KEY_ACCOUNT;
 
+public class AccountSettingsActivity extends AppCompatActivity {
     private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        account = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
+        account = getIntent().getParcelableExtra(KEY_ACCOUNT);
         setTitle(getString(R.string.settings_title, account.name));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +74,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            account = getArguments().getParcelable(EXTRA_ACCOUNT);
+            account = getArguments().getParcelable(KEY_ACCOUNT);
 
             getLoaderManager().initLoader(0, getArguments(), this);
         }
@@ -86,7 +86,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         @Override
         public Loader<AccountSettings> onCreateLoader(int id, Bundle args) {
-            return new AccountSettingsLoader(getContext(), (Account)args.getParcelable(EXTRA_ACCOUNT));
+            return new AccountSettingsLoader(getContext(), (Account)args.getParcelable(KEY_ACCOUNT));
         }
 
         @Override
