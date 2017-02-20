@@ -29,6 +29,7 @@ import java.util.logging.Level;
 
 import at.bitfire.davdroid.AccountSettings;
 import at.bitfire.davdroid.App;
+import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.GsonHelper;
 import at.bitfire.davdroid.HttpClient;
 import at.bitfire.davdroid.InvalidAccountException;
@@ -183,11 +184,8 @@ abstract public class SyncManager {
             syncResult.stats.numIoExceptions++;
 
         } catch (Exceptions.ServiceUnavailableException e) {
-            Date retryAfter = null; // ((Exceptions.ServiceUnavailableException) e).retryAfter;
-            if (retryAfter != null) {
-                // how many seconds to wait? getTime() returns ms, so divide by 1000
-                // syncResult.delayUntil = (retryAfter.getTime() - new Date().getTime()) / 1000;
-            }
+            long retryAfter = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
+            syncResult.delayUntil = retryAfter;
         } catch (InterruptedException e) {
             return;
         } catch (Exception | OutOfMemoryError e) {

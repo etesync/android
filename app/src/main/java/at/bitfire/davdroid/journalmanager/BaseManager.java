@@ -37,6 +37,8 @@ abstract class BaseManager {
 
         if (!response.isSuccessful()) {
             switch (response.code()) {
+                case HttpURLConnection.HTTP_UNAVAILABLE:
+                    throw new Exceptions.ServiceUnavailableException("Service unavailable", Long.valueOf(response.header("Retry-After", "0")));
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                     throw new Exceptions.UnauthorizedException("Failed to connect");
                 default:

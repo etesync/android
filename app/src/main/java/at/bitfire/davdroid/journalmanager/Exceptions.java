@@ -19,8 +19,13 @@ public class Exceptions {
     }
 
     public static class ServiceUnavailableException extends HttpException {
+        public long retryAfter;
         public ServiceUnavailableException(String message) {
+            this(message, 0);
+        }
+        public ServiceUnavailableException(String message, long retryAfter) {
             super(message);
+            this.retryAfter = retryAfter;
         }
     }
 
