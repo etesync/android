@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--common strings-->
-  <string name="app_name">DAVdroid</string>
   <string name="help">Допомога</string>
   <!--startup dialogs-->
   <!--AboutActivity-->
@@ -19,7 +18,6 @@
   <string name="settings_username">Ім\'я користувача</string>
   <string name="settings_enter_username">Введіть ім\'я користувача:</string>
   <string name="settings_password">Пароль</string>
-  <string name="settings_password_summary">Оновити пароль, згідно налаштувань Вашого сервера.</string>
   <string name="settings_enter_password">Введіть Ваш пароль:</string>
   <string name="settings_sync">Синхронізація</string>
   <string name="settings_sync_interval_contacts">Інтервал синхронізації контактів</string>

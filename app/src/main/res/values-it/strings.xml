@@ -1,41 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--common strings-->
-  <string name="app_name">DAVdroid</string>
   <string name="help">Aiuto</string>
   <string name="manage_accounts">Gestione account</string>
   <string name="please_wait">Attendere prego …</string>
   <string name="send">Invia</string>
   <!--startup dialogs-->
   <string name="startup_battery_optimization">Ottimizazione della batteria</string>
-  <string name="startup_battery_optimization_message">Android può ridurre o disabilitare la sincronizzazione di DAVdroid dopo alcuni giorni. Per prevenire questo comportamento disabilita l\'ottimizzazione della batteria</string>
-  <string name="startup_battery_optimization_disable">Disabilita per DAVdroid</string>
   <string name="startup_dont_show_again">Non mostrare più</string>
-  <string name="startup_development_version">Versione di sviluppo di DAVdroid</string>
-  <string name="startup_development_version_message">Questa è una versione di sviluppo di DAVdroid. Attenzione perché potrebbe avere malfunzionamenti. Inviateci consigli utili per migliorarlo.</string>
-  <string name="startup_development_version_give_feedback">Invia un rapporto</string>
   <string name="startup_donate">Informazioni sull\'Open-Source</string>
-  <string name="startup_donate_message">Siamo soddisfatti del tuo uso di DAVdroid, programma Open-Source (GPLv3). Poiché lo sviluppo è un\'iniziativa complessa che comporta molte ore di lavoro ti invitiamo a fare una donazione.</string>
   <string name="startup_donate_now">Mostra pagina donazioni</string>
   <string name="startup_donate_later">Più tardi</string>
   <string name="startup_google_play_accounts_removed">Informazioni sul bug del DRM di Play Store</string>
-  <string name="startup_google_play_accounts_removed_message">In alcune condizioni il DRM di Play Store può causare la perdita di tutti gli account DAVdroid dopo un riavvio o dopo un aggiornamento di DAVdroid. Se verificate questo problema installate successivamente \"DAVdroid JB Workaround\" da Play Store.</string>
   <string name="startup_google_play_accounts_removed_more_info">Maggiori informazioni</string>
   <string name="startup_opentasks_not_installed">OpenTasks non installata</string>
-  <string name="startup_opentasks_not_installed_message">L\'applicazione OpenTasks non è installata: di conseguenza DAVdroid non potrà sincronizzare l\'elenco delle attività.</string>
-  <string name="startup_opentasks_reinstall_davdroid">Dopo l\'installazione di OpenTasks è necessario INSTALLARE NUOVAMENTE DAVdroid e aggiungere ancora gli account (per un bug di Android).</string>
   <string name="startup_opentasks_not_installed_install">Installa OpenTasks</string>
   <!--AboutActivity-->
   <string name="about_license_terms">Termini di licenza</string>
   <string name="about_license_info_no_warranty">Il programma è distribuito SENZA ALCUNA GARANZIA. È software libero e può essere redistribuito sotto alcune condizioni.</string>
   <!--global settings-->
-  <string name="logging_davdroid_file_logging">Invio del log di DAVdroid su file</string>
   <string name="logging_to_external_storage">Log su dispositivo esterno: %s</string>
   <string name="logging_to_external_storage_warning">Cancellare prima possibile i file di log!</string>
   <string name="logging_couldnt_create_file">Non riesco a creare il file di log esterno: %s</string>
   <string name="logging_no_external_storage">Dispositivo esterno non disponibile</string>
   <!--AccountsActivity-->
-  <string name="navigation_drawer_subtitle">CalDAV/CardDAV adattatore di sincronizzazione</string>
   <string name="navigation_drawer_about">Informazioni / Licenza</string>
   <string name="navigation_drawer_settings">Impostazioni</string>
   <string name="navigation_drawer_news_updates">Notizie &amp; aggiornamenti</string>
@@ -44,7 +32,6 @@
   <string name="navigation_drawer_faq">Domande Frequenti</string>
   <string name="navigation_drawer_forums">Comunità</string>
   <string name="navigation_drawer_donate">Donazione</string>
-  <string name="account_list_empty">Benvenuto a DAVdroid!\n\nÈ ora possibile aggiungere account CalDAV/CardDAV.</string>
   <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Fallita l\'individuazione dei servizi</string>
   <string name="dav_service_refresh_couldnt_refresh">Impossibile rinnovare la lista delle collezioni</string>
@@ -85,15 +72,11 @@
   <string name="account_refresh_calendar_list">Aggiorna lista calendari</string>
   <string name="account_create_new_calendar">Crea nuovo calendario</string>
   <!--PermissionsActivity-->
-  <string name="permissions_title">Permessi DAVdroid</string>
   <string name="permissions_calendar">Permessi calendario</string>
-  <string name="permissions_calendar_details">Per sincronizzare gli eventi CalDAV con i calendari locali DAVdroid deve avere l\'accesso ai tuoi calendari.</string>
   <string name="permissions_calendar_request">Richiesta autorizzazione al calendario</string>
   <string name="permissions_contacts">Permessi Contatti</string>
-  <string name="permissions_contacts_details">Per sincronizzare l\'indirizzario CardDAV con i contatti locali DAVdroid deve avere l\'accesso ai tuoi contatti.</string>
   <string name="permissions_contacts_request">Richiesta autorizzazione ai contatti</string>
   <string name="permissions_opentasks">Permessi OpenTasks</string>
-  <string name="permissions_opentasks_details">Per sincronizzazione l\'elenco attività di CalDAV con l\'elenco locale DAVdroid deve avere l\'accesso  ad OpenTasks.</string>
   <string name="permissions_opentasks_request">Richiesta autorizzazione ad OpenTasks</string>
   <!--AddAccountActivity-->
   <string name="login_title">Aggiungi account</string>
@@ -108,7 +91,6 @@
   <string name="login_user_name">Nome utente</string>
   <string name="login_user_name_required">Nome utente richiesto</string>
   <string name="login_base_url">Base URL</string>
-  <string name="login_login">Login</string>
   <string name="login_back">Indietro</string>
   <string name="login_account_name">Nome account</string>
   <string name="login_account_name_info">Inserisci il tuo indirizzo email come nome dell\'account in quanto Android userà il nome dell\'account nel campo ORGANIZER degli eventi creati. Non è possibile avere due account con nome uguale.</string>
@@ -124,7 +106,6 @@
   <string name="settings_username">Nome utente</string>
   <string name="settings_enter_username">Inserisci nome utente:</string>
   <string name="settings_password">Password</string>
-  <string name="settings_password_summary">Aggiorna la password come sul tuo server.</string>
   <string name="settings_enter_password">Inserisci la tua password:</string>
   <string name="settings_sync">Sincronizzazione</string>
   <string name="settings_sync_interval_contacts">Intervallo sincr. Contatti</string>
@@ -159,7 +140,6 @@
   <string name="settings_sync_wifi_only_ssid_on">La sincronizzazione avverrà solo con %s</string>
   <string name="settings_sync_wifi_only_ssid_off">Verranno usate tutte le connessioni WiFi</string>
   <string name="settings_sync_wifi_only_ssid_message">Inserisci il nome di una rete WiFi (SSID) per limitare la sincronizzazione solo con questa rete o lasciare in bianco per usare tutte le connessioni WiFi.</string>
-  <string name="settings_carddav">CardDAV</string>
   <string-array name="settings_contact_group_method_values">
     <item>GROUP_VCARDS</item>
     <item>CATEGORIES</item>
@@ -168,7 +148,6 @@
     <item>I gruppi sono VCards separate</item>
     <item>I gruppi sono categorie per ogni contatto</item>
   </string-array>
-  <string name="settings_caldav">CalDAV</string>
   <string name="settings_sync_time_range_past">Limite di tempo per gli eventi trascorsi</string>
   <string name="settings_sync_time_range_past_none">Verranno sincronizzati tutti gli eventi</string>
   <plurals name="settings_sync_time_range_past_days">
@@ -177,16 +156,9 @@
   </plurals>
   <string name="settings_sync_time_range_past_message">Eventi più vecchi di questo numero di giorni verranno ignorati(può anche essere 0). Lasciare in bianco per sincronizzare tutti gli eventi.</string>
   <string name="settings_manage_calendar_colors">Cambia il colore del calendario</string>
-  <string name="settings_manage_calendar_colors_on">I colori dei calendari sono gestiti da DAVdroid</string>
-  <string name="settings_manage_calendar_colors_off">I colori dei calendari non sono gestiti da DAVdroid</string>
   <!--collection management-->
   <string name="create_addressbook">Crea indirizzario</string>
   <string name="create_addressbook_display_name_hint">Il mio indirizzario</string>
-  <string name="create_calendar_display_name_hint">Mio calendario</string>
-  <string name="create_calendar_time_zone">Fuso orario:</string>
-  <string name="create_calendar_type_only_events">Calendario (solo eventi)</string>
-  <string name="create_calendar_type_only_tasks">Elenco attività (solo attività)</string>
-  <string name="create_calendar_type_events_and_tasks">Combinato (eventi e attività)</string>
   <string name="create_collection_display_name_required">Il titolo è richiesto</string>
   <string name="create_collection_description">Descrizione (opzionale):</string>
   <string name="create_collection_create">Crea</string>
@@ -198,30 +170,10 @@
   <string name="exception_show_details">Mostra dettagli</string>
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Informazioni di debug</string>
-  <string name="sync_error_permissions">Autorizzazioni DAVdroid</string>
-  <string name="sync_error_permissions_text">Autorizzazioni addizionali richieste</string>
   <string name="sync_error_calendar">Sincronizzazione del calendario fallita (%s)</string>
-  <string name="sync_error_contacts">Sincronizzazione dell\'indirizzario fallita (%s)</string>
   <string name="sync_error_tasks">Sincronizzazione delle attività fallita (%s)</string>
   <string name="sync_error">Errore nel %s</string>
   <string name="sync_error_http_dav">Errore del server nel %s</string>
   <string name="sync_error_local_storage">Errore del database nel %s</string>
-  <string-array name="sync_error_phases">
-    <item>inizio sincronizzazione</item>
-    <item>controllo caratteristiche del server</item>
-    <item>elaborazione voci cancellate in locale</item>
-    <item>elaborazione voci create o modificate</item>
-    <item>invio voci create o modificate</item>
-    <item>controllo stato della sincronizzazione</item>
-    <item>elenco voci locali</item>
-    <item>elenco voci remote</item>
-    <item>confronto voci locali e remote</item>
-    <item>download voci remote</item>
-    <item>post-processing</item>
-    <item>salvataggio stato della sincronizzazione</item>
-  </string-array>
-  <string name="sync_error_unauthorized">Nome utente o password errati</string>
   <!--cert4android-->
-  <string name="certificate_notification_connection_security">DAVdroid: sicurezza della connessione</string>
-  <string name="trust_certificate_unknown_certificate_found">DAVdroid ha trovato un certificato sconosciuto. Ritenerlo affidabile?</string>
 </resources>

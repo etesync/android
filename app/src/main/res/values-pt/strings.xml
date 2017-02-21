@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--common strings-->
-  <string name="app_name">DAVDroid</string>
   <string name="help">Ajuda</string>
   <!--startup dialogs-->
   <!--AboutActivity-->
@@ -19,7 +18,6 @@
   <string name="settings_username">Nome de usuário</string>
   <string name="settings_enter_username">Informe o nome de usuário:</string>
   <string name="settings_password">Senha</string>
-  <string name="settings_password_summary">Atualize sua denha de acordo com a do seu servidor.</string>
   <string name="settings_enter_password">Informe sua senha:</string>
   <string name="settings_sync">Sincronização</string>
   <string name="settings_sync_interval_contacts">Intervalo de sincronização dos contatos</string>

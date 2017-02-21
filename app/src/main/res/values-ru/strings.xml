@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--common strings-->
-  <string name="app_name">DAVdroid</string>
   <string name="help">Помощь</string>
   <string name="send">Отправить</string>
   <!--startup dialogs-->
@@ -20,7 +19,6 @@
   <string name="settings_username">Имя</string>
   <string name="settings_enter_username">Введите имя пользователя:</string>
   <string name="settings_password">Пароль</string>
-  <string name="settings_password_summary">Обновить пароль в соответствии с вашим сервером.</string>
   <string name="settings_enter_password">Введите свой пароль:</string>
   <string name="settings_sync">Синхронизация</string>
   <string name="settings_sync_interval_contacts">Интервал синхронизации контактов</string>
@@ -54,11 +52,9 @@
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Отладочная информация</string>
   <string name="sync_error_calendar">Синхронизация календаря завершена с ошибкой (%s)</string>
-  <string name="sync_error_contacts">Синхронизация контактов завершена с ошибкой (%s)</string>
   <string name="sync_error_tasks">Синхронизация задачи завершена с ошибкой (%s)</string>
   <string name="sync_error">Ошибка %s</string>
   <string name="sync_error_http_dav">Ошибка сервера %s</string>
   <string name="sync_error_local_storage">Ошибка базы данных в процессе %s</string>
-  <string name="sync_error_unauthorized">Имя пользователя/пароль неверные</string>
   <!--cert4android-->
 </resources>

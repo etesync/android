@@ -1,35 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--common strings-->
-  <string name="app_name">DAVdroid</string>
   <string name="help">Help</string>
   <string name="manage_accounts">Beheer accounts</string>
   <string name="please_wait">Een moment geduld...</string>
   <string name="send">Verzenden</string>
   <!--startup dialogs-->
   <string name="startup_battery_optimization">Batterij optimalisatie</string>
-  <string name="startup_battery_optimization_message">Android kan mogelijk de DAVdroid synchronisatie stoppen na een paar dagen. Om dit te voorkomen zet u de batterij optimalisatie uit.</string>
-  <string name="startup_battery_optimization_disable">DAVdroid afsluiten</string>
   <string name="startup_dont_show_again">Niet opnieuw weergeven</string>
-  <string name="startup_development_version">DAVdroid voorlopige versie</string>
-  <string name="startup_development_version_message">Dit is een ontwikkelversie van DAVdroid. Het kan zijn dat dingen niet werken zoals verwacht. Geef ons constructieve feedback om DAVdroid te verbeteren.</string>
-  <string name="startup_development_version_give_feedback">Feedback geven</string>
   <string name="startup_donate">Open-Source informatie</string>
-  <string name="startup_donate_message">We zijn blij dat je DAVdroid gebruikt, wat open-source software (GPLv3) is. Omdat de ontwikkeling van DAVdroid hard werk is en duizenden uren in beslag neemt. overweeg alstublieft een donatie.</string>
   <string name="startup_donate_now">Toon donatie pagina</string>
   <string name="startup_donate_later">Misschien later</string>
   <string name="startup_google_play_accounts_removed">Play Store DRM fout-informatie</string>
-  <string name="startup_google_play_accounts_removed_message">Onder bepaalde omstandigheden, kan Play Store DRM ervoor zorgen dat accounts kwijt zijn na een herstart of na een DAVdroid update. Als dit probleem zich bij je voordoet (en alleen dan), Installeer dan \"DAVdroid JB Workaround\" vanuit de Play Store</string>
   <string name="startup_google_play_accounts_removed_more_info">Meer informatie</string>
   <string name="startup_opentasks_not_installed">OpenTasks niet geinstalleerd</string>
-  <string name="startup_opentasks_not_installed_message">De OpenTasks app is niet beschikbaar, Hierdoor is het voor DAVdroid niet mogelijk om uw taken te synchroniseren.</string>
-  <string name="startup_opentasks_reinstall_davdroid">Na installatie van OpenTasks dient u DAVdroid opnieuw te installeren en de accounts toe te voegen (Android bug).</string>
   <string name="startup_opentasks_not_installed_install">OpenTasks installeren</string>
   <!--AboutActivity-->
   <string name="about_license_terms">Licentie voorwaarden</string>
   <string name="about_license_info_no_warranty">Dit programma kom met ABSOLUUT GEEN GARANTIE. Het is gratis software, en je bent welkom dit te herdistribueren onder bepaalde voorwaarden.</string>
   <!--global settings-->
-  <string name="logging_davdroid_file_logging">DAVDroid bestand loggen</string>
   <string name="logging_to_external_storage">Loggen naar externe opslag: %s</string>
   <string name="logging_to_external_storage_warning">Verwijder logs zo snel mogelijk</string>
   <string name="logging_couldnt_create_file">Kon extern log bestand niet verwijderen: %s</string>
@@ -37,7 +26,6 @@
   <!--AccountsActivity-->
   <string name="navigation_drawer_open">Open navigatie drawer</string>
   <string name="navigation_drawer_close">Sluit navigatie drawer</string>
-  <string name="navigation_drawer_subtitle">CalDAV/CardDav Sync adapter</string>
   <string name="navigation_drawer_about">Over / Licentie</string>
   <string name="navigation_drawer_settings">Instellingen</string>
   <string name="navigation_drawer_news_updates">Nieuws &amp; updates</string>
@@ -46,7 +34,6 @@
   <string name="navigation_drawer_faq">FAQ</string>
   <string name="navigation_drawer_forums">Community</string>
   <string name="navigation_drawer_donate">Doneren</string>
-  <string name="account_list_empty">Welkom bij DAVdroid!\n\nJe kunt nu een CalDAV/CardDAv account toevoegen.</string>
   <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Service herkenning is mislukt</string>
   <string name="dav_service_refresh_couldnt_refresh">Kon de collectie lijst niet vernieuwen</string>
@@ -81,15 +68,11 @@
   <string name="account_refresh_calendar_list">Agenda\'s vernieuwen</string>
   <string name="account_create_new_calendar">Maak een nieuwe agenda</string>
   <!--PermissionsActivity-->
-  <string name="permissions_title">DAVdroid rechten</string>
   <string name="permissions_calendar">Agenda rechten</string>
-  <string name="permissions_calendar_details">Om CalDAV afspraken te synchroniseren met u agenda dient DAVdroid toegang te verkrijgen. </string>
   <string name="permissions_calendar_request">Agenda rechten verkrijgen</string>
   <string name="permissions_contacts">Contact rechten</string>
-  <string name="permissions_contacts_details">Om CalDAV afspraken te synchroniseren met u contacten dient DAVdroid toegang te verkrijgen. </string>
   <string name="permissions_contacts_request">Contacten rechten verkrijgen</string>
   <string name="permissions_opentasks">OpenTasks rechten</string>
-  <string name="permissions_opentasks_details">Om CalDAV taken te synchroniseren met uw local takenlijst dient DAVdroid toegang te hebben tot OpenTasks</string>
   <string name="permissions_opentasks_request">OpenTasks rechten verkrijgen</string>
   <!--AddAccountActivity-->
   <string name="login_title">Account toevoegen</string>
@@ -104,7 +87,6 @@
   <string name="login_user_name">Gebruikersnaam</string>
   <string name="login_user_name_required">Gebruikersnaam vereist</string>
   <string name="login_base_url">Basis URL</string>
-  <string name="login_login">Login</string>
   <string name="login_back">Terug</string>
   <string name="login_account_name">Accountnaam</string>
   <string name="login_account_name_info">Gebruik je email adres als account naam want Android zal je account naam gebruiken als ORGANIZER veld voor gemaakte afspraken. Je kunt geen 2 accounts met dezelfde naam hebben,</string>
@@ -120,7 +102,6 @@
   <string name="settings_username">Gebruikersnaam</string>
   <string name="settings_enter_username">Gebruikersnaam invoeren:</string>
   <string name="settings_password">Wachtwoord</string>
-  <string name="settings_password_summary">Gebruik het zelfde wachtwoord als op de server.</string>
   <string name="settings_enter_password">Wachtwoord invoeren:</string>
   <string name="settings_sync">Synchronisatie</string>
   <string name="settings_sync_interval_contacts">Contacten verversen</string>
@@ -156,7 +137,6 @@
   <string name="settings_sync_wifi_only_ssid_on">Zal alleen synchroniseren over %s</string>
   <string name="settings_sync_wifi_only_ssid_off">Alle WiFI verbindingen mogen worden gebruikt</string>
   <string name="settings_sync_wifi_only_ssid_message">Type de naam van het WiFi netwerk (SSID) om synchronisatie tot dit netwerk te beperken. Leeg laten voor sync over alle netwerken.</string>
-  <string name="settings_carddav">CardDAV</string>
   <string name="settings_contact_group_method">Contact groep methode</string>
   <string-array name="settings_contact_group_method_values">
     <item>GROUP_VCARDS</item>
@@ -166,7 +146,6 @@
     <item>Groepen zijn apparte VCards</item>
     <item>Groepen zijn per-contact categories</item>
   </string-array>
-  <string name="settings_caldav">CalDAV</string>
   <string name="settings_sync_time_range_past">Tijdslimiet verleden afspraken</string>
   <string name="settings_sync_time_range_past_none">Alle afspraken worden gesynchronizeerd</string>
   <plurals name="settings_sync_time_range_past_days">
@@ -175,19 +154,9 @@
   </plurals>
   <string name="settings_sync_time_range_past_message">Afspraken ouder dan dit aantal dagen worden genegeerd (mag 0 zijn). Laat leeg om alle afspraken te synchronizeren.</string>
   <string name="settings_manage_calendar_colors">Agenda kleuren beheren</string>
-  <string name="settings_manage_calendar_colors_on">Agenda kleuren worden door DAVdroid beheerd.</string>
-  <string name="settings_manage_calendar_colors_off">Agenda kleuren worden niet door DAVdroid ingesteld</string>
   <!--collection management-->
   <string name="create_addressbook">Maak adresboek</string>
   <string name="create_addressbook_display_name_hint">Mijn adresboek</string>
-  <string name="create_calendar">Maak CalDAV collectie</string>
-  <string name="create_calendar_display_name_hint">Mijn agenda</string>
-  <string name="create_calendar_time_zone">Tijdzone:</string>
-  <string name="create_calendar_type">Collectie type:</string>
-  <string name="create_calendar_type_only_events">Agenda (alleen afspraken)</string>
-  <string name="create_calendar_type_only_tasks">Takenlijst (alleen taken)</string>
-  <string name="create_calendar_type_events_and_tasks">Gecombineerd (afspraken en taken)</string>
-  <string name="create_collection_color">Stel een collectie kleur in</string>
   <string name="create_collection_creating">Collectie aan het maken</string>
   <string name="create_collection_display_name">Weergave naam (titel) van deze collectie:</string>
   <string name="create_collection_display_name_required">Titel is vereist</string>
@@ -205,30 +174,10 @@
   <string name="exception_show_details">Toon details</string>
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Debug informatie</string>
-  <string name="sync_error_permissions">DAVdroid rechten</string>
-  <string name="sync_error_permissions_text">Aanvullende rechten vereist</string>
   <string name="sync_error_calendar">Agenda synchronisatie is mislukt (%s)</string>
-  <string name="sync_error_contacts">Adresboek synchronisatie is mislukt (%s)</string>
   <string name="sync_error_tasks">Taak synchronisatie is mislukt (%s)</string>
   <string name="sync_error">Fout tijdens %s</string>
   <string name="sync_error_http_dav">Serverfout tijdens %s</string>
   <string name="sync_error_local_storage">Database fout tijdens %s</string>
-  <string-array name="sync_error_phases">
-    <item>synchronisatie voorbereiden</item>
-    <item>querying mogelijkheden</item>
-    <item>verwerken van lokaal verwijderde data</item>
-    <item>voorberteiding maken/wijzigen data</item>
-    <item>uploaden maken/bewerken data</item>
-    <item>controleren syngronisatie voortgang</item>
-    <item>lijst lokale data</item>
-    <item>lijst remote data</item>
-    <item>vergelijken lokale/remote data</item>
-    <item>downloaden remote data</item>
-    <item>nabewerking</item>
-    <item>opslaan sync voortgang</item>
-  </string-array>
-  <string name="sync_error_unauthorized">Gebruikersnaam/wachtwoord onjuist</string>
   <!--cert4android-->
-  <string name="certificate_notification_connection_security">DAVdroid: Verbinding beveiliging</string>
-  <string name="trust_certificate_unknown_certificate_found">Davdroid is benaderd door een onbekend certificaat. Vertrouwd u dit?</string>
 </resources>

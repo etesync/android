@@ -1,35 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--common strings-->
-  <string name="app_name">ДАВдроид</string>
   <string name="help">Помоћ</string>
   <string name="manage_accounts">Управљај налозима</string>
   <string name="please_wait">Сачекајте…</string>
   <string name="send">Пошаљи</string>
   <!--startup dialogs-->
   <string name="startup_battery_optimization">Оптимизација батерије</string>
-  <string name="startup_battery_optimization_message">Андроид може да искључи/умањи синхронизацију ДАВдроида након неколико дана. Да бисте спречили ово, искључите оптимизацију батерије.</string>
-  <string name="startup_battery_optimization_disable">Искључи за ДАВдроид</string>
   <string name="startup_dont_show_again">Не приказуј поново</string>
-  <string name="startup_development_version">ДАВдроид прелиминарно издање</string>
-  <string name="startup_development_version_message">Ово је развојно издање ДАВдроида. Имајте на уму да можда неће радити очекивано. Замољавамо вас за конструктивне повратне информације како бисмо га побољшали.</string>
-  <string name="startup_development_version_give_feedback">Повратне информације</string>
   <string name="startup_donate">Подаци о отвореном кôду</string>
-  <string name="startup_donate_message">Драго нам је да користите ДАВдроид, софтвер отвореног кôда (ГПЛв3). Развој ДАВдроида није баш лак посао и захтева хиљаде радних сати, стога вас молимо да размотрите донацију.</string>
   <string name="startup_donate_now">Прикажи страницу за донације</string>
   <string name="startup_donate_later">Можда касније</string>
   <string name="startup_google_play_accounts_removed">Грешка ДРМ-а Плеј продавнице</string>
-  <string name="startup_google_play_accounts_removed_message">Под одређеним околностима ДРМ Плеј продавнице може да узрокује да сви налози ДАВдроида нестане након рестарта или ажурирања ДАВдроида. Ако и само ако имате овај проблем, инсталирајте „DAVdroid JB Workaround“ са Плеј продавнице.</string>
   <string name="startup_google_play_accounts_removed_more_info">Још информација</string>
   <string name="startup_opentasks_not_installed">Отворени задаци нису инсталирани</string>
-  <string name="startup_opentasks_not_installed_message">Отворени задаци нису доступни па ДАВдроид неће моћи да синхронизује листе задатака. </string>
-  <string name="startup_opentasks_reinstall_davdroid">Након инсталирања Отворених задатака, морате поново да инсталирате ДАВдроид и поново додате ваше налоге (због грешке у Андроиду).</string>
   <string name="startup_opentasks_not_installed_install">Инсталирај Отворене задатке</string>
   <!--AboutActivity-->
   <string name="about_license_terms">Услови лиценце</string>
   <string name="about_license_info_no_warranty">Овај програм НЕМА НИКАКВЕ ГАРАНЦИЈЕ. Бесплатан је софтвер којег можете слободно да делите под одређеним условима.</string>
   <!--global settings-->
-  <string name="logging_davdroid_file_logging">ДАВдроид евиденција</string>
   <string name="logging_to_external_storage">Уписивање евиденције у спољашње складиште: %s</string>
   <string name="logging_to_external_storage_warning">Обришите записе што пре!</string>
   <string name="logging_couldnt_create_file">Не могох да направим спољашњи фајл записа: %s</string>
@@ -37,7 +26,6 @@
   <!--AccountsActivity-->
   <string name="navigation_drawer_open">Отвори навигациону фиоку</string>
   <string name="navigation_drawer_close">Затвори навигациону фиоку</string>
-  <string name="navigation_drawer_subtitle">КалДАВ/КардДАВ адаптер синхронизације</string>
   <string name="navigation_drawer_about">О програму/лиценца</string>
   <string name="navigation_drawer_settings">Поставке</string>
   <string name="navigation_drawer_news_updates">Новости и ажурирања</string>
@@ -46,7 +34,6 @@
   <string name="navigation_drawer_faq">ЧПП</string>
   <string name="navigation_drawer_forums">Заједница</string>
   <string name="navigation_drawer_donate">Донирај</string>
-  <string name="account_list_empty">Добро дошли у ДАВдроид!\n\nМожете сада да додате КалДАВ/КардДАВ налог.</string>
   <!--AccountUpdateService-->
   <string name="dav_service_refresh_failed">Откривање услуге није успело</string>
   <string name="dav_service_refresh_couldnt_refresh">Не могох да освежим списак збирки</string>
@@ -90,15 +77,11 @@
   <string name="account_refresh_calendar_list">Освежи списак календара</string>
   <string name="account_create_new_calendar">Направи нови календар</string>
   <!--PermissionsActivity-->
-  <string name="permissions_title">ДАВдроид дозволе</string>
   <string name="permissions_calendar">Дозволе за календар</string>
-  <string name="permissions_calendar_details">Да би синхронизовао КалДАВ догађаје са вашим локалним календарима, ДАВдроиду треба приступ вашим календарима.</string>
   <string name="permissions_calendar_request">Захтевај дозволе за календар</string>
   <string name="permissions_contacts">Дозволе за контакте</string>
-  <string name="permissions_contacts_details">Да би синхронизовао КардДАВ адресаре са вашим локалним контактима, ДАВдроиду треба приступ вашим контактима.</string>
   <string name="permissions_contacts_request">Захтевај дозволе за контакте</string>
   <string name="permissions_opentasks">Дозволе за задатке</string>
-  <string name="permissions_opentasks_details">Да би синхронизовао КалДАВ задатке са вашим локалним листама задатака, ДАВдроиду треба приступ Задацима.</string>
   <string name="permissions_opentasks_request">Захтевај дозволе за задатке</string>
   <!--AddAccountActivity-->
   <string name="login_title">Додај налог</string>
@@ -113,7 +96,6 @@
   <string name="login_user_name">Корисничко име</string>
   <string name="login_user_name_required">Корисничко име је обавезно</string>
   <string name="login_base_url">Корени УРЛ</string>
-  <string name="login_login">Пријава</string>
   <string name="login_back">Назад</string>
   <string name="login_account_name">Назив налога</string>
   <string name="login_account_name_info">Користите вашу е-адресу за назив налога јер Андроид користи назив налога за поље ОРГАНИЗАТОР за догађаје које направите. Не можете имати два налога истог назива.</string>
@@ -129,7 +111,6 @@
   <string name="settings_username">Корисничко име</string>
   <string name="settings_enter_username">Унесите корисничко име:</string>
   <string name="settings_password">Лозинка</string>
-  <string name="settings_password_summary">Ажурирајте лозинку за ваш сервер.</string>
   <string name="settings_enter_password">Унесите лозинку:</string>
   <string name="settings_sync">Синхронизација</string>
   <string name="settings_sync_interval_contacts">Интервал синх. контаката</string>
@@ -165,7 +146,6 @@
   <string name="settings_sync_wifi_only_ssid_on">Синхронизовање само преко %s</string>
   <string name="settings_sync_wifi_only_ssid_off">Коришћење свих бежичних мрежа</string>
   <string name="settings_sync_wifi_only_ssid_message">Унесите назив бежичне мреже (њен ССИД) да бисте ограничили синхронизацију само на ту мрежу, или оставите празно за синхронизовање преко било које бежичне мреже.</string>
-  <string name="settings_carddav">КардДАВ</string>
   <string name="settings_contact_group_method">Режим група контаката</string>
   <string-array name="settings_contact_group_method_values">
     <item>GROUP_VCARDS</item>
@@ -175,7 +155,6 @@
     <item>Групе су одвојене В-карте</item>
     <item>Групе су категорије по контакту</item>
   </string-array>
-  <string name="settings_caldav">КалДАВ</string>
   <string name="settings_sync_time_range_past">Ограничење догађаја у прошлости</string>
   <string name="settings_sync_time_range_past_none">Сви догађаји се синхронизују</string>
   <plurals name="settings_sync_time_range_past_days">
@@ -185,19 +164,9 @@
   </plurals>
   <string name="settings_sync_time_range_past_message">Догађаји старији од овог броја дана ће бити занемарени (може бити 0). Оставите празно за синхронизацију свих догађаја.</string>
   <string name="settings_manage_calendar_colors">Управљај бојама календара</string>
-  <string name="settings_manage_calendar_colors_on">Бојама календара управља ДАВдроид</string>
-  <string name="settings_manage_calendar_colors_off">Боје календара није поставио ДАВдроид</string>
   <!--collection management-->
   <string name="create_addressbook">Направи адресар</string>
   <string name="create_addressbook_display_name_hint">Мој адресар</string>
-  <string name="create_calendar">Направи КалДАВ збирку</string>
-  <string name="create_calendar_display_name_hint">Мој календар</string>
-  <string name="create_calendar_time_zone">Временска зона:</string>
-  <string name="create_calendar_type">Тип збирке:</string>
-  <string name="create_calendar_type_only_events">Календар (само догађаји)</string>
-  <string name="create_calendar_type_only_tasks">Листе задатака (само задаци)</string>
-  <string name="create_calendar_type_events_and_tasks">Комбиновано (догађаји и задаци)</string>
-  <string name="create_collection_color">Боја збирке</string>
   <string name="create_collection_creating">Правим збирку</string>
   <string name="create_collection_display_name">Назив (наслов) ове збирке:</string>
   <string name="create_collection_display_name_required">Наслов је обавезан</string>
@@ -215,30 +184,10 @@
   <string name="exception_show_details">Прикажи детаље</string>
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Подаци за исправљање грешака</string>
-  <string name="sync_error_permissions">ДАВдроид дозволе</string>
-  <string name="sync_error_permissions_text">Потребне су додатне доволе</string>
   <string name="sync_error_calendar">Синхронизација календара није успела (%s)</string>
-  <string name="sync_error_contacts">Синхронизација адресара није успела (%s)</string>
   <string name="sync_error_tasks">Синхронизација задатака није успела (%s)</string>
   <string name="sync_error">Грешка током %s</string>
   <string name="sync_error_http_dav">Грешка сервера током %s</string>
   <string name="sync_error_local_storage">Грешка базе података током %s</string>
-  <string-array name="sync_error_phases">
-    <item>припремам синхронизацију</item>
-    <item>проверавам могућности</item>
-    <item>обрађујем локално обрисане уносе</item>
-    <item>припремам направљене/измењене уносе</item>
-    <item>отпремам направљене/измењене уносе</item>
-    <item>проверавам стање синхронизације</item>
-    <item>излиставам локалне уносе</item>
-    <item>излиставам удаљене уносе</item>
-    <item>упоређујем локалне/удаљене уносе</item>
-    <item>преузимам удаљене уносе</item>
-    <item>додатна обрада</item>
-    <item>уписујем стање синхронизације</item>
-  </string-array>
-  <string name="sync_error_unauthorized">Корисничко име или лозинка погрешни</string>
   <!--cert4android-->
-  <string name="certificate_notification_connection_security">ДАВдроид: Безбедност везе</string>
-  <string name="trust_certificate_unknown_certificate_found">ДАВдроид је наишао на непознат сертификат. Желите ли да се поуздате у њега?</string>
 </resources>
