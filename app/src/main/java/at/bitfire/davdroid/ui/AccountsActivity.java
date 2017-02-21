@@ -20,10 +20,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import at.bitfire.davdroid.Constants;
 import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.ui.setup.LoginActivity;
+
+import static at.bitfire.davdroid.BuildConfig.DEBUG;
+import static at.bitfire.davdroid.Constants.serviceUrl;
 
 public class AccountsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -58,6 +62,10 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
             for (StartupDialogFragment fragment : StartupDialogFragment.getStartupDialogs(this))
                 ft.add(fragment, null);
             ft.commit();
+
+            if (DEBUG) {
+                Toast.makeText(this, "Server: " + serviceUrl.toString(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
