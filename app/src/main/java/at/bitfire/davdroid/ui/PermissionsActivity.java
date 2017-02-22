@@ -9,6 +9,7 @@
 package at.bitfire.davdroid.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import at.bitfire.davdroid.R;
 import at.bitfire.davdroid.resource.LocalTaskList;
 
 public class PermissionsActivity extends AppCompatActivity {
+    final static private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 
     public static final String
             PERMISSION_READ_TASKS = "org.dmfs.permission.READ_TASKS",
@@ -95,5 +97,14 @@ public class PermissionsActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         refresh();
+    }
+
+    public static void requestAllPermissions(Activity activity) {
+        ActivityCompat.requestPermissions(activity, new String[] {
+                Manifest.permission.READ_CALENDAR,
+                Manifest.permission.WRITE_CALENDAR,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS
+        }, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
     }
 }
