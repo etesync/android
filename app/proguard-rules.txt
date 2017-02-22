@@ -17,36 +17,29 @@
 -dontwarn freemarker.**                 # freemarker templating library (for creating hCards) not used
 -dontwarn org.jsoup.**                  # jsoup library (for hCard parsing) not used
 -dontwarn sun.misc.Perf
--keep class ezvcard.property.** { *; }  # keep all VCard properties (created at runtime)
+-keep,includedescriptorclasses class ezvcard.property.** { *; }  # keep all VCard properties (created at runtime)
 
 # ical4j: ignore unused dynamic libraries
 -dontwarn aQute.**
 -dontwarn groovy.**                       # Groovy-based ContentBuilder not used
 -dontwarn org.codehaus.groovy.**
 -dontwarn net.fortuna.ical4j.model.**     # ignore warnings from Groovy dependency
--keep class net.fortuna.ical4j.** { *; }  # keep all model classes (properties/factories, created at runtime)
+-keep,includedescriptorclasses class net.fortuna.ical4j.** { *; }  # keep all model classes (properties/factories, created at runtime)
 
 # okhttp
 -dontwarn java.nio.file.**   # not available on Android
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontnote com.android.org.conscrypt.SSLParametersImpl
+-dontnote org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
+-dontnote dalvik.system.CloseGuard
+-dontnote sun.security.ssl.SSLContextImpl
 
 # DAVdroid + libs
--keep class at.bitfire.** { *; }       # all DAVdroid code is required
+-keep,includedescriptorclasses class at.bitfire.davdroid.** { *; }    # all DAVdroid code and deps are required
+
+# gson
+-dontnote sun.misc.Unsafe  # not available on Android
 
 # Spongcastle
 -dontwarn org.spongycastle.jce.provider.X509LDAPCertStoreSpi
 -dontwarn org.spongycastle.x509.util.LDAPStoreHelper
--keep class org.spongycastle.crypto.BufferedBlockCipher
--keep class org.spongycastle.crypto.CipherParameters
--keep class org.spongycastle.crypto.InvalidCipherTextException
--keep class org.spongycastle.crypto.digests.SHA256Digest
--keep class org.spongycastle.crypto.engines.AESEngine
--keep class org.spongycastle.crypto.generators.SCrypt
--keep class org.spongycastle.crypto.macs.HMac
--keep class org.spongycastle.crypto.modes.CBCBlockCipher
--keep class org.spongycastle.crypto.paddings.BlockCipherPadding
--keep class org.spongycastle.crypto.paddings.PKCS7Padding
--keep class org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher
--keep class org.spongycastle.crypto.params.KeyParameter
--keep class org.spongycastle.crypto.params.ParametersWithIV
--keep class org.spongycastle.util.encoders.Hex
