@@ -16,6 +16,7 @@ import org.spongycastle.crypto.paddings.PKCS7Padding;
 import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.crypto.params.ParametersWithIV;
+import org.spongycastle.jcajce.provider.digest.SHA256;
 import org.spongycastle.util.encoders.Hex;
 
 import java.security.MessageDigest;
@@ -119,13 +120,11 @@ public class Helpers {
     }
 
     static String sha256(byte[] base) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(base);
-            return toHex(hash);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        SHA256Digest digest = new SHA256Digest();
+        digest.update(base, 0, base.length);
+        byte[] ret = new byte[digest.getDigestSize()];
+        digest.doFinal(ret, 0);
+        return toHex(ret);
     }
 
     public static String toHex(byte[] bytes) {
