@@ -50,7 +50,7 @@
                     android:visibility="gone"
                     android:indeterminate="true"/>
 
-                <at.bitfire.davdroid.ui.widget.MaximizedListView
+                <com.etesync.syncadapter.ui.widget.MaximizedListView
                     android:id="@+id/address_books"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                     android:visibility="gone"
                     android:indeterminate="true"/>
 
-                <at.bitfire.davdroid.ui.widget.MaximizedListView
+                <com.etesync.syncadapter.ui.widget.MaximizedListView
                     android:id="@+id/calendars"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -68,7 +68,7 @@
             android:summary="@string/app_settings_show_debug_info_details">
             <intent
                 android:targetPackage="com.etesync.syncadapter"
-                android:targetClass="at.bitfire.davdroid.ui.DebugInfoActivity"/>
+                android:targetClass="com.etesync.syncadapter.ui.DebugInfoActivity"/>
         </Preference>
 
     </PreferenceCategory>

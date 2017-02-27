@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <at.bitfire.davdroid.ui.widget.EditPassword
+            <com.etesync.syncadapter.ui.widget.EditPassword
                 android:id="@+id/encryption_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

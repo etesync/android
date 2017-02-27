@@ -6,7 +6,7 @@
   ~ which accompanies this distribution, and is available at
   ~ http://www.gnu.org/licenses/gpl.html
 -->
-<manifest package="at.bitfire.davdroid"
+<manifest package="com.etesync.syncadapter"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:installLocation="internalOnly">
@@ -57,7 +57,7 @@
             android:exported="false"
             android:process=":sync">
             <intent-filter>
-                <action android:name="at.bitfire.davdroid.REINIT_LOGGER"/>
+                <action android:name="com.etesync.syncadapter.REINIT_LOGGER"/>
             </intent-filter>
         </receiver>
         <receiver
@@ -65,7 +65,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package" android:path="at.bitfire.davdroid" />
+                <data android:scheme="package" android:path="com.etesync.syncadapter" />
             </intent-filter>
         </receiver>
 

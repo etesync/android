@@ -13,7 +13,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="at.bitfire.davdroid.ui.AccountsActivity">
+    tools:context="com.etesync.syncadapter.ui.AccountsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <fragment
-        class="at.bitfire.davdroid.ui.AccountListFragment"
+        class="com.etesync.syncadapter.ui.AccountListFragment"
         android:id="@+id/account_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

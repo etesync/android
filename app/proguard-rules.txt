@@ -35,7 +35,7 @@
 -dontnote sun.security.ssl.SSLContextImpl
 
 # DAVdroid + libs
--keep,includedescriptorclasses class at.bitfire.davdroid.** { *; }    # all DAVdroid code and deps are required
+-keep,includedescriptorclasses class syncadapter.** { *; }    # all DAVdroid code and deps are required
 
 # gson
 -dontnote sun.misc.Unsafe  # not available on Android
