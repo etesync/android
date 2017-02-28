@@ -13,25 +13,28 @@ import okio.Buffer;
 
 public class Exceptions {
     public static class UnauthorizedException extends HttpException {
-        public UnauthorizedException(String message) {
-            super(401, message);
+        public UnauthorizedException(Response response, String message) {
+            super(response, message);
         }
     }
 
     public static class UserInactiveException extends HttpException {
-        public UserInactiveException(String message) {
-            super(HttpURLConnection.HTTP_FORBIDDEN, message);
+        public UserInactiveException(Response response, String message) {
+            super(response, message);
         }
     }
 
     public static class ServiceUnavailableException extends HttpException {
         public long retryAfter;
+
         public ServiceUnavailableException(String message) {
-            this(message, 0);
-        }
-        public ServiceUnavailableException(String message, long retryAfter) {
             super(message);
-            this.retryAfter = retryAfter;
+            this.retryAfter = 0;
+        }
+
+        public ServiceUnavailableException(Response response, String message) {
+            super(response, message);
+            this.retryAfter = Long.valueOf(response.header("Retry-After", "0"));
         }
     }
 

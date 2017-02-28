@@ -43,7 +43,7 @@ public class JournalAuthenticator {
         if (response.isSuccessful()) {
             return GsonHelper.gson.fromJson(response.body().charStream(), AuthResponse.class).token;
         } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
-            throw new Exceptions.UnauthorizedException("Username or password incorrect");
+            throw new Exceptions.UnauthorizedException(response, "Username or password incorrect");
         } else {
             throw new Exceptions.HttpException(response);
         }
