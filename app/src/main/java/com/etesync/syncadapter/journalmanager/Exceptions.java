@@ -43,8 +43,8 @@ public class Exceptions {
 
     public static class HttpException extends Exception implements Serializable {
 
-        public final int status;
-        public final String message;
+        final int status;
+        final String message;
 
         public final String request, response;
 
@@ -65,10 +65,14 @@ public class Exceptions {
         }
 
         public HttpException(Response response) {
+            this(response, null);
+        }
+
+        public HttpException(Response response, String custom_message) {
             super(response.code() + " " + response.message());
 
             status = response.code();
-            message = response.message();
+            message = (custom_message != null) ? custom_message : response.message();
 
         /* As we don't know the media type and character set of request and response body,
            only printable ASCII characters will be shown in clear text. Other octets will
@@ -104,7 +108,7 @@ public class Exceptions {
 
             // format response
             formatted = new StringBuilder();
-            formatted.append(response.protocol()).append(" ").append(response.code()).append(" ").append(response.message()).append("\n");
+            formatted.append(response.protocol()).append(" ").append(response.code()).append(" ").append(message).append("\n");
             headers = response.headers();
             for (String name : headers.names())
                 for (String value : headers.values(name))
