@@ -262,9 +262,9 @@
     <string name="debug_info_title">Debug info</string>
     <string name="sync_error_permissions">EteSync permissions</string>
     <string name="sync_error_permissions_text">Additional permissions required</string>
-    <string name="sync_error_calendar">Calendar synchronization failed (%s)</string>
-    <string name="sync_error_contacts">Contacts synchronization failed (%s)</string>
-    <string name="sync_error_tasks">Task synchronization failed (%s)</string>
+    <string name="sync_error_calendar">Calendar sync failed (%s)</string>
+    <string name="sync_error_contacts">Contacts sync failed (%s)</string>
+    <string name="sync_error_tasks">Task sync failed (%s)</string>
     <string name="sync_error">Error while %s</string>
     <string name="sync_error_integrity">Integrity error while %s</string>
     <string name="sync_error_http_dav">Server error while %s</string>
