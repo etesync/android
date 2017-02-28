@@ -57,7 +57,7 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             super.onPerformSync(account, extras, authority, provider, syncResult);
-            NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals", Constants.NOTIFICATION_CONTACTS_SYNC);
+            NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC);
             notificationManager.cancel();
 
             ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());

@@ -63,7 +63,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
             super.onPerformSync(account, extras, authority, provider, syncResult);
 
-            NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals", Constants.NOTIFICATION_CALENDAR_SYNC);
+            NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals-calendar", Constants.NOTIFICATION_CALENDAR_SYNC);
             notificationManager.cancel();
 
             try {
