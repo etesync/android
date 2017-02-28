@@ -281,6 +281,7 @@
     <string name="sync_phase_push_entries">pushing entries</string>
     <string name="sync_phase_post_processing">post processing</string>
     <string name="sync_error_unauthorized">Authentication failed</string>
+    <string name="sync_error_user_inactive">User is inactive</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>

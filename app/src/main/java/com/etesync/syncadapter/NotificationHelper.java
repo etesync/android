@@ -40,6 +40,9 @@ public class NotificationHelper {
         if (e instanceof Exceptions.UnauthorizedException) {
             App.log.log(Level.SEVERE, "Not authorized anymore", e);
             messageString = R.string.sync_error_unauthorized;
+        } else if (e instanceof Exceptions.UserInactiveException) {
+            App.log.log(Level.SEVERE, "User inactive");
+            messageString = R.string.sync_error_user_inactive;
         } else if (e instanceof Exceptions.ServiceUnavailableException) {
             App.log.log(Level.SEVERE, "Service unavailable");
             messageString = R.string.sync_error_unavailable;
@@ -91,6 +94,9 @@ public class NotificationHelper {
             Intent detailsIntent;
             if (e instanceof Exceptions.UnauthorizedException) {
                 detailsIntent = new Intent(this, AccountSettingsActivity.class);
+            } else if (e instanceof Exceptions.UserInactiveException) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Constants.dashboard));
+                return;
             } else {
                 detailsIntent = new Intent(this, DebugInfoActivity.class);
             }

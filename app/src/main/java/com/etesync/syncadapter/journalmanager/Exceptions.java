@@ -2,6 +2,7 @@ package com.etesync.syncadapter.journalmanager;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
 
 import at.bitfire.cert4android.Constants;
 import okhttp3.Headers;
@@ -14,6 +15,12 @@ public class Exceptions {
     public static class UnauthorizedException extends HttpException {
         public UnauthorizedException(String message) {
             super(401, message);
+        }
+    }
+
+    public static class UserInactiveException extends HttpException {
+        public UserInactiveException(String message) {
+            super(HttpURLConnection.HTTP_FORBIDDEN, message);
         }
     }
 

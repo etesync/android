@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.GsonHelper;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,12 +42,26 @@ abstract class BaseManager {
                     throw new Exceptions.ServiceUnavailableException("Service unavailable", Long.valueOf(response.header("Retry-After", "0")));
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                     throw new Exceptions.UnauthorizedException("Failed to connect");
+                case HttpURLConnection.HTTP_FORBIDDEN:
+                    ApiError apiError = GsonHelper.gson.fromJson(response.body().charStream(), ApiError.class);
+                    if (apiError.code.equals("service_inactive")) {
+                        throw new Exceptions.UserInactiveException(apiError.detail);
+                    }
                 default:
-                    throw new Exceptions.HttpException(response);
+                    // Fall through. We want to always throw when unsuccessful.
             }
+            throw new Exceptions.HttpException(response);
         }
 
         return response;
+    }
+
+    static class ApiError {
+        String detail;
+        String code;
+
+        ApiError() {
+        }
     }
 
     static class Base {
