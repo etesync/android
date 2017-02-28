@@ -147,6 +147,10 @@
             android:parentActivityName=".ui.AccountsActivity"/>
 
         <activity
+            android:name=".NotificationHelper$NotificationHandlerActivity"
+            android:theme="@style/Theme.Transparent" />
+
+        <activity
             android:name=".ui.AppSettingsActivity"
             android:label="@string/app_settings"
             android:parentActivityName=".ui.AccountsActivity"/>

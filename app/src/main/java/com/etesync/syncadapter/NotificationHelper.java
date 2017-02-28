@@ -1,18 +1,21 @@
 package com.etesync.syncadapter;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
-
-import java.util.logging.Level;
 
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.ui.AccountSettingsActivity;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+
+import java.util.logging.Level;
+
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Getter;
@@ -54,13 +57,8 @@ public class NotificationHelper {
             messageString = R.string.sync_error;
         }
 
-        if (e instanceof Exceptions.UnauthorizedException) {
-            detailsIntent = new Intent(context, AccountSettingsActivity.class);
-        } else {
-            detailsIntent = new Intent(context, DebugInfoActivity.class);
-            detailsIntent.putExtra(DebugInfoActivity.KEY_THROWABLE, e);
-        }
-
+        detailsIntent = new Intent(context, NotificationHandlerActivity.class);
+        detailsIntent.putExtra(DebugInfoActivity.KEY_THROWABLE, e);
         detailsIntent.setData(Uri.parse("uri://" + getClass().getName() + "/" + notificationTag));
     }
 
@@ -80,5 +78,30 @@ public class NotificationHelper {
 
     public void cancel() {
         notificationManager.cancel(notificationTag, notificationId);
+    }
+
+    public static class NotificationHandlerActivity extends Activity {
+
+        @Override
+        public void onCreate(Bundle savedBundle) {
+            super.onCreate(savedBundle);
+            Bundle extras = getIntent().getExtras();
+            Exception e = (Exception) extras.get(DebugInfoActivity.KEY_THROWABLE);
+
+            Intent detailsIntent;
+            if (e instanceof Exceptions.UnauthorizedException) {
+                detailsIntent = new Intent(this, AccountSettingsActivity.class);
+            } else {
+                detailsIntent = new Intent(this, DebugInfoActivity.class);
+            }
+            detailsIntent.putExtras(getIntent().getExtras());
+            startActivity(detailsIntent);
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            finish();
+        }
     }
 }

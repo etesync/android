@@ -31,6 +31,7 @@ public class Constants {
     public static final Uri registrationUrl = webUri.buildUpon().appendEncodedPath("accounts/signup/").build();
     public static final Uri reportIssueUri = Uri.parse("https://github.com/etesync/android/issues");
     public static final Uri feedbackUri = reportIssueUri;
+    public static final Uri dashboard = webUri.buildUpon().appendEncodedPath("dashboard/").build();
     public static final Uri faqUri = webUri.buildUpon().appendEncodedPath("faq/").build();
     public static final Uri helpUri = webUri.buildUpon().appendEncodedPath("usage-guide/").build();
 
