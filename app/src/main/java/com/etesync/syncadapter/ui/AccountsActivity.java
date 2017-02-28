@@ -92,6 +92,9 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
             case R.id.nav_website:
                 startActivity(new Intent(Intent.ACTION_VIEW, Constants.webUri));
                 break;
+            case R.id.nav_guide:
+                startActivity(new Intent(Intent.ACTION_VIEW, Constants.helpUri));
+                break;
             case R.id.nav_faq:
                 startActivity(new Intent(Intent.ACTION_VIEW, Constants.faqUri));
                 break;

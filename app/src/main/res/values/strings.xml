@@ -57,6 +57,7 @@
     <string name="navigation_drawer_external_links">External links</string>
     <string name="navigation_drawer_website">Web site</string>
     <string name="navigation_drawer_faq">FAQ</string>
+    <string name="navigation_drawer_guide">Usage Guide</string>
     <string name="navigation_drawer_forums">Community</string>
     <string name="navigation_drawer_donate">Donate</string>
     <string name="navigation_drawer_report_issue">Report issue</string>
