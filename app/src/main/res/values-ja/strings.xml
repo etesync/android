@@ -115,7 +115,7 @@
   <string name="settings_sync">同期</string>
   <string name="settings_sync_interval_contacts">連絡先同期間隔</string>
   <string name="settings_sync_summary_manually">手動のみ</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%d 分ごと + ローカルの変更時はすぐに</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + ローカルの変更時はすぐに</string>
   <string name="settings_sync_summary_not_available">利用不可</string>
   <string name="settings_sync_interval_calendars">カレンダー同期間隔</string>
   <string name="settings_sync_interval_tasks">タスク同期間隔</string>

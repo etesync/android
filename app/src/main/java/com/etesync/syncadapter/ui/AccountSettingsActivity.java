@@ -116,7 +116,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 if (syncIntervalContacts == AccountSettings.SYNC_INTERVAL_MANUALLY)
                     prefSyncContacts.setSummary(R.string.settings_sync_summary_manually);
                 else
-                    prefSyncContacts.setSummary(getString(R.string.settings_sync_summary_periodically, syncIntervalContacts / 60));
+                    prefSyncContacts.setSummary(getString(R.string.settings_sync_summary_periodically, prefSyncContacts.getEntry()));
                 prefSyncContacts.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -136,7 +136,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 if (syncIntervalCalendars == AccountSettings.SYNC_INTERVAL_MANUALLY)
                     prefSyncCalendars.setSummary(R.string.settings_sync_summary_manually);
                 else
-                    prefSyncCalendars.setSummary(getString(R.string.settings_sync_summary_periodically, syncIntervalCalendars / 60));
+                    prefSyncCalendars.setSummary(getString(R.string.settings_sync_summary_periodically, prefSyncCalendars.getEntry()));
                 prefSyncCalendars.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {

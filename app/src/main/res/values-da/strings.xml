@@ -99,7 +99,7 @@
   <string name="settings_sync">Synkronisering</string>
   <string name="settings_sync_interval_contacts">Synkroniseringsinterval for kontakter</string>
   <string name="settings_sync_summary_manually">Kun manuelt</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">Hver %d minutter + øjeblikkeligt ved lokale ændringer</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + øjeblikkeligt ved lokale ændringer</string>
   <string name="settings_sync_summary_not_available">Ikke tilgængeligt</string>
   <string name="settings_sync_interval_calendars">Synkroniseringsinterval for kalender</string>
   <string name="settings_sync_interval_tasks">Synkroniseringsinterval for opgaver</string>

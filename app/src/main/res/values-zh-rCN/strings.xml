@@ -115,7 +115,7 @@
   <string name="settings_sync">同步</string>
   <string name="settings_sync_interval_contacts">通讯录自动同步间隔</string>
   <string name="settings_sync_summary_manually">手动同步</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">每 %d 分钟或本地修改后</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s 钟或本地修改后</string>
   <string name="settings_sync_summary_not_available">不可用</string>
   <string name="settings_sync_interval_calendars">日历自动同步间隔</string>
   <string name="settings_sync_interval_tasks">任务自动同步间隔</string>

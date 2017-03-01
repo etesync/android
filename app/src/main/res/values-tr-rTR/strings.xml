@@ -98,7 +98,7 @@
   <string name="settings_sync">Senkronizasyon</string>
   <string name="settings_sync_interval_contacts">Kişiler senk. aralığı</string>
   <string name="settings_sync_summary_manually">Sadece elle</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">Her %d dakika + yerel değişikliklerde hemen</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
   <string name="settings_sync_summary_not_available">Mevcut değil</string>
   <string name="settings_sync_interval_calendars">Takvimler senk. aralığı</string>
   <string name="settings_sync_interval_tasks">İşler senk. aralığı</string>

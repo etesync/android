@@ -115,7 +115,7 @@
   <string name="settings_sync">Синхронизација</string>
   <string name="settings_sync_interval_contacts">Интервал синх. контаката</string>
   <string name="settings_sync_summary_manually">Само ручно</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">Сваких %d минута + одмах по локалним изменама</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + одмах по локалним изменама</string>
   <string name="settings_sync_summary_not_available">Није доступно</string>
   <string name="settings_sync_interval_calendars">Интервал синх. календара</string>
   <string name="settings_sync_interval_tasks">Интервал синх. задатака</string>

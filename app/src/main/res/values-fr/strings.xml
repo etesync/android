@@ -115,7 +115,7 @@
   <string name="settings_sync">Synchronisation</string>
   <string name="settings_sync_interval_contacts">Interval de synchronisation des carnets d\'adresses</string>
   <string name="settings_sync_summary_manually">Manuellement</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">Toutes les %d minutes et immédiatement après un changement local</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s et immédiatement après un changement local</string>
   <string name="settings_sync_summary_not_available">Indisponible</string>
   <string name="settings_sync_interval_calendars">Interval de synchronisation des agendas</string>
   <string name="settings_sync_interval_tasks">Interval de synchronisation des tâches</string>

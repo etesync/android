@@ -110,7 +110,7 @@
   <string name="settings_sync">Sincronizzazione</string>
   <string name="settings_sync_interval_contacts">Intervallo sincr. Contatti</string>
   <string name="settings_sync_summary_manually">Solo manualmente</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">Ogni %d minuti e a seguito di ogni cambiamento locale</string>
+  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s e a seguito di ogni cambiamento locale</string>
   <string name="settings_sync_summary_not_available">Non disponile</string>
   <string name="settings_sync_interval_calendars">Intervallo sincr. calendari</string>
   <string name="settings_sync_interval_tasks">Intervallo sincr. attività</string>
