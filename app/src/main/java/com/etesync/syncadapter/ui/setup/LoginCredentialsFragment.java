@@ -76,7 +76,7 @@ public class LoginCredentialsFragment extends Fragment {
 
         String userName = editUserName.getText().toString();
         if (userName.isEmpty()) {
-            editUserName.setError(getString(R.string.login_user_name_required));
+            editUserName.setError(getString(R.string.login_email_address_error));
             valid = false;
         }
 

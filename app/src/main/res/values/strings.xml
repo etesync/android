@@ -127,7 +127,7 @@
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
     <string name="login_type_email">Login with email address</string>
-    <string name="login_email_address">Email address</string>
+    <string name="login_email_address">Email</string>
     <string name="login_email_address_error">Valid email address required</string>
     <string name="login_password">Password</string>
     <string name="login_encryption_password">Encryption Password</string>
