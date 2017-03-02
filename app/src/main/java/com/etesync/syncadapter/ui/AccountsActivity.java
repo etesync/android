@@ -8,10 +8,13 @@
 
 package com.etesync.syncadapter.ui;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,20 +29,25 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.ui.setup.LoginActivity;
 
+import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS;
 import static com.etesync.syncadapter.BuildConfig.DEBUG;
 import static com.etesync.syncadapter.Constants.serviceUrl;
 
-public class AccountsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AccountsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
+
+    private Snackbar syncStatusSnackbar;
+    private Object syncStatusObserver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounts);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,13 +55,13 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -72,8 +80,44 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        onStatusChanged(SYNC_OBSERVER_TYPE_SETTINGS);
+        syncStatusObserver = ContentResolver.addStatusChangeListener(SYNC_OBSERVER_TYPE_SETTINGS, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (syncStatusObserver != null) {
+            ContentResolver.removeStatusChangeListener(syncStatusObserver);
+            syncStatusObserver = null;
+        }
+    }
+
+    @Override
+    public void onStatusChanged(int which) {
+        if (syncStatusSnackbar != null) {
+            syncStatusSnackbar.dismiss();
+            syncStatusSnackbar = null;
+        }
+
+        if (!ContentResolver.getMasterSyncAutomatically()) {
+            syncStatusSnackbar = Snackbar.make(findViewById(R.id.coordinator), R.string.accounts_global_sync_disabled, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.accounts_global_sync_enable, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ContentResolver.setMasterSyncAutomatically(true);
+                        }
+                    });
+            syncStatusSnackbar.show();
+        }
+    }
+
+
+    @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
         else
@@ -106,7 +150,7 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

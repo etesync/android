@@ -50,6 +50,8 @@
     <string name="navigation_drawer_contact">Contact developer</string>
 
     <string name="account_list_empty">Welcome to EteSync!\n\nAdd an account to start.</string>
+    <string name="accounts_global_sync_disabled">System-wide automatic synchronization is disabled</string>
+    <string name="accounts_global_sync_enable">Enable</string>
 
     <!-- AccountUpdateService -->
 
