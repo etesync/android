@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.9.2
+* Reword some parts of the UI
+* Add a "Coming soon" section for the Change Journal
+
 ## Version 0.9.1
 * Add links to the usage guide.
 * Open the account's dashboard when getting a "UserInactive" exception.
