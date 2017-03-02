@@ -33,7 +33,7 @@ public class Constants {
     public static final Uri feedbackUri = reportIssueUri;
     public static final Uri dashboard = webUri.buildUpon().appendEncodedPath("dashboard/").build();
     public static final Uri faqUri = webUri.buildUpon().appendEncodedPath("faq/").build();
-    public static final Uri helpUri = webUri.buildUpon().appendEncodedPath("usage-guide/").build();
+    public static final Uri helpUri = webUri.buildUpon().appendEncodedPath("user-guide/").build();
 
     public static final Uri serviceUrl = Uri.parse((DEBUG_REMOTE_URL == null) ? "https://api.etesync.com/" : DEBUG_REMOTE_URL);
 

@@ -45,7 +45,7 @@
     <string name="navigation_drawer_external_links">External links</string>
     <string name="navigation_drawer_website">Web site</string>
     <string name="navigation_drawer_faq">FAQ</string>
-    <string name="navigation_drawer_guide">Usage Guide</string>
+    <string name="navigation_drawer_guide">User Guide</string>
     <string name="navigation_drawer_report_issue">Report issue</string>
     <string name="navigation_drawer_contact">Contact developer</string>
 
