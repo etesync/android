@@ -7,13 +7,6 @@
   <string name="send">Gönder</string>
   <!--startup dialogs-->
   <string name="startup_dont_show_again">Bir daha gösterme</string>
-  <string name="startup_donate">Açık-Kaynak Bilgisi</string>
-  <string name="startup_donate_now">Bağış sayfasını göster</string>
-  <string name="startup_donate_later">Belki sonra</string>
-  <string name="startup_google_play_accounts_removed">Play Store DRM hata bilgisi</string>
-  <string name="startup_google_play_accounts_removed_more_info">Daha fazla bilgi</string>
-  <string name="startup_opentasks_not_installed">OpenTasks kurulu değil</string>
-  <string name="startup_opentasks_not_installed_install">OpenTasks kur</string>
   <!--AboutActivity-->
   <string name="about_license_terms">Lisans şartları</string>
   <string name="about_license_info_no_warranty">Bu uygulama HİÇ BİR GARANTİ ile gelmemektedir. Bedava bir yazılımdır ve belli koşullar altında dağıtabilirsiniz.</string>
@@ -27,15 +20,10 @@
   <string name="navigation_drawer_close">Navigasyon çekmecesini kapat</string>
   <string name="navigation_drawer_about">Hakkında / Lisans</string>
   <string name="navigation_drawer_settings">Ayarlar</string>
-  <string name="navigation_drawer_news_updates">Haberler  &amp; güncellemeler </string>
   <string name="navigation_drawer_external_links">Harici bağlantılar</string>
   <string name="navigation_drawer_website">Web sitesi</string>
   <string name="navigation_drawer_faq">SSS</string>
-  <string name="navigation_drawer_forums">Camia</string>
-  <string name="navigation_drawer_donate">Bağış yap</string>
   <!--AccountUpdateService-->
-  <string name="dav_service_refresh_failed">Servis keşfi başarısız</string>
-  <string name="dav_service_refresh_couldnt_refresh">Kolleksiyon listesi yenilenemedi</string>
   <!--AppSettingsActivity-->
   <string name="app_settings">Ayarlar</string>
   <string name="app_settings_user_interface">Kullanıcı arayüzü</string>
@@ -56,9 +44,6 @@
   <string name="account_delete">Hesabı sil</string>
   <string name="account_delete_confirmation_title">Hesap gerçekten silinsin mi?</string>
   <string name="account_delete_confirmation_text">Rehber, takvim ve iş listelerinin tüm yerel kopyaları silinecektir.</string>
-  <string name="account_refresh_address_book_list">Rehber listesini yenile</string>
-  <string name="account_create_new_address_book">Yeni rehber oluştur</string>
-  <string name="account_refresh_calendar_list">Takvim listesini yenile</string>
   <string name="account_create_new_calendar">Yeni takvim oluştur</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Takvim izinleri</string>
@@ -69,30 +54,17 @@
   <string name="permissions_opentasks_request">OpenTasks izinleri iste</string>
   <!--AddAccountActivity-->
   <string name="login_title">Hesap ekle</string>
-  <string name="login_type_email">Eposta adresi ile giriş yap</string>
   <string name="login_email_address">Eposta adresi</string>
   <string name="login_email_address_error">Geçerli eposta adresi zorunludur</string>
   <string name="login_password">Parola</string>
   <string name="login_password_required">Parola zorunludur</string>
-  <string name="login_type_url">URL ve kullanıcı adı ile giriş yap</string>
-  <string name="login_url_must_be_http_or_https">URL http(s):// ile başlamalıdır</string>
-  <string name="login_url_host_name_required">Sunucu adı zorunludur</string>
-  <string name="login_user_name">Kullanıcı adı</string>
-  <string name="login_user_name_required">Kullanıcı adı zorunludur</string>
-  <string name="login_base_url">Baz URL</string>
   <string name="login_back">Geri</string>
-  <string name="login_account_name">Hesap adı</string>
-  <string name="login_account_name_info">Hesap ismi olarak e-posta adresini kullan çünkü Android hesap ismini yarattığın olaylarda DÜZENLEYEN alanında kullanacaktır. Aynı isimde iki faklı hesabın olamaz.</string>
-  <string name="login_account_name_required">Hesap adı zorunludur</string>
-  <string name="login_account_not_created">Hesap yaratılamadı</string>
   <string name="login_configuration_detection">Konfigürasyon keşfi</string>
   <string name="login_querying_server">Lütfen bekle, sunucu sorgulanıyor...</string>
   <string name="login_view_logs">Jurnallere bak</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Ayarlar: %s</string>
   <string name="settings_authentication">Doğrulama</string>
-  <string name="settings_username">Kullanıcı adı</string>
-  <string name="settings_enter_username">Kullanıcı adı girin:</string>
   <string name="settings_password">Parola</string>
   <string name="settings_enter_password">Parola girin:</string>
   <string name="settings_sync">Senkronizasyon</string>
@@ -101,7 +73,6 @@
   <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
   <string name="settings_sync_summary_not_available">Mevcut değil</string>
   <string name="settings_sync_interval_calendars">Takvimler senk. aralığı</string>
-  <string name="settings_sync_interval_tasks">İşler senk. aralığı</string>
   <string-array name="settings_sync_interval_seconds">
     <item>-1</item>
     <item>300</item>
@@ -129,13 +100,6 @@
   <string name="settings_sync_wifi_only_ssid_on">Sadece %s üzerinden senkronize olur</string>
   <string name="settings_sync_wifi_only_ssid_off">Tüm WiFi bağlantıları kullanılabilir</string>
   <string name="settings_sync_wifi_only_ssid_message">Senkronizasyonu sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) gir, veya tüm WiFi bağlantıları için boş bırak.</string>
-  <string name="settings_sync_time_range_past">Geçmiş olay zaman sınırı</string>
-  <string name="settings_sync_time_range_past_none">Tüm olaylar senkronize edilecek</string>
-  <plurals name="settings_sync_time_range_past_days">
-    <item quantity="other">%d günden daha eski olaylar göz ardı edilecektir</item>
-  </plurals>
-  <string name="settings_sync_time_range_past_message">Bu sayıdan daha eski olan olaylar yok sayılacaktır (0 olabilir). Tüm olayları senkronize etmek için boş bırak.</string>
-  <string name="settings_manage_calendar_colors">Takvim renklerini yönet</string>
   <!--collection management-->
   <string name="create_addressbook">Rehber yarat</string>
   <string name="create_addressbook_display_name_hint">Benim Rehberim</string>
@@ -157,7 +121,6 @@
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Hata ayıklama bilgisi</string>
   <string name="sync_error_calendar">Takvim senkronizasyonu başarısız (%s)</string>
-  <string name="sync_error_tasks">İş senkronizasyonu başarısız (%s)</string>
   <string name="sync_error">%s yaparken hata</string>
   <string name="sync_error_http_dav">%s yaparken sunucu hatası</string>
   <string name="sync_error_local_storage">%s yaparken veritabanı hatası</string>

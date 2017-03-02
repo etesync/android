@@ -11,12 +11,8 @@
   <!--AccountActivity-->
   <!--PermissionsActivity-->
   <!--AddAccountActivity-->
-  <string name="login_type_email">Login com seu enderço de email</string>
-  <string name="login_type_url">Login com URL e nome do usuário</string>
   <!--AccountSettingsActivity-->
   <string name="settings_authentication">Autenticação</string>
-  <string name="settings_username">Nome de usuário</string>
-  <string name="settings_enter_username">Informe o nome de usuário:</string>
   <string name="settings_password">Senha</string>
   <string name="settings_enter_password">Informe sua senha:</string>
   <string name="settings_sync">Sincronização</string>

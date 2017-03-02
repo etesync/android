@@ -24,17 +24,6 @@
     <string name="startup_development_version">EteSync Preview Release</string>
     <string name="startup_development_version_message">This is a development version of EteSync. Be aware that things may not work as expected. Please give us constructive feedback to improve EteSync.</string>
     <string name="startup_development_version_give_feedback">Give feedback</string>
-    <string name="startup_donate">Open-Source Information</string>
-    <string name="startup_donate_message">We\'re happy that you use EteSync, which is open-source software (GPLv3). Because developing EteSync is hard work and took us thousands of working hours, please consider a donation.</string>
-    <string name="startup_donate_now">Show donation page</string>
-    <string name="startup_donate_later">Maybe later</string>
-    <string name="startup_google_play_accounts_removed">Play Store DRM bug information</string>
-    <string name="startup_google_play_accounts_removed_message">Under certain conditions, Play Store DRM may cause all EteSync accounts to be gone after a reboot or after upgrading EteSync. If you\'re affected by this problem (and only then), please install \"EteSync JB Workaround\" from Play Store.</string>
-    <string name="startup_google_play_accounts_removed_more_info">More information</string>
-    <string name="startup_opentasks_not_installed">OpenTasks not installed</string>
-    <string name="startup_opentasks_not_installed_message">The OpenTasks app is not available, so EteSync won\'t be able to synchronize task lists.</string>
-    <string name="startup_opentasks_reinstall_davdroid">After installing OpenTasks, you have to RE-INSTALL EteSync and add your accounts again (Android bug).</string>
-    <string name="startup_opentasks_not_installed_install">Install OpenTasks</string>
 
     <!-- AboutActivity -->
     <string name="about_license_terms">License terms</string>
@@ -53,21 +42,16 @@
     <string name="navigation_drawer_subtitle">Secure Sync Adapter</string>
     <string name="navigation_drawer_about">About / License</string>
     <string name="navigation_drawer_settings">Settings</string>
-    <string name="navigation_drawer_news_updates">News &amp; updates</string>
     <string name="navigation_drawer_external_links">External links</string>
     <string name="navigation_drawer_website">Web site</string>
     <string name="navigation_drawer_faq">FAQ</string>
     <string name="navigation_drawer_guide">Usage Guide</string>
-    <string name="navigation_drawer_forums">Community</string>
-    <string name="navigation_drawer_donate">Donate</string>
     <string name="navigation_drawer_report_issue">Report issue</string>
     <string name="navigation_drawer_contact">Contact developer</string>
 
     <string name="account_list_empty">Welcome to EteSync!\n\nAdd an account to start.</string>
 
     <!-- AccountUpdateService -->
-    <string name="dav_service_refresh_failed">Service detection failed</string>
-    <string name="dav_service_refresh_couldnt_refresh">Couldn\'t refresh collection list</string>
 
     <!-- AppSettingsActivity -->
     <string name="app_settings">Settings</string>
@@ -99,15 +83,9 @@
     <string name="account_synchronize_now">Synchronize now</string>
     <string name="account_synchronizing_now">Synchronizing now</string>
     <string name="account_settings">Account settings</string>
-    <string name="account_rename">Rename account</string>
-    <string name="account_rename_new_name">Unsaved local data may be dismissed. Re-synchronization is required after renaming. New account name:</string>
-    <string name="account_rename_rename">Rename</string>
     <string name="account_delete">Delete account</string>
     <string name="account_delete_confirmation_title">Really delete account?</string>
     <string name="account_delete_confirmation_text">All local copies of address books, calendars and task lists will be deleted.</string>
-    <string name="account_refresh_address_book_list">Refresh address book list</string>
-    <string name="account_create_new_address_book">Create new address book</string>
-    <string name="account_refresh_calendar_list">Refresh calendar list</string>
     <string name="account_create_new_calendar">Create new calendar</string>
     <string name="account_delete_collection_last_title">Can\'t delete last collection</string>
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
@@ -126,19 +104,12 @@
 
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
-    <string name="login_type_email">Login with email address</string>
     <string name="login_email_address">Email</string>
     <string name="login_email_address_error">Valid email address required</string>
     <string name="login_password">Password</string>
     <string name="login_encryption_password">Encryption Password</string>
     <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be changed if wrong.</string>
     <string name="login_password_required">Password required</string>
-    <string name="login_type_url">Login with URL and user name</string>
-    <string name="login_url_must_be_http_or_https">URL must begin with http(s)://</string>
-    <string name="login_url_host_name_required">Host name required</string>
-    <string name="login_user_name">User name</string>
-    <string name="login_user_name_required">User name required</string>
-    <string name="login_base_url">Base URL</string>
     <string name="login_login">Log In</string>
     <string name="login_signup">Sign Up</string>
     <string name="login_finish">Finish</string>
@@ -147,11 +118,6 @@
     <string name="login_enter_encryption_details">Secret Encryption Password</string>
     <string name="login_encryption_account_label">Account:</string>
     <string name="login_service_details_description">This is your login password, *not* your encryption password!</string>
-    <string name="login_account_name">Account name</string>
-    <string name="login_account_name_info">Use your email address as account name because Android will use the account name as ORGANIZER field for events you create. You can\'t have two accounts with the same name.</string>
-    <string name="login_account_contact_group_method">Contact group method:</string>
-    <string name="login_account_name_required">Account name required</string>
-    <string name="login_account_not_created">Account could not be created</string>
 
     <string name="login_configuration_detection">Configuration detection</string>
     <string name="login_querying_server">Please wait, querying server…</string>
@@ -165,8 +131,6 @@
     <string name="settings_title">Settings: %s</string>
     <string name="settings_authentication">Authentication</string>
     <string name="settings_encryption">Encryption</string>
-    <string name="settings_username">User name</string>
-    <string name="settings_enter_username">Enter user name:</string>
     <string name="settings_password">Password</string>
     <string name="settings_password_summary">Change your authentication password</string>
     <string name="settings_enter_password">Enter your password:</string>
@@ -179,7 +143,6 @@
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s and immediately on local changes</string>
     <string name="settings_sync_summary_not_available">Not available</string>
     <string name="settings_sync_interval_calendars">Calendars sync. interval</string>
-    <string name="settings_sync_interval_tasks">Tasks sync. interval</string>
     <string-array name="settings_sync_interval_seconds" translateable="false">
         <item>-1</item>
         <item>300</item>
@@ -208,37 +171,13 @@
     <string name="settings_sync_wifi_only_ssid_off">All WiFi connections may be used</string>
     <string name="settings_sync_wifi_only_ssid_message">Enter the name of a WiFi network (SSID) to restrict synchronization to this network, or leave blank for all WiFi connections.</string>
     <string name="settings_carddav">Contacts</string>
-    <string name="settings_contact_group_method">Contact group method</string>
-    <string-array name="settings_contact_group_method_values">
-        <item>GROUP_VCARDS</item>
-        <item>CATEGORIES</item>
-    </string-array>
-    <string-array name="settings_contact_group_method_entries">
-        <item>Groups are separate VCards</item>
-        <item>Groups are per-contact categories</item>
-    </string-array>
     <string name="settings_caldav">Calendar</string>
-    <string name="settings_sync_time_range_past">Past event time limit</string>
-    <string name="settings_sync_time_range_past_none">All events will be synchronized</string>
-    <plurals name="settings_sync_time_range_past_days">
-        <item quantity="one">Events more than one day in the past will be ignored</item>
-        <item quantity="other">Events more than %d days in the past will be ignored</item>
-    </plurals>
-    <string name="settings_sync_time_range_past_message">Events which are more than this number of days in the past will be ignored (may be 0). Leave blank to synchronize all events.</string>
-    <string name="settings_manage_calendar_colors">Manage calendar colors</string>
-    <string name="settings_manage_calendar_colors_on">Calendar colors are managed by EteSync</string>
-    <string name="settings_manage_calendar_colors_off">Calendar colors are not set by EteSync</string>
 
     <!-- collection management -->
     <string name="create_addressbook">Create address book</string>
     <string name="create_addressbook_display_name_hint">My Address Book</string>
     <string name="create_calendar">Create calendar</string>
     <string name="create_calendar_display_name_hint">My Calendar</string>
-    <string name="create_calendar_time_zone">Time zone:</string>
-    <string name="create_calendar_type">Collection type:</string>
-    <string name="create_calendar_type_only_events">Calendar (only events)</string>
-    <string name="create_calendar_type_only_tasks">Task list (only tasks)</string>
-    <string name="create_calendar_type_events_and_tasks">Combined (events and tasks)</string>
     <string name="create_collection_color">Set the calendar\'s color</string>
     <string name="create_collection_creating">Creating collection</string>
     <string name="create_collection_display_name">Display name (title) of this collection:</string>
@@ -264,7 +203,6 @@
     <string name="sync_error_permissions_text">Additional permissions required</string>
     <string name="sync_error_calendar">Calendar sync failed (%s)</string>
     <string name="sync_error_contacts">Contacts sync failed (%s)</string>
-    <string name="sync_error_tasks">Task sync failed (%s)</string>
     <string name="sync_error">Error while %s</string>
     <string name="sync_error_integrity">Integrity error while %s</string>
     <string name="sync_error_http_dav">Server error while %s</string>

@@ -167,11 +167,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
     public boolean onMenuItemClick(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.create_address_book:
-                intent = new Intent(this, CreateAddressBookActivity.class);
-                intent.putExtra(CreateAddressBookActivity.EXTRA_ACCOUNT, account);
-                startActivity(intent);
-                break;
             case R.id.create_calendar:
                 intent = new Intent(this, CreateCalendarActivity.class);
                 intent.putExtra(CreateCalendarActivity.EXTRA_ACCOUNT, account);

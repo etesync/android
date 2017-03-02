@@ -12,12 +12,8 @@
   <!--AccountActivity-->
   <!--PermissionsActivity-->
   <!--AddAccountActivity-->
-  <string name="login_type_email">Вход по адресу email</string>
-  <string name="login_type_url">Вход через URL и имя пользователя</string>
   <!--AccountSettingsActivity-->
   <string name="settings_authentication">Идентификация</string>
-  <string name="settings_username">Имя</string>
-  <string name="settings_enter_username">Введите имя пользователя:</string>
   <string name="settings_password">Пароль</string>
   <string name="settings_enter_password">Введите свой пароль:</string>
   <string name="settings_sync">Синхронизация</string>
@@ -26,7 +22,6 @@
   <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s и немедленно при локальных изменениях</string>
   <string name="settings_sync_summary_not_available">Недоступно</string>
   <string name="settings_sync_interval_calendars">Период синхронизации календарей</string>
-  <string name="settings_sync_interval_tasks">Период синхронизации задач</string>
   <string-array name="settings_sync_interval_seconds">
     <item>-1</item>
     <item>300</item>
@@ -52,7 +47,6 @@
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Отладочная информация</string>
   <string name="sync_error_calendar">Синхронизация календаря завершена с ошибкой (%s)</string>
-  <string name="sync_error_tasks">Синхронизация задачи завершена с ошибкой (%s)</string>
   <string name="sync_error">Ошибка %s</string>
   <string name="sync_error_http_dav">Ошибка сервера %s</string>
   <string name="sync_error_local_storage">Ошибка базы данных в процессе %s</string>

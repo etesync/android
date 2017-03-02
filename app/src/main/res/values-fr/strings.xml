@@ -8,13 +8,6 @@
   <!--startup dialogs-->
   <string name="startup_battery_optimization">Optimisation de la batterie</string>
   <string name="startup_dont_show_again">Ne plus afficher</string>
-  <string name="startup_donate">Open-Source Information</string>
-  <string name="startup_donate_now">Faire un don</string>
-  <string name="startup_donate_later">Plus tard</string>
-  <string name="startup_google_play_accounts_removed">Erreur information Play Store DRM</string>
-  <string name="startup_google_play_accounts_removed_more_info">Plus d\'information</string>
-  <string name="startup_opentasks_not_installed">OpenTasks n\'est pas installé</string>
-  <string name="startup_opentasks_not_installed_install">Installer OpenTasks</string>
   <!--AboutActivity-->
   <string name="about_license_terms">Conditions d\'utilisation</string>
   <string name="about_license_info_no_warranty">Ce programme est fourni sans AUCUNE GARANTIE. C\'est un logiciel libre, et vous êtes en droit de le redistribuer sous certaines conditions.</string>
@@ -28,15 +21,10 @@
   <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
   <string name="navigation_drawer_about">A propos / Licence</string>
   <string name="navigation_drawer_settings">Paramètres</string>
-  <string name="navigation_drawer_news_updates">Actualité &amp; mise à jour</string>
   <string name="navigation_drawer_external_links">Liens externes</string>
   <string name="navigation_drawer_website">Site Web</string>
   <string name="navigation_drawer_faq">FAQ</string>
-  <string name="navigation_drawer_forums">Communauté</string>
-  <string name="navigation_drawer_donate">Faire un don</string>
   <!--AccountUpdateService-->
-  <string name="dav_service_refresh_failed">La détection du service a échoué</string>
-  <string name="dav_service_refresh_couldnt_refresh">Impossible d\'actualiser la liste de collection</string>
   <!--AppSettingsActivity-->
   <string name="app_settings">Paramètres</string>
   <string name="app_settings_user_interface">Interface utilisateur</string>
@@ -66,15 +54,9 @@
   <string name="account_synchronize_now">Synchroniser maintenant</string>
   <string name="account_synchronizing_now">Synchronisation en cours</string>
   <string name="account_settings">Paramètres du compte</string>
-  <string name="account_rename">Renommer le compte</string>
-  <string name="account_rename_new_name">Les données locales non enregistrées pourraient être perdues. Une re-synchronisation est nécessaire après avoir renommé le compte. Nouveau nom du compte : </string>
-  <string name="account_rename_rename">Renommer</string>
   <string name="account_delete">Supprimer le compte</string>
   <string name="account_delete_confirmation_title">Voulez-vous vraiment supprimer le compte?</string>
   <string name="account_delete_confirmation_text">Toutes les copies locales des carnets d\'adresses, des calendriers et des listes de tâches seront supprimées.</string>
-  <string name="account_refresh_address_book_list">Actualiser le carnet d\'adresse</string>
-  <string name="account_create_new_address_book">Créer un nouveau carnet d\'adresse</string>
-  <string name="account_refresh_calendar_list">Actualiser le calendrier</string>
   <string name="account_create_new_calendar">Créer un nouveau calendrier</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Autorisations calendrier</string>
@@ -85,31 +67,17 @@
   <string name="permissions_opentasks_request">Demande d\'autorisations d\'accéder à OpenTasks</string>
   <!--AddAccountActivity-->
   <string name="login_title">Ajouter un compte</string>
-  <string name="login_type_email">Connexion avec une adresse email</string>
   <string name="login_email_address">Adresse mail</string>
   <string name="login_email_address_error">Une adresse e-mail valide est requis</string>
   <string name="login_password">Mot de passe</string>
   <string name="login_password_required">Mot de passe requis</string>
-  <string name="login_type_url">Connexion avec une URL et un nom d\'utilisateur</string>
-  <string name="login_url_must_be_http_or_https">L\'URL doit commencer par http(s)://</string>
-  <string name="login_url_host_name_required">Nom d\'hôte requis</string>
-  <string name="login_user_name">Nom d\'utilisateur</string>
-  <string name="login_user_name_required">Nom d\'utilisateur requis</string>
-  <string name="login_base_url">URL de base</string>
   <string name="login_back">Retour</string>
-  <string name="login_account_name">Nom du compte</string>
-  <string name="login_account_name_info">Utilisez votre adresse e-mail comme nom de compte car Android utilisera ce nom en tant que champ ORGANISATEUR pour les événements que vous créerez. Vous ne pouvez pas avoir deux comptes avec le même nom.</string>
-  <string name="login_account_contact_group_method">Méthode pour les contacts de type groupe :</string>
-  <string name="login_account_name_required">Nom du compte requis</string>
-  <string name="login_account_not_created">Le compte n\'a pas pu être créé</string>
   <string name="login_configuration_detection">Détection de la configuration</string>
   <string name="login_querying_server">S\'il vous plaît patienter, nous interrogeons le serveur ...</string>
   <string name="login_view_logs">Voir infos de débogage</string>
   <!--AccountSettingsActivity-->
   <string name="settings_title">Paramètres: %s</string>
   <string name="settings_authentication">Authentification</string>
-  <string name="settings_username">Nom d\'utilisateur</string>
-  <string name="settings_enter_username">Saisissez votre nom d\'utilisateur :</string>
   <string name="settings_password">Mot de passe</string>
   <string name="settings_enter_password">Saisissez votre mot de passe :</string>
   <string name="settings_sync">Synchronisation</string>
@@ -118,7 +86,6 @@
   <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s et immédiatement après un changement local</string>
   <string name="settings_sync_summary_not_available">Indisponible</string>
   <string name="settings_sync_interval_calendars">Interval de synchronisation des agendas</string>
-  <string name="settings_sync_interval_tasks">Interval de synchronisation des tâches</string>
   <string-array name="settings_sync_interval_seconds">
     <item>-1</item>
     <item>300</item>
@@ -146,23 +113,6 @@
   <string name="settings_sync_wifi_only_ssid_on">Sera seulement synchroniser avec %s</string>
   <string name="settings_sync_wifi_only_ssid_off">Toutes les connexions WiFi peuvent être utilisées</string>
   <string name="settings_sync_wifi_only_ssid_message">Entrez le nom d\'un réseau WiFi (SSID) pour restreindre la synchronisation à ce réseau, ou laisser vide pour autoriser toutes les connexions WiFi.</string>
-  <string name="settings_contact_group_method">Méthode pour les contacts de type groupe</string>
-  <string-array name="settings_contact_group_method_values">
-    <item>GROUP_VCARDS</item>
-    <item>CATEGORIES</item>
-  </string-array>
-  <string-array name="settings_contact_group_method_entries">
-    <item>Les groupes sont des VCards indépendantes</item>
-    <item>Les groupes sont des catégories pour chacun des contacts</item>
-  </string-array>
-  <string name="settings_sync_time_range_past">Limite des événements passés</string>
-  <string name="settings_sync_time_range_past_none">Tous les événements seront synchronisés</string>
-  <plurals name="settings_sync_time_range_past_days">
-    <item quantity="one">Les événements de plus d’un jour passé seront ignorés</item>
-    <item quantity="other">Les événements de plus de %d jours passés seront ignorés</item>
-  </plurals>
-  <string name="settings_sync_time_range_past_message">Les événements antérieurs à ce nombre de jours seront ignorés (peut être 0). Laissez vide pour synchroniser tous les événements.</string>
-  <string name="settings_manage_calendar_colors">Choisir couleur du calendrier</string>
   <!--collection management-->
   <string name="create_addressbook">Créer un carnet d\'adresses</string>
   <string name="create_addressbook_display_name_hint">Mon carnet d\'adresses</string>
@@ -184,7 +134,6 @@
   <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Infos de débogage</string>
   <string name="sync_error_calendar">Échec de la synchronisation du calendrier (%s)</string>
-  <string name="sync_error_tasks">Échec de la synchronisation (%s)</string>
   <string name="sync_error">Erreur durant %s</string>
   <string name="sync_error_http_dav">Erreur de serveur durant %s</string>
   <string name="sync_error_local_storage">Erreur de base de donnée durant %s</string>
