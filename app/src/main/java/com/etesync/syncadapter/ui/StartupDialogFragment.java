@@ -22,15 +22,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.etesync.syncadapter.BuildConfig;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import lombok.Cleanup;
 
 public class StartupDialogFragment extends DialogFragment {

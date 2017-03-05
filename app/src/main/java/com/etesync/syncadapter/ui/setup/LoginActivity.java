@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.ui.WebViewActivity;
 
 /**
  * Activity to initially connect to a server and create an account.
@@ -71,6 +72,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void showHelp(MenuItem item) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Constants.helpUri));
+        WebViewActivity.openUrl(this, Constants.helpUri);
     }
 }

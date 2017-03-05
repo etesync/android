@@ -93,10 +93,10 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
                 startActivity(new Intent(Intent.ACTION_VIEW, Constants.webUri));
                 break;
             case R.id.nav_guide:
-                startActivity(new Intent(Intent.ACTION_VIEW, Constants.helpUri));
+                WebViewActivity.openUrl(this, Constants.helpUri);
                 break;
             case R.id.nav_faq:
-                startActivity(new Intent(Intent.ACTION_VIEW, Constants.faqUri));
+                WebViewActivity.openUrl(this, Constants.faqUri);
                 break;
             case R.id.nav_report_issue:
                 startActivity(new Intent(Intent.ACTION_VIEW, Constants.reportIssueUri));
@@ -110,5 +110,4 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

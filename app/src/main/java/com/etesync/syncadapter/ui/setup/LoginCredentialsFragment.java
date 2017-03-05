@@ -21,6 +21,7 @@ import android.widget.EditText;
 
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.ui.WebViewActivity;
 import com.etesync.syncadapter.ui.widget.EditPassword;
 
 public class LoginCredentialsFragment extends Fragment {
@@ -53,8 +54,7 @@ public class LoginCredentialsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Uri createUri = Constants.registrationUrl.buildUpon().appendQueryParameter("email", editUserName.getText().toString()).build();
-                Intent intent = new Intent(Intent.ACTION_VIEW, createUri);
-                startActivity(intent);
+                WebViewActivity.openUrl(getContext(), createUri);
             }
         });
 
