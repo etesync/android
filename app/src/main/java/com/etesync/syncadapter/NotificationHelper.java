@@ -13,6 +13,7 @@ import android.support.v7.app.NotificationCompat;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.ui.AccountSettingsActivity;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+import com.etesync.syncadapter.ui.WebViewActivity;
 
 import java.util.logging.Level;
 
@@ -95,7 +96,7 @@ public class NotificationHelper {
             if (e instanceof Exceptions.UnauthorizedException) {
                 detailsIntent = new Intent(this, AccountSettingsActivity.class);
             } else if (e instanceof Exceptions.UserInactiveException) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Constants.dashboard));
+                WebViewActivity.openUrl(this, Constants.dashboard);
                 return;
             } else {
                 detailsIntent = new Intent(this, DebugInfoActivity.class);

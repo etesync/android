@@ -225,4 +225,8 @@
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync has encountered an unknown certificate. Do you want to trust it?</string>
 
+    <!-- WebView activity-->
+    <string name="loading">Loading...</string>
+    <string name="loading_error_title">Loading Error</string>
+    <string name="loading_error_content">Refresh</string>
 </resources>
