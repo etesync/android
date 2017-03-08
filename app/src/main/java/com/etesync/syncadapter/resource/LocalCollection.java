@@ -24,4 +24,6 @@ public interface LocalCollection {
 
     String getCTag() throws CalendarStorageException, ContactsStorageException;
     void setCTag(String cTag) throws CalendarStorageException, ContactsStorageException;
+
+    long count() throws CalendarStorageException, ContactsStorageException;
 }

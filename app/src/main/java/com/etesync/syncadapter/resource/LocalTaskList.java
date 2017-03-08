@@ -19,12 +19,13 @@ import android.os.Build;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 
+import com.etesync.syncadapter.model.CollectionInfo;
+
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import java.io.FileNotFoundException;
 
-import com.etesync.syncadapter.model.CollectionInfo;
 import at.bitfire.ical4android.AndroidTaskList;
 import at.bitfire.ical4android.AndroidTaskListFactory;
 import at.bitfire.ical4android.CalendarStorageException;
@@ -109,6 +110,21 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
         return tasks;
     }
 
+    @Override
+    public long count() throws CalendarStorageException {
+        String where = Tasks.LIST_ID + "=?";
+        String whereArgs[] = {String.valueOf(getId())};
+
+        try {
+            @Cleanup Cursor cursor = provider.client.query(
+                    syncAdapterURI(provider.tasksUri()),
+                    null,
+                    where, whereArgs, null);
+            return cursor.getCount();
+        } catch (RemoteException e) {
+            throw new CalendarStorageException("Couldn't query calendar events", e);
+        }
+    }
 
     @Override
     @SuppressWarnings("Recycle")

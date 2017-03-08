@@ -23,6 +23,9 @@ import android.provider.CalendarContract.Reminders;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.model.CollectionInfo;
+
 import net.fortuna.ical4j.model.component.VTimeZone;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,8 +34,6 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.model.CollectionInfo;
 import at.bitfire.ical4android.AndroidCalendar;
 import at.bitfire.ical4android.AndroidCalendarFactory;
 import at.bitfire.ical4android.BatchOperation;
@@ -239,6 +240,21 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         }
     }
 
+    @Override
+    public long count() throws CalendarStorageException {
+        String where = Events.CALENDAR_ID + "=?";
+        String whereArgs[] = {String.valueOf(id)};
+
+        try {
+            @Cleanup Cursor cursor = provider.query(
+                    syncAdapterURI(Events.CONTENT_URI),
+                    null,
+                    where, whereArgs, null);
+            return cursor.getCount();
+        } catch (RemoteException e) {
+            throw new CalendarStorageException("Couldn't query calendar events", e);
+        }
+    }
 
     public static class Factory implements AndroidCalendarFactory {
         public static final Factory INSTANCE = new Factory();

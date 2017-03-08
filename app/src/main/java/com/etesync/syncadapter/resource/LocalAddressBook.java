@@ -23,13 +23,13 @@ import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.support.annotation.NonNull;
 
+import com.etesync.syncadapter.App;
+
 import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
-
-import com.etesync.syncadapter.App;
 
 import at.bitfire.vcard4android.AndroidAddressBook;
 import at.bitfire.vcard4android.AndroidContact;
@@ -158,6 +158,18 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         }
     }
 
+    @Override
+    public long count() throws ContactsStorageException {
+        try {
+            @Cleanup Cursor cursor = provider.query(syncAdapterURI(RawContacts.CONTENT_URI),
+                    null,
+                    null, null, null);
+
+            return cursor.getCount();
+        } catch (RemoteException e) {
+            throw new ContactsStorageException("Couldn't query contacts", e);
+        }
+    }
 
     @NonNull
     public LocalContact[] getDeletedContacts() throws ContactsStorageException {
