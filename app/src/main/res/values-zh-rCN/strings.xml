@@ -120,7 +120,6 @@
   <string name="create_collection_display_name">集合显示名称（标题）</string>
   <string name="create_collection_display_name_required">请输入标题</string>
   <string name="create_collection_description">简介（可选）</string>
-  <string name="create_collection_home_set">主集合</string>
   <string name="create_collection_create">创建</string>
   <string name="delete_collection">删除集合</string>
   <string name="delete_collection_confirm_title">你确定吗？</string>

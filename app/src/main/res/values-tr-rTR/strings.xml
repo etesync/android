@@ -107,7 +107,6 @@
   <string name="create_collection_display_name">Bu koleksiyonun gösterilen adı (başlığı):</string>
   <string name="create_collection_display_name_required">Başlık zorunlu</string>
   <string name="create_collection_description">Açıklama (isteğe bağlı):</string>
-  <string name="create_collection_home_set">Ev seti:</string>
   <string name="create_collection_create">Yarat</string>
   <string name="delete_collection">Koleksiyonu sil</string>
   <string name="delete_collection_confirm_title">Emin misin?</string>

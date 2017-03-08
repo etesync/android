@@ -120,7 +120,6 @@
   <string name="create_collection_display_name">Le nom affiché (titre) pour cette collection:</string>
   <string name="create_collection_display_name_required">Titre requis</string>
   <string name="create_collection_description">Description (facultatif)</string>
-  <string name="create_collection_home_set">Accueil:</string>
   <string name="create_collection_create">Créer</string>
   <string name="delete_collection">Supprimer la collection</string>
   <string name="delete_collection_confirm_title">Êtes-vous sur?</string>

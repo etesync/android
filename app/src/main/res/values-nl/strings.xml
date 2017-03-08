@@ -114,7 +114,6 @@
   <string name="create_collection_display_name">Weergave naam (titel) van deze collectie:</string>
   <string name="create_collection_display_name_required">Titel is vereist</string>
   <string name="create_collection_description">Beschrijving (optioneel):</string>
-  <string name="create_collection_home_set">Begin map:</string>
   <string name="create_collection_create">Maak</string>
   <string name="delete_collection">Verwijder collectie</string>
   <string name="delete_collection_confirm_title">Weet je het zeker?</string>

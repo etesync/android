@@ -120,7 +120,6 @@
   <string name="create_collection_display_name">Zobrazit jméno (nadpis) této sbírky:</string>
   <string name="create_collection_display_name_required">Nadpis je vyžadován</string>
   <string name="create_collection_description">Popis (volitelný):</string>
-  <string name="create_collection_home_set">Domácí sbírka:</string>
   <string name="create_collection_create">Vytvořit</string>
   <string name="delete_collection">Smazat sbírku</string>
   <string name="delete_collection_confirm_title">Jste si jisti?</string>

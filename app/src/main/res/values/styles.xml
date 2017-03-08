@@ -11,9 +11,7 @@
     <!-- colors -->
 
     <!-- FIXME: Colours are no longer correctly named. -->
-    <color name="green700">#ffa100</color>
 
-    <color name="light_green300">#ffd54f</color>
     <color name="light_green500">#ffc107</color>
     <color name="light_green700">#ffa100</color>
 

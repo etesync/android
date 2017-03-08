@@ -165,7 +165,6 @@
   <string name="create_collection_display_name">Anzeigename (Titel) dieser Sammlung:</string>
   <string name="create_collection_display_name_required">Titel benötigt</string>
   <string name="create_collection_description">Beschreibung (optional):</string>
-  <string name="create_collection_home_set">Übergeordnete Sammlung:</string>
   <string name="create_collection_create">Erstellen</string>
   <string name="delete_collection">Löschen</string>
   <string name="delete_collection_confirm_title">Sind Sie sicher?</string>

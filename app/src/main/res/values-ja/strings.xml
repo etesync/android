@@ -110,7 +110,6 @@
   <string name="create_collection_display_name">このコレクションの表示名 (タイトル):</string>
   <string name="create_collection_display_name_required">タイトルが必要です</string>
   <string name="create_collection_description">説明 (オプション):</string>
-  <string name="create_collection_home_set">ホーム セット:</string>
   <string name="create_collection_create">作成</string>
   <string name="delete_collection">コレクションを削除</string>
   <string name="delete_collection_confirm_title">よろしいですか?</string>

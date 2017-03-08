@@ -120,7 +120,6 @@
   <string name="create_collection_display_name">A gyűjtemény megnevezése (címe)</string>
   <string name="create_collection_display_name_required">A cím megadása feltétlenül szükséges</string>
   <string name="create_collection_description">Leírás (opcionális):</string>
-  <string name="create_collection_home_set">Gyűjtemények tárolója:</string>
   <string name="create_collection_create">Létrehozás</string>
   <string name="delete_collection">Gyűjtemény törlése</string>
   <string name="delete_collection_confirm_title">Biztos?</string>

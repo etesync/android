@@ -107,7 +107,6 @@
   <string name="create_collection_display_name">Navn (titel) på dette sæt:</string>
   <string name="create_collection_display_name_required">En titel er påkrævet</string>
   <string name="create_collection_description">Beskrivelse (valgfri):</string>
-  <string name="create_collection_home_set">Home set:</string>
   <string name="create_collection_create">Opret</string>
   <string name="delete_collection">Slet sæt</string>
   <string name="delete_collection_confirm_title">Er du sikker?</string>
