@@ -74,6 +74,18 @@ public class JournalManager extends BaseManager {
         newCall(request);
     }
 
+    public void updateJournal(Journal journal) throws Exceptions.HttpException {
+        HttpUrl remote = this.remote.resolve(journal.getUuid() + "/");
+        RequestBody body = RequestBody.create(JSON, journal.toJson());
+
+        Request request = new Request.Builder()
+                .put(body)
+                .url(remote)
+                .build();
+
+        newCall(request);
+    }
+
     public static class Journal extends Base {
         final private transient int hmacSize = 256 / 8; // hmac256 in bytes
         private transient byte[] hmac = null;
