@@ -12,6 +12,7 @@ import android.accounts.Account;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,6 +30,9 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
+import java.util.Locale;
+
+import at.bitfire.ical4android.CalendarStorageException;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreateCalendarActivity extends AppCompatActivity {
@@ -80,6 +85,18 @@ public class CreateCalendarActivity extends AppCompatActivity {
                 colorSquare.setBackgroundColor(info.color);
             } else {
                 colorSquare.setBackgroundColor(LocalCalendar.defaultColor);
+            }
+
+            final TextView stats = (TextView) findViewById(R.id.stats);
+            final View statsGroup = findViewById(R.id.stats_group);
+            try {
+                LocalCalendar resource = (LocalCalendar) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
+                        LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.NAME + "=?", new String[]{info.url})[0];
+                long count = resource.count();
+                stats.setText(String.format(Locale.getDefault(), "Events: %d", count));
+                statsGroup.setVisibility(View.VISIBLE);
+            } catch (CalendarStorageException e) {
+                e.printStackTrace();
             }
         }
     }

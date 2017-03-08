@@ -11,17 +11,26 @@ package com.etesync.syncadapter.ui;
 import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Text;
+
+import java.util.Locale;
+
+import at.bitfire.vcard4android.ContactsStorageException;
 
 public class CreateAddressBookActivity extends AppCompatActivity {
     public static final String EXTRA_ACCOUNT = "account",
@@ -48,6 +57,17 @@ public class CreateAddressBookActivity extends AppCompatActivity {
 
             final EditText desc = (EditText) findViewById(R.id.description);
             desc.setText(info.description);
+
+            final TextView stats = (TextView) findViewById(R.id.stats);
+            final View statsGroup = findViewById(R.id.stats_group);
+            try {
+                LocalAddressBook resource = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+                long count = resource.count();
+                stats.setText(String.format(Locale.getDefault(), "Contacts: %d", count));
+                statsGroup.setVisibility(View.VISIBLE);
+            } catch (ContactsStorageException e) {
+                e.printStackTrace();
+            }
         }
     }
 
