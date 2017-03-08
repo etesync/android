@@ -10,34 +10,44 @@ package com.etesync.syncadapter.model;
 
 import android.content.ContentValues;
 
+import com.etesync.syncadapter.model.ServiceDB.Collections;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 
-import com.etesync.syncadapter.GsonHelper;
-import com.etesync.syncadapter.model.ServiceDB.Collections;
 import lombok.ToString;
 
 @ToString
 public class CollectionInfo implements Serializable {
-    public transient long id;
-    public transient Long serviceID;
+    public long id;
+    public Long serviceID;
 
     public enum Type {
         ADDRESS_BOOK,
         CALENDAR
     }
 
+    @Expose
     public Type type;
 
-    public transient String url; // Essentially the uuid
+    public String url; // Essentially the uuid
 
+    @Expose
     public boolean readOnly;
+    @Expose
     public String displayName, description;
+    @Expose
     public Integer color;
 
+    @Expose
     public String timeZone;
+    @Expose
     public Boolean supportsVEVENT;
+    @Expose
     public Boolean supportsVTODO;
 
+    @Expose
     public boolean selected;
 
     public CollectionInfo() {
@@ -104,11 +114,11 @@ public class CollectionInfo implements Serializable {
     }
 
     public static CollectionInfo fromJson(String json) {
-        return GsonHelper.gson.fromJson(json, CollectionInfo.class);
+        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json, CollectionInfo.class);
     }
 
     public String toJson() {
-        return GsonHelper.gson.toJson(this, CollectionInfo.class);
+        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this, CollectionInfo.class);
     }
 
     private static Boolean getAsBooleanOrNull(ContentValues values, String field) {
