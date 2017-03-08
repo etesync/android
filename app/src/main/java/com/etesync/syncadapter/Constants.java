@@ -26,7 +26,7 @@ public class Constants {
             NOTIFICATION_TASK_SYNC = 12,
             NOTIFICATION_PERMISSIONS = 20;
 
-    public static final Uri webUri = Uri.parse("https://www.etesync.com/");
+    public static final Uri webUri = Uri.parse((DEBUG_REMOTE_URL == null) ? "https://www.etesync.com/" : DEBUG_REMOTE_URL);
     public static final Uri contactUri = Uri.parse("mailto:contact.app@etesync.com");
     public static final Uri registrationUrl = webUri.buildUpon().appendEncodedPath("accounts/signup/").build();
     public static final Uri reportIssueUri = Uri.parse("https://github.com/etesync/android/issues");
