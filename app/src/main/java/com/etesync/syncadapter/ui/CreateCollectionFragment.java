@@ -153,8 +153,8 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 if (info.url == null) {
                     // CollectionInfo doesn't have a url at this point, update it.
                     JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
-                    info.url = journal.getUuid();
                     journalManager.putJournal(journal);
+                    info.url = journal.getUuid();
                 } else {
                     JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson(), info.url);
                     journalManager.updateJournal(journal);
