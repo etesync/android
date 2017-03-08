@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -22,20 +23,30 @@ import android.widget.EditText;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.resource.LocalCalendar;
+
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreateCalendarActivity extends AppCompatActivity {
-    public static final String EXTRA_ACCOUNT = "account";
+    public static final String EXTRA_ACCOUNT = "account",
+                               EXTRA_COLLECTION_INFO = "collectionInfo",
+                               EXTRA_ALLOW_DELETE = "allowDelete";
 
     protected Account account;
+    protected CollectionInfo info;
+    protected Boolean allowDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         account = getIntent().getExtras().getParcelable(EXTRA_ACCOUNT);
+        info = (CollectionInfo) getIntent().getExtras().getSerializable(EXTRA_COLLECTION_INFO);
+        allowDelete = (Boolean) getIntent().getExtras().get(EXTRA_ALLOW_DELETE);
+        allowDelete = (allowDelete == null) ? false : allowDelete;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -56,11 +67,30 @@ public class CreateCalendarActivity extends AppCompatActivity {
                 }).show();
             }
         });
+
+        if (info != null) {
+            final EditText edit = (EditText) findViewById(R.id.display_name);
+            edit.setText(info.displayName);
+            edit.setEnabled(false);
+
+            final EditText desc = (EditText) findViewById(R.id.description);
+            desc.setText(info.description);
+
+            if (info.color != null) {
+                colorSquare.setBackgroundColor(info.color);
+            } else {
+                colorSquare.setBackgroundColor(LocalCalendar.defaultColor);
+            }
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_create_collection, menu);
+        if (info == null) {
+            getMenuInflater().inflate(R.menu.activity_create_collection, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.activity_edit_collection, menu);
+        }
         return true;
     }
 
@@ -75,9 +105,24 @@ public class CreateCalendarActivity extends AppCompatActivity {
         return false;
     }
 
+    public void onDeleteCollection(MenuItem item) {
+        if (!allowDelete) {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_error_dark)
+                    .setTitle(R.string.account_delete_collection_last_title)
+                    .setMessage(R.string.account_delete_collection_last_text)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        } else {
+            DeleteCollectionFragment.ConfirmDeleteCollectionFragment.newInstance(account, info).show(getSupportFragmentManager(), null);
+        }
+    }
+
     public void onCreateCollection(MenuItem item) {
         boolean ok = true;
-        CollectionInfo info = new CollectionInfo();
+        if (info == null) {
+            info = new CollectionInfo();
+        }
 
         EditText edit = (EditText) findViewById(R.id.display_name);
         info.displayName = edit.getText().toString();

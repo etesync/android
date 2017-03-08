@@ -18,24 +18,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class CreateAddressBookActivity extends AppCompatActivity {
-    public static final String EXTRA_ACCOUNT = "account";
+    public static final String EXTRA_ACCOUNT = "account",
+            EXTRA_COLLECTION_INFO = "collectionInfo";
 
     protected Account account;
+    protected CollectionInfo info;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         account = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
+        info = (CollectionInfo) getIntent().getExtras().getSerializable(EXTRA_COLLECTION_INFO);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_create_address_book);
+
+        if (info != null) {
+            final EditText edit = (EditText) findViewById(R.id.display_name);
+            edit.setText(info.displayName);
+            edit.setEnabled(false);
+
+            final EditText desc = (EditText) findViewById(R.id.description);
+            desc.setText(info.description);
+        }
     }
 
     @Override
@@ -57,7 +70,9 @@ public class CreateAddressBookActivity extends AppCompatActivity {
 
     public void onCreateCollection(MenuItem item) {
         boolean ok = true;
-        CollectionInfo info = new CollectionInfo();
+        if (info == null) {
+            info = new CollectionInfo();
+        }
 
         EditText edit = (EditText)findViewById(R.id.display_name);
         info.displayName = edit.getText().toString();

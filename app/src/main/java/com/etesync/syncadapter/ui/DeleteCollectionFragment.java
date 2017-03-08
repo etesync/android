@@ -81,6 +81,8 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
             Activity activity = getActivity();
             if (activity instanceof AccountActivity)
                 ((AccountActivity) activity).reload();
+            else if (activity instanceof CreateCalendarActivity)
+                activity.finish();
         }
     }
 

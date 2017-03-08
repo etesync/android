@@ -46,7 +46,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -176,81 +175,34 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         return false;
     }
 
-
-    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener onContactItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final ListView list = (ListView)parent;
             final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
             final CollectionInfo info = adapter.getItem(position);
 
-            boolean nowChecked = !info.selected;
-
-            if (list.getChoiceMode() == AbsListView.CHOICE_MODE_SINGLE)
-                // clear all other checked items
-                for (int i = adapter.getCount()-1; i >= 0; i--)
-                    adapter.getItem(i).selected = false;
-
-            OpenHelper dbHelper = new OpenHelper(AccountActivity.this);
-            try {
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.beginTransactionNonExclusive();
-
-                if (list.getChoiceMode() == AbsListView.CHOICE_MODE_SINGLE) {
-                    // disable all other collections
-                    ContentValues values = new ContentValues(1);
-                    values.put(Collections.SYNC, 0);
-                    db.update(Collections._TABLE, values, Collections.SERVICE_ID + "=?", new String[] { String.valueOf(info.serviceID) });
-                }
-
-                ContentValues values = new ContentValues(1);
-                values.put(Collections.SYNC, nowChecked ? 1 : 0);
-                db.update(Collections._TABLE, values, Collections.ID + "=?", new String[] { String.valueOf(info.id) });
-
-                db.setTransactionSuccessful();
-                db.endTransaction();
-
-                info.selected = nowChecked;
-                adapter.notifyDataSetChanged();
-            } finally {
-                dbHelper.close();
-            }
+            Intent intent = new Intent(AccountActivity.this, CreateAddressBookActivity.class);
+            intent.putExtra(CreateAddressBookActivity.EXTRA_ACCOUNT, account);
+            intent.putExtra(CreateAddressBookActivity.EXTRA_COLLECTION_INFO, info);
+            startActivity(intent);
         }
     };
 
-    private AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+    private AdapterView.OnItemClickListener onCalendarItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final ListView list = (ListView)parent;
             final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
             final CollectionInfo info = adapter.getItem(position);
 
-            PopupMenu popup = new PopupMenu(AccountActivity.this, view);
-            popup.inflate(R.menu.account_collection_operations);
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.delete_collection:
-                            if (adapter.getCount() == 1) {
-                                new AlertDialog.Builder(AccountActivity.this)
-                                        .setIcon(R.drawable.ic_error_dark)
-                                        .setTitle(R.string.account_delete_collection_last_title)
-                                        .setMessage(R.string.account_delete_collection_last_text)
-                                        .setPositiveButton(android.R.string.ok, null)
-                                        .show();
-                            } else {
-                                DeleteCollectionFragment.ConfirmDeleteCollectionFragment.newInstance(account, info).show(getSupportFragmentManager(), null);
-                            }
-                            break;
-                    }
-                    return true;
-                }
-            });
-            popup.show();
-
-            // long click was handled
-            return true;
+            Intent intent = new Intent(AccountActivity.this, CreateCalendarActivity.class);
+            intent.putExtra(CreateCalendarActivity.EXTRA_ACCOUNT, account);
+            intent.putExtra(CreateCalendarActivity.EXTRA_COLLECTION_INFO, info);
+            if (adapter.getCount() > 1) {
+                intent.putExtra(CreateCalendarActivity.EXTRA_ALLOW_DELETE, true);
+            }
+            startActivity(intent);
         }
     };
 
@@ -293,6 +245,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             AddressBookAdapter adapter = new AddressBookAdapter(this);
             adapter.addAll(info.carddav.collections);
             listCardDAV.setAdapter(adapter);
+            listCardDAV.setOnItemClickListener(onContactItemClickListener);
         } else
             card.setVisibility(View.GONE);
 
@@ -308,8 +261,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             final CalendarAdapter adapter = new CalendarAdapter(this);
             adapter.addAll(info.caldav.collections);
             listCalDAV.setAdapter(adapter);
-            listCalDAV.setOnItemClickListener(onItemClickListener);
-            listCalDAV.setOnItemLongClickListener(onItemLongClickListener);
+            listCalDAV.setOnItemClickListener(onCalendarItemClickListener);
         } else
             card.setVisibility(View.GONE);
     }
