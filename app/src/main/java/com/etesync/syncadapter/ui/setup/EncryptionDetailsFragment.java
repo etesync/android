@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.ui.widget.EditPassword;
 
@@ -64,6 +65,9 @@ public class EncryptionDetailsFragment extends Fragment {
                 SetupEncryptionFragment.newInstance(config).show(getFragmentManager(), null);
             }
         });
+
+        final TextView extra_details = (TextView) v.findViewById(R.id.encryption_extra_info);
+        extra_details.setText(getString(R.string.login_encryption_extra_info, Constants.faqUri.buildUpon().appendEncodedPath("#securing-etesync").build().toString()));
 
         return v;
     }
