@@ -197,7 +197,7 @@
     <string name="exception_show_details">Show details</string>
 
     <!-- sync errors and DebugInfoActivity -->
-    <string name="authority_log_provider">com.etesync.syncadapter.log</string>
+    <string name="authority_log_provider" translatable="false">com.etesync.syncadapter.log</string>
     <string name="debug_info_title">Debug info</string>
     <string name="sync_error_permissions">EteSync permissions</string>
     <string name="sync_error_permissions_text">Additional permissions required</string>
