@@ -42,7 +42,11 @@ public class SyncEntry {
     }
 
     public static SyncEntry fromJournalEntry(String keyBase64, JournalEntryManager.Entry entry) {
-        return GsonHelper.gson.fromJson(entry.getContent(keyBase64), SyncEntry.class);
+        return fromJson(entry.getContent(keyBase64));
+    }
+
+    static SyncEntry fromJson(String json) {
+        return GsonHelper.gson.fromJson(json, SyncEntry.class);
     }
 
     public String toJson() {

@@ -88,7 +88,8 @@ public class JournalModel {
         @Column(length = 64, unique = true, nullable = false)
         String uid;
 
-        String content;
+        @Convert(SyncEntryConverter.class)
+        SyncEntry content;
 
         @Index("journal_index")
         @ForeignKey(update = ReferentialAction.CASCADE)
@@ -96,7 +97,7 @@ public class JournalModel {
         Journal journal;
     }
 
-    public static class CollectionInfoConverter implements Converter<CollectionInfo, String> {
+    static class CollectionInfoConverter implements Converter<CollectionInfo, String> {
         @Override
         public Class<CollectionInfo> getMappedType() {
             return CollectionInfo.class;
@@ -120,6 +121,34 @@ public class JournalModel {
         @Override
         public CollectionInfo convertToMapped(Class<? extends CollectionInfo> type, String value) {
             return value == null ? null : CollectionInfo.fromJson(value);
+        }
+    }
+
+
+    static class SyncEntryConverter implements Converter<SyncEntry, String> {
+        @Override
+        public Class<SyncEntry> getMappedType() {
+            return SyncEntry.class;
+        }
+
+        @Override
+        public Class<String> getPersistedType() {
+            return String.class;
+        }
+
+        @Override
+        public Integer getPersistedSize() {
+            return null;
+        }
+
+        @Override
+        public String convertToPersisted(SyncEntry value) {
+            return value == null ? null : value.toJson();
+        }
+
+        @Override
+        public SyncEntry convertToMapped(Class<? extends SyncEntry> type, String value) {
+            return value == null ? null : SyncEntry.fromJson(value);
         }
     }
 }

@@ -231,7 +231,7 @@ abstract public class SyncManager {
     private void persistSyncEntry(String uid, SyncEntry syncEntry) {
         EntryEntity entry = new EntryEntity();
         entry.setUid(uid);
-        entry.setContent(syncEntry.toJson());
+        entry.setContent(syncEntry);
         entry.setJournal(getJournalEntity());
         data.insert(entry);
     }
