@@ -21,8 +21,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.EntryEntity;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +34,8 @@ import org.w3c.dom.Text;
 import java.util.Locale;
 
 import at.bitfire.vcard4android.ContactsStorageException;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 
 public class CreateAddressBookActivity extends AppCompatActivity {
     public static final String EXTRA_ACCOUNT = "account",
@@ -62,7 +67,13 @@ public class CreateAddressBookActivity extends AppCompatActivity {
             try {
                 LocalAddressBook resource = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
                 long count = resource.count();
-                stats.setText(String.format(Locale.getDefault(), "Contacts: %d", count));
+                EntityDataStore<Persistable> data = ((App) getApplication()).getData();
+                int entryCount = -1;
+                final JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(info.url)).limit(1).get().firstOrNull();
+                if (journalEntity != null) {
+                    entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
+                };
+                stats.setText(String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d", count, entryCount));
                 statsGroup.setVisibility(View.VISIBLE);
             } catch (ContactsStorageException e) {
                 e.printStackTrace();

@@ -28,11 +28,15 @@ import org.apache.commons.lang3.StringUtils;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.EntryEntity;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
 import java.util.Locale;
 
 import at.bitfire.ical4android.CalendarStorageException;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreateCalendarActivity extends AppCompatActivity {
@@ -92,7 +96,13 @@ public class CreateCalendarActivity extends AppCompatActivity {
                 LocalCalendar resource = (LocalCalendar) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
                         LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.NAME + "=?", new String[]{info.url})[0];
                 long count = resource.count();
-                stats.setText(String.format(Locale.getDefault(), "Events: %d", count));
+                EntityDataStore<Persistable> data = ((App) getApplication()).getData();
+                int entryCount = -1;
+                final JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(info.url)).limit(1).get().firstOrNull();
+                if (journalEntity != null) {
+                    entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
+                }
+                stats.setText(String.format(Locale.getDefault(), "Events: %d, Journal entries: %d", count, entryCount));
                 statsGroup.setVisibility(View.VISIBLE);
             } catch (CalendarStorageException e) {
                 e.printStackTrace();
