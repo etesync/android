@@ -14,16 +14,6 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-import org.apache.commons.collections4.ListUtils;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
@@ -35,12 +25,27 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.EntryEntity;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+
+import org.apache.commons.collections4.ListUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.InvalidCalendarException;
 import at.bitfire.vcard4android.ContactsStorageException;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
 
@@ -63,6 +68,9 @@ abstract public class SyncManager {
     protected OkHttpClient httpClient;
 
     protected JournalEntryManager journal;
+    private JournalEntity _journalEntity;
+
+    private EntityDataStore<Persistable> data;
 
     /**
      * remote CTag (uuid of the last entry on the server). We update it when we fetch/push and save when everything works.
@@ -101,6 +109,8 @@ abstract public class SyncManager {
         this.uniqueCollectionId = uniqueCollectionId;
         notificationManager = new NotificationHelper(context, uniqueCollectionId, notificationId());
         notificationManager.cancel();
+
+        data = ((App) context.getApplicationContext()).getData();
     }
 
     protected abstract int notificationId();
@@ -207,9 +217,25 @@ abstract public class SyncManager {
      * @return whether actual synchronization is required / can be made. true = synchronization
      * shall be continued, false = synchronization can be skipped
      */
-    abstract protected boolean prepare() throws ContactsStorageException, CalendarStorageException;
+    protected boolean prepare() throws ContactsStorageException, CalendarStorageException {
+        return true;
+    }
 
     abstract protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException, InvalidCalendarException;
+
+    private JournalEntity getJournalEntity() {
+        if (_journalEntity == null)
+            _journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(journal.getUid())).limit(1).get().first();
+        return _journalEntity;
+    }
+
+    private void persistSyncEntry(String uid, SyncEntry syncEntry) {
+        EntryEntity entry = new EntryEntity();
+        entry.setUid(uid);
+        entry.setContent(syncEntry.toJson());
+        entry.setJournal(getJournalEntity());
+        data.insert(entry);
+    }
 
     protected void applyLocalEntries() throws IOException, ContactsStorageException, CalendarStorageException, Exceptions.HttpException, InvalidCalendarException, InterruptedException {
         // FIXME: Need a better strategy
@@ -225,6 +251,7 @@ abstract public class SyncManager {
             App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
             SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+            persistSyncEntry(entry.getUuid(), cEntry);
             if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue;
             }
@@ -237,7 +264,23 @@ abstract public class SyncManager {
     }
 
     protected void fetchEntries() throws Exceptions.HttpException, ContactsStorageException, CalendarStorageException, Exceptions.IntegrityException {
-        remoteEntries = journal.getEntries(settings.password(), remoteCTag);
+        int count = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(getJournalEntity())).get().value();
+        if ((remoteCTag != null) && (count == 0)) {
+            // If we are updating an existing installation with no saved journal, we need to add
+            remoteEntries = journal.getEntries(settings.password(), null);
+            int i = 0;
+            for (JournalEntryManager.Entry entry : remoteEntries){
+                SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+                persistSyncEntry(entry.getUuid(), cEntry);
+                i++;
+                if (remoteCTag.equals(entry.getUuid())) {
+                    remoteEntries.subList(0, i).clear();
+                    break;
+                }
+            }
+        } else {
+            remoteEntries = journal.getEntries(settings.password(), remoteCTag);
+        }
 
         App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
     }
@@ -256,6 +299,7 @@ abstract public class SyncManager {
                 App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
                 SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+                persistSyncEntry(entry.getUuid(), cEntry);
                 App.log.info("Processing resource for journal entry");
                 processSyncEntry(cEntry);
 

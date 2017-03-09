@@ -127,6 +127,10 @@ dependencies {
 
     compile 'com.github.yukuku:ambilwarna:2.0.1'
 
+    compile 'io.requery:requery:1.2.0'
+    compile 'io.requery:requery-android:1.2.0'
+    annotationProcessor 'io.requery:requery-processor:1.2.0'
+
     compile group: 'com.madgag.spongycastle', name: 'core', version: '1.54.0.0'
     compile group: 'com.madgag.spongycastle', name: 'prov', version: '1.54.0.0'
     compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'

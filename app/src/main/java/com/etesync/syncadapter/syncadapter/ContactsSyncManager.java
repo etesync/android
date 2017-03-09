@@ -78,6 +78,8 @@ public class ContactsSyncManager extends SyncManager {
 
     @Override
     protected boolean prepare() throws ContactsStorageException, CalendarStorageException {
+        if (!super.prepare())
+            return false;
         // prepare local address book
         localCollection = new LocalAddressBook(account, provider);
         LocalAddressBook localAddressBook = localAddressBook();

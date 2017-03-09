@@ -47,8 +47,12 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.ui.PermissionsActivity;
+
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -195,6 +199,7 @@ public abstract class SyncAdapterService extends Service {
             }
 
             private void saveCollections(SQLiteDatabase db, Iterable<CollectionInfo> collections) {
+                EntityDataStore<Persistable> data = ((App) context.getApplicationContext()).getData();
                 Long service = dbHelper.getService(db, account, serviceType.toString());
                 db.delete(ServiceDB.Collections._TABLE, ServiceDB.Collections.SERVICE_ID + "=?", new String[]{String.valueOf(service)});
                 for (CollectionInfo collection : collections) {
@@ -202,6 +207,13 @@ public abstract class SyncAdapterService extends Service {
                     App.log.log(Level.FINE, "Saving collection", values);
                     values.put(ServiceDB.Collections.SERVICE_ID, service);
                     db.insertWithOnConflict(ServiceDB.Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.url)).limit(1).get().firstOrNull();
+                    if (journalEntity == null) {
+                        journalEntity = new JournalEntity();
+                        journalEntity.setUid(collection.url);
+                        data.insert(journalEntity);
+                    }
                 }
             }
         }

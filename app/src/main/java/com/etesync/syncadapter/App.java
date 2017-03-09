@@ -18,11 +18,18 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Process;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+
+import com.etesync.syncadapter.log.LogcatHandler;
+import com.etesync.syncadapter.log.PlainTextFormatter;
+import com.etesync.syncadapter.model.Models;
+import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.Settings;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -36,10 +43,11 @@ import java.util.logging.Logger;
 import javax.net.ssl.HostnameVerifier;
 
 import at.bitfire.cert4android.CustomCertManager;
-import com.etesync.syncadapter.log.LogcatHandler;
-import com.etesync.syncadapter.log.PlainTextFormatter;
-import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.Settings;
+import io.requery.Persistable;
+import io.requery.android.sqlite.DatabaseSource;
+import io.requery.sql.Configuration;
+import io.requery.sql.EntityDataStore;
+import io.requery.sql.TableCreationMode;
 import lombok.Cleanup;
 import lombok.Getter;
 import okhttp3.internal.tls.OkHostnameVerifier;
@@ -76,6 +84,7 @@ public class App extends Application {
         super.onCreate();
         reinitCertManager();
         reinitLogger();
+        StrictMode.enableDefaults();
     }
 
     public void reinitCertManager() {
@@ -175,5 +184,27 @@ public class App extends Application {
             app.reinitLogger();
         }
 
+    }
+
+    private EntityDataStore<Persistable> dataStore;
+
+    /**
+     * @return {@link EntityDataStore} single instance for the application.
+     * <p/>
+     * Note if you're using Dagger you can make this part of your application level module returning
+     * {@code @Provides @Singleton}.
+     */
+    public EntityDataStore<Persistable> getData() {
+        if (dataStore == null) {
+            // override onUpgrade to handle migrating to a new version
+            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 1);
+            if (BuildConfig.DEBUG) {
+                // use this in development mode to drop and recreate the tables on every upgrade
+                source.setTableCreationMode(TableCreationMode.DROP_CREATE);
+            }
+            Configuration configuration = source.getConfiguration();
+            dataStore = new EntityDataStore<>(configuration);
+        }
+        return dataStore;
     }
 }
