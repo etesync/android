@@ -230,7 +230,7 @@ public class AccountSettings {
         @Override
         @SuppressLint("UnsafeProtectedBroadcastReceiver,MissingPermission")
         public void onReceive(Context context, Intent intent) {
-            App.log.info("DAVdroid was updated, checking for AccountSettings version");
+            App.log.info("EteSync was updated, checking for AccountSettings version");
 
             // peek into AccountSettings to initiate a possible migration
             AccountManager accountManager = AccountManager.get(context);
