@@ -50,12 +50,6 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-
-import at.bitfire.cert4android.CustomCertManager;
 import com.etesync.syncadapter.AccountUpdateService;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
@@ -65,6 +59,13 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
 import com.etesync.syncadapter.model.ServiceDB.Services;
 import com.etesync.syncadapter.resource.LocalCalendar;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+
+import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -205,6 +206,11 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         }
     };
 
+    public void onChangeJournalClick(View view) {
+        Intent intent = new Intent(this, JournalViewerActivity.class);
+        intent.putExtra(JournalViewerActivity.EXTRA_ACCOUNT, account);
+        startActivity(intent);
+    }
 
     /* LOADERS AND LOADED DATA */
 

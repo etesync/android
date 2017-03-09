@@ -181,6 +181,7 @@
             android:name=".ui.AccountActivity"
             android:parentActivityName=".ui.AccountsActivity">
         </activity>
+        <activity android:name=".ui.JournalViewerActivity"/>
         <activity android:name=".ui.AccountSettingsActivity"/>
         <activity android:name=".ui.CreateAddressBookActivity"
             android:label="@string/create_addressbook"/>

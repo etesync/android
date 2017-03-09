@@ -90,6 +90,8 @@
     <string name="account_delete_collection_last_title">Can\'t delete last collection</string>
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
 
+    <string name="change_journal_title">Change Journal</string>
+
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>
     <string name="permissions_calendar">Calendar permissions</string>
@@ -190,6 +192,9 @@
     <string name="delete_collection_confirm_warning">This collection (%s) and all its data will be removed from the server.</string>
     <string name="delete_collection_deleting_collection">Deleting collection</string>
     <string name="collection_stats_title">Stats</string>
+
+    <!-- JournalViewer -->
+    <string name="journal_entries_list_empty">No entries found for this journal</string>
 
     <!-- ExceptionInfoFragment -->
     <string name="exception">An error has occurred.</string>

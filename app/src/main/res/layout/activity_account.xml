@@ -118,7 +118,7 @@
                     android:theme="@style/toolbar_theme"
                     style="@style/toolbar_style"
                     app:navigationIcon="@drawable/ic_journal"
-                    app:title="Change Journal"
+                    app:title="@string/change_journal_title"
                     android:elevation="2dp" tools:ignore="UnusedAttribute"/>
 
 
@@ -126,20 +126,22 @@
                     xmlns:tools="http://schemas.android.com/tools"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:gravity="center_vertical">
 
                     <LinearLayout android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
                         android:orientation="vertical">
 
-                        <TextView
+                        <Button
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Coming Soon..."/>
+                            android:onClick="onChangeJournalClick"
+                            android:gravity="left|center_vertical"
+                            android:padding="16dp"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:text="View (ugly preview-release)"/>
 
                     </LinearLayout>
 

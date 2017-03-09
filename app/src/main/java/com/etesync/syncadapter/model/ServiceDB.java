@@ -182,6 +182,12 @@ public class ServiceDB {
             else
                 return null;
         }
+
+        @Nullable
+        public Long getService(@NonNull Account account, String service) {
+            @Cleanup SQLiteDatabase db = getReadableDatabase();
+            return getService(db, account, service);
+        }
     }
 
 
