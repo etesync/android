@@ -34,6 +34,7 @@ import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalContact;
 import com.etesync.syncadapter.resource.LocalGroup;

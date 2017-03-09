@@ -17,7 +17,6 @@ import android.os.Bundle;
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
-import com.etesync.syncadapter.GsonHelper;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.NotificationHelper;
@@ -27,6 +26,7 @@ import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
@@ -46,7 +46,6 @@ import at.bitfire.ical4android.InvalidCalendarException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Getter;
 import okhttp3.OkHttpClient;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
@@ -444,48 +443,4 @@ abstract public class SyncManager {
     }
 
 
-    static class SyncEntry {
-        @Getter
-        private String content;
-        @Getter
-        private Actions action;
-
-        enum Actions {
-            ADD("ADD"),
-            CHANGE("CHANGE"),
-            DELETE("DELETE");
-
-            private final String text;
-
-            Actions(final String text) {
-                this.text = text;
-            }
-
-            @Override
-            public String toString() {
-                return text;
-            }
-        }
-
-        @SuppressWarnings("unused")
-        private SyncEntry() {
-        }
-
-        protected SyncEntry(String content, Actions action) {
-            this.content = content;
-            this.action = action;
-        }
-
-        boolean isAction(Actions action) {
-            return this.action.equals(action);
-        }
-
-        static SyncEntry fromJournalEntry(String keyBase64, JournalEntryManager.Entry entry) {
-            return GsonHelper.gson.fromJson(entry.getContent(keyBase64), SyncEntry.class);
-        }
-
-        String toJson() {
-            return GsonHelper.gson.toJson(this, this.getClass());
-        }
-    }
 }
