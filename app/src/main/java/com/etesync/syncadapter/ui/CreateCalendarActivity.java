@@ -76,7 +76,6 @@ public class CreateCalendarActivity extends AppCompatActivity {
         if (info != null) {
             final EditText edit = (EditText) findViewById(R.id.display_name);
             edit.setText(info.displayName);
-            edit.setEnabled(false);
 
             final EditText desc = (EditText) findViewById(R.id.description);
             desc.setText(info.description);
