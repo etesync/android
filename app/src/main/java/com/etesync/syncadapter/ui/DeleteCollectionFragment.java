@@ -14,7 +14,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -25,13 +24,17 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
 import com.etesync.syncadapter.AccountSettings;
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
-import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.JournalEntity;
+
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import okhttp3.HttpUrl;
 
 public class DeleteCollectionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Exception> {
@@ -94,13 +97,11 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
     protected static class DeleteCollectionLoader extends AsyncTaskLoader<Exception> {
         final Account account;
         final CollectionInfo collectionInfo;
-        final ServiceDB.OpenHelper dbHelper;
 
         public DeleteCollectionLoader(Context context, Account account, CollectionInfo collectionInfo) {
             super(context);
             this.account = account;
             this.collectionInfo = collectionInfo;
-            dbHelper = new ServiceDB.OpenHelper(getContext());
         }
 
         @Override
@@ -112,23 +113,20 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
         public Exception loadInBackground() {
             try {
                 // delete collection locally
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
                 journalManager.deleteJournal(new JournalManager.Journal(settings.password(), collectionInfo.toJson(), collectionInfo.url));
-
-                db.delete(ServiceDB.Collections._TABLE, ServiceDB.Collections.ID + "=?", new String[]{String.valueOf(collectionInfo.id)});
+                data.delete(JournalEntity.fetch(data, collectionInfo.url));
 
                 return null;
             } catch (Exceptions.HttpException e) {
                 return e;
             } catch (InvalidAccountException e) {
                 return e;
-            } finally {
-                dbHelper.close();
             }
         }
     }

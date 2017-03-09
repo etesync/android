@@ -32,6 +32,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +49,7 @@ import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.ui.PermissionsActivity;
 
@@ -185,35 +187,32 @@ public abstract class SyncAdapterService extends Service {
                 }
             }
 
-            @NonNull
-            private Map<String, CollectionInfo> readCollections(SQLiteDatabase db) {
-                Long service = dbHelper.getService(db, account, serviceType.toString());
-                Map<String, CollectionInfo> collections = new LinkedHashMap<>();
-                @Cleanup Cursor cursor = db.query(ServiceDB.Collections._TABLE, null, ServiceDB.Collections.SERVICE_ID + "=?", new String[]{String.valueOf(service)}, null, null, null);
-                while (cursor.moveToNext()) {
-                    ContentValues values = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cursor, values);
-                    collections.put(values.getAsString(ServiceDB.Collections.URL), CollectionInfo.fromDB(values));
-                }
-                return collections;
-            }
-
             private void saveCollections(SQLiteDatabase db, Iterable<CollectionInfo> collections) {
-                EntityDataStore<Persistable> data = ((App) context.getApplicationContext()).getData();
                 Long service = dbHelper.getService(db, account, serviceType.toString());
-                db.delete(ServiceDB.Collections._TABLE, ServiceDB.Collections.SERVICE_ID + "=?", new String[]{String.valueOf(service)});
-                for (CollectionInfo collection : collections) {
-                    ContentValues values = collection.toDB();
-                    App.log.log(Level.FINE, "Saving collection", values);
-                    values.put(ServiceDB.Collections.SERVICE_ID, service);
-                    db.insertWithOnConflict(ServiceDB.Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
-                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.url)).limit(1).get().firstOrNull();
-                    if (journalEntity == null) {
-                        journalEntity = new JournalEntity();
-                        journalEntity.setUid(collection.url);
-                        data.insert(journalEntity);
-                    }
+                EntityDataStore<Persistable> data = ((App) context.getApplicationContext()).getData();
+                Map<String, CollectionInfo> existing = new HashMap<>();
+                List<CollectionInfo> existingList = JournalEntity.getCollections(data, service);
+                for (CollectionInfo info : existingList) {
+                    existing.put(info.url, info);
+                }
+
+                for (CollectionInfo collection : collections) {
+                    App.log.log(Level.FINE, "Saving collection", collection.url);
+
+                    collection.serviceID = service;
+                    JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, collection);
+                    data.upsert(journalEntity);
+
+                    existing.remove(collection.url);
+                }
+
+                for (CollectionInfo collection : existing.values()) {
+                    App.log.log(Level.FINE, "Deleting collection", collection.url);
+
+                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.url)).limit(1).get().first();
+                    journalEntity.setDeleted(true);
+                    data.update(journalEntity);
                 }
             }
         }

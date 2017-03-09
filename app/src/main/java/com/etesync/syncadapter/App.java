@@ -8,11 +8,19 @@
 
 package com.etesync.syncadapter;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,6 +35,8 @@ import android.util.Log;
 
 import com.etesync.syncadapter.log.LogcatHandler;
 import com.etesync.syncadapter.log.PlainTextFormatter;
+import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.Models;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
@@ -35,6 +45,8 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -206,5 +218,57 @@ public class App extends Application {
             dataStore = new EntityDataStore<>(configuration);
         }
         return dataStore;
+    }
+
+    // update from previous account settings
+
+    private final static String PREF_VERSION = "version";
+
+    private void update(int fromVersion) {
+        App.log.info("Updating from version " + fromVersion + " to " + BuildConfig.VERSION_CODE);
+
+        if (fromVersion < 6) {
+            EntityDataStore<Persistable> data = this.getData();
+
+            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
+
+            List<CollectionInfo> collections = readCollections(dbHelper);
+            for (CollectionInfo info : collections) {
+                JournalEntity journalEntity = new JournalEntity(info);
+                data.insert(journalEntity);
+            }
+
+            @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(ServiceDB.Collections._TABLE, null, null);
+        }
+    }
+
+    public static class AppUpdatedReceiver extends BroadcastReceiver {
+
+        @Override
+        @SuppressLint("UnsafeProtectedBroadcastReceiver,MissingPermission")
+        public void onReceive(Context context, Intent intent) {
+            App.log.info("EteSync was updated, checking for app version");
+
+            App app = (App) context.getApplicationContext();
+            SharedPreferences prefs = app.getSharedPreferences("app", Context.MODE_PRIVATE);
+            int fromVersion = prefs.getInt(PREF_VERSION, 1);
+            app.update(fromVersion);
+            prefs.edit().putInt(PREF_VERSION, BuildConfig.VERSION_CODE).apply();
+        }
+
+    }
+
+    @NonNull
+    private List<CollectionInfo> readCollections(ServiceDB.OpenHelper dbHelper) {
+        @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+        List<CollectionInfo> collections = new LinkedList<>();
+        @Cleanup Cursor cursor = db.query(ServiceDB.Collections._TABLE, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            ContentValues values = new ContentValues();
+            DatabaseUtils.cursorRowToContentValues(cursor, values);
+            collections.add(CollectionInfo.fromDB(values));
+        }
+        return collections;
     }
 }

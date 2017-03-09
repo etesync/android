@@ -93,26 +93,6 @@ public class CollectionInfo implements Serializable {
         return info;
     }
 
-    public ContentValues toDB() {
-        ContentValues values = new ContentValues();
-        // Collections.SERVICE_ID is never changed
-
-        values.put(Collections.URL, url);
-        values.put(Collections.READ_ONLY, readOnly ? 1 : 0);
-        values.put(Collections.DISPLAY_NAME, displayName);
-        values.put(Collections.DESCRIPTION, description);
-        values.put(Collections.COLOR, color);
-
-        values.put(Collections.TIME_ZONE, timeZone);
-        if (supportsVEVENT != null)
-            values.put(Collections.SUPPORTS_VEVENT, supportsVEVENT ? 1 : 0);
-        if (supportsVTODO != null)
-            values.put(Collections.SUPPORTS_VTODO, supportsVTODO ? 1 : 0);
-
-        values.put(Collections.SYNC, selected ? 1 : 0);
-        return values;
-    }
-
     public static CollectionInfo fromJson(String json) {
         return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json, CollectionInfo.class);
     }

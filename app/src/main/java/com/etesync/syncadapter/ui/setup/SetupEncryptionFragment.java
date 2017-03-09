@@ -35,10 +35,13 @@ import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Helpers;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.resource.LocalTaskList;
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration;
 import at.bitfire.ical4android.TaskProvider;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
 
 public class SetupEncryptionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Configuration> {
@@ -176,12 +179,13 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         values.put(ServiceDB.Services.ACCOUNT_NAME, accountName);
         values.put(ServiceDB.Services.SERVICE, service);
         long serviceID = db.insertWithOnConflict(ServiceDB.Services._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
         // insert collections
         for (CollectionInfo collection : info.collections.values()) {
-            values = collection.toDB();
-            values.put(ServiceDB.Collections.SERVICE_ID, serviceID);
-            db.insertWithOnConflict(ServiceDB.Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            collection.serviceID = serviceID;
+            JournalEntity journalEntity = new JournalEntity(collection);
+            data.insert(journalEntity);
         }
 
         return serviceID;

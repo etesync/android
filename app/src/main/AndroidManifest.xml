@@ -61,6 +61,15 @@
             </intent-filter>
         </receiver>
         <receiver
+            android:name=".App$AppUpdatedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" android:path="com.etesync.syncadapter" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".AccountSettings$AppUpdatedReceiver"
             android:exported="true">
             <intent-filter>

@@ -1,16 +1,21 @@
 package com.etesync.syncadapter.model;
 
-import io.requery.CascadeAction;
+import java.util.LinkedList;
+import java.util.List;
+
 import io.requery.Column;
+import io.requery.Convert;
+import io.requery.Converter;
 import io.requery.Entity;
 import io.requery.ForeignKey;
 import io.requery.Generated;
 import io.requery.Index;
 import io.requery.Key;
 import io.requery.ManyToOne;
-import io.requery.OneToMany;
-import io.requery.OneToOne;
+import io.requery.Persistable;
+import io.requery.PostLoad;
 import io.requery.ReferentialAction;
+import io.requery.sql.EntityDataStore;
 
 public class JournalModel {
     @Entity
@@ -21,6 +26,57 @@ public class JournalModel {
 
         @Column(length = 64, unique = true, nullable = false)
         String uid;
+
+        @Convert(CollectionInfoConverter.class)
+        CollectionInfo info;
+
+        long service;
+
+        boolean deleted;
+
+        @PostLoad
+        void afterLoad() {
+            this.info.serviceID = service;
+            this.info.url = uid;
+        }
+
+        public Journal() {
+            this.deleted = false;
+        }
+
+        public Journal(CollectionInfo info) {
+            this();
+            this.info = info;
+            this.uid = info.url;
+            this.service = info.serviceID;
+        }
+
+        public static List<CollectionInfo> getCollections(EntityDataStore<Persistable> data, long service) {
+            List<CollectionInfo> ret = new LinkedList<>();
+
+            List<JournalEntity> journals = data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get().toList();
+            for (JournalEntity journal : journals) {
+                // FIXME: For some reason this isn't always being called, manually do it here.
+                journal.afterLoad();
+                ret.add(journal.getInfo());
+            }
+
+            return ret;
+        }
+
+        public static JournalEntity fetch(EntityDataStore<Persistable> data, String url) {
+            return data.select(JournalEntity.class).where(JournalEntity.UID.eq(url)).limit(1).get().firstOrNull();
+        }
+
+        public static JournalEntity fetchOrCreate(EntityDataStore<Persistable> data, CollectionInfo collection) {
+            JournalEntity journalEntity = fetch(data, collection.url);
+            if (journalEntity == null) {
+                journalEntity = new JournalEntity(collection);
+            } else {
+                journalEntity.setInfo(collection);
+            }
+            return journalEntity;
+        }
     }
 
     @Entity
@@ -38,5 +94,32 @@ public class JournalModel {
         @ForeignKey(update = ReferentialAction.CASCADE)
         @ManyToOne
         Journal journal;
+    }
+
+    public static class CollectionInfoConverter implements Converter<CollectionInfo, String> {
+        @Override
+        public Class<CollectionInfo> getMappedType() {
+            return CollectionInfo.class;
+        }
+
+        @Override
+        public Class<String> getPersistedType() {
+            return String.class;
+        }
+
+        @Override
+        public Integer getPersistedSize() {
+            return null;
+        }
+
+        @Override
+        public String convertToPersisted(CollectionInfo value) {
+            return value == null ? null : value.toJson();
+        }
+
+        @Override
+        public CollectionInfo convertToMapped(Class<? extends CollectionInfo> type, String value) {
+            return value == null ? null : CollectionInfo.fromJson(value);
+        }
     }
 }

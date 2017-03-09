@@ -11,21 +11,13 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.support.annotation.NonNull;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.logging.Level;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
@@ -34,13 +26,20 @@ import com.etesync.syncadapter.NotificationHelper;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.ServiceDB.Collections;
 import com.etesync.syncadapter.model.ServiceDB.Services;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
 import at.bitfire.ical4android.CalendarStorageException;
-import lombok.Cleanup;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import okhttp3.HttpUrl;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
@@ -117,7 +116,12 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
 
                 ret = HttpUrl.get(settings.getUri());
 
-                Map<String, CollectionInfo> remote = remoteCalendars(db, service);
+                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+                Map<String, CollectionInfo> remote = new HashMap<>();
+                List<CollectionInfo> remoteCollections = JournalEntity.getCollections(data, service);
+                for (CollectionInfo info : remoteCollections) {
+                    remote.put(info.url, info);
+                }
 
                 LocalCalendar[] local = (LocalCalendar[])LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, null, null);
 
@@ -150,23 +154,6 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
             }
 
             return ret;
-        }
-
-        @NonNull
-        private Map<String, CollectionInfo> remoteCalendars(@NonNull SQLiteDatabase db, Long service) {
-            Map<String, CollectionInfo> collections = new LinkedHashMap<>();
-            if (service != null) {
-                @Cleanup Cursor cursor = db.query(Collections._TABLE, null,
-                        Collections.SERVICE_ID + "=? AND " + Collections.SUPPORTS_VEVENT + "!=0 AND " + Collections.SYNC,
-                        new String[]{String.valueOf(service)}, null, null, null);
-                while (cursor.moveToNext()) {
-                    ContentValues values = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cursor, values);
-                    CollectionInfo info = CollectionInfo.fromDB(values);
-                    collections.put(info.url, info);
-                }
-            }
-            return collections;
         }
     }
 

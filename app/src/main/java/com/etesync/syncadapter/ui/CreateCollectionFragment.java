@@ -27,13 +27,18 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import com.etesync.syncadapter.AccountSettings;
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
+
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
 import okhttp3.HttpUrl;
 
@@ -161,9 +166,11 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 }
 
                 // 2. add collection to service
-                ContentValues values = info.toDB();
-                values.put(ServiceDB.Collections.SERVICE_ID, serviceID);
-                db.insertWithOnConflict(ServiceDB.Collections._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+                info.serviceID = serviceID;
+                JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, info);
+                data.upsert(journalEntity);
+
 
                 requestSync(authority);
             } catch (IllegalStateException | Exceptions.HttpException e) {

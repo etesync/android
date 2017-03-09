@@ -100,21 +100,6 @@ public class ServiceDB {
                     Services.SERVICE + " TEXT NOT NULL" +
             ")");
             db.execSQL("CREATE UNIQUE INDEX services_account ON " + Services._TABLE + " (" + Services.ACCOUNT_NAME + "," + Services.SERVICE + ")");
-
-            db.execSQL("CREATE TABLE " + Collections._TABLE + "(" +
-                    Collections.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Collections.SERVICE_ID + " INTEGER NOT NULL REFERENCES " + Services._TABLE +" ON DELETE CASCADE," +
-                    Collections.URL + " TEXT NOT NULL," +
-                    Collections.READ_ONLY + " INTEGER DEFAULT 0 NOT NULL," +
-                    Collections.DISPLAY_NAME + " TEXT NULL," +
-                    Collections.DESCRIPTION + " TEXT NULL," +
-                    Collections.COLOR + " INTEGER NULL," +
-                    Collections.TIME_ZONE + " TEXT NULL," +
-                    Collections.SUPPORTS_VEVENT + " INTEGER NULL," +
-                    Collections.SUPPORTS_VTODO + " INTEGER NULL," +
-                    Collections.SYNC + " INTEGER DEFAULT 0 NOT NULL" +
-            ")");
-            db.execSQL("CREATE UNIQUE INDEX collections_service_url ON " + Collections._TABLE + "(" + Collections.SERVICE_ID + "," + Collections.URL + ")");
         }
 
         @Override

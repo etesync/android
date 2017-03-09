@@ -18,7 +18,6 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import android.content.Loader;
 import android.content.ServiceConnection;
 import android.content.SyncStatusObserver;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -34,7 +32,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -64,11 +61,13 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
-import com.etesync.syncadapter.model.ServiceDB.Collections;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
 import com.etesync.syncadapter.model.ServiceDB.Services;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import at.bitfire.ical4android.TaskProvider;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
@@ -331,6 +330,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
             @Cleanup OpenHelper dbHelper = new OpenHelper(getContext());
             SQLiteDatabase db = dbHelper.getReadableDatabase();
+            EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
             @Cleanup Cursor cursor = db.query(
                     Services._TABLE,
@@ -345,32 +345,18 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
                     info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
-                    info.carddav.collections = readCollections(db, id);
-
+                    info.carddav.collections = JournalEntity.getCollections(data, id);
                 } else if (Services.SERVICE_CALDAV.equals(service)) {
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
                     info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
-                    info.caldav.collections = readCollections(db, id);
+                    info.caldav.collections = JournalEntity.getCollections(data, id);
                 }
             }
             return info;
         }
-
-        private List<CollectionInfo> readCollections(@NonNull SQLiteDatabase db, long service) {
-            List<CollectionInfo> collections = new LinkedList<>();
-            @Cleanup Cursor cursor = db.query(Collections._TABLE, null, Collections.SERVICE_ID + "=?",
-                    new String[] { String.valueOf(service) }, null, null, Collections.SUPPORTS_VEVENT + " DESC," + Collections.DISPLAY_NAME);
-            while (cursor.moveToNext()) {
-                ContentValues values = new ContentValues();
-                DatabaseUtils.cursorRowToContentValues(cursor, values);
-                collections.add(CollectionInfo.fromDB(values));
-            }
-            return collections;
-        }
-
     }
 
 

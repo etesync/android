@@ -11,18 +11,11 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import java.util.logging.Level;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
@@ -32,10 +25,14 @@ import com.etesync.syncadapter.NotificationHelper;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.ServiceDB.Collections;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
-import lombok.Cleanup;
+
+import java.util.logging.Level;
+
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import okhttp3.HttpUrl;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
@@ -72,7 +69,8 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                 Long service = dbHelper.getService(db, account, ServiceDB.Services.SERVICE_CARDDAV);
                 if (service != null) {
                     HttpUrl principal = HttpUrl.get(settings.getUri());
-                    CollectionInfo info = remoteAddressBook(db, service);
+                    EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+                    CollectionInfo info = JournalEntity.getCollections(data, service).get(0);
                     try {
                         ContactsSyncManager syncManager = new ContactsSyncManager(getContext(), account, settings, extras, authority, provider, syncResult, principal, info);
                         syncManager.performSync();
@@ -102,18 +100,6 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
             }
 
             App.log.info("Address book sync complete");
-        }
-
-        @Nullable
-        private CollectionInfo remoteAddressBook(@NonNull SQLiteDatabase db, long service) {
-            @Cleanup Cursor c = db.query(Collections._TABLE, null,
-                    Collections.SERVICE_ID + "=? AND " + Collections.SYNC, new String[]{String.valueOf(service)}, null, null, null);
-            if (c.moveToNext()) {
-                ContentValues values = new ContentValues();
-                DatabaseUtils.cursorRowToContentValues(c, values);
-                return CollectionInfo.fromDB(values);
-            } else
-                return null;
         }
     }
 

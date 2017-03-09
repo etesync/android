@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 
 import com.etesync.syncadapter.AccountSettings;
@@ -45,7 +46,11 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions.HttpException;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
+
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
@@ -238,6 +243,14 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
             report.append("SQLITE DUMP\n");
             @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
             dbHelper.dump(report);
+            report.append("\n");
+
+            report.append("JOURNALS DUMP\n");
+            EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+            List<JournalEntity> journals = data.select(JournalEntity.class).where(JournalEntity.DELETED.eq(false)).get().toList();
+            for (JournalEntity journal : journals) {
+                report.append(journal.toString() + "\n");
+            }
             report.append("\n");
 
             try {
