@@ -18,28 +18,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
+
 public class EditCollectionActivity extends CreateCollectionActivity {
-    private final static String EXTRA_ALLOW_DELETE = "allowDelete";
-
-    protected boolean allowDelete;
-
-    public static Intent newIntent(Context context, Account account, CollectionInfo info, boolean allowDelete) {
+    public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, EditCollectionActivity.class);
         intent.putExtra(CreateCollectionActivity.EXTRA_ACCOUNT, account);
         intent.putExtra(CreateCollectionActivity.EXTRA_COLLECTION_INFO, info);
-        intent.putExtra(EXTRA_ALLOW_DELETE, allowDelete);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        allowDelete = getIntent().getExtras().getBoolean(EXTRA_ALLOW_DELETE, false);
 
         setTitle(R.string.edit_collection);
 
@@ -70,7 +68,10 @@ public class EditCollectionActivity extends CreateCollectionActivity {
     }
 
     public void onDeleteCollection(MenuItem item) {
-        if (!allowDelete) {
+        EntityDataStore<Persistable> data = ((App) getApplication()).getData();
+        int journalCount = data.count(JournalEntity.class).where(JournalEntity.SERVICE.eq(info.serviceID)).get().value();
+
+        if (journalCount < 2) {
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.ic_error_dark)
                     .setTitle(R.string.account_delete_collection_last_title)

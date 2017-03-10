@@ -180,13 +180,13 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
             final CollectionInfo info = adapter.getItem(position);
 
-            startActivity(EditCollectionActivity.newIntent(AccountActivity.this, account, info, (adapter.getCount() > 1)));
+            startActivity(ViewCollectionActivity.newIntent(AccountActivity.this, account, info));
         }
     };
 
     public void onChangeJournalClick(View view) {
-        Intent intent = new Intent(this, JournalViewerActivity.class);
-        intent.putExtra(JournalViewerActivity.EXTRA_ACCOUNT, account);
+        Intent intent = new Intent(this, ViewCollectionActivity.class);
+        intent.putExtra(ViewCollectionActivity.EXTRA_ACCOUNT, account);
         startActivity(intent);
     }
 

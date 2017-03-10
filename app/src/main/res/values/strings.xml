@@ -187,6 +187,7 @@
     <string name="create_collection_display_name">Display name (title) of this collection:</string>
     <string name="create_collection_display_name_required">Title is required</string>
     <string name="create_collection_description">Description (optional):</string>
+    <string name="view_collection_edit">Edit</string>
     <string name="create_collection_create">Save</string>
     <string name="delete_collection">Delete</string>
     <string name="delete_collection_confirm_title">Are you sure?</string>

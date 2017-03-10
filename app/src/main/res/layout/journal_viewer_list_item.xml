@@ -19,6 +19,11 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             tools:text="Title"/>
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Subtitle"/>
 
     </LinearLayout>
 </LinearLayout>

@@ -10,6 +10,7 @@ package com.etesync.syncadapter.ui.journalviewer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
@@ -31,15 +33,15 @@ import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
 public class ListEntriesFragment extends ListFragment implements AdapterView.OnItemClickListener {
-    protected static final String EXTRA_JOURNAL = "journal";
+    protected static final String EXTRA_COLLECTION_INFO = "collectionInfo";
 
     private EntityDataStore<Persistable> data;
     private JournalEntity journalEntity;
 
-    public static ListEntriesFragment newInstance(String journal) {
+    public static ListEntriesFragment newInstance(CollectionInfo info) {
         ListEntriesFragment frag = new ListEntriesFragment();
         Bundle args = new Bundle(1);
-        args.putSerializable(EXTRA_JOURNAL, journal);
+        args.putSerializable(EXTRA_COLLECTION_INFO, info);
         frag.setArguments(args);
         return frag;
     }
@@ -48,14 +50,14 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         data = ((App) getContext().getApplicationContext()).getData();
-        String name = getArguments().getString(EXTRA_JOURNAL);
-        journalEntity = JournalModel.Journal.fetch(data, name);
+        CollectionInfo info = (CollectionInfo) getArguments().getSerializable(EXTRA_COLLECTION_INFO);
+        journalEntity = JournalModel.Journal.fetch(data, info.url);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle(String.format(Locale.getDefault(), "%s (%d)", journalEntity.getInfo().displayName, data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value()));
-        return inflater.inflate(R.layout.journal_viewer_list_entries, container, false);
+        getActivity().setTitle(journalEntity.getInfo().displayName);
+        return inflater.inflate(R.layout.journal_viewer_list, container, false);
     }
 
     @Override
@@ -74,24 +76,52 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EntryEntity entry = (EntryEntity) getListAdapter().getItem(position);
         new AlertDialog.Builder(getActivity())
-                .setTitle("Raw dump: " + entry.getUid())
-                .setMessage("Action: " + entry.getContent().getAction().toString() + "\nUid: " + entry.getUid() + "\n" + entry.getContent().getContent()).show();
+                .setTitle("Raw dump")
+                .setMessage("Action: " + entry.getContent().getAction().toString() + "\nIntegrity: " + entry.getUid() + "\n" + entry.getContent().getContent()).show();
     }
 
-    static class EntriesListAdapter extends ArrayAdapter<EntryEntity> {
-        public EntriesListAdapter(Context context) {
-            super(context, R.layout.journal_viewer_list_journals_item);
+    class EntriesListAdapter extends ArrayAdapter<EntryEntity> {
+        EntriesListAdapter(Context context) {
+            super(context, R.layout.journal_viewer_list_item);
         }
 
+        private String getLine(String content, String prefix) {
+            int start = content.indexOf(prefix);
+            if (start >= 0) {
+                int end = content.indexOf("\n", start);
+                content = content.substring(start + prefix.length(), end);
+            } else {
+                content = null;
+            }
+            return content;
+        }
         @Override
-        public View getView(int position, View v, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View v, @NonNull ViewGroup parent) {
             if (v == null)
-                v = LayoutInflater.from(getContext()).inflate(R.layout.journal_viewer_list_journals_item, parent, false);
+                v = LayoutInflater.from(getContext()).inflate(R.layout.journal_viewer_list_item, parent, false);
 
             EntryEntity entryEntity = getItem(position);
 
             TextView tv = (TextView) v.findViewById(R.id.title);
-            tv.setText(String.format(Locale.getDefault(), "%s: %s", entryEntity.getContent().getAction().toString(), entryEntity.getUid()));
+
+            // FIXME: hacky way to make it show sensible info
+            CollectionInfo info = journalEntity.getInfo();
+            String fullContent = entryEntity.getContent().getContent();
+            String prefix;
+            if (info.type == CollectionInfo.Type.CALENDAR) {
+                prefix = "SUMMARY:";
+            } else {
+                prefix = "FN:";
+            }
+            String content = getLine(fullContent, prefix);
+            content = (content != null) ? content : entryEntity.getUid().substring(0, 20);
+            tv.setText(String.format(Locale.getDefault(), "%s: %s", entryEntity.getContent().getAction().toString(), content));
+
+            tv = (TextView) v.findViewById(R.id.description);
+            content = getLine(fullContent, "UID:");
+            content = "UID: " + ((content != null) ? content : "Not found");
+            tv.setText(content);
 
             return v;
         }

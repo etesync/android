@@ -87,7 +87,7 @@ public class ListJournalsFragment extends ListFragment implements AdapterView.On
         if (item.getViewType() == 1) {
             CollectionInfo info = ((ListItem) item).info;
             getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, ListEntriesFragment.newInstance(info.url))
+                    .replace(android.R.id.content, ListEntriesFragment.newInstance(info))
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         }
