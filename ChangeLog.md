@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.10.0
+* Open FAQ, user guide and signup page inside the app
+* Add calendar/contacts view and edits screens
+* Show the change journal on calendar/contacts view screen
+* Journals are now cached locally
+* Setup account page: added more info about the encryption password.
+* Update German translation
+
 ## Version 0.9.2
 * Reword some parts of the UI
 * Add a "Coming soon" section for the Change Journal
