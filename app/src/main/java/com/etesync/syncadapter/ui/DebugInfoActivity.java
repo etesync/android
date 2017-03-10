@@ -46,6 +46,7 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions.HttpException;
+import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
 
@@ -250,6 +251,8 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
             List<JournalEntity> journals = data.select(JournalEntity.class).where(JournalEntity.DELETED.eq(false)).get().toList();
             for (JournalEntity journal : journals) {
                 report.append(journal.toString() + "\n");
+                int entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journal)).get().value();
+                report.append("\tEntries: " + String.valueOf(entryCount) + "\n\n");
             }
             report.append("\n");
 
