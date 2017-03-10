@@ -137,8 +137,15 @@ public class WebViewActivity extends AppCompatActivity {
         mWebView.invalidate();
     }
 
+    private boolean uriEqual(Uri uri1, Uri uri2) {
+        return uri1.getHost().equals(uri2.getHost()) &&
+                uri1.getPath().equals(uri2.getPath());
+    }
+
     private boolean shouldOverrideUrl(Uri uri) {
-        if (Constants.webUri.getHost().equals(uri.getHost())) {
+        if (uriEqual(Constants.faqUri, uri) ||
+                uriEqual(Constants.helpUri, uri) ||
+                uriEqual(Constants.registrationUrl, uri)) {
             if (uri.getQueryParameter(QUERY_KEY_EMBEDDED) != null) {
                 return false;
             } else {
