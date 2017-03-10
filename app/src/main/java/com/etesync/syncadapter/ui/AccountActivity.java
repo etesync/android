@@ -184,12 +184,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         }
     };
 
-    public void onChangeJournalClick(View view) {
-        Intent intent = new Intent(this, ViewCollectionActivity.class);
-        intent.putExtra(ViewCollectionActivity.EXTRA_ACCOUNT, account);
-        startActivity(intent);
-    }
-
     /* LOADERS AND LOADED DATA */
 
     protected static class AccountInfo {

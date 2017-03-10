@@ -100,56 +100,5 @@
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardUseCompatPadding="true"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.Toolbar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/toolbar_theme"
-                    style="@style/toolbar_style"
-                    app:navigationIcon="@drawable/ic_journal"
-                    app:title="@string/change_journal_title"
-                    android:elevation="2dp" tools:ignore="UnusedAttribute"/>
-
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:onClick="onChangeJournalClick"
-                            android:gravity="left|center_vertical"
-                            android:padding="16dp"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:text="View (ugly preview-release)"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
     </LinearLayout>
 </ScrollView>
