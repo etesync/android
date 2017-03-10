@@ -183,10 +183,8 @@
         </activity>
         <activity android:name=".ui.JournalViewerActivity"/>
         <activity android:name=".ui.AccountSettingsActivity"/>
-        <activity android:name=".ui.CreateAddressBookActivity"
-            android:label="@string/create_addressbook"/>
-        <activity android:name=".ui.CreateCalendarActivity"
-                  android:label="@string/create_calendar"/>
+        <activity android:name=".ui.CreateCollectionActivity"/>
+        <activity android:name=".ui.EditCollectionActivity"/>
 
         <activity
             android:name=".ui.DebugInfoActivity"

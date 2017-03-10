@@ -39,6 +39,7 @@
             android:inputType="textAutoCorrect"/>
 
         <LinearLayout
+            android:id="@+id/color_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -59,27 +60,5 @@
                 android:text="@string/create_collection_color"/>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/stats_group"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="@string/collection_stats_title"/>
-
-            <TextView
-                android:id="@+id/stats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp" />
-        </LinearLayout>
     </LinearLayout>
-
 </ScrollView>

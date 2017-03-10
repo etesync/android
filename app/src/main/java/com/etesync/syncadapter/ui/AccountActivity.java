@@ -61,7 +61,6 @@ import com.etesync.syncadapter.model.ServiceDB.Services;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -164,45 +163,24 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        Intent intent;
         switch (item.getItemId()) {
             case R.id.create_calendar:
-                intent = new Intent(this, CreateCalendarActivity.class);
-                intent.putExtra(CreateCalendarActivity.EXTRA_ACCOUNT, account);
-                startActivity(intent);
+                CollectionInfo info = new CollectionInfo();
+                info.type = CollectionInfo.Type.CALENDAR;
+                startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
                 break;
         }
         return false;
     }
 
-    private AdapterView.OnItemClickListener onContactItemClickListener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final ListView list = (ListView)parent;
             final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
             final CollectionInfo info = adapter.getItem(position);
 
-            Intent intent = new Intent(AccountActivity.this, CreateAddressBookActivity.class);
-            intent.putExtra(CreateAddressBookActivity.EXTRA_ACCOUNT, account);
-            intent.putExtra(CreateAddressBookActivity.EXTRA_COLLECTION_INFO, info);
-            startActivity(intent);
-        }
-    };
-
-    private AdapterView.OnItemClickListener onCalendarItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final ListView list = (ListView)parent;
-            final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
-            final CollectionInfo info = adapter.getItem(position);
-
-            Intent intent = new Intent(AccountActivity.this, CreateCalendarActivity.class);
-            intent.putExtra(CreateCalendarActivity.EXTRA_ACCOUNT, account);
-            intent.putExtra(CreateCalendarActivity.EXTRA_COLLECTION_INFO, info);
-            if (adapter.getCount() > 1) {
-                intent.putExtra(CreateCalendarActivity.EXTRA_ALLOW_DELETE, true);
-            }
-            startActivity(intent);
+            startActivity(EditCollectionActivity.newIntent(AccountActivity.this, account, info, (adapter.getCount() > 1)));
         }
     };
 
@@ -250,7 +228,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             AddressBookAdapter adapter = new AddressBookAdapter(this);
             adapter.addAll(info.carddav.collections);
             listCardDAV.setAdapter(adapter);
-            listCardDAV.setOnItemClickListener(onContactItemClickListener);
+            listCardDAV.setOnItemClickListener(onItemClickListener);
         } else
             card.setVisibility(View.GONE);
 
@@ -266,7 +244,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             final CalendarAdapter adapter = new CalendarAdapter(this);
             adapter.addAll(info.caldav.collections);
             listCalDAV.setAdapter(adapter);
-            listCalDAV.setOnItemClickListener(onCalendarItemClickListener);
+            listCalDAV.setOnItemClickListener(onItemClickListener);
         } else
             card.setVisibility(View.GONE);
     }
