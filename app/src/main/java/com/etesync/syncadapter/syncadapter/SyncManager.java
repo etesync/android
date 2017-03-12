@@ -120,7 +120,7 @@ abstract public class SyncManager {
     public void performSync() {
         int syncPhase = R.string.sync_phase_prepare;
         try {
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             if (!prepare()) {
                 App.log.info("No reason to synchronize, aborting");
                 return;
@@ -129,51 +129,51 @@ abstract public class SyncManager {
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_query_capabilities;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             queryCapabilities();
 
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_prepare_local;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             prepareLocal();
 
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_fetch_entries;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             fetchEntries();
 
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_apply_remote_entries;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             applyRemoteEntries();
 
             /* Create journal entries out of local changes. */
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_create_local_entries;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             createLocalEntries();
 
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_apply_local_entries;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             applyLocalEntries();
 
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_push_entries;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             pushEntries();
 
             /* Cleanup and finalize changes */
             if (Thread.interrupted())
                 return;
             syncPhase = R.string.sync_phase_post_processing;
-            App.log.info("Sync phase: " + syncPhase);
+            App.log.info("Sync phase: " + context.getString(syncPhase));
             postProcess();
         } catch (IOException e) {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e);
