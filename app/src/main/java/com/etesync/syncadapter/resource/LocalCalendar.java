@@ -83,6 +83,16 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         update(valuesFromCollectionInfo(info, updateColor));
     }
 
+    public static LocalCalendar findByName(Account account, ContentProviderClient provider, AndroidCalendarFactory factory, String name) throws FileNotFoundException, CalendarStorageException {
+        AndroidCalendar ret[] = LocalCalendar.find(account, provider, factory, Calendars.NAME + "==?", new String[]{name});
+        if (ret.length == 1) {
+            return (LocalCalendar) ret[0];
+        } else {
+            App.log.severe("No calendar found for name " + name);
+            return null;
+        }
+    }
+
     private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
         ContentValues values = new ContentValues();
         values.put(Calendars.NAME, info.url);
