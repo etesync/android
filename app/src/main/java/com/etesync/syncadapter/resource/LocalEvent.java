@@ -11,6 +11,7 @@ package com.etesync.syncadapter.resource;
 import android.annotation.TargetApi;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Build;
 import android.os.RemoteException;
 import android.provider.CalendarContract;
@@ -18,11 +19,12 @@ import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.etesync.syncadapter.App;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import com.etesync.syncadapter.App;
 import at.bitfire.ical4android.AndroidCalendar;
 import at.bitfire.ical4android.AndroidEvent;
 import at.bitfire.ical4android.AndroidEventFactory;
@@ -37,6 +39,8 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
     static final String COLUMN_ETAG = CalendarContract.Events.SYNC_DATA1,
             COLUMN_UID = Build.VERSION.SDK_INT >= 17 ? Events.UID_2445 : Events.SYNC_DATA2,
             COLUMN_SEQUENCE = CalendarContract.Events.SYNC_DATA3;
+
+    private boolean saveAsDirty = false; // When true, the resource will be saved as dirty
 
     @Getter
     protected String fileName;
@@ -108,7 +112,7 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
 
         builder.withValue(COLUMN_UID, event.uid)
                 .withValue(COLUMN_SEQUENCE, eventToBuild.sequence)
-                .withValue(CalendarContract.Events.DIRTY, 0)
+                .withValue(CalendarContract.Events.DIRTY, saveAsDirty ? 1 : 0)
                 .withValue(CalendarContract.Events.DELETED, 0);
 
         if (buildException)
@@ -118,6 +122,15 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
                     .withValue(COLUMN_ETAG, eTag);
     }
 
+    public Uri addAsDirty() throws CalendarStorageException {
+        saveAsDirty = true;
+        return this.add();
+    }
+
+    public Uri updateAsDirty(Event event) throws CalendarStorageException {
+        saveAsDirty = true;
+        return this.update(event);
+    }
 
     /* custom queries */
 
@@ -154,7 +167,6 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
             throw new CalendarStorageException("Couldn't update UID", e);
         }
     }
-
 
     static class Factory implements AndroidEventFactory {
         static final Factory INSTANCE = new Factory();

@@ -20,6 +20,9 @@ import android.provider.ContactsContract.RawContacts.Data;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.model.UnknownProperties;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,8 +30,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.model.UnknownProperties;
 import at.bitfire.vcard4android.AndroidAddressBook;
 import at.bitfire.vcard4android.AndroidContact;
 import at.bitfire.vcard4android.AndroidContactFactory;
@@ -43,6 +44,8 @@ import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 public class LocalContact extends AndroidContact implements LocalResource {
     public static final String COLUMN_HASHCODE = ContactsContract.RawContacts.SYNC3;
+
+    private boolean saveAsDirty = false; // When true, the resource will be saved as dirty
 
     protected final Set<Long>
             cachedGroupMemberships = new HashSet<>(),
@@ -166,22 +169,38 @@ public class LocalContact extends AndroidContact implements LocalResource {
     public int update(Contact contact) throws ContactsStorageException {
         int result = super.update(contact);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (!saveAsDirty && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N))
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             updateHashCode();
 
         return result;
     }
 
+    public int updateAsDirty(Contact contact) throws ContactsStorageException {
+        saveAsDirty = true;
+        return this.update(contact);
+    }
+
     @Override
     public Uri create() throws ContactsStorageException {
         Uri uri = super.create();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (!saveAsDirty && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N))
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             updateHashCode();
 
         return uri;
+    }
+
+    public Uri createAsDirty() throws ContactsStorageException {
+        saveAsDirty = true;
+        return this.create();
+    }
+
+    @Override
+    protected void buildContact(ContentProviderOperation.Builder builder, boolean update) {
+        super.buildContact(builder, update);
+        builder.withValue(ContactsContract.RawContacts.DIRTY, saveAsDirty ? 1 : 0);
     }
 
     /**
