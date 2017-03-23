@@ -13,12 +13,17 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
+import com.etesync.syncadapter.model.ServiceDB.Services;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
@@ -27,8 +32,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
-import com.etesync.syncadapter.model.ServiceDB.Services;
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 
 public class AccountUpdateService extends Service {
 
@@ -109,10 +114,20 @@ public class AccountUpdateService extends Service {
             for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE))
                 sqlAccountNames.add(DatabaseUtils.sqlEscapeString(account.name));
 
-            if (sqlAccountNames.isEmpty())
+            EntityDataStore<Persistable> data = ((App) getApplication()).getData();
+
+            if (sqlAccountNames.isEmpty()) {
+                data.delete(JournalEntity.class).get().value();
                 db.delete(Services._TABLE, null, null);
-            else
+            } else {
+                Cursor cur = db.query(Services._TABLE, new String[]{Services.ID}, Services.ACCOUNT_NAME + " NOT IN (" + TextUtils.join(",", sqlAccountNames) + ")", null, null, null, null);
+                cur.moveToFirst();
+                while(!cur.isAfterLast()) {
+                    data.delete(JournalEntity.class).where(JournalEntity.SERVICE.eq(cur.getLong(0))).get().value();
+                    cur.moveToNext();
+                }
                 db.delete(Services._TABLE, Services.ACCOUNT_NAME + " NOT IN (" + TextUtils.join(",", sqlAccountNames) + ")", null);
+            }
         } finally {
             dbHelper.close();
         }
