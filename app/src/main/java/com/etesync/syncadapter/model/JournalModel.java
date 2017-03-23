@@ -65,7 +65,12 @@ public class JournalModel {
         }
 
         public static JournalEntity fetch(EntityDataStore<Persistable> data, String url) {
-            return data.select(JournalEntity.class).where(JournalEntity.UID.eq(url)).limit(1).get().firstOrNull();
+            JournalEntity ret = data.select(JournalEntity.class).where(JournalEntity.UID.eq(url)).limit(1).get().firstOrNull();
+            if (ret != null) {
+                // FIXME: For some reason this isn't always being called, manually do it here.
+                ret.afterLoad();
+            }
+            return ret;
         }
 
         public static JournalEntity fetchOrCreate(EntityDataStore<Persistable> data, CollectionInfo collection) {
