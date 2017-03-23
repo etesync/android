@@ -61,9 +61,11 @@ public class ViewCollectionActivity extends AppCompatActivity {
         account = getIntent().getExtras().getParcelable(EXTRA_ACCOUNT);
         info = (CollectionInfo) getIntent().getExtras().getSerializable(EXTRA_COLLECTION_INFO);
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.list_entries_container, ListEntriesFragment.newInstance(info))
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.list_entries_container, ListEntriesFragment.newInstance(info))
+                    .commit();
+        }
 
 
         final TextView stats = (TextView) findViewById(R.id.stats);
