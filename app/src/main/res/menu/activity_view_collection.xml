@@ -14,4 +14,8 @@
           android:onClick="onEditCollection"
           app:showAsAction="always"/>
 
+    <item android:title="@string/view_collection_import"
+        android:onClick="onImport"
+        app:showAsAction="never"/>
+
 </menu>

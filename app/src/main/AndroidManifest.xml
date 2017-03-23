@@ -29,8 +29,10 @@
          for writing external log files; permission only required for SDK <= 18 because since then,
          writing to app-private directory doesn't require extra permissions
     -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
+
+    <!-- Used for external log and vcf import. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!-- other permissions -->
     <!-- android.permission-group.CONTACTS -->
@@ -207,8 +209,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/log_paths" />
         </provider>
-
-
     </application>
 
 </manifest>

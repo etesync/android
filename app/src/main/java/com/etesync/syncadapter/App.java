@@ -8,8 +8,6 @@
 
 package com.etesync.syncadapter;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Application;

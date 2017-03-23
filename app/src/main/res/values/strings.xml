@@ -130,6 +130,15 @@
     <string name="login_encryption_setup_title">Setting up encryption</string>
     <string name="login_encryption_setup">Please wait, setting up encryption…</string>
 
+    <!-- ImportFragment -->
+    <string name="import_dialog_title">Import</string>
+    <string name="import_dialog_failed_title">Import Failed</string>
+    <string name="import_dialog_loading_file">Loading file (may take a while)...</string>
+    <string name="import_dialog_adding_entries">Adding entries...</string>
+    <string name="import_dialog_success">Processed %1$d entries.\nAdded: %2$d\nChanged: %3$d\nSkipped (failed): %4$d</string>
+    <string name="import_permission_required">Reading storage permission is required for import.</string>
+    <string name="choose_file">Choose file</string>
+
     <!-- AccountSettingsActivity -->
     <string name="settings_title">Settings: %s</string>
     <string name="settings_authentication">Authentication</string>
@@ -188,6 +197,7 @@
     <string name="create_collection_display_name_required">Title is required</string>
     <string name="create_collection_description">Description (optional):</string>
     <string name="view_collection_edit">Edit</string>
+    <string name="view_collection_import">Import</string>
     <string name="create_collection_create">Save</string>
     <string name="delete_collection">Delete</string>
     <string name="delete_collection_confirm_title">Are you sure?</string>

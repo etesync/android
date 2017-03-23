@@ -159,4 +159,10 @@ public class ViewCollectionActivity extends AppCompatActivity {
         // FIXME: Handle it more gracefully
         finish();
     }
+
+    public void onImport(MenuItem item) {
+        getSupportFragmentManager().beginTransaction()
+                .add(ImportFragment.newInstance(account, info), null)
+                .commit();
+    }
 }
