@@ -205,6 +205,10 @@ public class ImportFragment extends DialogFragment {
                 .commitAllowingStateLoss();
 
         dismissAllowingStateLoss();
+
+        if (getActivity() instanceof Refreshable) {
+            ((Refreshable) getActivity()).refresh();
+        }
     }
 
     private class ImportCalendarsLoader implements Runnable {

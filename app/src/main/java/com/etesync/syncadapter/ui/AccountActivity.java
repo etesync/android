@@ -72,7 +72,7 @@ import lombok.Cleanup;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
 
-public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo> {
+public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
     public static final String EXTRA_ACCOUNT = "account";
 
     private Account account;
@@ -202,7 +202,8 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         return new AccountLoader(this, account);
     }
 
-    public void reload() {
+    @Override
+    public void refresh() {
         getLoaderManager().restartLoader(0, getIntent().getExtras(), this);
     }
 

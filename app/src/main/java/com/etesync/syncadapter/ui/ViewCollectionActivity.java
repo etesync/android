@@ -36,7 +36,7 @@ import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
-public class ViewCollectionActivity extends AppCompatActivity {
+public class ViewCollectionActivity extends AppCompatActivity implements Refreshable {
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
@@ -48,6 +48,61 @@ public class ViewCollectionActivity extends AppCompatActivity {
         intent.putExtra(ViewCollectionActivity.EXTRA_ACCOUNT, account);
         intent.putExtra(ViewCollectionActivity.EXTRA_COLLECTION_INFO, info);
         return intent;
+    }
+
+    @Override
+    public void refresh() {
+        EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
+        int entryCount = -1;
+
+        final JournalEntity journalEntity = JournalEntity.fetch(data, info.url);
+        if (journalEntity == null) {
+            finish();
+            return;
+        }
+
+        info = journalEntity.getInfo();
+
+        entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
+
+
+        final TextView stats = (TextView) findViewById(R.id.stats);
+
+        final View colorSquare = findViewById(R.id.color);
+        if (info.type == CollectionInfo.Type.CALENDAR) {
+            if (info.color != null) {
+                colorSquare.setBackgroundColor(info.color);
+            } else {
+                colorSquare.setBackgroundColor(LocalCalendar.defaultColor);
+            }
+
+            try {
+                LocalCalendar resource = (LocalCalendar) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
+                        LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.NAME + "=?", new String[]{info.url})[0];
+                long count = resource.count();
+                stats.setText(String.format(Locale.getDefault(), "Events: %d, Journal entries: %d", count, entryCount));
+            } catch (CalendarStorageException e) {
+                e.printStackTrace();
+                stats.setText("Stats loading error.");
+            }
+        } else {
+            colorSquare.setVisibility(View.GONE);
+
+            try {
+                LocalAddressBook resource = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+                long count = resource.count();
+                stats.setText(String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d", count, entryCount));
+            } catch (ContactsStorageException e) {
+                e.printStackTrace();
+                stats.setText("Stats loading error.");
+            }
+        }
+
+        final TextView title = (TextView) findViewById(R.id.display_name);
+        title.setText(info.displayName);
+
+        final TextView desc = (TextView) findViewById(R.id.description);
+        desc.setText(info.description);
     }
 
     @Override
@@ -67,56 +122,7 @@ public class ViewCollectionActivity extends AppCompatActivity {
                     .commit();
         }
 
-
-        final TextView stats = (TextView) findViewById(R.id.stats);
-
-        final View colorSquare = findViewById(R.id.color);
-        if (info.type == CollectionInfo.Type.CALENDAR) {
-            if (info.color != null) {
-                colorSquare.setBackgroundColor(info.color);
-            } else {
-                colorSquare.setBackgroundColor(LocalCalendar.defaultColor);
-            }
-
-            try {
-                LocalCalendar resource = (LocalCalendar) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
-                        LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.NAME + "=?", new String[]{info.url})[0];
-                long count = resource.count();
-                EntityDataStore<Persistable> data = ((App) getApplication()).getData();
-                int entryCount = -1;
-                final JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(info.url)).limit(1).get().firstOrNull();
-                if (journalEntity != null) {
-                    entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
-                }
-                stats.setText(String.format(Locale.getDefault(), "Events: %d, Journal entries: %d", count, entryCount));
-            } catch (CalendarStorageException e) {
-                e.printStackTrace();
-                stats.setText("Stats loading error.");
-            }
-        } else {
-            colorSquare.setVisibility(View.GONE);
-
-            try {
-                LocalAddressBook resource = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
-                long count = resource.count();
-                EntityDataStore<Persistable> data = ((App) getApplication()).getData();
-                int entryCount = -1;
-                final JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(info.url)).limit(1).get().firstOrNull();
-                if (journalEntity != null) {
-                    entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
-                };
-                stats.setText(String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d", count, entryCount));
-            } catch (ContactsStorageException e) {
-                e.printStackTrace();
-                stats.setText("Stats loading error.");
-            }
-        }
-
-        final TextView title = (TextView) findViewById(R.id.display_name);
-        title.setText(info.displayName);
-
-        final TextView desc = (TextView) findViewById(R.id.description);
-        desc.setText(info.description);
+        refresh();
     }
 
     @Override
@@ -143,6 +149,8 @@ public class ViewCollectionActivity extends AppCompatActivity {
         App app = (App) getApplicationContext();
         if (app.getCertManager() != null)
             app.getCertManager().appInForeground = true;
+
+        refresh();
     }
 
     @Override
@@ -156,8 +164,6 @@ public class ViewCollectionActivity extends AppCompatActivity {
 
     public void onEditCollection(MenuItem item) {
         startActivity(EditCollectionActivity.newIntent(this, account, info));
-        // FIXME: Handle it more gracefully
-        finish();
     }
 
     public void onImport(MenuItem item) {

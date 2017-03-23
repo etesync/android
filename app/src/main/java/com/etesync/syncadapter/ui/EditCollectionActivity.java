@@ -67,6 +67,15 @@ public class EditCollectionActivity extends CreateCollectionActivity {
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (getParent() instanceof Refreshable) {
+            ((Refreshable) getParent()).refresh();
+        }
+    }
+
     public void onDeleteCollection(MenuItem item) {
         EntityDataStore<Persistable> data = ((App) getApplication()).getData();
         int journalCount = data.count(JournalEntity.class).where(JournalEntity.SERVICE.eq(info.serviceID)).get().value();

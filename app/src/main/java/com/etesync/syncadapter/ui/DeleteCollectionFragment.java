@@ -82,9 +82,9 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                     .commitAllowingStateLoss();
         else {
             Activity activity = getActivity();
-            if (activity instanceof AccountActivity)
-                ((AccountActivity) activity).reload();
-            else if (activity instanceof CreateCollectionActivity)
+            if (activity instanceof Refreshable)
+                ((Refreshable) activity).refresh();
+            else if (activity instanceof EditCollectionActivity)
                 activity.finish();
         }
     }
