@@ -268,7 +268,7 @@ abstract public class SyncManager {
             // If we are updating an existing installation with no saved journal, we need to add
             remoteEntries = journal.getEntries(settings.password(), null);
             int i = 0;
-            for (JournalEntryManager.Entry entry : remoteEntries){
+            for (JournalEntryManager.Entry entry : remoteEntries) {
                 SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
                 persistSyncEntry(entry.getUuid(), cEntry);
                 i++;
@@ -404,13 +404,8 @@ abstract public class SyncManager {
             if (Thread.interrupted())
                 return ret;
 
-            if (!local.isLocalOnly()) {
-                App.log.info(local.getUuid() + " has been deleted locally -> deleting from server");
-                ret.add(local);
-            } else {
-                App.log.info("Removing local record #" + local.getId() + " which has been deleted locally and was never uploaded");
-                local.delete();
-            }
+            App.log.info(local.getUuid() + " has been deleted locally -> deleting from server");
+            ret.add(local);
 
             syncResult.stats.numDeletes++;
         }
