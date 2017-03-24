@@ -113,7 +113,7 @@ public class CalendarSyncManager extends SyncManager {
             syncResult.stats.numUpdates++;
         } else {
             App.log.info("Adding " + newData.uid + " to local calendar");
-            localEvent = new LocalEvent(localCalendar(), newData, newData.uid, null);
+            localEvent = new LocalEvent(localCalendar(), newData, newData.uid, newData.uid);
             localEvent.add();
             syncResult.stats.numInserts++;
         }

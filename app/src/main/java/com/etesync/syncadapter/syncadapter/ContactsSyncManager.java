@@ -193,13 +193,13 @@ public class ContactsSyncManager extends SyncManager {
         if (local == null) {
             if (newData.group) {
                 App.log.log(Level.INFO, "Creating local group", newData);
-                LocalGroup group = new LocalGroup(localAddressBook(), newData, uuid, null);
+                LocalGroup group = new LocalGroup(localAddressBook(), newData, uuid, uuid);
                 group.create();
 
                 local = group;
             } else {
                 App.log.log(Level.INFO, "Creating local contact", newData);
-                LocalContact contact = new LocalContact(localAddressBook(), newData, uuid, null);
+                LocalContact contact = new LocalContact(localAddressBook(), newData, uuid, uuid);
                 contact.create();
 
                 local = contact;
