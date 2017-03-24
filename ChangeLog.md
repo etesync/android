@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 0.11.0
+* Add import from file (vCard/iCal).
+* Fix bug preventing from re-adding a removed account.
+* Fix issue with some entries marked as "ADD" instead of "CHANGE" in some cases.
+* Fix issues with embedded webview not showing all pages it should.
+* Always log deletes, even when not previously added to server.
+* Refresh the collection view when editing/deleting.
+* Login: add a "forgot password" link.
+
 ## Version 0.10.0
 * Open FAQ, user guide and signup page inside the app
 * Add calendar/contacts view and edits screens
