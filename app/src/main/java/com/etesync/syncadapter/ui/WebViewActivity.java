@@ -156,6 +156,8 @@ public class WebViewActivity extends AppCompatActivity {
                 Constants.faqUri,
                 Constants.helpUri,
                 Constants.registrationUrl,
+                Constants.webUri.buildUpon().appendEncodedPath("tos/").build(),
+                Constants.webUri.buildUpon().appendEncodedPath("about/").build(),
         };
         final Uri accountsUri = Constants.webUri.buildUpon().appendEncodedPath("accounts/").build();
 
