@@ -57,7 +57,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         int entryCount = -1;
 
         final JournalEntity journalEntity = JournalEntity.fetch(data, info.url);
-        if (journalEntity == null) {
+        if ((journalEntity == null) || journalEntity.isDeleted()) {
             finish();
             return;
         }

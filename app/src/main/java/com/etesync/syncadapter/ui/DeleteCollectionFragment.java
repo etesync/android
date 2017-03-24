@@ -120,7 +120,9 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
                 journalManager.deleteJournal(new JournalManager.Journal(settings.password(), collectionInfo.toJson(), collectionInfo.url));
-                data.delete(JournalEntity.fetch(data, collectionInfo.url));
+                JournalEntity journalEntity = JournalEntity.fetch(data, collectionInfo.url);
+                journalEntity.setDeleted(true);
+                data.update(journalEntity);
 
                 return null;
             } catch (Exceptions.HttpException e) {
