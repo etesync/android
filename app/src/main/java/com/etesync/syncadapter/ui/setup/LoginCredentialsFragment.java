@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
@@ -68,6 +69,14 @@ public class LoginCredentialsFragment extends Fragment {
             }
         });
 
+        final TextView forgotPassword = (TextView) v.findViewById(R.id.forgot_password);
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebViewActivity.openUrl(getContext(), Constants.forgotPassword);
+            }
+        });
+
         return v;
     }
 
@@ -88,5 +97,4 @@ public class LoginCredentialsFragment extends Fragment {
 
         return valid ? new LoginCredentials(userName, password) : null;
     }
-
 }
