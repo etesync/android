@@ -280,4 +280,21 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         }
     }
 
+    /** Fix all of the etags of all of the non-dirty events to be non-null.
+     * Currently set to the ctag. */
+    public void fixEtags() throws CalendarStorageException {
+        String newEtag = getCTag();
+        String where = Events.CALENDAR_ID + "=? AND " + Events.DIRTY + "=0 AND " + LocalEvent.COLUMN_ETAG + " IS NULL";
+        String whereArgs[] = {String.valueOf(id)};
+
+        ContentValues values = new ContentValues(1);
+        values.put(LocalEvent.COLUMN_ETAG, newEtag);
+        try {
+            int fixed = provider.update(syncAdapterURI(Events.CONTENT_URI),
+                    values, where, whereArgs);
+            App.log.info("Fixed entries: " + String.valueOf(fixed));
+        } catch (RemoteException e) {
+            throw new CalendarStorageException("Couldn't fix etags", e);
+        }
+    }
 }

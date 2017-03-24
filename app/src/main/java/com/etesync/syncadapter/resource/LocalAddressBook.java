@@ -301,4 +301,20 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         }
     }
 
+    /** Fix all of the etags of all of the non-dirty contacts to be non-null.
+     * Currently set to the ctag. */
+    public void fixEtags() throws ContactsStorageException {
+        String newEtag = getCTag();
+        String where = ContactsContract.RawContacts.DIRTY + "=0 AND " + AndroidContact.COLUMN_ETAG + " IS NULL";
+
+        ContentValues values = new ContentValues(1);
+        values.put(AndroidContact.COLUMN_ETAG, newEtag);
+        try {
+            int fixed = provider.update(syncAdapterURI(RawContacts.CONTENT_URI),
+                    values, where, null);
+            App.log.info("Fixed entries: " + String.valueOf(fixed));
+        } catch (RemoteException e) {
+            throw new ContactsStorageException("Couldn't query contacts", e);
+        }
+    }
 }

@@ -8,6 +8,8 @@
 
 package com.etesync.syncadapter;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Application;
@@ -25,6 +27,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Process;
 import android.os.StrictMode;
+import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
@@ -38,6 +42,8 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.Models;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
+import com.etesync.syncadapter.resource.LocalAddressBook;
+import com.etesync.syncadapter.resource.LocalCalendar;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -53,6 +59,8 @@ import java.util.logging.Logger;
 import javax.net.ssl.HostnameVerifier;
 
 import at.bitfire.cert4android.CustomCertManager;
+import at.bitfire.ical4android.CalendarStorageException;
+import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.android.sqlite.DatabaseSource;
 import io.requery.sql.Configuration;
@@ -238,6 +246,29 @@ public class App extends Application {
 
             @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(ServiceDB.Collections._TABLE, null, null);
+        }
+
+        if (fromVersion < 7) {
+            /* Fix all of the etags to be non-null */
+            AccountManager am = AccountManager.get(this);
+            for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE)) {
+                try {
+                    LocalCalendar calendars[] = (LocalCalendar[]) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
+                            LocalCalendar.Factory.INSTANCE, null, null);
+                    for (LocalCalendar calendar : calendars) {
+                        calendar.fixEtags();
+                    }
+                } catch (CalendarStorageException e) {
+                    e.printStackTrace();
+                }
+
+                LocalAddressBook addressBook = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+                try {
+                    addressBook.fixEtags();
+                } catch (ContactsStorageException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
