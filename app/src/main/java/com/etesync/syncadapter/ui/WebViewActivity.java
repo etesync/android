@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -28,7 +30,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     private WebView mWebView;
     private ProgressBar mProgressBar;
-    private Toolbar mToolbar;
+    private ActionBar mToolbar;
 
     public static void openUrl(Context context, Uri uri) {
         Intent intent = new Intent(context, WebViewActivity.class);
@@ -41,9 +43,9 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mToolbar = getSupportActionBar();
+        mToolbar.setDisplayHomeAsUpEnabled(true);
 
         Uri uri = getIntent().getParcelableExtra(KEY_URL);
         uri = addQueryParams(uri);
@@ -86,7 +88,6 @@ public class WebViewActivity extends AppCompatActivity {
         mWebView.setWebChromeClient(new WebChromeClient() {
 
             public void onProgressChanged(WebView view, int progress) {
-                mToolbar = (Toolbar) findViewById(R.id.toolbar);
                 if (progress == 100) {
                     mToolbar.setTitle(view.getTitle());
                     mProgressBar.setVisibility(View.INVISIBLE);
@@ -193,5 +194,16 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (!getSupportFragmentManager().popBackStackImmediate()) {
+                finish();
+            }
+            return true;
+        }
+        return false;
     }
 }
