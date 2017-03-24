@@ -142,10 +142,27 @@ public class WebViewActivity extends AppCompatActivity {
                 uri1.getPath().equals(uri2.getPath());
     }
 
+    private boolean allowedUris(Uri allowedUris[], Uri uri2) {
+        for (Uri uri : allowedUris) {
+            if (uriEqual(uri, uri2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean shouldOverrideUrl(Uri uri) {
-        if (uriEqual(Constants.faqUri, uri) ||
-                uriEqual(Constants.helpUri, uri) ||
-                uriEqual(Constants.registrationUrl, uri)) {
+        final Uri allowedUris[] = new Uri[]{
+                Constants.faqUri,
+                Constants.helpUri,
+                Constants.registrationUrl,
+        };
+        final Uri accountsUri = Constants.webUri.buildUpon().appendEncodedPath("accounts/").build();
+
+        if (allowedUris(allowedUris, uri) ||
+                (uri.getHost().equals(accountsUri.getHost()) &&
+                        (uri.getPath().startsWith(accountsUri.getPath())))
+                ) {
             if (uri.getQueryParameter(QUERY_KEY_EMBEDDED) != null) {
                 return false;
             } else {
