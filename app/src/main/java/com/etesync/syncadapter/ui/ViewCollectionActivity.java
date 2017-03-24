@@ -29,6 +29,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment;
 
+import java.io.FileNotFoundException;
 import java.util.Locale;
 
 import at.bitfire.ical4android.CalendarStorageException;
@@ -77,11 +78,10 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
             }
 
             try {
-                LocalCalendar resource = (LocalCalendar) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
-                        LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.NAME + "=?", new String[]{info.url})[0];
+                LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.url);
                 long count = resource.count();
                 stats.setText(String.format(Locale.getDefault(), "Events: %d, Journal entries: %d", count, entryCount));
-            } catch (CalendarStorageException e) {
+            } catch (FileNotFoundException|CalendarStorageException e) {
                 e.printStackTrace();
                 stats.setText("Stats loading error.");
             }
