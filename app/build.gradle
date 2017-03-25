@@ -135,7 +135,7 @@ dependencies {
     compile group: 'com.madgag.spongycastle', name: 'prov', version: '1.54.0.0'
     compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-    provided 'org.projectlombok:lombok:1.16.14'
+    provided 'org.projectlombok:lombok:1.16.16'
 
     // for tests
     androidTestCompile('com.android.support.test:runner:0.5') {
