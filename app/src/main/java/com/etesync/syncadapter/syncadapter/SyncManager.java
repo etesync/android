@@ -298,9 +298,10 @@ abstract public class SyncManager {
                 App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
                 SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
-                persistSyncEntry(entry.getUuid(), cEntry);
                 App.log.info("Processing resource for journal entry");
                 processSyncEntry(cEntry);
+
+                persistSyncEntry(entry.getUuid(), cEntry);
 
                 remoteCTag = entry.getUuid();
             }
