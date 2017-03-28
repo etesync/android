@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.11.1
+* Fix potential crash when updating the app.
+
 ## Version 0.11.0
 * Add import from file (vCard/iCal).
 * Fix bug preventing from re-adding a removed account.
