@@ -103,6 +103,7 @@ public class App extends Application {
         reinitCertManager();
         reinitLogger();
         StrictMode.enableDefaults();
+        initPrefVersion();
     }
 
     public void reinitCertManager() {
@@ -229,6 +230,15 @@ public class App extends Application {
     // update from previous account settings
 
     private final static String PREF_VERSION = "version";
+
+    /** Init the preferences version of the app.
+     * This is used to initialise the first version if not alrady set. */
+    private void initPrefVersion() {
+        SharedPreferences prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        if (prefs.getInt(PREF_VERSION, 0) == 0) {
+            prefs.edit().putInt(PREF_VERSION, BuildConfig.VERSION_CODE).apply();
+        }
+    }
 
     private void update(int fromVersion) {
         App.log.info("Updating from version " + fromVersion + " to " + BuildConfig.VERSION_CODE);
