@@ -2,16 +2,18 @@ package com.etesync.syncadapter.ui.importlocal;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -25,8 +27,10 @@ import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalEvent;
 import com.etesync.syncadapter.ui.ImportFragment;
 
-import java.util.HashMap;
 import java.util.List;
+
+import at.bitfire.ical4android.CalendarStorageException;
+import at.bitfire.ical4android.Event;
 
 public class ImportActivity extends AppCompatActivity {
     public final static String EXTRA_ACCOUNT = "account",
@@ -86,11 +90,7 @@ public class ImportActivity extends AppCompatActivity {
         listCalendar.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView aExpandableListView, View aView, int groupPosition, int childPosition, long aL) {
-                Toast.makeText(ImportActivity.this,
-                        calendarAccountList.get(groupPosition).calendars.get(childPosition).toString(),
-                        Toast.LENGTH_SHORT).show();
-                //todo import
-                LocalCalendar localCalendar = (LocalCalendar) calendarAccountList.get(groupPosition).calendars.get(childPosition);
+                new ImportEvents().execute(calendarAccountList.get(groupPosition).calendars.get(childPosition));
                 return false;
             }
         });
@@ -138,7 +138,7 @@ public class ImportActivity extends AppCompatActivity {
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
             return calendarAccounts.get(groupPosition).calendars
-                    .get(childPosititon).toString();
+                    .get(childPosititon).getDisplayName();
         }
 
         @Override
@@ -214,6 +214,63 @@ public class ImportActivity extends AppCompatActivity {
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
+        }
+    }
+
+    protected class ImportEvents extends AsyncTask<LocalCalendar, Integer, Boolean> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(ImportActivity.this);
+            progressDialog.setTitle(R.string.import_dialog_title);
+            progressDialog.setMessage(getString(R.string.import_dialog_adding_entries));
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setIndeterminate(false);
+            progressDialog.setIcon(R.drawable.ic_import_export_black);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(LocalCalendar... calendars) {
+            return importEvents(calendars[0]);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            if (progressDialog != null)
+                progressDialog.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            progressDialog.dismiss();
+        }
+
+        private boolean importEvents(LocalCalendar fromCalendar) {
+            try {
+                LocalCalendar localCalendar = LocalCalendar.findByName(account,
+                        ImportActivity.this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
+                        LocalCalendar.Factory.INSTANCE, info.url);
+                LocalEvent[] localEvents = fromCalendar.getAll();
+                progressDialog.setMax(localEvents.length);
+                int progress = 0;
+                for (LocalEvent currentLocalEvent : localEvents) {
+                    Event event = currentLocalEvent.getEvent();
+                    try {
+                        LocalEvent localEvent = new LocalEvent(localCalendar, event, event.uid, null);
+                        localEvent.addAsDirty();
+                    } catch (CalendarStorageException e) {
+                        e.printStackTrace();
+                    }
+                    publishProgress(++progress);
+                }
+                return true;
+            } catch (Exception aE) {
+                aE.printStackTrace();
+                return false;
+            }
         }
     }
 }
