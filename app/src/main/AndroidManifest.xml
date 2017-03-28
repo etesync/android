@@ -184,6 +184,7 @@
             android:parentActivityName=".ui.AccountsActivity">
         </activity>
         <activity android:name=".ui.ViewCollectionActivity"/>
+        <activity android:name=".ui.importlocal.ImportActivity"/>
         <activity android:name=".ui.AccountSettingsActivity"/>
         <activity android:name=".ui.CreateCollectionActivity"/>
         <activity android:name=".ui.EditCollectionActivity"/>

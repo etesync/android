@@ -248,4 +248,9 @@
     <string name="loading">Loading...</string>
     <string name="loading_error_title">Loading Error</string>
     <string name="loading_error_content">Refresh</string>
+
+    <!-- Import Activity -->
+    <string name="import_button_file">Import from flie</string>
+    <string name="import_button_account">Import from account</string>
+
 </resources>

@@ -1,20 +1,27 @@
 package com.etesync.syncadapter.resource;
 
+import android.accounts.Account;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import at.bitfire.ical4android.AndroidCalendar;
-
-import static android.R.attr.id;
-import static org.spongycastle.asn1.x500.style.RFC4519Style.c;
+import at.bitfire.ical4android.AndroidEvent;
+import at.bitfire.ical4android.AndroidEventFactory;
+import at.bitfire.ical4android.CalendarStorageException;
+import at.bitfire.ical4android.Event;
+import lombok.Cleanup;
 
 /**
  * Created by tal on 27/03/17.
@@ -24,7 +31,7 @@ public class CalendarAccount {
     private static final String TAG = "CalendarAccount";
 
     public String accountName;
-    public List<CalendarAccount.Calendar> calendars = new ArrayList<>();
+    public List<LocalCalendar> calendars = new ArrayList<>();
 
     private static final String[] CAL_COLS = new String[] {
             Calendars._ID, Calendars.DELETED, Calendars.NAME, Calendars.CALENDAR_DISPLAY_NAME,
@@ -58,6 +65,7 @@ public class CalendarAccount {
         List<CalendarAccount> calendarAccounts = new ArrayList<>(cur.getCount());
 
         CalendarAccount calendarAccount = null;
+        ContentProviderClient contentProviderClient = resolver.acquireContentProviderClient(CalendarContract.CONTENT_URI);
         while (cur.moveToNext()) {
             if (getLong(cur, Calendars.DELETED) != 0)
                 continue;
@@ -68,24 +76,26 @@ public class CalendarAccount {
                 calendarAccounts.add(calendarAccount);
             }
 
-            CalendarAccount.Calendar calendar = new Calendar();
-            calendar.id = getLong(cur, Calendars._ID);
-            if (calendar.id == -1) {
+            long id = getLong(cur, Calendars._ID);
+            if (id == -1) {
                 continue;
             }
-            calendar.name = getString(cur, Calendars.NAME);
-            calendar.displayName = getString(cur, Calendars.CALENDAR_DISPLAY_NAME);
-            calendar.accountType = getString(cur, Calendars.ACCOUNT_TYPE);
-            calendar.owner = getString(cur, Calendars.OWNER_ACCOUNT);
-            calendar.isActive = getLong(cur, Calendars.VISIBLE) == 1;
-            calendar.timezone = getString(cur, Calendars.CALENDAR_TIME_ZONE);
 
-            final String[] args = new String[] { String.valueOf(calendar.id) };
+            final String[] args = new String[] { String.valueOf(id) };
             Cursor eventsCur = resolver.query(Events.CONTENT_URI, CAL_ID_COLS, CAL_ID_WHERE, args, null);
-            calendar.numEntries = eventsCur.getCount();
+            Account account = new Account(accountName, getString(cur, Calendars.ACCOUNT_TYPE));
+
+            try {
+                LocalCalendar localCalendar = LocalCalendar.findByName(account, contentProviderClient,
+                        LocalCalendar.Factory.INSTANCE, getString(cur, Calendars.NAME));
+                if (localCalendar != null) calendarAccount.calendars.add(localCalendar);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
             eventsCur.close();
-            calendarAccount.calendars.add(calendar);
         }
+        contentProviderClient.close();
         cur.close();
         return calendarAccounts;
     }
@@ -117,27 +127,22 @@ public class CalendarAccount {
         return accountName + " calendars:" + calendars.size();
     }
 
-    private boolean differ(final String lhs, final String rhs) {
-        if (lhs == null)
-            return rhs != null;
-        return rhs == null || !lhs.equals(rhs);
-    }
-
-    public static class Calendar {
-        public long id;
-        public String name;
-        public String displayName;
-        public String owner;
-        public String accountType;
-        public boolean isActive;
-        public String timezone;
-        public int numEntries;
+    static class Factory implements AndroidEventFactory {
+        static final LocalEvent.Factory INSTANCE = new LocalEvent.Factory();
 
         @Override
-        public String toString() {
-            return displayName + " ( " + id + " )";
+        public AndroidEvent newInstance(AndroidCalendar calendar, long id, ContentValues baseInfo) {
+            return new LocalEvent(calendar, id, baseInfo);
+        }
+
+        @Override
+        public AndroidEvent newInstance(AndroidCalendar calendar, Event event) {
+            return new LocalEvent(calendar, event, null, null);
+        }
+
+        @Override
+        public AndroidEvent[] newArray(int size) {
+            return new LocalEvent[size];
         }
     }
-
-
 }

@@ -27,6 +27,7 @@ import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
+import com.etesync.syncadapter.ui.importlocal.ImportActivity;
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment;
 
 import java.io.FileNotFoundException;
@@ -167,8 +168,6 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     }
 
     public void onImport(MenuItem item) {
-        getSupportFragmentManager().beginTransaction()
-                .add(ImportFragment.newInstance(account, info), null)
-                .commit();
+        startActivity(ImportActivity.newIntent(ViewCollectionActivity.this, account, info));
     }
 }
