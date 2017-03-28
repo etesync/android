@@ -95,7 +95,7 @@ public class CalendarAccount {
 
             eventsCur.close();
         }
-        contentProviderClient.close();
+        contentProviderClient.release();
         cur.close();
         return calendarAccounts;
     }
@@ -125,24 +125,5 @@ public class CalendarAccount {
     @Override
     public String toString() {
         return accountName + " calendars:" + calendars.size();
-    }
-
-    static class Factory implements AndroidEventFactory {
-        static final LocalEvent.Factory INSTANCE = new LocalEvent.Factory();
-
-        @Override
-        public AndroidEvent newInstance(AndroidCalendar calendar, long id, ContentValues baseInfo) {
-            return new LocalEvent(calendar, id, baseInfo);
-        }
-
-        @Override
-        public AndroidEvent newInstance(AndroidCalendar calendar, Event event) {
-            return new LocalEvent(calendar, event, null, null);
-        }
-
-        @Override
-        public AndroidEvent[] newArray(int size) {
-            return new LocalEvent[size];
-        }
     }
 }
