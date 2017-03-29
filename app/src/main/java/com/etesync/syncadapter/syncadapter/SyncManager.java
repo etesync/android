@@ -53,7 +53,7 @@ import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
 abstract public class SyncManager {
     protected final NotificationHelper notificationManager;
-    protected final String journalUid;
+    protected final CollectionInfo info;
 
     protected final Context context;
     protected final Account account;
@@ -107,14 +107,14 @@ abstract public class SyncManager {
         // create HttpClient with given logger
         httpClient = HttpClient.create(context, account);
 
+        data = ((App) context.getApplicationContext()).getData();
+        info = JournalEntity.fetch(data, journalUid).getInfo();
+
         // dismiss previous error notifications
-        this.journalUid = journalUid;
         notificationManager = new NotificationHelper(context, journalUid, notificationId());
         notificationManager.cancel();
 
         crypto = new Crypto.CryptoManager(settings.password(), journalUid);
-
-        data = ((App) context.getApplicationContext()).getData();
     }
 
     protected abstract int notificationId();

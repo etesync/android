@@ -58,13 +58,11 @@ public class ContactsSyncManager extends SyncManager {
 
     final private ContentProviderClient provider;
     final private HttpUrl remote;
-    final private CollectionInfo info;
 
     public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException {
         super(context, account, settings, extras, authority, result, info.url, CollectionInfo.Type.ADDRESS_BOOK);
         this.provider = provider;
         this.remote = principal;
-        this.info = info;
     }
 
     @Override
