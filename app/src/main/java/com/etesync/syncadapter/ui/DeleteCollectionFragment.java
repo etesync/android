@@ -28,6 +28,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
@@ -119,7 +120,9 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
-                journalManager.deleteJournal(new JournalManager.Journal(settings.password(), collectionInfo.toJson(), collectionInfo.url));
+                Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), collectionInfo.url);
+
+                journalManager.deleteJournal(new JournalManager.Journal(crypto, collectionInfo.toJson(), collectionInfo.url));
                 JournalEntity journalEntity = JournalEntity.fetch(data, collectionInfo.url);
                 journalEntity.setDeleted(true);
                 data.update(journalEntity);

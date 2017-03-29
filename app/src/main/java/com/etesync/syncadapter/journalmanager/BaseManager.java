@@ -73,19 +73,15 @@ abstract class BaseManager {
             return uid;
         }
 
-        public String getContent(String keyBase64) {
-            // FIXME: probably cache encryption object
-            Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(keyBase64, null);
-            return new String(cryptoManager.decrypt(content), Charsets.UTF_8);
+        public String getContent(Crypto.CryptoManager crypto) {
+            return new String(crypto.decrypt(content), Charsets.UTF_8);
         }
 
-        void setContent(String keyBase64, String content) {
-            // FIXME: probably cache encryption object
-            Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(keyBase64, null);
-            this.content = cryptoManager.encrypt(content.getBytes(Charsets.UTF_8));
+        void setContent(Crypto.CryptoManager crypto, String content) {
+            this.content = crypto.encrypt(content.getBytes(Charsets.UTF_8));
         }
 
-        byte[] calculateHmac(String keyBase64, String uuid) {
+        byte[] calculateHmac(Crypto.CryptoManager crypto, String uuid) {
             ByteArrayOutputStream hashContent = new ByteArrayOutputStream();
 
             try {
@@ -99,16 +95,14 @@ abstract class BaseManager {
                 return "DEADBEEFDEADBEEFDEADBEEFDEADBEEF".getBytes();
             }
 
-            // FIXME: probably cache encryption object
-            Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(keyBase64, null);
-            return cryptoManager.hmac(hashContent.toByteArray());
+            return crypto.hmac(hashContent.toByteArray());
         }
 
         protected Base() {
         }
 
-        Base(String keyBase64, String content, String uid) {
-            setContent(keyBase64, content);
+        Base(Crypto.CryptoManager crypto, String content, String uid) {
+            setContent(crypto, content);
             setUid(uid);
         }
 

@@ -45,6 +45,7 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
@@ -160,7 +161,8 @@ public abstract class SyncAdapterService extends Service {
                     List<CollectionInfo> collections = new LinkedList<>();
 
                     for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
-                        CollectionInfo info = CollectionInfo.fromJson(journal.getContent(settings.password()));
+                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), journal.getUuid());
+                        CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
                         info.url = journal.getUuid();
                         if (info.type.equals(serviceType)) {
                             collections.add(info);
@@ -169,9 +171,10 @@ public abstract class SyncAdapterService extends Service {
 
                     if (collections.isEmpty()) {
                         CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
-                        JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
+                        info.url = JournalManager.Journal.genUid();
+                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), info.url);
+                        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
                         journalsManager.putJournal(journal);
-                        info.url = journal.getUuid();
                         collections.add(info);
                     }
 

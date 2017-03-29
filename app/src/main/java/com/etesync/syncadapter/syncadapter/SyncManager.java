@@ -21,6 +21,7 @@ import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.NotificationHelper;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
@@ -69,6 +70,8 @@ abstract public class SyncManager {
     protected JournalEntryManager journal;
     private JournalEntity _journalEntity;
 
+    private final Crypto.CryptoManager crypto;
+
     private EntityDataStore<Persistable> data;
 
     /**
@@ -108,6 +111,8 @@ abstract public class SyncManager {
         this.journalUid = journalUid;
         notificationManager = new NotificationHelper(context, journalUid, notificationId());
         notificationManager.cancel();
+
+        crypto = new Crypto.CryptoManager(settings.password(), journalUid);
 
         data = ((App) context.getApplicationContext()).getData();
     }
@@ -249,7 +254,7 @@ abstract public class SyncManager {
             i++;
             App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
-            SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+            SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
             persistSyncEntry(entry.getUuid(), cEntry);
             if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue;
@@ -266,10 +271,10 @@ abstract public class SyncManager {
         int count = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(getJournalEntity())).get().value();
         if ((remoteCTag != null) && (count == 0)) {
             // If we are updating an existing installation with no saved journal, we need to add
-            remoteEntries = journal.getEntries(settings.password(), null);
+            remoteEntries = journal.getEntries(crypto, null);
             int i = 0;
             for (JournalEntryManager.Entry entry : remoteEntries) {
-                SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+                SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
                 persistSyncEntry(entry.getUuid(), cEntry);
                 i++;
                 if (remoteCTag.equals(entry.getUuid())) {
@@ -278,7 +283,7 @@ abstract public class SyncManager {
                 }
             }
         } else {
-            remoteEntries = journal.getEntries(settings.password(), remoteCTag);
+            remoteEntries = journal.getEntries(crypto, remoteCTag);
         }
 
         App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
@@ -297,7 +302,7 @@ abstract public class SyncManager {
                 i++;
                 App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
-                SyncEntry cEntry = SyncEntry.fromJournalEntry(settings.password(), entry);
+                SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
                 App.log.info("Processing resource for journal entry");
                 processSyncEntry(cEntry);
 
@@ -360,7 +365,7 @@ abstract public class SyncManager {
         for (LocalResource local : localDeleted) {
             SyncEntry entry = new SyncEntry(local.getContent(), SyncEntry.Actions.DELETE);
             JournalEntryManager.Entry tmp = new JournalEntryManager.Entry();
-            tmp.update(settings.password(), entry.toJson(), previousEntry);
+            tmp.update(crypto, entry.toJson(), previousEntry);
             previousEntry = tmp;
             localEntries.add(previousEntry);
         }
@@ -375,7 +380,7 @@ abstract public class SyncManager {
 
             SyncEntry entry = new SyncEntry(local.getContent(), action);
             JournalEntryManager.Entry tmp = new JournalEntryManager.Entry();
-            tmp.update(settings.password(), entry.toJson(), previousEntry);
+            tmp.update(crypto, entry.toJson(), previousEntry);
             previousEntry = tmp;
             localEntries.add(previousEntry);
         }

@@ -46,8 +46,9 @@ public class JournalManager extends BaseManager {
         List<Journal> ret = GsonHelper.gson.fromJson(body.charStream(), journalType);
 
         for (Journal journal : ret) {
+            Crypto.CryptoManager crypto = new Crypto.CryptoManager(keyBase64, journal.getUuid());
             journal.processFromJson();
-            journal.verify(keyBase64);
+            journal.verify(crypto);
         }
 
         return ret;
@@ -95,13 +96,9 @@ public class JournalManager extends BaseManager {
             super();
         }
 
-        public Journal(String keyBase64, String content) {
-            this(keyBase64, content, sha256(UUID.randomUUID().toString()));
-        }
-
-        public Journal(String keyBase64, String content, String uid) {
-            super(keyBase64, content, uid);
-            hmac = calculateHmac(keyBase64);
+        public Journal(Crypto.CryptoManager crypto, String content, String uid) {
+            super(crypto, content, uid);
+            hmac = calculateHmac(crypto);
         }
 
         private void processFromJson() {
@@ -109,19 +106,23 @@ public class JournalManager extends BaseManager {
             setContent(Arrays.copyOfRange(getContent(), hmacSize, getContent().length));
         }
 
-        void verify(String keyBase64) throws Exceptions.IntegrityException {
+        void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
             if (hmac == null) {
                 throw new Exceptions.IntegrityException("HMAC is null!");
             }
 
-            byte[] correctHash = calculateHmac(keyBase64);
+            byte[] correctHash = calculateHmac(crypto);
             if (!Arrays.areEqual(hmac, correctHash)) {
                 throw new Exceptions.IntegrityException("Bad HMAC. " + toHex(hmac) + " != " + toHex(correctHash));
             }
         }
 
-        byte[] calculateHmac(String keyBase64) {
-            return super.calculateHmac(keyBase64, getUuid());
+        byte[] calculateHmac(Crypto.CryptoManager crypto) {
+            return super.calculateHmac(crypto, getUuid());
+        }
+
+        public static String genUid() {
+            return sha256(UUID.randomUUID().toString());
         }
 
         @Override

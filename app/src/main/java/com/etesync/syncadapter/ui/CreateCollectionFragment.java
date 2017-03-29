@@ -31,6 +31,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
@@ -156,12 +157,13 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
                 if (info.url == null) {
-                    // CollectionInfo doesn't have a url at this point, update it.
-                    JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson());
+                    info.url = JournalManager.Journal.genUid();
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), info.url);
+                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
                     journalManager.putJournal(journal);
-                    info.url = journal.getUuid();
                 } else {
-                    JournalManager.Journal journal = new JournalManager.Journal(settings.password(), info.toJson(), info.url);
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), info.url);
+                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
                     journalManager.updateJournal(journal);
                 }
 

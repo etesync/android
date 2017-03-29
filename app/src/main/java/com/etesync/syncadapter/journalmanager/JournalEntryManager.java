@@ -35,7 +35,7 @@ public class JournalEntryManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Entry> getEntries(String keyBase64, String last) throws Exceptions.HttpException, Exceptions.IntegrityException {
+    public List<Entry> getEntries(Crypto.CryptoManager crypto, String last) throws Exceptions.HttpException, Exceptions.IntegrityException {
         Entry previousEntry = null;
         HttpUrl.Builder urlBuilder = this.remote.newBuilder();
         if (last != null) {
@@ -55,7 +55,7 @@ public class JournalEntryManager extends BaseManager {
         List<Entry> ret = GsonHelper.gson.fromJson(body.charStream(), entryType);
 
         for (Entry entry : ret) {
-            entry.verify(keyBase64, previousEntry);
+            entry.verify(crypto, previousEntry);
             previousEntry = entry;
         }
 
@@ -85,13 +85,13 @@ public class JournalEntryManager extends BaseManager {
             super();
         }
 
-        public void update(String keyBase64, String content, Entry previous) {
-            setContent(keyBase64, content);
-            setUid(calculateHmac(keyBase64, previous));
+        public void update(Crypto.CryptoManager crypto, String content, Entry previous) {
+            setContent(crypto, content);
+            setUid(calculateHmac(crypto, previous));
         }
 
-        void verify(String keyBase64, Entry previous) throws Exceptions.IntegrityException {
-            String correctHash = calculateHmac(keyBase64, previous);
+        void verify(Crypto.CryptoManager crypto, Entry previous) throws Exceptions.IntegrityException {
+            String correctHash = calculateHmac(crypto, previous);
             if (!getUuid().equals(correctHash)) {
                 throw new Exceptions.IntegrityException("Bad HMAC. " + getUuid() + " != " + correctHash);
             }
@@ -103,13 +103,13 @@ public class JournalEntryManager extends BaseManager {
             return ret;
         }
 
-        private String calculateHmac(String keyBase64, Entry previous) {
+        private String calculateHmac(Crypto.CryptoManager crypto, Entry previous) {
             String uuid = null;
             if (previous != null) {
                 uuid = previous.getUuid();
             }
 
-            return Crypto.toHex(calculateHmac(keyBase64, uuid));
+            return Crypto.toHex(calculateHmac(crypto, uuid));
         }
     }
 
