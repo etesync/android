@@ -91,7 +91,6 @@ public class JournalManager extends BaseManager {
     }
 
     public static class Journal extends Base {
-        @Setter
         @Getter
         private int version = -1;
 
