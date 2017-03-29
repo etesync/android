@@ -121,6 +121,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         settings.setSyncInterval(ContactsContract.AUTHORITY, Long.parseLong((String)newValue));
+                        getLoaderManager().restartLoader(0, getArguments(), AccountSettingsFragment.this);
                         return false;
                     }
                 });
@@ -141,6 +142,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         settings.setSyncInterval(CalendarContract.AUTHORITY, Long.parseLong((String)newValue));
+                        getLoaderManager().restartLoader(0, getArguments(), AccountSettingsFragment.this);
                         return false;
                     }
                 });
@@ -198,13 +200,17 @@ public class AccountSettingsActivity extends AppCompatActivity {
         @Override
         protected void onStartLoading() {
             forceLoad();
-
             listenerHandle = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, this);
         }
 
         @Override
         protected void onStopLoading() {
             ContentResolver.removeStatusChangeListener(listenerHandle);
+        }
+
+        @Override
+        public void abandon() {
+            onStopLoading();
         }
 
         @Override
@@ -220,6 +226,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         @Override
         public void onStatusChanged(int which) {
+            App.log.fine("Reloading account settings");
             forceLoad();
         }
 
