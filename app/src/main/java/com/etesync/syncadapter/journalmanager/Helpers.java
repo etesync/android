@@ -47,10 +47,9 @@ public class Helpers {
     }
 
     static class Cipher {
-        SecureRandom random;
+        private SecureRandom _random = null;
 
         Cipher() {
-            random = new SecureRandom();
         }
 
         private static final int blockSize = 16; // AES's block size in bytes
@@ -94,7 +93,7 @@ public class Helpers {
 
         byte[] encrypt(String keyBase64, byte[] data) {
             byte[] iv = new byte[blockSize];
-            random.nextBytes(iv);
+            getRandom().nextBytes(iv);
 
             BufferedBlockCipher cipher = getCipher(keyBase64, iv, true);
 
@@ -110,6 +109,13 @@ public class Helpers {
             }
 
             return buf;
+        }
+
+        private SecureRandom getRandom() {
+            if (_random == null) {
+                _random = new SecureRandom();
+            }
+            return _random;
         }
     }
 
