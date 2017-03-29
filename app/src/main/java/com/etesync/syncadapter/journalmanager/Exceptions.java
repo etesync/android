@@ -3,6 +3,7 @@ package com.etesync.syncadapter.journalmanager;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
+import java.security.GeneralSecurityException;
 
 import at.bitfire.cert4android.Constants;
 import okhttp3.Headers;
@@ -38,7 +39,7 @@ public class Exceptions {
         }
     }
 
-    public static class IntegrityException extends Exception {
+    public static class IntegrityException extends GeneralSecurityException {
         public IntegrityException(String message) {
             super(message);
         }
