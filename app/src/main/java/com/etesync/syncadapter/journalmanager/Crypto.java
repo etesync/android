@@ -24,7 +24,6 @@ import java.util.Arrays;
 import com.etesync.syncadapter.App;
 
 public class Crypto {
-    // FIXME: This should be somewhere else
     public static String deriveKey(String salt, String password) {
         final int keySize = 190;
 
