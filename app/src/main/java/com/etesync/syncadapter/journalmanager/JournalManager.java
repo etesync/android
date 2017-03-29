@@ -17,8 +17,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import static com.etesync.syncadapter.journalmanager.Helpers.sha256;
-import static com.etesync.syncadapter.journalmanager.Helpers.toHex;
+import static com.etesync.syncadapter.journalmanager.Crypto.sha256;
+import static com.etesync.syncadapter.journalmanager.Crypto.toHex;
 
 public class JournalManager extends BaseManager {
     final static private Type journalType = new TypeToken<List<Journal>>() {

@@ -33,7 +33,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
-import com.etesync.syncadapter.journalmanager.Helpers;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
@@ -112,7 +112,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
         @Override
         public Configuration loadInBackground() {
-            config.password = Helpers.deriveKey(config.userName, config.rawPassword);
+            config.password = Crypto.deriveKey(config.userName, config.rawPassword);
             return config;
         }
     }

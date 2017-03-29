@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 import com.etesync.syncadapter.App;
 
-public class Helpers {
+public class Crypto {
     // FIXME: This should be somewhere else
     public static String deriveKey(String salt, String password) {
         final int keySize = 190;
@@ -123,7 +123,7 @@ public class Helpers {
         return sha256(base.getBytes(Charsets.UTF_8));
     }
 
-    static String sha256(byte[] base) {
+    private static String sha256(byte[] base) {
         SHA256Digest digest = new SHA256Digest();
         digest.update(base, 0, base.length);
         byte[] ret = new byte[digest.getDigestSize()];
@@ -131,7 +131,7 @@ public class Helpers {
         return toHex(ret);
     }
 
-    public static String toHex(byte[] bytes) {
+    static String toHex(byte[] bytes) {
         return Hex.toHexString(bytes).toLowerCase();
     }
 }

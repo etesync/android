@@ -19,7 +19,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.etesync.syncadapter.journalmanager.Helpers.hmac;
+import static com.etesync.syncadapter.journalmanager.Crypto.hmac;
 
 abstract class BaseManager {
     final static protected MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -77,12 +77,12 @@ abstract class BaseManager {
 
         public String getContent(String keyBase64) {
             // FIXME: probably cache encryption object
-            return new String(new Helpers.Cipher().decrypt(keyBase64, content), Charsets.UTF_8);
+            return new String(new Crypto.Cipher().decrypt(keyBase64, content), Charsets.UTF_8);
         }
 
         void setContent(String keyBase64, String content) {
             // FIXME: probably cache encryption object
-            this.content = new Helpers.Cipher().encrypt(keyBase64, content.getBytes(Charsets.UTF_8));
+            this.content = new Crypto.Cipher().encrypt(keyBase64, content.getBytes(Charsets.UTF_8));
         }
 
         byte[] calculateHmac(String keyBase64, String uuid) {
