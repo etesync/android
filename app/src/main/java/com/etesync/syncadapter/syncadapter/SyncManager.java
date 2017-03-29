@@ -52,7 +52,7 @@ import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
 abstract public class SyncManager {
     protected final NotificationHelper notificationManager;
-    protected final String uniqueCollectionId;
+    protected final String journalUid;
 
     protected final Context context;
     protected final Account account;
@@ -92,7 +92,7 @@ abstract public class SyncManager {
     private List<LocalResource> localDeleted;
     private LocalResource[] localDirty;
 
-    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String uniqueCollectionId, CollectionInfo.Type serviceType) throws InvalidAccountException {
+    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType) throws InvalidAccountException {
         this.context = context;
         this.account = account;
         this.settings = settings;
@@ -105,8 +105,8 @@ abstract public class SyncManager {
         httpClient = HttpClient.create(context, account);
 
         // dismiss previous error notifications
-        this.uniqueCollectionId = uniqueCollectionId;
-        notificationManager = new NotificationHelper(context, uniqueCollectionId, notificationId());
+        this.journalUid = journalUid;
+        notificationManager = new NotificationHelper(context, journalUid, notificationId());
         notificationManager.cancel();
 
         data = ((App) context.getApplicationContext()).getData();
