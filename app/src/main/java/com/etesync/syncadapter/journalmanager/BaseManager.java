@@ -75,14 +75,14 @@ abstract class BaseManager {
 
         public String getContent(String keyBase64) {
             // FIXME: probably cache encryption object
-            Crypto.Cipher cipher = new Crypto.Cipher(keyBase64, null);
-            return new String(cipher.decrypt(content), Charsets.UTF_8);
+            Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(keyBase64, null);
+            return new String(cryptoManager.decrypt(content), Charsets.UTF_8);
         }
 
         void setContent(String keyBase64, String content) {
             // FIXME: probably cache encryption object
-            Crypto.Cipher cipher = new Crypto.Cipher(keyBase64, null);
-            this.content = cipher.encrypt(content.getBytes(Charsets.UTF_8));
+            Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(keyBase64, null);
+            this.content = cryptoManager.encrypt(content.getBytes(Charsets.UTF_8));
         }
 
         byte[] calculateHmac(String keyBase64, String uuid) {
@@ -100,8 +100,8 @@ abstract class BaseManager {
             }
 
             // FIXME: probably cache encryption object
-            Crypto.Cipher cipher = new Crypto.Cipher(keyBase64, null);
-            return cipher.hmac(hashContent.toByteArray());
+            Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(keyBase64, null);
+            return cryptoManager.hmac(hashContent.toByteArray());
         }
 
         protected Base() {

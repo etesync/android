@@ -31,12 +31,12 @@ public class Crypto {
         return Base64.encodeToString(SCrypt.generate(password.getBytes(Charsets.UTF_8), salt.getBytes(Charsets.UTF_8), 16384, 8, 1, keySize), Base64.NO_WRAP);
     }
 
-    static class Cipher {
+    static class CryptoManager {
         private SecureRandom _random = null;
         private final byte[] cipherKey;
         private final byte[] hmacKey;
 
-        Cipher(String keyBase64, String salt) {
+        CryptoManager(String keyBase64, String salt) {
             byte[] derivedKey; // FIXME use salt = hmac256(salt.getBytes(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP));
             derivedKey = Base64.decode(keyBase64, Base64.NO_WRAP);
             cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);
