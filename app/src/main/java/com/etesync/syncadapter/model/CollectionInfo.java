@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 import lombok.ToString;
 
-@ToString(exclude = {"uid"})
+@ToString(exclude = {"id"})
 public class CollectionInfo implements Serializable {
     @Deprecated
     public long id;
