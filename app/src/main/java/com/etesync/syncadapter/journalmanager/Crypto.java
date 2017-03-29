@@ -31,32 +31,22 @@ public class Crypto {
         return Base64.encodeToString(SCrypt.generate(password.getBytes(Charsets.UTF_8), salt.getBytes(Charsets.UTF_8), 16384, 8, 1, keySize), Base64.NO_WRAP);
     }
 
-    private static byte[] hmac256(byte[] keyByte, byte[] data) {
-        HMac hmac = new HMac(new SHA256Digest());
-        KeyParameter key = new KeyParameter(keyByte);
-        byte[] ret = new byte[hmac.getMacSize()];
-        hmac.init(key);
-        hmac.update(data, 0, data.length);
-        hmac.doFinal(ret, 0);
-        return ret;
-    }
-
-    static byte[] hmac(String keyBase64, byte[] data) {
-        byte[] derivedKey = hmac256("hmac".getBytes(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP));
-        return hmac256(derivedKey, data);
-    }
-
     static class Cipher {
         private SecureRandom _random = null;
+        private final byte[] cipherKey;
+        private final byte[] hmacKey;
 
-        Cipher() {
+        Cipher(String keyBase64, String salt) {
+            byte[] derivedKey; // FIXME use salt = hmac256(salt.getBytes(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP));
+            derivedKey = Base64.decode(keyBase64, Base64.NO_WRAP);
+            cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);
+            hmacKey = hmac256("hmac".getBytes(Charsets.UTF_8), derivedKey);
         }
 
         private static final int blockSize = 16; // AES's block size in bytes
 
-        private BufferedBlockCipher getCipher(String keyBase64, byte[] iv, boolean encrypt) {
-            byte[] derivedKey = hmac256("aes".getBytes(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP));
-            KeyParameter key = new KeyParameter(derivedKey);
+        private BufferedBlockCipher getCipher(byte[] iv, boolean encrypt) {
+            KeyParameter key = new KeyParameter(cipherKey);
             CipherParameters params = new ParametersWithIV(key, iv);
 
             BlockCipherPadding padding = new PKCS7Padding();
@@ -68,11 +58,11 @@ public class Crypto {
             return cipher;
         }
 
-        byte[] decrypt(String keyBase64, byte[] _data) {
+        byte[] decrypt(byte[] _data) {
             byte[] iv = Arrays.copyOfRange(_data, 0, blockSize);
             byte[] data = Arrays.copyOfRange(_data, blockSize, _data.length);
 
-            BufferedBlockCipher cipher = getCipher(keyBase64, iv, false);
+            BufferedBlockCipher cipher = getCipher(iv, false);
 
             byte[] buf = new byte[cipher.getOutputSize(data.length)];
             int len = cipher.processBytes(data, 0, data.length, buf, 0);
@@ -91,11 +81,11 @@ public class Crypto {
             return out;
         }
 
-        byte[] encrypt(String keyBase64, byte[] data) {
+        byte[] encrypt(byte[] data) {
             byte[] iv = new byte[blockSize];
             getRandom().nextBytes(iv);
 
-            BufferedBlockCipher cipher = getCipher(keyBase64, iv, true);
+            BufferedBlockCipher cipher = getCipher(iv, true);
 
             byte[] buf = new byte[cipher.getOutputSize(data.length) + blockSize];
             System.arraycopy(iv, 0, buf, 0, iv.length);
@@ -111,11 +101,25 @@ public class Crypto {
             return buf;
         }
 
+        byte[] hmac(byte[] data) {
+            return hmac256(hmacKey, data);
+        }
+
         private SecureRandom getRandom() {
             if (_random == null) {
                 _random = new SecureRandom();
             }
             return _random;
+        }
+
+        private static byte[] hmac256(byte[] keyByte, byte[] data) {
+            HMac hmac = new HMac(new SHA256Digest());
+            KeyParameter key = new KeyParameter(keyByte);
+            byte[] ret = new byte[hmac.getMacSize()];
+            hmac.init(key);
+            hmac.update(data, 0, data.length);
+            hmac.doFinal(ret, 0);
+            return ret;
         }
     }
 

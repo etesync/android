@@ -1,14 +1,14 @@
 package com.etesync.syncadapter.journalmanager;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.GsonHelper;
+
 import org.apache.commons.codec.Charsets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.logging.Level;
-
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.GsonHelper;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,8 +18,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import static com.etesync.syncadapter.journalmanager.Crypto.hmac;
 
 abstract class BaseManager {
     final static protected MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -77,12 +75,14 @@ abstract class BaseManager {
 
         public String getContent(String keyBase64) {
             // FIXME: probably cache encryption object
-            return new String(new Crypto.Cipher().decrypt(keyBase64, content), Charsets.UTF_8);
+            Crypto.Cipher cipher = new Crypto.Cipher(keyBase64, null);
+            return new String(cipher.decrypt(content), Charsets.UTF_8);
         }
 
         void setContent(String keyBase64, String content) {
             // FIXME: probably cache encryption object
-            this.content = new Crypto.Cipher().encrypt(keyBase64, content.getBytes(Charsets.UTF_8));
+            Crypto.Cipher cipher = new Crypto.Cipher(keyBase64, null);
+            this.content = cipher.encrypt(content.getBytes(Charsets.UTF_8));
         }
 
         byte[] calculateHmac(String keyBase64, String uuid) {
@@ -99,7 +99,9 @@ abstract class BaseManager {
                 return "DEADBEEFDEADBEEFDEADBEEFDEADBEEF".getBytes();
             }
 
-            return hmac(keyBase64, hashContent.toByteArray());
+            // FIXME: probably cache encryption object
+            Crypto.Cipher cipher = new Crypto.Cipher(keyBase64, null);
+            return cipher.hmac(hashContent.toByteArray());
         }
 
         protected Base() {
