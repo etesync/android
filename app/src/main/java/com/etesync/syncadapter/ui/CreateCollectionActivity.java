@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 
 import org.apache.commons.lang3.StringUtils;

@@ -32,6 +32,7 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.SyncEntry;
@@ -59,7 +60,7 @@ public class ContactsSyncManager extends SyncManager {
     final private ContentProviderClient provider;
     final private HttpUrl remote;
 
-    public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException {
+    public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException, Exceptions.IntegrityException {
         super(context, account, settings, extras, authority, result, info.url, CollectionInfo.Type.ADDRESS_BOOK);
         this.provider = provider;
         this.remote = principal;

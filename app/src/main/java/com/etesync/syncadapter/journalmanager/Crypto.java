@@ -1,8 +1,12 @@
 package com.etesync.syncadapter.journalmanager;
 
+import android.support.annotation.NonNull;
 import android.util.Base64;
 
+import com.etesync.syncadapter.App;
+
 import org.apache.commons.codec.Charsets;
+import org.apache.commons.lang3.ArrayUtils;
 import org.spongycastle.crypto.BufferedBlockCipher;
 import org.spongycastle.crypto.CipherParameters;
 import org.spongycastle.crypto.InvalidCipherTextException;
@@ -21,7 +25,7 @@ import org.spongycastle.util.encoders.Hex;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-import com.etesync.syncadapter.App;
+import lombok.Getter;
 
 public class Crypto {
     public static String deriveKey(String salt, String password) {
@@ -32,12 +36,24 @@ public class Crypto {
 
     public static class CryptoManager {
         private SecureRandom _random = null;
+        @Getter
+        private final byte version;
         private final byte[] cipherKey;
         private final byte[] hmacKey;
 
-        public CryptoManager(String keyBase64, String salt) {
-            byte[] derivedKey; // FIXME use salt = hmac256(salt.getBytes(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP));
-            derivedKey = Base64.decode(keyBase64, Base64.NO_WRAP);
+        public CryptoManager(int version, @NonNull String keyBase64, @NonNull String salt) throws Exceptions.IntegrityException {
+            byte[] derivedKey;
+            if (version > Byte.MAX_VALUE) {
+                throw new Exceptions.IntegrityException("Version is out of range.");
+            } else if (version > Constants.CURRENT_VERSION) {
+                throw new RuntimeException("Journal version is newer than expected.");
+            } else if (version == 1) {
+                derivedKey = Base64.decode(keyBase64, Base64.NO_WRAP);
+            } else {
+                derivedKey = hmac256(salt.getBytes(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP));
+            }
+
+            this.version = (byte) version;
             cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);
             hmacKey = hmac256("hmac".getBytes(Charsets.UTF_8), derivedKey);
         }
@@ -101,7 +117,12 @@ public class Crypto {
         }
 
         byte[] hmac(byte[] data) {
-            return hmac256(hmacKey, data);
+            if (version == 1) {
+                return hmac256(hmacKey, data);
+            } else {
+                // Starting from version 2 we hmac the version too.
+                return hmac256(hmacKey, ArrayUtils.add(data, version));
+            }
         }
 
         private SecureRandom getRandom() {

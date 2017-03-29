@@ -24,6 +24,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.SyncEntry;
@@ -44,7 +45,7 @@ public class CalendarSyncManager extends SyncManager {
 
     final private HttpUrl remote;
 
-    public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws InvalidAccountException {
+    public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws InvalidAccountException, Exceptions.IntegrityException {
         super(context, account, settings, extras, authority, result, calendar.getName(), CollectionInfo.Type.CALENDAR);
         localCollection = calendar;
         this.remote = remote;

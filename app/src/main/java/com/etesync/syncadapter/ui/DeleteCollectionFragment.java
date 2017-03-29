@@ -120,7 +120,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
-                Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), collectionInfo.url);
+                Crypto.CryptoManager crypto = new Crypto.CryptoManager(collectionInfo.version, settings.password(), collectionInfo.url);
 
                 journalManager.deleteJournal(new JournalManager.Journal(crypto, collectionInfo.toJson(), collectionInfo.url));
                 JournalEntity journalEntity = JournalEntity.fetch(data, collectionInfo.url);
@@ -128,7 +128,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                 data.update(journalEntity);
 
                 return null;
-            } catch (Exceptions.HttpException e) {
+            } catch (Exceptions.HttpException|Exceptions.IntegrityException e) {
                 return e;
             } catch (InvalidAccountException e) {
                 return e;

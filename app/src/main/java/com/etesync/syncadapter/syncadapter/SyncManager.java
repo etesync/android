@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -95,7 +96,7 @@ abstract public class SyncManager {
     private List<LocalResource> localDeleted;
     private LocalResource[] localDirty;
 
-    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType) throws InvalidAccountException {
+    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType) throws InvalidAccountException, Exceptions.IntegrityException {
         this.context = context;
         this.account = account;
         this.settings = settings;
@@ -114,7 +115,8 @@ abstract public class SyncManager {
         notificationManager = new NotificationHelper(context, journalUid, notificationId());
         notificationManager.cancel();
 
-        crypto = new Crypto.CryptoManager(settings.password(), journalUid);
+        App.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version));
+        crypto = new Crypto.CryptoManager(info.version, settings.password(), journalUid);
     }
 
     protected abstract int notificationId();

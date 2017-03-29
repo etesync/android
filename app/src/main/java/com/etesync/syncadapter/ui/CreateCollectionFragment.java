@@ -158,11 +158,11 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
                 if (info.url == null) {
                     info.url = JournalManager.Journal.genUid();
-                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), info.url);
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.url);
                     JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
                     journalManager.putJournal(journal);
                 } else {
-                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), info.url);
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.url);
                     JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
                     journalManager.updateJournal(journal);
                 }
@@ -178,6 +178,8 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
             } catch (IllegalStateException | Exceptions.HttpException e) {
                 return e;
             } catch (InvalidAccountException e) {
+                return e;
+            } catch (Exceptions.IntegrityException e) {
                 return e;
             } finally {
                 dbHelper.close();

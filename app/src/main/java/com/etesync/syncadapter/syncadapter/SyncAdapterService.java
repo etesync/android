@@ -14,12 +14,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -33,7 +30,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +46,6 @@ import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.ui.PermissionsActivity;
 
@@ -161,9 +156,10 @@ public abstract class SyncAdapterService extends Service {
                     List<CollectionInfo> collections = new LinkedList<>();
 
                     for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), journal.getUuid());
+                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUuid());
                         CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
-                        info.url = journal.getUuid();
+                        info.updateFromJournal(journal);
+
                         if (info.type.equals(serviceType)) {
                             collections.add(info);
                         }
@@ -172,7 +168,7 @@ public abstract class SyncAdapterService extends Service {
                     if (collections.isEmpty()) {
                         CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
                         info.url = JournalManager.Journal.genUid();
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(settings.password(), info.url);
+                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.url);
                         JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
                         journalsManager.putJournal(journal);
                         collections.add(info);

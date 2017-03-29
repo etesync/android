@@ -10,6 +10,8 @@ package com.etesync.syncadapter.model;
 
 import android.content.ContentValues;
 
+import com.etesync.syncadapter.journalmanager.Constants;
+import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.ServiceDB.Collections;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -22,12 +24,17 @@ import lombok.ToString;
 public class CollectionInfo implements Serializable {
     @Deprecated
     public long id;
+
     public Long serviceID;
 
     public enum Type {
         ADDRESS_BOOK,
         CALENDAR
     }
+
+    // FIXME: Shouldn't be exposed, as it's already saved in the journal. We just expose it for when we save for db.
+    @Expose
+    public int version = -1;
 
     @Expose
     public Type type;
@@ -52,6 +59,7 @@ public class CollectionInfo implements Serializable {
     public boolean selected;
 
     public CollectionInfo() {
+        version = Constants.CURRENT_VERSION;
     }
 
     public static CollectionInfo defaultForServiceType(Type service) {
@@ -68,6 +76,11 @@ public class CollectionInfo implements Serializable {
             // Carddav
         }
         return info;
+    }
+
+    public void updateFromJournal(JournalManager.Journal journal) {
+        url = journal.getUuid();
+        version = journal.getVersion();
     }
 
     public boolean isOfTypeService(String service) {

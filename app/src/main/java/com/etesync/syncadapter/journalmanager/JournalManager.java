@@ -10,6 +10,9 @@ import java.util.UUID;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.GsonHelper;
+
+import lombok.Getter;
+import lombok.Setter;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,7 +49,7 @@ public class JournalManager extends BaseManager {
         List<Journal> ret = GsonHelper.gson.fromJson(body.charStream(), journalType);
 
         for (Journal journal : ret) {
-            Crypto.CryptoManager crypto = new Crypto.CryptoManager(keyBase64, journal.getUuid());
+            Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), keyBase64, journal.getUuid());
             journal.processFromJson();
             journal.verify(crypto);
         }
@@ -88,6 +91,10 @@ public class JournalManager extends BaseManager {
     }
 
     public static class Journal extends Base {
+        @Setter
+        @Getter
+        private int version = -1;
+
         final private transient int hmacSize = 256 / 8; // hmac256 in bytes
         private transient byte[] hmac = null;
 
@@ -99,6 +106,7 @@ public class JournalManager extends BaseManager {
         public Journal(Crypto.CryptoManager crypto, String content, String uid) {
             super(crypto, content, uid);
             hmac = calculateHmac(crypto);
+            version = crypto.getVersion();
         }
 
         private void processFromJson() {
