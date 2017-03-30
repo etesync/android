@@ -3,7 +3,9 @@ package com.etesync.syncadapter.ui.importlocal;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,14 +15,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.ui.ImportFragment;
 
-public class ImportActivity extends AppCompatActivity implements SelectImportMethod, OnImportCallback {
+public class ImportActivity extends AppCompatActivity implements SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
@@ -124,14 +125,18 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
     }
 
     @Override
-    public void onImportSuccess() {
-        //todo tom what would you like to do? toast?
+    public void onImportResult(ResultFragment.ImportResult importResult) {
+        ResultFragment fragment = ResultFragment.newInstance(importResult);
+        fragment.show(getSupportFragmentManager(), null);
+    }
+
+    @Override
+    public void cancel() {
         finish();
     }
 
     @Override
-    public void onImportFailed() {
-        //todo tom what would you like to do? toast?
+    public void dismiss() {
         finish();
     }
 

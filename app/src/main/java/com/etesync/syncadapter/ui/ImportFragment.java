@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentProviderClient;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,10 +16,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
@@ -29,6 +25,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalContact;
 import com.etesync.syncadapter.resource.LocalEvent;
+import com.etesync.syncadapter.ui.importlocal.ResultFragment;
 
 import org.apache.commons.codec.Charsets;
 
@@ -36,7 +33,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
@@ -44,10 +40,10 @@ import at.bitfire.ical4android.InvalidCalendarException;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Cleanup;
-import lombok.ToString;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 import static com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO;
+import static com.etesync.syncadapter.ui.importlocal.ResultFragment.*;
 
 public class ImportFragment extends DialogFragment {
     private static final int REQUEST_CODE = 6384; // onActivityResult request
@@ -345,70 +341,6 @@ public class ImportFragment extends DialogFragment {
                 result.e = e;
                 return result;
             }
-        }
-    }
-
-    @ToString
-    static class ImportResult implements Serializable {
-        long total;
-        long added;
-        long updated;
-        Exception e;
-
-        boolean isFailed() {
-            return (e != null);
-        }
-
-        long getSkipped() {
-            return total - (added + updated);
-        }
-    }
-
-    public static class ResultFragment extends DialogFragment {
-        private static final String KEY_RESULT = "result";
-        private ImportResult result;
-
-        private static ResultFragment newInstance(ImportResult result) {
-            Bundle args = new Bundle();
-            args.putSerializable(KEY_RESULT, result);
-            ResultFragment fragment = new ResultFragment();
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            result = (ImportResult) getArguments().getSerializable(KEY_RESULT);
-        }
-
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            int icon;
-            int title;
-            String msg;
-            if (result.isFailed()) {
-                icon = R.drawable.ic_error_dark;
-                title = R.string.import_dialog_failed_title;
-                msg = result.e.getLocalizedMessage();
-            } else {
-                icon = R.drawable.ic_import_export_black;
-                title = R.string.import_dialog_title;
-                msg = getString(R.string.import_dialog_success, result.total, result.added, result.updated, result.getSkipped());
-            }
-            return new AlertDialog.Builder(getActivity())
-                    .setTitle(title)
-                    .setIcon(icon)
-                    .setMessage(msg)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // dismiss
-                        }
-                    })
-                    .create();
         }
     }
 }

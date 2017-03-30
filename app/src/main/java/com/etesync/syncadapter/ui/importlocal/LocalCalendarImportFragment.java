@@ -34,7 +34,7 @@ public class LocalCalendarImportFragment extends ListFragment {
 
     private Account account;
     private CollectionInfo info;
-    private OnImportCallback importCallback;
+    private ResultFragment.OnImportCallback importCallback;
 
     public static LocalCalendarImportFragment newInstance(Account account, CollectionInfo info) {
         LocalCalendarImportFragment frag = new LocalCalendarImportFragment();
@@ -72,7 +72,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            importCallback = (OnImportCallback) getActivity();
+            importCallback = (ResultFragment.OnImportCallback) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement MyInterface ");
@@ -86,7 +86,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            importCallback = (OnImportCallback) activity;
+            importCallback = (ResultFragment.OnImportCallback) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement MyInterface ");
@@ -234,8 +234,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         @Override
         protected void onPostExecute(Boolean result) {
             progressDialog.dismiss();
-            if (result) importCallback.onImportSuccess();
-            else importCallback.onImportFailed();
+            importCallback.onImportResult(new ResultFragment.ImportResult());
         }
 
         private boolean importEvents(LocalCalendar fromCalendar) {
