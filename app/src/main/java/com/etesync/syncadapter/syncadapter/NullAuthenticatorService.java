@@ -19,6 +19,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.etesync.syncadapter.ui.AccountsActivity;
+
 public class NullAuthenticatorService extends Service {
 
     private AccountAuthenticator accountAuthenticator;
@@ -51,7 +53,11 @@ public class NullAuthenticatorService extends Service {
 
         @Override
         public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-            return null;
+            Intent intent = new Intent(context, AccountsActivity.class);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+            return bundle;
         }
 
         @Override
