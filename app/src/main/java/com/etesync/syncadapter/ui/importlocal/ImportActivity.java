@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
@@ -40,6 +41,8 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
         setContentView(R.layout.activity_import);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(getString(R.string.import_dialog_title));
 
         account = getIntent().getExtras().getParcelable(EXTRA_ACCOUNT);
         info = (CollectionInfo) getIntent().getExtras().getSerializable(EXTRA_COLLECTION_INFO);
@@ -73,6 +76,7 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
                     .addToBackStack(LocalContactImportFragment.class.getName())
                     .commit();
         }
+        setTitle(getString(R.string.import_select_account));
     }
 
     private void popBackStack() {
@@ -121,13 +125,13 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
 
     @Override
     public void onImportSuccess() {
-        //todo tom what would you like to do?
+        //todo tom what would you like to do? toast?
         finish();
     }
 
     @Override
     public void onImportFailed() {
-        //todo tom what would you like to do?
+        //todo tom what would you like to do? toast?
         finish();
     }
 

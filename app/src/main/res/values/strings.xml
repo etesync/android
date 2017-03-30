@@ -252,5 +252,6 @@
     <!-- Import Activity -->
     <string name="import_button_file">Import from flie</string>
     <string name="import_button_account">Import from account</string>
+    <string name="import_select_account">Select Account</string>
 
 </resources>
