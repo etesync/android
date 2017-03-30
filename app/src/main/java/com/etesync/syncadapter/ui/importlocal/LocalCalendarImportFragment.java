@@ -34,7 +34,6 @@ public class LocalCalendarImportFragment extends ListFragment {
 
     private Account account;
     private CollectionInfo info;
-    private ResultFragment.OnImportCallback importCallback;
 
     public static LocalCalendarImportFragment newInstance(Account account, CollectionInfo info) {
         LocalCalendarImportFragment frag = new LocalCalendarImportFragment();
@@ -64,33 +63,6 @@ public class LocalCalendarImportFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         importAccount();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            importCallback = (ResultFragment.OnImportCallback) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement MyInterface ");
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            importCallback = (ResultFragment.OnImportCallback) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement MyInterface ");
-        }
     }
 
     protected void importAccount() {
@@ -204,7 +176,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         }
     }
 
-    protected class ImportEvents extends AsyncTask<LocalCalendar, Integer, Boolean> {
+    protected class ImportEvents extends AsyncTask<LocalCalendar, Integer, ResultFragment.ImportResult> {
         ProgressDialog progressDialog;
 
         @Override
@@ -221,7 +193,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         }
 
         @Override
-        protected Boolean doInBackground(LocalCalendar... calendars) {
+        protected ResultFragment.ImportResult doInBackground(LocalCalendar... calendars) {
             return importEvents(calendars[0]);
         }
 
@@ -232,34 +204,47 @@ public class LocalCalendarImportFragment extends ListFragment {
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(ResultFragment.ImportResult result) {
             progressDialog.dismiss();
-            importCallback.onImportResult(new ResultFragment.ImportResult());
+            ((ResultFragment.OnImportCallback) getActivity()).onImportResult(result);
         }
 
-        private boolean importEvents(LocalCalendar fromCalendar) {
+        private ResultFragment.ImportResult importEvents(LocalCalendar fromCalendar) {
+            ResultFragment.ImportResult result = new ResultFragment.ImportResult();
             try {
                 LocalCalendar localCalendar = LocalCalendar.findByName(account,
                         getContext().getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
                         LocalCalendar.Factory.INSTANCE, info.url);
                 LocalEvent[] localEvents = fromCalendar.getAll();
-                progressDialog.setMax(localEvents.length);
+                int total = localEvents.length;
+                progressDialog.setMax(total);
+                result.total = total;
                 int progress = 0;
                 for (LocalEvent currentLocalEvent : localEvents) {
                     Event event = currentLocalEvent.getEvent();
                     try {
-                        LocalEvent localEvent = new LocalEvent(localCalendar, event, event.uid, null);
-                        localEvent.addAsDirty();
+                        LocalEvent localEvent = event.uid == null ? null :
+                                localCalendar.getByUid(event.uid);
+
+                        if (localEvent != null) {
+                            localEvent.updateAsDirty(event);
+                            result.updated++;
+                        } else {
+                            localEvent = new LocalEvent(localCalendar, event, event.uid, null);
+                            localEvent.addAsDirty();
+                            result.added++;
+                        }
                     } catch (CalendarStorageException e) {
                         e.printStackTrace();
+
                     }
                     publishProgress(++progress);
                 }
-                return true;
-            } catch (Exception aE) {
-                aE.printStackTrace();
-                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.e = e;
             }
+            return result;
         }
     }
 }

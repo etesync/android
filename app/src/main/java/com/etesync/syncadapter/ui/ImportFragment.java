@@ -81,9 +81,7 @@ public class ImportFragment extends DialogFragment {
         } else {
             ImportResult data = new ImportResult();
             data.e = new Exception(getString(R.string.import_permission_required));
-            getFragmentManager().beginTransaction()
-                    .add(ResultFragment.newInstance(data), null)
-                    .commitAllowingStateLoss();
+            ((ResultFragment.OnImportCallback) getActivity()).onImportResult(data);
 
             dismissAllowingStateLoss();
         }
@@ -162,9 +160,8 @@ public class ImportFragment extends DialogFragment {
         } catch (ActivityNotFoundException e) {
             ImportResult data = new ImportResult();
             data.e = new Exception("Failed to open file chooser.\nPlease install one.");
-            getFragmentManager().beginTransaction()
-                    .add(ResultFragment.newInstance(data), null)
-                    .commitAllowingStateLoss();
+
+            ((ResultFragment.OnImportCallback) getActivity()).onImportResult(data);
 
             dismissAllowingStateLoss();
         }
@@ -196,9 +193,7 @@ public class ImportFragment extends DialogFragment {
     }
 
     public void loadFinished(ImportResult data) {
-        getFragmentManager().beginTransaction()
-                .add(ResultFragment.newInstance(data), null)
-                .commitAllowingStateLoss();
+        ((ResultFragment.OnImportCallback) getActivity()).onImportResult(data);
 
         dismissAllowingStateLoss();
 

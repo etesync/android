@@ -1,10 +1,8 @@
 package com.etesync.syncadapter.ui.importlocal;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentProviderClient;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.bitfire.vcard4android.Contact;
+import at.bitfire.vcard4android.ContactsStorageException;
 
 import static android.content.ContentValues.TAG;
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
@@ -36,7 +35,6 @@ public class LocalContactImportFragment extends Fragment {
 
     private Account account;
     private CollectionInfo info;
-    private ResultFragment.OnImportCallback importCallback;
 
     public static LocalContactImportFragment newInstance(Account account, CollectionInfo info) {
         LocalContactImportFragment frag = new LocalContactImportFragment();
@@ -76,33 +74,6 @@ public class LocalContactImportFragment extends Fragment {
         importAccount();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            importCallback = (ResultFragment.OnImportCallback) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement MyInterface ");
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            importCallback = (ResultFragment.OnImportCallback) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement MyInterface ");
-        }
-    }
-
     protected void importAccount() {
         ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
         Cursor cursor;
@@ -138,7 +109,7 @@ public class LocalContactImportFragment extends Fragment {
         }));
     }
 
-    protected class ImportContacts extends AsyncTask<LocalAddressBook, Integer, Boolean> {
+    protected class ImportContacts extends AsyncTask<LocalAddressBook, Integer, ResultFragment.ImportResult> {
         ProgressDialog progressDialog;
 
         @Override
@@ -155,7 +126,7 @@ public class LocalContactImportFragment extends Fragment {
         }
 
         @Override
-        protected Boolean doInBackground(LocalAddressBook... addressBooks) {
+        protected ResultFragment.ImportResult doInBackground(LocalAddressBook... addressBooks) {
             return importContacts(addressBooks[0]);
         }
 
@@ -166,29 +137,46 @@ public class LocalContactImportFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(ResultFragment.ImportResult result) {
             progressDialog.dismiss();
-            importCallback.onImportResult(new ResultFragment.ImportResult());
+            ((ResultFragment.OnImportCallback) getActivity()).onImportResult(result);
         }
 
-        private boolean importContacts(LocalAddressBook localAddressBook) {
+        private ResultFragment.ImportResult importContacts(LocalAddressBook localAddressBook) {
+            ResultFragment.ImportResult result = new ResultFragment.ImportResult();
             try {
                 LocalAddressBook addressBook = new LocalAddressBook(account,
                         getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI));
                 LocalContact[] localContacts = localAddressBook.getAll();
                 int total = localContacts.length;
                 progressDialog.setMax(total);
+                result.total = total;
                 int progress = 0;
                 for (LocalContact currentLocalContact : localContacts) {
                     Contact contact = currentLocalContact.getContact();
                     (new LocalContact(addressBook, contact, contact.uid, null)).createAsDirty();
+
+                    try {
+                        LocalContact localContact = contact.uid == null ?
+                                null : (LocalContact) addressBook.getByUid(contact.uid);
+                        if (localContact != null) {
+                            localContact.updateAsDirty(contact);
+                            result.updated++;
+                        } else {
+                            localContact = new LocalContact(addressBook, contact, contact.uid, null);
+                            localContact.createAsDirty();
+                            result.added++;
+                        }
+                    } catch (ContactsStorageException e) {
+                        e.printStackTrace();
+                        result.e = e;
+                    }
                     publishProgress(++progress);
                 }
-                return true;
-            } catch (Exception aE) {
-                aE.printStackTrace();
-                return false;
+            } catch (Exception e) {
+                result.e = e;
             }
+            return result;
         }
     }
 
