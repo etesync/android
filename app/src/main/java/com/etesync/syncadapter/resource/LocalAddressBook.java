@@ -182,6 +182,11 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     }
 
     @NonNull
+    public LocalContact[] getAll() throws ContactsStorageException {
+        return (LocalContact[])queryContacts(RawContacts.DELETED + "== 0", null);
+    }
+
+    @NonNull
     public LocalGroup[] getDeletedGroups() throws ContactsStorageException {
         return (LocalGroup[])queryGroups(Groups.DELETED + "!= 0", null);
     }

@@ -147,7 +147,7 @@ public class LocalCalendarImportFragment extends ListFragment {
             //Todo add viewholder after we decide about the UI
 
             TextView txtListChild = (TextView) convertView
-                    .findViewById(R.id.lblListItem);
+                    .findViewById(R.id.listItemText);
 
             txtListChild.setText(childText);
             return convertView;
