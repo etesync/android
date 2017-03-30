@@ -1,27 +1,19 @@
-package com.etesync.syncadapter.resource;
+package com.etesync.syncadapter.ui.importlocal;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import com.etesync.syncadapter.resource.LocalCalendar;
 
-import at.bitfire.ical4android.AndroidCalendar;
-import at.bitfire.ical4android.AndroidEvent;
-import at.bitfire.ical4android.AndroidEventFactory;
-import at.bitfire.ical4android.CalendarStorageException;
-import at.bitfire.ical4android.Event;
-import lombok.Cleanup;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tal on 27/03/17.

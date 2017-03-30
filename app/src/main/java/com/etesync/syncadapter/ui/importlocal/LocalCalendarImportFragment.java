@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
-import com.etesync.syncadapter.resource.CalendarAccount;
+import com.etesync.syncadapter.model.CalendarAccount;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalEvent;
 
