@@ -3,7 +3,12 @@ package com.etesync.syncadapter.ui.importlocal;
 import android.accounts.Account;
 import android.app.ProgressDialog;
 import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,6 +40,7 @@ public class LocalContactImportFragment extends Fragment {
 
     private Account account;
     private CollectionInfo info;
+    private RecyclerView recyclerView;
 
     public static LocalContactImportFragment newInstance(Account account, CollectionInfo info) {
         LocalContactImportFragment frag = new LocalContactImportFragment();
@@ -55,8 +61,6 @@ public class LocalContactImportFragment extends Fragment {
         info = (CollectionInfo) getArguments().getSerializable(KEY_COLLECTION_INFO);
     }
 
-    RecyclerView recyclerView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_local_contact_import, container, false);
@@ -64,6 +68,7 @@ public class LocalContactImportFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         return view;
     }
 
@@ -79,7 +84,7 @@ public class LocalContactImportFragment extends Fragment {
         Cursor cursor;
         try {
             cursor = provider.query(ContactsContract.RawContacts.CONTENT_URI,
-                    new String[] { ContactsContract.RawContacts.ACCOUNT_NAME, ContactsContract.RawContacts.ACCOUNT_TYPE }
+                    new String[]{ContactsContract.RawContacts.ACCOUNT_NAME, ContactsContract.RawContacts.ACCOUNT_TYPE}
                     , null, null, ContactsContract.RawContacts.ACCOUNT_NAME + " ASC");
         } catch (Exception except) {
             Log.w(TAG, "Calendar provider is missing columns, continuing anyway");
@@ -190,7 +195,8 @@ public class LocalContactImportFragment extends Fragment {
          * Provide a reference to the type of views that you are using (custom ViewHolder)
          */
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            private final TextView textView;
+            private final TextView titleTextView;
+            private final TextView descTextView;
 
             public ViewHolder(View v, final OnAccountSelected onAccountSelected) {
                 super(v);
@@ -201,11 +207,16 @@ public class LocalContactImportFragment extends Fragment {
                         onAccountSelected.accountSelected(getAdapterPosition());
                     }
                 });
-                textView = (TextView) v.findViewById(R.id.listItemText);
+                titleTextView = (TextView) v.findViewById(R.id.title);
+                descTextView = (TextView) v.findViewById(R.id.description);
             }
 
-            public TextView getTextView() {
-                return textView;
+            public TextView getTitleTextView() {
+                return titleTextView;
+            }
+
+            public TextView getDescriptionTextView() {
+                return descTextView;
             }
         }
 
@@ -224,14 +235,15 @@ public class LocalContactImportFragment extends Fragment {
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             // Create a new view.
             View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.list_item, viewGroup, false);
+                    .inflate(R.layout.import_contacts_list_item, viewGroup, false);
 
             return new ViewHolder(v, mOnAccountSelected);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-            viewHolder.getTextView().setText(mAddressBooks.get(position).account.name);
+            viewHolder.getTitleTextView().setText(mAddressBooks.get(position).account.name);
+            viewHolder.getDescriptionTextView().setText(mAddressBooks.get(position).account.type);
         }
 
         @Override
@@ -242,5 +254,46 @@ public class LocalContactImportFragment extends Fragment {
 
     private interface OnAccountSelected {
         void accountSelected(int index);
+    }
+
+    public static class DividerItemDecoration extends RecyclerView.ItemDecoration {
+
+        private static final int[] ATTRS = new int[]{
+                android.R.attr.listDivider
+        };
+
+        private Drawable mDivider;
+
+        public DividerItemDecoration(Context context) {
+            final TypedArray a = context.obtainStyledAttributes(ATTRS);
+            mDivider = a.getDrawable(0);
+            a.recycle();
+        }
+
+        @Override
+        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            drawVertical(c, parent);
+        }
+
+        public void drawVertical(Canvas c, RecyclerView parent) {
+            final int left = parent.getPaddingLeft();
+            final int right = parent.getWidth() - parent.getPaddingRight();
+
+            final int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                final View child = parent.getChildAt(i);
+                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                        .getLayoutParams();
+                final int top = child.getBottom() + params.bottomMargin;
+                final int bottom = top + mDivider.getIntrinsicHeight();
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+        }
     }
 }

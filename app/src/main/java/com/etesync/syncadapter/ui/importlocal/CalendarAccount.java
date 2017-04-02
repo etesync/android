@@ -116,6 +116,6 @@ public class CalendarAccount {
 
     @Override
     public String toString() {
-        return accountName + " calendars:" + calendars.size();
+        return accountName;
     }
 }

@@ -250,8 +250,8 @@
     <string name="loading_error_content">Refresh</string>
 
     <!-- Import Activity -->
-    <string name="import_button_file">Import from flie</string>
-    <string name="import_button_account">Import from account</string>
+    <string name="import_button_file">Import from file</string>
+    <string name="import_button_local">Import from local</string>
     <string name="import_select_account">Select Account</string>
 
 </resources>

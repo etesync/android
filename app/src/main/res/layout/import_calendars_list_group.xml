@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
+              android:background="@color/light_green700"
               android:padding="8dp"
-              android:background="#000000">
+              android:orientation="vertical">
 
 
     <TextView
-        android:id="@+id/lblListHeader"
-        android:layout_width="fill_parent"
+        android:id="@+id/title"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="17dp"
-        android:textColor="#f9f93d" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="Title"/>
 
 </LinearLayout>

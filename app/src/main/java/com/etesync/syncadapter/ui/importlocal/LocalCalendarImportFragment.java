@@ -1,10 +1,8 @@
 package com.etesync.syncadapter.ui.importlocal;
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
-import com.etesync.syncadapter.model.CalendarAccount;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalEvent;
 
@@ -55,7 +52,7 @@ public class LocalCalendarImportFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_local_import, container, false);
+        return inflater.inflate(R.layout.fragment_local_calendar_import, container, false);
     }
 
     @Override
@@ -94,6 +91,14 @@ public class LocalCalendarImportFragment extends ListFragment {
             this.calendarAccounts = calendarAccounts;
         }
 
+        private class ChildViewHolder {
+            TextView textView;
+        }
+
+        private class GroupViewHolder {
+            TextView titleTextView;
+        }
+
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
             return calendarAccounts.get(groupPosition).calendars
@@ -110,18 +115,22 @@ public class LocalCalendarImportFragment extends ListFragment {
                                  boolean isLastChild, View convertView, ViewGroup parent) {
 
             final String childText = (String) getChild(groupPosition, childPosition);
-
+            ChildViewHolder viewHolder;
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.list_item, null);
+                convertView = inflater.inflate(R.layout.import_calendars_list_item, null);
             }
-            //Todo add viewholder after we decide about the UI
 
-            TextView txtListChild = (TextView) convertView
-                    .findViewById(R.id.listItemText);
-
-            txtListChild.setText(childText);
+            if (convertView.getTag() != null) {
+                viewHolder =  (ChildViewHolder) convertView.getTag();
+            } else {
+                viewHolder = new ChildViewHolder();
+                viewHolder.textView = (TextView) convertView
+                        .findViewById(R.id.listItemText);
+                convertView.setTag(viewHolder);
+            }
+            viewHolder.textView.setText(childText);
             return convertView;
         }
 
@@ -150,17 +159,21 @@ public class LocalCalendarImportFragment extends ListFragment {
         public View getGroupView(int groupPosition, boolean isExpanded,
                                  View convertView, ViewGroup parent) {
             String headerTitle = (String) getGroup(groupPosition);
+            GroupViewHolder viewHolder;
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.list_group, null);
+                convertView = inflater.inflate(R.layout.import_calendars_list_group, null);
             }
-            //Todo add viewholder after we decide about the UI
-
-            TextView lblListHeader = (TextView) convertView
-                    .findViewById(R.id.lblListHeader);
-            lblListHeader.setTypeface(null, Typeface.BOLD);
-            lblListHeader.setText(headerTitle);
+            if (convertView.getTag() != null) {
+                viewHolder =  (GroupViewHolder) convertView.getTag();
+            } else {
+                viewHolder = new GroupViewHolder();
+                viewHolder.titleTextView = (TextView) convertView
+                        .findViewById(R.id.title);
+                convertView.setTag(viewHolder);
+            }
+            viewHolder.titleTextView.setText(headerTitle);
 
             return convertView;
         }
