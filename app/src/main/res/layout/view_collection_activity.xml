@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,16 +22,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:hint="@string/create_calendar_display_name_hint"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:hint="@string/create_calendar_display_name_hint"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <View
                 android:id="@+id/color"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="16dp"
-                android:background="@color/orangeA700" />
+                android:background="@color/orangeA700"/>
 
         </LinearLayout>
 
@@ -39,7 +39,7 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"/>
     </LinearLayout>
 
     <TextView
@@ -47,14 +47,26 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_margin"
         android:text="@string/change_journal_title"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <TextView
-        android:id="@+id/stats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/activity_margin"
-        android:text="Stats:" />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:padding="@dimen/activity_margin">
+        <TextView
+            android:id="@+id/stats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Stats:"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+        />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/list_entries_container"

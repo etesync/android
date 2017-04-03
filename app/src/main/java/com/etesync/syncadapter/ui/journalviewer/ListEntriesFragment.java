@@ -8,7 +8,9 @@
 
 package com.etesync.syncadapter.ui.journalviewer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
@@ -27,6 +29,9 @@ import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
 
+import org.w3c.dom.Text;
+
+import java.util.List;
 import java.util.Locale;
 
 import io.requery.Persistable;
@@ -36,7 +41,10 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     protected static final String EXTRA_COLLECTION_INFO = "collectionInfo";
 
     private EntityDataStore<Persistable> data;
+    private CollectionInfo info;
     private JournalEntity journalEntity;
+
+    private TextView emptyTextView;
 
     public static ListEntriesFragment newInstance(CollectionInfo info) {
         ListEntriesFragment frag = new ListEntriesFragment();
@@ -50,24 +58,25 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         data = ((App) getContext().getApplicationContext()).getData();
-        CollectionInfo info = (CollectionInfo) getArguments().getSerializable(EXTRA_COLLECTION_INFO);
-        journalEntity = JournalModel.Journal.fetch(data, info.url);
+        info = (CollectionInfo) getArguments().getSerializable(EXTRA_COLLECTION_INFO);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle(journalEntity.getInfo().displayName);
-        return inflater.inflate(R.layout.journal_viewer_list, container, false);
+        getActivity().setTitle(info.displayName);
+        View view = inflater.inflate(R.layout.journal_viewer_list, container, false);
+
+        //This is instead of setEmptyText() function because of Google bug
+        //See: https://code.google.com/p/android/issues/detail?id=21742
+        emptyTextView = (TextView) view.findViewById(android.R.id.empty);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EntriesListAdapter listAdapter = new EntriesListAdapter(getContext());
-        setListAdapter(listAdapter);
-
-        listAdapter.addAll(data.select(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList());
+        new JournalFetch().execute();
 
         getListView().setOnItemClickListener(this);
     }
@@ -124,6 +133,25 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
             tv.setText(content);
 
             return v;
+        }
+    }
+
+    private class JournalFetch extends AsyncTask<Void, Void, List<EntryEntity>> {
+
+        @Override
+        protected List<EntryEntity> doInBackground(Void... voids) {
+            journalEntity = JournalModel.Journal.fetch(data, info.url);
+            return data.select(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList();
+        }
+
+        @Override
+        protected void onPostExecute(List<EntryEntity> result) {
+            EntriesListAdapter listAdapter = new EntriesListAdapter(getContext());
+            setListAdapter(listAdapter);
+
+            listAdapter.addAll(result);
+
+            emptyTextView.setText(getString(R.string.journal_entries_list_empty));
         }
     }
 }
