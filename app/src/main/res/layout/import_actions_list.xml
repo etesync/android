@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/import_file"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        layout="@layout/import_actions_list_item"/>
+
+    <include
+        android:id="@+id/import_account"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        layout="@layout/import_actions_list_item"/>
+</LinearLayout>

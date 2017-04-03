@@ -2,8 +2,6 @@ package com.etesync.syncadapter.ui.importlocal;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
@@ -39,8 +39,6 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_import);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(getString(R.string.import_dialog_title));
@@ -50,7 +48,7 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
 
         if (savedInstanceState == null)
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new ImportActivity.SelectImportFragment())
+                    .add(android.R.id.content, new ImportActivity.SelectImportFragment())
                     .commit();
     }
 
@@ -66,13 +64,13 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
     public void importAccount() {
         if (info.type == CollectionInfo.Type.CALENDAR) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container,
+                    .replace(android.R.id.content,
                             LocalCalendarImportFragment.newInstance(account, info))
                     .addToBackStack(LocalCalendarImportFragment.class.getName())
                     .commit();
         } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container,
+                    .replace(android.R.id.content,
                             LocalContactImportFragment.newInstance(account, info))
                     .addToBackStack(LocalContactImportFragment.class.getName())
                     .commit();
@@ -140,6 +138,7 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
         finish();
     }
 
+
     public static class SelectImportFragment extends Fragment {
 
         private SelectImportMethod mSelectImportMethod;
@@ -172,20 +171,32 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
         }
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.fragment_import, container, false);
-            v.findViewById(R.id.import_button_account).setOnClickListener(new View.OnClickListener() {
+            View v = inflater.inflate(R.layout.import_actions_list, container, false);
+
+            View card = v.findViewById(R.id.import_file);
+            ImageView img = (ImageView) card.findViewById(R.id.action_icon);
+            TextView text = (TextView) card.findViewById(R.id.action_text);
+            img.setImageResource(R.drawable.ic_file_white);
+            text.setText(R.string.import_button_file);
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View aView) {
+                    mSelectImportMethod.importFile();
+                }
+            });
+
+            card = v.findViewById(R.id.import_account);
+            img = (ImageView) card.findViewById(R.id.action_icon);
+            text = (TextView) card.findViewById(R.id.action_text);
+            img.setImageResource(R.drawable.ic_account_circle_white);
+            text.setText(R.string.import_button_local);
+            card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View aView) {
                     mSelectImportMethod.importAccount();
                 }
             });
 
-            v.findViewById(R.id.import_button_file).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View aView) {
-                    mSelectImportMethod.importFile();
-                }
-            });
             return v;
         }
     }
