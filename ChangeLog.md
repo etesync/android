@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.12.0
+* Add import from local account (import calendars/contacts)
+* Update the crypto protocol to version 2.
+* Refactoring
+
 ## Version 0.11.1
 * Fix potential crash when updating the app.
 
