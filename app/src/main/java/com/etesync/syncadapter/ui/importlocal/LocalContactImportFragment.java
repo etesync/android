@@ -86,7 +86,8 @@ public class LocalContactImportFragment extends Fragment {
         try {
             cursor = provider.query(ContactsContract.RawContacts.CONTENT_URI,
                     new String[]{ContactsContract.RawContacts.ACCOUNT_NAME, ContactsContract.RawContacts.ACCOUNT_TYPE}
-                    , null, null, ContactsContract.RawContacts.ACCOUNT_NAME + " ASC");
+                    , null, null,
+                    ContactsContract.RawContacts.ACCOUNT_NAME + " ASC, " + ContactsContract.RawContacts.ACCOUNT_TYPE);
         } catch (Exception except) {
             Log.w(TAG, "Calendar provider is missing columns, continuing anyway");
 

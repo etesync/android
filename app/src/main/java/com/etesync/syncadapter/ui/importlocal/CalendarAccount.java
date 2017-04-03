@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.etesync.syncadapter.App;
@@ -21,19 +22,15 @@ import java.util.List;
  */
 
 public class CalendarAccount {
-    public String accountName;
-    public List<LocalCalendar> calendars = new ArrayList<>();
+    private Account account;
+    private List<LocalCalendar> calendars = new ArrayList<>();
 
-    private static final String[] CAL_COLS = new String[] {
-            Calendars._ID, Calendars.DELETED, Calendars.NAME, Calendars.CALENDAR_DISPLAY_NAME,
-            Calendars.ACCOUNT_NAME, Calendars.ACCOUNT_TYPE, Calendars.OWNER_ACCOUNT,
-            Calendars.VISIBLE, Calendars.CALENDAR_TIME_ZONE };
+    private static final String[] CAL_COLS = new String[]{
+            Calendars.ACCOUNT_NAME, Calendars.ACCOUNT_TYPE,
+            Calendars.DELETED, Calendars.NAME};
 
-    private static final String[] CAL_ID_COLS = new String[] { Events._ID };
-    private static final String CAL_ID_WHERE = Events.CALENDAR_ID + "=?";
-
-    protected CalendarAccount(String accountName) {
-        this.accountName = accountName;
+    protected CalendarAccount(Account account) {
+        this.account = account;
     }
 
     // Load all available calendars.
@@ -47,7 +44,8 @@ public class CalendarAccount {
         Cursor cur;
         try {
             cur = resolver.query(Calendars.CONTENT_URI,
-                    CAL_COLS, null, null, Calendars.ACCOUNT_NAME + " ASC");
+                    CAL_COLS, null, null,
+                    ContactsContract.RawContacts.ACCOUNT_NAME + " ASC, " + ContactsContract.RawContacts.ACCOUNT_TYPE);
         } catch (Exception except) {
             App.log.warning("Calendar provider is missing columns, continuing anyway");
             cur = resolver.query(Calendars.CONTENT_URI, null, null, null, null);
@@ -56,35 +54,29 @@ public class CalendarAccount {
         List<CalendarAccount> calendarAccounts = new ArrayList<>(cur.getCount());
 
         CalendarAccount calendarAccount = null;
+
         ContentProviderClient contentProviderClient = resolver.acquireContentProviderClient(CalendarContract.CONTENT_URI);
         while (cur.moveToNext()) {
             if (getLong(cur, Calendars.DELETED) != 0)
                 continue;
 
             String accountName = getString(cur, Calendars.ACCOUNT_NAME);
-            if (calendarAccount == null || !calendarAccount.accountName.equals(accountName)) {
-                calendarAccount = new CalendarAccount(accountName);
+            String accountType = getString(cur, Calendars.ACCOUNT_TYPE);
+            if (calendarAccount == null ||
+                    !calendarAccount.getAccountName().equals(accountName) ||
+                    !calendarAccount.getAccountType().equals(accountType)) {
+                calendarAccount = new CalendarAccount(new Account(accountName, accountType));
                 calendarAccounts.add(calendarAccount);
             }
 
-            long id = getLong(cur, Calendars._ID);
-            if (id == -1) {
-                continue;
-            }
-
-            final String[] args = new String[] { String.valueOf(id) };
-            Cursor eventsCur = resolver.query(Events.CONTENT_URI, CAL_ID_COLS, CAL_ID_WHERE, args, null);
-            Account account = new Account(accountName, getString(cur, Calendars.ACCOUNT_TYPE));
-
             try {
-                LocalCalendar localCalendar = LocalCalendar.findByName(account, contentProviderClient,
+                LocalCalendar localCalendar = LocalCalendar.findByName(calendarAccount.getAccount(),
+                        contentProviderClient,
                         LocalCalendar.Factory.INSTANCE, getString(cur, Calendars.NAME));
                 if (localCalendar != null) calendarAccount.calendars.add(localCalendar);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
-            eventsCur.close();
         }
         contentProviderClient.release();
         cur.close();
@@ -113,8 +105,24 @@ public class CalendarAccount {
         return provider == null;
     }
 
+    public String getAccountName() {
+        return account.name;
+    }
+
+    public String getAccountType() {
+        return account.type;
+    }
+
+    public List<LocalCalendar> getCalendars() {
+        return calendars;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
     @Override
     public String toString() {
-        return accountName;
+        return account.toString();
     }
 }

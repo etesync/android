@@ -74,7 +74,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         listCalendar.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView aExpandableListView, View aView, int groupPosition, int childPosition, long aL) {
-                new ImportEvents().execute(calendarAccountList.get(groupPosition).calendars.get(childPosition));
+                new ImportEvents().execute(calendarAccountList.get(groupPosition).getCalendars().get(childPosition));
                 return false;
             }
         });
@@ -102,7 +102,7 @@ public class LocalCalendarImportFragment extends ListFragment {
 
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
-            return calendarAccounts.get(groupPosition).calendars
+            return calendarAccounts.get(groupPosition).getCalendars()
                     .get(childPosititon).getDisplayName();
         }
 
@@ -137,13 +137,13 @@ public class LocalCalendarImportFragment extends ListFragment {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return calendarAccounts.get(groupPosition).calendars
+            return calendarAccounts.get(groupPosition).getCalendars()
                     .size();
         }
 
         @Override
         public Object getGroup(int groupPosition) {
-            return calendarAccounts.get(groupPosition).toString();
+            return calendarAccounts.get(groupPosition);
         }
 
         @Override
@@ -159,7 +159,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded,
                                  View convertView, ViewGroup parent) {
-            String headerTitle = (String) getGroup(groupPosition);
+            CalendarAccount calendarAccount = (CalendarAccount) getGroup(groupPosition);
             GroupViewHolder viewHolder;
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
@@ -176,9 +176,9 @@ public class LocalCalendarImportFragment extends ListFragment {
                         .findViewById(R.id.description);
                 convertView.setTag(viewHolder);
             }
-            viewHolder.titleTextView.setText(headerTitle);
-            viewHolder.descriptionTextView.setText(headerTitle);
 
+            viewHolder.titleTextView.setText(calendarAccount.getAccountName());
+            viewHolder.descriptionTextView.setText(calendarAccount.getAccountType());
 
             return convertView;
         }
