@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etesync.syncadapter.R;
@@ -197,6 +198,7 @@ public class LocalContactImportFragment extends Fragment {
         public static class ViewHolder extends RecyclerView.ViewHolder {
             private final TextView titleTextView;
             private final TextView descTextView;
+            private final ImageView iconImageView;
 
             public ViewHolder(View v, final OnAccountSelected onAccountSelected) {
                 super(v);
@@ -209,14 +211,7 @@ public class LocalContactImportFragment extends Fragment {
                 });
                 titleTextView = (TextView) v.findViewById(R.id.title);
                 descTextView = (TextView) v.findViewById(R.id.description);
-            }
-
-            public TextView getTitleTextView() {
-                return titleTextView;
-            }
-
-            public TextView getDescriptionTextView() {
-                return descTextView;
+                iconImageView = (ImageView) v.findViewById(R.id.icon);
             }
         }
 
@@ -242,8 +237,8 @@ public class LocalContactImportFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-            viewHolder.getTitleTextView().setText(mAddressBooks.get(position).account.name);
-            viewHolder.getDescriptionTextView().setText(mAddressBooks.get(position).account.type);
+            viewHolder.titleTextView.setText(mAddressBooks.get(position).account.name);
+            viewHolder.descTextView.setText(mAddressBooks.get(position).account.type);
         }
 
         @Override
