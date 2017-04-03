@@ -10,6 +10,7 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.util.Log;
 
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
 import java.util.ArrayList;
@@ -20,8 +21,6 @@ import java.util.List;
  */
 
 public class CalendarAccount {
-    private static final String TAG = "CalendarAccount";
-
     public String accountName;
     public List<LocalCalendar> calendars = new ArrayList<>();
 
@@ -50,7 +49,7 @@ public class CalendarAccount {
             cur = resolver.query(Calendars.CONTENT_URI,
                     CAL_COLS, null, null, Calendars.ACCOUNT_NAME + " ASC");
         } catch (Exception except) {
-            Log.w(TAG, "Calendar provider is missing columns, continuing anyway");
+            App.log.warning("Calendar provider is missing columns, continuing anyway");
             cur = resolver.query(Calendars.CONTENT_URI, null, null, null, null);
             except.printStackTrace();
         }
