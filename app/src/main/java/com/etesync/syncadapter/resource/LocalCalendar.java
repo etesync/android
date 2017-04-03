@@ -130,6 +130,11 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         return (LocalEvent[])queryEvents(Events._SYNC_ID + " IS NULL AND " + Events.ORIGINAL_ID + " IS NULL", null);
     }
 
+
+    public LocalEvent[] getAll() throws CalendarStorageException {
+        return (LocalEvent[])queryEvents(null, null);
+    }
+
     @Override
     public LocalEvent getByUid(String uid) throws CalendarStorageException {
         LocalEvent[] ret = (LocalEvent[]) queryEvents(Events._SYNC_ID + " =? ", new String[]{uid});
