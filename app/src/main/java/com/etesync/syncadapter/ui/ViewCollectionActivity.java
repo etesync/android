@@ -11,10 +11,12 @@ package com.etesync.syncadapter.ui;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,11 +34,14 @@ import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment;
 
 import java.io.FileNotFoundException;
 import java.util.Locale;
+import java.util.Objects;
 
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
+
+import static com.etesync.syncadapter.R.id.stats;
 
 public class ViewCollectionActivity extends AppCompatActivity implements Refreshable {
     public final static String EXTRA_ACCOUNT = "account",
@@ -55,7 +60,6 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     @Override
     public void refresh() {
         EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
-        int entryCount = -1;
 
         final JournalEntity journalEntity = JournalEntity.fetch(data, info.url);
         if ((journalEntity == null) || journalEntity.isDeleted()) {
@@ -65,11 +69,6 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
 
         info = journalEntity.getInfo();
 
-        entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
-
-
-        final TextView stats = (TextView) findViewById(R.id.stats);
-
         final View colorSquare = findViewById(R.id.color);
         if (info.type == CollectionInfo.Type.CALENDAR) {
             if (info.color != null) {
@@ -77,27 +76,11 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
             } else {
                 colorSquare.setBackgroundColor(LocalCalendar.defaultColor);
             }
-
-            try {
-                LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.url);
-                long count = resource.count();
-                stats.setText(String.format(Locale.getDefault(), "Events: %d, Journal entries: %d", count, entryCount));
-            } catch (FileNotFoundException|CalendarStorageException e) {
-                e.printStackTrace();
-                stats.setText("Stats loading error.");
-            }
         } else {
             colorSquare.setVisibility(View.GONE);
-
-            try {
-                LocalAddressBook resource = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
-                long count = resource.count();
-                stats.setText(String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d", count, entryCount));
-            } catch (ContactsStorageException e) {
-                e.printStackTrace();
-                stats.setText("Stats loading error.");
-            }
         }
+
+        new LoadCountTask().execute();
 
         final TextView title = (TextView) findViewById(R.id.display_name);
         title.setText(info.displayName);
@@ -169,5 +152,56 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
 
     public void onImport(MenuItem item) {
         startActivity(ImportActivity.newIntent(ViewCollectionActivity.this, account, info));
+    }
+
+    private class LoadCountTask extends AsyncTask<Void, Void, Long> {
+        private int entryCount;
+
+        @Override
+        protected Long doInBackground(Void... aVoids) {
+            EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
+
+            final JournalEntity journalEntity = JournalEntity.fetch(data, info.url);
+
+            entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
+            long count;
+
+            if (info.type == CollectionInfo.Type.CALENDAR) {
+                try {
+                    LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.url);
+                    count = resource.count();
+                } catch (FileNotFoundException | CalendarStorageException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                try {
+                    LocalAddressBook resource = new LocalAddressBook(account, getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+                    count = resource.count();
+                } catch (ContactsStorageException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            return count;
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            final TextView stats = (TextView) findViewById(R.id.stats);
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
+
+            if (result == null) {
+                stats.setText("Stats loading error.");
+            } else {
+                if (info.type == CollectionInfo.Type.CALENDAR) {
+                    stats.setText(String.format(Locale.getDefault(), "Events: %d, Journal entries: %d",
+                            result, entryCount));
+                } else {
+                    stats.setText(String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d",
+                            result, entryCount));
+                }
+            }
+        }
     }
 }
