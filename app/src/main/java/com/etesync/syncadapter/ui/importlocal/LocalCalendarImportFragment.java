@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etesync.syncadapter.R;
@@ -85,10 +86,12 @@ public class LocalCalendarImportFragment extends ListFragment {
 
         private Context context;
         private List<CalendarAccount> calendarAccounts;
+        private AccountResolver accountResolver;
 
         public ExpandableListAdapter(Context context, List<CalendarAccount> calendarAccounts) {
             this.context = context;
             this.calendarAccounts = calendarAccounts;
+            this.accountResolver = new AccountResolver(context);
         }
 
         private class ChildViewHolder {
@@ -98,6 +101,7 @@ public class LocalCalendarImportFragment extends ListFragment {
         private class GroupViewHolder {
             TextView titleTextView;
             TextView descriptionTextView;
+            ImageView iconImageView;
         }
 
         @Override
@@ -174,11 +178,14 @@ public class LocalCalendarImportFragment extends ListFragment {
                         .findViewById(R.id.title);
                 viewHolder.descriptionTextView = (TextView) convertView
                         .findViewById(R.id.description);
+                viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.icon);
                 convertView.setTag(viewHolder);
             }
 
             viewHolder.titleTextView.setText(calendarAccount.getAccountName());
-            viewHolder.descriptionTextView.setText(calendarAccount.getAccountType());
+            AccountResolver.AccountInfo accountInfo = accountResolver.resolve(calendarAccount.getAccountType());
+            viewHolder.descriptionTextView.setText(accountInfo.name);
+            viewHolder.iconImageView.setImageDrawable(accountInfo.icon);
 
             return convertView;
         }

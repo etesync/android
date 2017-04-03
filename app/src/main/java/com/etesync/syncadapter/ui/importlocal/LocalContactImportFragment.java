@@ -108,7 +108,7 @@ public class LocalContactImportFragment extends Fragment {
             }
         }
 
-        recyclerView.setAdapter(new ImportContactAdapter(localAddressBooks, new OnAccountSelected() {
+        recyclerView.setAdapter(new ImportContactAdapter(getContext(), localAddressBooks, new OnAccountSelected() {
             @Override
             public void accountSelected(int index) {
                 new ImportContacts().execute(localAddressBooks.get(index));
@@ -192,6 +192,7 @@ public class LocalContactImportFragment extends Fragment {
 
         private List<LocalAddressBook> mAddressBooks;
         private OnAccountSelected mOnAccountSelected;
+        private AccountResolver accountResolver;
 
         /**
          * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -221,9 +222,10 @@ public class LocalContactImportFragment extends Fragment {
          *
          * @param addressBooks containing the data to populate views to be used by RecyclerView.
          */
-        public ImportContactAdapter(List<LocalAddressBook> addressBooks, OnAccountSelected onAccountSelected) {
+        public ImportContactAdapter(Context context, List<LocalAddressBook> addressBooks, OnAccountSelected onAccountSelected) {
             mAddressBooks = addressBooks;
             mOnAccountSelected = onAccountSelected;
+            accountResolver = new AccountResolver(context);
         }
 
         // Create new views (invoked by the layout manager)
@@ -239,7 +241,9 @@ public class LocalContactImportFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
             viewHolder.titleTextView.setText(mAddressBooks.get(position).account.name);
-            viewHolder.descTextView.setText(mAddressBooks.get(position).account.type);
+            AccountResolver.AccountInfo accountInfo = accountResolver.resolve(mAddressBooks.get(position).account.type);
+            viewHolder.descTextView.setText(accountInfo.name);
+            viewHolder.iconImageView.setImageDrawable(accountInfo.icon);
         }
 
         @Override
