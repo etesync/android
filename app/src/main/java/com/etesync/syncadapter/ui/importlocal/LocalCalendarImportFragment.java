@@ -97,6 +97,7 @@ public class LocalCalendarImportFragment extends ListFragment {
 
         private class GroupViewHolder {
             TextView titleTextView;
+            TextView descriptionTextView;
         }
 
         @Override
@@ -163,7 +164,7 @@ public class LocalCalendarImportFragment extends ListFragment {
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.import_calendars_list_group, null);
+                convertView = inflater.inflate(R.layout.import_content_list_header, null);
             }
             if (convertView.getTag() != null) {
                 viewHolder =  (GroupViewHolder) convertView.getTag();
@@ -171,9 +172,13 @@ public class LocalCalendarImportFragment extends ListFragment {
                 viewHolder = new GroupViewHolder();
                 viewHolder.titleTextView = (TextView) convertView
                         .findViewById(R.id.title);
+                viewHolder.descriptionTextView = (TextView) convertView
+                        .findViewById(R.id.description);
                 convertView.setTag(viewHolder);
             }
             viewHolder.titleTextView.setText(headerTitle);
+            viewHolder.descriptionTextView.setText(headerTitle);
+
 
             return convertView;
         }

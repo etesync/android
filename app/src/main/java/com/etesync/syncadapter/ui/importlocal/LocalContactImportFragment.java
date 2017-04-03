@@ -235,7 +235,7 @@ public class LocalContactImportFragment extends Fragment {
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             // Create a new view.
             View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.import_contacts_list_item, viewGroup, false);
+                    .inflate(R.layout.import_content_list_account, viewGroup, false);
 
             return new ViewHolder(v, mOnAccountSelected);
         }
