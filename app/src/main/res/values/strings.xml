@@ -208,6 +208,7 @@
 
     <!-- JournalViewer -->
     <string name="journal_entries_list_empty">No entries found for this journal</string>
+    <string name="journal_entries_loading">Loading journal entries...</string>
 
     <!-- ExceptionInfoFragment -->
     <string name="exception">An error has occurred.</string>

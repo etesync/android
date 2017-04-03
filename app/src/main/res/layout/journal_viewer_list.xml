@@ -15,6 +15,6 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp"
         android:gravity="center"
-        android:text="@string/journal_entries_list_empty"
+        android:text="@string/journal_entries_loading"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 </LinearLayout>
