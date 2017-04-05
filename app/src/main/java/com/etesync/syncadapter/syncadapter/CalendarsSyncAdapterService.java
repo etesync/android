@@ -72,7 +72,9 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
 
                 new RefreshCollections(account, CollectionInfo.Type.CALENDAR).run();
 
-                HttpUrl principal = updateLocalCalendars(provider, account, settings);
+                updateLocalCalendars(provider, account, settings);
+
+                HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 for (LocalCalendar calendar : (LocalCalendar[]) LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
                     App.log.info("Synchronizing calendar #" + calendar.getId() + ", URL: " + calendar.getName());
@@ -106,15 +108,12 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
             App.log.info("Calendar sync complete");
         }
 
-        private HttpUrl updateLocalCalendars(ContentProviderClient provider, Account account, AccountSettings settings) throws CalendarStorageException {
-            HttpUrl ret = null;
+        private void updateLocalCalendars(ContentProviderClient provider, Account account, AccountSettings settings) throws CalendarStorageException {
             ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
             try {
                 // enumerate remote and local calendars
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 Long service = dbHelper.getService(db, account, Services.SERVICE_CALDAV);
-
-                ret = HttpUrl.get(settings.getUri());
 
                 EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
                 Map<String, CollectionInfo> remote = new HashMap<>();
@@ -152,8 +151,6 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
             } finally {
                 dbHelper.close();
             }
-
-            return ret;
         }
     }
 
