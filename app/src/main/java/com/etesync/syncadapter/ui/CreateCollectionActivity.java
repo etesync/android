@@ -118,8 +118,6 @@ public class CreateCollectionActivity extends AppCompatActivity {
             if (info.type == CollectionInfo.Type.CALENDAR) {
                 View view = findViewById(R.id.color);
                 info.color = ((ColorDrawable) view.getBackground()).getColor();
-
-                info.supportsVEVENT = true;
             }
 
             info.selected = true;

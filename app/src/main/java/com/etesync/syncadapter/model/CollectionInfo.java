@@ -50,10 +50,6 @@ public class CollectionInfo implements Serializable {
 
     @Expose
     public String timeZone;
-    @Expose
-    public Boolean supportsVEVENT;
-    @Expose
-    public Boolean supportsVTODO;
 
     @Expose
     public boolean selected;
@@ -69,12 +65,6 @@ public class CollectionInfo implements Serializable {
         info.readOnly = false;
         info.type = service;
 
-        if (service.equals(Type.CALENDAR)) {
-            info.supportsVEVENT =  true;
-            // info.supportsVTODO = true;
-        } else {
-            // Carddav
-        }
         return info;
     }
 
@@ -100,8 +90,6 @@ public class CollectionInfo implements Serializable {
         info.color = values.getAsInteger(Collections.COLOR);
 
         info.timeZone = values.getAsString(Collections.TIME_ZONE);
-        info.supportsVEVENT = getAsBooleanOrNull(values, Collections.SUPPORTS_VEVENT);
-        info.supportsVTODO = getAsBooleanOrNull(values, Collections.SUPPORTS_VTODO);
 
         info.selected = values.getAsInteger(Collections.SYNC) != 0;
         return info;

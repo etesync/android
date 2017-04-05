@@ -57,8 +57,6 @@ public class ServiceDB {
                 DESCRIPTION = "description",
                 COLOR = "color",
                 TIME_ZONE = "timezone",
-                SUPPORTS_VEVENT = "supportsVEVENT",
-                SUPPORTS_VTODO = "supportsVTODO",
                 SYNC = "sync";
     }
 
