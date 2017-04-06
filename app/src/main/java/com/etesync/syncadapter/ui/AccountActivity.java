@@ -38,6 +38,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,8 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
 import com.etesync.syncadapter.model.ServiceDB.Services;
 import com.etesync.syncadapter.resource.LocalCalendar;
+import com.etesync.syncadapter.utils.HintManager;
+import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -69,11 +72,13 @@ import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
+import tourguide.tourguide.ToolTip;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
 
 public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
     public static final String EXTRA_ACCOUNT = "account";
+    private static final HintManager.Hint HINT_VIEW_COLLECTION = HintManager.registerHint("ViewCollection");
 
     private Account account;
     private AccountInfo accountInfo;
@@ -106,6 +111,13 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         // load CardDAV/CalDAV collections
         getLoaderManager().initLoader(0, getIntent().getExtras(), this);
+
+        if (!HintManager.getHintSeen(this, HINT_VIEW_COLLECTION)) {
+            ShowcaseBuilder.getBuilder(this)
+                    .setToolTip(new ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_view_collection)))
+                    .playOn(tbCardDAV);
+            HintManager.setHintSeen(this, HINT_VIEW_COLLECTION, true);
+        }
     }
 
     @Override
