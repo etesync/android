@@ -37,7 +37,7 @@ public class JournalModel {
         @PostLoad
         void afterLoad() {
             this.info.serviceID = service;
-            this.info.url = uid;
+            this.info.uid = uid;
         }
 
         public Journal() {
@@ -47,7 +47,7 @@ public class JournalModel {
         public Journal(CollectionInfo info) {
             this();
             this.info = info;
-            this.uid = info.url;
+            this.uid = info.uid;
             this.service = info.serviceID;
         }
 
@@ -74,7 +74,7 @@ public class JournalModel {
         }
 
         public static JournalEntity fetchOrCreate(EntityDataStore<Persistable> data, CollectionInfo collection) {
-            JournalEntity journalEntity = fetch(data, collection.url);
+            JournalEntity journalEntity = fetch(data, collection.uid);
             if (journalEntity == null) {
                 journalEntity = new JournalEntity(collection);
             } else {

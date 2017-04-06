@@ -265,7 +265,7 @@ public class ImportFragment extends DialogFragment {
                     ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI);
                     LocalCalendar localCalendar;
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory.INSTANCE, info.url);
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory.INSTANCE, info.uid);
                         if (localCalendar == null) {
                             throw new FileNotFoundException("Failed to load local resource.");
                         }

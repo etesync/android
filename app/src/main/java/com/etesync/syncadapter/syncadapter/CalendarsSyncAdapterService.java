@@ -119,7 +119,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                 Map<String, CollectionInfo> remote = new HashMap<>();
                 List<CollectionInfo> remoteCollections = JournalEntity.getCollections(data, service);
                 for (CollectionInfo info : remoteCollections) {
-                    remote.put(info.url, info);
+                    remote.put(info.uid, info);
                 }
 
                 LocalCalendar[] local = (LocalCalendar[])LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, null, null);

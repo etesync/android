@@ -41,7 +41,6 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import tourguide.tourguide.Overlay;
 import tourguide.tourguide.ToolTip;
 import tourguide.tourguide.TourGuide;
 
@@ -64,7 +63,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     public void refresh() {
         EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-        final JournalEntity journalEntity = JournalEntity.fetch(data, info.url);
+        final JournalEntity journalEntity = JournalEntity.fetch(data, info.uid);
         if ((journalEntity == null) || journalEntity.isDeleted()) {
             finish();
             return;
@@ -174,14 +173,14 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         protected Long doInBackground(Void... aVoids) {
             EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-            final JournalEntity journalEntity = JournalEntity.fetch(data, info.url);
+            final JournalEntity journalEntity = JournalEntity.fetch(data, info.uid);
 
             entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
             long count;
 
             if (info.type == CollectionInfo.Type.CALENDAR) {
                 try {
-                    LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.url);
+                    LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.uid);
                     count = resource.count();
                 } catch (FileNotFoundException | CalendarStorageException e) {
                     e.printStackTrace();

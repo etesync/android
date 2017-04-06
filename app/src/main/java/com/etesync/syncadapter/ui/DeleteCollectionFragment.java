@@ -120,10 +120,10 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
-                Crypto.CryptoManager crypto = new Crypto.CryptoManager(collectionInfo.version, settings.password(), collectionInfo.url);
+                Crypto.CryptoManager crypto = new Crypto.CryptoManager(collectionInfo.version, settings.password(), collectionInfo.uid);
 
-                journalManager.deleteJournal(new JournalManager.Journal(crypto, collectionInfo.toJson(), collectionInfo.url));
-                JournalEntity journalEntity = JournalEntity.fetch(data, collectionInfo.url);
+                journalManager.deleteJournal(new JournalManager.Journal(crypto, collectionInfo.toJson(), collectionInfo.uid));
+                JournalEntity journalEntity = JournalEntity.fetch(data, collectionInfo.uid);
                 journalEntity.setDeleted(true);
                 data.update(journalEntity);
 
@@ -152,7 +152,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             CollectionInfo collectionInfo = (CollectionInfo) getArguments().getSerializable(ARG_COLLECTION_INFO);
-            String name = TextUtils.isEmpty(collectionInfo.displayName) ? collectionInfo.url : collectionInfo.displayName;
+            String name = TextUtils.isEmpty(collectionInfo.displayName) ? collectionInfo.uid : collectionInfo.displayName;
 
             return new AlertDialog.Builder(getContext())
                     .setTitle(R.string.delete_collection_confirm_title)

@@ -13,7 +13,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -156,14 +155,14 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
                 JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
-                if (info.url == null) {
-                    info.url = JournalManager.Journal.genUid();
-                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.url);
-                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
+                if (info.uid == null) {
+                    info.uid = JournalManager.Journal.genUid();
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
                     journalManager.putJournal(journal);
                 } else {
-                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.url);
-                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
                     journalManager.updateJournal(journal);
                 }
 

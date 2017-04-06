@@ -39,7 +39,7 @@ public class CollectionInfo implements Serializable {
     @Expose
     public Type type;
 
-    public String url; // Essentially the uuid
+    public String uid;
 
     @Expose
     public boolean readOnly;
@@ -69,7 +69,7 @@ public class CollectionInfo implements Serializable {
     }
 
     public void updateFromJournal(JournalManager.Journal journal) {
-        url = journal.getUuid();
+        uid = journal.getUuid();
         version = journal.getVersion();
     }
 
@@ -82,7 +82,7 @@ public class CollectionInfo implements Serializable {
         info.id = values.getAsLong(Collections.ID);
         info.serviceID = values.getAsLong(Collections.SERVICE_ID);
 
-        info.url = values.getAsString(Collections.URL);
+        info.uid = values.getAsString(Collections.URL);
         info.readOnly = values.getAsInteger(Collections.READ_ONLY) != 0;
         info.displayName = values.getAsString(Collections.DISPLAY_NAME);
         info.description = values.getAsString(Collections.DESCRIPTION);

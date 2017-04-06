@@ -95,7 +95,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
 
     private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
         ContentValues values = new ContentValues();
-        values.put(Calendars.NAME, info.url);
+        values.put(Calendars.NAME, info.uid);
         values.put(Calendars.CALENDAR_DISPLAY_NAME, info.displayName);
 
         if (withColor)

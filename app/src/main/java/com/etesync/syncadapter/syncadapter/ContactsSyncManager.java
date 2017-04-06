@@ -61,7 +61,7 @@ public class ContactsSyncManager extends SyncManager {
     final private HttpUrl remote;
 
     public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
-        super(context, account, settings, extras, authority, result, info.url, CollectionInfo.Type.ADDRESS_BOOK);
+        super(context, account, settings, extras, authority, result, info.uid, CollectionInfo.Type.ADDRESS_BOOK);
         this.provider = provider;
         this.remote = principal;
     }
@@ -83,7 +83,7 @@ public class ContactsSyncManager extends SyncManager {
         // prepare local address book
         localCollection = new LocalAddressBook(account, provider);
         LocalAddressBook localAddressBook = localAddressBook();
-        localAddressBook.setURL(info.url);
+        localAddressBook.setURL(info.uid);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
@@ -101,7 +101,7 @@ public class ContactsSyncManager extends SyncManager {
         values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1);
         localAddressBook.updateSettings(values);
 
-        journal = new JournalEntryManager(httpClient, remote, info.url);
+        journal = new JournalEntryManager(httpClient, remote, info.uid);
 
         return true;
     }

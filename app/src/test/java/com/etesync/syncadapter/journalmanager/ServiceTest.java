@@ -74,10 +74,10 @@ public class ServiceTest {
         Exception caught;
         JournalManager journalManager = new JournalManager(httpClient, remote);
         CollectionInfo info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK);
-        info.url = JournalManager.Journal.genUid();
+        info.uid = JournalManager.Journal.genUid();
         info.displayName = "Test";
-        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, Helpers.keyBase64, info.url);
-        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
+        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid);
+        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
         journalManager.putJournal(journal);
 
         // Try pushing the same journal (uid clash)
@@ -96,7 +96,7 @@ public class ServiceTest {
 
         // Update journal
         info.displayName = "Test 2";
-        journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
+        journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
         journalManager.updateJournal(journal);
 
         journals = journalManager.getJournals(Helpers.keyBase64);
@@ -111,8 +111,8 @@ public class ServiceTest {
         assertEquals(journals.size(), 0);
 
         // Bad HMAC
-        info.url = JournalManager.Journal.genUid();
-        journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
+        info.uid = JournalManager.Journal.genUid();
+        journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
         info.displayName = "Test 3";
         //// We assume this doesn't update the hmac.
         journal.setContent(crypto, info.toJson());

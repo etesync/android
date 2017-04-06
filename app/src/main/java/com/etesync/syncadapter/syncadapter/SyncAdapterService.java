@@ -167,9 +167,9 @@ public abstract class SyncAdapterService extends Service {
 
                     if (collections.isEmpty()) {
                         CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
-                        info.url = JournalManager.Journal.genUid();
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.url);
-                        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.url);
+                        info.uid = JournalManager.Journal.genUid();
+                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+                        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
                         journalsManager.putJournal(journal);
                         collections.add(info);
                     }
@@ -193,23 +193,23 @@ public abstract class SyncAdapterService extends Service {
                 Map<String, CollectionInfo> existing = new HashMap<>();
                 List<CollectionInfo> existingList = JournalEntity.getCollections(data, service);
                 for (CollectionInfo info : existingList) {
-                    existing.put(info.url, info);
+                    existing.put(info.uid, info);
                 }
 
                 for (CollectionInfo collection : collections) {
-                    App.log.log(Level.FINE, "Saving collection", collection.url);
+                    App.log.log(Level.FINE, "Saving collection", collection.uid);
 
                     collection.serviceID = service;
                     JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, collection);
                     data.upsert(journalEntity);
 
-                    existing.remove(collection.url);
+                    existing.remove(collection.uid);
                 }
 
                 for (CollectionInfo collection : existing.values()) {
-                    App.log.log(Level.FINE, "Deleting collection", collection.url);
+                    App.log.log(Level.FINE, "Deleting collection", collection.uid);
 
-                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.url)).limit(1).get().first();
+                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.uid)).limit(1).get().first();
                     journalEntity.setDeleted(true);
                     data.update(journalEntity);
                 }

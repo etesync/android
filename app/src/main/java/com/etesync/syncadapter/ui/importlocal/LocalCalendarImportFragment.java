@@ -239,7 +239,7 @@ public class LocalCalendarImportFragment extends ListFragment {
             try {
                 LocalCalendar localCalendar = LocalCalendar.findByName(account,
                         getContext().getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
-                        LocalCalendar.Factory.INSTANCE, info.url);
+                        LocalCalendar.Factory.INSTANCE, info.uid);
                 LocalEvent[] localEvents = fromCalendar.getAll();
                 int total = localEvents.length;
                 progressDialog.setMax(total);

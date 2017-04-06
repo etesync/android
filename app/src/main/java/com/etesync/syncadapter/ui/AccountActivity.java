@@ -39,7 +39,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -366,7 +365,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             final CollectionInfo info = getItem(position);
 
             TextView tv = (TextView)v.findViewById(R.id.title);
-            tv.setText(TextUtils.isEmpty(info.displayName) ? info.url : info.displayName);
+            tv.setText(TextUtils.isEmpty(info.displayName) ? info.uid : info.displayName);
 
             tv = (TextView)v.findViewById(R.id.description);
             if (TextUtils.isEmpty(info.description))
@@ -403,7 +402,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             }
 
             TextView tv = (TextView)v.findViewById(R.id.title);
-            tv.setText(TextUtils.isEmpty(info.displayName) ? info.url : info.displayName);
+            tv.setText(TextUtils.isEmpty(info.displayName) ? info.uid : info.displayName);
 
             tv = (TextView)v.findViewById(R.id.description);
             if (TextUtils.isEmpty(info.description))
