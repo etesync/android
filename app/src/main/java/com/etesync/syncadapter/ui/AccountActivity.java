@@ -33,6 +33,7 @@ import android.os.IBinder;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -95,8 +96,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         setContentView(R.layout.activity_account);
 
-        Drawable icMenu = Build.VERSION.SDK_INT >= 21 ? getDrawable(R.drawable.ic_menu_light) :
-                getResources().getDrawable(R.drawable.ic_menu_light);
+        Drawable icMenu = ContextCompat.getDrawable(this, R.drawable.ic_menu_light);
 
         // CardDAV toolbar
         tbCardDAV = (Toolbar)findViewById(R.id.carddav_menu);

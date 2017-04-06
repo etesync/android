@@ -32,6 +32,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -195,9 +196,8 @@ public class App extends Application {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Bitmap getLauncherBitmap(@NonNull Context context) {
         Bitmap bitmapLogo = null;
-        Drawable drawableLogo = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP ?
-                context.getDrawable(R.mipmap.ic_launcher) :
-                context.getResources().getDrawable(R.mipmap.ic_launcher);
+        Drawable drawableLogo = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+
         if (drawableLogo instanceof BitmapDrawable)
             bitmapLogo = ((BitmapDrawable)drawableLogo).getBitmap();
         return bitmapLogo;
