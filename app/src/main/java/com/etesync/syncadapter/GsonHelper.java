@@ -1,7 +1,6 @@
 package com.etesync.syncadapter;
 
-import android.util.Base64;
-
+import com.etesync.syncadapter.utils.Base64;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;

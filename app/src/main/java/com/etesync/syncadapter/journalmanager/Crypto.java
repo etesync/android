@@ -1,9 +1,9 @@
 package com.etesync.syncadapter.journalmanager;
 
 import android.support.annotation.NonNull;
-import android.util.Base64;
 
 import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.utils.Base64;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
