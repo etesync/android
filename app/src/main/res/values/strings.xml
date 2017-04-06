@@ -97,7 +97,9 @@
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
     <string name="account_showcase_view_collection">You can click on an item to view the collection. From there you can view the journal, import, and much more...</string>
 
+    <!-- ViewCollection -->
     <string name="change_journal_title">Change Journal</string>
+    <string name="account_showcase_import">In order to import contacts and calendars into EteSync, you need to click on the menu, and choose \"Import\".</string>
 
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>

@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,19 +31,22 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.importlocal.ImportActivity;
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment;
+import com.etesync.syncadapter.utils.HintManager;
+import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
 import java.io.FileNotFoundException;
 import java.util.Locale;
-import java.util.Objects;
 
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-
-import static com.etesync.syncadapter.R.id.stats;
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 
 public class ViewCollectionActivity extends AppCompatActivity implements Refreshable {
+    private final static HintManager.Hint HINT_IMPORT = HintManager.registerHint("import");
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
@@ -107,6 +110,16 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         }
 
         refresh();
+
+        final TextView title = (TextView) findViewById(R.id.display_name);
+        if (!HintManager.getHintSeen(this, HINT_IMPORT)) {
+            TourGuide tourGuide = ShowcaseBuilder.getBuilder(this)
+                    .setToolTip(new ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_import)).setGravity(Gravity.BOTTOM))
+                    .setPointer(null);
+            tourGuide.mOverlay.setHoleRadius(0);
+            tourGuide.playOn(title);
+            HintManager.setHintSeen(this, HINT_IMPORT, true);
+        }
     }
 
     @Override
