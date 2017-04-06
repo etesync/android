@@ -46,6 +46,7 @@ public class ServiceDB {
                 SERVICE_CARDDAV = CollectionInfo.Type.ADDRESS_BOOK.toString();
     }
 
+    @Deprecated
     public static class Collections {
         public static final String
                 _TABLE = "collections",
