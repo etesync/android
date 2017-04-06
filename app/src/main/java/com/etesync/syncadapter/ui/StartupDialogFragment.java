@@ -25,18 +25,15 @@ import android.support.v7.app.AlertDialog;
 import com.etesync.syncadapter.BuildConfig;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
-import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.Settings;
+import com.etesync.syncadapter.utils.HintManager;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import lombok.Cleanup;
-
 public class StartupDialogFragment extends DialogFragment {
-    public static final String
-            HINT_BATTERY_OPTIMIZATIONS = "hint_BatteryOptimizations";
+    private static final HintManager.Hint
+            HINT_BATTERY_OPTIMIZATIONS = HintManager.registerHint("BatteryOptimizations");
 
     private static final String ARGS_MODE = "mode";
 
@@ -49,14 +46,11 @@ public class StartupDialogFragment extends DialogFragment {
     public static StartupDialogFragment[] getStartupDialogs(Context context) {
         List<StartupDialogFragment> dialogs = new LinkedList<>();
 
-        @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(context);
-        Settings settings  = new Settings(dbHelper.getReadableDatabase());
-
         if (BuildConfig.VERSION_NAME.contains("-alpha") || BuildConfig.VERSION_NAME.contains("-beta") || BuildConfig.VERSION_NAME.contains("-rc"))
             dialogs.add(StartupDialogFragment.instantiate(Mode.DEVELOPMENT_VERSION));
 
         // battery optimization whitelisting
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && settings.getBoolean(HINT_BATTERY_OPTIMIZATIONS, true)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !HintManager.getHintSeen(context, HINT_BATTERY_OPTIMIZATIONS)) {
             PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
             if (!powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID))
                 dialogs.add(StartupDialogFragment.instantiate(Mode.BATTERY_OPTIMIZATIONS));
@@ -104,9 +98,7 @@ public class StartupDialogFragment extends DialogFragment {
                         .setNegativeButton(R.string.startup_dont_show_again, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
-                                Settings settings = new Settings(dbHelper.getWritableDatabase());
-                                settings.putBoolean(HINT_BATTERY_OPTIMIZATIONS, false);
+                                HintManager.setHintSeen(getContext(), HINT_BATTERY_OPTIMIZATIONS, true);
                             }
                         })
                         .create();

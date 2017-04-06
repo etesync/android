@@ -24,6 +24,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
+import com.etesync.syncadapter.utils.HintManager;
 
 public class AppSettingsActivity extends AppCompatActivity {
 
@@ -150,7 +151,7 @@ public class AppSettingsActivity extends AppCompatActivity {
         }
 
         private void resetHints() {
-            settings.remove(StartupDialogFragment.HINT_BATTERY_OPTIMIZATIONS);
+            HintManager.resetHints(getContext());
             Snackbar.make(getView(), R.string.app_settings_reset_hints_success, Snackbar.LENGTH_LONG).show();
         }
 
