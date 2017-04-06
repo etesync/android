@@ -1,5 +1,5 @@
 package com.etesync.syncadapter.ui;
 
-interface Refreshable {
+public interface Refreshable {
     public void refresh();
 }

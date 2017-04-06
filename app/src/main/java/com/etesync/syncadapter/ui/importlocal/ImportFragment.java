@@ -1,4 +1,4 @@
-package com.etesync.syncadapter.ui;
+package com.etesync.syncadapter.ui.importlocal;
 
 import android.Manifest;
 import android.accounts.Account;
@@ -25,7 +25,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalContact;
 import com.etesync.syncadapter.resource.LocalEvent;
-import com.etesync.syncadapter.ui.importlocal.ResultFragment;
+import com.etesync.syncadapter.ui.Refreshable;
 
 import org.apache.commons.codec.Charsets;
 

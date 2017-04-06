@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
-import com.etesync.syncadapter.ui.ImportFragment;
 
 public class ImportActivity extends AppCompatActivity implements SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
     public final static String EXTRA_ACCOUNT = "account",
