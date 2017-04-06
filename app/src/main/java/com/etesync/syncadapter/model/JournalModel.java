@@ -82,6 +82,15 @@ public class JournalModel {
             }
             return journalEntity;
         }
+
+        public String getLastUid(EntityDataStore<Persistable> data) {
+            EntryEntity last = data.select(EntryEntity.class).where(EntryEntity.JOURNAL.eq(this)).orderBy(EntryEntity.ID.desc()).limit(1).get().firstOrNull();
+            if (last != null) {
+                return last.getUid();
+            }
+
+            return null;
+        }
     }
 
     @Entity

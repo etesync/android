@@ -160,31 +160,6 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         return dirty.toArray(new LocalResource[dirty.size()]);
     }
 
-
-    @Override
-    @SuppressWarnings("Recycle")
-    public String getCTag() throws CalendarStorageException {
-        try {
-            @Cleanup Cursor cursor = provider.query(calendarSyncURI(), new String[] { COLUMN_CTAG }, null, null, null);
-            if (cursor != null && cursor.moveToNext())
-                return cursor.getString(0);
-        } catch (RemoteException e) {
-            throw new CalendarStorageException("Couldn't read local (last known) CTag", e);
-        }
-        return null;
-    }
-
-    @Override
-    public void setCTag(String cTag) throws CalendarStorageException, ContactsStorageException {
-        try {
-            ContentValues values = new ContentValues(1);
-            values.put(COLUMN_CTAG, cTag);
-            provider.update(calendarSyncURI(), values, null, null);
-        } catch (RemoteException e) {
-            throw new CalendarStorageException("Couldn't write local (last known) CTag", e);
-        }
-    }
-
     @SuppressWarnings("Recycle")
     public void processDirtyExceptions() throws CalendarStorageException {
         // process deleted exceptions
@@ -286,9 +261,9 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
     }
 
     /** Fix all of the etags of all of the non-dirty events to be non-null.
-     * Currently set to the ctag. */
+     * Currently set to all ones.. */
     public void fixEtags() throws CalendarStorageException {
-        String newEtag = getCTag();
+        String newEtag = "1111111111111111111111111111111111111111111111111111111111111111";
         String where = Events.CALENDAR_ID + "=? AND " + Events.DIRTY + "=0 AND " + LocalEvent.COLUMN_ETAG + " IS NULL";
         String whereArgs[] = {String.valueOf(id)};
 

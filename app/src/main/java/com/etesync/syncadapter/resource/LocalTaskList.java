@@ -126,31 +126,6 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
         }
     }
 
-    @Override
-    @SuppressWarnings("Recycle")
-    public String getCTag() throws CalendarStorageException {
-        try {
-            @Cleanup Cursor cursor = provider.client.query(taskListSyncUri(), new String[] { COLUMN_CTAG }, null, null, null);
-            if (cursor != null && cursor.moveToNext())
-                return cursor.getString(0);
-        } catch (RemoteException e) {
-            throw new CalendarStorageException("Couldn't read local (last known) CTag", e);
-        }
-        return null;
-    }
-
-    @Override
-    public void setCTag(String cTag) throws CalendarStorageException {
-        try {
-            ContentValues values = new ContentValues(1);
-            values.put(COLUMN_CTAG, cTag);
-            provider.client.update(taskListSyncUri(), values, null, null);
-        } catch (RemoteException e) {
-            throw new CalendarStorageException("Couldn't write local (last known) CTag", e);
-        }
-    }
-
-
     // helpers
 
     public static boolean tasksProviderAvailable(@NonNull Context context) {

@@ -304,24 +304,6 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         }
     }
 
-    @Override
-    public String getCTag() throws ContactsStorageException {
-        synchronized (syncState) {
-            readSyncState();
-            return syncState.getString(SYNC_STATE_CTAG);
-        }
-    }
-
-    @Override
-    public void setCTag(String cTag) throws ContactsStorageException {
-        synchronized (syncState) {
-            readSyncState();
-            syncState.putString(SYNC_STATE_CTAG, cTag);
-            writeSyncState();
-        }
-    }
-
-
     // HELPERS
 
     public static void onRenameAccount(@NonNull ContentResolver resolver, @NonNull String oldName, @NonNull String newName) throws RemoteException {
@@ -334,9 +316,9 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     }
 
     /** Fix all of the etags of all of the non-dirty contacts to be non-null.
-     * Currently set to the ctag. */
+     * Currently set to all ones. */
     public void fixEtags() throws ContactsStorageException {
-        String newEtag = getCTag();
+        String newEtag = "1111111111111111111111111111111111111111111111111111111111111111";
         String where = ContactsContract.RawContacts.DIRTY + "=0 AND " + AndroidContact.COLUMN_ETAG + " IS NULL";
 
         ContentValues values = new ContentValues(1);

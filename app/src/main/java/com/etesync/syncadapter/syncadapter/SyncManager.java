@@ -181,6 +181,8 @@ abstract public class SyncManager {
             syncPhase = R.string.sync_phase_post_processing;
             App.log.info("Sync phase: " + context.getString(syncPhase));
             postProcess();
+
+            App.log.info("Finished sync with CTag=" + remoteCTag);
         } catch (IOException e) {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e);
             syncResult.stats.numIoExceptions++;
@@ -295,24 +297,20 @@ abstract public class SyncManager {
         String strTotal = String.valueOf(remoteEntries.size());
         int i = 0;
 
-        try {
-            for (JournalEntryManager.Entry entry : remoteEntries) {
-                if (Thread.interrupted()) {
-                    throw new InterruptedException();
-                }
-                i++;
-                App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
-
-                SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
-                App.log.info("Processing resource for journal entry");
-                processSyncEntry(cEntry);
-
-                persistSyncEntry(entry.getUid(), cEntry);
-
-                remoteCTag = entry.getUid();
+        for (JournalEntryManager.Entry entry : remoteEntries) {
+            if (Thread.interrupted()) {
+                throw new InterruptedException();
             }
-        } finally {
-            saveSyncTag();
+            i++;
+            App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
+
+            SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
+            App.log.info("Processing resource for journal entry");
+            processSyncEntry(cEntry);
+
+            persistSyncEntry(entry.getUid(), cEntry);
+
+            remoteCTag = entry.getUid();
         }
     }
 
@@ -352,8 +350,6 @@ abstract public class SyncManager {
 
             localDirty = null;
             localDeleted = null;
-
-            saveSyncTag();
         }
     }
 
@@ -390,12 +386,12 @@ abstract public class SyncManager {
     /**
      */
     protected void prepareLocal() throws CalendarStorageException, ContactsStorageException, FileNotFoundException {
+        remoteCTag = getJournalEntity().getLastUid(data);
+
         localDeleted = processLocallyDeleted();
         localDirty = localCollection.getDirty();
         // This is done after fetching the local dirty so all the ones we are using will be prepared
         prepareDirty();
-
-        remoteCTag = localCollection.getCTag();
     }
 
 
@@ -438,11 +434,4 @@ abstract public class SyncManager {
      */
     protected void postProcess() throws CalendarStorageException, ContactsStorageException {
     }
-
-    private void saveSyncTag() throws CalendarStorageException, ContactsStorageException {
-        App.log.info("Saving CTag=" + remoteCTag);
-        localCollection.setCTag(remoteCTag);
-    }
-
-
 }

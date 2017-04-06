@@ -22,8 +22,5 @@ public interface LocalCollection {
 
     LocalResource getByUid(String uid) throws CalendarStorageException, ContactsStorageException;
 
-    String getCTag() throws CalendarStorageException, ContactsStorageException;
-    void setCTag(String cTag) throws CalendarStorageException, ContactsStorageException;
-
     long count() throws CalendarStorageException, ContactsStorageException;
 }
