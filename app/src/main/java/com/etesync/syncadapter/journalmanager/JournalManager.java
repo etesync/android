@@ -12,7 +12,6 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.GsonHelper;
 
 import lombok.Getter;
-import lombok.Setter;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,7 +48,7 @@ public class JournalManager extends BaseManager {
         List<Journal> ret = GsonHelper.gson.fromJson(body.charStream(), journalType);
 
         for (Journal journal : ret) {
-            Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), keyBase64, journal.getUuid());
+            Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), keyBase64, journal.getUid());
             journal.processFromJson();
             journal.verify(crypto);
         }
@@ -58,7 +57,7 @@ public class JournalManager extends BaseManager {
     }
 
     public void deleteJournal(Journal journal) throws Exceptions.HttpException {
-        HttpUrl remote = this.remote.resolve(journal.getUuid() + "/");
+        HttpUrl remote = this.remote.resolve(journal.getUid() + "/");
         Request request = new Request.Builder()
                 .delete()
                 .url(remote)
@@ -79,7 +78,7 @@ public class JournalManager extends BaseManager {
     }
 
     public void updateJournal(Journal journal) throws Exceptions.HttpException {
-        HttpUrl remote = this.remote.resolve(journal.getUuid() + "/");
+        HttpUrl remote = this.remote.resolve(journal.getUid() + "/");
         RequestBody body = RequestBody.create(JSON, journal.toJson());
 
         Request request = new Request.Builder()
@@ -125,7 +124,7 @@ public class JournalManager extends BaseManager {
         }
 
         byte[] calculateHmac(Crypto.CryptoManager crypto) {
-            return super.calculateHmac(crypto, getUuid());
+            return super.calculateHmac(crypto, getUid());
         }
 
         public static String genUid() {

@@ -69,7 +69,7 @@ abstract class BaseManager {
         @Setter(AccessLevel.PACKAGE)
         private String uid;
 
-        public String getUuid() {
+        public String getUid() {
             return uid;
         }
 

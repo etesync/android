@@ -69,7 +69,7 @@ public class CollectionInfo implements Serializable {
     }
 
     public void updateFromJournal(JournalManager.Journal journal) {
-        uid = journal.getUuid();
+        uid = journal.getUid();
         version = journal.getVersion();
     }
 

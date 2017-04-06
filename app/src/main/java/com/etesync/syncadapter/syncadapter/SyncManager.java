@@ -256,7 +256,7 @@ abstract public class SyncManager {
             App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
             SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
-            persistSyncEntry(entry.getUuid(), cEntry);
+            persistSyncEntry(entry.getUid(), cEntry);
             if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue;
             }
@@ -276,9 +276,9 @@ abstract public class SyncManager {
             int i = 0;
             for (JournalEntryManager.Entry entry : remoteEntries) {
                 SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
-                persistSyncEntry(entry.getUuid(), cEntry);
+                persistSyncEntry(entry.getUid(), cEntry);
                 i++;
-                if (remoteCTag.equals(entry.getUuid())) {
+                if (remoteCTag.equals(entry.getUid())) {
                     remoteEntries.subList(0, i).clear();
                     break;
                 }
@@ -307,9 +307,9 @@ abstract public class SyncManager {
                 App.log.info("Processing resource for journal entry");
                 processSyncEntry(cEntry);
 
-                persistSyncEntry(entry.getUuid(), cEntry);
+                persistSyncEntry(entry.getUid(), cEntry);
 
-                remoteCTag = entry.getUuid();
+                remoteCTag = entry.getUid();
             }
         } finally {
             saveSyncTag();
@@ -325,7 +325,7 @@ abstract public class SyncManager {
             if (!localEntries.isEmpty()) {
                 for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
                     journal.putEntries(entries, remoteCTag);
-                    remoteCTag = entries.get(entries.size() - 1).getUuid();
+                    remoteCTag = entries.get(entries.size() - 1).getUid();
                     pushed += entries.size();
                 }
             }

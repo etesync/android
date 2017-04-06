@@ -92,8 +92,8 @@ public class JournalEntryManager extends BaseManager {
 
         void verify(Crypto.CryptoManager crypto, Entry previous) throws Exceptions.IntegrityException {
             String correctHash = calculateHmac(crypto, previous);
-            if (!getUuid().equals(correctHash)) {
-                throw new Exceptions.IntegrityException("Bad HMAC. " + getUuid() + " != " + correctHash);
+            if (!getUid().equals(correctHash)) {
+                throw new Exceptions.IntegrityException("Bad HMAC. " + getUid() + " != " + correctHash);
             }
         }
 
@@ -106,7 +106,7 @@ public class JournalEntryManager extends BaseManager {
         private String calculateHmac(Crypto.CryptoManager crypto, Entry previous) {
             String uuid = null;
             if (previous != null) {
-                uuid = previous.getUuid();
+                uuid = previous.getUid();
             }
 
             return Crypto.toHex(calculateHmac(crypto, uuid));
