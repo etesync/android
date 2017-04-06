@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.etesync.syncadapter.AccountSettings;
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.ui.setup.LoginCredentials;
