@@ -16,6 +16,9 @@
     <string name="please_wait">Please wait …</string>
     <string name="send">Send</string>
 
+    <!-- tourguide -->
+    <string name="tourguide_title">Did you know?</string>
+
     <!-- startup dialogs -->
     <string name="startup_battery_optimization">Battery Optimization</string>
     <string name="startup_battery_optimization_message">Android may disable/reduce EteSync synchronization after a few days. To prevent this, turn off battery optimization.</string>
@@ -49,9 +52,10 @@
     <string name="navigation_drawer_report_issue">Report issue</string>
     <string name="navigation_drawer_contact">Contact developer</string>
 
-    <string name="account_list_empty">Welcome to EteSync!\n\nAdd an account to start.</string>
+    <string name="account_list_empty">Welcome to EteSync!</string>
     <string name="accounts_global_sync_disabled">System-wide automatic synchronization is disabled</string>
     <string name="accounts_global_sync_enable">Enable</string>
+    <string name="accounts_showcase_add">You need to add an account in order to use EteSync. Click here to add one...</string>
 
     <!-- AccountUpdateService -->
 

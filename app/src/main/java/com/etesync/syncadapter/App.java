@@ -44,6 +44,8 @@ import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
+import com.etesync.syncadapter.ui.AccountsActivity;
+import com.etesync.syncadapter.utils.HintManager;
 
 import net.fortuna.ical4j.util.UidGenerator;
 
@@ -288,6 +290,10 @@ public class App extends Application {
                     e.printStackTrace();
                 }
             }
+        }
+
+        if (fromVersion < 10) {
+            HintManager.setHintSeen(this, AccountsActivity.HINT_ACCOUNT_ADD, true);
         }
     }
 

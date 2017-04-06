@@ -21,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -28,12 +29,20 @@ import android.widget.Toast;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.ui.setup.LoginActivity;
+import com.etesync.syncadapter.utils.HintManager;
+import com.etesync.syncadapter.utils.ShowcaseBuilder;
+
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS;
 import static com.etesync.syncadapter.BuildConfig.DEBUG;
 import static com.etesync.syncadapter.Constants.serviceUrl;
 
 public class AccountsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
+    public static final HintManager.Hint HINT_ACCOUNT_ADD = HintManager.registerHint("AddAccount");
 
     private Snackbar syncStatusSnackbar;
     private Object syncStatusObserver;
@@ -77,6 +86,13 @@ public class AccountsActivity extends AppCompatActivity implements NavigationVie
         }
 
         PermissionsActivity.requestAllPermissions(this);
+
+        if (!HintManager.getHintSeen(this, HINT_ACCOUNT_ADD)) {
+            ShowcaseBuilder.getBuilder(this)
+                    .setToolTip(new ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.accounts_showcase_add)).setGravity(Gravity.TOP | Gravity.LEFT))
+                    .playOn(fab);
+            HintManager.setHintSeen(this, HINT_ACCOUNT_ADD, true);
+        }
     }
 
     @Override
