@@ -45,8 +45,20 @@ public class Exceptions {
         }
     }
 
-    public static class HttpException extends Exception implements Serializable {
 
+    public static class GenericCryptoException extends Exception {
+        public GenericCryptoException(String message) {
+            super(message);
+        }
+    }
+
+    public static class VersionTooNewException extends GenericCryptoException {
+        public VersionTooNewException(String message) {
+            super(message);
+        }
+    }
+
+    public static class HttpException extends Exception implements Serializable {
         final int status;
         final String message;
 

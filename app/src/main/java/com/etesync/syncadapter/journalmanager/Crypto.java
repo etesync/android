@@ -41,12 +41,12 @@ public class Crypto {
         private final byte[] cipherKey;
         private final byte[] hmacKey;
 
-        public CryptoManager(int version, @NonNull String keyBase64, @NonNull String salt) throws Exceptions.IntegrityException {
+        public CryptoManager(int version, @NonNull String keyBase64, @NonNull String salt) throws Exceptions.IntegrityException, Exceptions.VersionTooNewException {
             byte[] derivedKey;
             if (version > Byte.MAX_VALUE) {
                 throw new Exceptions.IntegrityException("Version is out of range.");
             } else if (version > Constants.CURRENT_VERSION) {
-                throw new RuntimeException("Journal version is newer than expected.");
+                throw new Exceptions.VersionTooNewException("Version to new: " + String.valueOf(version));
             } else if (version == 1) {
                 derivedKey = Base64.decode(keyBase64, Base64.NO_WRAP);
             } else {

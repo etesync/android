@@ -128,7 +128,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                 data.update(journalEntity);
 
                 return null;
-            } catch (Exceptions.HttpException|Exceptions.IntegrityException e) {
+            } catch (Exceptions.HttpException|Exceptions.IntegrityException|Exceptions.GenericCryptoException e) {
                 return e;
             } catch (InvalidAccountException e) {
                 return e;

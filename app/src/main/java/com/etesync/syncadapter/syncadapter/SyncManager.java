@@ -95,7 +95,7 @@ abstract public class SyncManager {
     private List<LocalResource> localDeleted;
     private LocalResource[] localDirty;
 
-    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType) throws InvalidAccountException, Exceptions.IntegrityException {
+    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         this.context = context;
         this.account = account;
         this.settings = settings;

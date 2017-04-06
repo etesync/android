@@ -38,7 +38,7 @@ public class JournalManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Journal> getJournals(String keyBase64) throws Exceptions.HttpException, Exceptions.IntegrityException {
+    public List<Journal> getJournals(String keyBase64) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         Request request = new Request.Builder()
                 .get()
                 .url(remote)

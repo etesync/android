@@ -142,7 +142,7 @@ public abstract class SyncAdapterService extends Service {
                 dbHelper = new ServiceDB.OpenHelper(context);
             }
 
-            void run() throws Exceptions.HttpException, Exceptions.IntegrityException, InvalidAccountException {
+            void run() throws Exceptions.HttpException, Exceptions.IntegrityException, InvalidAccountException, Exceptions.GenericCryptoException {
                 try {
                     @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
 

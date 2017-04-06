@@ -60,7 +60,7 @@ public class ContactsSyncManager extends SyncManager {
     final private ContentProviderClient provider;
     final private HttpUrl remote;
 
-    public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException, Exceptions.IntegrityException {
+    public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         super(context, account, settings, extras, authority, result, info.url, CollectionInfo.Type.ADDRESS_BOOK);
         this.provider = provider;
         this.remote = principal;

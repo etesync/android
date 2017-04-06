@@ -179,7 +179,7 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 return e;
             } catch (InvalidAccountException e) {
                 return e;
-            } catch (Exceptions.IntegrityException e) {
+            } catch (Exceptions.IntegrityException|Exceptions.GenericCryptoException e) {
                 return e;
             } finally {
                 dbHelper.close();
