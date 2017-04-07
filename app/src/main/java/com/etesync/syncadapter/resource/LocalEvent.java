@@ -21,6 +21,9 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.Constants;
+
+import net.fortuna.ical4j.model.property.ProdId;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,6 +41,9 @@ import lombok.Setter;
 
 @TargetApi(17)
 public class LocalEvent extends AndroidEvent implements LocalResource {
+    static {
+        Event.prodId = new ProdId(Constants.PRODID_BASE + "//ical4android ical4j/2.x");
+    }
     static final String COLUMN_ETAG = CalendarContract.Events.SYNC_DATA1,
             COLUMN_UID = Build.VERSION.SDK_INT >= 17 ? Events.UID_2445 : Events.SYNC_DATA2,
             COLUMN_SEQUENCE = CalendarContract.Events.SYNC_DATA3;

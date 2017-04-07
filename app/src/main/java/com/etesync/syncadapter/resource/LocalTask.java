@@ -15,6 +15,9 @@ import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
 
 import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.Constants;
+
+import net.fortuna.ical4j.model.property.ProdId;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
@@ -32,6 +35,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class LocalTask extends AndroidTask implements LocalResource {
+    static {
+        Task.prodId = new ProdId(Constants.PRODID_BASE + "//ical4android ical4j/2.x");
+    }
+
     @Getter
     protected String uuid;
 

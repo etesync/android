@@ -22,6 +22,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.BuildConfig;
+import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.model.UnknownProperties;
 
 import java.io.ByteArrayOutputStream;
@@ -39,12 +41,16 @@ import at.bitfire.vcard4android.BatchOperation;
 import at.bitfire.vcard4android.CachedGroupMembership;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
+import ezvcard.Ezvcard;
 import ezvcard.VCardVersion;
 import lombok.Cleanup;
 
 import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 public class LocalContact extends AndroidContact implements LocalResource {
+    static {
+        Contact.productID = Constants.PRODID_BASE + "//vcard4android ez-vcard/0.10.x";
+    }
     public static final String COLUMN_HASHCODE = ContactsContract.RawContacts.SYNC3;
 
     private boolean saveAsDirty = false; // When true, the resource will be saved as dirty

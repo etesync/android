@@ -38,6 +38,8 @@ public class Constants {
 
     public static final Uri serviceUrl = Uri.parse((DEBUG_REMOTE_URL == null) ? "https://api.etesync.com/" : DEBUG_REMOTE_URL);
 
+    public static final String PRODID_BASE = "-//EteSync//" + BuildConfig.APPLICATION_ID + " " + BuildConfig.VERSION_NAME;
+
     public static final int DEFAULT_SYNC_INTERVAL = 4 * 3600;  // 4 hours
     public static final long DEFAULT_RETRY_DELAY = 30 * 60; // 30 minutes
 
