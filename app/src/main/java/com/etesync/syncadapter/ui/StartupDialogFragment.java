@@ -32,8 +32,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class StartupDialogFragment extends DialogFragment {
-    private static final HintManager.Hint
-            HINT_BATTERY_OPTIMIZATIONS = HintManager.registerHint("BatteryOptimizations");
+    private static final String
+            HINT_BATTERY_OPTIMIZATIONS = "BatteryOptimizations";
 
     private static final String ARGS_MODE = "mode";
 

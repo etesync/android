@@ -45,7 +45,7 @@ import tourguide.tourguide.ToolTip;
 import tourguide.tourguide.TourGuide;
 
 public class ViewCollectionActivity extends AppCompatActivity implements Refreshable {
-    private final static HintManager.Hint HINT_IMPORT = HintManager.registerHint("import");
+    private final static String HINT_IMPORT = "Import";
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 

@@ -42,7 +42,7 @@ import static com.etesync.syncadapter.BuildConfig.DEBUG;
 import static com.etesync.syncadapter.Constants.serviceUrl;
 
 public class AccountsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
-    public static final HintManager.Hint HINT_ACCOUNT_ADD = HintManager.registerHint("AddAccount");
+    public static final String HINT_ACCOUNT_ADD = "AddAccount";
 
     private Snackbar syncStatusSnackbar;
     private Object syncStatusObserver;

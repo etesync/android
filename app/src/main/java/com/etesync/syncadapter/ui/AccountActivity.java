@@ -78,7 +78,7 @@ import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
 
 public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
     public static final String EXTRA_ACCOUNT = "account";
-    private static final HintManager.Hint HINT_VIEW_COLLECTION = HintManager.registerHint("ViewCollection");
+    private static final String HINT_VIEW_COLLECTION = "ViewCollection";
 
     private Account account;
     private AccountInfo accountInfo;
