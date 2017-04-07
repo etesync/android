@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 0.13.0
+* Added a showcase wizard to showcase some features on first use.
+* Make the sync more robust in case of interruptions.
+* Changed the allowed TLS ciphers to only include a secure list.
+* Changed the minimum required version to Android 4.1 (sdk version 16)
+* Show a message when system-wide auto-sync is disabled
+* Set correct PROID for Contacts, Events and Tasks
+* Added many tests for the crypto and service.
+* Code cleanups and refactoring in the sync manager.
+* Update {cert,ical,vcard}4android to latest.
+* Minor fixes
+
 ## Version 0.12.0
 * Add import from local account (import calendars/contacts)
 * Update the crypto protocol to version 2.
