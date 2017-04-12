@@ -35,6 +35,8 @@ public class Crypto {
     }
 
     public static class CryptoManager {
+        final static int HMAC_SIZE = 256 / 8; // hmac256 in bytes
+
         private SecureRandom _random = null;
         @Getter
         private final byte version;

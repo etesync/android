@@ -19,6 +19,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import static com.etesync.syncadapter.journalmanager.Crypto.CryptoManager.HMAC_SIZE;
 import static com.etesync.syncadapter.journalmanager.Crypto.sha256;
 import static com.etesync.syncadapter.journalmanager.Crypto.toHex;
 
@@ -93,7 +94,6 @@ public class JournalManager extends BaseManager {
         @Getter
         private int version = -1;
 
-        final private transient int hmacSize = 256 / 8; // hmac256 in bytes
         private transient byte[] hmac = null;
 
         @SuppressWarnings("unused")
@@ -108,8 +108,8 @@ public class JournalManager extends BaseManager {
         }
 
         private void processFromJson() {
-            hmac = Arrays.copyOfRange(getContent(), 0, hmacSize);
-            setContent(Arrays.copyOfRange(getContent(), hmacSize, getContent().length));
+            hmac = Arrays.copyOfRange(getContent(), 0, HMAC_SIZE);
+            setContent(Arrays.copyOfRange(getContent(), HMAC_SIZE, getContent().length));
         }
 
         void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
