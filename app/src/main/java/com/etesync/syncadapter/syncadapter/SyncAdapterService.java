@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -153,7 +154,7 @@ public abstract class SyncAdapterService extends Service {
                     AccountSettings settings = new AccountSettings(context, account);
                     JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
 
-                    List<CollectionInfo> collections = new LinkedList<>();
+                    List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();
 
                     for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
                         Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
@@ -161,22 +162,22 @@ public abstract class SyncAdapterService extends Service {
                         info.updateFromJournal(journal);
 
                         if (info.type.equals(serviceType)) {
-                            collections.add(info);
+                            journals.add(new Pair<>(journal, info));
                         }
                     }
 
-                    if (collections.isEmpty()) {
+                    if (journals.isEmpty()) {
                         CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
                         info.uid = JournalManager.Journal.genUid();
                         Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
                         JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
                         journalsManager.putJournal(journal);
-                        collections.add(info);
+                        journals.add(new Pair<>(journal, info));
                     }
 
                     db.beginTransactionNonExclusive();
                     try {
-                        saveCollections(db, collections);
+                        saveCollections(db, journals);
                         db.setTransactionSuccessful();
                     } finally {
                         db.endTransaction();
@@ -186,30 +187,32 @@ public abstract class SyncAdapterService extends Service {
                 }
             }
 
-            private void saveCollections(SQLiteDatabase db, Iterable<CollectionInfo> collections) {
+            private void saveCollections(SQLiteDatabase db, Iterable<Pair<JournalManager.Journal, CollectionInfo>> journals) {
                 Long service = dbHelper.getService(db, account, serviceType.toString());
 
                 EntityDataStore<Persistable> data = ((App) context.getApplicationContext()).getData();
-                Map<String, CollectionInfo> existing = new HashMap<>();
-                List<CollectionInfo> existingList = JournalEntity.getCollections(data, service);
-                for (CollectionInfo info : existingList) {
-                    existing.put(info.uid, info);
+                Map<String, JournalEntity> existing = new HashMap<>();
+                for (JournalEntity journalEntity : JournalEntity.getJournals(data, service)) {
+                    existing.put(journalEntity.getUid(), journalEntity);
                 }
 
-                for (CollectionInfo collection : collections) {
-                    App.log.log(Level.FINE, "Saving collection", collection.uid);
+                for (Pair<JournalManager.Journal, CollectionInfo> pair : journals) {
+                    JournalManager.Journal journal = pair.first;
+                    CollectionInfo collection = pair.second;
+                    App.log.log(Level.FINE, "Saving collection", journal.getUid());
 
                     collection.serviceID = service;
                     JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, collection);
+                    journalEntity.setOwner(journal.getOwner());
+                    journalEntity.setEncryptedKey(journal.getKey());
                     data.upsert(journalEntity);
 
                     existing.remove(collection.uid);
                 }
 
-                for (CollectionInfo collection : existing.values()) {
-                    App.log.log(Level.FINE, "Deleting collection", collection.uid);
+                for (JournalEntity journalEntity : existing.values()) {
+                    App.log.log(Level.FINE, "Deleting collection", journalEntity.getUid());
 
-                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.uid)).limit(1).get().first();
                     journalEntity.setDeleted(true);
                     data.update(journalEntity);
                 }

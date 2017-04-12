@@ -30,6 +30,10 @@ public class JournalModel {
         @Convert(CollectionInfoConverter.class)
         CollectionInfo info;
 
+        String owner;
+
+        byte[] encryptedKey;
+
         long service;
 
         boolean deleted;
@@ -51,10 +55,15 @@ public class JournalModel {
             this.service = info.serviceID;
         }
 
+        public static List<JournalEntity> getJournals(EntityDataStore<Persistable> data, long service) {
+            return data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get().toList();
+        }
+
         public static List<CollectionInfo> getCollections(EntityDataStore<Persistable> data, long service) {
             List<CollectionInfo> ret = new LinkedList<>();
 
-            for (JournalEntity journal : data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get()) {
+            List<JournalEntity> journals = getJournals(data, service);
+            for (JournalEntity journal : journals) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
                 journal.afterLoad();
                 ret.add(journal.getInfo());

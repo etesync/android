@@ -131,6 +131,12 @@ public class JournalManager extends BaseManager {
 
     public static class Journal extends Base {
         @Getter
+        private String owner;
+
+        @Getter
+        private byte[] key;
+
+        @Getter
         private int version = -1;
 
         private transient byte[] hmac = null;
