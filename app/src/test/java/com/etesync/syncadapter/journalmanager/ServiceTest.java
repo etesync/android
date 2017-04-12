@@ -12,6 +12,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.model.CollectionInfo;
 
+import org.apache.commons.codec.Charsets;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,9 @@ import okio.BufferedSink;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class ServiceTest {
     private OkHttpClient httpClient;
@@ -195,5 +198,38 @@ public class ServiceTest {
             caught = e;
         }
         assertNotNull(caught);
+    }
+
+
+    @Test
+    public void testUserInfo() throws IOException, Exceptions.HttpException, Exceptions.GenericCryptoException, Exceptions.IntegrityException {
+        Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(Constants.CURRENT_VERSION, Helpers.keyBase64, "userInfo");
+        UserInfoManager.UserInfo userInfo, userInfo2;
+        UserInfoManager manager = new UserInfoManager(httpClient, remote);
+
+        // Get when there's nothing
+        userInfo = manager.get(cryptoManager, Helpers.USER);
+        assertNull(userInfo);
+
+        // Create
+        userInfo = UserInfoManager.UserInfo.generate(cryptoManager, Helpers.USER);
+        manager.create(userInfo);
+
+        // Get
+        userInfo2 = manager.get(cryptoManager, Helpers.USER);
+        assertNotNull(userInfo2);
+        assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2.getContent(cryptoManager));
+
+        // Update
+        userInfo.setContent(cryptoManager, "test".getBytes(Charsets.UTF_8));
+        manager.update(userInfo);
+        userInfo2 = manager.get(cryptoManager, Helpers.USER);
+        assertNotNull(userInfo2);
+        assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2.getContent(cryptoManager));
+
+        // Delete
+        manager.delete(userInfo);
+        userInfo = manager.get(cryptoManager, Helpers.USER);
+        assertNull(userInfo);
     }
 }

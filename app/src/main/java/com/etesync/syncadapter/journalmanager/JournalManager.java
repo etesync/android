@@ -1,15 +1,15 @@
 package com.etesync.syncadapter.journalmanager;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.GsonHelper;
 import com.google.gson.reflect.TypeToken;
 
 import org.spongycastle.util.Arrays;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
-
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.GsonHelper;
 
 import lombok.Getter;
 import okhttp3.HttpUrl;
