@@ -56,8 +56,6 @@ public class JournalModel {
 
             List<JournalEntity> journals = data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get().toList();
             for (JournalEntity journal : journals) {
-                // FIXME: For some reason this isn't always being called, manually do it here.
-                journal.afterLoad();
                 ret.add(journal.getInfo());
             }
 
@@ -66,10 +64,6 @@ public class JournalModel {
 
         public static JournalEntity fetch(EntityDataStore<Persistable> data, String url) {
             JournalEntity ret = data.select(JournalEntity.class).where(JournalEntity.UID.eq(url)).limit(1).get().firstOrNull();
-            if (ret != null) {
-                // FIXME: For some reason this isn't always being called, manually do it here.
-                ret.afterLoad();
-            }
             return ret;
         }
 
