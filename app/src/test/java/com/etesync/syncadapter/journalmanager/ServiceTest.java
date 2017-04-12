@@ -31,7 +31,6 @@ import okio.BufferedSink;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -231,5 +230,30 @@ public class ServiceTest {
         manager.delete(userInfo);
         userInfo = manager.get(cryptoManager, Helpers.USER);
         assertNull(userInfo);
+    }
+
+
+    @Test
+    public void testJournalMember() throws IOException, Exceptions.HttpException, Exceptions.GenericCryptoException, Exceptions.IntegrityException {
+        JournalManager journalManager = new JournalManager(httpClient, remote);
+        CollectionInfo info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK);
+        info.uid = JournalManager.Journal.genUid();
+        info.displayName = "Test";
+        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid);
+        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
+        journalManager.putJournal(journal);
+
+        assertEquals(journalManager.listMembers(journal).size(), 0);
+
+        // Test inviting ourselves
+        JournalManager.Member member = new JournalManager.Member(Helpers.USER, "test".getBytes(Charsets.UTF_8));
+        journalManager.addMember(journal, member);
+
+        assertEquals(journalManager.listMembers(journal).size(), 1);
+
+        // Uninviting ourselves
+        journalManager.deleteMember(journal, member);
+
+        assertEquals(journalManager.listMembers(journal).size(), 0);
     }
 }

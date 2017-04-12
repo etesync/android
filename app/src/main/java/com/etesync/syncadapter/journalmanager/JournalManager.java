@@ -26,6 +26,8 @@ import static com.etesync.syncadapter.journalmanager.Crypto.toHex;
 public class JournalManager extends BaseManager {
     final static private Type journalType = new TypeToken<List<Journal>>() {
     }.getType();
+    final static private Type memberType = new TypeToken<List<Member>>() {
+    }.getType();
 
 
     public JournalManager(OkHttpClient httpClient, HttpUrl remote) {
@@ -90,6 +92,43 @@ public class JournalManager extends BaseManager {
         newCall(request);
     }
 
+    private HttpUrl getMemberRemote(Journal journal) {
+        return this.remote.resolve(journal.getUid() + "/members/");
+    }
+
+    public List<Member> listMembers(Journal journal) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+        Request request = new Request.Builder()
+                .get()
+                .url(getMemberRemote(journal))
+                .build();
+
+        Response response = newCall(request);
+        ResponseBody body = response.body();
+        return GsonHelper.gson.fromJson(body.charStream(), memberType);
+    }
+
+    public void deleteMember(Journal journal, Member member) throws Exceptions.HttpException {
+        RequestBody body = RequestBody.create(JSON, member.toJson());
+
+        Request request = new Request.Builder()
+                .delete(body)
+                .url(getMemberRemote(journal))
+                .build();
+
+        newCall(request);
+    }
+
+    public void addMember(Journal journal, Member member) throws Exceptions.HttpException {
+        RequestBody body = RequestBody.create(JSON, member.toJson());
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(getMemberRemote(journal))
+                .build();
+
+        newCall(request);
+    }
+
     public static class Journal extends Base {
         @Getter
         private int version = -1;
@@ -138,6 +177,26 @@ public class JournalManager extends BaseManager {
             String ret = super.toJson();
             setContent(rawContent);
             return ret;
+        }
+    }
+
+    public static class Member {
+        @Getter
+        private String user;
+        @Getter
+        private byte[] key;
+
+        @SuppressWarnings("unused")
+        private Member() {
+        }
+
+        public Member(String user, byte[] encryptedKey) {
+            this.user = user;
+            this.key = encryptedKey;
+        }
+
+        String toJson() {
+            return GsonHelper.gson.toJson(this, getClass());
         }
     }
 }
