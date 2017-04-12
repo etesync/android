@@ -21,6 +21,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.etesync.syncadapter.journalmanager.Crypto;
+import com.etesync.syncadapter.utils.Base64;
+
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,6 +39,8 @@ public class AccountSettings {
             KEY_URI = "uri",
             KEY_USERNAME = "user_name",
             KEY_TOKEN = "auth_token",
+            KEY_ASYMMETRIC_PRIVATE_KEY = "asymmetric_private_key",
+            KEY_ASYMMETRIC_PUBLIC_KEY = "asymmetric_public_key",
             KEY_WIFI_ONLY = "wifi_only",            // sync on WiFi only (default: false)
             KEY_WIFI_ONLY_SSID = "wifi_only_ssid";  // restrict sync to specific WiFi SSID
 
@@ -120,6 +125,23 @@ public class AccountSettings {
 
     public void setAuthToken(@NonNull String token) {
         accountManager.setUserData(account, KEY_TOKEN, token);
+    }
+
+
+    public Crypto.AsymmetricKeyPair getKeyPair() {
+        if (accountManager.getUserData(account, KEY_ASYMMETRIC_PUBLIC_KEY) != null) {
+            byte[] pubkey = Base64.decode(accountManager.getUserData(account, KEY_ASYMMETRIC_PUBLIC_KEY), Base64.NO_WRAP);
+            byte[] privkey = Base64.decode(accountManager.getUserData(account, KEY_ASYMMETRIC_PRIVATE_KEY), Base64.NO_WRAP);
+
+            return new Crypto.AsymmetricKeyPair(privkey, pubkey);
+        }
+
+        return null;
+    }
+
+    public void setKeyPair(@NonNull Crypto.AsymmetricKeyPair keyPair) {
+        accountManager.setUserData(account, KEY_ASYMMETRIC_PUBLIC_KEY, Base64.encodeToString(keyPair.getPublicKey(), Base64.NO_WRAP));
+        accountManager.setUserData(account, KEY_ASYMMETRIC_PRIVATE_KEY, Base64.encodeToString(keyPair.getPrivateKey(), Base64.NO_WRAP));
     }
 
     public String username() {
