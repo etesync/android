@@ -15,16 +15,19 @@ import io.requery.ManyToOne;
 import io.requery.Persistable;
 import io.requery.PostLoad;
 import io.requery.ReferentialAction;
+import io.requery.Table;
 import io.requery.sql.EntityDataStore;
 
 public class JournalModel {
+    // FIXME: Add unique constraint on the uid + service combination. Can't do it at the moment because requery is broken.
     @Entity
+    @Table(name = "Journal")
     public static abstract class Journal {
         @Key
         @Generated
         int id;
 
-        @Column(length = 64, unique = true, nullable = false)
+        @Column(length = 64, nullable = false)
         String uid;
 
         @Convert(CollectionInfoConverter.class)
@@ -34,6 +37,7 @@ public class JournalModel {
 
         byte[] encryptedKey;
 
+        @Index(value = "uid_unique")
         long service;
 
         boolean deleted;
@@ -102,18 +106,20 @@ public class JournalModel {
     }
 
     @Entity
+    @Table(name = "Entry", uniqueIndexes = "entry_unique_together")
     public static abstract class Entry {
         @Key
         @Generated
         int id;
 
-        @Column(length = 64, unique = true, nullable = false)
+        @Index("entry_unique_together")
+        @Column(length = 64, nullable = false)
         String uid;
 
         @Convert(SyncEntryConverter.class)
         SyncEntry content;
 
-        @Index("journal_index")
+        @Index("entry_unique_together")
         @ForeignKey(update = ReferentialAction.CASCADE)
         @ManyToOne
         Journal journal;
