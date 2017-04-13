@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-include ':app'
+include ':app', ':remoteexample'
 include ':ical4android'
 include ':vcard4android'
 include ':cert4android'
