@@ -104,6 +104,8 @@
     <string name="change_journal_title">Change Journal</string>
     <string name="account_showcase_import">In order to import contacts and calendars into EteSync, you need to click on the menu, and choose \"Import\".</string>
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
+    <string name="not_allowed_title">Not Allowed</string>
+    <string name="edit_owner_only">Only the owner of this collection (%s) is allowed to edit it.</string>
 
     <!-- CollectionMembers -->
     <string name="collection_members_title">Members</string>

@@ -10,11 +10,13 @@ package com.etesync.syncadapter.ui;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.Menu;
@@ -52,7 +54,9 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
     private Account account;
+    private JournalEntity journalEntity;
     protected CollectionInfo info;
+    private boolean isOwner;
 
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, ViewCollectionActivity.class);
@@ -65,13 +69,14 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     public void refresh() {
         EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-        final JournalEntity journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid);
+        journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid);
         if ((journalEntity == null) || journalEntity.isDeleted()) {
             finish();
             return;
         }
 
         info = journalEntity.getInfo();
+        isOwner = account.name.equals(journalEntity.getOwner());
 
         final View colorSquare = findViewById(R.id.color);
         if (info.type == CollectionInfo.Type.CALENDAR) {
@@ -161,7 +166,21 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     }
 
     public void onEditCollection(MenuItem item) {
-        startActivity(EditCollectionActivity.newIntent(this, account, info));
+        if (isOwner) {
+            startActivity(EditCollectionActivity.newIntent(this, account, info));
+        } else {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(getString(R.string.edit_owner_only, journalEntity.getOwner()))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        }
     }
 
     public void onImport(MenuItem item) {
