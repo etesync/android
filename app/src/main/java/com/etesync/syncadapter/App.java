@@ -40,8 +40,10 @@ import com.etesync.syncadapter.log.LogcatHandler;
 import com.etesync.syncadapter.log.PlainTextFormatter;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.Models;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
@@ -227,7 +229,7 @@ public class App extends Application {
     public EntityDataStore<Persistable> getData() {
         if (dataStore == null) {
             // override onUpgrade to handle migrating to a new version
-            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 2);
+            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 3);
             Configuration configuration = source.getConfiguration();
             dataStore = new EntityDataStore<>(configuration);
         }
@@ -257,7 +259,7 @@ public class App extends Application {
 
             List<CollectionInfo> collections = readCollections(dbHelper);
             for (CollectionInfo info : collections) {
-                JournalEntity journalEntity = new JournalEntity(info);
+                JournalEntity journalEntity = new JournalEntity(data, info);
                 data.insert(journalEntity);
             }
 
@@ -291,6 +293,12 @@ public class App extends Application {
         if (fromVersion < 10) {
             HintManager.setHintSeen(this, AccountsActivity.HINT_ACCOUNT_ADD, true);
         }
+
+        if (fromVersion < 11) {
+            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
+
+            migrateServices(dbHelper);
+        }
     }
 
     public static class AppUpdatedReceiver extends BroadcastReceiver {
@@ -320,5 +328,26 @@ public class App extends Application {
             collections.add(CollectionInfo.fromDB(values));
         }
         return collections;
+    }
+
+    public void migrateServices(ServiceDB.OpenHelper dbHelper) {
+        @Cleanup SQLiteDatabase db = dbHelper.getReadableDatabase();
+        EntityDataStore<Persistable> data = this.getData();
+        @Cleanup Cursor cursor = db.query(ServiceDB.Services._TABLE, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            ContentValues values = new ContentValues();
+            DatabaseUtils.cursorRowToContentValues(cursor, values);
+            ServiceEntity service = new ServiceEntity();
+            service.setAccount(values.getAsString(ServiceDB.Services.ACCOUNT_NAME));
+            service.setType(CollectionInfo.Type.valueOf(values.getAsString(ServiceDB.Services.SERVICE)));
+            data.insert(service);
+
+            for (JournalEntity journalEntity : data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(values.getAsLong(ServiceDB.Services.ID))).get()) {
+                journalEntity.setServiceModel(service);
+                data.update(journalEntity);
+            }
+        }
+
+        db.delete(ServiceDB.Services._TABLE, null, null);
     }
 }

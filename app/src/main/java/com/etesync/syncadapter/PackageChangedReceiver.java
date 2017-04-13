@@ -8,22 +8,13 @@
 
 package com.etesync.syncadapter;
 
-import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.ServiceDB.Services;
 import com.etesync.syncadapter.resource.LocalTaskList;
-import at.bitfire.ical4android.TaskProvider;
-import lombok.Cleanup;
 
 public class PackageChangedReceiver extends BroadcastReceiver {
 
@@ -40,24 +31,7 @@ public class PackageChangedReceiver extends BroadcastReceiver {
         App.log.info("Package (un)installed; OpenTasks provider now available = " + tasksInstalled);
 
         // check all accounts and (de)activate OpenTasks if a CalDAV service is defined
-        @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        @Cleanup Cursor cursor = db.query(Services._TABLE, new String[] { Services.ACCOUNT_NAME },
-                Services.SERVICE + "=?", new String[] { Services.SERVICE_CALDAV }, null, null, null);
-        while (cursor.moveToNext()) {
-            Account account = new Account(cursor.getString(0), Constants.ACCOUNT_TYPE);
-
-            if (tasksInstalled) {
-                if (ContentResolver.getIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority) <= 0) {
-                    ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 1);
-                    ContentResolver.setSyncAutomatically(account, TaskProvider.ProviderName.OpenTasks.authority, true);
-                    ContentResolver.addPeriodicSync(account, TaskProvider.ProviderName.OpenTasks.authority, new Bundle(), Constants.DEFAULT_SYNC_INTERVAL);
-                }
-            } else
-                ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 0);
-
-        }
+        // FIXME: Do something if we ever bring back tasks.
     }
 
 }

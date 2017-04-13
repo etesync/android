@@ -35,7 +35,9 @@ import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -125,31 +127,21 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
 
         @Override
         public Exception loadInBackground() {
-            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
-
             try {
                 String authority = null;
-                // now insert collection into database:
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
                 // 1. find service ID
-                String serviceType;
                 if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    serviceType = ServiceDB.Services.SERVICE_CARDDAV;
                     authority = ContactsContract.AUTHORITY;
                 } else if (info.type == CollectionInfo.Type.CALENDAR) {
-                    serviceType = ServiceDB.Services.SERVICE_CALDAV;
                     authority = CalendarContract.AUTHORITY;
                 } else {
                     throw new IllegalArgumentException("Collection must be an address book or calendar");
                 }
-                @Cleanup Cursor c = db.query(ServiceDB.Services._TABLE, new String[]{ServiceDB.Services.ID},
-                        ServiceDB.Services.ACCOUNT_NAME + "=? AND " + ServiceDB.Services.SERVICE + "=?",
-                        new String[]{account.name, serviceType}, null, null, null
-                );
-                if (!c.moveToNext())
-                    throw new IllegalStateException();
-                long serviceID = c.getLong(0);
+
+                ServiceEntity serviceEntity = JournalModel.Service.fetch(data, account.name, info.type);
 
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 HttpUrl principal = HttpUrl.get(settings.getUri());
@@ -167,8 +159,7 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 }
 
                 // 2. add collection to service
-                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
-                info.serviceID = serviceID;
+                info.serviceID = serviceEntity.getId();
                 JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, info);
                 data.upsert(journalEntity);
 
@@ -180,8 +171,6 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 return e;
             } catch (Exceptions.IntegrityException|Exceptions.GenericCryptoException e) {
                 return e;
-            } finally {
-                dbHelper.close();
             }
 
             return null;

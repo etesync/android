@@ -137,7 +137,7 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
 
         @Override
         protected List<EntryEntity> doInBackground(Void... voids) {
-            journalEntity = JournalModel.Journal.fetch(data, info.uid);
+            journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid);
             return data.select(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList();
         }
 

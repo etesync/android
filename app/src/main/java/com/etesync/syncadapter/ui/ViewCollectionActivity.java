@@ -27,6 +27,8 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.importlocal.ImportActivity;
@@ -63,7 +65,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     public void refresh() {
         EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-        final JournalEntity journalEntity = JournalEntity.fetch(data, info.uid);
+        final JournalEntity journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid);
         if ((journalEntity == null) || journalEntity.isDeleted()) {
             finish();
             return;
@@ -173,7 +175,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         protected Long doInBackground(Void... aVoids) {
             EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-            final JournalEntity journalEntity = JournalEntity.fetch(data, info.uid);
+            final JournalEntity journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid);
 
             entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
             long count;

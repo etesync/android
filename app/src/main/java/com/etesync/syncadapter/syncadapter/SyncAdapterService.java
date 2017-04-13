@@ -47,7 +47,9 @@ import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.ui.PermissionsActivity;
 
 import io.requery.Persistable;
@@ -175,22 +177,16 @@ public abstract class SyncAdapterService extends Service {
                         journals.add(new Pair<>(journal, info));
                     }
 
-                    db.beginTransactionNonExclusive();
-                    try {
-                        saveCollections(db, journals);
-                        db.setTransactionSuccessful();
-                    } finally {
-                        db.endTransaction();
-                    }
+                    saveCollections(journals);
                 } finally {
                     dbHelper.close();
                 }
             }
 
-            private void saveCollections(SQLiteDatabase db, Iterable<Pair<JournalManager.Journal, CollectionInfo>> journals) {
-                Long service = dbHelper.getService(db, account, serviceType.toString());
-
+            private void saveCollections(Iterable<Pair<JournalManager.Journal, CollectionInfo>> journals) {
                 EntityDataStore<Persistable> data = ((App) context.getApplicationContext()).getData();
+                ServiceEntity service =  JournalModel.Service.fetch(data, account.name, serviceType);
+
                 Map<String, JournalEntity> existing = new HashMap<>();
                 for (JournalEntity journalEntity : JournalEntity.getJournals(data, service)) {
                     existing.put(journalEntity.getUid(), journalEntity);
@@ -201,7 +197,7 @@ public abstract class SyncAdapterService extends Service {
                     CollectionInfo collection = pair.second;
                     App.log.log(Level.FINE, "Saving collection", journal.getUid());
 
-                    collection.serviceID = service;
+                    collection.serviceID = service.getId();
                     JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, collection);
                     journalEntity.setOwner(journal.getOwner());
                     journalEntity.setEncryptedKey(journal.getKey());

@@ -33,17 +33,13 @@ public class ServiceDB {
                 VALUE = "value";
     }
 
+    @Deprecated
     public static class Services {
         public static final String
                 _TABLE = "services",
                 ID = "_id",
                 ACCOUNT_NAME = "accountName",
                 SERVICE = "service";
-
-        // allowed values for SERVICE column
-        public static final String
-                SERVICE_CALDAV = CollectionInfo.Type.CALENDAR.toString(),
-                SERVICE_CARDDAV = CollectionInfo.Type.ADDRESS_BOOK.toString();
     }
 
     @Deprecated
@@ -90,15 +86,8 @@ public class ServiceDB {
             db.execSQL("CREATE TABLE " + Settings._TABLE + "(" +
                     Settings.NAME + " TEXT NOT NULL," +
                     Settings.VALUE + " TEXT NOT NULL" +
-            ")");
+                    ")");
             db.execSQL("CREATE UNIQUE INDEX settings_name ON " + Settings._TABLE + " (" + Settings.NAME + ")");
-
-            db.execSQL("CREATE TABLE " + Services._TABLE + "(" +
-                    Services.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    Services.ACCOUNT_NAME + " TEXT NOT NULL," +
-                    Services.SERVICE + " TEXT NOT NULL" +
-            ")");
-            db.execSQL("CREATE UNIQUE INDEX services_account ON " + Services._TABLE + " (" + Services.ACCOUNT_NAME + "," + Services.SERVICE + ")");
         }
 
         @Override
@@ -112,7 +101,7 @@ public class ServiceDB {
             db.beginTransactionNonExclusive();
 
             // iterate through all tables
-            @Cleanup Cursor cursorTables = db.query("sqlite_master", new String[] { "name" }, "type='table'", null, null, null, null);
+            @Cleanup Cursor cursorTables = db.query("sqlite_master", new String[]{"name"}, "type='table'", null, null, null, null);
             while (cursorTables.moveToNext()) {
                 String table = cursorTables.getString(0);
                 sb.append(table).append("\n");
@@ -153,47 +142,5 @@ public class ServiceDB {
             }
             db.endTransaction();
         }
-
-        @NonNull
-        public Account getServiceAccount(SQLiteDatabase db, long service) {
-            @Cleanup Cursor cursor = db.query(Services._TABLE, new String[]{Services.ACCOUNT_NAME}, Services.ID + "=?", new String[]{String.valueOf(service)}, null, null, null);
-            if (cursor.moveToNext()) {
-                return new Account(cursor.getString(0), Constants.ACCOUNT_TYPE);
-            } else
-                throw new IllegalArgumentException("Service not found");
-        }
-
-        @NonNull
-        public String getServiceType(SQLiteDatabase db, long service) {
-            @Cleanup Cursor cursor = db.query(Services._TABLE, new String[]{Services.SERVICE}, Services.ID + "=?", new String[]{String.valueOf(service)}, null, null, null);
-            if (cursor.moveToNext())
-                return cursor.getString(0);
-            else
-                throw new IllegalArgumentException("Service not found");
-        }
-
-        @Nullable
-        public Long getService(@NonNull SQLiteDatabase db, @NonNull Account account, String service) {
-            @Cleanup Cursor c = db.query(Services._TABLE, new String[]{Services.ID},
-                    Services.ACCOUNT_NAME + "=? AND " + Services.SERVICE + "=?", new String[]{account.name, service}, null, null, null);
-            if (c.moveToNext())
-                return c.getLong(0);
-            else
-                return null;
-        }
-
-        @Nullable
-        public Long getService(@NonNull Account account, String service) {
-            @Cleanup SQLiteDatabase db = getReadableDatabase();
-            return getService(db, account, service);
-        }
     }
-
-
-    public static void onRenameAccount(@NonNull SQLiteDatabase db, @NonNull String oldName, @NonNull String newName) {
-        ContentValues values = new ContentValues(1);
-        values.put(Services.ACCOUNT_NAME, newName);
-        db.update(Services._TABLE, values, Services.ACCOUNT_NAME + "=?", new String[] { oldName });
-    }
-
 }

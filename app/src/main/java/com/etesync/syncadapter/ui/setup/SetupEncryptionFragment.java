@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -26,8 +25,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
-import java.util.logging.Level;
-
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
@@ -37,8 +34,12 @@ import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalTaskList;
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration;
+
+import java.util.logging.Level;
+
 import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -140,7 +141,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
             if (config.cardDAV != null) {
                 // insert CardDAV service
-                insertService(db, accountName, ServiceDB.Services.SERVICE_CARDDAV, config.cardDAV);
+                insertService(db, accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV);
 
                 // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
                 settings.setSyncInterval(ContactsContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL);
@@ -150,7 +151,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
             if (config.calDAV != null) {
                 // insert CalDAV service
-                insertService(db, accountName, ServiceDB.Services.SERVICE_CALDAV, config.calDAV);
+                insertService(db, accountName, CollectionInfo.Type.CALENDAR, config.calDAV);
 
                 // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
                 settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL);
@@ -172,22 +173,20 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         return true;
     }
 
-    protected long insertService(SQLiteDatabase db, String accountName, String service, BaseConfigurationFinder.Configuration.ServiceInfo info) {
-        ContentValues values = new ContentValues();
+    protected void insertService(SQLiteDatabase db, String accountName, CollectionInfo.Type serviceType, BaseConfigurationFinder.Configuration.ServiceInfo info) {
+        EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
         // insert service
-        values.put(ServiceDB.Services.ACCOUNT_NAME, accountName);
-        values.put(ServiceDB.Services.SERVICE, service);
-        long serviceID = db.insertWithOnConflict(ServiceDB.Services._TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+        ServiceEntity serviceEntity = new ServiceEntity();
+        serviceEntity.setAccount(accountName);
+        serviceEntity.setType(serviceType);
+        data.upsert(serviceEntity);
 
         // insert collections
         for (CollectionInfo collection : info.collections.values()) {
-            collection.serviceID = serviceID;
-            JournalEntity journalEntity = new JournalEntity(collection);
+            collection.serviceID = serviceEntity.getId();
+            JournalEntity journalEntity = new JournalEntity(data, collection);
             data.insert(journalEntity);
         }
-
-        return serviceID;
     }
 }

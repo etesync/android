@@ -49,6 +49,7 @@ import com.etesync.syncadapter.journalmanager.Exceptions.HttpException;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -246,8 +247,14 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
             dbHelper.dump(report);
             report.append("\n");
 
-            report.append("JOURNALS DUMP\n");
+            report.append("SERVICES DUMP\n");
             EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+            for (ServiceEntity serviceEntity : data.select(ServiceEntity.class).get()) {
+                report.append(serviceEntity.toString() + "\n");
+            }
+            report.append("\n");
+
+            report.append("JOURNALS DUMP\n");
             List<JournalEntity> journals = data.select(JournalEntity.class).where(JournalEntity.DELETED.eq(false)).get().toList();
             for (JournalEntity journal : journals) {
                 report.append(journal.toString() + "\n");

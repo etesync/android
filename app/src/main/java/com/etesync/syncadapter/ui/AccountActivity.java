@@ -24,8 +24,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.ServiceConnection;
 import android.content.SyncStatusObserver;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,8 +55,7 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
-import com.etesync.syncadapter.model.ServiceDB.Services;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
@@ -71,7 +68,6 @@ import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import tourguide.tourguide.ToolTip;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
@@ -318,31 +314,23 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         public AccountInfo loadInBackground() {
             AccountInfo info = new AccountInfo();
 
-            @Cleanup OpenHelper dbHelper = new OpenHelper(getContext());
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
             EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
-            @Cleanup Cursor cursor = db.query(
-                    Services._TABLE,
-                    new String[] { Services.ID, Services.SERVICE },
-                    Services.ACCOUNT_NAME + "=?", new String[] { account.name },
-                    null, null, null);
-
-            while (cursor.moveToNext()) {
-                long id = cursor.getLong(0);
-                String service = cursor.getString(1);
-                if (Services.SERVICE_CARDDAV.equals(service)) {
+            for (ServiceEntity serviceEntity : data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account.name)).get()) {
+                long id = serviceEntity.getId();
+                CollectionInfo.Type service = serviceEntity.getType();
+                if (service.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
                     info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
-                    info.carddav.collections = JournalEntity.getCollections(data, id);
-                } else if (Services.SERVICE_CALDAV.equals(service)) {
+                    info.carddav.collections = JournalEntity.getCollections(data, serviceEntity);
+                } else if (service.equals(CollectionInfo.Type.CALENDAR)) {
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
                     info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
-                    info.caldav.collections = JournalEntity.getCollections(data, id);
+                    info.caldav.collections = JournalEntity.getCollections(data, serviceEntity);
                 }
             }
             return info;
