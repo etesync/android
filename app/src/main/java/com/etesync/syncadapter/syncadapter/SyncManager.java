@@ -33,6 +33,7 @@ import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+import com.etesync.syncadapter.utils.Base64;
 
 import org.apache.commons.collections4.ListUtils;
 
@@ -118,7 +119,12 @@ abstract public class SyncManager {
         notificationManager.cancel();
 
         App.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version));
-        crypto = new Crypto.CryptoManager(info.version, settings.password(), journalUid);
+
+        if (getJournalEntity().getEncryptedKey() != null) {
+            crypto = new Crypto.CryptoManager(info.version, settings.getKeyPair(), getJournalEntity().getEncryptedKey());
+        } else {
+            crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+        }
     }
 
     protected abstract int notificationId();
@@ -235,7 +241,7 @@ abstract public class SyncManager {
 
     private JournalEntity getJournalEntity() {
         if (_journalEntity == null)
-            _journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), journal.getUid());
+            _journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid);
         return _journalEntity;
     }
 

@@ -93,7 +93,7 @@ public class ServiceTest {
         }
         assertNotNull(caught);
 
-        List<JournalManager.Journal> journals = journalManager.getJournals(Helpers.keyBase64);
+        List<JournalManager.Journal> journals = journalManager.getJournals();
         assertEquals(journals.size(), 1);
         CollectionInfo info2 = CollectionInfo.fromJson(journals.get(0).getContent(crypto));
         assertEquals(info2.displayName, info.displayName);
@@ -103,7 +103,7 @@ public class ServiceTest {
         journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
         journalManager.updateJournal(journal);
 
-        journals = journalManager.getJournals(Helpers.keyBase64);
+        journals = journalManager.getJournals();
         assertEquals(journals.size(), 1);
         info2 = CollectionInfo.fromJson(journals.get(0).getContent(crypto));
         assertEquals(info2.displayName, info.displayName);
@@ -111,7 +111,7 @@ public class ServiceTest {
         // Delete journal
         journalManager.deleteJournal(journal);
 
-        journals = journalManager.getJournals(Helpers.keyBase64);
+        journals = journalManager.getJournals();
         assertEquals(journals.size(), 0);
 
         // Bad HMAC
@@ -124,7 +124,10 @@ public class ServiceTest {
 
         try {
             caught = null;
-            journalManager.getJournals(Helpers.keyBase64);
+            for (JournalManager.Journal journal1 : journalManager.getJournals()) {
+                Crypto.CryptoManager crypto1 = new Crypto.CryptoManager(info.version, Helpers.keyBase64, journal1.getUid());
+                journal1.verify(crypto1);
+            }
         } catch (Exceptions.IntegrityException e) {
             caught = e;
         }

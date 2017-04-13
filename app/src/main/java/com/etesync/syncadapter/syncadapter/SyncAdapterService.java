@@ -158,8 +158,16 @@ public abstract class SyncAdapterService extends Service {
 
                     List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();
 
-                    for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
+                    for (JournalManager.Journal journal : journalsManager.getJournals()) {
+                        Crypto.CryptoManager crypto;
+                        if (journal.getKey() != null) {
+                            crypto = new Crypto.CryptoManager(journal.getVersion(), settings.getKeyPair(), journal.getKey());
+                        } else {
+                            crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
+                        }
+
+                        journal.verify(crypto);
+
                         CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
                         info.updateFromJournal(journal);
 

@@ -123,8 +123,21 @@ public class Crypto {
         private SecureRandom _random = null;
         @Getter
         private final byte version;
-        private final byte[] cipherKey;
-        private final byte[] hmacKey;
+        private byte[] cipherKey;
+        private byte[] hmacKey;
+
+        private void setDerivedKey(byte[] derivedKey) {
+            cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);
+            hmacKey = hmac256("hmac".getBytes(Charsets.UTF_8), derivedKey);
+        }
+
+        public CryptoManager(int version, AsymmetricKeyPair keyPair, byte[] encryptedKey) {
+            Crypto.AsymmetricCryptoManager cryptoManager = new Crypto.AsymmetricCryptoManager(keyPair);
+            byte[] derivedKey = cryptoManager.decrypt(encryptedKey);
+
+            this.version = (byte) version;
+            setDerivedKey(derivedKey);
+        }
 
         public CryptoManager(int version, @NonNull String keyBase64, @NonNull String salt) throws Exceptions.IntegrityException, Exceptions.VersionTooNewException {
             byte[] derivedKey;
@@ -139,8 +152,7 @@ public class Crypto {
             }
 
             this.version = (byte) version;
-            cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);
-            hmacKey = hmac256("hmac".getBytes(Charsets.UTF_8), derivedKey);
+            setDerivedKey(derivedKey);
         }
 
         private static final int blockSize = 16; // AES's block size in bytes

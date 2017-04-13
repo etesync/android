@@ -40,7 +40,7 @@ public class JournalManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Journal> getJournals(String keyBase64) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+    public List<Journal> getJournals() throws Exceptions.HttpException {
         Request request = new Request.Builder()
                 .get()
                 .url(remote)
@@ -51,9 +51,7 @@ public class JournalManager extends BaseManager {
         List<Journal> ret = GsonHelper.gson.fromJson(body.charStream(), journalType);
 
         for (Journal journal : ret) {
-            Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), keyBase64, journal.getUid());
             journal.processFromJson();
-            journal.verify(crypto);
         }
 
         return ret;
@@ -157,7 +155,7 @@ public class JournalManager extends BaseManager {
             setContent(Arrays.copyOfRange(getContent(), HMAC_SIZE, getContent().length));
         }
 
-        void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
+        public void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
             if (hmac == null) {
                 throw new Exceptions.IntegrityException("HMAC is null!");
             }
