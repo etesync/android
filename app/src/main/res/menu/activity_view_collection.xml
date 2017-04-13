@@ -11,8 +11,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:title="@string/view_collection_edit"
-          android:onClick="onEditCollection"
-          app:showAsAction="always"/>
+        android:icon="@drawable/ic_edit_dark"
+        android:onClick="onEditCollection"
+        app:showAsAction="always" />
 
     <item android:title="@string/view_collection_import"
         android:onClick="onImport"
