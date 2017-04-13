@@ -49,10 +49,12 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.AccountUpdateService;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceEntity;
@@ -60,6 +62,8 @@ import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
+
+import org.spongycastle.util.encoders.Hex;
 
 import java.io.IOException;
 import java.util.List;
@@ -167,6 +171,19 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                         })
                         .show();
                 break;
+            case R.id.show_fingerprint:
+                AlertDialog dialog = new AlertDialog.Builder(AccountActivity.this)
+                        .setIcon(R.drawable.ic_fingerprint_dark)
+                        .setTitle(R.string.show_fingperprint_title)
+                        .setMessage(getFormattedFingerprint())
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create();
+                dialog.show();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -195,6 +212,19 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             startActivity(ViewCollectionActivity.newIntent(AccountActivity.this, account, info));
         }
     };
+
+    private String getFormattedFingerprint() {
+        AccountSettings settings = null;
+        try {
+            settings = new AccountSettings(this, account);
+            byte[] fingerprint = Crypto.AsymmetricCryptoManager.getKeyFingerprint(settings.getKeyPair().getPublicKey());
+            String fingerprintString = Hex.toHexString(fingerprint).toLowerCase();
+            return fingerprintString.replaceAll("(.{4})", "$1   ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /* LOADERS AND LOADED DATA */
 
