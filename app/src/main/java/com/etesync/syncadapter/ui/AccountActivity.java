@@ -57,6 +57,7 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
+import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
@@ -112,6 +113,10 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                     .setToolTip(new ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_view_collection)))
                     .playOn(tbCardDAV);
             HintManager.setHintSeen(this, HINT_VIEW_COLLECTION, true);
+        }
+
+        if (!SetupUserInfoFragment.hasUserInfo(this, account)) {
+            SetupUserInfoFragment.newInstance(account).show(getSupportFragmentManager(), null);
         }
     }
 

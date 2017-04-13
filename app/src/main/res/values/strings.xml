@@ -140,6 +140,10 @@
     <string name="login_encryption_setup_title">Setting up encryption</string>
     <string name="login_encryption_setup">Please wait, setting up encryption…</string>
 
+    <!-- SetupUserInfoFragment -->
+    <string name="login_encryption_error_title">Encryption Error</string>
+
+
     <!-- ImportFragment -->
     <string name="import_dialog_title">Import</string>
     <string name="import_dialog_failed_title">Import Failed</string>
