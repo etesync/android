@@ -7,11 +7,18 @@ import com.etesync.syncadapter.utils.Base64;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang3.ArrayUtils;
+import org.spongycastle.asn1.pkcs.PrivateKeyInfo;
+import org.spongycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.spongycastle.crypto.AsymmetricBlockCipher;
+import org.spongycastle.crypto.AsymmetricCipherKeyPair;
 import org.spongycastle.crypto.BufferedBlockCipher;
 import org.spongycastle.crypto.CipherParameters;
 import org.spongycastle.crypto.InvalidCipherTextException;
 import org.spongycastle.crypto.digests.SHA256Digest;
+import org.spongycastle.crypto.encodings.OAEPEncoding;
 import org.spongycastle.crypto.engines.AESEngine;
+import org.spongycastle.crypto.engines.RSAEngine;
+import org.spongycastle.crypto.generators.RSAKeyPairGenerator;
 import org.spongycastle.crypto.generators.SCrypt;
 import org.spongycastle.crypto.macs.HMac;
 import org.spongycastle.crypto.modes.CBCBlockCipher;
@@ -20,18 +27,94 @@ import org.spongycastle.crypto.paddings.PKCS7Padding;
 import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.crypto.params.ParametersWithIV;
+import org.spongycastle.crypto.params.RSAKeyGenerationParameters;
+import org.spongycastle.crypto.util.PrivateKeyFactory;
+import org.spongycastle.crypto.util.PrivateKeyInfoFactory;
+import org.spongycastle.crypto.util.PublicKeyFactory;
+import org.spongycastle.crypto.util.SubjectPublicKeyInfoFactory;
 import org.spongycastle.util.encoders.Hex;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 public class Crypto {
     public static String deriveKey(String salt, String password) {
         final int keySize = 190;
 
         return Base64.encodeToString(SCrypt.generate(password.getBytes(Charsets.UTF_8), salt.getBytes(Charsets.UTF_8), 16384, 8, 1, keySize), Base64.NO_WRAP);
+    }
+
+    public static AsymmetricKeyPair generateKeyPair() {
+        RSAKeyPairGenerator keyPairGenerator = new RSAKeyPairGenerator();
+        keyPairGenerator.init(new RSAKeyGenerationParameters(BigInteger.valueOf(65537), new SecureRandom(), 2048, 160));
+        AsymmetricCipherKeyPair keyPair = keyPairGenerator.generateKeyPair();
+        try {
+            PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.createPrivateKeyInfo(keyPair.getPrivate());
+            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(keyPair.getPublic());
+            return new AsymmetricKeyPair(privateKeyInfo.getEncoded(), publicKeyInfo.getEncoded());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @RequiredArgsConstructor
+    public static class AsymmetricKeyPair {
+        @Getter(AccessLevel.PUBLIC)
+        private final byte[] privateKey;
+        @Getter(AccessLevel.PUBLIC)
+        private final byte[] publicKey;
+    }
+
+    public static class AsymmetricCryptoManager {
+        private final AsymmetricKeyPair keyPair;
+
+        public AsymmetricCryptoManager(AsymmetricKeyPair keyPair) {
+            this.keyPair = keyPair;
+        }
+
+        public byte[] encrypt(byte[] pubkey, byte[] content) {
+            AsymmetricBlockCipher cipher = new RSAEngine();
+            cipher = new OAEPEncoding(cipher);
+            try {
+                cipher.init(true, PublicKeyFactory.createKey(pubkey));
+                return cipher.processBlock(content, 0, content.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvalidCipherTextException e) {
+                e.printStackTrace();
+                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(content, Base64.NO_WRAP));
+            }
+
+            return null;
+        }
+
+        public byte[] decrypt(byte[] cipherText) {
+            AsymmetricBlockCipher cipher = new RSAEngine();
+            cipher = new OAEPEncoding(cipher);
+            try {
+                cipher.init(false, PrivateKeyFactory.createKey(keyPair.getPrivateKey()));
+                return cipher.processBlock(cipherText, 0, cipherText.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvalidCipherTextException e) {
+                e.printStackTrace();
+                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(cipherText, Base64.NO_WRAP));
+            }
+
+            return null;
+        }
+
+        public static byte[] getKeyFingerprint(byte[] pubkey) {
+            return sha256(pubkey);
+        }
     }
 
     public static class CryptoManager {
@@ -146,15 +229,15 @@ public class Crypto {
     }
 
     static String sha256(String base) {
-        return sha256(base.getBytes(Charsets.UTF_8));
+        return toHex(sha256(base.getBytes(Charsets.UTF_8)));
     }
 
-    private static String sha256(byte[] base) {
+    private static byte[] sha256(byte[] base) {
         SHA256Digest digest = new SHA256Digest();
         digest.update(base, 0, base.length);
         byte[] ret = new byte[digest.getDigestSize()];
         digest.doFinal(ret, 0);
-        return toHex(ret);
+        return ret;
     }
 
     static String toHex(byte[] bytes) {
