@@ -103,6 +103,20 @@
     <!-- ViewCollection -->
     <string name="change_journal_title">Change Journal</string>
     <string name="account_showcase_import">In order to import contacts and calendars into EteSync, you need to click on the menu, and choose \"Import\".</string>
+    <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
+
+    <!-- CollectionMembers -->
+    <string name="collection_members_title">Members</string>
+    <string name="collection_members_list_loading">Loading members...</string>
+    <string name="collection_members_list_empty">No members</string>
+    <string name="collection_members_add">Add member</string>
+    <string name="collection_members_add_error">Error adding member</string>
+    <string name="collection_members_adding">Adding member</string>
+    <string name="trust_fingerprint_title">Trust fingerprint?</string>
+    <string name="collection_members_removing">Removing member</string>
+    <string name="collection_members_remove_error">Error removing member</string>
+    <string name="collection_members_remove_title">Remove member</string>
+    <string name="collection_members_remove">Would you like to revoke %s\'s access?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
 
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>
@@ -215,6 +229,7 @@
     <string name="create_collection_description">Description (optional):</string>
     <string name="view_collection_edit">Edit</string>
     <string name="view_collection_import">Import</string>
+    <string name="view_collection_members">Manage Members</string>
     <string name="create_collection_create">Save</string>
     <string name="delete_collection">Delete</string>
     <string name="delete_collection_confirm_title">Are you sure?</string>

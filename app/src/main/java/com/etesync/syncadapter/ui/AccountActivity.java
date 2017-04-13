@@ -217,9 +217,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         AccountSettings settings = null;
         try {
             settings = new AccountSettings(this, account);
-            byte[] fingerprint = Crypto.AsymmetricCryptoManager.getKeyFingerprint(settings.getKeyPair().getPublicKey());
-            String fingerprintString = Hex.toHexString(fingerprint).toLowerCase();
-            return fingerprintString.replaceAll("(.{4})", "$1   ");
+            return Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(settings.getKeyPair().getPublicKey());
         } catch (Exception e) {
             e.printStackTrace();
             return null;

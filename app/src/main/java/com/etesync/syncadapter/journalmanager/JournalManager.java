@@ -144,6 +144,12 @@ public class JournalManager extends BaseManager {
             super();
         }
 
+        public static Journal fakeWithUid(String uid) {
+            Journal ret = new Journal();
+            ret.setUid(uid);
+            return ret;
+        }
+
         public Journal(Crypto.CryptoManager crypto, String content, String uid) {
             super(crypto, content, uid);
             hmac = calculateHmac(crypto);

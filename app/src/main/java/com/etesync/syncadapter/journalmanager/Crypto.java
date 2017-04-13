@@ -115,6 +115,12 @@ public class Crypto {
         public static byte[] getKeyFingerprint(byte[] pubkey) {
             return sha256(pubkey);
         }
+
+        public static String getPrettyKeyFingerprint(byte[] pubkey) {
+            byte[] fingerprint = Crypto.AsymmetricCryptoManager.getKeyFingerprint(pubkey);
+            String fingerprintString = Hex.toHexString(fingerprint).toLowerCase();
+            return fingerprintString.replaceAll("(.{4})", "$1   ");
+        }
     }
 
     public static class CryptoManager {
@@ -125,6 +131,7 @@ public class Crypto {
         private final byte version;
         private byte[] cipherKey;
         private byte[] hmacKey;
+        private byte[] derivedKey;
 
         private void setDerivedKey(byte[] derivedKey) {
             cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);
@@ -133,14 +140,13 @@ public class Crypto {
 
         public CryptoManager(int version, AsymmetricKeyPair keyPair, byte[] encryptedKey) {
             Crypto.AsymmetricCryptoManager cryptoManager = new Crypto.AsymmetricCryptoManager(keyPair);
-            byte[] derivedKey = cryptoManager.decrypt(encryptedKey);
+            derivedKey = cryptoManager.decrypt(encryptedKey);
 
             this.version = (byte) version;
             setDerivedKey(derivedKey);
         }
 
         public CryptoManager(int version, @NonNull String keyBase64, @NonNull String salt) throws Exceptions.IntegrityException, Exceptions.VersionTooNewException {
-            byte[] derivedKey;
             if (version > Byte.MAX_VALUE) {
                 throw new Exceptions.IntegrityException("Version is out of range.");
             } else if (version > Constants.CURRENT_VERSION) {
@@ -237,6 +243,11 @@ public class Crypto {
             hmac.update(data, 0, data.length);
             hmac.doFinal(ret, 0);
             return ret;
+        }
+
+        public byte[] getEncryptedKey(AsymmetricKeyPair keyPair, byte[] publicKey) {
+            AsymmetricCryptoManager cryptoManager = new AsymmetricCryptoManager(keyPair);
+            return cryptoManager.encrypt(publicKey, derivedKey);
         }
     }
 

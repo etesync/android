@@ -168,6 +168,24 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         startActivity(ImportActivity.newIntent(ViewCollectionActivity.this, account, info));
     }
 
+    public void onManageMembers(MenuItem item) {
+        if (isOwner) {
+            startActivity(CollectionMembersActivity.newIntent(this, account, info));
+        } else {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(getString(R.string.members_owner_only, journalEntity.getOwner()))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        }
+    }
+
     private class LoadCountTask extends AsyncTask<Void, Void, Long> {
         private int entryCount;
 

@@ -15,6 +15,11 @@
         android:onClick="onEditCollection"
         app:showAsAction="always" />
 
+    <item android:title="@string/view_collection_members"
+        android:icon="@drawable/ic_members_dark"
+        android:onClick="onManageMembers"
+        app:showAsAction="ifRoom"/>
+
     <item android:title="@string/view_collection_import"
         android:onClick="onImport"
         app:showAsAction="never"/>
