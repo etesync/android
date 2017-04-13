@@ -327,6 +327,13 @@
     <string name="import_button_local">From Account</string>
     <string name="import_select_account">Select Account</string>
 
-    <!-- Event (from Etar) -->
+    <!-- Remote register -->
+    <string name="api_register_title">"Allow access to EteSync?"</string>
+    <string name="api_register_text" formatted="false">"%s requests to access your account for %s. This will allow the app to modify your account"</string>
+    <string name="api_register_allow">"Allow access"</string>
+    <string name="api_register_disallow">"Disallow access"</string>
+    <string name="api_permission_not_granted">Permission not granted.</string>
+    <string name="api_permission_granted">Permission granted</string>
+
     <string name="event_info_organizer">Organizer:</string>
 </resources>

@@ -234,6 +234,22 @@
 
         <activity android:name=".ui.WebViewActivity" />
 
+        <activity
+            android:name=".remote.RemoteRegisterActivity"
+            android:theme="@style/AppTheme.Dialog.Alert"
+            android:launchMode="singleInstance"/>
+
+
+        <service
+            android:name=".remote.RemoteService"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.etesync.syncadapter.RemoteService" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="@string/authority_log_provider"
