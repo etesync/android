@@ -188,7 +188,19 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     }
 
     public void onManageMembers(MenuItem item) {
-        if (isOwner) {
+        if (info.type.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(R.string.members_address_book_not_allowed)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        } else if (isOwner) {
             startActivity(CollectionMembersActivity.newIntent(this, account, info));
         } else {
             AlertDialog dialog = new AlertDialog.Builder(this)

@@ -106,6 +106,7 @@
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
     <string name="not_allowed_title">Not Allowed</string>
     <string name="edit_owner_only">Only the owner of this collection (%s) is allowed to edit it.</string>
+    <string name="members_address_book_not_allowed">Sharing of address books is currently not supported.</string>
 
     <!-- CollectionMembers -->
     <string name="collection_members_title">Members</string>
