@@ -18,6 +18,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Constants;
 import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.UserInfoManager;
 
@@ -88,18 +89,21 @@ public class SetupUserInfoFragment extends DialogFragment {
         @Override
         protected SetupUserInfo.SetupUserInfoResult doInBackground(Account... accounts) {
             try {
+                Crypto.CryptoManager cryptoManager;
                 OkHttpClient httpClient = HttpClient.create(getContext(), account);
 
-                Crypto.CryptoManager cryptoManager = new Crypto.CryptoManager(com.etesync.syncadapter.journalmanager.Constants.CURRENT_VERSION, settings.password(), "userInfo");
                 UserInfoManager userInfoManager = new UserInfoManager(httpClient, HttpUrl.get(settings.getUri()));
-                UserInfoManager.UserInfo userInfo = userInfoManager.get(cryptoManager, account.name);
+                UserInfoManager.UserInfo userInfo = userInfoManager.get(account.name);
 
                 if (userInfo == null) {
                     App.log.info("Creating userInfo for " + account.name);
+                    cryptoManager = new Crypto.CryptoManager(Constants.CURRENT_VERSION, settings.password(), "userInfo");
                     userInfo = UserInfoManager.UserInfo.generate(cryptoManager, account.name);
                     userInfoManager.create(userInfo);
                 } else {
                     App.log.info("Fetched userInfo for " + account.name);
+                    cryptoManager = new Crypto.CryptoManager(userInfo.getVersion(), settings.password(), "userInfo");
+                    userInfo.verify(cryptoManager);
                 }
 
                 Crypto.AsymmetricKeyPair keyPair = new Crypto.AsymmetricKeyPair(userInfo.getContent(cryptoManager), userInfo.getPubkey());

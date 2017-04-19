@@ -79,9 +79,7 @@ public class AddMemberFragment extends DialogFragment {
             try {
                 UserInfoManager userInfoManager = new UserInfoManager(httpClient, remote);
 
-                Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
-
-                memberPubKey = userInfoManager.get(crypto, memberEmail).getPubkey();
+                memberPubKey = userInfoManager.get(memberEmail).getPubkey();
                 return new AddResult(null);
             } catch (Exception e) {
                 return new AddResult(e);

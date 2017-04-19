@@ -30,7 +30,7 @@ public class UserInfoManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public UserInfo get(Crypto.CryptoManager cryptoManager, String owner) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+    public UserInfo get(String owner) throws Exceptions.HttpException {
         HttpUrl remote = this.remote.newBuilder().addPathSegment(owner).addPathSegment("").build();
         Request request = new Request.Builder()
                 .get()
@@ -50,7 +50,6 @@ public class UserInfoManager extends BaseManager {
 
         ResponseBody body = response.body();
         UserInfo ret = GsonHelper.gson.fromJson(body.charStream(), UserInfo.class);
-        ret.verify(cryptoManager);
         ret.setOwner(owner);
 
         return ret;
@@ -109,7 +108,7 @@ public class UserInfoManager extends BaseManager {
             this.content = Arrays.concatenate(calculateHmac(crypto, content), content);
         }
 
-        void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
+        public void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
             if (this.content == null) {
                 // Nothing to verify.
                 return;

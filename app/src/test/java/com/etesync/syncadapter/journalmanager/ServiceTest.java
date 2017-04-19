@@ -210,7 +210,7 @@ public class ServiceTest {
         UserInfoManager manager = new UserInfoManager(httpClient, remote);
 
         // Get when there's nothing
-        userInfo = manager.get(cryptoManager, Helpers.USER);
+        userInfo = manager.get(Helpers.USER);
         assertNull(userInfo);
 
         // Create
@@ -218,20 +218,20 @@ public class ServiceTest {
         manager.create(userInfo);
 
         // Get
-        userInfo2 = manager.get(cryptoManager, Helpers.USER);
+        userInfo2 = manager.get(Helpers.USER);
         assertNotNull(userInfo2);
         assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2.getContent(cryptoManager));
 
         // Update
         userInfo.setContent(cryptoManager, "test".getBytes(Charsets.UTF_8));
         manager.update(userInfo);
-        userInfo2 = manager.get(cryptoManager, Helpers.USER);
+        userInfo2 = manager.get(Helpers.USER);
         assertNotNull(userInfo2);
         assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2.getContent(cryptoManager));
 
         // Delete
         manager.delete(userInfo);
-        userInfo = manager.get(cryptoManager, Helpers.USER);
+        userInfo = manager.get(Helpers.USER);
         assertNull(userInfo);
     }
 
