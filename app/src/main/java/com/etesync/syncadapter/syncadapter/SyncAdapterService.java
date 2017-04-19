@@ -133,7 +133,6 @@ public abstract class SyncAdapterService extends Service {
         }
 
         protected class RefreshCollections {
-            final private ServiceDB.OpenHelper dbHelper;
             final private Account account;
             final private Context context;
             final private CollectionInfo.Type serviceType;
@@ -142,53 +141,46 @@ public abstract class SyncAdapterService extends Service {
                 this.account = account;
                 this.serviceType = serviceType;
                 context = getContext();
-                dbHelper = new ServiceDB.OpenHelper(context);
             }
 
             void run() throws Exceptions.HttpException, Exceptions.IntegrityException, InvalidAccountException, Exceptions.GenericCryptoException {
-                try {
-                    @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+                App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString());
 
-                    App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString());
+                OkHttpClient httpClient = HttpClient.create(context, account);
 
-                    OkHttpClient httpClient = HttpClient.create(context, account);
+                AccountSettings settings = new AccountSettings(context, account);
+                JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
 
-                    AccountSettings settings = new AccountSettings(context, account);
-                    JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
+                List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();
 
-                    List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();
-
-                    for (JournalManager.Journal journal : journalsManager.getJournals()) {
-                        Crypto.CryptoManager crypto;
-                        if (journal.getKey() != null) {
-                            crypto = new Crypto.CryptoManager(journal.getVersion(), settings.getKeyPair(), journal.getKey());
-                        } else {
-                            crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
-                        }
-
-                        journal.verify(crypto);
-
-                        CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
-                        info.updateFromJournal(journal);
-
-                        if (info.type.equals(serviceType)) {
-                            journals.add(new Pair<>(journal, info));
-                        }
+                for (JournalManager.Journal journal : journalsManager.getJournals()) {
+                    Crypto.CryptoManager crypto;
+                    if (journal.getKey() != null) {
+                        crypto = new Crypto.CryptoManager(journal.getVersion(), settings.getKeyPair(), journal.getKey());
+                    } else {
+                        crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
                     }
 
-                    if (journals.isEmpty()) {
-                        CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
-                        info.uid = JournalManager.Journal.genUid();
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
-                        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-                        journalsManager.putJournal(journal);
+                    journal.verify(crypto);
+
+                    CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
+                    info.updateFromJournal(journal);
+
+                    if (info.type.equals(serviceType)) {
                         journals.add(new Pair<>(journal, info));
                     }
-
-                    saveCollections(journals);
-                } finally {
-                    dbHelper.close();
                 }
+
+                if (journals.isEmpty()) {
+                    CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
+                    info.uid = JournalManager.Journal.genUid();
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
+                    journalsManager.putJournal(journal);
+                    journals.add(new Pair<>(journal, info));
+                }
+
+                saveCollections(journals);
             }
 
             private void saveCollections(Iterable<Pair<JournalManager.Journal, CollectionInfo>> journals) {

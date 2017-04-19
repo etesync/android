@@ -158,8 +158,6 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
         // add entries for account to service DB
         App.log.log(Level.INFO, "Writing account configuration to database", config);
-        @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
             AccountSettings settings = new AccountSettings(getContext(), account);
 
@@ -170,7 +168,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
             if (config.cardDAV != null) {
                 // insert CardDAV service
-                insertService(db, accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV);
+                insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV);
 
                 // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
                 settings.setSyncInterval(ContactsContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL);
@@ -180,7 +178,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
             if (config.calDAV != null) {
                 // insert CalDAV service
-                insertService(db, accountName, CollectionInfo.Type.CALENDAR, config.calDAV);
+                insertService(accountName, CollectionInfo.Type.CALENDAR, config.calDAV);
 
                 // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
                 settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL);
@@ -202,7 +200,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         return true;
     }
 
-    protected void insertService(SQLiteDatabase db, String accountName, CollectionInfo.Type serviceType, BaseConfigurationFinder.Configuration.ServiceInfo info) {
+    protected void insertService(String accountName, CollectionInfo.Type serviceType, BaseConfigurationFinder.Configuration.ServiceInfo info) {
         EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
         // insert service

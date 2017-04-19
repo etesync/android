@@ -58,7 +58,6 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
             NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC);
             notificationManager.cancel();
 
-            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
             try {
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
@@ -97,8 +96,6 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
                 }
                 notificationManager.notify(title, getContext().getString(syncPhase));
-            } finally {
-                dbHelper.close();
             }
 
             App.log.info("Address book sync complete");
