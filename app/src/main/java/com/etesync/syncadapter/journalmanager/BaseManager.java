@@ -35,20 +35,22 @@ abstract class BaseManager {
         }
 
         if (!response.isSuccessful()) {
+            ApiError apiError = GsonHelper.gson.fromJson(response.body().charStream(), ApiError.class);
+
             switch (response.code()) {
                 case HttpURLConnection.HTTP_UNAVAILABLE:
                     throw new Exceptions.ServiceUnavailableException(response, "Service unavailable");
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                     throw new Exceptions.UnauthorizedException(response, "Unauthorized auth token");
                 case HttpURLConnection.HTTP_FORBIDDEN:
-                    ApiError apiError = GsonHelper.gson.fromJson(response.body().charStream(), ApiError.class);
                     if (apiError.code.equals("service_inactive")) {
                         throw new Exceptions.UserInactiveException(response, apiError.detail);
                     }
                 default:
                     // Fall through. We want to always throw when unsuccessful.
             }
-            throw new Exceptions.HttpException(response);
+
+            throw new Exceptions.HttpException(response, apiError.detail);
         }
 
         return response;

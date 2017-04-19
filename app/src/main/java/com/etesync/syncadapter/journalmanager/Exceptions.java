@@ -143,6 +143,11 @@ public class Exceptions {
             this.response = formatted.toString();
         }
 
+        @Override
+        public String getMessage() {
+            return message;
+        }
+
         private static void appendByte(StringBuilder formatted, byte b) {
             if (b == '\r')
                 formatted.append("[CR]");
