@@ -74,6 +74,10 @@ public class HttpClient {
         return create(context, App.log);
     }
 
+    public static OkHttpClient create(@Nullable Context context, String authToken) {
+        return create(context, App.log, Constants.serviceUrl.getHost(), authToken);
+    }
+
 
     private static OkHttpClient.Builder defaultBuilder(@Nullable Context context, @NonNull final Logger logger) {
         OkHttpClient.Builder builder = client.newBuilder();

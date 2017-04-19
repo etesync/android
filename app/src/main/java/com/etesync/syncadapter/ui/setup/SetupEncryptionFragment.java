@@ -28,9 +28,12 @@ import android.support.v4.content.Loader;
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
+import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Crypto;
+import com.etesync.syncadapter.journalmanager.Exceptions;
+import com.etesync.syncadapter.journalmanager.UserInfoManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
@@ -44,6 +47,8 @@ import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 
 public class SetupEncryptionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Configuration> {
     private static final String KEY_CONFIG = "config";
@@ -114,6 +119,27 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         @Override
         public Configuration loadInBackground() {
             config.password = Crypto.deriveKey(config.userName, config.rawPassword);
+
+            try {
+                Crypto.CryptoManager cryptoManager;
+                OkHttpClient httpClient = HttpClient.create(getContext(), config.authtoken);
+
+                UserInfoManager userInfoManager = new UserInfoManager(httpClient, HttpUrl.get(config.url));
+                UserInfoManager.UserInfo userInfo = userInfoManager.get(config.userName);
+                if (userInfo != null) {
+                    App.log.info("Fetched userInfo for " + config.userName);
+                    cryptoManager = new Crypto.CryptoManager(userInfo.getVersion(), config.password, "userInfo");
+                    userInfo.verify(cryptoManager);
+                    config.keyPair = new Crypto.AsymmetricKeyPair(userInfo.getContent(cryptoManager), userInfo.getPubkey());
+                }
+            } catch (Exceptions.HttpException e) {
+                e.printStackTrace();
+            } catch (Exceptions.IntegrityException e) {
+                e.printStackTrace();
+            } catch (Exceptions.VersionTooNewException e) {
+                e.printStackTrace();
+            }
+
             return config;
         }
     }
@@ -138,6 +164,9 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
             AccountSettings settings = new AccountSettings(getContext(), account);
 
             settings.setAuthToken(config.authtoken);
+            if (config.keyPair != null) {
+                settings.setKeyPair(config.keyPair);
+            }
 
             if (config.cardDAV != null) {
                 // insert CardDAV service
