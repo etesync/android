@@ -201,6 +201,7 @@ public abstract class SyncAdapterService extends Service {
                     JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, collection);
                     journalEntity.setOwner(journal.getOwner());
                     journalEntity.setEncryptedKey(journal.getKey());
+                    journalEntity.setDeleted(false);
                     data.upsert(journalEntity);
 
                     existing.remove(collection.uid);
