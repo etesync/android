@@ -54,8 +54,7 @@ public class JournalModel {
         public static List<CollectionInfo> getCollections(EntityDataStore<Persistable> data, long service) {
             List<CollectionInfo> ret = new LinkedList<>();
 
-            List<JournalEntity> journals = data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get().toList();
-            for (JournalEntity journal : journals) {
+            for (JournalEntity journal : data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get()) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
                 journal.afterLoad();
                 ret.add(journal.getInfo());
