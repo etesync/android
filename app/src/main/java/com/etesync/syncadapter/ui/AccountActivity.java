@@ -231,7 +231,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCardDAV.setEnabled(!info.carddav.refreshing);
             listCardDAV.setAlpha(info.carddav.refreshing ? 0.5f : 1);
 
-            AddressBookAdapter adapter = new AddressBookAdapter(this);
+            CollectionListAdapter adapter = new CollectionListAdapter(this);
             adapter.addAll(info.carddav.collections);
             listCardDAV.setAdapter(adapter);
             listCardDAV.setOnItemClickListener(onItemClickListener);
@@ -247,7 +247,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCalDAV.setEnabled(!info.caldav.refreshing);
             listCalDAV.setAlpha(info.caldav.refreshing ? 0.5f : 1);
 
-            final CalendarAdapter adapter = new CalendarAdapter(this);
+            final CollectionListAdapter adapter = new CollectionListAdapter(this);
             adapter.addAll(info.caldav.collections);
             listCalDAV.setAdapter(adapter);
             listCalDAV.setOnItemClickListener(onItemClickListener);
@@ -352,15 +352,15 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     /* LIST ADAPTERS */
 
-    public static class AddressBookAdapter extends ArrayAdapter<CollectionInfo> {
-        public AddressBookAdapter(Context context) {
-            super(context, R.layout.account_carddav_item);
+    public static class CollectionListAdapter extends ArrayAdapter<CollectionInfo> {
+        public CollectionListAdapter(Context context) {
+            super(context, R.layout.account_collection_item);
         }
 
         @Override
         public View getView(int position, View v, ViewGroup parent) {
             if (v == null)
-                v = LayoutInflater.from(getContext()).inflate(R.layout.account_carddav_item, parent, false);
+                v = LayoutInflater.from(getContext()).inflate(R.layout.account_collection_item, parent, false);
 
             final CollectionInfo info = getItem(position);
 
@@ -375,45 +375,19 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 tv.setText(info.description);
             }
 
-            tv = (TextView)v.findViewById(R.id.read_only);
-            tv.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
-
-            return v;
-        }
-    }
-
-    public static class CalendarAdapter extends ArrayAdapter<CollectionInfo> {
-        public CalendarAdapter(Context context) {
-            super(context, R.layout.account_caldav_item);
-        }
-
-        @Override
-        public View getView(final int position, View v, ViewGroup parent) {
-            if (v == null)
-                v = LayoutInflater.from(getContext()).inflate(R.layout.account_caldav_item, parent, false);
-
-            final CollectionInfo info = getItem(position);
-
-            View vColor = v.findViewById(R.id.color);
-            if (info.color != null) {
-                vColor.setBackgroundColor(info.color);
+            final View vColor = v.findViewById(R.id.color);
+            if (info.type.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
+                vColor.setVisibility(View.GONE);
             } else {
-                vColor.setBackgroundColor(LocalCalendar.defaultColor);
+                if (info.color != null) {
+                    vColor.setBackgroundColor(info.color);
+                } else {
+                    vColor.setBackgroundColor(LocalCalendar.defaultColor);
+                }
             }
 
-            TextView tv = (TextView)v.findViewById(R.id.title);
-            tv.setText(TextUtils.isEmpty(info.displayName) ? info.uid : info.displayName);
-
-            tv = (TextView)v.findViewById(R.id.description);
-            if (TextUtils.isEmpty(info.description))
-                tv.setVisibility(View.GONE);
-            else {
-                tv.setVisibility(View.VISIBLE);
-                tv.setText(info.description);
-            }
-
-            tv = (TextView)v.findViewById(R.id.read_only);
-            tv.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
+            View readOnly = v.findViewById(R.id.read_only);
+            readOnly.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
 
             return v;
         }
