@@ -137,7 +137,7 @@ dependencies {
     compile group: 'com.madgag.spongycastle', name: 'core', version: '1.54.0.0'
     compile group: 'com.madgag.spongycastle', name: 'prov', version: '1.54.0.0'
     compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.7.0'
     provided 'org.projectlombok:lombok:1.16.16'
 
     // for tests
@@ -148,8 +148,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
+    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.7.0'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
+    testCompile 'com.squareup.okhttp3:mockwebserver:3.7.0'
 }
