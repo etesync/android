@@ -29,8 +29,6 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.JournalModel;
-import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.importlocal.ImportActivity;
@@ -96,6 +94,13 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
 
         final TextView desc = (TextView) findViewById(R.id.description);
         desc.setText(info.description);
+
+        final TextView owner = (TextView) findViewById(R.id.owner);
+        if (account.name.equals(journalEntity.getOwner())) {
+            owner.setVisibility(View.GONE);
+        } else {
+            owner.setText(getString(R.string.account_owner, journalEntity.getOwner()));
+        }
     }
 
     @Override
