@@ -200,6 +200,18 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
                         }
                     }).create();
             dialog.show();
+        } else if (info.version < 2) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(R.string.members_old_journals_not_allowed)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
         } else if (isOwner) {
             startActivity(CollectionMembersActivity.newIntent(this, account, info));
         } else {

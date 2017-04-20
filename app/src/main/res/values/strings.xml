@@ -107,6 +107,7 @@
     <string name="not_allowed_title">Not Allowed</string>
     <string name="edit_owner_only">Only the owner of this collection (%s) is allowed to edit it.</string>
     <string name="members_address_book_not_allowed">Sharing of address books is currently not supported.</string>
+    <string name="members_old_journals_not_allowed">Sharing of old-style journals is not allowed. In order to share this journal, create a new one, and copy its contents over using the \"import\" dialog. If you are experiencing any issues, please contact support.</string>
 
     <!-- CollectionMembers -->
     <string name="collection_members_title">Members</string>
