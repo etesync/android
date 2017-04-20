@@ -40,7 +40,7 @@ public class JournalManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Journal> getJournals() throws Exceptions.HttpException {
+    public List<Journal> list() throws Exceptions.HttpException {
         Request request = new Request.Builder()
                 .get()
                 .url(remote)
@@ -57,7 +57,7 @@ public class JournalManager extends BaseManager {
         return ret;
     }
 
-    public void deleteJournal(Journal journal) throws Exceptions.HttpException {
+    public void delete(Journal journal) throws Exceptions.HttpException {
         HttpUrl remote = this.remote.resolve(journal.getUid() + "/");
         Request request = new Request.Builder()
                 .delete()
@@ -67,7 +67,7 @@ public class JournalManager extends BaseManager {
         newCall(request);
     }
 
-    public void putJournal(Journal journal) throws Exceptions.HttpException {
+    public void create(Journal journal) throws Exceptions.HttpException {
         RequestBody body = RequestBody.create(JSON, journal.toJson());
 
         Request request = new Request.Builder()
@@ -78,7 +78,7 @@ public class JournalManager extends BaseManager {
         newCall(request);
     }
 
-    public void updateJournal(Journal journal) throws Exceptions.HttpException {
+    public void update(Journal journal) throws Exceptions.HttpException {
         HttpUrl remote = this.remote.resolve(journal.getUid() + "/");
         RequestBody body = RequestBody.create(JSON, journal.toJson());
 

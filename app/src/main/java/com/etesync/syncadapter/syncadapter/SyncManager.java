@@ -33,7 +33,6 @@ import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
-import com.etesync.syncadapter.utils.Base64;
 
 import org.apache.commons.collections4.ListUtils;
 
@@ -283,7 +282,7 @@ abstract public class SyncManager {
         int count = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(getJournalEntity())).get().value();
         if ((remoteCTag != null) && (count == 0)) {
             // If we are updating an existing installation with no saved journal, we need to add
-            remoteEntries = journal.getEntries(crypto, null);
+            remoteEntries = journal.list(crypto, null);
             int i = 0;
             for (JournalEntryManager.Entry entry : remoteEntries) {
                 SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
@@ -295,7 +294,7 @@ abstract public class SyncManager {
                 }
             }
         } else {
-            remoteEntries = journal.getEntries(crypto, remoteCTag);
+            remoteEntries = journal.list(crypto, remoteCTag);
         }
 
         App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
@@ -331,7 +330,7 @@ abstract public class SyncManager {
         try {
             if (!localEntries.isEmpty()) {
                 for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
-                    journal.putEntries(entries, remoteCTag);
+                    journal.create(entries, remoteCTag);
                     remoteCTag = entries.get(entries.size() - 1).getUid();
                     pushed += entries.size();
                 }

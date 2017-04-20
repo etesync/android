@@ -17,7 +17,6 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -48,13 +47,11 @@ import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
-import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.ui.PermissionsActivity;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
@@ -153,7 +150,7 @@ public abstract class SyncAdapterService extends Service {
 
                 List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();
 
-                for (JournalManager.Journal journal : journalsManager.getJournals()) {
+                for (JournalManager.Journal journal : journalsManager.list()) {
                     Crypto.CryptoManager crypto;
                     if (journal.getKey() != null) {
                         crypto = new Crypto.CryptoManager(journal.getVersion(), settings.getKeyPair(), journal.getKey());
@@ -176,7 +173,7 @@ public abstract class SyncAdapterService extends Service {
                     info.uid = JournalManager.Journal.genUid();
                     Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
                     JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-                    journalsManager.putJournal(journal);
+                    journalsManager.create(journal);
                     journals.add(new Pair<>(journal, info));
                 }
 

@@ -82,18 +82,18 @@ public class ServiceTest {
         info.displayName = "Test";
         Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid);
         JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-        journalManager.putJournal(journal);
+        journalManager.create(journal);
 
         // Try pushing the same journal (uid clash)
         try {
             caught = null;
-            journalManager.putJournal(journal);
+            journalManager.create(journal);
         } catch (Exceptions.HttpException e) {
             caught = e;
         }
         assertNotNull(caught);
 
-        List<JournalManager.Journal> journals = journalManager.getJournals();
+        List<JournalManager.Journal> journals = journalManager.list();
         assertEquals(journals.size(), 1);
         CollectionInfo info2 = CollectionInfo.fromJson(journals.get(0).getContent(crypto));
         assertEquals(info2.displayName, info.displayName);
@@ -101,17 +101,17 @@ public class ServiceTest {
         // Update journal
         info.displayName = "Test 2";
         journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-        journalManager.updateJournal(journal);
+        journalManager.update(journal);
 
-        journals = journalManager.getJournals();
+        journals = journalManager.list();
         assertEquals(journals.size(), 1);
         info2 = CollectionInfo.fromJson(journals.get(0).getContent(crypto));
         assertEquals(info2.displayName, info.displayName);
 
         // Delete journal
-        journalManager.deleteJournal(journal);
+        journalManager.delete(journal);
 
-        journals = journalManager.getJournals();
+        journals = journalManager.list();
         assertEquals(journals.size(), 0);
 
         // Bad HMAC
@@ -120,11 +120,11 @@ public class ServiceTest {
         info.displayName = "Test 3";
         //// We assume this doesn't update the hmac.
         journal.setContent(crypto, info.toJson());
-        journalManager.putJournal(journal);
+        journalManager.create(journal);
 
         try {
             caught = null;
-            for (JournalManager.Journal journal1 : journalManager.getJournals()) {
+            for (JournalManager.Journal journal1 : journalManager.list()) {
                 Crypto.CryptoManager crypto1 = new Crypto.CryptoManager(info.version, Helpers.keyBase64, journal1.getUid());
                 journal1.verify(crypto1);
             }
@@ -144,7 +144,7 @@ public class ServiceTest {
         info.displayName = "Test";
         Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid);
         JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-        journalManager.putJournal(journal);
+        journalManager.create(journal);
 
         JournalEntryManager journalEntryManager = new JournalEntryManager(httpClient, remote, info.uid);
         JournalEntryManager.Entry previousEntry = null;
@@ -154,7 +154,7 @@ public class ServiceTest {
         List<JournalEntryManager.Entry> entries = new LinkedList<>();
 
         entries.add(entry);
-        journalEntryManager.putEntries(entries, null);
+        journalEntryManager.create(entries, null);
         previousEntry = entry;
 
         entries.clear();
@@ -165,14 +165,14 @@ public class ServiceTest {
         // Pushing a correct entries without the last parameter
         try {
             caught = null;
-            journalEntryManager.putEntries(entries, null);
+            journalEntryManager.create(entries, null);
         } catch (Exceptions.HttpException e) {
             caught = e;
         }
         assertNotNull(caught);
 
         // Adding a second entry
-        journalEntryManager.putEntries(entries, previousEntry.getUid());
+        journalEntryManager.create(entries, previousEntry.getUid());
         previousEntry = entry2;
 
         entries.clear();
@@ -180,9 +180,9 @@ public class ServiceTest {
         entries.add(entry2);
 
         // Check last works:
-        entries = journalEntryManager.getEntries(crypto, entry.getUid());
+        entries = journalEntryManager.list(crypto, entry.getUid());
         assertEquals(entries.size(), 1);
-        entries = journalEntryManager.getEntries(crypto, entry2.getUid());
+        entries = journalEntryManager.list(crypto, entry2.getUid());
         assertEquals(entries.size(), 0);
 
         // Corrupt the journal and verify we catch it
@@ -191,11 +191,11 @@ public class ServiceTest {
         entry2.update(crypto, "Content", null);
         entries.add(entry2);
 
-        journalEntryManager.putEntries(entries, previousEntry.getUid());
+        journalEntryManager.create(entries, previousEntry.getUid());
 
         try {
             caught = null;
-            journalEntryManager.getEntries(crypto, null);
+            journalEntryManager.list(crypto, null);
         } catch (Exceptions.IntegrityException e) {
             caught = e;
         }
@@ -244,7 +244,7 @@ public class ServiceTest {
         info.displayName = "Test";
         Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid);
         JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-        journalManager.putJournal(journal);
+        journalManager.create(journal);
 
         assertEquals(journalManager.listMembers(journal).size(), 0);
 

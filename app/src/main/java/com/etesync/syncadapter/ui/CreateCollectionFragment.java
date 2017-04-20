@@ -14,8 +14,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
@@ -36,12 +34,10 @@ import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
-import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import okhttp3.HttpUrl;
 
 public class CreateCollectionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Exception> {
@@ -151,11 +147,11 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                     info.uid = JournalManager.Journal.genUid();
                     Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
                     JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-                    journalManager.putJournal(journal);
+                    journalManager.create(journal);
                 } else {
                     Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
                     JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-                    journalManager.updateJournal(journal);
+                    journalManager.update(journal);
                 }
 
                 // 2. add collection to service

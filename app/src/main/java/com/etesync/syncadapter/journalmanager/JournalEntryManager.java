@@ -35,7 +35,7 @@ public class JournalEntryManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Entry> getEntries(Crypto.CryptoManager crypto, String last) throws Exceptions.HttpException, Exceptions.IntegrityException {
+    public List<Entry> list(Crypto.CryptoManager crypto, String last) throws Exceptions.HttpException, Exceptions.IntegrityException {
         Entry previousEntry = null;
         HttpUrl.Builder urlBuilder = this.remote.newBuilder();
         if (last != null) {
@@ -62,7 +62,7 @@ public class JournalEntryManager extends BaseManager {
         return ret;
     }
 
-    public void putEntries(List<Entry> entries, String last) throws Exceptions.HttpException {
+    public void create(List<Entry> entries, String last) throws Exceptions.HttpException {
         HttpUrl.Builder urlBuilder = this.remote.newBuilder();
         if (last != null) {
             urlBuilder.addQueryParameter("last", last);
