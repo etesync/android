@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -46,7 +47,9 @@ import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.ui.PermissionsActivity;
 
 import io.requery.Persistable;
@@ -130,7 +133,6 @@ public abstract class SyncAdapterService extends Service {
         }
 
         protected class RefreshCollections {
-            final private ServiceDB.OpenHelper dbHelper;
             final private Account account;
             final private Context context;
             final private CollectionInfo.Type serviceType;
@@ -139,77 +141,75 @@ public abstract class SyncAdapterService extends Service {
                 this.account = account;
                 this.serviceType = serviceType;
                 context = getContext();
-                dbHelper = new ServiceDB.OpenHelper(context);
             }
 
             void run() throws Exceptions.HttpException, Exceptions.IntegrityException, InvalidAccountException, Exceptions.GenericCryptoException {
-                try {
-                    @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+                App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString());
 
-                    App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString());
+                OkHttpClient httpClient = HttpClient.create(context, account);
 
-                    OkHttpClient httpClient = HttpClient.create(context, account);
+                AccountSettings settings = new AccountSettings(context, account);
+                JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
 
-                    AccountSettings settings = new AccountSettings(context, account);
-                    JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
+                List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();
 
-                    List<CollectionInfo> collections = new LinkedList<>();
-
-                    for (JournalManager.Journal journal : journalsManager.getJournals(settings.password())) {
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
-                        CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
-                        info.updateFromJournal(journal);
-
-                        if (info.type.equals(serviceType)) {
-                            collections.add(info);
-                        }
+                for (JournalManager.Journal journal : journalsManager.getJournals()) {
+                    Crypto.CryptoManager crypto;
+                    if (journal.getKey() != null) {
+                        crypto = new Crypto.CryptoManager(journal.getVersion(), settings.getKeyPair(), journal.getKey());
+                    } else {
+                        crypto = new Crypto.CryptoManager(journal.getVersion(), settings.password(), journal.getUid());
                     }
 
-                    if (collections.isEmpty()) {
-                        CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
-                        info.uid = JournalManager.Journal.genUid();
-                        Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
-                        JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
-                        journalsManager.putJournal(journal);
-                        collections.add(info);
-                    }
+                    journal.verify(crypto);
 
-                    db.beginTransactionNonExclusive();
-                    try {
-                        saveCollections(db, collections);
-                        db.setTransactionSuccessful();
-                    } finally {
-                        db.endTransaction();
+                    CollectionInfo info = CollectionInfo.fromJson(journal.getContent(crypto));
+                    info.updateFromJournal(journal);
+
+                    if (info.type.equals(serviceType)) {
+                        journals.add(new Pair<>(journal, info));
                     }
-                } finally {
-                    dbHelper.close();
                 }
+
+                if (journals.isEmpty()) {
+                    CollectionInfo info = CollectionInfo.defaultForServiceType(serviceType);
+                    info.uid = JournalManager.Journal.genUid();
+                    Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+                    JournalManager.Journal journal = new JournalManager.Journal(crypto, info.toJson(), info.uid);
+                    journalsManager.putJournal(journal);
+                    journals.add(new Pair<>(journal, info));
+                }
+
+                saveCollections(journals);
             }
 
-            private void saveCollections(SQLiteDatabase db, Iterable<CollectionInfo> collections) {
-                Long service = dbHelper.getService(db, account, serviceType.toString());
-
+            private void saveCollections(Iterable<Pair<JournalManager.Journal, CollectionInfo>> journals) {
                 EntityDataStore<Persistable> data = ((App) context.getApplicationContext()).getData();
-                Map<String, CollectionInfo> existing = new HashMap<>();
-                List<CollectionInfo> existingList = JournalEntity.getCollections(data, service);
-                for (CollectionInfo info : existingList) {
-                    existing.put(info.uid, info);
+                ServiceEntity service =  JournalModel.Service.fetch(data, account.name, serviceType);
+
+                Map<String, JournalEntity> existing = new HashMap<>();
+                for (JournalEntity journalEntity : JournalEntity.getJournals(data, service)) {
+                    existing.put(journalEntity.getUid(), journalEntity);
                 }
 
-                for (CollectionInfo collection : collections) {
-                    App.log.log(Level.FINE, "Saving collection", collection.uid);
+                for (Pair<JournalManager.Journal, CollectionInfo> pair : journals) {
+                    JournalManager.Journal journal = pair.first;
+                    CollectionInfo collection = pair.second;
+                    App.log.log(Level.FINE, "Saving collection", journal.getUid());
 
-                    collection.serviceID = service;
+                    collection.serviceID = service.getId();
                     JournalEntity journalEntity = JournalEntity.fetchOrCreate(data, collection);
+                    journalEntity.setOwner(journal.getOwner());
+                    journalEntity.setEncryptedKey(journal.getKey());
+                    journalEntity.setDeleted(false);
                     data.upsert(journalEntity);
 
                     existing.remove(collection.uid);
                 }
 
-                for (CollectionInfo collection : existing.values()) {
-                    App.log.log(Level.FINE, "Deleting collection", collection.uid);
+                for (JournalEntity journalEntity : existing.values()) {
+                    App.log.log(Level.FINE, "Deleting collection", journalEntity.getUid());
 
-                    JournalEntity journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(collection.uid)).limit(1).get().first();
                     journalEntity.setDeleted(true);
                     data.update(journalEntity);
                 }

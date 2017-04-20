@@ -18,6 +18,8 @@ import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 import lombok.ToString;
 
 @ToString(exclude = {"id"})
@@ -25,7 +27,7 @@ public class CollectionInfo implements Serializable {
     @Deprecated
     public long id;
 
-    public Long serviceID;
+    public int serviceID;
 
     public enum Type {
         ADDRESS_BOOK,
@@ -80,7 +82,7 @@ public class CollectionInfo implements Serializable {
     public static CollectionInfo fromDB(ContentValues values) {
         CollectionInfo info = new CollectionInfo();
         info.id = values.getAsLong(Collections.ID);
-        info.serviceID = values.getAsLong(Collections.SERVICE_ID);
+        info.serviceID = values.getAsInteger(Collections.SERVICE_ID);
 
         info.uid = values.getAsString(Collections.URL);
         info.readOnly = values.getAsInteger(Collections.READ_ONLY) != 0;
@@ -93,6 +95,10 @@ public class CollectionInfo implements Serializable {
 
         info.selected = values.getAsInteger(Collections.SYNC) != 0;
         return info;
+    }
+
+    public ServiceEntity getServiceEntity(EntityDataStore<Persistable> data) {
+        return data.findByKey(ServiceEntity.class, serviceID);
     }
 
     public static CollectionInfo fromJson(String json) {

@@ -15,28 +15,41 @@ import io.requery.ManyToOne;
 import io.requery.Persistable;
 import io.requery.PostLoad;
 import io.requery.ReferentialAction;
+import io.requery.Table;
 import io.requery.sql.EntityDataStore;
 
 public class JournalModel {
+    // FIXME: Add unique constraint on the uid + service combination. Can't do it at the moment because requery is broken.
     @Entity
+    @Table(name = "Journal")
     public static abstract class Journal {
         @Key
         @Generated
         int id;
 
-        @Column(length = 64, unique = true, nullable = false)
+        @Column(length = 64, nullable = false)
         String uid;
 
         @Convert(CollectionInfoConverter.class)
         CollectionInfo info;
 
+        String owner;
+
+        byte[] encryptedKey;
+
+
+        @Deprecated
         long service;
+
+        @ForeignKey(update = ReferentialAction.CASCADE)
+        @ManyToOne
+        Service serviceModel;
 
         boolean deleted;
 
         @PostLoad
         void afterLoad() {
-            this.info.serviceID = service;
+            this.info.serviceID = this.serviceModel.id;
             this.info.uid = uid;
         }
 
@@ -44,17 +57,22 @@ public class JournalModel {
             this.deleted = false;
         }
 
-        public Journal(CollectionInfo info) {
+        public Journal(EntityDataStore<Persistable> data, CollectionInfo info) {
             this();
             this.info = info;
             this.uid = info.uid;
-            this.service = info.serviceID;
+            this.serviceModel = info.getServiceEntity(data);
         }
 
-        public static List<CollectionInfo> getCollections(EntityDataStore<Persistable> data, long service) {
+        public static List<JournalEntity> getJournals(EntityDataStore<Persistable> data, ServiceEntity serviceEntity) {
+            return data.select(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(serviceEntity).and(JournalEntity.DELETED.eq(false))).get().toList();
+        }
+
+        public static List<CollectionInfo> getCollections(EntityDataStore<Persistable> data, ServiceEntity serviceEntity) {
             List<CollectionInfo> ret = new LinkedList<>();
 
-            for (JournalEntity journal : data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(service).and(JournalEntity.DELETED.eq(false))).get()) {
+            List<JournalEntity> journals = getJournals(data, serviceEntity);
+            for (JournalEntity journal : journals) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
                 journal.afterLoad();
                 ret.add(journal.getInfo());
@@ -63,8 +81,8 @@ public class JournalModel {
             return ret;
         }
 
-        public static JournalEntity fetch(EntityDataStore<Persistable> data, String url) {
-            JournalEntity ret = data.select(JournalEntity.class).where(JournalEntity.UID.eq(url)).limit(1).get().firstOrNull();
+        public static JournalEntity fetch(EntityDataStore<Persistable> data, ServiceEntity serviceEntity, String uid) {
+            JournalEntity ret = data.select(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(serviceEntity).and(JournalEntity.UID.eq(uid))).limit(1).get().firstOrNull();
             if (ret != null) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
                 ret.afterLoad();
@@ -73,9 +91,9 @@ public class JournalModel {
         }
 
         public static JournalEntity fetchOrCreate(EntityDataStore<Persistable> data, CollectionInfo collection) {
-            JournalEntity journalEntity = fetch(data, collection.uid);
+            JournalEntity journalEntity = fetch(data, collection.getServiceEntity(data), collection.uid);
             if (journalEntity == null) {
-                journalEntity = new JournalEntity(collection);
+                journalEntity = new JournalEntity(data, collection);
             } else {
                 journalEntity.setInfo(collection);
             }
@@ -93,21 +111,43 @@ public class JournalModel {
     }
 
     @Entity
+    @Table(name = "Entry", uniqueIndexes = "entry_unique_together")
     public static abstract class Entry {
         @Key
         @Generated
         int id;
 
-        @Column(length = 64, unique = true, nullable = false)
+        @Index("entry_unique_together")
+        @Column(length = 64, nullable = false)
         String uid;
 
         @Convert(SyncEntryConverter.class)
         SyncEntry content;
 
-        @Index("journal_index")
+        @Index("entry_unique_together")
         @ForeignKey(update = ReferentialAction.CASCADE)
         @ManyToOne
         Journal journal;
+    }
+
+
+    @Entity
+    @Table(name = "Service", uniqueIndexes = "service_unique_together")
+    public static abstract class Service {
+        @Key
+        @Generated
+        int id;
+
+        @Index(value = "service_unique_together")
+        @Column(nullable = false)
+        String account;
+
+        @Index(value = "service_unique_together")
+        CollectionInfo.Type type;
+
+        public static ServiceEntity fetch(EntityDataStore<Persistable> data, String account, CollectionInfo.Type type) {
+            return data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account).and(ServiceEntity.TYPE.eq(type))).limit(1).get().firstOrNull();
+        }
     }
 
     static class CollectionInfoConverter implements Converter<CollectionInfo, String> {

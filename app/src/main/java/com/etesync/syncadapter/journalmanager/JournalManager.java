@@ -1,15 +1,15 @@
 package com.etesync.syncadapter.journalmanager;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.GsonHelper;
 import com.google.gson.reflect.TypeToken;
 
 import org.spongycastle.util.Arrays;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
-
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.GsonHelper;
 
 import lombok.Getter;
 import okhttp3.HttpUrl;
@@ -26,6 +26,8 @@ import static com.etesync.syncadapter.journalmanager.Crypto.toHex;
 public class JournalManager extends BaseManager {
     final static private Type journalType = new TypeToken<List<Journal>>() {
     }.getType();
+    final static private Type memberType = new TypeToken<List<Member>>() {
+    }.getType();
 
 
     public JournalManager(OkHttpClient httpClient, HttpUrl remote) {
@@ -38,7 +40,7 @@ public class JournalManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Journal> getJournals(String keyBase64) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+    public List<Journal> getJournals() throws Exceptions.HttpException {
         Request request = new Request.Builder()
                 .get()
                 .url(remote)
@@ -49,9 +51,7 @@ public class JournalManager extends BaseManager {
         List<Journal> ret = GsonHelper.gson.fromJson(body.charStream(), journalType);
 
         for (Journal journal : ret) {
-            Crypto.CryptoManager crypto = new Crypto.CryptoManager(journal.getVersion(), keyBase64, journal.getUid());
             journal.processFromJson();
-            journal.verify(crypto);
         }
 
         return ret;
@@ -90,7 +90,50 @@ public class JournalManager extends BaseManager {
         newCall(request);
     }
 
+    private HttpUrl getMemberRemote(Journal journal) {
+        return this.remote.resolve(journal.getUid() + "/members/");
+    }
+
+    public List<Member> listMembers(Journal journal) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+        Request request = new Request.Builder()
+                .get()
+                .url(getMemberRemote(journal))
+                .build();
+
+        Response response = newCall(request);
+        ResponseBody body = response.body();
+        return GsonHelper.gson.fromJson(body.charStream(), memberType);
+    }
+
+    public void deleteMember(Journal journal, Member member) throws Exceptions.HttpException {
+        RequestBody body = RequestBody.create(JSON, member.toJson());
+
+        Request request = new Request.Builder()
+                .delete(body)
+                .url(getMemberRemote(journal))
+                .build();
+
+        newCall(request);
+    }
+
+    public void addMember(Journal journal, Member member) throws Exceptions.HttpException {
+        RequestBody body = RequestBody.create(JSON, member.toJson());
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(getMemberRemote(journal))
+                .build();
+
+        newCall(request);
+    }
+
     public static class Journal extends Base {
+        @Getter
+        private String owner;
+
+        @Getter
+        private byte[] key;
+
         @Getter
         private int version = -1;
 
@@ -99,6 +142,12 @@ public class JournalManager extends BaseManager {
         @SuppressWarnings("unused")
         private Journal() {
             super();
+        }
+
+        public static Journal fakeWithUid(String uid) {
+            Journal ret = new Journal();
+            ret.setUid(uid);
+            return ret;
         }
 
         public Journal(Crypto.CryptoManager crypto, String content, String uid) {
@@ -112,7 +161,7 @@ public class JournalManager extends BaseManager {
             setContent(Arrays.copyOfRange(getContent(), HMAC_SIZE, getContent().length));
         }
 
-        void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
+        public void verify(Crypto.CryptoManager crypto) throws Exceptions.IntegrityException {
             if (hmac == null) {
                 throw new Exceptions.IntegrityException("HMAC is null!");
             }
@@ -138,6 +187,26 @@ public class JournalManager extends BaseManager {
             String ret = super.toJson();
             setContent(rawContent);
             return ret;
+        }
+    }
+
+    public static class Member {
+        @Getter
+        private String user;
+        @Getter
+        private byte[] key;
+
+        @SuppressWarnings("unused")
+        private Member() {
+        }
+
+        public Member(String user, byte[] encryptedKey) {
+            this.user = user;
+            this.key = encryptedKey;
+        }
+
+        String toJson() {
+            return GsonHelper.gson.toJson(this, getClass());
         }
     }
 }

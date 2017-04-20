@@ -42,6 +42,7 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.Models;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
@@ -68,9 +69,9 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.android.sqlite.DatabaseSource;
+import io.requery.meta.EntityModel;
 import io.requery.sql.Configuration;
 import io.requery.sql.EntityDataStore;
-import io.requery.sql.TableCreationMode;
 import lombok.Cleanup;
 import lombok.Getter;
 import okhttp3.internal.tls.OkHostnameVerifier;
@@ -227,11 +228,41 @@ public class App extends Application {
     public EntityDataStore<Persistable> getData() {
         if (dataStore == null) {
             // override onUpgrade to handle migrating to a new version
-            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 1);
+            DatabaseSource source = new MyDatabaseSource(this, Models.DEFAULT, 3);
             Configuration configuration = source.getConfiguration();
             dataStore = new EntityDataStore<>(configuration);
         }
         return dataStore;
+    }
+
+    private static class MyDatabaseSource extends DatabaseSource {
+        MyDatabaseSource(Context context, EntityModel entityModel, int version) {
+            super(context, entityModel, version);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            super.onUpgrade(db, oldVersion, newVersion);
+
+            if (oldVersion < 3) {
+                db.execSQL("PRAGMA foreign_keys=OFF;");
+
+                db.execSQL("CREATE TABLE new_Journal (id integer primary key autoincrement not null, deleted boolean not null, encryptedKey varbinary(255), info varchar(255), owner varchar(255), service integer, serviceModel integer, uid varchar(64) not null, foreign key (serviceModel) references Service (id) on delete cascade);");
+                db.execSQL("CREATE TABLE new_Entry (id integer primary key autoincrement not null, content varchar(255), journal integer, uid varchar(64) not null, foreign key (journal) references Journal (id) on delete cascade);");
+
+                db.execSQL("INSERT INTO new_Journal SELECT id, deleted, encryptedKey, info, owner, service, serviceModel, uid from Journal;");
+                db.execSQL("INSERT INTO new_Entry SELECT id, content, journal, uid from Entry;");
+
+                db.execSQL("DROP TABLE Journal;");
+                db.execSQL("DROP TABLE Entry;");
+                db.execSQL("ALTER TABLE new_Journal RENAME TO Journal;");
+                db.execSQL("ALTER TABLE new_Entry RENAME TO Entry;");
+                // Add back indexes
+                db.execSQL("CREATE UNIQUE INDEX journal_unique_together on Journal (serviceModel, uid);");
+                db.execSQL("CREATE UNIQUE INDEX entry_unique_together on Entry (journal, uid);");
+                db.execSQL("PRAGMA foreign_keys=ON;");
+            }
+        }
     }
 
     // update from previous account settings
@@ -257,7 +288,7 @@ public class App extends Application {
 
             List<CollectionInfo> collections = readCollections(dbHelper);
             for (CollectionInfo info : collections) {
-                JournalEntity journalEntity = new JournalEntity(info);
+                JournalEntity journalEntity = new JournalEntity(data, info);
                 data.insert(journalEntity);
             }
 
@@ -291,6 +322,12 @@ public class App extends Application {
         if (fromVersion < 10) {
             HintManager.setHintSeen(this, AccountsActivity.HINT_ACCOUNT_ADD, true);
         }
+
+        if (fromVersion < 11) {
+            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
+
+            migrateServices(dbHelper);
+        }
     }
 
     public static class AppUpdatedReceiver extends BroadcastReceiver {
@@ -320,5 +357,26 @@ public class App extends Application {
             collections.add(CollectionInfo.fromDB(values));
         }
         return collections;
+    }
+
+    public void migrateServices(ServiceDB.OpenHelper dbHelper) {
+        @Cleanup SQLiteDatabase db = dbHelper.getReadableDatabase();
+        EntityDataStore<Persistable> data = this.getData();
+        @Cleanup Cursor cursor = db.query(ServiceDB.Services._TABLE, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            ContentValues values = new ContentValues();
+            DatabaseUtils.cursorRowToContentValues(cursor, values);
+            ServiceEntity service = new ServiceEntity();
+            service.setAccount(values.getAsString(ServiceDB.Services.ACCOUNT_NAME));
+            service.setType(CollectionInfo.Type.valueOf(values.getAsString(ServiceDB.Services.SERVICE)));
+            data.insert(service);
+
+            for (JournalEntity journalEntity : data.select(JournalEntity.class).where(JournalEntity.SERVICE.eq(values.getAsLong(ServiceDB.Services.ID))).get()) {
+                journalEntity.setServiceModel(service);
+                data.update(journalEntity);
+            }
+        }
+
+        db.delete(ServiceDB.Services._TABLE, null, null);
     }
 }

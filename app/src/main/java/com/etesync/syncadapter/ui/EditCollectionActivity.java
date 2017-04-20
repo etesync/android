@@ -78,7 +78,7 @@ public class EditCollectionActivity extends CreateCollectionActivity {
 
     public void onDeleteCollection(MenuItem item) {
         EntityDataStore<Persistable> data = ((App) getApplication()).getData();
-        int journalCount = data.count(JournalEntity.class).where(JournalEntity.SERVICE.eq(info.serviceID)).get().value();
+        int journalCount = data.count(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(info.getServiceEntity(data))).get().value();
 
         if (journalCount < 2) {
             new AlertDialog.Builder(this)

@@ -24,8 +24,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.ServiceConnection;
 import android.content.SyncStatusObserver;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,15 +49,17 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.AccountUpdateService;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
-import com.etesync.syncadapter.model.ServiceDB.Services;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
+import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
@@ -71,7 +71,6 @@ import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import tourguide.tourguide.ToolTip;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
@@ -108,7 +107,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         tbCalDAV.setOnMenuItemClickListener(this);
         tbCalDAV.setTitle(R.string.settings_caldav);
 
-        // load CardDAV/CalDAV collections
+        // load CardDAV/CalDAV journals
         getLoaderManager().initLoader(0, getIntent().getExtras(), this);
 
         if (!HintManager.getHintSeen(this, HINT_VIEW_COLLECTION)) {
@@ -116,6 +115,10 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                     .setToolTip(new ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_view_collection)))
                     .playOn(tbCardDAV);
             HintManager.setHintSeen(this, HINT_VIEW_COLLECTION, true);
+        }
+
+        if (!SetupUserInfoFragment.hasUserInfo(this, account)) {
+            SetupUserInfoFragment.newInstance(account).show(getSupportFragmentManager(), null);
         }
     }
 
@@ -166,6 +169,19 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                         })
                         .show();
                 break;
+            case R.id.show_fingerprint:
+                AlertDialog dialog = new AlertDialog.Builder(AccountActivity.this)
+                        .setIcon(R.drawable.ic_fingerprint_dark)
+                        .setTitle(R.string.show_fingperprint_title)
+                        .setMessage(getFormattedFingerprint())
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create();
+                dialog.show();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -188,12 +204,24 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final ListView list = (ListView)parent;
-            final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
-            final CollectionInfo info = adapter.getItem(position);
+            final ArrayAdapter<JournalEntity> adapter = (ArrayAdapter)list.getAdapter();
+            final JournalEntity journalEntity = adapter.getItem(position);
+            final CollectionInfo info = journalEntity.getInfo();
 
             startActivity(ViewCollectionActivity.newIntent(AccountActivity.this, account, info));
         }
     };
+
+    private String getFormattedFingerprint() {
+        AccountSettings settings = null;
+        try {
+            settings = new AccountSettings(this, account);
+            return Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(settings.getKeyPair().getPublicKey());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /* LOADERS AND LOADED DATA */
 
@@ -204,7 +232,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             long id;
             boolean refreshing;
 
-            List<CollectionInfo> collections;
+            List<JournalEntity> journals;
         }
     }
 
@@ -231,8 +259,8 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCardDAV.setEnabled(!info.carddav.refreshing);
             listCardDAV.setAlpha(info.carddav.refreshing ? 0.5f : 1);
 
-            AddressBookAdapter adapter = new AddressBookAdapter(this);
-            adapter.addAll(info.carddav.collections);
+            final CollectionListAdapter adapter = new CollectionListAdapter(this, account);
+            adapter.addAll(info.carddav.journals);
             listCardDAV.setAdapter(adapter);
             listCardDAV.setOnItemClickListener(onItemClickListener);
         } else
@@ -247,8 +275,8 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCalDAV.setEnabled(!info.caldav.refreshing);
             listCalDAV.setAlpha(info.caldav.refreshing ? 0.5f : 1);
 
-            final CalendarAdapter adapter = new CalendarAdapter(this);
-            adapter.addAll(info.caldav.collections);
+            final CollectionListAdapter adapter = new CollectionListAdapter(this, account);
+            adapter.addAll(info.caldav.journals);
             listCalDAV.setAdapter(adapter);
             listCalDAV.setOnItemClickListener(onItemClickListener);
         } else
@@ -318,31 +346,23 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         public AccountInfo loadInBackground() {
             AccountInfo info = new AccountInfo();
 
-            @Cleanup OpenHelper dbHelper = new OpenHelper(getContext());
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
             EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
 
-            @Cleanup Cursor cursor = db.query(
-                    Services._TABLE,
-                    new String[] { Services.ID, Services.SERVICE },
-                    Services.ACCOUNT_NAME + "=?", new String[] { account.name },
-                    null, null, null);
-
-            while (cursor.moveToNext()) {
-                long id = cursor.getLong(0);
-                String service = cursor.getString(1);
-                if (Services.SERVICE_CARDDAV.equals(service)) {
+            for (ServiceEntity serviceEntity : data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account.name)).get()) {
+                long id = serviceEntity.getId();
+                CollectionInfo.Type service = serviceEntity.getType();
+                if (service.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
                     info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
-                    info.carddav.collections = JournalEntity.getCollections(data, id);
-                } else if (Services.SERVICE_CALDAV.equals(service)) {
+                    info.carddav.journals = JournalEntity.getJournals(data, serviceEntity);
+                } else if (service.equals(CollectionInfo.Type.CALENDAR)) {
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
                     info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
-                    info.caldav.collections = JournalEntity.getCollections(data, id);
+                    info.caldav.journals = JournalEntity.getJournals(data, serviceEntity);
                 }
             }
             return info;
@@ -352,17 +372,21 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     /* LIST ADAPTERS */
 
-    public static class AddressBookAdapter extends ArrayAdapter<CollectionInfo> {
-        public AddressBookAdapter(Context context) {
-            super(context, R.layout.account_carddav_item);
+    public static class CollectionListAdapter extends ArrayAdapter<JournalEntity> {
+        private Account account;
+
+        public CollectionListAdapter(Context context, Account account) {
+            super(context, R.layout.account_collection_item);
+            this.account = account;
         }
 
         @Override
         public View getView(int position, View v, ViewGroup parent) {
             if (v == null)
-                v = LayoutInflater.from(getContext()).inflate(R.layout.account_carddav_item, parent, false);
+                v = LayoutInflater.from(getContext()).inflate(R.layout.account_collection_item, parent, false);
 
-            final CollectionInfo info = getItem(position);
+            final JournalEntity journalEntity = getItem(position);
+            final CollectionInfo info = journalEntity.getInfo();
 
             TextView tv = (TextView)v.findViewById(R.id.title);
             tv.setText(TextUtils.isEmpty(info.displayName) ? info.uid : info.displayName);
@@ -375,45 +399,22 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 tv.setText(info.description);
             }
 
-            tv = (TextView)v.findViewById(R.id.read_only);
-            tv.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
-
-            return v;
-        }
-    }
-
-    public static class CalendarAdapter extends ArrayAdapter<CollectionInfo> {
-        public CalendarAdapter(Context context) {
-            super(context, R.layout.account_caldav_item);
-        }
-
-        @Override
-        public View getView(final int position, View v, ViewGroup parent) {
-            if (v == null)
-                v = LayoutInflater.from(getContext()).inflate(R.layout.account_caldav_item, parent, false);
-
-            final CollectionInfo info = getItem(position);
-
-            View vColor = v.findViewById(R.id.color);
-            if (info.color != null) {
-                vColor.setBackgroundColor(info.color);
+            final View vColor = v.findViewById(R.id.color);
+            if (info.type.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
+                vColor.setVisibility(View.GONE);
             } else {
-                vColor.setBackgroundColor(LocalCalendar.defaultColor);
+                if (info.color != null) {
+                    vColor.setBackgroundColor(info.color);
+                } else {
+                    vColor.setBackgroundColor(LocalCalendar.defaultColor);
+                }
             }
 
-            TextView tv = (TextView)v.findViewById(R.id.title);
-            tv.setText(TextUtils.isEmpty(info.displayName) ? info.uid : info.displayName);
+            View readOnly = v.findViewById(R.id.read_only);
+            readOnly.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
 
-            tv = (TextView)v.findViewById(R.id.description);
-            if (TextUtils.isEmpty(info.description))
-                tv.setVisibility(View.GONE);
-            else {
-                tv.setVisibility(View.VISIBLE);
-                tv.setText(info.description);
-            }
-
-            tv = (TextView)v.findViewById(R.id.read_only);
-            tv.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
+            final View shared = v.findViewById(R.id.shared);
+            shared.setVisibility(account.name.equals(journalEntity.getOwner()) ? View.GONE : View.VISIBLE);
 
             return v;
         }

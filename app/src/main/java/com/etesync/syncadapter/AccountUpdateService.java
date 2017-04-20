@@ -13,17 +13,12 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
-import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.ServiceDB.OpenHelper;
-import com.etesync.syncadapter.model.ServiceDB.Services;
+import com.etesync.syncadapter.model.ServiceEntity;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
@@ -105,31 +100,17 @@ public class AccountUpdateService extends Service {
     void cleanupAccounts() {
         App.log.info("Cleaning up orphaned accounts");
 
-        final OpenHelper dbHelper = new OpenHelper(this);
-        try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+        List<String> sqlAccountNames = new LinkedList<>();
+        AccountManager am = AccountManager.get(this);
+        for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE))
+            sqlAccountNames.add(account.name);
 
-            List<String> sqlAccountNames = new LinkedList<>();
-            AccountManager am = AccountManager.get(this);
-            for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE))
-                sqlAccountNames.add(DatabaseUtils.sqlEscapeString(account.name));
+        EntityDataStore<Persistable> data = ((App) getApplication()).getData();
 
-            EntityDataStore<Persistable> data = ((App) getApplication()).getData();
-
-            if (sqlAccountNames.isEmpty()) {
-                data.delete(JournalEntity.class).get().value();
-                db.delete(Services._TABLE, null, null);
-            } else {
-                Cursor cur = db.query(Services._TABLE, new String[]{Services.ID}, Services.ACCOUNT_NAME + " NOT IN (" + TextUtils.join(",", sqlAccountNames) + ")", null, null, null, null);
-                cur.moveToFirst();
-                while(!cur.isAfterLast()) {
-                    data.delete(JournalEntity.class).where(JournalEntity.SERVICE.eq(cur.getLong(0))).get().value();
-                    cur.moveToNext();
-                }
-                db.delete(Services._TABLE, Services.ACCOUNT_NAME + " NOT IN (" + TextUtils.join(",", sqlAccountNames) + ")", null);
-            }
-        } finally {
-            dbHelper.close();
+        if (sqlAccountNames.isEmpty()) {
+            data.delete(ServiceEntity.class).get().value();
+        } else {
+            data.delete(ServiceEntity.class).where(ServiceEntity.ACCOUNT.notIn(sqlAccountNames)).get().value();
         }
     }
 }

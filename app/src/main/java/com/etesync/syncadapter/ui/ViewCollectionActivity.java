@@ -10,11 +10,13 @@ package com.etesync.syncadapter.ui;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.Menu;
@@ -50,7 +52,9 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
     private Account account;
+    private JournalEntity journalEntity;
     protected CollectionInfo info;
+    private boolean isOwner;
 
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, ViewCollectionActivity.class);
@@ -63,13 +67,14 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     public void refresh() {
         EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-        final JournalEntity journalEntity = JournalEntity.fetch(data, info.uid);
+        journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid);
         if ((journalEntity == null) || journalEntity.isDeleted()) {
             finish();
             return;
         }
 
         info = journalEntity.getInfo();
+        isOwner = account.name.equals(journalEntity.getOwner());
 
         final View colorSquare = findViewById(R.id.color);
         if (info.type == CollectionInfo.Type.CALENDAR) {
@@ -89,6 +94,13 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
 
         final TextView desc = (TextView) findViewById(R.id.description);
         desc.setText(info.description);
+
+        final TextView owner = (TextView) findViewById(R.id.owner);
+        if (account.name.equals(journalEntity.getOwner())) {
+            owner.setVisibility(View.GONE);
+        } else {
+            owner.setText(getString(R.string.account_owner, journalEntity.getOwner()));
+        }
     }
 
     @Override
@@ -159,11 +171,67 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
     }
 
     public void onEditCollection(MenuItem item) {
-        startActivity(EditCollectionActivity.newIntent(this, account, info));
+        if (isOwner) {
+            startActivity(EditCollectionActivity.newIntent(this, account, info));
+        } else {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(getString(R.string.edit_owner_only, journalEntity.getOwner()))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        }
     }
 
     public void onImport(MenuItem item) {
         startActivity(ImportActivity.newIntent(ViewCollectionActivity.this, account, info));
+    }
+
+    public void onManageMembers(MenuItem item) {
+        if (info.type.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(R.string.members_address_book_not_allowed)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        } else if (info.version < 2) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(R.string.members_old_journals_not_allowed)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        } else if (isOwner) {
+            startActivity(CollectionMembersActivity.newIntent(this, account, info));
+        } else {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.not_allowed_title)
+                    .setMessage(getString(R.string.members_owner_only, journalEntity.getOwner()))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+            dialog.show();
+        }
     }
 
     private class LoadCountTask extends AsyncTask<Void, Void, Long> {
@@ -173,7 +241,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         protected Long doInBackground(Void... aVoids) {
             EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
 
-            final JournalEntity journalEntity = JournalEntity.fetch(data, info.uid);
+            final JournalEntity journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid);
 
             entryCount = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value();
             long count;

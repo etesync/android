@@ -14,7 +14,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.etesync.syncadapter.AccountSettings;
@@ -26,7 +25,9 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
 
 import java.util.logging.Level;
@@ -57,7 +58,6 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
             NotificationHelper notificationManager = new NotificationHelper(getContext(), "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC);
             notificationManager.cancel();
 
-            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(getContext());
             try {
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
@@ -65,11 +65,12 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
 
                 new RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run();
 
-                SQLiteDatabase db = dbHelper.getReadableDatabase();
-                Long service = dbHelper.getService(db, account, ServiceDB.Services.SERVICE_CARDDAV);
+                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
+
+                ServiceEntity service = JournalModel.Service.fetch(data, account.name, CollectionInfo.Type.ADDRESS_BOOK);
+
                 if (service != null) {
                     HttpUrl principal = HttpUrl.get(settings.getUri());
-                    EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
                     CollectionInfo info = JournalEntity.getCollections(data, service).get(0);
                     try {
                         ContactsSyncManager syncManager = new ContactsSyncManager(getContext(), account, settings, extras, authority, provider, syncResult, principal, info);
@@ -95,8 +96,6 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase);
                 }
                 notificationManager.notify(title, getContext().getString(syncPhase));
-            } finally {
-                dbHelper.close();
             }
 
             App.log.info("Address book sync complete");

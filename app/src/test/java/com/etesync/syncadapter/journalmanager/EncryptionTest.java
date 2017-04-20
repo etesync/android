@@ -14,9 +14,11 @@ import org.apache.commons.codec.Charsets;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spongycastle.util.encoders.Hex;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class EncryptionTest {
@@ -66,5 +68,20 @@ public class EncryptionTest {
     @Test(expected=Exceptions.IntegrityException.class)
     public void testCryptoVersionOutOfRange() throws Exceptions.IntegrityException, Exceptions.VersionTooNewException {
         new Crypto.CryptoManager(999, Helpers.keyBase64, "TestSaltShouldBeJournalId");
+    }
+
+    @Test
+    public void testAsymCrypto() throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+        Crypto.AsymmetricKeyPair keyPair = Crypto.generateKeyPair();
+        Crypto.AsymmetricCryptoManager cryptoManager = new Crypto.AsymmetricCryptoManager(keyPair);
+
+        byte[] clearText = "This Is Some Test Cleartext.".getBytes(Charsets.UTF_8);
+        byte[] cipher = cryptoManager.encrypt(keyPair.getPublicKey(), clearText);
+        byte[] clearText2 = cryptoManager.decrypt(cipher);
+        assertArrayEquals(clearText, clearText2);
+
+        // Mostly for coverage. Make sure it's the expected sha256 value.
+        assertEquals("ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+                     Hex.toHexString(Crypto.AsymmetricCryptoManager.getKeyFingerprint("a".getBytes(Charsets.UTF_8))).toLowerCase());
     }
 }

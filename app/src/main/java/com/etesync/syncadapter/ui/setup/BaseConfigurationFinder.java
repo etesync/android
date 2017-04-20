@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.etesync.syncadapter.HttpClient;
+import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalAuthenticator;
 import com.etesync.syncadapter.log.StringHandler;
@@ -99,6 +100,7 @@ public class BaseConfigurationFinder {
         public final String userName, authtoken;
         public String rawPassword;
         public String password;
+        public Crypto.AsymmetricKeyPair keyPair;
 
         public final ServiceInfo cardDAV;
         public final ServiceInfo calDAV;

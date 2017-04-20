@@ -27,10 +27,13 @@ import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
+import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+import com.etesync.syncadapter.utils.Base64;
 
 import org.apache.commons.collections4.ListUtils;
 
@@ -108,14 +111,20 @@ abstract public class SyncManager {
         httpClient = HttpClient.create(context, account);
 
         data = ((App) context.getApplicationContext()).getData();
-        info = JournalEntity.fetch(data, journalUid).getInfo();
+        ServiceEntity serviceEntity = JournalModel.Service.fetch(data, account.name, serviceType);
+        info = JournalEntity.fetch(data, serviceEntity, journalUid).getInfo();
 
         // dismiss previous error notifications
         notificationManager = new NotificationHelper(context, journalUid, notificationId());
         notificationManager.cancel();
 
         App.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version));
-        crypto = new Crypto.CryptoManager(info.version, settings.password(), journalUid);
+
+        if (getJournalEntity().getEncryptedKey() != null) {
+            crypto = new Crypto.CryptoManager(info.version, settings.getKeyPair(), getJournalEntity().getEncryptedKey());
+        } else {
+            crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);
+        }
     }
 
     protected abstract int notificationId();
@@ -232,7 +241,7 @@ abstract public class SyncManager {
 
     private JournalEntity getJournalEntity() {
         if (_journalEntity == null)
-            _journalEntity = data.select(JournalEntity.class).where(JournalEntity.UID.eq(journal.getUid())).limit(1).get().first();
+            _journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid);
         return _journalEntity;
     }
 
