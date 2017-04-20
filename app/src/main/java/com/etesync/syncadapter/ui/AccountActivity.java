@@ -63,8 +63,6 @@ import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
-import org.spongycastle.util.encoders.Hex;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -109,7 +107,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         tbCalDAV.setOnMenuItemClickListener(this);
         tbCalDAV.setTitle(R.string.settings_caldav);
 
-        // load CardDAV/CalDAV collections
+        // load CardDAV/CalDAV journals
         getLoaderManager().initLoader(0, getIntent().getExtras(), this);
 
         if (!HintManager.getHintSeen(this, HINT_VIEW_COLLECTION)) {
@@ -206,8 +204,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final ListView list = (ListView)parent;
-            final ArrayAdapter<CollectionInfo> adapter = (ArrayAdapter)list.getAdapter();
-            final CollectionInfo info = adapter.getItem(position);
+            final ArrayAdapter<JournalEntity> adapter = (ArrayAdapter)list.getAdapter();
+            final JournalEntity journalEntity = adapter.getItem(position);
+            final CollectionInfo info = journalEntity.getInfo();
 
             startActivity(ViewCollectionActivity.newIntent(AccountActivity.this, account, info));
         }
@@ -233,7 +232,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             long id;
             boolean refreshing;
 
-            List<CollectionInfo> collections;
+            List<JournalEntity> journals;
         }
     }
 
@@ -260,8 +259,8 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCardDAV.setEnabled(!info.carddav.refreshing);
             listCardDAV.setAlpha(info.carddav.refreshing ? 0.5f : 1);
 
-            CollectionListAdapter adapter = new CollectionListAdapter(this);
-            adapter.addAll(info.carddav.collections);
+            final CollectionListAdapter adapter = new CollectionListAdapter(this, account);
+            adapter.addAll(info.carddav.journals);
             listCardDAV.setAdapter(adapter);
             listCardDAV.setOnItemClickListener(onItemClickListener);
         } else
@@ -276,8 +275,8 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             listCalDAV.setEnabled(!info.caldav.refreshing);
             listCalDAV.setAlpha(info.caldav.refreshing ? 0.5f : 1);
 
-            final CollectionListAdapter adapter = new CollectionListAdapter(this);
-            adapter.addAll(info.caldav.collections);
+            final CollectionListAdapter adapter = new CollectionListAdapter(this, account);
+            adapter.addAll(info.caldav.journals);
             listCalDAV.setAdapter(adapter);
             listCalDAV.setOnItemClickListener(onItemClickListener);
         } else
@@ -356,14 +355,14 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
                     info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
-                    info.carddav.collections = JournalEntity.getCollections(data, serviceEntity);
+                    info.carddav.journals = JournalEntity.getJournals(data, serviceEntity);
                 } else if (service.equals(CollectionInfo.Type.CALENDAR)) {
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
                     info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
-                    info.caldav.collections = JournalEntity.getCollections(data, serviceEntity);
+                    info.caldav.journals = JournalEntity.getJournals(data, serviceEntity);
                 }
             }
             return info;
@@ -373,9 +372,12 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     /* LIST ADAPTERS */
 
-    public static class CollectionListAdapter extends ArrayAdapter<CollectionInfo> {
-        public CollectionListAdapter(Context context) {
+    public static class CollectionListAdapter extends ArrayAdapter<JournalEntity> {
+        private Account account;
+
+        public CollectionListAdapter(Context context, Account account) {
             super(context, R.layout.account_collection_item);
+            this.account = account;
         }
 
         @Override
@@ -383,7 +385,8 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             if (v == null)
                 v = LayoutInflater.from(getContext()).inflate(R.layout.account_collection_item, parent, false);
 
-            final CollectionInfo info = getItem(position);
+            final JournalEntity journalEntity = getItem(position);
+            final CollectionInfo info = journalEntity.getInfo();
 
             TextView tv = (TextView)v.findViewById(R.id.title);
             tv.setText(TextUtils.isEmpty(info.displayName) ? info.uid : info.displayName);
@@ -409,6 +412,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
             View readOnly = v.findViewById(R.id.read_only);
             readOnly.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
+
+            final View shared = v.findViewById(R.id.shared);
+            shared.setVisibility(account.name.equals(journalEntity.getOwner()) ? View.GONE : View.VISIBLE);
 
             return v;
         }
