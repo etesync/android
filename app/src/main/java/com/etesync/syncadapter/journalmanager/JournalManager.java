@@ -90,14 +90,21 @@ public class JournalManager extends BaseManager {
         newCall(request);
     }
 
-    private HttpUrl getMemberRemote(Journal journal) {
-        return this.remote.resolve(journal.getUid() + "/members/");
+    private HttpUrl getMemberRemote(Journal journal, String user) {
+        HttpUrl.Builder bulider = this.remote.newBuilder();
+        bulider.addPathSegment(journal.getUid())
+                .addPathSegment("members");
+        if (user != null) {
+            bulider.addPathSegment(user);
+        }
+        bulider.addPathSegment("");
+        return bulider.build();
     }
 
     public List<Member> listMembers(Journal journal) throws Exceptions.HttpException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         Request request = new Request.Builder()
                 .get()
-                .url(getMemberRemote(journal))
+                .url(getMemberRemote(journal, null))
                 .build();
 
         Response response = newCall(request);
@@ -110,7 +117,7 @@ public class JournalManager extends BaseManager {
 
         Request request = new Request.Builder()
                 .delete(body)
-                .url(getMemberRemote(journal))
+                .url(getMemberRemote(journal, member.getUser()))
                 .build();
 
         newCall(request);
@@ -121,7 +128,7 @@ public class JournalManager extends BaseManager {
 
         Request request = new Request.Builder()
                 .post(body)
-                .url(getMemberRemote(journal))
+                .url(getMemberRemote(journal, null))
                 .build();
 
         newCall(request);
