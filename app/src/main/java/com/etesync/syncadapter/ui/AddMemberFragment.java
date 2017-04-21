@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.Constants;
@@ -90,18 +93,20 @@ public class AddMemberFragment extends DialogFragment {
         protected void onPostExecute(AddResult result) {
             if (result.throwable == null) {
                 String fingerprint = Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(memberPubKey);
-
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.fingerprint_alertdialog, null);
+                ((TextView) view.findViewById(R.id.body)).setText(getString(R.string.trust_fingerprint_body, memberEmail));
+                ((TextView) view.findViewById(R.id.fingerprint)).setText(fingerprint);
                 new AlertDialog.Builder(getActivity())
-                        .setIcon(R.drawable.ic_info_dark)
+                        .setIcon(R.drawable.ic_fingerprint_dark)
                         .setTitle(R.string.trust_fingerprint_title)
-                        .setMessage(fingerprint)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setView(view)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 new MemberAddSecond().execute();
                             }
                         })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             }

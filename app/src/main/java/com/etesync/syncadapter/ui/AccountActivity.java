@@ -170,10 +170,13 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                         .show();
                 break;
             case R.id.show_fingerprint:
+                View view = getLayoutInflater().inflate(R.layout.fingerprint_alertdialog, null);
+                view.findViewById(R.id.body).setVisibility(View.GONE);
+                ((TextView) view.findViewById(R.id.fingerprint)).setText(getFormattedFingerprint());
                 AlertDialog dialog = new AlertDialog.Builder(AccountActivity.this)
                         .setIcon(R.drawable.ic_fingerprint_dark)
                         .setTitle(R.string.show_fingperprint_title)
-                        .setMessage(getFormattedFingerprint())
+                        .setView(view)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -119,7 +119,7 @@ public class Crypto {
         public static String getPrettyKeyFingerprint(byte[] pubkey) {
             byte[] fingerprint = Crypto.AsymmetricCryptoManager.getKeyFingerprint(pubkey);
             String fingerprintString = Hex.toHexString(fingerprint).toLowerCase();
-            return fingerprintString.replaceAll("(.{4})", "$1   ");
+            return fingerprintString.replaceAll("(.{4})", "$1   ").trim();
         }
     }
 
