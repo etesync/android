@@ -26,8 +26,9 @@ public class JournalEntryManager extends BaseManager {
     public JournalEntryManager(OkHttpClient httpClient, HttpUrl remote, String journal) {
         this.uid = journal;
         this.remote = remote.newBuilder()
-                .addPathSegments("api/v1/journal")
+                .addPathSegments("api/v1/journals")
                 .addPathSegments(journal)
+                .addPathSegment("entries")
                 .addPathSegment("")
                 .build();
         App.log.info("Created for: " + this.remote.toString());
