@@ -109,6 +109,7 @@ public class AddMemberFragment extends DialogFragment {
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                dismiss();
                             }
                         }).show();
             } else {
