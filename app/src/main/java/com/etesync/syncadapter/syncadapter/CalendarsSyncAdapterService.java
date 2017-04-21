@@ -111,10 +111,10 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
             EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
             ServiceEntity service = JournalModel.Service.fetch(data, account.name, CollectionInfo.Type.CALENDAR);
 
-            Map<String, CollectionInfo> remote = new HashMap<>();
-            List<CollectionInfo> remoteCollections = JournalEntity.getCollections(data, service);
-            for (CollectionInfo info : remoteCollections) {
-                remote.put(info.uid, info);
+            Map<String, JournalEntity> remote = new HashMap<>();
+            List<JournalEntity> remoteJournals = JournalEntity.getJournals(data, service);
+            for (JournalEntity journalEntity : remoteJournals) {
+                remote.put(journalEntity.getUid(), journalEntity);
             }
 
             LocalCalendar[] local = (LocalCalendar[]) LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, null, null);
@@ -129,9 +129,9 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                     calendar.delete();
                 } else {
                     // remote CollectionInfo found for this local collection, update data
-                    CollectionInfo info = remote.get(url);
-                    App.log.fine("Updating local calendar " + url + " with " + info);
-                    calendar.update(info, updateColors);
+                    JournalEntity journalEntity = remote.get(url);
+                    App.log.fine("Updating local calendar " + url + " with " + journalEntity);
+                    calendar.update(journalEntity, updateColors);
                     // we already have a local calendar for this remote collection, don't take into consideration anymore
                     remote.remove(url);
                 }
@@ -139,9 +139,9 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
 
             // create new local calendars
             for (String url : remote.keySet()) {
-                CollectionInfo info = remote.get(url);
-                App.log.info("Adding local calendar list " + info);
-                LocalCalendar.create(account, provider, info);
+                JournalEntity journalEntity = remote.get(url);
+                App.log.info("Adding local calendar list " + journalEntity);
+                LocalCalendar.create(account, provider, journalEntity);
             }
         }
     }

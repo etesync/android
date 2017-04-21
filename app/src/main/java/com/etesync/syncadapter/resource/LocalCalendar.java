@@ -25,6 +25,7 @@ import android.text.TextUtils;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 
 import net.fortuna.ical4j.model.component.VTimeZone;
 
@@ -64,8 +65,8 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         super(account, provider, LocalEvent.Factory.INSTANCE, id);
     }
 
-    public static Uri create(@NonNull Account account, @NonNull ContentProviderClient provider, @NonNull CollectionInfo info) throws CalendarStorageException {
-        ContentValues values = valuesFromCollectionInfo(info, true);
+    public static Uri create(@NonNull Account account, @NonNull ContentProviderClient provider, @NonNull JournalEntity journalEntity) throws CalendarStorageException {
+        ContentValues values = valuesFromCollectionInfo(journalEntity, true);
 
         // ACCOUNT_NAME and ACCOUNT_TYPE are required (see docs)! If it's missing, other apps will crash.
         values.put(Calendars.ACCOUNT_NAME, account.name);
@@ -79,8 +80,8 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         return create(account, provider, values);
     }
 
-    public void update(CollectionInfo info, boolean updateColor) throws CalendarStorageException {
-        update(valuesFromCollectionInfo(info, updateColor));
+    public void update(JournalEntity journalEntity, boolean updateColor) throws CalendarStorageException {
+        update(valuesFromCollectionInfo(journalEntity, updateColor));
     }
 
     public static LocalCalendar findByName(Account account, ContentProviderClient provider, AndroidCalendarFactory factory, String name) throws FileNotFoundException, CalendarStorageException {
@@ -93,7 +94,8 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         }
     }
 
-    private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
+    private static ContentValues valuesFromCollectionInfo(JournalEntity journalEntity, boolean withColor) {
+        CollectionInfo info = journalEntity.getInfo();
         ContentValues values = new ContentValues();
         values.put(Calendars.NAME, info.uid);
         values.put(Calendars.CALENDAR_DISPLAY_NAME, info.displayName);
