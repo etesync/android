@@ -103,7 +103,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         if (withColor)
             values.put(Calendars.CALENDAR_COLOR, info.color != null ? info.color : defaultColor);
 
-        if (info.readOnly)
+        if (journalEntity.isReadOnly())
             values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_READ);
         else {
             values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_OWNER);

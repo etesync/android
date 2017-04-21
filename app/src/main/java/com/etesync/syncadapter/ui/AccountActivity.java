@@ -414,7 +414,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
             }
 
             View readOnly = v.findViewById(R.id.read_only);
-            readOnly.setVisibility(info.readOnly ? View.VISIBLE : View.GONE);
+            readOnly.setVisibility(journalEntity.isReadOnly() ? View.VISIBLE : View.GONE);
 
             final View shared = v.findViewById(R.id.shared);
             shared.setVisibility(account.name.equals(journalEntity.getOwner()) ? View.GONE : View.VISIBLE);

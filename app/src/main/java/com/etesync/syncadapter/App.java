@@ -228,7 +228,7 @@ public class App extends Application {
     public EntityDataStore<Persistable> getData() {
         if (dataStore == null) {
             // override onUpgrade to handle migrating to a new version
-            DatabaseSource source = new MyDatabaseSource(this, Models.DEFAULT, 3);
+            DatabaseSource source = new MyDatabaseSource(this, Models.DEFAULT, 4);
             Configuration configuration = source.getConfiguration();
             dataStore = new EntityDataStore<>(configuration);
         }

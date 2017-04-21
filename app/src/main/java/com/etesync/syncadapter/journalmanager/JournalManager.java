@@ -137,6 +137,9 @@ public class JournalManager extends BaseManager {
         @Getter
         private int version = -1;
 
+        @Getter
+        private boolean readOnly = false;
+
         private transient byte[] hmac = null;
 
         @SuppressWarnings("unused")

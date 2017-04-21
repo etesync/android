@@ -44,8 +44,6 @@ public class CollectionInfo implements Serializable {
     public String uid;
 
     @Expose
-    public boolean readOnly;
-    @Expose
     public String displayName, description;
     @Expose
     public Integer color;
@@ -64,7 +62,6 @@ public class CollectionInfo implements Serializable {
         CollectionInfo info = new CollectionInfo();
         info.displayName = "Default";
         info.selected = true;
-        info.readOnly = false;
         info.type = service;
 
         return info;
@@ -85,7 +82,6 @@ public class CollectionInfo implements Serializable {
         info.serviceID = values.getAsInteger(Collections.SERVICE_ID);
 
         info.uid = values.getAsString(Collections.URL);
-        info.readOnly = values.getAsInteger(Collections.READ_ONLY) != 0;
         info.displayName = values.getAsString(Collections.DISPLAY_NAME);
         info.description = values.getAsString(Collections.DESCRIPTION);
 

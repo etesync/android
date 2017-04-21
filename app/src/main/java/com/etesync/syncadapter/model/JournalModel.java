@@ -47,6 +47,9 @@ public class JournalModel {
 
         boolean deleted;
 
+        @Column(value = "false")
+        boolean readOnly;
+
         @PostLoad
         void afterLoad() {
             this.info.serviceID = this.serviceModel.id;
