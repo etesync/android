@@ -57,7 +57,6 @@
   <string name="account_delete">Excluir conta</string>
   <string name="account_delete_confirmation_title">Deseja excluir a conta?</string>
   <string name="account_delete_confirmation_text">Todas as cópias locais dos livros de endereços, calendários e listas de tarefas serão excluídas.</string>
-  <string name="account_create_new_calendar">Criar novo calendário</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Permissões do calendário</string>
   <string name="permissions_calendar_request">Solicitar permissão do calendário</string>

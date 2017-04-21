@@ -59,11 +59,7 @@ public class EditCollectionActivity extends CreateCollectionActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-            getMenuInflater().inflate(R.menu.activity_create_collection, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.activity_edit_collection, menu);
-        }
+        getMenuInflater().inflate(R.menu.activity_edit_collection, menu);
         return true;
     }
 

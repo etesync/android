@@ -54,8 +54,10 @@ public class CreateCollectionActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_collection);
 
+        final EditText displayName = (EditText) findViewById(R.id.display_name);
         if (info.type == CollectionInfo.Type.CALENDAR) {
             setTitle(R.string.create_calendar);
+            displayName.setHint(R.string.create_calendar_display_name_hint);
 
             final View colorSquare = findViewById(R.id.color);
             colorSquare.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +77,7 @@ public class CreateCollectionActivity extends AppCompatActivity {
             });
         } else {
             setTitle(R.string.create_addressbook);
+            displayName.setHint(R.string.create_addressbook_display_name_hint);
 
             final View colorGroup = findViewById(R.id.color_group);
             colorGroup.setVisibility(View.GONE);

@@ -100,6 +100,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         // CardDAV toolbar
         tbCardDAV = (Toolbar)findViewById(R.id.carddav_menu);
+        tbCardDAV.setOverflowIcon(icMenu);
+        tbCardDAV.inflateMenu(R.menu.carddav_actions);
+        tbCardDAV.setOnMenuItemClickListener(this);
         tbCardDAV.setTitle(R.string.settings_carddav);
 
         // CalDAV toolbar
@@ -195,10 +198,16 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        CollectionInfo info;
         switch (item.getItemId()) {
             case R.id.create_calendar:
-                CollectionInfo info = new CollectionInfo();
+                info = new CollectionInfo();
                 info.type = CollectionInfo.Type.CALENDAR;
+                startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
+                break;
+            case R.id.create_addressbook:
+                info = new CollectionInfo();
+                info.type = CollectionInfo.Type.ADDRESS_BOOK;
                 startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
                 break;
         }

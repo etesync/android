@@ -55,7 +55,6 @@
   <string name="account_delete">Elimina account</string>
   <string name="account_delete_confirmation_title">Cancellare l\'account?</string>
   <string name="account_delete_confirmation_text">Tutte le copie locali delle rubriche, dei calendari e degli elenchi attività verranno eliminate.</string>
-  <string name="account_create_new_calendar">Crea nuovo calendario</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Permessi calendario</string>
   <string name="permissions_calendar_request">Richiesta autorizzazione al calendario</string>

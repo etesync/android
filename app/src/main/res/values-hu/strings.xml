@@ -57,7 +57,6 @@
   <string name="account_delete">Fiók törlése</string>
   <string name="account_delete_confirmation_title">Valóban törölni akarja a fiókot?</string>
   <string name="account_delete_confirmation_text">Az összes címjegyzék, naptár és feladatlista helyi példányai törölve lesznek.</string>
-  <string name="account_create_new_calendar">Új naptár létrehozása</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Naptárengedély</string>
   <string name="permissions_calendar_request">Naptárhozzáférés igénylése</string>
