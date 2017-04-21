@@ -11,10 +11,10 @@
 
     <!-- common strings -->
     <string name="app_name">EteSync</string>
-    <string name="account_type">com.etesync.syncadapter</string>
-    <string name="account_type_address_book">com.etesync.syncadapter.address_book</string>
+    <string name="account_type" translatable="false">com.etesync.syncadapter</string>
+    <string name="account_type_address_book" translatable="false">com.etesync.syncadapter.address_book</string>
     <string name="account_title_address_book">EteSync Address book</string>
-    <string name="address_books_authority">com.etesync.syncadapter.addressbooks</string>
+    <string name="address_books_authority" translatable="false">com.etesync.syncadapter.addressbooks</string>
     <string name="address_books_authority_title">Address books</string>
     <string name="help">Help</string>
     <string name="manage_accounts">Manage accounts</string>
