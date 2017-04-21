@@ -146,7 +146,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
 
     protected boolean createAccount(String accountName, BaseConfigurationFinder.Configuration config) {
-        Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
+        Account account = new Account(accountName, App.getAccountType());
 
         // create Android account
         Bundle userData = AccountSettings.initialUserData(config.url, config.userName);

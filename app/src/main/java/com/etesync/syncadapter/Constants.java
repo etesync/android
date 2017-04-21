@@ -13,9 +13,6 @@ import static com.etesync.syncadapter.BuildConfig.DEBUG_REMOTE_URL;
 
 public class Constants {
 
-	public static final String
-		ACCOUNT_TYPE = "com.etesync.syncadapter";
-
     // notification IDs
     public final static int
             NOTIFICATION_ACCOUNT_SETTINGS_UPDATED = 0,

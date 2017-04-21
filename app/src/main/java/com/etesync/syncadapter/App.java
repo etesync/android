@@ -310,7 +310,7 @@ public class App extends Application {
         if (fromVersion < 7) {
             /* Fix all of the etags to be non-null */
             AccountManager am = AccountManager.get(this);
-            for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE)) {
+            for (Account account : am.getAccountsByType(App.getAccountType())) {
                 try {
                     // Generate account settings to make sure account is migrated.
                     new AccountSettings(this, account);
