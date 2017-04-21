@@ -130,7 +130,7 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
 
                 // 1. find service ID
                 if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    authority = ContactsContract.AUTHORITY;
+                    authority = App.getAddressBooksAuthority();
                 } else if (info.type == CollectionInfo.Type.CALENDAR) {
                     authority = CalendarContract.AUTHORITY;
                 } else {
@@ -142,7 +142,7 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
-                JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
+                JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), settings), principal);
                 if (info.uid == null) {
                     info.uid = JournalManager.Journal.genUid();
                     Crypto.CryptoManager crypto = new Crypto.CryptoManager(info.version, settings.password(), info.uid);

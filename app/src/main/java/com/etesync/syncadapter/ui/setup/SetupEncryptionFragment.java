@@ -171,9 +171,9 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
                 insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV);
 
                 // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
-                settings.setSyncInterval(ContactsContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL);
+                settings.setSyncInterval(App.getAddressBooksAuthority(), Constants.DEFAULT_SYNC_INTERVAL);
             } else {
-                ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 0);
+                ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 0);
             }
 
             if (config.calDAV != null) {

@@ -55,7 +55,7 @@ public class AddMemberFragment extends DialogFragment {
         memberEmail = getArguments().getString(KEY_MEMBER);
         try {
             settings = new AccountSettings(getContext(), account);
-            httpClient = HttpClient.create(getContext(), account);
+            httpClient = HttpClient.create(getContext(), settings);
         } catch (InvalidAccountException e) {
             e.printStackTrace();
         }

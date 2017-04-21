@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 
 import com.etesync.syncadapter.model.ServiceEntity;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
@@ -26,7 +27,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
+import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
@@ -100,17 +103,30 @@ public class AccountUpdateService extends Service {
     void cleanupAccounts() {
         App.log.info("Cleaning up orphaned accounts");
 
-        List<String> sqlAccountNames = new LinkedList<>();
+        List<String> accountNames = new LinkedList<>();
         AccountManager am = AccountManager.get(this);
-        for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE))
-            sqlAccountNames.add(account.name);
+        for (Account account : am.getAccountsByType(App.getAccountType())) {
+            accountNames.add(account.name);
+        }
 
         EntityDataStore<Persistable> data = ((App) getApplication()).getData();
 
-        if (sqlAccountNames.isEmpty()) {
+        // delete orphaned address book accounts
+        for (Account addrBookAccount : am.getAccountsByType(App.getAddressBookAccountType())) {
+            LocalAddressBook addressBook = new LocalAddressBook(this, addrBookAccount, null);
+            try {
+                if (!accountNames.contains(addressBook.getMainAccount().name))
+                    addressBook.delete();
+            } catch(ContactsStorageException e) {
+                App.log.log(Level.SEVERE, "Couldn't get address book main account", e);
+            }
+        }
+
+
+        if (accountNames.isEmpty()) {
             data.delete(ServiceEntity.class).get().value();
         } else {
-            data.delete(ServiceEntity.class).where(ServiceEntity.ACCOUNT.notIn(sqlAccountNames)).get().value();
+            data.delete(ServiceEntity.class).where(ServiceEntity.ACCOUNT.notIn(accountNames)).get().value();
         }
     }
 }

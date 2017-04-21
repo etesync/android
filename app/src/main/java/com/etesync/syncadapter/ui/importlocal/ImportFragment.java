@@ -307,7 +307,7 @@ public class ImportFragment extends DialogFragment {
                     finishParsingFile(contacts.length);
 
                     ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
-                    LocalAddressBook localAddressBook = new LocalAddressBook(account, provider);
+                    LocalAddressBook localAddressBook = new LocalAddressBook(getContext(), account, provider);
 
                     for (Contact contact : contacts) {
                         try {

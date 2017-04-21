@@ -107,6 +107,13 @@ public class App extends Application {
         at.bitfire.cert4android.Constants.log = Logger.getLogger("syncadapter.cert4android");
     }
 
+    @Getter
+    private static String accountType;
+    @Getter
+    private static String addressBookAccountType;
+    @Getter
+    private static String addressBooksAuthority;
+
     @Override
     @SuppressLint("HardwareIds")
     public void onCreate() {
@@ -117,6 +124,10 @@ public class App extends Application {
         initPrefVersion();
 
         uidGenerator = new UidGenerator(null, android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
+
+        accountType = getString(R.string.account_type);
+        addressBookAccountType = getString(R.string.account_type_address_book);
+        addressBooksAuthority = getString(R.string.address_books_authority);
     }
 
     public void reinitCertManager() {
@@ -301,16 +312,21 @@ public class App extends Application {
             AccountManager am = AccountManager.get(this);
             for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE)) {
                 try {
+                    // Generate account settings to make sure account is migrated.
+                    new AccountSettings(this, account);
+
                     LocalCalendar calendars[] = (LocalCalendar[]) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
                             LocalCalendar.Factory.INSTANCE, null, null);
                     for (LocalCalendar calendar : calendars) {
                         calendar.fixEtags();
                     }
-                } catch (CalendarStorageException e) {
+                } catch (CalendarStorageException|InvalidAccountException e) {
                     e.printStackTrace();
                 }
+            }
 
-                LocalAddressBook addressBook = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+            for (Account account : am.getAccountsByType(App.getAddressBookAccountType())) {
+                LocalAddressBook addressBook = new LocalAddressBook(this, account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
                 try {
                     addressBook.fixEtags();
                 } catch (ContactsStorageException e) {

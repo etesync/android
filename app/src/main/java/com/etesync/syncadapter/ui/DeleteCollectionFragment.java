@@ -119,7 +119,7 @@ public class DeleteCollectionFragment extends DialogFragment implements LoaderMa
                 AccountSettings settings = new AccountSettings(getContext(), account);
                 HttpUrl principal = HttpUrl.get(settings.getUri());
 
-                JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), account), principal);
+                JournalManager journalManager = new JournalManager(HttpClient.create(getContext(), settings), principal);
                 Crypto.CryptoManager crypto = new Crypto.CryptoManager(collectionInfo.version, settings.password(), collectionInfo.uid);
 
                 journalManager.delete(new JournalManager.Journal(crypto, collectionInfo.toJson(), collectionInfo.uid));

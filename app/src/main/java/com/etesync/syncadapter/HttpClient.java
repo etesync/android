@@ -56,9 +56,7 @@ public class HttpClient {
         return builder.build();
     }
 
-    public static OkHttpClient create(@Nullable Context context, @NonNull Account account, @NonNull final Logger logger) throws InvalidAccountException {
-        // use account settings for authentication
-        AccountSettings settings = new AccountSettings(context, account);
+    public static OkHttpClient create(@Nullable Context context, @NonNull AccountSettings settings, @NonNull final Logger logger) throws InvalidAccountException {
         return create(context, logger, Constants.serviceUrl.getHost(), settings.getAuthToken());
     }
 
@@ -66,8 +64,8 @@ public class HttpClient {
         return defaultBuilder(context, logger).build();
     }
 
-    public static OkHttpClient create(@NonNull Context context, @NonNull Account account) throws InvalidAccountException {
-        return create(context, account, App.log);
+    public static OkHttpClient create(@NonNull Context context, @NonNull AccountSettings settings) throws InvalidAccountException {
+        return create(context, settings, App.log);
     }
 
     public static OkHttpClient create(@Nullable Context context) {

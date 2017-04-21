@@ -58,6 +58,7 @@ import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceEntity;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment;
 import com.etesync.syncadapter.utils.HintManager;
@@ -69,6 +70,7 @@ import java.util.logging.Level;
 
 import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.ical4android.TaskProvider;
+import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 import tourguide.tourguide.ToolTip;
@@ -357,8 +359,18 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 if (service.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
-                    info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
+                    info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, App.getAddressBooksAuthority());
                     info.carddav.journals = JournalEntity.getJournals(data, serviceEntity);
+
+                    AccountManager accountManager = AccountManager.get(getContext());
+                    for (Account addrBookAccount : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+                        LocalAddressBook addressBook = new LocalAddressBook(getContext(), addrBookAccount, null);
+                        try {
+                            if (account.equals(addressBook.getMainAccount()))
+                                info.carddav.refreshing |= ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY);
+                        } catch(ContactsStorageException e) {
+                        }
+                    }
                 } else if (service.equals(CollectionInfo.Type.CALENDAR)) {
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
@@ -457,7 +469,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     protected static void requestSync(Account account) {
         String authorities[] = {
-                ContactsContract.AUTHORITY,
+                App.getAddressBooksAuthority(),
                 CalendarContract.AUTHORITY,
                 TaskProvider.ProviderName.OpenTasks.authority
         };

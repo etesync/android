@@ -46,7 +46,7 @@ public class CalendarSyncManager extends SyncManager {
     final private HttpUrl remote;
 
     public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
-        super(context, account, settings, extras, authority, result, calendar.getName(), CollectionInfo.Type.CALENDAR);
+        super(context, account, settings, extras, authority, result, calendar.getName(), CollectionInfo.Type.CALENDAR, account.name);
         localCollection = calendar;
         this.remote = remote;
     }

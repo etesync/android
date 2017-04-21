@@ -90,7 +90,7 @@ public class SetupUserInfoFragment extends DialogFragment {
         protected SetupUserInfo.SetupUserInfoResult doInBackground(Account... accounts) {
             try {
                 Crypto.CryptoManager cryptoManager;
-                OkHttpClient httpClient = HttpClient.create(getContext(), account);
+                OkHttpClient httpClient = HttpClient.create(getContext(), settings);
 
                 UserInfoManager userInfoManager = new UserInfoManager(httpClient, HttpUrl.get(settings.getUri()));
                 UserInfoManager.UserInfo userInfo = userInfoManager.get(account.name);

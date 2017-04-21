@@ -130,8 +130,8 @@ public class CollectionMembersListFragment extends ListFragment implements Adapt
         @Override
         protected MembersResult doInBackground(Void... voids) {
             try {
-                OkHttpClient httpClient = HttpClient.create(getContext(), account);
                 AccountSettings settings = new AccountSettings(getContext(), account);
+                OkHttpClient httpClient = HttpClient.create(getContext(), settings);
                 JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
 
                 JournalManager.Journal journal = JournalManager.Journal.fakeWithUid(journalEntity.getUid());

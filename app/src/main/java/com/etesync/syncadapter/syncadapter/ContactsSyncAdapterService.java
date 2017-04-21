@@ -28,6 +28,7 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
 
 import java.util.logging.Level;
@@ -59,30 +60,18 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
             notificationManager.cancel();
 
             try {
-                AccountSettings settings = new AccountSettings(getContext(), account);
+                LocalAddressBook addressBook = new LocalAddressBook(getContext(), account, provider);
+
+                AccountSettings settings = new AccountSettings(getContext(), addressBook.getMainAccount());
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
                     return;
 
-                new RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run();
+                App.log.info("Synchronizing address book: "  + addressBook.getURL());
+                App.log.info("Taking settings from: "  + addressBook.getMainAccount());
 
-                EntityDataStore<Persistable> data = ((App) getContext().getApplicationContext()).getData();
-
-                ServiceEntity service = JournalModel.Service.fetch(data, account.name, CollectionInfo.Type.ADDRESS_BOOK);
-
-                if (service != null) {
-                    HttpUrl principal = HttpUrl.get(settings.getUri());
-                    CollectionInfo info = JournalEntity.getCollections(data, service).get(0);
-                    try {
-                        ContactsSyncManager syncManager = new ContactsSyncManager(getContext(), account, settings, extras, authority, provider, syncResult, principal, info);
-                        syncManager.performSync();
-                    } catch (InvalidAccountException e) {
-                        App.log.log(Level.SEVERE, "Couldn't get account settings", e);
-                    }
-                } else
-                    App.log.info("No CardDAV service found in DB");
-            } catch (Exceptions.ServiceUnavailableException e) {
-                syncResult.stats.numIoExceptions++;
-                syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
+                HttpUrl principal = HttpUrl.get(settings.getUri());
+                ContactsSyncManager syncManager = new ContactsSyncManager(getContext(), account, settings, extras, authority, provider, syncResult, addressBook, principal);
+                syncManager.performSync();
             } catch (Exception | OutOfMemoryError e) {
                 int syncPhase = R.string.sync_phase_journals;
                 String title = getContext().getString(R.string.sync_error_contacts, account.name);
@@ -98,7 +87,7 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
                 notificationManager.notify(title, getContext().getString(syncPhase));
             }
 
-            App.log.info("Address book sync complete");
+            App.log.info("Contacts sync complete");
         }
     }
 
