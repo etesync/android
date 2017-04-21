@@ -128,7 +128,12 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
 
     public void delete() {
         AccountManager accountManager = AccountManager.get(context);
-        accountManager.removeAccount(account, null, null);
+        if (Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.LOLLIPOP_MR1) {
+            accountManager.removeAccountExplicitly(account);
+        } else {
+            accountManager.removeAccount(account, null, null);
+        }
     }
 
     public LocalAddressBook(Context context, Account account, ContentProviderClient provider) {

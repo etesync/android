@@ -11,6 +11,7 @@ package com.etesync.syncadapter.syncadapter;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.app.Service;
 import android.content.Context;
@@ -78,6 +79,13 @@ public class NullAuthenticatorService extends Service {
             return null;
         }
 
+        @Override
+        public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) {
+            Bundle result = new Bundle();
+            boolean allowed = false; // we don't want users to explicitly delete inner accounts
+            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, allowed);
+            return result;
+        }
     }
 
 }
