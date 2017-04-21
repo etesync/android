@@ -74,7 +74,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
         }
 
         info = journalEntity.getInfo();
-        isOwner = account.name.equals(journalEntity.getOwner());
+        isOwner = (journalEntity.getOwner() == null) || journalEntity.getOwner().equals(account.name);
 
         final View colorSquare = findViewById(R.id.color);
         if (info.type == CollectionInfo.Type.CALENDAR) {
