@@ -208,14 +208,9 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
                 String installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID);
                 if (TextUtils.isEmpty(installedFrom))
                     installedFrom = "APK (directly)";
-                boolean workaroundInstalled = false;
-                try {
-                    workaroundInstalled = pm.getPackageInfo(BuildConfig.APPLICATION_ID + ".jbworkaround", 0) != null;
-                } catch(PackageManager.NameNotFoundException ignored) {}
                 report.append("\nSOFTWARE INFORMATION\n" +
                                 "EteSync version: ").append(BuildConfig.VERSION_NAME).append(" (").append(BuildConfig.VERSION_CODE).append(") ").append(new Date(BuildConfig.buildTime)).append("\n")
-                                .append("Installed from: ").append(installedFrom).append("\n")
-                                .append("JB Workaround installed: ").append(workaroundInstalled ? "yes" : "no").append("\n\n");
+                                .append("Installed from: ").append(installedFrom).append("\n");
             } catch(Exception ex) {
                 App.log.log(Level.SEVERE, "Couldn't get software information", ex);
             }
