@@ -89,6 +89,9 @@ public class App extends Application {
     public static final int OVERRIDE_PROXY_PORT_DEFAULT = 8118;
 
     @Getter
+    private static String appName;
+
+    @Getter
     private CustomCertManager certManager;
 
     @Getter
@@ -123,6 +126,7 @@ public class App extends Application {
 
         uidGenerator = new UidGenerator(null, android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
 
+        appName = getString(R.string.app_name);
         accountType = getString(R.string.account_type);
         addressBookAccountType = getString(R.string.account_type_address_book);
         addressBooksAuthority = getString(R.string.address_books_authority);

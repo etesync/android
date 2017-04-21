@@ -72,7 +72,7 @@ public class AboutActivity extends AppCompatActivity {
 
     private final static ComponentInfo components[] = {
             new ComponentInfo(
-                    "EteSync", BuildConfig.VERSION_NAME, Constants.webUri.toString(),
+                    App.getAppName(), BuildConfig.VERSION_NAME, Constants.webUri.toString(),
                     DateFormatUtils.format(BuildConfig.buildTime, "yyyy") + " Tom Hacohen",
                     R.string.about_license_info_no_warranty, "gpl-3.0-standalone.html"
             ), new ComponentInfo(
