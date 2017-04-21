@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 
 import java.util.HashMap;
@@ -24,7 +25,12 @@ class AccountResolver {
         // Hardcoded swaps for known accounts:
         if (accountName.equals("com.google")) {
             accountName = "com.google.android.googlequicksearchbox";
+        } else if (accountName.equals(App.getAddressBookAccountType())) {
+            accountName = App.getAccountType();
+        }  else if (accountName.equals("at.bitfire.davdroid.address_book")) {
+            accountName = "at.bitfire.davdroid";
         }
+
         AccountInfo ret = cache.get(accountName);
         if (ret == null) {
             try {
