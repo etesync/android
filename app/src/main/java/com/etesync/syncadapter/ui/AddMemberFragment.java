@@ -82,7 +82,11 @@ public class AddMemberFragment extends DialogFragment {
             try {
                 UserInfoManager userInfoManager = new UserInfoManager(httpClient, remote);
 
-                memberPubKey = userInfoManager.get(memberEmail).getPubkey();
+                UserInfoManager.UserInfo userInfo = userInfoManager.get(memberEmail);
+                if (userInfo == null) {
+                    throw new Exception(getString(R.string.collection_members_error_user_not_found, memberEmail));
+                }
+                memberPubKey = userInfo.getPubkey();
                 return new AddResult(null);
             } catch (Exception e) {
                 return new AddResult(e);
