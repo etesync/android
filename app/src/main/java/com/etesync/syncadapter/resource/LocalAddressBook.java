@@ -32,6 +32,7 @@ import android.support.v4.os.OperationCanceledException;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.utils.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -83,7 +84,8 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         return result.toArray(new LocalAddressBook[result.size()]);
     }
 
-    public static LocalAddressBook create(@NonNull Context context, @NonNull ContentProviderClient provider, @NonNull Account mainAccount, @NonNull CollectionInfo info) throws ContactsStorageException {
+    public static LocalAddressBook create(@NonNull Context context, @NonNull ContentProviderClient provider, @NonNull Account mainAccount, @NonNull JournalEntity journalEntity) throws ContactsStorageException {
+        CollectionInfo info = journalEntity.getInfo();
         AccountManager accountManager = AccountManager.get(context);
 
         Account account = new Account(accountName(mainAccount, info), App.getAddressBookAccountType());
@@ -99,7 +101,8 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         return addressBook;
     }
 
-    public void update(@NonNull CollectionInfo info) throws AuthenticatorException, OperationCanceledException, IOException, ContactsStorageException, android.accounts.OperationCanceledException {
+    public void update(@NonNull JournalEntity journalEntity) throws AuthenticatorException, OperationCanceledException, IOException, ContactsStorageException, android.accounts.OperationCanceledException {
+        CollectionInfo info = journalEntity.getInfo();
         final String newAccountName = accountName(getMainAccount(), info);
         if (!account.name.equals(newAccountName) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final AccountManager accountManager = AccountManager.get(context);
