@@ -247,10 +247,10 @@ public class App extends Application {
             if (oldVersion < 3) {
                 db.execSQL("PRAGMA foreign_keys=OFF;");
 
-                db.execSQL("CREATE TABLE new_Journal (id integer primary key autoincrement not null, deleted boolean not null, encryptedKey varbinary(255), info varchar(255), owner varchar(255), service integer, serviceModel integer, uid varchar(64) not null, foreign key (serviceModel) references Service (id) on delete cascade);");
-                db.execSQL("CREATE TABLE new_Entry (id integer primary key autoincrement not null, content varchar(255), journal integer, uid varchar(64) not null, foreign key (journal) references Journal (id) on delete cascade);");
+                db.execSQL("CREATE TABLE new_Journal (id integer primary key autoincrement not null, deleted boolean not null, encryptedKey varbinary(255), info varchar(255), owner varchar(255), service integer, serviceModel integer, uid varchar(64) not null, readOnly boolean default false, foreign key (serviceModel) references Service (id) on delete cascade);");
+                db.execSQL("CREATE TABLE new_Entry (id integer primary key autoincrement not null, content varchar(255), journal integer, uid varchar(64) not null, foreign key (journal) references new_Journal (id) on delete cascade);");
 
-                db.execSQL("INSERT INTO new_Journal SELECT id, deleted, encryptedKey, info, owner, service, serviceModel, uid from Journal;");
+                db.execSQL("INSERT INTO new_Journal SELECT id, deleted, encryptedKey, info, owner, service, serviceModel, uid, 0 from Journal;");
                 db.execSQL("INSERT INTO new_Entry SELECT id, content, journal, uid from Entry;");
 
                 db.execSQL("DROP TABLE Journal;");
