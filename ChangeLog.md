@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.14.0
+* Add support for sharing journals and using shared journals.
+    * This change includes viewing and verifying user's public key fingerprints, as well as automatic upload of encrypted private key.
+* Add support for read-only journals (not controlling them, just treating existing read-only ones as such)
+* Add icons to menu operations.
+* Update dependencies (e.g. okhttp, requery, ical4android)
+
 ## Version 0.13.0
 * Added a showcase wizard to showcase some features on first use.
 * Make the sync more robust in case of interruptions.
