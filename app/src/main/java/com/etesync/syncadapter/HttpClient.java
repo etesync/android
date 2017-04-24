@@ -8,12 +8,14 @@
 
 package com.etesync.syncadapter;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.Settings;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -25,8 +27,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.Settings;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -56,7 +56,7 @@ public class HttpClient {
         return builder.build();
     }
 
-    public static OkHttpClient create(@Nullable Context context, @NonNull AccountSettings settings, @NonNull final Logger logger) throws InvalidAccountException {
+    public static OkHttpClient create(@Nullable Context context, @NonNull AccountSettings settings, @NonNull final Logger logger) {
         return create(context, logger, Constants.serviceUrl.getHost(), settings.getAuthToken());
     }
 
@@ -64,7 +64,7 @@ public class HttpClient {
         return defaultBuilder(context, logger).build();
     }
 
-    public static OkHttpClient create(@NonNull Context context, @NonNull AccountSettings settings) throws InvalidAccountException {
+    public static OkHttpClient create(@NonNull Context context, @NonNull AccountSettings settings) {
         return create(context, settings, App.log);
     }
 

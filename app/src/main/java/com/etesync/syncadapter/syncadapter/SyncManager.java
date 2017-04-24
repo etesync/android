@@ -18,7 +18,6 @@ import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.HttpClient;
-import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.NotificationHelper;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Crypto;
@@ -97,7 +96,7 @@ abstract public class SyncManager {
     private List<LocalResource> localDeleted;
     private LocalResource[] localDirty;
 
-    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType, String accountName) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType, String accountName) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         this.context = context;
         this.account = account;
         this.settings = settings;
