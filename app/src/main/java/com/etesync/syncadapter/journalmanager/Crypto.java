@@ -3,6 +3,7 @@ package com.etesync.syncadapter.journalmanager;
 import android.support.annotation.NonNull;
 
 import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.journalmanager.util.ByteUtil;
 import com.etesync.syncadapter.utils.Base64;
 
 import org.apache.commons.codec.Charsets;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Locale;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -118,8 +120,21 @@ public class Crypto {
 
         public static String getPrettyKeyFingerprint(byte[] pubkey) {
             byte[] fingerprint = Crypto.AsymmetricCryptoManager.getKeyFingerprint(pubkey);
-            String fingerprintString = Hex.toHexString(fingerprint).toLowerCase();
-            return fingerprintString.replaceAll("(.{4})", "$1   ").trim();
+            String spacing = "   ";
+            String ret = getEncodedChunk(fingerprint, 0) + spacing +
+                    getEncodedChunk(fingerprint, 4)  + spacing +
+                    getEncodedChunk(fingerprint, 8)  + spacing +
+                    getEncodedChunk(fingerprint, 12) + "\n" +
+                    getEncodedChunk(fingerprint, 16) + spacing +
+                    getEncodedChunk(fingerprint, 20) + spacing +
+                    getEncodedChunk(fingerprint, 24) + spacing +
+                    getEncodedChunk(fingerprint, 28);
+            return ret.trim();
+        }
+
+        private static String getEncodedChunk(byte[] hash, int offset) {
+            long chunk = ByteUtil.byteArray4ToLong(hash, offset) % 100000;
+            return String.format(Locale.getDefault(), "%05d", chunk);
         }
     }
 
