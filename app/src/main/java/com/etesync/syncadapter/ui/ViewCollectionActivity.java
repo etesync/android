@@ -256,7 +256,7 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
                 }
             } else {
                 try {
-                    LocalAddressBook resource = new LocalAddressBook(ViewCollectionActivity.this, account, getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+                    LocalAddressBook resource = LocalAddressBook.findByUid(ViewCollectionActivity.this, getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI), account, info.uid);
                     count = resource.count();
                 } catch (ContactsStorageException e) {
                     e.printStackTrace();
