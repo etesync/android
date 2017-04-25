@@ -84,6 +84,18 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         return result.toArray(new LocalAddressBook[result.size()]);
     }
 
+    public static LocalAddressBook findByUid(@NonNull Context context, @NonNull ContentProviderClient provider, @Nullable Account mainAccount, String uid) throws ContactsStorageException {
+        AccountManager accountManager = AccountManager.get(context);
+
+        for (Account account : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+            LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
+            if (addressBook.getURL().equals(uid) && (mainAccount == null || addressBook.getMainAccount().equals(mainAccount)))
+                return addressBook;
+        }
+
+        return null;
+    }
+
     public static LocalAddressBook create(@NonNull Context context, @NonNull ContentProviderClient provider, @NonNull Account mainAccount, @NonNull JournalEntity journalEntity) throws ContactsStorageException {
         CollectionInfo info = journalEntity.getInfo();
         AccountManager accountManager = AccountManager.get(context);
