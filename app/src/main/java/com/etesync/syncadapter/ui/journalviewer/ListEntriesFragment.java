@@ -92,6 +92,10 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
         }
 
         private String getLine(String content, String prefix) {
+            if (content == null) {
+                return null;
+            }
+
             int start = content.indexOf(prefix);
             if (start >= 0) {
                 int end = content.indexOf("\n", start);
