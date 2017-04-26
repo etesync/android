@@ -15,6 +15,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -24,6 +26,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
@@ -39,7 +42,9 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalTaskList;
+import com.etesync.syncadapter.ui.DebugInfoActivity;
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration;
+import com.etesync.syncadapter.utils.AndroidCompat;
 
 import java.util.logging.Level;
 
@@ -87,11 +92,23 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
     @Override
     public void onLoadFinished(Loader<Configuration> loader, Configuration config) {
-        if (createAccount(config.userName, config)) {
-            getActivity().setResult(Activity.RESULT_OK);
-            getActivity().finish();
-        } else {
+        try {
+            if (createAccount(config.userName, config)) {
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
+            }
+        } catch (InvalidAccountException e) {
             App.log.severe("Account creation failed!");
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.account_creation_failed)
+                    .setIcon(R.drawable.ic_error_dark)
+                    .setMessage(e.getLocalizedMessage())
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // dismiss
+                        }
+                    }).show();
         }
 
         dismissAllowingStateLoss();
@@ -145,7 +162,7 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
     }
 
 
-    protected boolean createAccount(String accountName, BaseConfigurationFinder.Configuration config) {
+    protected boolean createAccount(String accountName, BaseConfigurationFinder.Configuration config) throws InvalidAccountException {
         Account account = new Account(accountName, App.getAccountType());
 
         // create Android account
@@ -195,6 +212,8 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
         } catch(InvalidAccountException e) {
             App.log.log(Level.SEVERE, "Couldn't access account settings", e);
+            AndroidCompat.removeAccount(accountManager, account);
+            throw e;
         }
 
         return true;

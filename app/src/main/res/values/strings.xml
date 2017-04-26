@@ -167,6 +167,8 @@
     <string name="login_encryption_setup_title">Setting up encryption</string>
     <string name="login_encryption_setup">Please wait, setting up encryption…</string>
 
+    <string name="account_creation_failed">Account creation failed</string>
+
     <!-- SetupUserInfoFragment -->
     <string name="login_encryption_error_title">Encryption Error</string>
 
