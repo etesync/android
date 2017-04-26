@@ -246,7 +246,7 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
                 try {
                     AccountSettings settings = new AccountSettings(context, acct);
                     report.append("Account: ").append(acct.name).append("\n" +
-                                  "  Address book sync. interval: ").append(syncStatus(settings, context.getString(R.string.address_books_authority))).append("\n" +
+                                  "  Address book sync. interval: ").append(syncStatus(settings, App.getAddressBooksAuthority())).append("\n" +
                                   "  Calendar     sync. interval: ").append(syncStatus(settings, CalendarContract.AUTHORITY)).append("\n" +
                                   "  OpenTasks    sync. interval: ").append(syncStatus(settings, "org.dmfs.tasks")).append("\n" +
                                   "  WiFi only: ").append(settings.getSyncWifiOnly());
@@ -259,7 +259,7 @@ public class DebugInfoActivity extends AppCompatActivity implements LoaderManage
                     report.append(acct).append(" is invalid (unsupported settings version) or does not exist\n");
                 }
             // address book accounts
-            for (Account acct : accountManager.getAccountsByType(context.getString(R.string.account_type_address_book)))
+            for (Account acct : accountManager.getAccountsByType(App.getAddressBookAccountType()))
                 try {
                     LocalAddressBook addressBook = new LocalAddressBook(context, acct, null);
                     report.append("Address book account: ").append(acct.name).append("\n" +

@@ -85,7 +85,7 @@ public class AddressBooksSyncAdapterService extends SyncAdapterService {
                 updateLocalAddressBooks(contactsProvider, account);
 
                 AccountManager accountManager = AccountManager.get(getContext());
-                for (Account addressBookAccount : accountManager.getAccountsByType(getContext().getString(R.string.account_type_address_book))) {
+                for (Account addressBookAccount : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
                     App.log.log(Level.INFO, "Running sync for address book", addressBookAccount);
                     Bundle syncExtras = new Bundle(extras);
                     syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true);
