@@ -33,6 +33,7 @@ import com.etesync.syncadapter.ui.DebugInfoActivity;
 
 import java.util.logging.Level;
 
+import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 import okhttp3.HttpUrl;
@@ -62,7 +63,15 @@ public class ContactsSyncAdapterService extends SyncAdapterService {
             try {
                 LocalAddressBook addressBook = new LocalAddressBook(getContext(), account, provider);
 
-                AccountSettings settings = new AccountSettings(getContext(), addressBook.getMainAccount());
+                AccountSettings settings;
+                try {
+                    settings = new AccountSettings(getContext(), addressBook.getMainAccount());
+                } catch (InvalidAccountException|ContactsStorageException e) {
+                    App.log.info("Skipping sync due to invalid account.");
+                    App.log.info(e.getLocalizedMessage());
+                    return;
+                }
+
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
                     return;
 
