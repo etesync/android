@@ -34,9 +34,7 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.utils.AndroidCompat;
-import com.etesync.syncadapter.utils.Base64;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
@@ -102,9 +100,10 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         AccountManager accountManager = AccountManager.get(context);
 
         Account account = new Account(accountName(mainAccount, info), App.getAddressBookAccountType());
-        if (!accountManager.addAccountExplicitly(account, null, initialUserData(mainAccount, info.uid)))
+        if (!accountManager.addAccountExplicitly(account, null, null))
             throw new ContactsStorageException("Couldn't create address book account");
 
+        setUserData(accountManager, account, mainAccount, info.uid);
         LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
         addressBook.setMainAccount(mainAccount);
         addressBook.setURL(info.uid);
@@ -360,12 +359,11 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
 
     // SETTINGS
 
-    public static Bundle initialUserData(@NonNull Account mainAccount, @NonNull String url) {
-        Bundle bundle = new Bundle(3);
-        bundle.putString(USER_DATA_MAIN_ACCOUNT_NAME, mainAccount.name);
-        bundle.putString(USER_DATA_MAIN_ACCOUNT_TYPE, mainAccount.type);
-        bundle.putString(USER_DATA_URL, url);
-        return bundle;
+    // XXX: Workaround a bug in Android where passing a bundle to addAccountExplicitly doesn't work.
+    public static void setUserData(@NonNull AccountManager accountManager, @NonNull Account account, @NonNull Account mainAccount, @NonNull String url) {
+        accountManager.setUserData(account, USER_DATA_MAIN_ACCOUNT_NAME, mainAccount.name);
+        accountManager.setUserData(account, USER_DATA_MAIN_ACCOUNT_TYPE, mainAccount.type);
+        accountManager.setUserData(account, USER_DATA_URL, url);
     }
 
     public Account getMainAccount() throws ContactsStorageException {

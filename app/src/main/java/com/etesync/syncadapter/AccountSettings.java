@@ -31,7 +31,6 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.utils.Base64;
 
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -105,12 +104,11 @@ public class AccountSettings {
         }
     }
 
-    public static Bundle initialUserData(URI uri, String userName) {
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_SETTINGS_VERSION, String.valueOf(CURRENT_VERSION));
-        bundle.putString(KEY_USERNAME, userName);
-        bundle.putString(KEY_URI, uri.toString());
-        return bundle;
+    // XXX: Workaround a bug in Android where passing a bundle to addAccountExplicitly doesn't work.
+    public static void setUserData(AccountManager accountManager, Account account, URI uri, String userName) {
+        accountManager.setUserData(account, KEY_SETTINGS_VERSION, String.valueOf(CURRENT_VERSION));
+        accountManager.setUserData(account, KEY_USERNAME, userName);
+        accountManager.setUserData(account, KEY_URI, uri.toString());
     }
 
 
@@ -286,8 +284,10 @@ public class AccountSettings {
                         info.displayName = account.name;
                         App.log.log(Level.INFO, "Creating new address book account", url);
                         Account addressBookAccount = new Account(LocalAddressBook.accountName(account, info), App.getAddressBookAccountType());
-                        if (!accountManager.addAccountExplicitly(addressBookAccount, null, LocalAddressBook.initialUserData(account, info.uid)))
+                        if (!accountManager.addAccountExplicitly(addressBookAccount, null, null))
                             throw new ContactsStorageException("Couldn't create address book account");
+
+                        LocalAddressBook.setUserData(accountManager, addressBookAccount, account, info.uid);
                         LocalAddressBook addressBook = new LocalAddressBook(context, addressBookAccount, provider);
 
                         // move contacts to new address book

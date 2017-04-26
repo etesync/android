@@ -166,12 +166,13 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
         Account account = new Account(accountName, App.getAccountType());
 
         // create Android account
-        Bundle userData = AccountSettings.initialUserData(config.url, config.userName);
-        App.log.log(Level.INFO, "Creating Android account with initial config", new Object[] { account, userData });
+        App.log.log(Level.INFO, "Creating Android account with initial config", new Object[] { account, config.userName, config.url });
 
         AccountManager accountManager = AccountManager.get(getContext());
-        if (!accountManager.addAccountExplicitly(account, config.password, userData))
+        if (!accountManager.addAccountExplicitly(account, config.password, null))
             return false;
+
+        AccountSettings.setUserData(accountManager, account, config.url, config.userName);
 
         // add entries for account to service DB
         App.log.log(Level.INFO, "Writing account configuration to database", config);
