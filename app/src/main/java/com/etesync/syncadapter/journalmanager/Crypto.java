@@ -36,6 +36,7 @@ import org.spongycastle.crypto.util.SubjectPublicKeyInfoFactory;
 import org.spongycastle.util.encoders.Hex;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -68,7 +69,7 @@ public class Crypto {
     }
 
     @RequiredArgsConstructor
-    public static class AsymmetricKeyPair {
+    public static class AsymmetricKeyPair implements Serializable {
         @Getter(AccessLevel.PUBLIC)
         private final byte[] privateKey;
         @Getter(AccessLevel.PUBLIC)
