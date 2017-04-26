@@ -237,6 +237,9 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
             if (info.type == CollectionInfo.Type.CALENDAR) {
                 try {
                     LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.uid);
+                    if (resource == null) {
+                        return null;
+                    }
                     count = resource.count();
                 } catch (FileNotFoundException | CalendarStorageException e) {
                     e.printStackTrace();
@@ -245,6 +248,9 @@ public class ViewCollectionActivity extends AppCompatActivity implements Refresh
             } else {
                 try {
                     LocalAddressBook resource = LocalAddressBook.findByUid(ViewCollectionActivity.this, getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI), account, info.uid);
+                    if (resource == null) {
+                        return null;
+                    }
                     count = resource.count();
                 } catch (ContactsStorageException e) {
                     e.printStackTrace();
