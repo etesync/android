@@ -33,6 +33,7 @@ import android.support.v4.os.OperationCanceledException;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.utils.AndroidCompat;
 import com.etesync.syncadapter.utils.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -143,12 +144,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
 
     public void delete() {
         AccountManager accountManager = AccountManager.get(context);
-        if (Build.VERSION.SDK_INT >=
-                Build.VERSION_CODES.LOLLIPOP_MR1) {
-            accountManager.removeAccountExplicitly(account);
-        } else {
-            accountManager.removeAccount(account, null, null);
-        }
+        AndroidCompat.removeAccount(accountManager, account);
     }
 
     public LocalAddressBook(Context context, Account account, ContentProviderClient provider) {
