@@ -24,6 +24,7 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.UUID;
 
 import at.bitfire.ical4android.AndroidTask;
 import at.bitfire.ical4android.AndroidTaskFactory;
@@ -100,7 +101,7 @@ public class LocalTask extends AndroidTask implements LocalResource {
 
     public void prepareForUpload() throws CalendarStorageException {
         try {
-            final String uid = App.getUidGenerator().generateUid().getValue();
+            final String uid = UUID.randomUUID().toString();
             final String newFileName = uid + ".ics";
 
             ContentValues values = new ContentValues(2);

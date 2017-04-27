@@ -27,6 +27,7 @@ import net.fortuna.ical4j.model.property.ProdId;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import at.bitfire.ical4android.AndroidCalendar;
@@ -150,7 +151,7 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
             if (c.moveToNext())
                 uid = c.getString(0);
             if (uid == null)
-                uid = App.getUidGenerator().generateUid().getValue();
+                uid = UUID.randomUUID().toString();
 
             final String newFileName = uid;
 

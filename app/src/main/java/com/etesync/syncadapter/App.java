@@ -49,8 +49,6 @@ import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.AccountsActivity;
 import com.etesync.syncadapter.utils.HintManager;
 
-import net.fortuna.ical4j.util.UidGenerator;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.File;
@@ -100,9 +98,6 @@ public class App extends Application {
     @Getter
     private static HostnameVerifier hostnameVerifier;
 
-    @Getter
-    private static UidGenerator uidGenerator;
-
     public final static Logger log = Logger.getLogger("syncadapter");
     static {
         at.bitfire.cert4android.Constants.log = Logger.getLogger("syncadapter.cert4android");
@@ -123,8 +118,6 @@ public class App extends Application {
         reinitLogger();
         StrictMode.enableDefaults();
         initPrefVersion();
-
-        uidGenerator = new UidGenerator(null, android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
 
         appName = getString(R.string.app_name);
         accountType = getString(R.string.account_type);
