@@ -311,9 +311,6 @@ public class AccountSettings {
                 throw new ContactsStorageException("Couldn't migrate contacts to new address book", e);
             }
 
-            // update version number so that further syncs don't repeat the migration
-            accountManager.setUserData(account, KEY_SETTINGS_VERSION, "6");
-
             // request sync of new address book account
             ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 1);
             setSyncInterval(App.getAddressBooksAuthority(), Constants.DEFAULT_SYNC_INTERVAL);
