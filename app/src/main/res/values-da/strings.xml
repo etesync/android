@@ -44,7 +44,6 @@
   <string name="account_delete">Slet konto</string>
   <string name="account_delete_confirmation_title">Ønsker du at slette konto?</string>
   <string name="account_delete_confirmation_text">Alle lokale kopier af addessebøger, kalendere og opgavelister vil blive slettet.</string>
-  <string name="account_create_new_calendar">Opret ny kalender</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Kalenderadgange</string>
   <string name="permissions_calendar_request">Anmod om kalenderadgang</string>

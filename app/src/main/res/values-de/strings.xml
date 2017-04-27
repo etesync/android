@@ -78,7 +78,6 @@
   <string name="account_delete">Konto löschen</string>
   <string name="account_delete_confirmation_title">Konto wirklich löschen?</string>
   <string name="account_delete_confirmation_text">Alle lokalen gespeicherten Kopien von Addressbüchern, Kalendern und Aufgabenlisten werden gelöscht.</string>
-  <string name="account_create_new_calendar">Neuen Kalender erstellen</string>
   <string name="account_delete_collection_last_title">Letzte Sammlung kann nicht gelöscht werden</string>
   <string name="account_delete_collection_last_text">Die letzte Sammlung kann nicht gelöscht werden, bitte erstellen Sie eine neue Sammlung wenn Sie diese löschen wollen.</string>
 

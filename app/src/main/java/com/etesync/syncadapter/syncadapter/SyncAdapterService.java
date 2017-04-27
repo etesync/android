@@ -76,7 +76,7 @@ public abstract class SyncAdapterService extends Service {
 
         @Override
         public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-            App.log.log(Level.INFO, "Sync for " + authority + " has been initiated.", extras.keySet().toArray());
+            App.log.log(Level.INFO, authority + " sync of " + account + " has been initiated.", extras.keySet().toArray());
 
             // required for dav4android (ServiceLoader)
             Thread.currentThread().setContextClassLoader(getContext().getClassLoader());
@@ -143,9 +143,9 @@ public abstract class SyncAdapterService extends Service {
             void run() throws Exceptions.HttpException, Exceptions.IntegrityException, InvalidAccountException, Exceptions.GenericCryptoException {
                 App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString());
 
-                OkHttpClient httpClient = HttpClient.create(context, account);
-
                 AccountSettings settings = new AccountSettings(context, account);
+                OkHttpClient httpClient = HttpClient.create(context, settings);
+
                 JournalManager journalsManager = new JournalManager(httpClient, HttpUrl.get(settings.getUri()));
 
                 List<Pair<JournalManager.Journal, CollectionInfo>> journals = new LinkedList<>();

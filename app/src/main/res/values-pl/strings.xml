@@ -57,7 +57,6 @@
   <string name="account_delete">Usuń konto</string>
   <string name="account_delete_confirmation_title">Naprawdę chcesz usunąć konto?</string>
   <string name="account_delete_confirmation_text">Wszystkie lokalne kopie książek adresowych, kalendarzy i list zadań zostaną usunięte.</string>
-  <string name="account_create_new_calendar">Stwórz nowy kalendarz</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Uprawnienia kalendarza</string>
   <string name="permissions_calendar_request">Zezwól na uprawnienia kalendarza</string>

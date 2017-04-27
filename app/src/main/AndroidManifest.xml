@@ -55,11 +55,11 @@
         tools:ignore="UnusedAttribute">
 
         <receiver
-            android:name=".App$ReinitLoggingReceiver"
+            android:name=".App$ReinitSettingsReceiver"
             android:exported="false"
             android:process=":sync">
             <intent-filter>
-                <action android:name="com.etesync.syncadapter.REINIT_LOGGER"/>
+                <action android:name="at.bitfire.davdroid.REINIT_SETTINGS"/>
             </intent-filter>
         </receiver>
         <receiver
@@ -91,6 +91,54 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/account_authenticator"/>
         </service>
+
+        <!-- Normal account -->
+        <service
+            android:name=".syncadapter.CalendarsSyncAdapterService"
+            android:exported="true"
+            android:process=":sync"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_calendars" />
+        </service>
+
+        <!-- Address book account -->
+        <service
+            android:name=".syncadapter.NullAuthenticatorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator_address_book"/>
+        </service>
+        <provider
+            android:authorities="@string/address_books_authority"
+            android:exported="false"
+            android:label="@string/address_books_authority_title"
+            android:name=".syncadapter.AddressBookProvider"
+            android:multiprocess="false"/>
+        <service
+            android:name=".syncadapter.AddressBooksSyncAdapterService"
+            android:exported="true"
+            android:process=":sync"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_address_books"/>
+        </service>
+
         <service
             android:name=".syncadapter.ContactsSyncAdapterService"
             android:exported="true"
@@ -106,19 +154,6 @@
             <meta-data
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts"/>
-        </service>
-        <service
-            android:name=".syncadapter.CalendarsSyncAdapterService"
-            android:exported="true"
-            android:process=":sync"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_calendars" />
         </service>
 
 

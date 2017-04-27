@@ -57,7 +57,6 @@
   <string name="account_delete">アカウントを削除</string>
   <string name="account_delete_confirmation_title">アカウントを削除してもよろしいですか?</string>
   <string name="account_delete_confirmation_text">アドレス帳、カレンダー、タスクリストのローカルコピーがすべて削除されます。</string>
-  <string name="account_create_new_calendar">新しいカレンダーを作成</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">カレンダー アクセス許可</string>
   <string name="permissions_calendar_request">カレンダー アクセス許可の要求</string>

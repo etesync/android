@@ -51,7 +51,6 @@
   <string name="account_delete">Account verwijderen</string>
   <string name="account_delete_confirmation_title">Account echt verwijderen?</string>
   <string name="account_delete_confirmation_text">Alle lokale kopieën van adresboeken, agenda\'s en taken worden verwijderd.</string>
-  <string name="account_create_new_calendar">Maak een nieuwe agenda</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Agenda rechten</string>
   <string name="permissions_calendar_request">Agenda rechten verkrijgen</string>

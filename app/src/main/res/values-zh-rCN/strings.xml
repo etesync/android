@@ -57,7 +57,6 @@
   <string name="account_delete">删除账户</string>
   <string name="account_delete_confirmation_title">真的要删除账户吗？</string>
   <string name="account_delete_confirmation_text">所有通讯录、日历和任务列表的本机存储将被删除。</string>
-  <string name="account_create_new_calendar">创建日历</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">日历权限</string>
   <string name="permissions_calendar_request">请求日历权限</string>

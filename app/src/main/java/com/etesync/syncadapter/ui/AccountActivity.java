@@ -58,6 +58,7 @@ import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceEntity;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment;
 import com.etesync.syncadapter.utils.HintManager;
@@ -69,6 +70,7 @@ import java.util.logging.Level;
 
 import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.ical4android.TaskProvider;
+import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 import tourguide.tourguide.ToolTip;
@@ -98,6 +100,9 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         // CardDAV toolbar
         tbCardDAV = (Toolbar)findViewById(R.id.carddav_menu);
+        tbCardDAV.setOverflowIcon(icMenu);
+        tbCardDAV.inflateMenu(R.menu.carddav_actions);
+        tbCardDAV.setOnMenuItemClickListener(this);
         tbCardDAV.setTitle(R.string.settings_carddav);
 
         // CalDAV toolbar
@@ -193,10 +198,16 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        CollectionInfo info;
         switch (item.getItemId()) {
             case R.id.create_calendar:
-                CollectionInfo info = new CollectionInfo();
+                info = new CollectionInfo();
                 info.type = CollectionInfo.Type.CALENDAR;
+                startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
+                break;
+            case R.id.create_addressbook:
+                info = new CollectionInfo();
+                info.type = CollectionInfo.Type.ADDRESS_BOOK;
                 startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
                 break;
         }
@@ -357,8 +368,18 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
                 if (service.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
                     info.carddav = new AccountInfo.ServiceInfo();
                     info.carddav.id = id;
-                    info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, ContactsContract.AUTHORITY);
+                    info.carddav.refreshing = (davService != null && davService.isRefreshing(id)) || ContentResolver.isSyncActive(account, App.getAddressBooksAuthority());
                     info.carddav.journals = JournalEntity.getJournals(data, serviceEntity);
+
+                    AccountManager accountManager = AccountManager.get(getContext());
+                    for (Account addrBookAccount : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+                        LocalAddressBook addressBook = new LocalAddressBook(getContext(), addrBookAccount, null);
+                        try {
+                            if (account.equals(addressBook.getMainAccount()))
+                                info.carddav.refreshing |= ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY);
+                        } catch(ContactsStorageException e) {
+                        }
+                    }
                 } else if (service.equals(CollectionInfo.Type.CALENDAR)) {
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
@@ -457,7 +478,7 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     protected static void requestSync(Account account) {
         String authorities[] = {
-                ContactsContract.AUTHORITY,
+                App.getAddressBooksAuthority(),
                 CalendarContract.AUTHORITY,
                 TaskProvider.ProviderName.OpenTasks.authority
         };

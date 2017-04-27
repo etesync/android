@@ -68,19 +68,11 @@ public class JournalModel {
         }
 
         public static List<JournalEntity> getJournals(EntityDataStore<Persistable> data, ServiceEntity serviceEntity) {
-            return data.select(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(serviceEntity).and(JournalEntity.DELETED.eq(false))).get().toList();
-        }
-
-        public static List<CollectionInfo> getCollections(EntityDataStore<Persistable> data, ServiceEntity serviceEntity) {
-            List<CollectionInfo> ret = new LinkedList<>();
-
-            List<JournalEntity> journals = getJournals(data, serviceEntity);
-            for (JournalEntity journal : journals) {
+            List<JournalEntity> ret = data.select(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(serviceEntity).and(JournalEntity.DELETED.eq(false))).get().toList();
+            for (JournalEntity journal : ret) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
                 journal.afterLoad();
-                ret.add(journal.getInfo());
             }
-
             return ret;
         }
 

@@ -18,7 +18,6 @@ import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.HttpClient;
-import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.NotificationHelper;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Crypto;
@@ -97,7 +96,7 @@ abstract public class SyncManager {
     private List<LocalResource> localDeleted;
     private LocalResource[] localDirty;
 
-    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+    public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType, String accountName) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         this.context = context;
         this.account = account;
         this.settings = settings;
@@ -107,10 +106,10 @@ abstract public class SyncManager {
         this.serviceType = serviceType;
 
         // create HttpClient with given logger
-        httpClient = HttpClient.create(context, account);
+        httpClient = HttpClient.create(context, settings);
 
         data = ((App) context.getApplicationContext()).getData();
-        ServiceEntity serviceEntity = JournalModel.Service.fetch(data, account.name, serviceType);
+        ServiceEntity serviceEntity = JournalModel.Service.fetch(data, accountName, serviceType);
         info = JournalEntity.fetch(data, serviceEntity, journalUid).getInfo();
 
         // dismiss previous error notifications

@@ -44,7 +44,6 @@
   <string name="account_delete">Hesabı sil</string>
   <string name="account_delete_confirmation_title">Hesap gerçekten silinsin mi?</string>
   <string name="account_delete_confirmation_text">Rehber, takvim ve iş listelerinin tüm yerel kopyaları silinecektir.</string>
-  <string name="account_create_new_calendar">Yeni takvim oluştur</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Takvim izinleri</string>
   <string name="permissions_calendar_request">Takvim izinleri iste</string>

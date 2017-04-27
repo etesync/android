@@ -57,7 +57,6 @@
   <string name="account_delete">Supprimer le compte</string>
   <string name="account_delete_confirmation_title">Voulez-vous vraiment supprimer le compte?</string>
   <string name="account_delete_confirmation_text">Toutes les copies locales des carnets d\'adresses, des calendriers et des listes de tâches seront supprimées.</string>
-  <string name="account_create_new_calendar">Créer un nouveau calendrier</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Autorisations calendrier</string>
   <string name="permissions_calendar_request">Demande d\'autorisations d\'accéder au calendrier</string>

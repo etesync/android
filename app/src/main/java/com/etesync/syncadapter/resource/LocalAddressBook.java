@@ -8,25 +8,35 @@
 package com.etesync.syncadapter.resource;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.os.OperationCanceledException;
 
 import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.utils.AndroidCompat;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -45,9 +55,11 @@ import lombok.Cleanup;
 public class LocalAddressBook extends AndroidAddressBook implements LocalCollection {
 
     protected static final String
-            SYNC_STATE_CTAG = "ctag",
-            SYNC_STATE_URL = "url";
+            USER_DATA_MAIN_ACCOUNT_TYPE = "real_account_type",
+            USER_DATA_MAIN_ACCOUNT_NAME = "real_account_name",
+            USER_DATA_URL = "url";
 
+    protected final Context context;
     private final Bundle syncState = new Bundle();
 
     /**
@@ -58,8 +70,85 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     public boolean includeGroups = true;
 
 
-    public LocalAddressBook(Account account, ContentProviderClient provider) {
+    public static LocalAddressBook[] find(@NonNull Context context, @NonNull ContentProviderClient provider, @Nullable Account mainAccount) throws ContactsStorageException {
+        AccountManager accountManager = AccountManager.get(context);
+
+        List<LocalAddressBook> result = new LinkedList<>();
+        for (Account account : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+            LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
+            if (mainAccount == null || addressBook.getMainAccount().equals(mainAccount))
+                result.add(addressBook);
+        }
+
+        return result.toArray(new LocalAddressBook[result.size()]);
+    }
+
+    public static LocalAddressBook findByUid(@NonNull Context context, @NonNull ContentProviderClient provider, @Nullable Account mainAccount, String uid) throws ContactsStorageException {
+        AccountManager accountManager = AccountManager.get(context);
+
+        for (Account account : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+            LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
+            if (addressBook.getURL().equals(uid) && (mainAccount == null || addressBook.getMainAccount().equals(mainAccount)))
+                return addressBook;
+        }
+
+        return null;
+    }
+
+    public static LocalAddressBook create(@NonNull Context context, @NonNull ContentProviderClient provider, @NonNull Account mainAccount, @NonNull JournalEntity journalEntity) throws ContactsStorageException {
+        CollectionInfo info = journalEntity.getInfo();
+        AccountManager accountManager = AccountManager.get(context);
+
+        Account account = new Account(accountName(mainAccount, info), App.getAddressBookAccountType());
+        if (!accountManager.addAccountExplicitly(account, null, null))
+            throw new ContactsStorageException("Couldn't create address book account");
+
+        setUserData(accountManager, account, mainAccount, info.uid);
+        LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
+        addressBook.setMainAccount(mainAccount);
+        addressBook.setURL(info.uid);
+
+        ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
+
+        return addressBook;
+    }
+
+    public void update(@NonNull JournalEntity journalEntity) throws AuthenticatorException, OperationCanceledException, IOException, ContactsStorageException, android.accounts.OperationCanceledException {
+        CollectionInfo info = journalEntity.getInfo();
+        final String newAccountName = accountName(getMainAccount(), info);
+        if (!account.name.equals(newAccountName) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final AccountManager accountManager = AccountManager.get(context);
+            AccountManagerFuture<Account> future = accountManager.renameAccount(account, newAccountName, new AccountManagerCallback<Account>() {
+                @Override
+                public void run(AccountManagerFuture<Account> future) {
+                    try {
+                        // update raw contacts to new account name
+                        if (provider != null) {
+                            ContentValues values = new ContentValues(1);
+                            values.put(RawContacts.ACCOUNT_NAME, newAccountName);
+                            provider.update(syncAdapterURI(RawContacts.CONTENT_URI), values, RawContacts.ACCOUNT_NAME + "=? AND " + RawContacts.ACCOUNT_TYPE + "=?",
+                                    new String[] { account.name, account.type });
+                        }
+                    } catch(RemoteException e) {
+                        App.log.log(Level.WARNING, "Couldn't re-assign contacts to new account name", e);
+                    }
+                }
+            }, null);
+            account = future.getResult();
+        }
+
+        // make sure it will still be synchronized when contacts are updated
+        ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
+    }
+
+    public void delete() {
+        AccountManager accountManager = AccountManager.get(context);
+        AndroidCompat.removeAccount(accountManager, account);
+    }
+
+    public LocalAddressBook(Context context, Account account, ContentProviderClient provider) {
         super(account, provider, LocalGroup.Factory.INSTANCE, LocalContact.Factory.INSTANCE);
+        this.context = context;
     }
 
     @NonNull
@@ -268,51 +357,52 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     }
 
 
-    // SYNC STATE
+    // SETTINGS
 
-    @SuppressWarnings("ParcelClassLoader,Recycle")
-    protected void readSyncState() throws ContactsStorageException {
-        @Cleanup("recycle") Parcel parcel = Parcel.obtain();
-        byte[] raw = getSyncState();
-        syncState.clear();
-        if (raw != null) {
-            parcel.unmarshall(raw, 0, raw.length);
-            parcel.setDataPosition(0);
-            syncState.putAll(parcel.readBundle());
-        }
+    // XXX: Workaround a bug in Android where passing a bundle to addAccountExplicitly doesn't work.
+    public static void setUserData(@NonNull AccountManager accountManager, @NonNull Account account, @NonNull Account mainAccount, @NonNull String url) {
+        accountManager.setUserData(account, USER_DATA_MAIN_ACCOUNT_NAME, mainAccount.name);
+        accountManager.setUserData(account, USER_DATA_MAIN_ACCOUNT_TYPE, mainAccount.type);
+        accountManager.setUserData(account, USER_DATA_URL, url);
     }
 
-    @SuppressWarnings("Recycle")
-    protected void writeSyncState() throws ContactsStorageException {
-        @Cleanup("recycle") Parcel parcel = Parcel.obtain();
-        parcel.writeBundle(syncState);
-        setSyncState(parcel.marshall());
+    public Account getMainAccount() throws ContactsStorageException {
+        AccountManager accountManager = AccountManager.get(context);
+        String  name = accountManager.getUserData(account, USER_DATA_MAIN_ACCOUNT_NAME),
+                type = accountManager.getUserData(account, USER_DATA_MAIN_ACCOUNT_TYPE);
+        if (name != null && type != null)
+            return new Account(name, type);
+        else
+            throw new ContactsStorageException("Address book doesn't exist anymore");
+    }
+
+    public void setMainAccount(@NonNull Account mainAccount) throws ContactsStorageException {
+        AccountManager accountManager = AccountManager.get(context);
+        accountManager.setUserData(account, USER_DATA_MAIN_ACCOUNT_NAME, mainAccount.name);
+        accountManager.setUserData(account, USER_DATA_MAIN_ACCOUNT_TYPE, mainAccount.type);
     }
 
     public String getURL() throws ContactsStorageException {
-        synchronized (syncState) {
-            readSyncState();
-            return syncState.getString(SYNC_STATE_URL);
-        }
+        AccountManager accountManager = AccountManager.get(context);
+        return accountManager.getUserData(account, USER_DATA_URL);
     }
 
     public void setURL(String url) throws ContactsStorageException {
-        synchronized (syncState) {
-            readSyncState();
-            syncState.putString(SYNC_STATE_URL, url);
-            writeSyncState();
-        }
+        AccountManager accountManager = AccountManager.get(context);
+        accountManager.setUserData(account, USER_DATA_URL, url);
     }
 
     // HELPERS
 
-    public static void onRenameAccount(@NonNull ContentResolver resolver, @NonNull String oldName, @NonNull String newName) throws RemoteException {
-        @Cleanup("release") ContentProviderClient client = resolver.acquireContentProviderClient(ContactsContract.AUTHORITY);
-        if (client != null) {
-            ContentValues values = new ContentValues(1);
-            values.put(RawContacts.ACCOUNT_NAME, newName);
-            client.update(RawContacts.CONTENT_URI, values, RawContacts.ACCOUNT_NAME + "=?", new String[]{oldName});
-        }
+    public static String accountName(@NonNull Account mainAccount, @NonNull CollectionInfo info) {
+        String displayName = (info.displayName != null) ? info.displayName : info.uid;
+        StringBuilder sb = new StringBuilder(displayName);
+        sb      .append(" (")
+                .append(mainAccount.name)
+                .append(" ")
+                .append(info.uid.substring(0, 4))
+                .append(")");
+        return sb.toString();
     }
 
     /** Fix all of the etags of all of the non-dirty contacts to be non-null.

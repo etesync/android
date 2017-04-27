@@ -15,6 +15,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -24,6 +26,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
@@ -39,7 +42,9 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalTaskList;
+import com.etesync.syncadapter.ui.DebugInfoActivity;
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration;
+import com.etesync.syncadapter.utils.AndroidCompat;
 
 import java.util.logging.Level;
 
@@ -87,11 +92,23 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
     @Override
     public void onLoadFinished(Loader<Configuration> loader, Configuration config) {
-        if (createAccount(config.userName, config)) {
-            getActivity().setResult(Activity.RESULT_OK);
-            getActivity().finish();
-        } else {
+        try {
+            if (createAccount(config.userName, config)) {
+                getActivity().setResult(Activity.RESULT_OK);
+                getActivity().finish();
+            }
+        } catch (InvalidAccountException e) {
             App.log.severe("Account creation failed!");
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.account_creation_failed)
+                    .setIcon(R.drawable.ic_error_dark)
+                    .setMessage(e.getLocalizedMessage())
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // dismiss
+                        }
+                    }).show();
         }
 
         dismissAllowingStateLoss();
@@ -145,16 +162,17 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
     }
 
 
-    protected boolean createAccount(String accountName, BaseConfigurationFinder.Configuration config) {
-        Account account = new Account(accountName, Constants.ACCOUNT_TYPE);
+    protected boolean createAccount(String accountName, BaseConfigurationFinder.Configuration config) throws InvalidAccountException {
+        Account account = new Account(accountName, App.getAccountType());
 
         // create Android account
-        Bundle userData = AccountSettings.initialUserData(config.url, config.userName);
-        App.log.log(Level.INFO, "Creating Android account with initial config", new Object[] { account, userData });
+        App.log.log(Level.INFO, "Creating Android account with initial config", new Object[] { account, config.userName, config.url });
 
         AccountManager accountManager = AccountManager.get(getContext());
-        if (!accountManager.addAccountExplicitly(account, config.password, userData))
+        if (!accountManager.addAccountExplicitly(account, config.password, null))
             return false;
+
+        AccountSettings.setUserData(accountManager, account, config.url, config.userName);
 
         // add entries for account to service DB
         App.log.log(Level.INFO, "Writing account configuration to database", config);
@@ -171,9 +189,9 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
                 insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV);
 
                 // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
-                settings.setSyncInterval(ContactsContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL);
+                settings.setSyncInterval(App.getAddressBooksAuthority(), Constants.DEFAULT_SYNC_INTERVAL);
             } else {
-                ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 0);
+                ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 0);
             }
 
             if (config.calDAV != null) {
@@ -195,6 +213,8 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
 
         } catch(InvalidAccountException e) {
             App.log.log(Level.SEVERE, "Couldn't access account settings", e);
+            AndroidCompat.removeAccount(accountManager, account);
+            throw e;
         }
 
         return true;

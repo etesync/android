@@ -13,16 +13,9 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-import org.apache.commons.codec.Charsets;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
-import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
@@ -31,6 +24,13 @@ import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalEvent;
 import com.etesync.syncadapter.resource.LocalResource;
+
+import org.apache.commons.codec.Charsets;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
 import at.bitfire.ical4android.InvalidCalendarException;
@@ -45,8 +45,8 @@ public class CalendarSyncManager extends SyncManager {
 
     final private HttpUrl remote;
 
-    public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
-        super(context, account, settings, extras, authority, result, calendar.getName(), CollectionInfo.Type.CALENDAR);
+    public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {
+        super(context, account, settings, extras, authority, result, calendar.getName(), CollectionInfo.Type.CALENDAR, account.name);
         localCollection = calendar;
         this.remote = remote;
     }

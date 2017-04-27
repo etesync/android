@@ -18,19 +18,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.io.IOUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.HttpClient;
-import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
@@ -40,6 +31,15 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalContact;
 import com.etesync.syncadapter.resource.LocalGroup;
 import com.etesync.syncadapter.resource.LocalResource;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
@@ -60,10 +60,12 @@ public class ContactsSyncManager extends SyncManager {
     final private ContentProviderClient provider;
     final private HttpUrl remote;
 
-    public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, HttpUrl principal, CollectionInfo info) throws InvalidAccountException, Exceptions.IntegrityException, Exceptions.GenericCryptoException {
-        super(context, account, settings, extras, authority, result, info.uid, CollectionInfo.Type.ADDRESS_BOOK);
+    public ContactsSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, ContentProviderClient provider, SyncResult result, LocalAddressBook localAddressBook, HttpUrl principal) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException, ContactsStorageException {
+        super(context, account, settings, extras, authority, result, localAddressBook.getURL(), CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.getMainAccount().name);
         this.provider = provider;
         this.remote = principal;
+
+        localCollection = localAddressBook;
     }
 
     @Override
@@ -80,10 +82,7 @@ public class ContactsSyncManager extends SyncManager {
     protected boolean prepare() throws ContactsStorageException, CalendarStorageException {
         if (!super.prepare())
             return false;
-        // prepare local address book
-        localCollection = new LocalAddressBook(account, provider);
         LocalAddressBook localAddressBook = localAddressBook();
-        localAddressBook.setURL(info.uid);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
@@ -101,7 +100,7 @@ public class ContactsSyncManager extends SyncManager {
         values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1);
         localAddressBook.updateSettings(values);
 
-        journal = new JournalEntryManager(httpClient, remote, info.uid);
+        journal = new JournalEntryManager(httpClient, remote, localAddressBook.getURL());
 
         return true;
     }

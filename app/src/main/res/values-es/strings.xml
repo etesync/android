@@ -57,7 +57,6 @@
   <string name="account_delete">Eliminar cuenta</string>
   <string name="account_delete_confirmation_title">¿Seguro que deseas eliminar la cuenta?</string>
   <string name="account_delete_confirmation_text">Todas las copias locales de tus contactos, calendarios y tareas serán eliminadas.</string>
-  <string name="account_create_new_calendar">Crear nuevo calendario</string>
   <!--PermissionsActivity-->
   <string name="permissions_calendar">Permisos de calendario</string>
   <string name="permissions_calendar_request">Solicitar permisos sobre calendario</string>

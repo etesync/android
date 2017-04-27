@@ -12,28 +12,36 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
+import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.PeriodicSync;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.etesync.syncadapter.journalmanager.Crypto;
+import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.utils.Base64;
 
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Level;
 
+import at.bitfire.vcard4android.ContactsStorageException;
 import at.bitfire.vcard4android.GroupMethod;
+import lombok.Cleanup;
 
 public class AccountSettings {
-    private final static int CURRENT_VERSION = 1;
+    private final static int CURRENT_VERSION = 2;
     private final static String
             KEY_SETTINGS_VERSION = "version",
             KEY_URI = "uri",
@@ -96,12 +104,11 @@ public class AccountSettings {
         }
     }
 
-    public static Bundle initialUserData(URI uri, String userName) {
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_SETTINGS_VERSION, String.valueOf(CURRENT_VERSION));
-        bundle.putString(KEY_USERNAME, userName);
-        bundle.putString(KEY_URI, uri.toString());
-        return bundle;
+    // XXX: Workaround a bug in Android where passing a bundle to addAccountExplicitly doesn't work.
+    public static void setUserData(AccountManager accountManager, Account account, URI uri, String userName) {
+        accountManager.setUserData(account, KEY_SETTINGS_VERSION, String.valueOf(CURRENT_VERSION));
+        accountManager.setUserData(account, KEY_USERNAME, userName);
+        accountManager.setUserData(account, KEY_URI, uri.toString());
     }
 
 
@@ -234,16 +241,82 @@ public class AccountSettings {
     // update from previous account settings
 
     private void update(int fromVersion) {
-        for (int toVersion = fromVersion + 1; toVersion <= CURRENT_VERSION; toVersion++) {
-            App.log.info("Updating account " + account.name + " from version " + fromVersion + " to " + toVersion);
+        int toVersion = CURRENT_VERSION;
+        App.log.info("Updating account " + account.name + " from version " + fromVersion + " to " + toVersion);
+        try {
+            updateInner(fromVersion);
+            accountManager.setUserData(account, KEY_SETTINGS_VERSION, String.valueOf(toVersion));
+        } catch (Exception e) {
+            App.log.log(Level.SEVERE, "Couldn't update account settings", e);
+        }
+    }
+
+    private void updateInner(int fromVersion) throws ContactsStorageException {
+        if (fromVersion < 2) {
+            @Cleanup("release") ContentProviderClient provider = context.getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
+            if (provider == null)
+                // no access to contacts provider
+                return;
+
+            // don't run syncs during the migration
+            ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 0);
+            ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 0);
+            ContentResolver.cancelSync(account, null);
+
             try {
-                Method updateProc = getClass().getDeclaredMethod("update_" + fromVersion + "_" + toVersion);
-                updateProc.invoke(this);
-                accountManager.setUserData(account, KEY_SETTINGS_VERSION, String.valueOf(toVersion));
-            } catch (Exception e) {
-                App.log.log(Level.SEVERE, "Couldn't update account settings", e);
+                // get previous address book settings (including URL)
+                @Cleanup("recycle") Parcel parcel = Parcel.obtain();
+                byte[] raw = ContactsContract.SyncState.get(provider, account);
+                if (raw == null)
+                    App.log.info("No contacts sync state, ignoring account");
+                else {
+                    parcel.unmarshall(raw, 0, raw.length);
+                    parcel.setDataPosition(0);
+                    Bundle params = parcel.readBundle();
+                    String url = params.getString("url");
+                    if (url == null)
+                        App.log.info("No address book URL, ignoring account");
+                    else {
+                        // create new address book
+                        CollectionInfo info = new CollectionInfo();
+                        info.type = CollectionInfo.Type.ADDRESS_BOOK;
+                        info.uid = url;
+                        info.displayName = account.name;
+                        App.log.log(Level.INFO, "Creating new address book account", url);
+                        Account addressBookAccount = new Account(LocalAddressBook.accountName(account, info), App.getAddressBookAccountType());
+                        if (!accountManager.addAccountExplicitly(addressBookAccount, null, null))
+                            throw new ContactsStorageException("Couldn't create address book account");
+
+                        LocalAddressBook.setUserData(accountManager, addressBookAccount, account, info.uid);
+                        LocalAddressBook addressBook = new LocalAddressBook(context, addressBookAccount, provider);
+
+                        // move contacts to new address book
+                        App.log.info("Moving contacts from " + account + " to " + addressBookAccount);
+                        ContentValues newAccount = new ContentValues(2);
+                        newAccount.put(ContactsContract.RawContacts.ACCOUNT_NAME, addressBookAccount.name);
+                        newAccount.put(ContactsContract.RawContacts.ACCOUNT_TYPE, addressBookAccount.type);
+                        int affected = provider.update(ContactsContract.RawContacts.CONTENT_URI.buildUpon()
+                                        .appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_NAME, account.name)
+                                        .appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_TYPE, account.type)
+                                        .appendQueryParameter(ContactsContract.CALLER_IS_SYNCADAPTER, "true").build(),
+                                newAccount,
+                                ContactsContract.RawContacts.ACCOUNT_NAME + "=? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + "=?",
+                                new String[]{account.name, account.type});
+                        App.log.info(affected + " contacts moved to new address book");
+                    }
+
+                    ContactsContract.SyncState.set(provider, account, null);
+                }
+            } catch (RemoteException e) {
+                throw new ContactsStorageException("Couldn't migrate contacts to new address book", e);
             }
-            fromVersion = toVersion;
+
+            // update version number so that further syncs don't repeat the migration
+            accountManager.setUserData(account, KEY_SETTINGS_VERSION, "6");
+
+            // request sync of new address book account
+            ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 1);
+            setSyncInterval(App.getAddressBooksAuthority(), Constants.DEFAULT_SYNC_INTERVAL);
         }
     }
 
@@ -256,7 +329,7 @@ public class AccountSettings {
 
             // peek into AccountSettings to initiate a possible migration
             AccountManager accountManager = AccountManager.get(context);
-            for (Account account : accountManager.getAccountsByType(Constants.ACCOUNT_TYPE))
+            for (Account account : accountManager.getAccountsByType(App.getAccountType()))
                 try {
                     App.log.info("Checking account " + account.name);
                     new AccountSettings(context, account);

@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.etesync.syncadapter.AccountsChangedReceiver;
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 
@@ -106,7 +107,7 @@ public class AccountListFragment extends ListFragment implements LoaderManager.L
         @Override
         @SuppressLint("MissingPermission")
         public Account[] loadInBackground() {
-            return accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+            return accountManager.getAccountsByType(App.getAccountType());
         }
     }
 

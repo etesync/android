@@ -78,8 +78,6 @@ import okhttp3.internal.tls.OkHostnameVerifier;
 
 
 public class App extends Application {
-    public static final String FLAVOR_GOOGLE_PLAY = "gplay";
-
     public static final String
             DISTRUST_SYSTEM_CERTIFICATES = "distrustSystemCerts",
             LOG_TO_EXTERNAL_STORAGE = "logToExternalStorage",
@@ -89,6 +87,9 @@ public class App extends Application {
 
     public static final String OVERRIDE_PROXY_HOST_DEFAULT = "localhost";
     public static final int OVERRIDE_PROXY_PORT_DEFAULT = 8118;
+
+    @Getter
+    private static String appName;
 
     @Getter
     private CustomCertManager certManager;
@@ -107,6 +108,13 @@ public class App extends Application {
         at.bitfire.cert4android.Constants.log = Logger.getLogger("syncadapter.cert4android");
     }
 
+    @Getter
+    private static String accountType;
+    @Getter
+    private static String addressBookAccountType;
+    @Getter
+    private static String addressBooksAuthority;
+
     @Override
     @SuppressLint("HardwareIds")
     public void onCreate() {
@@ -117,6 +125,11 @@ public class App extends Application {
         initPrefVersion();
 
         uidGenerator = new UidGenerator(null, android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
+
+        appName = getString(R.string.app_name);
+        accountType = getString(R.string.account_type);
+        addressBookAccountType = getString(R.string.account_type_address_book);
+        addressBooksAuthority = getString(R.string.address_books_authority);
     }
 
     public void reinitCertManager() {
@@ -205,11 +218,13 @@ public class App extends Application {
     }
 
 
-    public static class ReinitLoggingReceiver extends BroadcastReceiver {
+    public static class ReinitSettingsReceiver extends BroadcastReceiver {
+
+        public static final String ACTION_REINIT_SETTINGS = BuildConfig.APPLICATION_ID + ".REINIT_SETTINGS";
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            log.info("Received broadcast: re-initializing logger");
+            log.info("Received broadcast: re-initializing settings (logger/cert manager)");
 
             App app = (App)context.getApplicationContext();
             app.reinitLogger();
@@ -299,18 +314,23 @@ public class App extends Application {
         if (fromVersion < 7) {
             /* Fix all of the etags to be non-null */
             AccountManager am = AccountManager.get(this);
-            for (Account account : am.getAccountsByType(Constants.ACCOUNT_TYPE)) {
+            for (Account account : am.getAccountsByType(App.getAccountType())) {
                 try {
+                    // Generate account settings to make sure account is migrated.
+                    new AccountSettings(this, account);
+
                     LocalCalendar calendars[] = (LocalCalendar[]) LocalCalendar.find(account, this.getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI),
                             LocalCalendar.Factory.INSTANCE, null, null);
                     for (LocalCalendar calendar : calendars) {
                         calendar.fixEtags();
                     }
-                } catch (CalendarStorageException e) {
+                } catch (CalendarStorageException|InvalidAccountException e) {
                     e.printStackTrace();
                 }
+            }
 
-                LocalAddressBook addressBook = new LocalAddressBook(account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
+            for (Account account : am.getAccountsByType(App.getAddressBookAccountType())) {
+                LocalAddressBook addressBook = new LocalAddressBook(this, account, this.getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI));
                 try {
                     addressBook.fixEtags();
                 } catch (ContactsStorageException e) {

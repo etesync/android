@@ -104,7 +104,7 @@ public class LocalContactImportFragment extends Fragment {
             String accountType = cursor.getString(accountTypeIndex);
             if (account == null || (!account.name.equals(accountName) || !account.type.equals(accountType))) {
                 account = new Account(accountName, accountType);
-                localAddressBooks.add(new LocalAddressBook(account, provider));
+                localAddressBooks.add(new LocalAddressBook(getContext(), account, provider));
             }
         }
 
@@ -152,8 +152,9 @@ public class LocalContactImportFragment extends Fragment {
         private ResultFragment.ImportResult importContacts(LocalAddressBook localAddressBook) {
             ResultFragment.ImportResult result = new ResultFragment.ImportResult();
             try {
-                LocalAddressBook addressBook = new LocalAddressBook(account,
-                        getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI));
+                LocalAddressBook addressBook = LocalAddressBook.findByUid(getContext(),
+                        getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI),
+                        account, info.uid);
                 LocalContact[] localContacts = localAddressBook.getAll();
                 int total = localContacts.length;
                 progressDialog.setMax(total);

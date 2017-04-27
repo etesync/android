@@ -11,6 +11,11 @@
 
     <!-- common strings -->
     <string name="app_name">EteSync</string>
+    <string name="account_type" translatable="false">com.etesync.syncadapter</string>
+    <string name="account_type_address_book" translatable="false">com.etesync.syncadapter.address_book</string>
+    <string name="account_title_address_book">EteSync Address book</string>
+    <string name="address_books_authority" translatable="false">com.etesync.syncadapter.addressbooks</string>
+    <string name="address_books_authority_title">Address books</string>
     <string name="help">Help</string>
     <string name="manage_accounts">Manage accounts</string>
     <string name="please_wait">Please wait …</string>
@@ -93,7 +98,6 @@
     <string name="account_show_fingerprint">Show Fingerprint</string>
     <string name="account_delete_confirmation_title">Really delete account?</string>
     <string name="account_delete_confirmation_text">All local copies of address books, calendars and task lists will be deleted.</string>
-    <string name="account_create_new_calendar">Create new calendar</string>
     <string name="account_delete_collection_last_title">Can\'t delete last collection</string>
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
     <string name="account_showcase_view_collection">You can click on an item to view the collection. From there you can view the journal, import, and much more...</string>
@@ -107,7 +111,6 @@
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
     <string name="not_allowed_title">Not Allowed</string>
     <string name="edit_owner_only">Only the owner of this collection (%s) is allowed to edit it.</string>
-    <string name="members_address_book_not_allowed">Sharing of address books is currently not supported.</string>
     <string name="members_old_journals_not_allowed">Sharing of old-style journals is not allowed. In order to share this journal, create a new one, and copy its contents over using the \"import\" dialog. If you are experiencing any issues, please contact support.</string>
 
     <!-- CollectionMembers -->
@@ -163,6 +166,8 @@
 
     <string name="login_encryption_setup_title">Setting up encryption</string>
     <string name="login_encryption_setup">Please wait, setting up encryption…</string>
+
+    <string name="account_creation_failed">Account creation failed</string>
 
     <!-- SetupUserInfoFragment -->
     <string name="login_encryption_error_title">Encryption Error</string>

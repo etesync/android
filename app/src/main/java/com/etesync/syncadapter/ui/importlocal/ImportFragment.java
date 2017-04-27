@@ -307,7 +307,7 @@ public class ImportFragment extends DialogFragment {
                     finishParsingFile(contacts.length);
 
                     ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
-                    LocalAddressBook localAddressBook = new LocalAddressBook(account, provider);
+                    LocalAddressBook localAddressBook = LocalAddressBook.findByUid(getContext(), provider, account, info.uid);
 
                     for (Contact contact : contacts) {
                         try {
@@ -332,7 +332,7 @@ public class ImportFragment extends DialogFragment {
             } catch (FileNotFoundException e) {
                 result.e = e;
                 return result;
-            } catch (InvalidCalendarException | IOException e) {
+            } catch (InvalidCalendarException | IOException | ContactsStorageException e) {
                 result.e = e;
                 return result;
             }
