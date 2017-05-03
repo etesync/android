@@ -33,9 +33,13 @@ public class WebViewActivity extends AppCompatActivity {
     private ActionBar mToolbar;
 
     public static void openUrl(Context context, Uri uri) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(WebViewActivity.KEY_URL, uri);
-        context.startActivity(intent);
+        if (isAllowedUrl(uri)) {
+            Intent intent = new Intent(context, WebViewActivity.class);
+            intent.putExtra(WebViewActivity.KEY_URL, uri);
+            context.startActivity(intent);
+        } else {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        }
     }
 
     @Override
@@ -138,12 +142,12 @@ public class WebViewActivity extends AppCompatActivity {
         mWebView.invalidate();
     }
 
-    private boolean uriEqual(Uri uri1, Uri uri2) {
+    private static boolean uriEqual(Uri uri1, Uri uri2) {
         return uri1.getHost().equals(uri2.getHost()) &&
                 uri1.getPath().equals(uri2.getPath());
     }
 
-    private boolean allowedUris(Uri allowedUris[], Uri uri2) {
+    private static boolean allowedUris(Uri allowedUris[], Uri uri2) {
         for (Uri uri : allowedUris) {
             if (uriEqual(uri, uri2)) {
                 return true;
@@ -152,7 +156,7 @@ public class WebViewActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean shouldOverrideUrl(Uri uri) {
+    private static boolean isAllowedUrl(Uri uri) {
         final Uri allowedUris[] = new Uri[]{
                 Constants.faqUri,
                 Constants.helpUri,
@@ -162,10 +166,14 @@ public class WebViewActivity extends AppCompatActivity {
         };
         final Uri accountsUri = Constants.webUri.buildUpon().appendEncodedPath("accounts/").build();
 
-        if (allowedUris(allowedUris, uri) ||
+        return (allowedUris(allowedUris, uri) ||
                 (uri.getHost().equals(accountsUri.getHost()) &&
                         (uri.getPath().startsWith(accountsUri.getPath())))
-                ) {
+        );
+    }
+
+    private boolean shouldOverrideUrl(Uri uri) {
+        if (isAllowedUrl(uri)) {
             if (uri.getQueryParameter(QUERY_KEY_EMBEDDED) != null) {
                 return false;
             } else {
@@ -173,7 +181,6 @@ public class WebViewActivity extends AppCompatActivity {
                 mWebView.loadUrl(uri.toString());
                 return true;
             }
-
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
