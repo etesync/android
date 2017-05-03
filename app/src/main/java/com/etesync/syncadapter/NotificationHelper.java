@@ -98,6 +98,9 @@ public class NotificationHelper {
             } else if (e instanceof Exceptions.UserInactiveException) {
                 WebViewActivity.openUrl(this, Constants.dashboard);
                 return;
+            } else if (e instanceof AccountSettings.AccountMigrationException) {
+                WebViewActivity.openUrl(this, Constants.faqUri.buildUpon().encodedFragment("account-migration-error").build());
+                return;
             } else {
                 detailsIntent = new Intent(this, DebugInfoActivity.class);
             }

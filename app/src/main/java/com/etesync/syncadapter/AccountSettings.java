@@ -253,6 +253,8 @@ public class AccountSettings {
 
     private void updateInner(int fromVersion) throws ContactsStorageException {
         if (fromVersion < 2) {
+            long affected = -1;
+            long newCount = -1;
             @Cleanup("release") ContentProviderClient provider = context.getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
             if (provider == null)
                 // no access to contacts provider
@@ -288,14 +290,14 @@ public class AccountSettings {
                             throw new ContactsStorageException("Couldn't create address book account");
 
                         LocalAddressBook.setUserData(accountManager, addressBookAccount, account, info.uid);
-                        LocalAddressBook addressBook = new LocalAddressBook(context, addressBookAccount, provider);
+                        LocalAddressBook newAddressBook = new LocalAddressBook(context, addressBookAccount, provider);
 
                         // move contacts to new address book
                         App.log.info("Moving contacts from " + account + " to " + addressBookAccount);
                         ContentValues newAccount = new ContentValues(2);
                         newAccount.put(ContactsContract.RawContacts.ACCOUNT_NAME, addressBookAccount.name);
                         newAccount.put(ContactsContract.RawContacts.ACCOUNT_TYPE, addressBookAccount.type);
-                        int affected = provider.update(ContactsContract.RawContacts.CONTENT_URI.buildUpon()
+                        affected = provider.update(ContactsContract.RawContacts.CONTENT_URI.buildUpon()
                                         .appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_NAME, account.name)
                                         .appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_TYPE, account.type)
                                         .appendQueryParameter(ContactsContract.CALLER_IS_SYNCADAPTER, "true").build(),
@@ -303,6 +305,7 @@ public class AccountSettings {
                                 ContactsContract.RawContacts.ACCOUNT_NAME + "=? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + "=?",
                                 new String[]{account.name, account.type});
                         App.log.info(affected + " contacts moved to new address book");
+                        newCount = newAddressBook.count();
                     }
 
                     ContactsContract.SyncState.set(provider, account, null);
@@ -314,6 +317,13 @@ public class AccountSettings {
             // request sync of new address book account
             ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 1);
             setSyncInterval(App.getAddressBooksAuthority(), Constants.DEFAULT_SYNC_INTERVAL);
+
+            // Error handling
+            if ((affected != -1) && (affected != newCount)) {
+                NotificationHelper notificationHelper = new NotificationHelper(context, "account-migration", Constants.NOTIFICATION_ACCOUNT_UPDATE);
+                notificationHelper.setThrowable(new AccountMigrationException("Failed to upgrade account"));
+                notificationHelper.notify("Account upgrade failed", "upgrading account");
+            }
         }
     }
 
@@ -337,4 +347,9 @@ public class AccountSettings {
 
     }
 
+    public static class AccountMigrationException extends Exception {
+        public AccountMigrationException(String msg) {
+            super(msg);
+        }
+    }
 }

@@ -21,6 +21,7 @@ public class Constants {
             NOTIFICATION_CONTACTS_SYNC = 10,
             NOTIFICATION_CALENDAR_SYNC = 11,
             NOTIFICATION_TASK_SYNC = 12,
+            NOTIFICATION_ACCOUNT_UPDATE = 13,
             NOTIFICATION_PERMISSIONS = 20;
 
     public static final Uri webUri = Uri.parse((DEBUG_REMOTE_URL == null) ? "https://www.etesync.com/" : DEBUG_REMOTE_URL);
