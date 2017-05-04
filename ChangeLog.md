@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 0.15.0
+* Add support for multiple address books (adjusted from the DAVdroid solution).
+    * This works around the Android limitation of one address book per account.
+* Change the fingerprint format to be numeric instead of hex (thanks to Dominik Schürmann for the suggestion)
+* Fix UUID generation - in some cases weird UUIDs were generated for events.
+* Fix opening of dashboard in the external browser.
+* Fix a rare crash on the login page.
+* Fix potential crash when viewing journals before they have been sync.
+
 ## Version 0.14.0
 * Add support for sharing journals and using shared journals.
     * This change includes viewing and verifying user's public key fingerprints, as well as automatic upload of encrypted private key.
