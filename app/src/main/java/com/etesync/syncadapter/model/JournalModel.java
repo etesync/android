@@ -19,14 +19,14 @@ import io.requery.Table;
 import io.requery.sql.EntityDataStore;
 
 public class JournalModel {
-    // FIXME: Add unique constraint on the uid + service combination. Can't do it at the moment because requery is broken.
     @Entity
-    @Table(name = "Journal")
+    @Table(name = "Journal", uniqueIndexes = "journal_unique_together")
     public static abstract class Journal {
         @Key
         @Generated
         int id;
 
+        @Index(value = "journal_unique_together")
         @Column(length = 64, nullable = false)
         String uid;
 
@@ -41,6 +41,7 @@ public class JournalModel {
         @Deprecated
         long service;
 
+        @Index(value = "journal_unique_together")
         @ForeignKey(update = ReferentialAction.CASCADE)
         @ManyToOne
         Service serviceModel;
