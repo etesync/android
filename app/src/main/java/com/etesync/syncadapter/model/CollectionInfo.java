@@ -9,6 +9,8 @@
 package com.etesync.syncadapter.model;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.etesync.syncadapter.journalmanager.Constants;
 import com.etesync.syncadapter.journalmanager.JournalManager;
@@ -23,7 +25,7 @@ import io.requery.sql.EntityDataStore;
 import lombok.ToString;
 
 @ToString(exclude = {"id"})
-public class CollectionInfo implements Serializable {
+public class CollectionInfo implements Parcelable, Serializable {
     @Deprecated
     public long id;
 
@@ -56,6 +58,17 @@ public class CollectionInfo implements Serializable {
 
     public CollectionInfo() {
         version = Constants.CURRENT_VERSION;
+    }
+
+    protected CollectionInfo(Parcel in) {
+        id = in.readLong();
+        serviceID = in.readInt();
+        version = in.readInt();
+        uid = in.readString();
+        displayName = in.readString();
+        description = in.readString();
+        timeZone = in.readString();
+        selected = in.readByte() != 0;
     }
 
     public static CollectionInfo defaultForServiceType(Type service) {
@@ -110,4 +123,33 @@ public class CollectionInfo implements Serializable {
         return (i == null) ? null : (i != 0);
     }
 
+
+    public static final Creator<CollectionInfo> CREATOR = new Creator<CollectionInfo>() {
+        @Override
+        public CollectionInfo createFromParcel(Parcel in) {
+            return new CollectionInfo(in);
+        }
+
+        @Override
+        public CollectionInfo[] newArray(int size) {
+            return new CollectionInfo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel aParcel, int aI) {
+        aParcel.writeLong(id);
+        aParcel.writeInt(serviceID);
+        aParcel.writeInt(version);
+        aParcel.writeString(uid);
+        aParcel.writeString(displayName);
+        aParcel.writeString(description);
+        aParcel.writeString(timeZone);
+        aParcel.writeByte((byte) (selected ? 1 : 0));
+    }
 }

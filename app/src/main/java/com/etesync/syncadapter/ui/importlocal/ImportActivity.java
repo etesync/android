@@ -18,8 +18,11 @@ import android.widget.TextView;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.ui.BaseActivity;
+import java.io.Serializable;
+
 
 public class ImportActivity extends BaseActivity implements SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
+
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
@@ -29,7 +32,7 @@ public class ImportActivity extends BaseActivity implements SelectImportMethod, 
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, ImportActivity.class);
         intent.putExtra(ImportActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(ImportActivity.EXTRA_COLLECTION_INFO, info);
+        intent.putExtra(ImportActivity.EXTRA_COLLECTION_INFO, (Serializable) info);
         return intent;
     }
 

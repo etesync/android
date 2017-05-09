@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -18,6 +19,8 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
+
+import java.io.Serializable;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -34,7 +37,7 @@ public class CollectionMembersActivity extends BaseActivity implements Refreshab
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, CollectionMembersActivity.class);
         intent.putExtra(CollectionMembersActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(CollectionMembersActivity.EXTRA_COLLECTION_INFO, info);
+        intent.putExtra(CollectionMembersActivity.EXTRA_COLLECTION_INFO, (Serializable) info);
         return intent;
     }
 

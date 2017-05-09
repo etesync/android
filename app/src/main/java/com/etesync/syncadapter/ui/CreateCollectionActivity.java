@@ -25,11 +25,13 @@ import com.etesync.syncadapter.model.CollectionInfo;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
+
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreateCollectionActivity extends BaseActivity {
     static final String EXTRA_ACCOUNT = "account",
-                        EXTRA_COLLECTION_INFO = "collectionInfo";
+            EXTRA_COLLECTION_INFO = "collectionInfo";
 
     protected Account account;
     protected CollectionInfo info;
@@ -37,7 +39,7 @@ public class CreateCollectionActivity extends BaseActivity {
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, CreateCollectionActivity.class);
         intent.putExtra(CreateCollectionActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(CreateCollectionActivity.EXTRA_COLLECTION_INFO, info);
+        intent.putExtra(CreateCollectionActivity.EXTRA_COLLECTION_INFO, (Serializable) info);
         return intent;
     }
 

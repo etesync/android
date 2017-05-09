@@ -36,6 +36,7 @@ import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.Locale;
 
 import at.bitfire.ical4android.CalendarStorageException;
@@ -58,7 +59,7 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, ViewCollectionActivity.class);
         intent.putExtra(ViewCollectionActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(ViewCollectionActivity.EXTRA_COLLECTION_INFO, info);
+        intent.putExtra(ViewCollectionActivity.EXTRA_COLLECTION_INFO, (Serializable) info);
         return intent;
     }
 

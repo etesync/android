@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.etesync.syncadapter.IEteSyncService;
+import com.etesync.syncadapter.model.CollectionInfo;
 
 public class RemoteService extends Service {
 
@@ -33,6 +34,12 @@ public class RemoteService extends Service {
 
             RemoteRegisterActivity.startActivity(RemoteService.this,
                     mApiPermissionHelper.getCurrentCallingPackage(), journalType);
+        }
+
+        public CollectionInfo[] getJournalEntries(String journalType) throws RemoteException {
+            if (!mApiPermissionHelper.isAllowedIgnoreErrors(journalType)) return null;
+
+            return new CollectionInfo[0]; //todo implement
         }
     };
 

@@ -24,6 +24,8 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.resource.LocalCalendar;
 
+import java.io.Serializable;
+
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
@@ -31,7 +33,7 @@ public class EditCollectionActivity extends CreateCollectionActivity {
     public static Intent newIntent(Context context, Account account, CollectionInfo info) {
         Intent intent = new Intent(context, EditCollectionActivity.class);
         intent.putExtra(CreateCollectionActivity.EXTRA_ACCOUNT, account);
-        intent.putExtra(CreateCollectionActivity.EXTRA_COLLECTION_INFO, info);
+        intent.putExtra(CreateCollectionActivity.EXTRA_COLLECTION_INFO, (Serializable) info);
         return intent;
     }
 

@@ -122,6 +122,8 @@ public class ApiPermissionHelper {
 
         String[] callingPackages = mPackageManager.getPackagesForUid(uid);
 
+        if (callingPackages == null) return false;
+
         // is calling package allowed to use this service?
         for (String currentPkg : callingPackages) {
             if (isPackageAllowed(currentPkg, journalType)) {
@@ -144,7 +146,7 @@ public class ApiPermissionHelper {
             App.log.warning("Package is NOT allowed! packageName: " + packageName + " for journal type " + journalType);
             return false;
         }
-        App.log.info("Package is allowed! packageName: " + packageName + " for journal type " + journalType);
+        App.log.info("Package is allowed. packageName: " + packageName + " for journal type " + journalType);
 
         byte[] currentPackageCert;
         try {
