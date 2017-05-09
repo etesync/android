@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.etesync.syncadapter.IEteSyncService;
+import com.etesync.syncadapter.model.CollectionInfo;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
                 boolean isAllowed = mEteSyncService.hasPermission(JOURNAL_TYPE);
                 if (!isAllowed) {
                     mEteSyncService.requestPermission(JOURNAL_TYPE);
+                } else {
+                    CollectionInfo[] collectionInfo = mEteSyncService.getJournalEntries(JOURNAL_TYPE);
+                    if (collectionInfo == null) {
+                        Log.i(TAG, "Received no collection infos");
+                    } else {
+                        for (CollectionInfo collectionInfo1 : collectionInfo) {
+                            Log.i(TAG, "Received collection info: " + collectionInfo1.displayName);
+                        }
+                    }
                 }
 
                 Log.i(TAG, JOURNAL_TYPE + " isAllowed:" + mEteSyncService.hasPermission(JOURNAL_TYPE) +
