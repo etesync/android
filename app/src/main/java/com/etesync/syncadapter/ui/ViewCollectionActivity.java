@@ -98,6 +98,7 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
         if (account.name.equals(journalEntity.getOwner())) {
             owner.setVisibility(View.GONE);
         } else {
+            owner.setVisibility(View.VISIBLE);
             owner.setText(getString(R.string.account_owner, journalEntity.getOwner()));
         }
     }
