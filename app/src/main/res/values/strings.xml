@@ -128,6 +128,9 @@
     <string name="collection_members_remove_title">Remove member</string>
     <string name="collection_members_remove">Would you like to revoke %s\'s access?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
 
+    <!-- JournalItemActivity -->
+    <string name="journal_item_title">Journal Item</string>
+
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>
     <string name="permissions_calendar">Calendar permissions</string>

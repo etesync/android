@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,8 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
+import com.etesync.syncadapter.model.SyncEntry;
+import com.etesync.syncadapter.ui.JournalItemActivity;
 
 import java.util.List;
 
@@ -81,9 +82,7 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EntryEntity entry = (EntryEntity) getListAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Raw dump")
-                .setMessage("Action: " + entry.getContent().getAction().toString() + "\nIntegrity: " + entry.getUid() + "\n" + entry.getContent().getContent()).show();
+        startActivity(JournalItemActivity.newIntent(getContext(), info, entry.getContent()));
     }
 
     class EntriesListAdapter extends ArrayAdapter<EntryEntity> {
@@ -91,20 +90,6 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
             super(context, R.layout.journal_viewer_list_item);
         }
 
-        private String getLine(String content, String prefix) {
-            if (content == null) {
-                return null;
-            }
-
-            int start = content.indexOf(prefix);
-            if (start >= 0) {
-                int end = content.indexOf("\n", start);
-                content = content.substring(start + prefix.length(), end);
-            } else {
-                content = null;
-            }
-            return content;
-        }
         @Override
         @NonNull
         public View getView(int position, View v, @NonNull ViewGroup parent) {
@@ -117,36 +102,59 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
 
             // FIXME: hacky way to make it show sensible info
             CollectionInfo info = journalEntity.getInfo();
-            String fullContent = entryEntity.getContent().getContent();
-            String prefix;
-            if (info.type == CollectionInfo.Type.CALENDAR) {
-                prefix = "SUMMARY:";
-            } else {
-                prefix = "FN:";
-            }
-            String content = getLine(fullContent, prefix);
-            content = (content != null) ? content : entryEntity.getUid().substring(0, 20);
-            tv.setText(content);
-
-            tv = (TextView) v.findViewById(R.id.description);
-            content = getLine(fullContent, "UID:");
-            content = "UID: " + ((content != null) ? content : "Not found");
-            tv.setText(content);
-
-            ImageView action = (ImageView) v.findViewById(R.id.action);
-            switch (entryEntity.getContent().getAction()) {
-                case ADD:
-                    action.setImageResource(R.drawable.action_add);
-                    break;
-                case CHANGE:
-                    action.setImageResource(R.drawable.action_change);
-                    break;
-                case DELETE:
-                    action.setImageResource(R.drawable.action_delete);
-                    break;
-            }
+            setJournalEntryView(v, info, entryEntity.getContent());
 
             return v;
+        }
+    }
+
+    private static String getLine(String content, String prefix) {
+        if (content == null) {
+            return null;
+        }
+
+        int start = content.indexOf(prefix);
+        if (start >= 0) {
+            int end = content.indexOf("\n", start);
+            content = content.substring(start + prefix.length(), end);
+        } else {
+            content = null;
+        }
+        return content;
+    }
+
+    public static void setJournalEntryView(View v, CollectionInfo info, SyncEntry syncEntry) {
+
+        TextView tv = (TextView) v.findViewById(R.id.title);
+
+        // FIXME: hacky way to make it show sensible info
+        String fullContent = syncEntry.getContent();
+        String prefix;
+        if (info.type == CollectionInfo.Type.CALENDAR) {
+            prefix = "SUMMARY:";
+        } else {
+            prefix = "FN:";
+        }
+        String content = getLine(fullContent, prefix);
+        content = (content != null) ? content : "Not found";
+        tv.setText(content);
+
+        tv = (TextView) v.findViewById(R.id.description);
+        content = getLine(fullContent, "UID:");
+        content = "UID: " + ((content != null) ? content : "Not found");
+        tv.setText(content);
+
+        ImageView action = (ImageView) v.findViewById(R.id.action);
+        switch (syncEntry.getAction()) {
+            case ADD:
+                action.setImageResource(R.drawable.action_add);
+                break;
+            case CHANGE:
+                action.setImageResource(R.drawable.action_change);
+                break;
+            case DELETE:
+                action.setImageResource(R.drawable.action_delete);
+                break;
         }
     }
 

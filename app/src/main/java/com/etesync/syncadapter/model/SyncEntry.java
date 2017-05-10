@@ -4,9 +4,11 @@ import com.etesync.syncadapter.GsonHelper;
 import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 
-public class SyncEntry {
+public class SyncEntry implements Serializable {
     @Getter
     private String content;
     @Getter
