@@ -16,14 +16,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.resource.LocalTaskList;
 
-public class PermissionsActivity extends AppCompatActivity {
+public class PermissionsActivity extends BaseActivity {
     final static private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 
     public static final String

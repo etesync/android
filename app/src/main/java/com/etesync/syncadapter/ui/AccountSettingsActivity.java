@@ -15,12 +15,10 @@ import android.content.Intent;
 import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.provider.ContactsContract;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -38,7 +36,7 @@ import com.etesync.syncadapter.ui.setup.LoginCredentialsChangeFragment;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
-public class AccountSettingsActivity extends AppCompatActivity {
+public class AccountSettingsActivity extends BaseActivity {
     private Account account;
 
     @Override

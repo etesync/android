@@ -20,7 +20,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -30,6 +29,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.BuildConfig;
+import com.etesync.syncadapter.Constants;
+import com.etesync.syncadapter.R;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -37,15 +41,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.BuildConfig;
-import com.etesync.syncadapter.Constants;
-import com.etesync.syncadapter.R;
 import ezvcard.Ezvcard;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

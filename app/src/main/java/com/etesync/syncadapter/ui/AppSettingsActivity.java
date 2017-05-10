@@ -11,14 +11,10 @@ package com.etesync.syncadapter.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
@@ -26,7 +22,10 @@ import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.utils.HintManager;
 
-public class AppSettingsActivity extends AppCompatActivity {
+import java.net.URI;
+import java.net.URISyntaxException;
+
+public class AppSettingsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

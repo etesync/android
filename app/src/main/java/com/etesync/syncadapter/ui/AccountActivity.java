@@ -33,7 +33,6 @@ import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -68,7 +67,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
-import at.bitfire.cert4android.CustomCertManager;
 import at.bitfire.ical4android.TaskProvider;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
@@ -77,7 +75,7 @@ import tourguide.tourguide.ToolTip;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE;
 
-public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
+public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
     public static final String EXTRA_ACCOUNT = "account";
     private static final String HINT_VIEW_COLLECTION = "ViewCollection";
 
@@ -125,22 +123,6 @@ public class AccountActivity extends AppCompatActivity implements Toolbar.OnMenu
         if (!SetupUserInfoFragment.hasUserInfo(this, account)) {
             SetupUserInfoFragment.newInstance(account).show(getSupportFragmentManager(), null);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        CustomCertManager certManager = ((App)getApplicationContext()).getCertManager();
-        if (certManager != null)
-            certManager.appInForeground = false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        CustomCertManager certManager = ((App)getApplicationContext()).getCertManager();
-        if (certManager != null)
-            certManager.appInForeground = true;
     }
 
     @Override

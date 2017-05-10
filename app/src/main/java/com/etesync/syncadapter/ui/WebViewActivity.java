@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +21,7 @@ import android.widget.ProgressBar;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BaseActivity {
 
     private static final String KEY_URL = "url";
     private static final String QUERY_KEY_EMBEDDED = "embedded";
@@ -201,16 +199,5 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            if (!getSupportFragmentManager().popBackStackImmediate()) {
-                finish();
-            }
-            return true;
-        }
-        return false;
     }
 }

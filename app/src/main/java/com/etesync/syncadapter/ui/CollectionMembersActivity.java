@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,7 @@ import com.etesync.syncadapter.resource.LocalCalendar;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
-public class CollectionMembersActivity extends AppCompatActivity implements Refreshable {
+public class CollectionMembersActivity extends BaseActivity implements Refreshable {
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
@@ -121,33 +120,8 @@ public class CollectionMembersActivity extends AppCompatActivity implements Refr
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            if (!getSupportFragmentManager().popBackStackImmediate()) {
-                finish();
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-
-        App app = (App) getApplicationContext();
-        if (app.getCertManager() != null)
-            app.getCertManager().appInForeground = true;
-
         refresh();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        App app = (App) getApplicationContext();
-        if (app.getCertManager() != null)
-            app.getCertManager().appInForeground = false;
     }
 }

@@ -8,22 +8,20 @@
 
 package com.etesync.syncadapter.ui.setup;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.ui.BaseActivity;
 import com.etesync.syncadapter.ui.WebViewActivity;
 
 /**
  * Activity to initially connect to a server and create an account.
  * Fields for server/user data can be pre-filled with extras in the Intent.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     /**
      * When set, and {@link #EXTRA_PASSWORD} is set too, the user name field will be set to this value.
      */
@@ -45,24 +43,6 @@ public class LoginActivity extends AppCompatActivity {
                     .replace(android.R.id.content, new LoginCredentialsFragment())
                     .commit();
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        App app = (App)getApplicationContext();
-        if (app.getCertManager() != null)
-            app.getCertManager().appInForeground = true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        App app = (App)getApplicationContext();
-        if (app.getCertManager() != null)
-            app.getCertManager().appInForeground = false;
     }
 
     @Override

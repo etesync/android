@@ -26,11 +26,22 @@ import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.etesync.syncadapter.AccountSettings;
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.BuildConfig;
+import com.etesync.syncadapter.InvalidAccountException;
+import com.etesync.syncadapter.R;
+import com.etesync.syncadapter.journalmanager.Exceptions.HttpException;
+import com.etesync.syncadapter.model.EntryEntity;
+import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.ServiceEntity;
+import com.etesync.syncadapter.resource.LocalAddressBook;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.text.WordUtils;
@@ -42,19 +53,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.etesync.syncadapter.AccountSettings;
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.BuildConfig;
-import com.etesync.syncadapter.Constants;
-import com.etesync.syncadapter.InvalidAccountException;
-import com.etesync.syncadapter.R;
-import com.etesync.syncadapter.journalmanager.Exceptions.HttpException;
-import com.etesync.syncadapter.model.EntryEntity;
-import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.ServiceDB;
-import com.etesync.syncadapter.model.ServiceEntity;
-import com.etesync.syncadapter.resource.LocalAddressBook;
-
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -62,7 +60,7 @@ import lombok.Cleanup;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
-public class DebugInfoActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
+public class DebugInfoActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<String> {
     public static final String
             KEY_THROWABLE = "throwable",
             KEY_LOGS = "logs",

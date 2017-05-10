@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,11 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.ui.BaseActivity;
 
-public class ImportActivity extends AppCompatActivity implements SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
+public class ImportActivity extends BaseActivity implements SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
     public final static String EXTRA_ACCOUNT = "account",
             EXTRA_COLLECTION_INFO = "collectionInfo";
 
@@ -101,24 +100,6 @@ public class ImportActivity extends AppCompatActivity implements SelectImportMet
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        App app = (App) getApplicationContext();
-        if (app.getCertManager() != null)
-            app.getCertManager().appInForeground = true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        App app = (App) getApplicationContext();
-        if (app.getCertManager() != null)
-            app.getCertManager().appInForeground = false;
     }
 
     @Override

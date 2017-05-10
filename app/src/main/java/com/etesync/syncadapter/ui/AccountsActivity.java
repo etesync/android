@@ -19,7 +19,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -32,16 +31,13 @@ import com.etesync.syncadapter.ui.setup.LoginActivity;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.ShowcaseBuilder;
 
-import tourguide.tourguide.Overlay;
-import tourguide.tourguide.Pointer;
 import tourguide.tourguide.ToolTip;
-import tourguide.tourguide.TourGuide;
 
 import static android.content.ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS;
 import static com.etesync.syncadapter.BuildConfig.DEBUG;
 import static com.etesync.syncadapter.Constants.serviceUrl;
 
-public class AccountsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
+public class AccountsActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
     public static final String HINT_ACCOUNT_ADD = "AddAccount";
 
     private Snackbar syncStatusSnackbar;
