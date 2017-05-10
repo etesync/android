@@ -3,7 +3,14 @@ package com.etesync.syncadapter.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.etesync.syncadapter.App;
@@ -12,7 +19,6 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.SyncEntry;
-import com.etesync.syncadapter.resource.LocalCalendar;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -44,27 +50,7 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
         info = journalEntity.getInfo();
 
-        setTitle(R.string.journal_item_title);
-
-        final View colorSquare = findViewById(R.id.color);
-        if (info.type == CollectionInfo.Type.CALENDAR) {
-            if (info.color != null) {
-                colorSquare.setBackgroundColor(info.color);
-            } else {
-                colorSquare.setBackgroundColor(LocalCalendar.defaultColor);
-            }
-        } else {
-            colorSquare.setVisibility(View.GONE);
-        }
-
-        final TextView title = (TextView) findViewById(R.id.display_name);
-        title.setText(info.displayName);
-
-        final TextView desc = (TextView) findViewById(R.id.description);
-        desc.setText(info.description);
-
-        final TextView content = (TextView) findViewById(R.id.content);
-        content.setText(syncEntry.getContent());
+        setTitle(info.displayName);
 
         setJournalEntryView(findViewById(R.id.journal_list_item), info, syncEntry);
     }
@@ -82,14 +68,63 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
         refresh();
 
-        // We refresh before this, so we don't refresh the list before it was fully created.
-        if (savedInstanceState == null) {
-            /*
-            listFragment = CollectionMembersListFragment.newInstance(account, info);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.list_entries_container, listFragment)
-                    .commit();
-                    */
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), info, syncEntry));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private static class TabsAdapter extends FragmentPagerAdapter {
+        private CollectionInfo info;
+        private SyncEntry syncEntry;
+        public TabsAdapter(FragmentManager fm, CollectionInfo info, SyncEntry syncEntry) {
+            super(fm);
+            this.info = info;
+            this.syncEntry = syncEntry;
+        }
+
+        @Override
+        public int getCount() {
+            // FIXME: Make it depend on info type (only have non-raw for known types)
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            // FIXME: use string resources
+            if (position == 0) {
+                return "Main";
+            } else {
+                return "Raw";
+            }
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return TextFragment.newInstance(syncEntry);
+        }
+    }
+
+    public static class TextFragment extends Fragment {
+        public static TextFragment newInstance(SyncEntry syncEntry) {
+            TextFragment frag = new TextFragment();
+            Bundle args = new Bundle(1);
+            args.putSerializable(KEY_SYNC_ENTRY, syncEntry);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.text_fragment, container, false);
+
+            TextView tv = (TextView) v.findViewById(R.id.content);
+
+            SyncEntry syncEntry = (SyncEntry) getArguments().getSerializable(KEY_SYNC_ENTRY);
+            tv.setText(syncEntry.getContent());
+
+            return v;
         }
     }
 
