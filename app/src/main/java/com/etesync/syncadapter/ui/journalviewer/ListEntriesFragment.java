@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etesync.syncadapter.App;
@@ -29,7 +30,6 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
 
 import java.util.List;
-import java.util.Locale;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
@@ -126,12 +126,25 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
             }
             String content = getLine(fullContent, prefix);
             content = (content != null) ? content : entryEntity.getUid().substring(0, 20);
-            tv.setText(String.format(Locale.getDefault(), "%s: %s", entryEntity.getContent().getAction().toString(), content));
+            tv.setText(content);
 
             tv = (TextView) v.findViewById(R.id.description);
             content = getLine(fullContent, "UID:");
             content = "UID: " + ((content != null) ? content : "Not found");
             tv.setText(content);
+
+            ImageView action = (ImageView) v.findViewById(R.id.action);
+            switch (entryEntity.getContent().getAction()) {
+                case ADD:
+                    action.setImageResource(R.drawable.action_add);
+                    break;
+                case CHANGE:
+                    action.setImageResource(R.drawable.action_change);
+                    break;
+                case DELETE:
+                    action.setImageResource(R.drawable.action_delete);
+                    break;
+            }
 
             return v;
         }
