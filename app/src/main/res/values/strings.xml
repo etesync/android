@@ -7,7 +7,7 @@
   ~ http://www.gnu.org/licenses/gpl.html
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- common strings -->
     <string name="app_name">EteSync</string>
@@ -249,7 +249,6 @@
     <string name="delete_collection_confirm_title">Are you sure?</string>
     <string name="delete_collection_confirm_warning">This collection (%s) and all its data will be removed from the server.</string>
     <string name="delete_collection_deleting_collection">Deleting collection</string>
-    <string name="collection_stats_title">Stats</string>
 
     <!-- JournalViewer -->
     <string name="journal_entries_list_empty">No entries found for this journal</string>
@@ -300,4 +299,6 @@
     <string name="import_button_local">From Account</string>
     <string name="import_select_account">Select Account</string>
 
+    <!-- Event (from Etar) -->
+    <string name="event_info_organizer">Organizer:</string>
 </resources>

@@ -2,12 +2,16 @@ package com.etesync.syncadapter.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,19 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.SyncEntry;
 
+import net.fortuna.ical4j.model.component.VAlarm;
+import net.fortuna.ical4j.model.property.Attendee;
+
+import org.apache.commons.codec.Charsets;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Formatter;
+import java.util.Locale;
+
+import at.bitfire.ical4android.Event;
+import at.bitfire.ical4android.InvalidCalendarException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
@@ -102,7 +119,11 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
         @Override
         public Fragment getItem(int position) {
-            return TextFragment.newInstance(syncEntry);
+            if (position == 0) {
+                return EventFragment.newInstance(info, syncEntry);
+            } else {
+                return TextFragment.newInstance(syncEntry);
+            }
         }
     }
 
@@ -125,6 +146,140 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
             tv.setText(syncEntry.getContent());
 
             return v;
+        }
+    }
+
+    public static class EventFragment extends Fragment {
+        CollectionInfo info;
+        SyncEntry syncEntry;
+
+        public static EventFragment newInstance(CollectionInfo info, SyncEntry syncEntry) {
+            EventFragment frag = new EventFragment();
+            Bundle args = new Bundle(1);
+            args.putSerializable(Constants.KEY_COLLECTION_INFO, info);
+            args.putSerializable(KEY_SYNC_ENTRY, syncEntry);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.event_info, container, false);
+
+            info = (CollectionInfo) getArguments().getSerializable(Constants.KEY_COLLECTION_INFO);
+            syncEntry = (SyncEntry) getArguments().getSerializable(KEY_SYNC_ENTRY);
+
+            new LoadEventTask(v).execute();
+
+            return v;
+        }
+
+        private class LoadEventTask extends AsyncTask<Void, Void, Event> {
+            View view;
+            LoadEventTask(View v) {
+                super();
+                view = v;
+            }
+            @Override
+            protected Event doInBackground(Void... aVoids) {
+                InputStream is = new ByteArrayInputStream(syncEntry.getContent().getBytes(Charsets.UTF_8));
+
+                try {
+                    Event event = Event.fromStream(is, Charsets.UTF_8, null)[0];
+                    return event;
+                } catch (InvalidCalendarException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Event event) {
+                final View loader = view.findViewById(R.id.event_info_loading_msg);
+                loader.setVisibility(View.GONE);
+                final View contentContainer = view.findViewById(R.id.event_info_scroll_view);
+                contentContainer.setVisibility(View.VISIBLE);
+
+                setTextViewText(view, R.id.title, event.summary);
+
+                setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(event.dtStart.getDate().getTime(), event.dtEnd.getDate().getTime(), event.isAllDay(), getContext()));
+
+                setTextViewText(view, R.id.where, event.location);
+
+                if (event.organizer != null) {
+                    TextView tv = (TextView) view.findViewById(R.id.organizer);
+                    tv.setText(event.organizer.getCalAddress().toString().replaceFirst("mailto:", ""));
+                } else {
+                    View organizer = view.findViewById(R.id.organizer_container);
+                    organizer.setVisibility(View.GONE);
+                }
+
+                setTextViewText(view, R.id.description, event.description);
+
+                boolean first = true;
+                StringBuilder sb = new StringBuilder();
+                for (Attendee attendee : event.attendees) {
+                    if (first) {
+                        first = false;
+                        sb.append("Attendees: ");
+                    } else {
+                        sb.append(", ");
+                    }
+                    sb.append(attendee.getCalAddress().toString().replaceFirst("mailto:", ""));
+                }
+                setTextViewText(view, R.id.attendees, sb.toString());
+
+                first = true;
+                sb = new StringBuilder();
+                for (VAlarm alarm : event.alarms) {
+                    if (first) {
+                        first = false;
+                        sb.append("Reminders: ");
+                    } else {
+                        sb.append(", ");
+                    }
+                    sb.append(alarm.getTrigger().getValue());
+                }
+                setTextViewText(view, R.id.reminders, sb.toString());
+            }
+        }
+
+        private static void setTextViewText(View parent, int id, String text) {
+            TextView tv = (TextView) parent.findViewById(id);
+            if (text == null) {
+                tv.setVisibility(View.GONE);
+            } else {
+                tv.setText(text);
+            }
+        }
+
+        public static String getDisplayedDatetime(long startMillis, long endMillis, boolean allDay, Context context) {
+            // Configure date/time formatting.
+            int flagsDate = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY;
+            int flagsTime = DateUtils.FORMAT_SHOW_TIME;
+            if (DateFormat.is24HourFormat(context)) {
+                flagsTime |= DateUtils.FORMAT_24HOUR;
+            }
+
+            String datetimeString = null;
+            if (allDay) {
+                // For multi-day allday events or single-day all-day events that are not
+                // today or tomorrow, use framework formatter.
+                Formatter f = new Formatter(new StringBuilder(50), Locale.getDefault());
+                datetimeString = DateUtils.formatDateRange(context, f, startMillis,
+                        endMillis, flagsDate, Time.TIMEZONE_UTC).toString();
+            } else {
+                // For multiday events, shorten day/month names.
+                // Example format: "Fri Apr 6, 5:00pm - Sun, Apr 8, 6:00pm"
+                int flagsDatetime = flagsDate | flagsTime | DateUtils.FORMAT_ABBREV_MONTH |
+                        DateUtils.FORMAT_ABBREV_WEEKDAY;
+                datetimeString = DateUtils.formatDateRange(context, startMillis, endMillis,
+                        flagsDatetime);
+            }
+            return datetimeString;
         }
     }
 
