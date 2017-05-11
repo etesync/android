@@ -220,6 +220,7 @@
         </activity>
         <activity android:name=".ui.ViewCollectionActivity"/>
         <activity android:name=".ui.CollectionMembersActivity"/>
+        <activity android:name=".ui.JournalItemActivity"/>
         <activity android:name=".ui.importlocal.ImportActivity"/>
         <activity android:name=".ui.AccountSettingsActivity"/>
         <activity android:name=".ui.CreateCollectionActivity"/>

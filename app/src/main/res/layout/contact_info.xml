@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:padding="0dp">
+
+    <RelativeLayout
+        android:id="@+id/loading_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/event_info_progress_bar"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/event_info_progress_bar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dip"
+            android:text="@string/loading" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/orange400"
+            android:padding="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/White"
+            android:textIsSelectable="true"
+            android:textStyle="bold" />
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:fadingEdge="none"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/main_card"
+                    layout="@layout/contact_info_item_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/about_card"
+                    layout="@layout/contact_info_item_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>
