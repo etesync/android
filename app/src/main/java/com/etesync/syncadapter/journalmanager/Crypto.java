@@ -55,7 +55,7 @@ public class Crypto {
 
     public static AsymmetricKeyPair generateKeyPair() {
         RSAKeyPairGenerator keyPairGenerator = new RSAKeyPairGenerator();
-        keyPairGenerator.init(new RSAKeyGenerationParameters(BigInteger.valueOf(65537), new SecureRandom(), 2048, 160));
+        keyPairGenerator.init(new RSAKeyGenerationParameters(BigInteger.valueOf(65537), new SecureRandom(), 3072, 160));
         AsymmetricCipherKeyPair keyPair = keyPairGenerator.generateKeyPair();
         try {
             PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.createPrivateKeyInfo(keyPair.getPrivate());
