@@ -130,6 +130,22 @@
 
     <!-- JournalItemActivity -->
     <string name="about">About</string>
+    <string name="journal_item_tab_main">Main</string>
+    <string name="journal_item_tab_raw">Raw</string>
+    <string name="journal_item_attendees">Attendees</string>
+    <string name="journal_item_reminders">Reminders</string>
+    <string name="journal_item_phone">Phone</string>
+    <string name="journal_item_email">Email</string>
+    <string name="journal_item_organization">Organization</string>
+    <string name="journal_item_job_description">Job Description</string>
+    <string name="journal_item_impp">Instant Messaging</string>
+    <string name="journal_item_nickname">Nickname</string>
+    <string name="journal_item_address">Address</string>
+    <string name="journal_item_note">Note</string>
+    <string name="journal_item_website">Website</string>
+    <string name="journal_item_anniversary">Anniversary</string>
+    <string name="journal_item_birthday">Birthday</string>
+    <string name="journal_item_relation">Relation</string>
 
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>

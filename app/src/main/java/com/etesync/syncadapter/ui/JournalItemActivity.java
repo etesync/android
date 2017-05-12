@@ -99,17 +99,19 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
         refresh();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), info, syncEntry));
+        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), this, info, syncEntry));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private static class TabsAdapter extends FragmentPagerAdapter {
+        private Context context;
         private CollectionInfo info;
         private SyncEntry syncEntry;
-        public TabsAdapter(FragmentManager fm, CollectionInfo info, SyncEntry syncEntry) {
+        public TabsAdapter(FragmentManager fm, Context context, CollectionInfo info, SyncEntry syncEntry) {
             super(fm);
+            this.context = context;
             this.info = info;
             this.syncEntry = syncEntry;
         }
@@ -122,11 +124,10 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            // FIXME: use string resources
             if (position == 0) {
-                return "Main";
+                return context.getString(R.string.journal_item_tab_main);
             } else {
-                return "Raw";
+                return context.getString(R.string.journal_item_tab_raw);
             }
         }
 
@@ -245,7 +246,7 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
                 for (Attendee attendee : event.attendees) {
                     if (first) {
                         first = false;
-                        sb.append("Attendees: ");
+                        sb.append(getString(R.string.journal_item_attendees)).append(": ");
                     } else {
                         sb.append(", ");
                     }
@@ -258,7 +259,7 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
                 for (VAlarm alarm : event.alarms) {
                     if (first) {
                         first = false;
-                        sb.append("Reminders: ");
+                        sb.append(getString(R.string.journal_item_reminders)).append(": ");
                     } else {
                         sb.append(", ");
                     }
@@ -307,67 +308,67 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
                 for (LabeledProperty<Telephone> labeledPhone : contact.phoneNumbers) {
                     List<TelephoneType> types = labeledPhone.property.getTypes();
                     String type = (types.size() > 0) ? types.get(0).getValue() : null;
-                    addInfoItem(view.getContext(), mainCard, "Phone", type, labeledPhone.property.getText());
+                    addInfoItem(view.getContext(), mainCard, getString(R.string.journal_item_phone), type, labeledPhone.property.getText());
                 }
 
                 // EMAIL
                 for (LabeledProperty<Email> labeledEmail : contact.emails) {
                     List<EmailType> types = labeledEmail.property.getTypes();
                     String type = (types.size() > 0) ? types.get(0).getValue() : null;
-                    addInfoItem(view.getContext(), mainCard, "Email", type, labeledEmail.property.getValue());
+                    addInfoItem(view.getContext(), mainCard, getString(R.string.journal_item_email), type, labeledEmail.property.getValue());
                 }
 
                 // ORG, TITLE, ROLE
                 if (contact.organization != null) {
-                    addInfoItem(view.getContext(), aboutCard, "Organization", contact.jobTitle, contact.organization.getValues().get(0));
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization.getValues().get(0));
                 }
                 if (contact.jobDescription != null) {
-                    addInfoItem(view.getContext(), aboutCard, "Job Description", null, contact.jobTitle);
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_job_description), null, contact.jobTitle);
                 }
 
                 // IMPP
                 for (LabeledProperty<Impp> labeledImpp : contact.impps) {
-                    addInfoItem(view.getContext(), mainCard, "Instant Messaging", labeledImpp.property.getProtocol(), labeledImpp.property.getHandle());
+                    addInfoItem(view.getContext(), mainCard, getString(R.string.journal_item_impp), labeledImpp.property.getProtocol(), labeledImpp.property.getHandle());
                 }
 
                 // NICKNAME
                 if (contact.nickName != null) {
-                    addInfoItem(view.getContext(), aboutCard, "Nickname", null, contact.nickName.getValues().get(0));
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName.getValues().get(0));
                 }
 
                 // ADR
                 for (LabeledProperty<Address> labeledAddress : contact.addresses) {
                     List<AddressType> types = labeledAddress.property.getTypes();
                     String type = (types.size() > 0) ? types.get(0).getValue() : null;
-                    addInfoItem(view.getContext(), mainCard, "Address", type, labeledAddress.property.getLabel());
+                    addInfoItem(view.getContext(), mainCard, getString(R.string.journal_item_address), type, labeledAddress.property.getLabel());
                 }
 
                 // NOTE
                 if (contact.note != null) {
-                    addInfoItem(view.getContext(), aboutCard, "Note", null, contact.note);
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_note), null, contact.note);
                 }
 
                 // URL
                 for (LabeledProperty<Url> labeledUrl : contact.urls) {
-                    addInfoItem(view.getContext(), aboutCard, "Website", null, labeledUrl.property.getValue());
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_website), null, labeledUrl.property.getValue());
                 }
 
                 // ANNIVERSARY
                 if (contact.anniversary != null) {
                     String date = getDisplayedDatetime(contact.anniversary.getDate().getTime(), contact.anniversary.getDate().getTime(), true, getContext());
-                    addInfoItem(view.getContext(), aboutCard, "Anniversary", null, date);
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_anniversary), null, date);
                 }
                 // BDAY
                 if (contact.birthDay != null) {
                     String date = getDisplayedDatetime(contact.birthDay.getDate().getTime(), contact.birthDay.getDate().getTime(), true, getContext());
-                    addInfoItem(view.getContext(), aboutCard, "Birthday", null, date);
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_birthday), null, date);
                 }
 
                 // RELATED
                 for (Related related : contact.relations) {
                     List<RelatedType> types = related.getTypes();
                     String type = (types.size() > 0) ? types.get(0).getValue() : null;
-                    addInfoItem(view.getContext(), aboutCard, "Relation", type, related.getText());
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_relation), type, related.getText());
                 }
 
                 // PHOTO
