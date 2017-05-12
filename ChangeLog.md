@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.16.0
+* Improve the look and feel of the journal viewer and show contacts and events in a prettier way.
+* Increase default RSA key length to 3072 bit.
+* Fix an issue with account addition not working in some cases.
+* Add a unique constraint on journal UIDs (possible thanks to a bug fix in requery)
+
 ## Version 0.15.0
 * Add support for multiple address books (adjusted from the DAVdroid solution).
     * This works around the Android limitation of one address book per account.
