@@ -41,6 +41,7 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     private EntityDataStore<Persistable> data;
     private CollectionInfo info;
     private JournalEntity journalEntity;
+    private AsyncTask asyncTask;
 
     private TextView emptyTextView;
 
@@ -74,9 +75,16 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        new JournalFetch().execute();
+        asyncTask = new JournalFetch().execute();
 
         getListView().setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (asyncTask != null)
+            asyncTask.cancel(true);
     }
 
     @Override

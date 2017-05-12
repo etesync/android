@@ -166,6 +166,7 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
     public static class PrettyFragment extends Fragment {
         CollectionInfo info;
         SyncEntry syncEntry;
+        private AsyncTask asyncTask;
 
         public static PrettyFragment newInstance(CollectionInfo info, SyncEntry syncEntry) {
             PrettyFragment frag = new PrettyFragment();
@@ -186,15 +187,22 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
             switch (info.type) {
                 case ADDRESS_BOOK:
                     v = inflater.inflate(R.layout.contact_info, container, false);
-                    new LoadContactTask(v).execute();
+                    asyncTask = new LoadContactTask(v).execute();
                     break;
                 case CALENDAR:
                     v = inflater.inflate(R.layout.event_info, container, false);
-                    new LoadEventTask(v).execute();
+                    asyncTask = new LoadEventTask(v).execute();
                     break;
             }
 
             return v;
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            if (asyncTask != null)
+                asyncTask.cancel(true);
         }
 
         private class LoadEventTask extends AsyncTask<Void, Void, Event> {

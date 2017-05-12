@@ -40,6 +40,7 @@ public class CollectionMembersListFragment extends ListFragment implements Adapt
     private Account account;
     private CollectionInfo info;
     private JournalEntity journalEntity;
+    private AsyncTask asyncTask;
 
     private TextView emptyTextView;
 
@@ -73,7 +74,7 @@ public class CollectionMembersListFragment extends ListFragment implements Adapt
 
     @Override
     public void refresh() {
-        new JournalMembersFetch().execute();
+        asyncTask = new JournalMembersFetch().execute();
     }
 
     @Override
@@ -83,6 +84,13 @@ public class CollectionMembersListFragment extends ListFragment implements Adapt
         refresh();
 
         getListView().setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (asyncTask != null)
+            asyncTask.cancel(true);
     }
 
     @Override
