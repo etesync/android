@@ -238,6 +238,7 @@ public class ServiceTest {
 
     @Test
     public void testJournalMember() throws IOException, Exceptions.HttpException, Exceptions.GenericCryptoException, Exceptions.IntegrityException {
+        Exception caught;
         JournalManager journalManager = new JournalManager(httpClient, remote);
         CollectionInfo info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK);
         info.uid = JournalManager.Journal.genUid();
@@ -250,13 +251,14 @@ public class ServiceTest {
 
         // Test inviting ourselves
         JournalManager.Member member = new JournalManager.Member(Helpers.USER, "test".getBytes(Charsets.UTF_8));
-        journalManager.addMember(journal, member);
+        try {
+            caught = null;
+            journalManager.addMember(journal, member);
+        } catch (Exceptions.HttpException e) {
+            caught = e;
+        }
+        assertNotNull(caught);
 
-        assertEquals(journalManager.listMembers(journal).size(), 1);
-
-        // Uninviting ourselves
-        journalManager.deleteMember(journal, member);
-
-        assertEquals(journalManager.listMembers(journal).size(), 0);
+        // FIXME: Need to test inviting other users (need to add another user for that)
     }
 }
