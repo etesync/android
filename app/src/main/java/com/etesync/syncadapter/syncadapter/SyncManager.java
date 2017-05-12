@@ -166,7 +166,7 @@ abstract public class SyncManager {
                 syncPhase = R.string.sync_phase_apply_remote_entries;
                 App.log.info("Sync phase: " + context.getString(syncPhase));
                 applyRemoteEntries();
-            } while (remoteEntries.size() > 0);
+            } while (remoteEntries.size() == MAX_FETCH);
 
             /* Create journal entries out of local changes. */
             if (Thread.interrupted())
