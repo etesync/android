@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/orange400"
+            android:elevation="2dp"
             android:padding="16dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/White"
