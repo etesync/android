@@ -16,16 +16,11 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 
 import com.etesync.syncadapter.AccountSettings;
@@ -39,10 +34,8 @@ import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.UserInfoManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.JournalEntity;
-import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalTaskList;
-import com.etesync.syncadapter.ui.DebugInfoActivity;
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration;
 import com.etesync.syncadapter.utils.AndroidCompat;
 
@@ -51,11 +44,10 @@ import java.util.logging.Level;
 import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
-public class SetupEncryptionFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Configuration> {
+public class SetupEncryptionFragment extends DialogFragment {
     private static final String KEY_CONFIG = "config";
 
     public static SetupEncryptionFragment newInstance(BaseConfigurationFinder.Configuration config) {
@@ -82,60 +74,48 @@ public class SetupEncryptionFragment extends DialogFragment implements LoaderMan
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getLoaderManager().initLoader(0, getArguments(), this);
+        new SetupEncryptionLoader(getContext(), (Configuration) getArguments().getSerializable(KEY_CONFIG)).execute();
     }
 
-    @Override
-    public Loader<Configuration> onCreateLoader(int id, Bundle args) {
-        return new SetupEncryptionLoader(getContext(), (Configuration)args.getSerializable(KEY_CONFIG));
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Configuration> loader, Configuration config) {
-        try {
-            if (createAccount(config.userName, config)) {
-                getActivity().setResult(Activity.RESULT_OK);
-                getActivity().finish();
-            }
-        } catch (InvalidAccountException e) {
-            App.log.severe("Account creation failed!");
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.account_creation_failed)
-                    .setIcon(R.drawable.ic_error_dark)
-                    .setMessage(e.getLocalizedMessage())
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // dismiss
-                        }
-                    }).show();
-        }
-
-        dismissAllowingStateLoss();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Configuration> loader) {
-    }
-
-    static class SetupEncryptionLoader extends AsyncTaskLoader<Configuration> {
+    private class SetupEncryptionLoader extends AsyncTask<Void, Void, Configuration> {
         final Context context;
         final Configuration config;
 
         public SetupEncryptionLoader(Context context, Configuration config) {
-            super(context);
+            super();
             this.context = context;
             this.config = config;
         }
 
         @Override
-        protected void onStartLoading() {
-            forceLoad();
+        protected void onPostExecute(Configuration result) {
+            try {
+                if (createAccount(config.userName, config)) {
+                    getActivity().setResult(Activity.RESULT_OK);
+                    getActivity().finish();
+                }
+            } catch (InvalidAccountException e) {
+                App.log.severe("Account creation failed!");
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.account_creation_failed)
+                        .setIcon(R.drawable.ic_error_dark)
+                        .setMessage(e.getLocalizedMessage())
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // dismiss
+                            }
+                        }).show();
+            }
+
+            dismissAllowingStateLoss();
         }
 
         @Override
-        public Configuration loadInBackground() {
+        protected Configuration doInBackground(Void... aVoids) {
+            App.log.info("Started deriving key");
             config.password = Crypto.deriveKey(config.userName, config.rawPassword);
+            App.log.info("Finished deriving key");
 
             try {
                 Crypto.CryptoManager cryptoManager;
