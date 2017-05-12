@@ -53,6 +53,9 @@ import okhttp3.OkHttpClient;
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
 abstract public class SyncManager {
+    private static final int MAX_FETCH = 50;
+    private static final int MAX_PUSH = 30;
+
     protected final NotificationHelper notificationManager;
     protected final CollectionInfo info;
 
@@ -151,17 +154,19 @@ abstract public class SyncManager {
             App.log.info("Sync phase: " + context.getString(syncPhase));
             prepareLocal();
 
-            if (Thread.interrupted())
-                throw new InterruptedException();
-            syncPhase = R.string.sync_phase_fetch_entries;
-            App.log.info("Sync phase: " + context.getString(syncPhase));
-            fetchEntries();
+            do {
+                if (Thread.interrupted())
+                    throw new InterruptedException();
+                syncPhase = R.string.sync_phase_fetch_entries;
+                App.log.info("Sync phase: " + context.getString(syncPhase));
+                fetchEntries();
 
-            if (Thread.interrupted())
-                throw new InterruptedException();
-            syncPhase = R.string.sync_phase_apply_remote_entries;
-            App.log.info("Sync phase: " + context.getString(syncPhase));
-            applyRemoteEntries();
+                if (Thread.interrupted())
+                    throw new InterruptedException();
+                syncPhase = R.string.sync_phase_apply_remote_entries;
+                App.log.info("Sync phase: " + context.getString(syncPhase));
+                applyRemoteEntries();
+            } while (remoteEntries.size() > 0);
 
             /* Create journal entries out of local changes. */
             if (Thread.interrupted())
@@ -282,7 +287,7 @@ abstract public class SyncManager {
         int count = data.count(EntryEntity.class).where(EntryEntity.JOURNAL.eq(getJournalEntity())).get().value();
         if ((remoteCTag != null) && (count == 0)) {
             // If we are updating an existing installation with no saved journal, we need to add
-            remoteEntries = journal.list(crypto, null);
+            remoteEntries = journal.list(crypto, null, MAX_FETCH);
             int i = 0;
             for (JournalEntryManager.Entry entry : remoteEntries) {
                 SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
@@ -294,7 +299,7 @@ abstract public class SyncManager {
                 }
             }
         } else {
-            remoteEntries = journal.list(crypto, remoteCTag);
+            remoteEntries = journal.list(crypto, remoteCTag, MAX_FETCH);
         }
 
         App.log.info("Fetched " + String.valueOf(remoteEntries.size()) + " entries");
@@ -324,7 +329,6 @@ abstract public class SyncManager {
 
     protected void pushEntries() throws Exceptions.HttpException, IOException, ContactsStorageException, CalendarStorageException {
         // upload dirty contacts
-        final int MAX_PUSH = 30;
         int pushed = 0;
         // FIXME: Deal with failure (someone else uploaded before we go here)
         try {

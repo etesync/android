@@ -41,8 +41,6 @@ import okhttp3.HttpUrl;
  * <p>Synchronization manager for CardDAV collections; handles contacts and groups.</p>
  */
 public class CalendarSyncManager extends SyncManager {
-    protected static final int MAX_MULTIGET = 10;
-
     final private HttpUrl remote;
 
     public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {

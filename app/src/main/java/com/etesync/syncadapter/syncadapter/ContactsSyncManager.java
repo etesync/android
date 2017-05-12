@@ -55,8 +55,6 @@ import okhttp3.ResponseBody;
  * <p>Synchronization manager for CardDAV collections; handles contacts and groups.</p>
  */
 public class ContactsSyncManager extends SyncManager {
-    protected static final int MAX_MULTIGET = 10;
-
     final private ContentProviderClient provider;
     final private HttpUrl remote;
 

@@ -36,12 +36,16 @@ public class JournalEntryManager extends BaseManager {
         this.client = httpClient;
     }
 
-    public List<Entry> list(Crypto.CryptoManager crypto, String last) throws Exceptions.HttpException, Exceptions.IntegrityException {
+    public List<Entry> list(Crypto.CryptoManager crypto, String last, int limit) throws Exceptions.HttpException, Exceptions.IntegrityException {
         Entry previousEntry = null;
         HttpUrl.Builder urlBuilder = this.remote.newBuilder();
         if (last != null) {
             urlBuilder.addQueryParameter("last", last);
             previousEntry = Entry.getFakeWithUid(last);
+        }
+
+        if (limit > 0) {
+            urlBuilder.addQueryParameter("limit", String.valueOf(limit));
         }
 
         HttpUrl remote = urlBuilder.build();

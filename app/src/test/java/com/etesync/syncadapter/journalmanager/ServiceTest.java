@@ -180,9 +180,9 @@ public class ServiceTest {
         entries.add(entry2);
 
         // Check last works:
-        entries = journalEntryManager.list(crypto, entry.getUid());
+        entries = journalEntryManager.list(crypto, entry.getUid(), 0);
         assertEquals(entries.size(), 1);
-        entries = journalEntryManager.list(crypto, entry2.getUid());
+        entries = journalEntryManager.list(crypto, entry2.getUid(), 0);
         assertEquals(entries.size(), 0);
 
         // Corrupt the journal and verify we catch it
@@ -195,7 +195,7 @@ public class ServiceTest {
 
         try {
             caught = null;
-            journalEntryManager.list(crypto, null);
+            journalEntryManager.list(crypto, null, 0);
         } catch (Exceptions.IntegrityException e) {
             caught = e;
         }
