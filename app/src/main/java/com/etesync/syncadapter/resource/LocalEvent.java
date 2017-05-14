@@ -43,7 +43,7 @@ import lombok.Setter;
 @TargetApi(17)
 public class LocalEvent extends AndroidEvent implements LocalResource {
     static {
-        Event.prodId = new ProdId(Constants.PRODID_BASE + "//ical4android ical4j/2.x");
+        Event.prodId = new ProdId(Constants.PRODID_BASE + " ical4j/2.x");
     }
     static final String COLUMN_ETAG = CalendarContract.Events.SYNC_DATA1,
             COLUMN_UID = Build.VERSION.SDK_INT >= 17 ? Events.UID_2445 : Events.SYNC_DATA2,

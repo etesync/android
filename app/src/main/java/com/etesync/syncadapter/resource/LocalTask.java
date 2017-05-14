@@ -37,7 +37,7 @@ import lombok.Setter;
 
 public class LocalTask extends AndroidTask implements LocalResource {
     static {
-        Task.prodId = new ProdId(Constants.PRODID_BASE + "//ical4android ical4j/2.x");
+        Task.prodId = new ProdId(Constants.PRODID_BASE + " ical4j/2.x");
     }
 
     @Getter
