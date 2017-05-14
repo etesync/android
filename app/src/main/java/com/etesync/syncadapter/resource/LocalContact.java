@@ -49,7 +49,7 @@ import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 public class LocalContact extends AndroidContact implements LocalResource {
     static {
-        Contact.productID = Constants.PRODID_BASE + "//vcard4android ez-vcard/0.10.x";
+        Contact.productID = Constants.PRODID_BASE + " ez-vcard/" + Ezvcard.VERSION;
     }
     public static final String COLUMN_HASHCODE = ContactsContract.RawContacts.SYNC3;
 
