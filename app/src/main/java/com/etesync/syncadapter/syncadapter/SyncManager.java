@@ -271,7 +271,6 @@ abstract public class SyncManager {
             App.log.info("Processing (" + String.valueOf(i) + "/" + strTotal + ") " + entry.toString());
 
             SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
-            persistSyncEntry(entry.getUid(), cEntry);
             if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue;
             }
@@ -335,6 +334,11 @@ abstract public class SyncManager {
             if (!localEntries.isEmpty()) {
                 for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
                     journal.create(entries, remoteCTag);
+                    // Persist the entries after they've been pushed
+                    for (JournalEntryManager.Entry entry : entries) {
+                        SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
+                        persistSyncEntry(entry.getUid(), cEntry);
+                    }
                     remoteCTag = entries.get(entries.size() - 1).getUid();
                     pushed += entries.size();
                 }
