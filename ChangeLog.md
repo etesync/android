@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.17.0
+* Download journal in chunks instead of all at once
+    * Improves behaviour on slow and unreliable internet connections.
+    * Fixes Android cancelling the sync mid-way on some Android versions.
+* Fix crash when exiting some activities before content loading has finished.
+
 ## Version 0.16.0
 * Improve the look and feel of the journal viewer and show contacts and events in a prettier way.
 * Increase default RSA key length to 3072 bit.
