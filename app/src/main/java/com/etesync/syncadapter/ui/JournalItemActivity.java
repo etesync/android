@@ -308,6 +308,25 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
                 TextView tv = (TextView) view.findViewById(R.id.display_name);
                 tv.setText(contact.displayName);
 
+                if (contact.group) {
+                    showGroup(contact);
+                } else {
+                    showContact(contact);
+                }
+            }
+
+            private void showGroup(Contact contact) {
+                final ViewGroup mainCard = (ViewGroup) view.findViewById(R.id.main_card);
+
+                addInfoItem(view.getContext(), mainCard, getString(R.string.journal_item_member_count), null, String.valueOf(contact.members.size()));
+
+                for (String member : contact.members) {
+                    addInfoItem(view.getContext(), mainCard, getString(R.string.journal_item_member), null, member);
+                }
+            }
+
+
+            private void showContact(Contact contact) {
                 final ViewGroup mainCard = (ViewGroup) view.findViewById(R.id.main_card);
                 final ViewGroup aboutCard = (ViewGroup) view.findViewById(R.id.about_card);
                 aboutCard.findViewById(R.id.title_container).setVisibility(View.VISIBLE);

@@ -146,6 +146,8 @@
     <string name="journal_item_anniversary">Anniversary</string>
     <string name="journal_item_birthday">Birthday</string>
     <string name="journal_item_relation">Relation</string>
+    <string name="journal_item_member">Member</string>
+    <string name="journal_item_member_count">Member Count</string>
 
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>
