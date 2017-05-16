@@ -10,7 +10,9 @@ package com.etesync.syncadapter.syncadapter;
 
 import android.accounts.Account;
 import android.content.ContentProviderClient;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
@@ -33,14 +35,18 @@ import com.etesync.syncadapter.resource.LocalGroup;
 import com.etesync.syncadapter.resource.LocalResource;
 
 import org.apache.commons.codec.Charsets;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 import java.util.logging.Level;
 
 import at.bitfire.ical4android.CalendarStorageException;
+import at.bitfire.vcard4android.BatchOperation;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Cleanup;
@@ -100,6 +106,8 @@ public class ContactsSyncManager extends SyncManager {
 
         journal = new JournalEntryManager(httpClient, remote, localAddressBook.getURL());
 
+        localAddressBook.includeGroups = true;
+
         return true;
     }
 
@@ -109,12 +117,27 @@ public class ContactsSyncManager extends SyncManager {
 
         LocalAddressBook addressBook = localAddressBook();
 
-        /* groups as separate VCards: thtere are group contacts and individual contacts */
+        /* groups as separate VCards: there are group contacts and individual contacts */
 
         // mark groups with changed members as dirty
-
-        // FIXME: add back
-
+        BatchOperation batch = new BatchOperation(addressBook.provider);
+        for (LocalContact contact : addressBook.getDirtyContacts()) {
+            try {
+                App.log.fine("Looking for changed group memberships of contact " + contact.getFileName());
+                Set<Long> cachedGroups = contact.getCachedGroupMemberships(),
+                        currentGroups = contact.getGroupMemberships();
+                for (Long groupID : SetUtils.disjunction(cachedGroups, currentGroups)) {
+                    App.log.fine("Marking group as dirty: " + groupID);
+                    batch.enqueue(new BatchOperation.Operation(
+                            ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(ContactsContract.Groups.CONTENT_URI, groupID)))
+                                    .withValue(ContactsContract.Groups.DIRTY, 1)
+                                    .withYieldAllowed(true)
+                    ));
+                }
+            } catch (FileNotFoundException ignored) {
+            }
+        }
+        batch.commit();
     }
 
     @Override

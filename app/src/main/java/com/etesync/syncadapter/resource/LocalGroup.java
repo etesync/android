@@ -25,6 +25,7 @@ import com.etesync.syncadapter.App;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
@@ -41,9 +42,12 @@ import at.bitfire.vcard4android.BatchOperation;
 import at.bitfire.vcard4android.CachedGroupMembership;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
+import ezvcard.VCardVersion;
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.ToString;
+
+import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 @ToString(callSuper=true)
 public class LocalGroup extends AndroidGroup implements LocalResource {
@@ -62,7 +66,15 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
 
     @Override
     public String getContent() throws IOException, ContactsStorageException {
-        return null;
+        final Contact contact;
+        contact = getContact();
+
+        App.log.log(Level.FINE, "Preparing upload of VCard " + getUuid(), contact);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        contact.write(VCardVersion.V4_0, GROUP_VCARDS, os);
+
+        return os.toString();
     }
 
     @Override
@@ -107,7 +119,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
     @Override
     public void prepareForUpload() throws ContactsStorageException {
         final String uid = UUID.randomUUID().toString();
-        final String newFileName = uid + ".vcf";
+        final String newFileName = uid;
 
         ContentValues values = new ContentValues(2);
         values.put(COLUMN_FILENAME, newFileName);
