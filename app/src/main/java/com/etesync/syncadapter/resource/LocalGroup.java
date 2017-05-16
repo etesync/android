@@ -20,6 +20,7 @@ import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.RawContacts.Data;
+import android.text.TextUtils;
 
 import com.etesync.syncadapter.App;
 
@@ -79,7 +80,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
 
     @Override
     public boolean isLocalOnly() {
-        return false;
+        return TextUtils.isEmpty(getETag());
     }
 
     @Override
