@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.18.0
+* Add back support for contact groups - thanks to user "359" for reporting this.
+* Fix an issue causing local cache corruption in some rare cases - thanks to user "359" for reporting this.
+* Clean up the vObject PRODID.
+* Update okhttp
+
 ## Version 0.17.0
 * Download journal in chunks instead of all at once
     * Improves behaviour on slow and unreliable internet connections.
