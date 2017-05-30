@@ -259,6 +259,13 @@ public class ServiceTest {
         }
         assertNotNull(caught);
 
-        // FIXME: Need to test inviting other users (need to add another user for that)
+        JournalManager.Member member2 = new JournalManager.Member(Helpers.USER2, "test".getBytes(Charsets.UTF_8));
+        journalManager.addMember(journal, member2);
+        assertEquals(journalManager.listMembers(journal).size(), 1);
+
+        // Uninviting user
+        journalManager.deleteMember(journal, member2);
+
+        assertEquals(journalManager.listMembers(journal).size(), 0);
     }
 }
