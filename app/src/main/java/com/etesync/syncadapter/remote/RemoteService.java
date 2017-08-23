@@ -41,6 +41,11 @@ public class RemoteService extends Service {
 
             return new CollectionInfo[0]; //todo implement
         }
+
+        //todo - query journals?
+        //todo - add insert. - returns uid
+        //todo add update?
+        //todo create journal
     };
 
     @Override

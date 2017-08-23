@@ -10,5 +10,7 @@ interface IEteSyncService {
     void requestPermission(String journalType);
 
     CollectionInfo[] getJournalEntries(String journalType);
+
+
 }
 
