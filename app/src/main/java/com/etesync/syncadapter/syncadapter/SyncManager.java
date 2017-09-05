@@ -12,6 +12,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.etesync.syncadapter.AccountSettings;
@@ -32,6 +33,7 @@ import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
+import com.etesync.syncadapter.ui.ViewCollectionActivity;
 
 import org.apache.commons.collections4.ListUtils;
 
@@ -51,6 +53,7 @@ import io.requery.sql.EntityDataStore;
 import okhttp3.OkHttpClient;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
+import static com.etesync.syncadapter.model.SyncEntry.Actions.ADD;
 
 abstract public class SyncManager {
     private static final int MAX_FETCH = 50;
@@ -132,6 +135,8 @@ abstract public class SyncManager {
 
     protected abstract String getSyncErrorTitle();
 
+    protected abstract String getSyncSuccessfullyTitle();
+
     @TargetApi(21)
     public void performSync() {
         int syncPhase = R.string.sync_phase_prepare;
@@ -194,6 +199,8 @@ abstract public class SyncManager {
             App.log.info("Sync phase: " + context.getString(syncPhase));
             postProcess();
 
+            notifyUserOnSync();
+
             App.log.info("Finished sync with CTag=" + remoteCTag);
         } catch (IOException e) {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e);
@@ -230,6 +237,47 @@ abstract public class SyncManager {
         }
     }
 
+    private void notifyUserOnSync() {
+        if (remoteEntries.isEmpty()) {
+            return;
+        }
+        NotificationHelper notificationHelper = new NotificationHelper(context,
+                String.valueOf(System.currentTimeMillis()), notificationId());
+
+        int deleted = 0;
+        int added = 0;
+        int changed = 0;
+        for (JournalEntryManager.Entry entry : remoteEntries) {
+            SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
+            SyncEntry.Actions action = cEntry.getAction();
+            switch (action) {
+                case ADD:
+                    added++;
+                    break;
+                case DELETE:
+                    deleted++;
+                    break;
+                case CHANGE:
+                    changed++;
+                    break;
+            }
+        }
+
+        Resources resources = context.getResources();
+        Intent intent = ViewCollectionActivity.newIntent(context, account, info);
+        notificationHelper.notify(getSyncSuccessfullyTitle(),
+                String.format(context.getString(R.string.sync_successfully_modified),
+                        resources.getQuantityString(R.plurals.sync_successfully,
+                                remoteEntries.size(), remoteEntries.size())),
+                String.format(context.getString(R.string.sync_successfully_modified_full),
+                        resources.getQuantityString(R.plurals.sync_successfully,
+                                added, added),
+                        resources.getQuantityString(R.plurals.sync_successfully,
+                                changed, changed),
+                        resources.getQuantityString(R.plurals.sync_successfully,
+                                deleted, deleted)),
+                intent);
+    }
 
     /**
      * Prepares synchronization (for instance, allocates necessary resources).
@@ -386,7 +434,7 @@ abstract public class SyncManager {
         for (LocalResource local : localDirty) {
             SyncEntry.Actions action;
             if (local.isLocalOnly()) {
-                action = SyncEntry.Actions.ADD;
+                action = ADD;
             } else {
                 action = SyncEntry.Actions.CHANGE;
             }
