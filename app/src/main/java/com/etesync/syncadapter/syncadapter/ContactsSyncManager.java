@@ -83,6 +83,11 @@ public class ContactsSyncManager extends SyncManager {
     }
 
     @Override
+    protected String getSyncSuccessfullyTitle() {
+        return context.getString(R.string.sync_successfully_contacts, account.name);
+    }
+
+    @Override
     protected boolean prepare() throws ContactsStorageException, CalendarStorageException {
         if (!super.prepare())
             return false;

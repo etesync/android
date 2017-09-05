@@ -30,6 +30,8 @@ public class NotificationHelper {
     Intent detailsIntent;
     int messageString;
 
+    private Throwable throwable = null;
+
     public NotificationHelper(Context context, String notificationTag, int notificationId) {
         this.notificationManager = NotificationManagerCompat.from(context);
         this.context = context;
@@ -38,6 +40,7 @@ public class NotificationHelper {
     }
 
     public void setThrowable(Throwable e) {
+        throwable = e;
         if (e instanceof Exceptions.UnauthorizedException) {
             App.log.log(Level.SEVERE, "Not authorized anymore", e);
             messageString = R.string.sync_error_unauthorized;
@@ -68,17 +71,38 @@ public class NotificationHelper {
 
     public void notify(String title, String state) {
         String message = context.getString(messageString, state);
+        notify(title, message, null, detailsIntent);
+    }
 
+    public void notify(String title, String content, String bigText, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setSmallIcon(R.drawable.ic_error_light)
-                .setLargeIcon(App.getLauncherBitmap(context))
+        int icon;
+        String category;
+        String tag;
+        //Check if error was configured
+        if (throwable == null) {
+            icon = R.drawable.ic_sync_dark;
+            category = NotificationCompat.CATEGORY_STATUS;
+        } else {
+            icon = R.drawable.ic_error_light;
+            category = NotificationCompat.CATEGORY_ERROR;
+        }
+
+        builder.setLargeIcon(App.getLauncherBitmap(context))
                 .setContentTitle(title)
-                .setContentIntent(PendingIntent.getActivity(context, 0, detailsIntent, PendingIntent.FLAG_CANCEL_CURRENT))
-                .setCategory(NotificationCompat.CATEGORY_ERROR)
-                .setContentText(message);
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setCategory(category)
+                .setSmallIcon(icon)
+                .setContentIntent(PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+        ;
+
+        if (bigText != null) builder.setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(bigText));
 
         notificationManager.notify(notificationTag, notificationId, builder.build());
     }
+
 
     public void cancel() {
         notificationManager.cancel(notificationTag, notificationId);

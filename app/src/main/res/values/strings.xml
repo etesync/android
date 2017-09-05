@@ -303,6 +303,10 @@
     <string name="sync_phase_post_processing">post processing</string>
     <string name="sync_error_unauthorized">Authentication failed</string>
     <string name="sync_error_user_inactive">User is inactive</string>
+    <string name="sync_successfully_calendar" formatted="false">Calendar \"%s\" modified (%s)</string>
+    <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
+    <string name="sync_successfully_modified" formatted="false">%s modified.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s added.\n%s updated.\n%s deleted.</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>
