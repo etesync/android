@@ -48,6 +48,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.ui.AccountsActivity;
 import com.etesync.syncadapter.utils.HintManager;
+import com.etesync.syncadapter.utils.LanguageUtils;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -55,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -81,10 +83,14 @@ public class App extends Application {
             LOG_TO_EXTERNAL_STORAGE = "logToExternalStorage",
             OVERRIDE_PROXY = "overrideProxy",
             OVERRIDE_PROXY_HOST = "overrideProxyHost",
-            OVERRIDE_PROXY_PORT = "overrideProxyPort";
+            OVERRIDE_PROXY_PORT = "overrideProxyPort",
+            FORCE_LANGUAGE = "forceLanguage";
 
     public static final String OVERRIDE_PROXY_HOST_DEFAULT = "localhost";
     public static final int OVERRIDE_PROXY_PORT_DEFAULT = 8118;
+
+    public static final String DEFAULT_LANGUAGE = "default";
+    public static Locale sDefaultLocacle = Locale.getDefault();
 
     @Getter
     private static String appName;
@@ -123,6 +129,16 @@ public class App extends Application {
         accountType = getString(R.string.account_type);
         addressBookAccountType = getString(R.string.account_type_address_book);
         addressBooksAuthority = getString(R.string.address_books_authority);
+
+        loadLanguage();
+    }
+
+    private void loadLanguage() {
+        String lang = new Settings(new ServiceDB.OpenHelper(this).
+                getReadableDatabase()).getString(App.FORCE_LANGUAGE, null);
+        if (lang != null && !lang.equals(DEFAULT_LANGUAGE)) {
+            LanguageUtils.setLanguage(this, lang);
+        }
     }
 
     public void reinitCertManager() {
