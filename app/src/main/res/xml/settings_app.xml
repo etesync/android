@@ -63,6 +63,10 @@
             android:summaryOn="@string/app_settings_log_to_external_storage_on"
             android:summaryOff="@string/app_settings_log_to_external_storage_off"/>
 
+        <ListPreference
+            android:key="select_language"
+            android:title="@string/app_settings_select_language"/>
+
         <Preference
             android:title="@string/app_settings_show_debug_info"
             android:summary="@string/app_settings_show_debug_info_details">

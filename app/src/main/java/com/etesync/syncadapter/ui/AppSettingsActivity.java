@@ -9,9 +9,11 @@
 package com.etesync.syncadapter.ui;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
@@ -21,9 +23,11 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.utils.HintManager;
+import com.etesync.syncadapter.utils.LanguageUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 public class AppSettingsActivity extends BaseActivity {
 
@@ -125,13 +129,20 @@ public class AppSettingsActivity extends BaseActivity {
                 }
             });
 
-            prefDistrustSystemCerts = (SwitchPreferenceCompat)findPreference("distrust_system_certs");
+            prefDistrustSystemCerts = (SwitchPreferenceCompat) findPreference("distrust_system_certs");
             prefDistrustSystemCerts.setChecked(settings.getBoolean(App.DISTRUST_SYSTEM_CERTIFICATES, false));
 
             prefResetCertificates = findPreference("reset_certificates");
 
-            prefLogToExternalStorage = (SwitchPreferenceCompat)findPreference("log_to_external_storage");
+            prefLogToExternalStorage = (SwitchPreferenceCompat) findPreference("log_to_external_storage");
             prefLogToExternalStorage.setChecked(settings.getBoolean(App.LOG_TO_EXTERNAL_STORAGE, false));
+
+            initSelectLanguageList();
+        }
+
+        private void initSelectLanguageList() {
+            ListPreference listPreference = (ListPreference) findPreference("select_language");
+            new LanguageTask(listPreference).execute();
         }
 
         @Override
@@ -174,12 +185,52 @@ public class AppSettingsActivity extends BaseActivity {
             settings.putBoolean(App.LOG_TO_EXTERNAL_STORAGE, externalLogging);
 
             // reinitialize logger of default process
-            App app = (App)getContext().getApplicationContext();
+            App app = (App) getContext().getApplicationContext();
             app.reinitLogger();
 
             // reinitialize logger of :sync process
             getContext().sendBroadcast(new Intent(App.ReinitSettingsReceiver.ACTION_REINIT_SETTINGS));
         }
-    }
 
+        private class LanguageTask extends AsyncTask<Void, Void, LanguageUtils.LocaleList> {
+            private ListPreference mListPreference;
+
+            LanguageTask(ListPreference listPreference) {
+                mListPreference = listPreference;
+            }
+
+            @Override
+            protected LanguageUtils.LocaleList doInBackground(Void... voids) {
+                return LanguageUtils.getAppLanguages(getContext());
+
+            }
+
+            @Override
+            protected void onPostExecute(LanguageUtils.LocaleList locales) {
+
+                mListPreference.setEntries(locales.getDisplayNames());
+                mListPreference.setEntryValues(locales.getLocaleData());
+
+                mListPreference.setValue(settings.getString(App.FORCE_LANGUAGE,
+                        App.DEFAULT_LANGUAGE));
+                mListPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        String value = newValue.toString();
+                        if (value.equals(((ListPreference) preference).getValue())) return true;
+
+                        LanguageUtils.setLanguage(getContext(), value);
+
+                        settings.putString(App.FORCE_LANGUAGE, newValue.toString());
+
+                        Intent intent = new Intent(getContext(), AccountsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return false;
+                    }
+                });
+            }
+        }
+    }
 }

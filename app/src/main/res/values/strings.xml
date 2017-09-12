@@ -89,6 +89,8 @@
     <string name="app_settings_log_to_external_storage_off">External file logging is disabled</string>
     <string name="app_settings_show_debug_info">Show debug info</string>
     <string name="app_settings_show_debug_info_details">View/share software and configuration details</string>
+    <string name="app_settings_force_language">Force Language</string>
+    <string name="app_settings_force_language_default">Auto</string>
 
     <!-- AccountActivity -->
     <string name="account_synchronize_now">Synchronize now</string>
