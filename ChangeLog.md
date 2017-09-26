@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.18.1
+* Add support for birthdays without the year.
+* Notify the user on journal modification.
+* Add a debug option to force the UI language.
+
 ## Version 0.18.0
 * Add back support for contact groups - thanks to user "359" for reporting this.
 * Fix an issue causing local cache corruption in some rare cases - thanks to user "359" for reporting this.
