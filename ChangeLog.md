@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.18.2
+* Added fastlane data for f-droid
+
 ## Version 0.18.1
 * Add support for birthdays without the year.
 * Notify the user on journal modification.
