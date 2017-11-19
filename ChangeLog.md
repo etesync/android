@@ -2,6 +2,7 @@
 
 ## Version 0.19.0
 * Added support for setting a custom server address (needed for self-hosting support)
+* Add support for anniversaries without a year
 
 ## Version 0.18.2
 * Added fastlane data for f-droid
