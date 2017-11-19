@@ -1,25 +1,16 @@
-Secure, End-to-End encrypted and journalized personal information
-synchronization for Android. Currently only contacts and calendars, with more on
-the way.
+Secure, End-to-End encrypted and journalized personal information synchronization for Android. Currently only contacts and calendars, with more on the way.
 
-In order to use this application you need to have an account with EteSync. Check
-out https://www.etesync.com/ for more information. The server code is available
-at https://github.com/etesync/journal-manager
+In order to use this application you need to have an account with EteSync, or run your own instance. Check out https://www.etesync.com/ for more information. The server code is available at https://github.com/etesync/journal-manager
 
 Easy to Use
 ===========
-EteSync is very easy to use. It seamlessly integrates with
-Android so you won't even notice you are using it. Security doesn't always have
-to come at a cost.
+EteSync is very easy to use. It seamlessly integrates with Android so you won't even notice you are using it. Security doesn't always have to come at a cost.
 
 Secure & Open
 ============
-Thanks to End-to-End encryption, not even we can see your data. Don't believe
-us? You shouldn't, just verify yourself, the client is open source.
+Thanks to End-to-End encryption, not even we can see your data. Don't believe us? You shouldn't, just verify yourself, the client is open source.
 
 
 Full History
 =========
-A full history of your data is saved in a secure and integrity-checked journal
-which means you can review, replay and revert any changes made to it at any
-point in time.
+A full history of your data is saved in a secure and integrity-checked journal which means you can review, replay and revert any changes made to it at any point in time.
