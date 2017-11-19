@@ -119,7 +119,7 @@ public class SetupEncryptionFragment extends DialogFragment {
 
             try {
                 Crypto.CryptoManager cryptoManager;
-                OkHttpClient httpClient = HttpClient.create(getContext(), config.authtoken);
+                OkHttpClient httpClient = HttpClient.create(getContext(), config.url, config.authtoken);
 
                 UserInfoManager userInfoManager = new UserInfoManager(httpClient, HttpUrl.get(config.url));
                 UserInfoManager.UserInfo userInfo = userInfoManager.get(config.userName);

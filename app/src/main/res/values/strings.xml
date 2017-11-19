@@ -168,6 +168,9 @@
     <string name="login_email_address">Email</string>
     <string name="login_email_address_error">Valid email address required</string>
     <string name="login_password">Password</string>
+    <string name="login_custom_server">Custom Server URL</string>
+    <string name="login_custom_server_error">Invalid URL found, did you forget to include https://?</string>
+    <string name="login_toggle_advanced">Show advanced settings</string>
     <string name="login_encryption_password">Encryption Password</string>
     <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be changed if wrong.</string>
     <string name="login_encryption_extra_info">This password is used to encrypt your data, unlike the previous one, which is used to log into the service.\nYou are asked to choose a separate encryption password for security reasons. For more information, plesae refer to the FAQ at: %s</string>

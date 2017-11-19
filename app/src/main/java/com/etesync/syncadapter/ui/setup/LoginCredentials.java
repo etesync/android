@@ -18,20 +18,20 @@ import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class LoginCredentials implements Parcelable {
     public final URI uri;
     public final String userName, password;
 
-    public LoginCredentials(String userName, String password) {
+    public LoginCredentials(URI uri, String userName, String password) {
         this.userName = userName;
         this.password = password;
 
-        URI uri = null;
-        try {
-            uri = new URI(Constants.serviceUrl.toString());
-        } catch (URISyntaxException e) {
-            App.log.severe("Should never happen, it's a constant");
+        if (uri == null) {
+            try {
+                uri = new URI(Constants.serviceUrl.toString());
+            } catch (URISyntaxException e) {
+                App.log.severe("Should never happen, it's a constant");
+            }
         }
         this.uri = uri;
     }

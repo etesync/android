@@ -100,7 +100,7 @@ public class AccountSettingsActivity extends BaseActivity {
             prefPassword.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    LoginCredentials credentials = newValue != null ? new LoginCredentials(account.name, (String) newValue) : null;
+                    LoginCredentials credentials = newValue != null ? new LoginCredentials(settings.getUri(), account.name, (String) newValue) : null;
                     LoginCredentialsChangeFragment.newInstance(account, credentials).show(getFragmentManager(), null);
                     getLoaderManager().restartLoader(0, getArguments(), AccountSettingsFragment.this);
                     return false;

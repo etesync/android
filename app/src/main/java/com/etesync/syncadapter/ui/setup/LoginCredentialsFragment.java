@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,9 +26,19 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.ui.WebViewActivity;
 import com.etesync.syncadapter.ui.widget.EditPassword;
 
+import net.cachapa.expandablelayout.ExpandableLayout;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import okhttp3.HttpUrl;
+
 public class LoginCredentialsFragment extends Fragment {
     EditText editUserName;
     EditPassword editUrlPassword;
+
+    CheckedTextView showAdvanced;
+    EditText customServer;
 
 
     @Override
@@ -36,6 +47,8 @@ public class LoginCredentialsFragment extends Fragment {
 
         editUserName = (EditText) v.findViewById(R.id.user_name);
         editUrlPassword = (EditPassword) v.findViewById(R.id.url_password);
+        showAdvanced = (CheckedTextView) v.findViewById(R.id.show_advanced);
+        customServer = (EditText) v.findViewById(R.id.custom_server);
 
         if (savedInstanceState == null) {
             Activity activity = getActivity();
@@ -77,6 +90,22 @@ public class LoginCredentialsFragment extends Fragment {
             }
         });
 
+        final ExpandableLayout advancedLayout = (ExpandableLayout) v.findViewById(R.id.advanced_layout);
+
+        showAdvanced.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (showAdvanced.isChecked()) {
+                    showAdvanced.setChecked(false);
+                    advancedLayout.collapse();
+                } else {
+                    showAdvanced.setChecked(true);
+                    advancedLayout.expand();
+                }
+            }
+        });
+
         return v;
     }
 
@@ -95,6 +124,21 @@ public class LoginCredentialsFragment extends Fragment {
             valid = false;
         }
 
-        return valid ? new LoginCredentials(userName, password) : null;
+        URI uri = null;
+        if (showAdvanced.isChecked()) {
+            String server = customServer.getText().toString();
+            // If this field is null, just use the default
+            if (!server.isEmpty()) {
+                HttpUrl url = HttpUrl.parse(server);
+                if (url != null) {
+                    uri = url.uri();
+                } else {
+                    customServer.setError(getString(R.string.login_custom_server_error));
+                    valid = false;
+                }
+            }
+        }
+
+        return valid ? new LoginCredentials(uri, userName, password) : null;
     }
 }

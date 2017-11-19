@@ -20,6 +20,7 @@ import com.etesync.syncadapter.model.Settings;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -57,7 +58,7 @@ public class HttpClient {
     }
 
     public static OkHttpClient create(@Nullable Context context, @NonNull AccountSettings settings, @NonNull final Logger logger) {
-        return create(context, logger, Constants.serviceUrl.getHost(), settings.getAuthToken());
+        return create(context, logger, settings.getUri().getHost(), settings.getAuthToken());
     }
 
     public static OkHttpClient create(@NonNull Context context, @NonNull Logger logger) {
@@ -72,8 +73,8 @@ public class HttpClient {
         return create(context, App.log);
     }
 
-    public static OkHttpClient create(@Nullable Context context, String authToken) {
-        return create(context, App.log, Constants.serviceUrl.getHost(), authToken);
+    public static OkHttpClient create(@Nullable Context context, @NonNull URI uri, String authToken) {
+        return create(context, App.log, uri.getHost(), authToken);
     }
 
 
