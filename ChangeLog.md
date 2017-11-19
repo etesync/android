@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.19.1
+* Update description to include self-hosting information on f-droid.
+
 ## Version 0.19.0
 * Added support for setting a custom server address (needed for self-hosting support)
 * Add support for anniversaries without a year
