@@ -1,139 +1,332 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Pomoc</string>
-  <string name="manage_accounts">Zadządzaj kontami</string>
-  <string name="please_wait">Proszę czekać</string>
-  <string name="send">Wyślij</string>
-  <!--startup dialogs-->
-  <string name="startup_battery_optimization">Optymalizacja baterii</string>
-  <string name="startup_dont_show_again">Nie pokazuj ponownie</string>
-  <!--AboutActivity-->
-  <string name="about_license_terms">Warunki licencji</string>
-  <string name="about_license_info_no_warranty">Ten program jest ABSOLUTNIE BEZ GWARANCJI. To jest wolne oprogramowanie i mile widziane jest dalsze rozpowszechnianie go pod pewnymi warunkami.</string>
-  <!--global settings-->
-  <string name="logging_to_external_storage">Logowanie do zewnątrznej pamięci: %s</string>
-  <string name="logging_to_external_storage_warning">Usuń logi tak szybko jak to możliwe!</string>
-  <string name="logging_couldnt_create_file">Nie można stworzyć zewnętrznego pliku logów: %s</string>
-  <string name="logging_no_external_storage">Zewnętrzna pamięci nie została naleziona</string>
-  <!--AccountsActivity-->
-  <string name="navigation_drawer_open">Otwórz menu nawigacji</string>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2013 – 2015 Ricki Hirner (bitfire web engineering).
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the GNU Public License v3.0
+  ~ which accompanies this distribution, and is available at
+  ~ http://www.gnu.org/licenses/gpl.html
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- common strings -->
+    <string name="app_name">EteSync</string>
+    <string name="account_type" translatable="false">com.etesync.syncadapter</string>
+    <string name="account_type_address_book" translatable="false">com.etesync.syncadapter.address_book</string>
+    <string name="account_title_address_book">Książka adresowa EteSync</string>
+    <string name="address_books_authority" translatable="false">com.etesync.syncadapter.addressbooks</string>
+    <string name="address_books_authority_title">Książka adresowa</string>
+    <string name="help">Pomoc</string>
+    <string name="manage_accounts">Zarządzaj kontami</string>
+    <string name="please_wait">Proszę czekać …</string>
+    <string name="send">Wyślij</string>
+
+    <!-- tourguide -->
+    <string name="tourguide_title">Czy wiesz o tym?</string>
+
+    <!-- startup dialogs -->
+    <string name="startup_battery_optimization">Optymalizacja Baterii</string>
+    <string name="startup_battery_optimization_message">System Android może wyłączyć/zredukować synchronizację EteSync po kilku dniach. Aby temu zapobiec, wyłącz optymalizację baterii.</string>
+    <string name="startup_battery_optimization_disable">Wyłącz optymalizację baterii dla EteSync</string>
+    <string name="startup_dont_show_again">Nie pokazuj ponownie</string>
+    <string name="startup_development_version">Przegląd Wydania EteSync</string>
+    <string name="startup_development_version_message">To jest programistyczna wersja aplikacji EteSync. Bądź świadomy tego, iż niektóre funkcje mogą nie działać. Aby wspomóc rozwój EteSync, podziel się konstruktywną opinią.</string>
+    <string name="startup_development_version_give_feedback">Dodaj opinię</string>
+
+    <!-- AboutActivity -->
+    <string name="about_license_terms">Warunki licencji</string>
+    <string name="about_license_info_no_warranty">Ten program jest ABSOLUTNIE BEZ GWARANCJI. To jest wolne oprogramowanie i mile widziane jest dalsze rozpowszechnianie go pod pewnymi warunkami.</string>
+
+    <!-- global settings -->
+    <string name="logging_davdroid_file_logging">Plik logów EteSync</string>
+    <string name="logging_to_external_storage">Logowanie do zewnątrznej pamięci: %s</string>
+    <string name="logging_to_external_storage_warning">Usuń logi tak szybko, jak to możliwe!</string>
+    <string name="logging_couldnt_create_file">Nie można stworzyć zewnętrznego pliku logów: %s</string>
+    <string name="logging_no_external_storage">Zewnętrzna pamięć nie została odnaleziona</string>
+
+    <!-- AccountsActivity -->
+    <string name="navigation_drawer_open">Otwórz menu nawigacji</string>
   <string name="navigation_drawer_close">Zamknij menu nawigacji</string>
-  <string name="navigation_drawer_about">O DAVdroid / Licencja</string>
-  <string name="navigation_drawer_settings">Ustawienia</string>
-  <string name="navigation_drawer_external_links">Zewnętrzne odnośniki</string>
-  <string name="navigation_drawer_website">Strona WWW</string>
-  <string name="navigation_drawer_faq">FQA</string>
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <string name="app_settings">Ustawienia</string>
-  <string name="app_settings_user_interface">Interfejs użytkownika</string>
-  <string name="app_settings_reset_hints">Zresetuj podpowiedzi</string>
-  <string name="app_settings_reset_hints_summary">Ponownie włącz wskazówki, które zostały usunięte wcześniej</string>
-  <string name="app_settings_reset_hints_success">Wszystkie wskazówki pojawią się ponownie</string>
-  <string name="app_settings_connection">Łączność</string>
-  <string name="app_settings_override_proxy">Nadpisz ustawienia proxy</string>
-  <string name="app_settings_override_proxy_on">Użyj niestandardowych ustawień proxy </string>
-  <string name="app_settings_override_proxy_off">Użyj systemowych ustawień proxy</string>
-  <string name="app_settings_override_proxy_host">Nazwa hosta HTTP proxy</string>
-  <string name="app_settings_override_proxy_port">Port HTTP proxy</string>
-  <string name="app_settings_security">Bezpieczeństwo</string>
-  <string name="app_settings_distrust_system_certs">Usuń certyfikaty systemowe</string>
-  <string name="app_settings_distrust_system_certs_on">CA systemowe i użytkownika nie zostaną dodane</string>
-  <string name="app_settings_distrust_system_certs_off">CA systemowe i użytkownika zostaną dodane (zalecane)</string>
-  <string name="app_settings_reset_certificates">Zresetuj (nie)zaufane certyfikaty</string>
-  <string name="app_settings_reset_certificates_summary">Zresetuj wszystkie niestandardowe certyfikaty.</string>
-  <string name="app_settings_reset_certificates_success">Wszystkie niestandardowe certyfikaty zostały wyczyszczone</string>
-  <string name="app_settings_debug">Debugowanie</string>
-  <string name="app_settings_log_to_external_storage">Loguj to zewnętrznego pliku</string>
-  <string name="app_settings_log_to_external_storage_on">Logowanie do zewnętrznej pamięci (jeśli jest dostępna)</string>
-  <string name="app_settings_log_to_external_storage_off">Logowanie do zewnętrznego pliku jest niedostępne</string>
-  <string name="app_settings_show_debug_info">Pokaż informacje do debug\'owania</string>
-  <string name="app_settings_show_debug_info_details">Przeglądaj/udostępnij oprogramowanie i szczegóły konfiguracji </string>
-  <!--AccountActivity-->
-  <string name="account_synchronize_now">Synchronizuj teraz</string>
-  <string name="account_synchronizing_now">Synchronizcja w toku</string>
-  <string name="account_settings">Ustawienia konta</string>
-  <string name="account_delete">Usuń konto</string>
-  <string name="account_delete_confirmation_title">Naprawdę chcesz usunąć konto?</string>
-  <string name="account_delete_confirmation_text">Wszystkie lokalne kopie książek adresowych, kalendarzy i list zadań zostaną usunięte.</string>
-  <!--PermissionsActivity-->
-  <string name="permissions_calendar">Uprawnienia kalendarza</string>
-  <string name="permissions_calendar_request">Zezwól na uprawnienia kalendarza</string>
-  <string name="permissions_contacts">Uprawnienia kontaktów</string>
-  <string name="permissions_contacts_request">Zezwól na uprawnienia kontaktów</string>
-  <string name="permissions_opentasks">Uprawnienia OpenTasks</string>
-  <string name="permissions_opentasks_request">Zezwól na uprawnienia OpenTasks</string>
-  <!--AddAccountActivity-->
-  <string name="login_title">Dodaj konto</string>
-  <string name="login_email_address">Adres e-mail</string>
-  <string name="login_email_address_error">Wymanagny poprawny adres e-mail</string>
-  <string name="login_password">Hasło</string>
-  <string name="login_password_required">Wymagane hasło</string>
-  <string name="login_back">Wróć</string>
-  <string name="login_configuration_detection">Wykrywanie konfiguracji</string>
-  <string name="login_querying_server">Proszę czekać, odpytywanie serwera...</string>
-  <string name="login_view_logs">Pokaż logi</string>
-  <!--AccountSettingsActivity-->
-  <string name="settings_title">Ustawienia: %s</string>
-  <string name="settings_authentication">Uwierzytelnianie</string>
-  <string name="settings_password">Hasło</string>
-  <string name="settings_enter_password">Wpisz hasło:</string>
-  <string name="settings_sync">Synchronizacja</string>
-  <string name="settings_sync_interval_contacts">Okres synchronizacji kontktów</string>
-  <string name="settings_sync_summary_manually">Tylko ręcznie</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s oraz natychmiast przy zmianach lokalnych</string>
-  <string name="settings_sync_summary_not_available">Niedostępne</string>
-  <string name="settings_sync_interval_calendars">Okres synchronizacji kalendarzy</string>
-  <string-array name="settings_sync_interval_seconds">
-    <item>-1</item>
-    <item>300</item>
-    <item>600</item>
-    <item>900</item>
-    <item>3600</item>
-    <item>7200</item>
-    <item>14400</item>
-    <item>86400</item>
-  </string-array>
-  <string-array name="settings_sync_interval_names">
-    <item>Tylko ręcznie</item>
-    <item>Co 5 minut</item>
-    <item>Co 10 minut</item>
-    <item>Co 15 minut</item>
-    <item>Co godzinę</item>
-    <item>Co 2 godziny</item>
-    <item>Co 4 godziny</item>
-    <item>Raz dziennie</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">Synchronizuj tylko przez WiFi</string>
-  <string name="settings_sync_wifi_only_on">Synchronizacja jest ograniczony do połączeń WiFi</string>
-  <string name="settings_sync_wifi_only_off">Rodzaj połączenia nie jest brany pod uwagę</string>
-  <string name="settings_sync_wifi_only_ssid">Organicznie WiFi SSID</string>
-  <string name="settings_sync_wifi_only_ssid_on">Będzie synchronizować tylko przez %s.</string>
-  <string name="settings_sync_wifi_only_ssid_off">Wszystkie połączenia WiFi mogą zostać wykorzystane</string>
-  <string name="settings_sync_wifi_only_ssid_message">Wprowadź nazwę sieci WiFi (SSID), aby ograniczyć synchronizację do tej sieci lub pozostaw puste dla wszystkich połączeń WiFi.</string>
-  <!--collection management-->
-  <string name="create_addressbook">Stwórz książkę adresową</string>
-  <string name="create_addressbook_display_name_hint">Moja książka adresowa</string>
-  <string name="create_collection_creating">Tworzenie kolekcji</string>
-  <string name="create_collection_display_name">Nazwa wyświetlana (tytuł) kolekcji:</string>
-  <string name="create_collection_display_name_required">Tytuł jest wymagany</string>
-  <string name="create_collection_description">Opis (opcjoalnie)</string>
-  <string name="create_collection_create">Stwórz</string>
-  <string name="delete_collection">Usuń kolekcje</string>
-  <string name="delete_collection_confirm_title">Jesteś pewien?</string>
-  <string name="delete_collection_confirm_warning">Kolekcja (%s) i jej wszystkie dane zostaną usunięte z serwera.</string>
-  <string name="delete_collection_deleting_collection">Usuwanie kolekcji</string>
-  <!--ExceptionInfoFragment-->
-  <string name="exception">Wystąpił błąd.</string>
-  <string name="exception_httpexception">Wystąpił błąd HTTP.</string>
-  <string name="exception_ioexception">Wystąpił błąd I/O.</string>
-  <string name="exception_show_details">Pokaż szczegóły</string>
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">Informacje debugowe</string>
-  <string name="sync_error_calendar">Synchronizacja kalendarza nie powiodała się (%s)</string>
-  <string name="sync_error">Błąd podczas %s</string>
-  <string name="sync_error_http_dav">Błąd servera podczas %s</string>
-  <string name="sync_error_local_storage">Bład bazy danych podczas %s</string>
-  <!--cert4android-->
+    <string name="navigation_drawer_subtitle">Secure Sync Adapter</string>
+    <string name="navigation_drawer_about">O EteSync / Licencja</string>
+    <string name="navigation_drawer_settings">Ustawienia</string>
+    <string name="navigation_drawer_external_links">Zewnętrzne odnośniki</string>
+    <string name="navigation_drawer_website">Strona WWW</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <string name="navigation_drawer_guide">Podręcznik Użytkowania</string>
+    <string name="navigation_drawer_report_issue">Zgłoś błąd</string>
+    <string name="navigation_drawer_contact">Skontaktuj się z programistą</string>
+
+    <string name="account_list_empty">Witaj w EteSync!</string>
+    <string name="accounts_global_sync_disabled">Ogólnosystemowa automatyczna synchronizacja jest wyłączona</string>
+    <string name="accounts_global_sync_enable">Włącz</string>
+    <string name="accounts_showcase_add">Musisz dodać konto, jeżeli chcesz korzystać z EteSync. Dotknij tutaj, aby to zrobić...</string>
+
+    <!-- AccountUpdateService -->
+
+    <!-- AppSettingsActivity -->
+    <string name="app_settings">Ustawienia</string>
+    <string name="app_settings_user_interface">Interfejs użytkownika</string>
+    <string name="app_settings_reset_hints">Zresetuj podpowiedzi</string>
+    <string name="app_settings_reset_hints_summary">Ponownie włącz wskazówki, które zostały wcześniej usunięte</string>
+    <string name="app_settings_reset_hints_success">Wszystkie wskazówki pojawią się ponownie</string>
+    <string name="app_settings_connection">Łączność</string>
+    <string name="app_settings_override_proxy">Nadpisz ustawienia proxy</string>
+    <string name="app_settings_override_proxy_on">Użyj niestandardowych ustawień proxy </string>
+    <string name="app_settings_override_proxy_off">Użyj systemowych ustawień proxy</string>
+    <string name="app_settings_override_proxy_host">Nazwa hosta HTTP proxy</string>
+    <string name="app_settings_override_proxy_port">Port HTTP proxy</string>
+    <string name="app_settings_security">Bezpieczeństwo</string>
+    <string name="app_settings_distrust_system_certs">Usuń certyfikaty systemowe</string>
+    <string name="app_settings_distrust_system_certs_on">CA systemowe i użytkownika nie zostaną dodane</string>
+    <string name="app_settings_distrust_system_certs_off">CA systemowe i użytkownika zostaną dodane (zalecane)</string>
+    <string name="app_settings_reset_certificates">Zresetuj (nie)zaufane certyfikaty</string>
+    <string name="app_settings_reset_certificates_summary">Zresetuj wszystkie niestandardowe certyfikaty.</string>
+    <string name="app_settings_reset_certificates_success">Wszystkie niestandardowe certyfikaty zostały wyczyszczone</string>
+    <string name="app_settings_debug">Debugowanie</string>
+    <string name="app_settings_log_to_external_storage">Loguj do zewnętrznego pliku</string>
+    <string name="app_settings_log_to_external_storage_on">Logowanie do zewnętrznej pamięci (jeśli jest dostępna)</string>
+    <string name="app_settings_log_to_external_storage_off">Logowanie do zewnętrznego pliku jest niedostępne</string>
+    <string name="app_settings_show_debug_info">Pokaż informacje do debugowania</string>
+    <string name="app_settings_show_debug_info_details">Przeglądaj/udostępnij oprogramowanie i szczegóły konfiguracji</string>
+    <string name="app_settings_force_language">Wymuś język</string>
+    <string name="app_settings_force_language_default">Automatyczny</string>
+
+    <!-- AccountActivity -->
+    <string name="account_synchronize_now">Synchronizuj teraz</string>
+    <string name="account_synchronizing_now">Synchronizcja w toku</string>
+    <string name="account_settings">Ustawienia konta</string>
+    <string name="account_delete">Usuń konto</string>
+    <string name="account_show_fingerprint">Pokaż Odcisk</string>
+    <string name="account_delete_confirmation_title">Naprawdę chcesz usunąć konto?</string>
+    <string name="account_delete_confirmation_text">Wszystkie lokalne kopie książek adresowych, kalendarzy i list zadań zostaną usunięte.</string>
+    <string name="account_delete_collection_last_title">Nie można usunąć ostatniej kolekcji</string>
+    <string name="account_delete_collection_last_text">Usunięcie ostatniej kolekcji nie jest dozwolone - proszę utworzyć nową, aby móc usunąć obecną.</string>
+    <string name="account_showcase_view_collection">Możesz dotknąć obiektu, aby przejrzeć kolekcję. Dzięki temu zobaczysz dzienniki, zaimportujesz pliki oraz wiele więcej...</string>
+
+    <string name="show_fingperprint_title">Mój Odcisk</string>
+
+    <!-- ViewCollection -->
+    <string name="change_journal_title">Zmień Dzienniki</string>
+    <string name="account_showcase_import">Jeżeli chcesz importować kontakty oraz kalendarze do EteSync, musisz rozwinąć menu oraz wybrać \"Importuj\".</string>
+    <string name="account_owner">Właściciel: %s</string>
+    <string name="members_owner_only">Tylko właściciel tej kolekcji (%s) może zobaczyć jej członków.</string>
+    <string name="not_allowed_title">Niedozwolone</string>
+    <string name="edit_owner_only">Tylko właściciel tej kolekcji (%s) może ją edytować.</string>
+    <string name="members_old_journals_not_allowed">Udostępnianie dzienników ze starym stylem nie jest dozwolone. Jeżeli chcesz go udostępnić, musisz stworzyć nowy oraz skopiować kontekst starego do nowego poprzez użycie okna /"Importuj/". Jeżeli doświadczasz jakichkolwiek problemów, proszę skontaktować się ze wsparciem.</string>
+
+    <!-- CollectionMembers -->
+    <string name="collection_members_title">Członkowie</string>
+    <string name="collection_members_list_loading">Wczytywanie członków...</string>
+    <string name="collection_members_list_empty">Brak członków</string>
+    <string name="collection_members_add">Dodaj członka</string>
+    <string name="collection_members_add_error">Wystąpił błąd podczas dodawania członka</string>
+    <string name="collection_members_adding">Dodawanie członka</string>
+    <string name="trust_fingerprint_title">Zweryfikuj odcisk bezpieczeństwa</string>
+    <string name="trust_fingerprint_body">Weryfikuje odcisk bezpieczeństwa użytkownika /"%s/", aby upewnić się, iż szyfrowanie jest bezpieczne.</string>
+    <string name="collection_members_error_user_not_found">Użytkownik (%s) nie został znaleziony lub wyłączył udostępnianie dziennika.</string>
+    <string name="collection_members_removing">Usuwanie członka</string>
+    <string name="collection_members_remove_error">Wystąpił błąd podczas usuwania członka</string>
+    <string name="collection_members_remove_title">Usuń członka</string>
+    <string name="collection_members_remove">Czy chcesz odwołać dostęp użytkownika %s?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
+
+    <!-- JournalItemActivity -->
+    <string name="about">O aplikacji</string>
+    <string name="journal_item_tab_main">Główne</string>
+    <string name="journal_item_tab_raw">Raw</string>
+    <string name="journal_item_attendees">Uczestnicy</string>
+    <string name="journal_item_reminders">Przypomnienia</string>
+    <string name="journal_item_phone">Telefon</string>
+    <string name="journal_item_email">Adres e-mail</string>
+    <string name="journal_item_organization">Organizacja</string>
+    <string name="journal_item_job_description">Opis Pracy</string>
+    <string name="journal_item_impp">Wiadomości Błyskawiczne</string>
+    <string name="journal_item_nickname">Nazwa Użytkownika</string>
+    <string name="journal_item_address">Adres</string>
+    <string name="journal_item_note">Notatka</string>
+    <string name="journal_item_website">Strona Internetowa</string>
+    <string name="journal_item_anniversary">Rocznica</string>
+    <string name="journal_item_birthday">Urodziny</string>
+    <string name="journal_item_relation">Relacje</string>
+    <string name="journal_item_member">Członek</string>
+    <string name="journal_item_member_count">Liczba Członków</string>
+
+    <!-- PermissionsActivity -->
+    <string name="permissions_title">Uprawnienia EteSync</string>
+    <string name="permissions_calendar">Dostęp do kalendarza</string>
+    <string name="permissions_calendar_details">Aby zsynchronizować wydarzenia kalendarza z Twoimi lokalnymi kalendarzami, EteSync potrzebuje dostępu do kalendarzy.</string>
+    <string name="permissions_calendar_request">Zażądaj dostępu do kalendarzy</string>
+    <string name="permissions_contacts">Dostęp do kontaktów</string>
+    <string name="permissions_contacts_details">Aby zsychronizować książkę adresową z Twoimi lokalnymi kontaktami, EteSync potrzebuje dostępu do kontaktów.</string>
+    <string name="permissions_contacts_request">Zażądaj uprawnień do kontaktów</string>
+    <string name="permissions_opentasks">Uprawnienia OpenTasks</string>
+    <string name="permissions_opentasks_details">Aby zsynchronizować zadania z lokalną listą, EteSync potrzebuje dostępu do OpenTasks.</string>
+    <string name="permissions_opentasks_request">Zażądaj uprawnień do OpenTasks</string>
+
+    <!-- AddAccountActivity -->
+    <string name="login_title">Dodaj konto</string>
+    <string name="login_email_address">Adres e-mail</string>
+    <string name="login_email_address_error">Nieprawidłowy adres e-mail</string>
+    <string name="login_password">Hasło</string>
+    <string name="login_custom_server">Niestandardowy adres URL serwera</string>
+    <string name="login_custom_server_error">Wykryto nieprawidłowy adres URL, czy nie zapomniałeś o https://?</string>
+    <string name="login_toggle_advanced">Pokaż ustawienia zaawansowane</string>
+    <string name="login_encryption_password">Hasło szyfrowania</string>
+    <string name="login_encryption_check_password">* Proszę podwójnie sprawdzić hasło, gdyż nie może zostać zmienione, jeżeli jest złe.</string>
+    <string name="login_encryption_extra_info">To hasło jest używane w celu zaszyfrowania Twoich danych, w przeciwieństwie do poprzedniego, które służy do zalogowania się w usłudze.\nZostałeś zapytany o wybranie osobnego hasła szyfrowania z powodów bezpieczeństwa. W celu uzyskania informacji, proszę zapoznać się z FAQ: %s</string>
+    <string name="login_password_required">Hasło jest wymagane</string>
+    <string name="login_login">Zaloguj się</string>
+    <string name="login_signup">Zarejestruj</string>
+    <string name="login_finish">Zakończ</string>
+    <string name="login_back">Cofnij</string>
+    <string name="login_enter_service_details">Wprowadź Dane Logowania</string>
+    <string name="login_enter_encryption_details">Sekretne Hasło Szyfrowania</string>
+    <string name="login_encryption_account_label">Konto:</string>
+    <string name="login_service_details_description">Służy ono do zalogowania się, *nie jest* szyfrowanym hasłem!</string>
+    <string name="login_forgot_password">Zapomniałeś hasła?</string>
+
+    <string name="login_configuration_detection">Wykrywanie Konfiguracji</string>
+    <string name="login_querying_server">Proszę czekać, odpytywanie serwera…</string>
+    <string name="login_wrong_username_or_password">Nie można zweryfikować (prawdopodobnie zła nazwa użytkownika lub hasło).</string>
+    <string name="login_view_logs">Zobacz logi</string>
+
+    <string name="login_encryption_setup_title">Ustawianie Szyfrowania</string>
+    <string name="login_encryption_setup">Proszę czekać, ustawianie szyfrowania…</string>
+
+    <string name="account_creation_failed">Tworzenie konta nie powiodło się</string>
+
+    <!-- SetupUserInfoFragment -->
+    <string name="login_encryption_error_title">Błąd szyfrowania</string>
+
+
+    <!-- ImportFragment -->
+    <string name="import_dialog_title">Importuj</string>
+    <string name="import_dialog_failed_title">Importowanie nie powiodło się</string>
+    <string name="import_dialog_loading_file">Ładowanie pliku (może chwilę potrwać)...</string>
+    <string name="import_dialog_adding_entries">Dodawanie wejść...</string>
+    <string name="import_dialog_success">Przetworzono %1$d wejść.\nDodano: %2$d\nZmieniono: %3$d\nPominięto (niepowodzenia): %4$d</string>
+    <string name="import_permission_required">Odczytywanie uprawnień do pamięci jest potrzebne, aby zaimportować.</string>
+    <string name="choose_file">Wybierz plik</string>
+
+    <!-- AccountSettingsActivity -->
+    <string name="settings_title">Ustawienia: %s</string>
+    <string name="settings_authentication">Weryfikacja</string>
+    <string name="settings_encryption">Szyfrowanie</string>
+    <string name="settings_password">Hasło</string>
+    <string name="settings_password_summary">Zmień hasło weryfikacji</string>
+    <string name="settings_enter_password">Wprowadź obecne hasło:</string>
+    <string name="settings_encryption_password">Hasło szyfrowania</string>
+    <string name="settings_encryption_password_summary">Zmień swoje hasło szyfrowania (niezaimpletowane)</string>
+    <string name="settings_enter_encryption_password">Wprowadź obecne hasło szyfrowania:</string>
+    <string name="settings_sync">Synchronizacja</string>
+    <string name="settings_sync_interval_contacts">Okres synchronizacji kontaktów</string>
+    <string name="settings_sync_summary_manually">Tylko ręcznie</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s oraz natychmiast przy zmianach lokalnych</string>
+    <string name="settings_sync_summary_not_available">Niedostępne</string>
+    <string name="settings_sync_interval_calendars">Okres synchronizacji kalendarzy</string>
+    <string-array name="settings_sync_interval_seconds" translateable="false">
+        <item>-1</item>
+        <item>300</item>
+        <item>600</item>
+        <item>900</item>
+        <item>3600</item>
+        <item>7200</item>
+        <item>14400</item>
+        <item>86400</item>
+    </string-array>
+    <string-array name="settings_sync_interval_names">
+        <item>Tylko ręcznie</item>
+        <item>Co 5 minut</item>
+        <item>Co 10 minut</item>
+        <item>Co 15 minut</item>
+        <item>Co godzinę</item>
+        <item>Co 2 godziny</item>
+        <item>Co 4 godziny</item>
+        <item>Raz dziennie</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">Synchronizuj tylko przez Wi-Fi</string>
+    <string name="settings_sync_wifi_only_on">Synchronizacja jest ograniczona do połączeń WiFi</string>
+    <string name="settings_sync_wifi_only_off">Rodzaj połączenia nie jest brany pod uwagę</string>
+    <string name="settings_sync_wifi_only_ssid">Organicznie Wi-Fi SSID</string>
+    <string name="settings_sync_wifi_only_ssid_on">Będzie synchronizować tylko przez %s.</string>
+    <string name="settings_sync_wifi_only_ssid_off">Wszystkie połączenia WiFi mogą zostać wykorzystane</string>
+    <string name="settings_sync_wifi_only_ssid_message">Wprowadź nazwę sieci Wi-Fi (SSID), aby ograniczyć synchronizację do tej sieci lub pozostaw puste dla wszystkich połączeń Wi-Fi.</string>
+    <string name="settings_carddav">Kontakty</string>
+    <string name="settings_caldav">Kalendarz</string>
+
+    <!-- collection management -->
+    <string name="create_addressbook">Stwórz książkę adresową</string>
+    <string name="create_addressbook_display_name_hint">Moja książka adresowa</string>
+    <string name="create_calendar">Stwórz kalendarz</string>
+    <string name="create_calendar_display_name_hint">Mój kalendarz</string>
+    <string name="edit_collection">Edytuj kolekcję</string>
+    <string name="create_collection_color">Ustaw kolor kalendarza</string>
+    <string name="create_collection_creating">Tworzenie kolekcji</string>
+    <string name="create_collection_display_name">Nazwa wyświetlana (tytuł) kolekcji:</string>
+    <string name="create_collection_display_name_required">Tytuł jest wymagany</string>
+    <string name="create_collection_description">Opis (opcjonalnie):</string>
+    <string name="view_collection_edit">Edytuj</string>
+    <string name="view_collection_import">Importuj</string>
+    <string name="view_collection_members">Zarządzaj Członkami</string>
+    <string name="create_collection_create">Zapisz</string>
+    <string name="delete_collection">Usuń</string>
+    <string name="delete_collection_confirm_title">Jesteś pewien?</string>
+    <string name="delete_collection_confirm_warning">Kolekcja (%s) i jej wszystkie dane zostaną usunięte z serwera.</string>
+    <string name="delete_collection_deleting_collection">Usuwanie kolekcji</string>
+
+    <!-- JournalViewer -->
+    <string name="journal_entries_list_empty">Nie znaleziono żadnych wejść w tym dzienniku</string>
+    <string name="journal_entries_loading">Ładowanie dziennika wejść...</string>
+
+    <!-- ExceptionInfoFragment -->
+    <string name="exception">Wystąpił błąd.</string>
+    <string name="exception_httpexception">Wystąpił błąd HTTP.</string>
+    <string name="exception_ioexception">Wystąpił błąd I/O.</string>
+    <string name="exception_show_details">Pokaż szczegóły</string>
+
+    <!-- sync errors and DebugInfoActivity -->
+    <string name="authority_log_provider" translatable="false">com.etesync.syncadapter.log</string>
+    <string name="debug_info_title">Informacje debugowania</string>
+    <string name="sync_error_permissions">Uprawnienia EteSync</string>
+    <string name="sync_error_permissions_text">Wymagane dodatkowe uprawnienia</string>
+    <string name="sync_error_calendar">Synchronizacja kalendarza nie powiodła się (%s)</string>
+    <string name="sync_error_contacts">Synchronizacja kontaktów nie powiodła się (%s)</string>
+    <string name="sync_error">Wystąpił błąd podczas %s</string>
+    <string name="sync_error_integrity">Błąd integralności podczas %s</string>
+    <string name="sync_error_http_dav">Błąd serwera podczas %s</string>
+    <string name="sync_error_unavailable">Niemożliwe było połączenie z serwerem podczas %s</string>
+    <string name="sync_error_local_storage">Błąd bazy danych podczas %s</string>
+    <string name="sync_phase_prepare">przygotowywanie synchronizacji</string>
+    <string name="sync_phase_journals">synchronizacja dzienników</string>
+    <string name="sync_phase_query_capabilities">odpytywanie możliwości</string>
+    <string name="sync_phase_prepare_local">przygotowywanie lokalnych wejść</string>
+    <string name="sync_phase_create_local_entries">tworzenie lokalnych wejść</string>
+    <string name="sync_phase_fetch_entries">otrzymywanie zdalnych wejść</string>
+    <string name="sync_phase_apply_remote_entries">stosowanie lokalnych wejść</string>
+    <string name="sync_phase_apply_local_entries">ponowne stosowanie lokalnych wejść</string>
+    <string name="sync_phase_push_entries">wprowadzanie wejść</string>
+    <string name="sync_phase_post_processing">przetwarzanie końcowe</string>
+    <string name="sync_error_unauthorized">Weryfikacja nie powiodła się</string>
+    <string name="sync_error_user_inactive">Użytkownik jest nieaktywny</string>
+    <string name="sync_successfully_calendar" formatted="false">Kalendarz \"%s\" został zmodyfikowany (%s)</string>
+    <string name="sync_successfully_contacts" formatted="false">Kontakty zostały zmodyfikowane (%s)</string>
+    <string name="sync_successfully_modified" formatted="false">%s został zmodyfikowany.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s został dodany. \n%s został zaktualizowany.\n%s został usunięty.</string>
+
+    <!-- cert4android -->
+    <string name="certificate_notification_connection_security">EteSync: Bezpieczeństwo połączenia</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync otrzymał nieznany certyfikat. Czy chcesz mu zaufać?</string>
+
+    <!-- WebView activity-->
+    <string name="loading">Ładowanie...</string>
+    <string name="loading_error_title">Błąd Ładowania</string>
+    <string name="loading_error_content">Odśwież</string>
+
+    <!-- Import Activity -->
+    <string name="import_button_file">Z Pliku</string>
+    <string name="import_button_local">Z Konta</string>
+    <string name="import_select_account">Wybierz Konto</string>
+
+    <!-- Event (from Etar) -->
+    <string name="event_info_organizer">Organizer:</string>
 </resources>
