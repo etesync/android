@@ -13,4 +13,4 @@ Thanks to End-to-End encryption, not even we can see your data. Don't believe us
 
 Full History
 =========
-A full history of your data is saved in a secure and integrity-checked journal which means you can review, replay and revert any changes made to it at any point in time.
+A full history of your data is saved in an encrypted tamper-proof journal which means you can review, replay and revert any changes you have made at any point in time.
