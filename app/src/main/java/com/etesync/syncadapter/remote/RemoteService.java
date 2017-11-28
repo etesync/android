@@ -20,7 +20,9 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
+import com.etesync.syncadapter.model.ServiceEntity;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,16 +57,21 @@ public class RemoteService extends Service {
             Journal ret[] = new Journal[journals.size()];
             int i = 0;
             for (JournalEntity journal : journals) {
+                if (!journal.getInfo().isOfTypeService(journalType)) {
+                    continue;
+                }
                 ret[i] = new Journal(journal.getUid());
                 i++;
             }
 
-            return ret;
+            return Arrays.copyOf(ret, i);
         }
 
         public JournalEntry[] getJournalEntries(String journalUid, String lastUid) throws RemoteException {
             EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
-            JournalEntity journal = data.select(JournalEntity.class).where((JournalEntity.DELETED.eq(false))).limit(1).get().firstOrNull();
+            JournalEntity journal = data.select(JournalEntity.class).where((JournalEntity.DELETED.eq(false)).and(JournalEntity.UID.eq(journalUid))).limit(1).get().firstOrNull();
+            // FIXME: Should return a proper error
+            if (journal == null) return null;
             // FIXME: Should support generic type
             if (!mApiPermissionHelper.isAllowedIgnoreErrors(journal.getInfo().type.toString())) return null;
 
