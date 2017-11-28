@@ -10,12 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.etesync.syncadapter.IEteSyncService;
-import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.remote.Journal;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final String JOURNAL_TYPE = "ToDo";
+    private static final String JOURNAL_TYPE = "CALENDAR";
 
 
     private IEteSyncService mEteSyncService;
@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
                 if (!isAllowed) {
                     mEteSyncService.requestPermission(JOURNAL_TYPE);
                 } else {
-                    CollectionInfo[] collectionInfo = mEteSyncService.getJournalEntries(JOURNAL_TYPE);
-                    if (collectionInfo == null) {
+                    Journal[] journals = mEteSyncService.getJournals(JOURNAL_TYPE);
+                    if (journals == null) {
                         Log.i(TAG, "Received no collection infos");
                     } else {
-                        for (CollectionInfo collectionInfo1 : collectionInfo) {
-                            Log.i(TAG, "Received collection info: " + collectionInfo1.displayName);
+                        for (Journal journal : journals) {
+                            Log.i(TAG, "Received collection info: " + journal.id);
                         }
                     }
                 }

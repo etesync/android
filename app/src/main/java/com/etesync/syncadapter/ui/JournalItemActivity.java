@@ -32,6 +32,7 @@ import org.apache.commons.codec.Charsets;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -63,7 +64,7 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
     public static Intent newIntent(Context context, CollectionInfo info, SyncEntry syncEntry) {
         Intent intent = new Intent(context, JournalItemActivity.class);
-        intent.putExtra(Constants.KEY_COLLECTION_INFO, info);
+        intent.putExtra(Constants.KEY_COLLECTION_INFO, (Serializable) info);
         intent.putExtra(KEY_SYNC_ENTRY, syncEntry);
         return intent;
     }

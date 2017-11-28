@@ -12,9 +12,18 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
+import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.IEteSyncService;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import io.requery.Persistable;
+import io.requery.sql.EntityDataStore;
 
 public class RemoteService extends Service {
 
@@ -36,10 +45,19 @@ public class RemoteService extends Service {
                     mApiPermissionHelper.getCurrentCallingPackage(), journalType);
         }
 
-        public CollectionInfo[] getJournalEntries(String journalType) throws RemoteException {
+        public Journal[] getJournals(String journalType) throws RemoteException {
             if (!mApiPermissionHelper.isAllowedIgnoreErrors(journalType)) return null;
 
-            return new CollectionInfo[0]; //todo implement
+            EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
+            List<JournalEntity> journals = data.select(JournalEntity.class).where((JournalEntity.DELETED.eq(false))).get().toList();
+            Journal ret[] = new Journal[journals.size()];
+            int i = 0;
+            for (JournalEntity journal : journals) {
+                ret[i] = new Journal(journal.getUid());
+                i++;
+            }
+
+            return ret;
         }
 
         //todo - query journals?
