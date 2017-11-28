@@ -3,28 +3,28 @@ package com.etesync.syncadapter.remote;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Journal implements Parcelable {
+public class JournalEntry implements Parcelable {
     public String account;
     public String id;
-    public boolean readOnly = false;
+    public String content;
 
-    public Journal(String id) {
+    public JournalEntry(String id) {
         this.id = id;
     }
 
-    protected Journal(Parcel in) {
+    protected JournalEntry(Parcel in) {
         readFromParcel(in);
     }
 
-    public static final Creator<Journal> CREATOR = new Creator<Journal>() {
+    public static final Creator<JournalEntry> CREATOR = new Creator<JournalEntry>() {
         @Override
-        public Journal createFromParcel(Parcel in) {
-            return new Journal(in);
+        public JournalEntry createFromParcel(Parcel in) {
+            return new JournalEntry(in);
         }
 
         @Override
-        public Journal[] newArray(int size) {
-            return new Journal[size];
+        public JournalEntry[] newArray(int size) {
+            return new JournalEntry[size];
         }
     };
 
@@ -37,12 +37,12 @@ public class Journal implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(account);
         parcel.writeString(id);
-        parcel.writeByte((byte) (readOnly ? 1 : 0));
+        parcel.writeString(content);
     }
 
     public void readFromParcel(Parcel in) {
         account = in.readString();
         id = in.readString();
-        readOnly = in.readByte() == 0;
+        content = in.readString();
     }
 }

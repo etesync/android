@@ -17,7 +17,9 @@ import android.util.Log;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.IEteSyncService;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +56,25 @@ public class RemoteService extends Service {
             int i = 0;
             for (JournalEntity journal : journals) {
                 ret[i] = new Journal(journal.getUid());
+                i++;
+            }
+
+            return ret;
+        }
+
+        public JournalEntry[] getJournalEntries(String journalUid, String lastUid) throws RemoteException {
+            EntityDataStore<Persistable> data = ((App) getApplicationContext()).getData();
+            JournalEntity journal = data.select(JournalEntity.class).where((JournalEntity.DELETED.eq(false))).limit(1).get().firstOrNull();
+            // FIXME: Should support generic type
+            if (!mApiPermissionHelper.isAllowedIgnoreErrors(journal.getInfo().type.toString())) return null;
+
+            List<EntryEntity> entries = data.select(EntryEntity.class).where(EntryEntity.JOURNAL.eq(journal)).orderBy(EntryEntity.ID.desc()).get().toList();
+
+            JournalEntry ret[] = new JournalEntry[entries.size()];
+            int i = 0;
+            for (EntryEntity entry : entries) {
+                ret[i] = new JournalEntry(entry.getUid());
+                ret[i].content = entry.getContent().toJson();
                 i++;
             }
 

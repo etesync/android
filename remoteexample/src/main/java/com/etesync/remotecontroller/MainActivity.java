@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         for (Journal journal : journals) {
                             Log.i(TAG, "Received collection info: " + journal.id);
+                            Log.i(TAG, "Size: " + mEteSyncService.getJournalEntries(journal.id, null));
                         }
                     }
                 }

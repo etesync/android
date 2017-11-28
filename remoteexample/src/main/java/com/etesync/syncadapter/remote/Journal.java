@@ -6,14 +6,14 @@ import android.os.Parcelable;
 public class Journal implements Parcelable {
     public String account;
     public String id;
+    public boolean readOnly = false;
 
-    public String getId() {
-        return id;
+    public Journal(String id) {
+        this.id = id;
     }
 
     protected Journal(Parcel in) {
-        account = in.readString();
-        id = in.readString();
+        readFromParcel(in);
     }
 
     public static final Creator<Journal> CREATOR = new Creator<Journal>() {
@@ -37,5 +37,12 @@ public class Journal implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(account);
         parcel.writeString(id);
+        parcel.writeByte((byte) (readOnly ? 1 : 0));
+    }
+
+    public void readFromParcel(Parcel in) {
+        account = in.readString();
+        id = in.readString();
+        readOnly = in.readByte() == 0;
     }
 }
