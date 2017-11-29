@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.19.2
+* Fix a crash on import when app is in the background.
+* Fix a few minor leaks.
+* Update Polish translation.
+
 ## Version 0.19.1
 * Update description to include self-hosting information on f-droid.
 
