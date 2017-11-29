@@ -9,6 +9,7 @@
 package com.etesync.syncadapter.ui;
 
 import android.accounts.Account;
+import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +43,7 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
+import lombok.Cleanup;
 import tourguide.tourguide.ToolTip;
 import tourguide.tourguide.TourGuide;
 
@@ -211,7 +213,8 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
 
             if (info.type == CollectionInfo.Type.CALENDAR) {
                 try {
-                    LocalCalendar resource = LocalCalendar.findByName(account, getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI), LocalCalendar.Factory.INSTANCE, info.uid);
+                    @Cleanup("release") ContentProviderClient providerClient = getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI);
+                    LocalCalendar resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory.INSTANCE, info.uid);
                     if (resource == null) {
                         return null;
                     }
@@ -222,7 +225,8 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
                 }
             } else {
                 try {
-                    LocalAddressBook resource = LocalAddressBook.findByUid(ViewCollectionActivity.this, getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI), account, info.uid);
+                    @Cleanup("release") ContentProviderClient providerClient = getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI);
+                    LocalAddressBook resource = LocalAddressBook.findByUid(ViewCollectionActivity.this, providerClient, account, info.uid);
                     if (resource == null) {
                         return null;
                     }

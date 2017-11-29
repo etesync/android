@@ -306,7 +306,7 @@ public class ImportFragment extends DialogFragment {
 
                     finishParsingFile(contacts.length);
 
-                    ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
+                    @Cleanup ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
                     LocalAddressBook localAddressBook = LocalAddressBook.findByUid(getContext(), provider, account, info.uid);
 
                     for (Contact contact : contacts) {
