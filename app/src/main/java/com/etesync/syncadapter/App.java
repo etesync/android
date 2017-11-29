@@ -134,8 +134,8 @@ public class App extends Application {
     }
 
     private void loadLanguage() {
-        String lang = new Settings(new ServiceDB.OpenHelper(this).
-                getReadableDatabase()).getString(App.FORCE_LANGUAGE, null);
+        @Cleanup ServiceDB.OpenHelper serviceDB = new ServiceDB.OpenHelper(this);
+        String lang = new Settings(serviceDB.getReadableDatabase()).getString(App.FORCE_LANGUAGE, null);
         if (lang != null && !lang.equals(DEFAULT_LANGUAGE)) {
             LanguageUtils.setLanguage(this, lang);
         }
