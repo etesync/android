@@ -275,7 +275,7 @@
     <string name="delete_collection_deleting_collection">Deleting collection</string>
 
     <!-- JournalViewer -->
-    <string name="journal_entries_list_empty">No entries found for this journal</string>
+    <string name="journal_entries_list_empty">Journal is empty.\n(Maybe it\'s still syncing?)</string>
     <string name="journal_entries_loading">Loading journal entries...</string>
 
     <!-- ExceptionInfoFragment -->
