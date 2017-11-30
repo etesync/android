@@ -24,7 +24,7 @@
 
     <!-- AboutActivity -->
     <string name="about_license_terms">Warunki licencji</string>
-    <string name="about_license_info_no_warranty">Ten program jest ABSOLUTNIE BEZ GWARANCJI. EteSync jest wolnym oprogramowaniem i mile widziane jest dalsze rozpowszechnianie go pod pewnymi warunkami.</string>
+    <string name="about_license_info_no_warranty">Ten program jest ABSOLUTNIE BEZ GWARANCJI - jako wolne oprogramowanie, mile widziane jest dalsze rozpowszechnianie go pod pewnymi warunkami.</string>
 
     <!-- global settings -->
     <string name="logging_davdroid_file_logging">Plik logów EteSync</string>
@@ -76,7 +76,7 @@
     <string name="app_settings_log_to_external_storage">Loguj do zewnętrznego pliku</string>
     <string name="app_settings_log_to_external_storage_on">Logowanie do zewnętrznej pamięci (jeśli jest dostępna)</string>
     <string name="app_settings_log_to_external_storage_off">Logowanie do zewnętrznego pliku jest niedostępne</string>
-    <string name="app_settings_show_debug_info">Pokaż informacje do debugowania</string>
+    <string name="app_settings_show_debug_info">Pokaż informacje debugowania</string>
     <string name="app_settings_show_debug_info_details">Przeglądaj/udostępnij oprogramowanie i szczegóły konfiguracji</string>
     <string name="app_settings_force_language">Wymuś język</string>
     <string name="app_settings_force_language_default">Automatyczny</string>
