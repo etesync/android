@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.os.RemoteException;
 import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
@@ -21,10 +22,12 @@ import net.fortuna.ical4j.model.property.ProdId;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import at.bitfire.ical4android.AndroidTask;
 import at.bitfire.ical4android.AndroidTaskFactory;
@@ -65,13 +68,17 @@ public class LocalTask extends AndroidTask implements LocalResource {
     }
 
     @Override
-    public String getContent() throws IOException, ContactsStorageException {
-        return null;
-    }
+    public String getContent() throws IOException, CalendarStorageException {
+        App.log.log(Level.FINE, "Preparing upload of task " + getFileName(), getTask());
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        getTask().write(os);
+
+        return os.toString();    }
 
     @Override
     public boolean isLocalOnly() {
-        return false;
+        return TextUtils.isEmpty(getETag());
     }
 
     /* process LocalTask-specific fields */
@@ -102,7 +109,7 @@ public class LocalTask extends AndroidTask implements LocalResource {
     public void prepareForUpload() throws CalendarStorageException {
         try {
             final String uid = UUID.randomUUID().toString();
-            final String newFileName = uid + ".ics";
+            final String newFileName = uid;
 
             ContentValues values = new ContentValues(2);
             values.put(Tasks._SYNC_ID, newFileName);

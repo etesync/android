@@ -20,6 +20,8 @@ import android.os.RemoteException;
 import android.support.annotation.NonNull;
 
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.JournalEntity;
+import com.etesync.syncadapter.model.JournalModel;
 
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -35,8 +37,6 @@ import lombok.Cleanup;
 public class LocalTaskList extends AndroidTaskList implements LocalCollection {
 
     public static final int defaultColor = 0xFFC3EA6E;     // "DAVdroid green"
-
-    public static final String COLUMN_CTAG = TaskLists.SYNC_VERSION;
 
     static String[] BASE_INFO_COLUMNS = new String[] {
             Tasks._ID,
@@ -55,19 +55,20 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
         super(account, provider, LocalTask.Factory.INSTANCE, id);
     }
 
-    public static Uri create(Account account, TaskProvider provider, CollectionInfo info) throws CalendarStorageException {
-        ContentValues values = valuesFromCollectionInfo(info, true);
+    public static Uri create(Account account, TaskProvider provider, JournalEntity journalEntity) throws CalendarStorageException {
+        ContentValues values = valuesFromCollectionInfo(journalEntity, true);
         values.put(TaskLists.OWNER, account.name);
         values.put(TaskLists.SYNC_ENABLED, 1);
         values.put(TaskLists.VISIBLE, 1);
         return create(account, provider, values);
     }
 
-    public void update(CollectionInfo info, boolean updateColor) throws CalendarStorageException {
-        update(valuesFromCollectionInfo(info, updateColor));
+    public void update(JournalEntity journalEntity, boolean updateColor) throws CalendarStorageException {
+        update(valuesFromCollectionInfo(journalEntity, updateColor));
     }
 
-    private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
+    private static ContentValues valuesFromCollectionInfo(JournalEntity journalEntity, boolean withColor) {
+        CollectionInfo info = journalEntity.getInfo();
         ContentValues values = new ContentValues();
         values.put(TaskLists._SYNC_ID, info.uid);
         values.put(TaskLists.LIST_NAME, info.displayName);
@@ -151,17 +152,4 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
             return new LocalTaskList[size];
         }
     }
-
-
-    // HELPERS
-
-    public static void onRenameAccount(@NonNull ContentResolver resolver, @NonNull String oldName, @NonNull String newName) throws RemoteException {
-        @Cleanup("release") ContentProviderClient client = resolver.acquireContentProviderClient(TaskProvider.ProviderName.OpenTasks.authority);
-        if (client != null) {
-            ContentValues values = new ContentValues(1);
-            values.put(Tasks.ACCOUNT_NAME, newName);
-            client.update(Tasks.getContentUri(TaskProvider.ProviderName.OpenTasks.authority), values, Tasks.ACCOUNT_NAME + "=?", new String[]{oldName});
-        }
-    }
-
 }
