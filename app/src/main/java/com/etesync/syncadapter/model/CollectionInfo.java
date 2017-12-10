@@ -31,7 +31,8 @@ public class CollectionInfo implements Serializable {
 
     public enum Type {
         ADDRESS_BOOK,
-        CALENDAR
+        CALENDAR,
+        TASK_LIST,
     }
 
     // FIXME: Shouldn't be exposed, as it's already saved in the journal. We just expose it for when we save for db.

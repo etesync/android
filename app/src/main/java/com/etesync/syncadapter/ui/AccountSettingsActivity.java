@@ -34,6 +34,8 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.ui.setup.LoginCredentials;
 import com.etesync.syncadapter.ui.setup.LoginCredentialsChangeFragment;
 
+import at.bitfire.ical4android.TaskProvider;
+
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
 public class AccountSettingsActivity extends BaseActivity {
@@ -148,6 +150,27 @@ public class AccountSettingsActivity extends BaseActivity {
             } else {
                 prefSyncCalendars.setEnabled(false);
                 prefSyncCalendars.setSummary(R.string.settings_sync_summary_not_available);
+            }
+
+            final ListPreference prefSyncTasks = (ListPreference)findPreference("sync_interval_tasks");
+            final Long syncIntervalTasks = settings.getSyncInterval(TaskProvider.ProviderName.OpenTasks.authority);
+            if (syncIntervalTasks != null) {
+                prefSyncTasks.setValue(syncIntervalTasks.toString());
+                if (syncIntervalTasks == AccountSettings.SYNC_INTERVAL_MANUALLY)
+                    prefSyncTasks.setSummary(R.string.settings_sync_summary_manually);
+                else
+                    prefSyncTasks.setSummary(getString(R.string.settings_sync_summary_periodically, prefSyncTasks.getEntry()));
+                prefSyncTasks.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        settings.setSyncInterval(TaskProvider.ProviderName.OpenTasks.authority, Long.parseLong((String)newValue));
+                        getLoaderManager().restartLoader(0, getArguments(), AccountSettingsFragment.this);
+                        return false;
+                    }
+                });
+            } else {
+                prefSyncTasks.setEnabled(false);
+                prefSyncTasks.setSummary(R.string.settings_sync_summary_not_available);
             }
 
             final SwitchPreferenceCompat prefWifiOnly = (SwitchPreferenceCompat)findPreference("sync_wifi_only");
