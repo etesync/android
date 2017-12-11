@@ -140,6 +140,8 @@ public class ListEntriesFragment extends ListFragment implements AdapterView.OnI
         String prefix;
         if (info.type == CollectionInfo.Type.CALENDAR) {
             prefix = "SUMMARY:";
+        } else if (info.type == CollectionInfo.Type.TASK_LIST) {
+            prefix = "SUMMARY:";
         } else {
             prefix = "FN:";
         }

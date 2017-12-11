@@ -36,6 +36,7 @@ import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
 import com.etesync.syncadapter.model.ServiceEntity;
 
+import at.bitfire.ical4android.TaskProvider;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 import okhttp3.HttpUrl;
@@ -133,6 +134,8 @@ public class CreateCollectionFragment extends DialogFragment implements LoaderMa
                     authority = App.getAddressBooksAuthority();
                 } else if (info.type == CollectionInfo.Type.CALENDAR) {
                     authority = CalendarContract.AUTHORITY;
+                } else if (info.type == CollectionInfo.Type.TASK_LIST) {
+                    authority = TaskProvider.ProviderName.OpenTasks.authority;
                 } else {
                     throw new IllegalArgumentException("Collection must be an address book or calendar");
                 }

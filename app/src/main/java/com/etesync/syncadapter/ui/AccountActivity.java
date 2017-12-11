@@ -67,6 +67,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
+import at.bitfire.ical4android.Task;
 import at.bitfire.ical4android.TaskProvider;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
@@ -190,6 +191,11 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
             case R.id.create_addressbook:
                 info = new CollectionInfo();
                 info.type = CollectionInfo.Type.ADDRESS_BOOK;
+                startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
+                break;
+            case R.id.create_task_list:
+                info = new CollectionInfo();
+                info.type = CollectionInfo.Type.TASK_LIST;
                 startActivity(CreateCollectionActivity.newIntent(AccountActivity.this, account, info));
                 break;
         }
@@ -366,7 +372,12 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
                     info.caldav = new AccountInfo.ServiceInfo();
                     info.caldav.id = id;
                     info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
-                            ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
+                            ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY);
+                    info.caldav.journals = JournalEntity.getJournals(data, serviceEntity);
+                } else if (service.equals(CollectionInfo.Type.TASK_LIST)) {
+                    info.caldav = new AccountInfo.ServiceInfo();
+                    info.caldav.id = id;
+                    info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
                     info.caldav.journals = JournalEntity.getJournals(data, serviceEntity);
                 }

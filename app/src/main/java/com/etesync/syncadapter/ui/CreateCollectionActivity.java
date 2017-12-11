@@ -73,7 +73,13 @@ public class CreateCollectionActivity extends BaseActivity {
                     }).show();
                 }
             });
-        } else {
+        } else if (info.type == CollectionInfo.Type.TASK_LIST) {
+            setTitle(R.string.create_tasklist);
+            displayName.setHint(R.string.create_tasklist_display_name_hint);
+
+            final View colorGroup = findViewById(R.id.color_group);
+            colorGroup.setVisibility(View.GONE);
+        } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
             setTitle(R.string.create_addressbook);
             displayName.setHint(R.string.create_addressbook_display_name_hint);
 
