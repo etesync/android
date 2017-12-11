@@ -1,4 +1,4 @@
-Secure, End-to-End encrypted and journalized personal information synchronization for Android and the desktop. Currently only contacts and calendars, with more on the way.
+Secure, End-to-End encrypted and journalized personal information synchronization for Android, the desktop and the web. Currently only contacts and calendars, with more on the way.
 
 In order to use this application you need to have an account with EteSync, or run your own instance. Check out https://www.etesync.com/ for more information. The server code is available at https://github.com/etesync/journal-manager
 
