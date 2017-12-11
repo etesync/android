@@ -254,6 +254,7 @@
     <string name="settings_sync_wifi_only_ssid_message">Enter the name of a WiFi network (SSID) to restrict synchronization to this network, or leave blank for all WiFi connections.</string>
     <string name="settings_carddav">Contacts</string>
     <string name="settings_caldav">Calendar</string>
+    <string name="settings_tasks">Tasks</string>
 
     <!-- collection management -->
     <string name="create_addressbook">Create address book</string>

@@ -83,8 +83,8 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
     private Account account;
     private AccountInfo accountInfo;
 
-    ListView listCalDAV, listCardDAV;
-    Toolbar tbCardDAV, tbCalDAV;
+    ListView listCalDAV, listCardDAV, listTasks;
+    Toolbar tbCardDAV, tbCalDAV, tbTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +110,14 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
         tbCalDAV.inflateMenu(R.menu.caldav_actions);
         tbCalDAV.setOnMenuItemClickListener(this);
         tbCalDAV.setTitle(R.string.settings_caldav);
+
+        // Tasks toolbar
+        tbTasks = (Toolbar)findViewById(R.id.tasks_menu);
+        tbTasks.setOverflowIcon(icMenu);
+        tbTasks.inflateMenu(R.menu.vtodo_actions);
+        tbTasks.setOnMenuItemClickListener(this);
+        tbTasks.setTitle(R.string.settings_tasks);
+
 
         // load CardDAV/CalDAV journals
         getLoaderManager().initLoader(0, getIntent().getExtras(), this);
@@ -228,7 +236,7 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
     /* LOADERS AND LOADED DATA */
 
     protected static class AccountInfo {
-        ServiceInfo carddav, caldav;
+        ServiceInfo carddav, caldav, tasks;
 
         public static class ServiceInfo {
             long id;
@@ -283,6 +291,21 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
             listCalDAV.setOnItemClickListener(onItemClickListener);
         } else
             card.setVisibility(View.GONE);
+
+        card = (CardView)findViewById(R.id.tasklist);
+        if (info.tasks != null) {
+            ProgressBar progress = (ProgressBar)findViewById(R.id.caldav_refreshing);
+            progress.setVisibility(info.tasks.refreshing ? View.VISIBLE : View.GONE);
+
+            listTasks = (ListView)findViewById(R.id.calendars);
+            listTasks.setEnabled(!info.tasks.refreshing);
+            listTasks.setAlpha(info.tasks.refreshing ? 0.5f : 1);
+
+            final CollectionListAdapter adapter = new CollectionListAdapter(this, account);
+            adapter.addAll(info.tasks.journals);
+            listTasks.setAdapter(adapter);
+            listTasks.setOnItemClickListener(onItemClickListener);
+        }
     }
 
     @Override
@@ -292,6 +315,9 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
 
         if (listCalDAV != null)
             listCalDAV.setAdapter(null);
+
+        if (listTasks != null)
+            listTasks.setAdapter(null);
     }
 
 
@@ -375,11 +401,11 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
                             ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY);
                     info.caldav.journals = JournalEntity.getJournals(data, serviceEntity);
                 } else if (service.equals(CollectionInfo.Type.TASK_LIST)) {
-                    info.caldav = new AccountInfo.ServiceInfo();
-                    info.caldav.id = id;
-                    info.caldav.refreshing = (davService != null && davService.isRefreshing(id)) ||
+                    info.tasks = new AccountInfo.ServiceInfo();
+                    info.tasks.id = id;
+                    info.tasks.refreshing = (davService != null && davService.isRefreshing(id)) ||
                             ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority);
-                    info.caldav.journals = JournalEntity.getJournals(data, serviceEntity);
+                    info.tasks.journals = JournalEntity.getJournals(data, serviceEntity);
                 }
             }
             return info;
