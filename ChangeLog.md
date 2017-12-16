@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.19.4
+* Improve error message when using the wrong encryption password on account creation.
+* Update target SDK
+
 ## Version 0.19.3
 * Update Polish translation.
 
