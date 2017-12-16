@@ -19,15 +19,10 @@ android {
         targetSdkVersion 25
 
         versionCode 21
+        versionName "0.19.3"
 
         buildConfigField "long", "buildTime", System.currentTimeMillis() + "L"
         buildConfigField "boolean", "customCerts", "true"
-    }
-
-    productFlavors {
-        standard {
-            versionName "0.19.3"
-        }
     }
 
     buildTypes {
