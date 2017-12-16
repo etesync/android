@@ -107,6 +107,8 @@ public class BaseConfigurationFinder {
 
         public final String logs;
 
+        public Throwable error;
+
         @Getter
         private final boolean failed;
     }

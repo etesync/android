@@ -89,23 +89,37 @@ public class SetupEncryptionFragment extends DialogFragment {
 
         @Override
         protected void onPostExecute(Configuration result) {
-            try {
-                if (createAccount(config.userName, config)) {
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
-                }
-            } catch (InvalidAccountException e) {
-                App.log.severe("Account creation failed!");
+            if ((config.error != null) && (config.error instanceof Exceptions.IntegrityException)) {
+                App.log.severe("Wrong encryption password.");
                 new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.account_creation_failed)
+                        .setTitle(R.string.wrong_encryption_password)
                         .setIcon(R.drawable.ic_error_dark)
-                        .setMessage(e.getLocalizedMessage())
+                        .setMessage(getString(R.string.wrong_encryption_password_content, config.error.getLocalizedMessage()))
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // dismiss
                             }
                         }).show();
+            } else {
+                try {
+                    if (createAccount(config.userName, config)) {
+                        getActivity().setResult(Activity.RESULT_OK);
+                        getActivity().finish();
+                    }
+                } catch (InvalidAccountException e) {
+                    App.log.severe("Account creation failed!");
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.account_creation_failed)
+                            .setIcon(R.drawable.ic_error_dark)
+                            .setMessage(e.getLocalizedMessage())
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // dismiss
+                                }
+                            }).show();
+                }
             }
 
             dismissAllowingStateLoss();
@@ -116,6 +130,7 @@ public class SetupEncryptionFragment extends DialogFragment {
             App.log.info("Started deriving key");
             config.password = Crypto.deriveKey(config.userName, config.rawPassword);
             App.log.info("Finished deriving key");
+            config.error = null;
 
             try {
                 Crypto.CryptoManager cryptoManager;
@@ -129,12 +144,9 @@ public class SetupEncryptionFragment extends DialogFragment {
                     userInfo.verify(cryptoManager);
                     config.keyPair = new Crypto.AsymmetricKeyPair(userInfo.getContent(cryptoManager), userInfo.getPubkey());
                 }
-            } catch (Exceptions.HttpException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            } catch (Exceptions.IntegrityException e) {
-                e.printStackTrace();
-            } catch (Exceptions.VersionTooNewException e) {
-                e.printStackTrace();
+                config.error = e;
             }
 
             return config;

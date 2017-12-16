@@ -194,6 +194,8 @@
     <string name="login_encryption_setup">Please wait, setting up encryption…</string>
 
     <string name="account_creation_failed">Account creation failed</string>
+    <string name="wrong_encryption_password">Wrong encryption password</string>
+    <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\n\n%s</string>
 
     <!-- SetupUserInfoFragment -->
     <string name="login_encryption_error_title">Encryption Error</string>
