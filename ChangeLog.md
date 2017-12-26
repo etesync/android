@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.19.5
+* Update store description.
+
 ## Version 0.19.4
 * Improve error message when using the wrong encryption password on account creation.
 * Update target SDK
