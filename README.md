@@ -9,7 +9,7 @@ EteSync
       height="80" />](https://f-droid.org/app/com.etesync.syncadapter)
 
 ![GitHub tag](https://img.shields.io/github/tag/etesync/android.svg)
-[![Chan on freenode](https://img.shields.io/badge/irc.freenode.net-%23EteSync-blue.svg)](ircs://chat.freenode.net:6697/etesync)
+[![Chat on freenode](https://img.shields.io/badge/irc.freenode.net-%23EteSync-blue.svg)](https://webchat.freenode.net/?channels=#etesync)
 
 Please see the [EteSync website](https://www.etesync.com) for more information.
 
