@@ -1,14 +1,17 @@
 EteSync
 =======
 
-Please see the [EteSync website](https://www.etesync.com) for more information.
-
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
       alt="Get it on Google Play" 
       height="80" />](https://play.google.com/store/apps/details?id=com.etesync.syncadapter)
 [<img src="https://f-droid.org/badge/get-it-on.png"
       alt="Get it on F-Droid"
       height="80" />](https://f-droid.org/app/com.etesync.syncadapter)
+
+![GitHub tag](https://img.shields.io/github/tag/etesync/android.svg)
+[![Chan on freenode](https://img.shields.io/badge/irc.freenode.net-%23EteSync-blue.svg)](ircs://chat.freenode.net:6697/etesync)
+
+Please see the [EteSync website](https://www.etesync.com) for more information.
 
 EteSync is licensed under the [GPLv3 License](LICENSE).
 
