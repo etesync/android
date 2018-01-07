@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.19.6
+* Fix confusing error message when creating/fetching user info.
+
 ## Version 0.19.5
 * Update store description.
 
