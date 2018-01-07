@@ -198,7 +198,7 @@
     <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\n\n%s</string>
 
     <!-- SetupUserInfoFragment -->
-    <string name="login_encryption_error_title">Encryption Error</string>
+    <string name="login_user_info_error_title">Error Setting User Info</string>
 
 
     <!-- ImportFragment -->

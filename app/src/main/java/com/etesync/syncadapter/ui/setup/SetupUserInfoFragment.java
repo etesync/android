@@ -121,7 +121,7 @@ public class SetupUserInfoFragment extends DialogFragment {
                 settings.setKeyPair(result.keyPair);
             } else {
                 Dialog dialog = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.login_encryption_error_title)
+                        .setTitle(R.string.login_user_info_error_title)
                         .setIcon(R.drawable.ic_error_dark)
                         .setMessage(result.exception.getLocalizedMessage())
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
