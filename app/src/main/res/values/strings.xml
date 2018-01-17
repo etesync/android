@@ -38,7 +38,7 @@
     <string name="about_license_info_no_warranty">This program comes with ABSOLUTELY NO WARRANTY. It is free software, and you are welcome to redistribute it under certain conditions.</string>
 
     <!-- global settings -->
-    <string name="logging_davdroid_file_logging">EteSync file logging</string>
+    <string name="logging_davdroid_file_logging">EteSync file logging is ON</string>
     <string name="logging_to_external_storage">Logging to external storage: %s</string>
     <string name="logging_to_external_storage_warning">Delete logs as soon as possible!</string>
     <string name="logging_couldnt_create_file">Couldn\'t create external log file: %s</string>
@@ -85,7 +85,7 @@
     <string name="app_settings_reset_certificates_success">All custom certificates have been cleared</string>
     <string name="app_settings_debug">Debugging</string>
     <string name="app_settings_log_to_external_storage">Log to external file</string>
-    <string name="app_settings_log_to_external_storage_on">Logging to external storage (if available)</string>
+    <string name="app_settings_log_to_external_storage_on">Logging to external storage. Disable to hide the notification.</string>
     <string name="app_settings_log_to_external_storage_off">External file logging is disabled</string>
     <string name="app_settings_show_debug_info">Show debug info</string>
     <string name="app_settings_show_debug_info_details">View/share software and configuration details</string>
