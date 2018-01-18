@@ -32,6 +32,9 @@
     <string name="startup_development_version">EteSync Preview Release</string>
     <string name="startup_development_version_message">This is a development version of EteSync. Be aware that things may not work as expected. Please give us constructive feedback to improve EteSync.</string>
     <string name="startup_development_version_give_feedback">Give feedback</string>
+    <string name="startup_vendor_specific_bugs">Potential Vendor Bugs</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync has detected you are using an Android version that may contain vendor specific bugs.\nPlease take a look at the FAQ for more information.</string>
+    <string name="startup_vendor_specific_bugs_open_faq">Open FAQ</string>
 
     <!-- AboutActivity -->
     <string name="about_license_terms">License terms</string>

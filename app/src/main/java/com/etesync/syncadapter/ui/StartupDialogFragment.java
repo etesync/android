@@ -33,7 +33,8 @@ import java.util.List;
 
 public class StartupDialogFragment extends DialogFragment {
     private static final String
-            HINT_BATTERY_OPTIMIZATIONS = "BatteryOptimizations";
+            HINT_BATTERY_OPTIMIZATIONS = "BatteryOptimizations",
+            HINT_VENDOR_SPECIFIC_BUGS = "VendorSpecificBugs";
 
     private static final String ARGS_MODE = "mode";
 
@@ -41,6 +42,7 @@ public class StartupDialogFragment extends DialogFragment {
         BATTERY_OPTIMIZATIONS,
         DEVELOPMENT_VERSION,
         GOOGLE_PLAY_ACCOUNTS_REMOVED,
+        VENDOR_SPECIFIC_BUGS,
     }
 
     public static StartupDialogFragment[] getStartupDialogs(Context context) {
@@ -54,6 +56,12 @@ public class StartupDialogFragment extends DialogFragment {
             PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
             if (powerManager != null && !powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID))
                 dialogs.add(StartupDialogFragment.instantiate(Mode.BATTERY_OPTIMIZATIONS));
+        }
+
+        // Vendor specific bugs
+        String manu = Build.MANUFACTURER;
+        if (!HintManager.getHintSeen(context, HINT_BATTERY_OPTIMIZATIONS) && (manu.equalsIgnoreCase("Xiaomi") || manu.equalsIgnoreCase("Huawei")) && !Build.DISPLAY.contains("lineage")) {
+            dialogs.add(StartupDialogFragment.instantiate(Mode.VENDOR_SPECIFIC_BUGS));
         }
 
         Collections.reverse(dialogs);
@@ -117,6 +125,28 @@ public class StartupDialogFragment extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Constants.feedbackUri));
+                            }
+                        })
+                        .create();
+            case VENDOR_SPECIFIC_BUGS:
+                return new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.startup_vendor_specific_bugs)
+                        .setMessage(R.string.startup_vendor_specific_bugs_message)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setNeutralButton(R.string.startup_vendor_specific_bugs_open_faq, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                WebViewActivity.openUrl(getContext(), Constants.faqUri.buildUpon().encodedFragment("vendor-issues").build());
+                            }
+                        })
+                        .setNegativeButton(R.string.startup_dont_show_again, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                HintManager.setHintSeen(getContext(), HINT_VENDOR_SPECIFIC_BUGS, true);
                             }
                         })
                         .create();
