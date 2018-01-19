@@ -104,6 +104,10 @@ public class JournalModel {
 
             return null;
         }
+
+        public boolean isOwner(String username) {
+            return (owner == null) || owner.equalsIgnoreCase(username);
+        }
     }
 
     @Entity

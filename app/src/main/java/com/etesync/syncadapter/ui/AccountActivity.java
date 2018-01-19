@@ -420,7 +420,7 @@ public class AccountActivity extends BaseActivity implements Toolbar.OnMenuItemC
             readOnly.setVisibility(journalEntity.isReadOnly() ? View.VISIBLE : View.GONE);
 
             final View shared = v.findViewById(R.id.shared);
-            boolean isOwner = (journalEntity.getOwner() == null) || journalEntity.getOwner().equals(account.name);
+            boolean isOwner = journalEntity.isOwner(account.name);
             shared.setVisibility(isOwner ? View.GONE : View.VISIBLE);
 
             return v;

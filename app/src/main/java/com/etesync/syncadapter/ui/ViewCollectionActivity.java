@@ -75,7 +75,7 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
         }
 
         info = journalEntity.getInfo();
-        isOwner = (journalEntity.getOwner() == null) || journalEntity.getOwner().equals(account.name);
+        isOwner = journalEntity.isOwner(account.name);
 
         final View colorSquare = findViewById(R.id.color);
         if (info.type == CollectionInfo.Type.CALENDAR) {
@@ -97,7 +97,7 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
         desc.setText(info.description);
 
         final TextView owner = (TextView) findViewById(R.id.owner);
-        if (account.name.equals(journalEntity.getOwner())) {
+        if (isOwner) {
             owner.setVisibility(View.GONE);
         } else {
             owner.setVisibility(View.VISIBLE);
