@@ -111,6 +111,10 @@ android {
 }
 
 dependencies {
+    def acraVersion = '5.0.1'
+    implementation "ch.acra:acra-mail:$acraVersion"
+    implementation "ch.acra:acra-toast:$acraVersion"
+
     compile project(':cert4android')
     compile project(':ical4android')
     compile project(':vcard4android')

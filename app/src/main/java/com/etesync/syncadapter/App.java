@@ -35,6 +35,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.etesync.syncadapter.log.LogcatHandler;
 import com.etesync.syncadapter.log.PlainTextFormatter;
@@ -50,6 +51,10 @@ import com.etesync.syncadapter.ui.AccountsActivity;
 import com.etesync.syncadapter.utils.HintManager;
 import com.etesync.syncadapter.utils.LanguageUtils;
 
+import org.acra.ACRA;
+import org.acra.annotation.AcraCore;
+import org.acra.annotation.AcraMailSender;
+import org.acra.annotation.AcraToast;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.File;
@@ -76,7 +81,11 @@ import lombok.Cleanup;
 import lombok.Getter;
 import okhttp3.internal.tls.OkHostnameVerifier;
 
-
+@AcraCore(buildConfigClass = BuildConfig.class)
+@AcraMailSender(mailTo = "reports@etesync.com",
+        reportFileName = "ACRA-report.stacktrace.json")
+@AcraToast(resText = R.string.crash_message,
+        length = Toast.LENGTH_LONG)
 public class App extends Application {
     public static final String
             DISTRUST_SYSTEM_CERTIFICATES = "distrustSystemCerts",
@@ -131,6 +140,14 @@ public class App extends Application {
         addressBooksAuthority = getString(R.string.address_books_authority);
 
         loadLanguage();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
+        // The following line triggers the initialization of ACRA
+        ACRA.init(this);
     }
 
     private void loadLanguage() {

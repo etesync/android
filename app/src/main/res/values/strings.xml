@@ -21,6 +21,9 @@
     <string name="please_wait">Please wait …</string>
     <string name="send">Send</string>
 
+    <!-- Crash -->
+    <string name="crash_message">EteSync has crashed, please send stack trace to developers.</string>
+
     <!-- tourguide -->
     <string name="tourguide_title">Did you know?</string>
 
