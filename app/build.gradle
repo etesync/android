@@ -129,9 +129,10 @@ dependencies {
          transitive=true
     }
 
-    compile 'io.requery:requery:1.3.1'
-    compile 'io.requery:requery-android:1.3.1'
-    annotationProcessor 'io.requery:requery-processor:1.3.1'
+    compile 'io.requery:requery:1.5.0'
+    compile 'io.requery:requery-android:1.5.0'
+    compile 'io.requery:requery-kotlin:1.5.0'
+    annotationProcessor 'io.requery:requery-processor:1.5.0'
 
     compile group: 'com.madgag.spongycastle', name: 'core', version: '1.54.0.0'
     compile group: 'com.madgag.spongycastle', name: 'prov', version: '1.54.0.0'
