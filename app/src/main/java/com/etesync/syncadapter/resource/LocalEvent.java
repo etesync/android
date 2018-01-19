@@ -37,8 +37,6 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Cleanup;
-import lombok.Getter;
-import lombok.Setter;
 
 @TargetApi(17)
 public class LocalEvent extends AndroidEvent implements LocalResource {
@@ -51,11 +49,20 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
 
     private boolean saveAsDirty = false; // When true, the resource will be saved as dirty
 
-    @Getter
-    protected String fileName;
-    @Getter
-    @Setter
+    private String fileName;
     protected String eTag;
+
+    private String getFileName() {
+        return fileName;
+    }
+
+    public String getETag() {
+        return eTag;
+    }
+
+    public void setETag(String eTag) {
+        this.eTag = eTag;
+    }
 
     public boolean weAreOrganizer = true;
 

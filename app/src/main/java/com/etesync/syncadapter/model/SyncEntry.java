@@ -6,13 +6,17 @@ import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 
 import java.io.Serializable;
 
-import lombok.Getter;
-
 public class SyncEntry implements Serializable {
-    @Getter
     private String content;
-    @Getter
     private Actions action;
+
+    public String getContent() {
+        return content;
+    }
+
+    public Actions getAction() {
+        return action;
+    }
 
     public enum Actions {
         ADD("ADD"),

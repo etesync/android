@@ -42,9 +42,6 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Locale;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
 public class Crypto {
     public static String deriveKey(String salt, String password) {
         final int keySize = 190;
@@ -68,10 +65,16 @@ public class Crypto {
     }
 
     public static class AsymmetricKeyPair implements Serializable {
-        @Getter(AccessLevel.PUBLIC)
         private final byte[] privateKey;
-        @Getter(AccessLevel.PUBLIC)
         private final byte[] publicKey;
+
+        public byte[] getPrivateKey() {
+            return privateKey;
+        }
+
+        public byte[] getPublicKey() {
+            return publicKey;
+        }
 
         public AsymmetricKeyPair(final byte[] privateKey, final byte[] publicKey) {
             this.privateKey = privateKey;
@@ -146,11 +149,14 @@ public class Crypto {
         final static int HMAC_SIZE = 256 / 8; // hmac256 in bytes
 
         private SecureRandom _random = null;
-        @Getter
         private final byte version;
         private byte[] cipherKey;
         private byte[] hmacKey;
         private byte[] derivedKey;
+
+        public byte getVersion() {
+            return version;
+        }
 
         private void setDerivedKey(byte[] derivedKey) {
             cipherKey = hmac256("aes".getBytes(Charsets.UTF_8), derivedKey);

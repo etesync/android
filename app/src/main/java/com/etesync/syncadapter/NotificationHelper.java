@@ -19,16 +19,18 @@ import java.util.logging.Level;
 
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Getter;
 
 public class NotificationHelper {
     final NotificationManagerCompat notificationManager;
     final Context context;
     final String notificationTag;
     final int notificationId;
-    @Getter
     Intent detailsIntent;
     int messageString;
+
+    public Intent getDetailsIntent() {
+        return detailsIntent;
+    }
 
     private Throwable throwable = null;
 

@@ -14,7 +14,6 @@ import android.os.RemoteException;
 import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
 
-import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
 
 import net.fortuna.ical4j.model.property.ProdId;
@@ -32,23 +31,36 @@ import at.bitfire.ical4android.AndroidTaskList;
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Task;
 import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class LocalTask extends AndroidTask implements LocalResource {
     static {
         Task.prodId = new ProdId(Constants.PRODID_BASE + " ical4j/2.x");
     }
 
-    @Getter
     protected String uuid;
 
     static final String COLUMN_ETAG = Tasks.SYNC1,
                         COLUMN_UID = Tasks.SYNC2,
                         COLUMN_SEQUENCE = Tasks.SYNC3;
 
-    @Getter protected String fileName;
-    @Getter @Setter protected String eTag;
+    protected String fileName;
+    protected String eTag;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    private String getFileName() {
+        return fileName;
+    }
+
+    public String getETag() {
+        return eTag;
+    }
+
+    public void setETag(String eTag) {
+        this.eTag = eTag;
+    }
 
     public LocalTask(@NonNull AndroidTaskList taskList, Task task, String fileName, String eTag) {
         super(taskList, task);

@@ -45,17 +45,19 @@ import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import ezvcard.VCardVersion;
 import lombok.Cleanup;
-import lombok.Getter;
 import lombok.ToString;
 
 import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 @ToString(callSuper=true)
 public class LocalGroup extends AndroidGroup implements LocalResource {
-    @Getter
     protected String uuid;
     /** marshalled list of member UIDs, as sent by server */
     public static final String COLUMN_PENDING_MEMBERS = Groups.SYNC3;
+
+    public String getUuid() {
+        return uuid;
+    }
 
     public LocalGroup(AndroidAddressBook addressBook, long id, String fileName, String eTag) {
         super(addressBook, id, fileName, eTag);

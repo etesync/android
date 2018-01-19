@@ -6,12 +6,10 @@ import com.google.gson.reflect.TypeToken;
 
 import org.spongycastle.util.Arrays;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.Getter;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -135,17 +133,26 @@ public class JournalManager extends BaseManager {
     }
 
     public static class Journal extends Base {
-        @Getter
         private String owner;
-
-        @Getter
         private byte[] key;
-
-        @Getter
         private int version = -1;
-
-        @Getter
         private boolean readOnly = false;
+
+        public String getOwner() {
+            return this.owner;
+        }
+
+        public byte[] getKey() {
+            return this.key;
+        }
+
+        public int getVersion() {
+            return this.version;
+        }
+
+        public boolean isReadOnly() {
+            return this.readOnly;
+        }
 
         private transient byte[] hmac = null;
 
@@ -201,10 +208,16 @@ public class JournalManager extends BaseManager {
     }
 
     public static class Member {
-        @Getter
         private String user;
-        @Getter
         private byte[] key;
+
+        public String getUser() {
+            return user;
+        }
+
+        public byte[] getKey() {
+            return key;
+        }
 
         @SuppressWarnings("unused")
         private Member() {

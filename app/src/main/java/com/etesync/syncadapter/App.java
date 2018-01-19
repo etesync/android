@@ -78,7 +78,6 @@ import io.requery.meta.EntityModel;
 import io.requery.sql.Configuration;
 import io.requery.sql.EntityDataStore;
 import lombok.Cleanup;
-import lombok.Getter;
 import okhttp3.internal.tls.OkHostnameVerifier;
 
 @AcraCore(buildConfigClass = BuildConfig.class)
@@ -101,16 +100,12 @@ public class App extends Application {
     public static final String DEFAULT_LANGUAGE = "default";
     public static Locale sDefaultLocacle = Locale.getDefault();
 
-    @Getter
     private static String appName;
 
-    @Getter
     private CustomCertManager certManager;
 
-    @Getter
     private static SSLSocketFactoryCompat sslSocketFactoryCompat;
 
-    @Getter
     private static HostnameVerifier hostnameVerifier;
 
     public final static Logger log = Logger.getLogger("syncadapter");
@@ -118,12 +113,37 @@ public class App extends Application {
         at.bitfire.cert4android.Constants.log = Logger.getLogger("syncadapter.cert4android");
     }
 
-    @Getter
     private static String accountType;
-    @Getter
     private static String addressBookAccountType;
-    @Getter
     private static String addressBooksAuthority;
+
+    public static String getAppName() {
+        return App.appName;
+    }
+
+    public CustomCertManager getCertManager() {
+        return this.certManager;
+    }
+
+    public static SSLSocketFactoryCompat getSslSocketFactoryCompat() {
+        return App.sslSocketFactoryCompat;
+    }
+
+    public static HostnameVerifier getHostnameVerifier() {
+        return App.hostnameVerifier;
+    }
+
+    public static String getAccountType() {
+        return App.accountType;
+    }
+
+    public static String getAddressBookAccountType() {
+        return App.addressBookAccountType;
+    }
+
+    public static String getAddressBooksAuthority() {
+        return App.addressBooksAuthority;
+    }
 
     @Override
     @SuppressLint("HardwareIds")

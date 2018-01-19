@@ -1,14 +1,12 @@
 package com.etesync.syncadapter.journalmanager;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.GsonHelper;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.GsonHelper;
-
-import lombok.Getter;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,11 +15,13 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class JournalEntryManager extends BaseManager {
-    @Getter
     final String uid;
     final static private Type entryType = new TypeToken<List<Entry>>() {
     }.getType();
 
+    public String getUid() {
+        return uid;
+    }
 
     public JournalEntryManager(OkHttpClient httpClient, HttpUrl remote, String journal) {
         this.uid = journal;

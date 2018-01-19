@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import lombok.Getter;
 import lombok.ToString;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -118,8 +117,11 @@ public class BaseConfigurationFinder {
 
         public Throwable error;
 
-        @Getter
         private final boolean failed;
+
+        public boolean isFailed() {
+            return failed;
+        }
     }
 
 }

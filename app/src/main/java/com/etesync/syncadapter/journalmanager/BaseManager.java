@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.logging.Level;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -65,11 +62,20 @@ abstract class BaseManager {
     }
 
     static class Base {
-        @Setter(AccessLevel.PACKAGE)
-        @Getter(AccessLevel.PACKAGE)
         private byte[] content;
-        @Setter(AccessLevel.PACKAGE)
         private String uid;
+
+        void setContent(final byte[] content) {
+            this.content = content;
+        }
+
+        byte[] getContent() {
+            return this.content;
+        }
+
+        void setUid(final String uid) {
+            this.uid = uid;
+        }
 
         public String getUid() {
             return uid;

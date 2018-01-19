@@ -2,14 +2,11 @@ package com.etesync.syncadapter.journalmanager;
 
 import com.etesync.syncadapter.GsonHelper;
 
-import org.apache.commons.codec.Charsets;
 import org.spongycastle.util.Arrays;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import lombok.Getter;
-import lombok.Setter;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -89,14 +86,26 @@ public class UserInfoManager extends BaseManager {
     }
 
     public static class UserInfo {
-        @Setter
-        @Getter
         private transient String owner;
-        @Getter
         private byte version;
-        @Getter
         private byte[] pubkey;
         private byte[] content;
+
+        public void setOwner(final String owner) {
+            this.owner = owner;
+        }
+
+        public String getOwner() {
+            return this.owner;
+        }
+
+        public byte getVersion() {
+            return this.version;
+        }
+
+        public byte[] getPubkey() {
+            return this.pubkey;
+        }
 
         public byte[] getContent(Crypto.CryptoManager crypto) {
             byte[] content = Arrays.copyOfRange(this.content, HMAC_SIZE, this.content.length);
