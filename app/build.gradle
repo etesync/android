@@ -7,6 +7,13 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    generateStubs = true
+}
 
 android {
     compileSdkVersion 27
@@ -133,6 +140,7 @@ dependencies {
     compile 'io.requery:requery-android:1.5.0'
     compile 'io.requery:requery-kotlin:1.5.0'
     annotationProcessor 'io.requery:requery-processor:1.5.0'
+    kapt 'io.requery:requery-processor:1.5.0'
 
     compile group: 'com.madgag.spongycastle', name: 'core', version: '1.54.0.0'
     compile group: 'com.madgag.spongycastle', name: 'prov', version: '1.54.0.0'
