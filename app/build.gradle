@@ -134,7 +134,8 @@ dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'org.apache.commons:commons-collections4:4.1'
-    provided 'org.projectlombok:lombok:1.16.16'
+    compileOnly 'org.projectlombok:lombok:1.16.20'
+    annotationProcessor 'org.projectlombok:lombok:1.16.20'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
     // for tests
