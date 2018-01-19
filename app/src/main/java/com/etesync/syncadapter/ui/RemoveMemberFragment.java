@@ -15,14 +15,11 @@ import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.InvalidAccountException;
 import com.etesync.syncadapter.R;
-import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.JournalManager;
-import com.etesync.syncadapter.journalmanager.UserInfoManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 
 import org.apache.commons.codec.Charsets;
 
-import lombok.RequiredArgsConstructor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
@@ -108,9 +105,12 @@ public class RemoveMemberFragment extends DialogFragment {
             dismiss();
         }
 
-        @RequiredArgsConstructor
         class RemoveResult {
             final Throwable throwable;
+
+            RemoveResult(final Throwable throwable) {
+                this.throwable = throwable;
+            }
         }
     }
 }

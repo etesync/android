@@ -23,7 +23,6 @@ import com.etesync.syncadapter.HttpClient;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.model.CollectionInfo;
-import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
 
@@ -31,7 +30,6 @@ import java.util.List;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.RequiredArgsConstructor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
@@ -163,10 +161,14 @@ public class CollectionMembersListFragment extends ListFragment implements Adapt
             }
         }
 
-        @RequiredArgsConstructor
         class MembersResult {
             final List<JournalManager.Member> members;
             final Throwable throwable;
+
+            MembersResult(final List<JournalManager.Member> members, final Throwable throwable) {
+                this.members = members;
+                this.throwable = throwable;
+            }
         }
     }
 }

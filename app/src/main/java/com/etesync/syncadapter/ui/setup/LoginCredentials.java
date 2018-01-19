@@ -11,12 +11,11 @@ package com.etesync.syncadapter.ui.setup;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
-import lombok.RequiredArgsConstructor;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class LoginCredentials implements Parcelable {
     public final URI uri;

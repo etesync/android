@@ -23,7 +23,6 @@ import com.etesync.syncadapter.journalmanager.JournalManager;
 import com.etesync.syncadapter.journalmanager.UserInfoManager;
 import com.etesync.syncadapter.model.CollectionInfo;
 
-import lombok.RequiredArgsConstructor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
@@ -131,9 +130,12 @@ public class AddMemberFragment extends DialogFragment {
             }
         }
 
-        @RequiredArgsConstructor
         class AddResult {
             final Throwable throwable;
+
+            AddResult(final Throwable throwable) {
+                this.throwable = throwable;
+            }
         }
     }
 
@@ -174,9 +176,12 @@ public class AddMemberFragment extends DialogFragment {
             dismiss();
         }
 
-        @RequiredArgsConstructor
         class AddResultSecond {
             final Throwable throwable;
+
+            AddResultSecond(final Throwable throwable) {
+                this.throwable = throwable;
+            }
         }
     }
 }

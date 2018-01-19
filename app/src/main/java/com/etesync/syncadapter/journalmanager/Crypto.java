@@ -44,7 +44,6 @@ import java.util.Locale;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 public class Crypto {
     public static String deriveKey(String salt, String password) {
@@ -68,12 +67,16 @@ public class Crypto {
         return null;
     }
 
-    @RequiredArgsConstructor
     public static class AsymmetricKeyPair implements Serializable {
         @Getter(AccessLevel.PUBLIC)
         private final byte[] privateKey;
         @Getter(AccessLevel.PUBLIC)
         private final byte[] publicKey;
+
+        public AsymmetricKeyPair(final byte[] privateKey, final byte[] publicKey) {
+            this.privateKey = privateKey;
+            this.publicKey = publicKey;
+        }
     }
 
     public static class AsymmetricCryptoManager {

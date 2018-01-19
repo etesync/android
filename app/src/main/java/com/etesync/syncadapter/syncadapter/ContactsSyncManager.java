@@ -50,7 +50,6 @@ import at.bitfire.vcard4android.BatchOperation;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import lombok.Cleanup;
-import lombok.RequiredArgsConstructor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -240,7 +239,6 @@ public class ContactsSyncManager extends SyncManager {
 
     // downloader helper class
 
-    @RequiredArgsConstructor
     private class ResourceDownloader implements Contact.Downloader {
         @Override
         public byte[] download(String url, String accepts) {

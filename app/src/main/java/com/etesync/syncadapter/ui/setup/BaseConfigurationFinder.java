@@ -10,6 +10,13 @@ package com.etesync.syncadapter.ui.setup;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.etesync.syncadapter.HttpClient;
+import com.etesync.syncadapter.journalmanager.Crypto;
+import com.etesync.syncadapter.journalmanager.Exceptions;
+import com.etesync.syncadapter.journalmanager.JournalAuthenticator;
+import com.etesync.syncadapter.log.StringHandler;
+import com.etesync.syncadapter.model.CollectionInfo;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -18,14 +25,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.etesync.syncadapter.HttpClient;
-import com.etesync.syncadapter.journalmanager.Crypto;
-import com.etesync.syncadapter.journalmanager.Exceptions;
-import com.etesync.syncadapter.journalmanager.JournalAuthenticator;
-import com.etesync.syncadapter.log.StringHandler;
-import com.etesync.syncadapter.model.CollectionInfo;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -85,10 +85,19 @@ public class BaseConfigurationFinder {
 
     // data classes
 
-    @RequiredArgsConstructor
     @ToString(exclude={"logs", "authtoken", "rawPassword", "password"})
     public static class Configuration implements Serializable {
         // We have to use URI here because HttpUrl is not serializable!
+
+        public Configuration(final URI url, final String userName, final String authtoken, final ServiceInfo cardDAV, final ServiceInfo calDAV, final String logs, final boolean failed) {
+            this.url = url;
+            this.userName = userName;
+            this.authtoken = authtoken;
+            this.cardDAV = cardDAV;
+            this.calDAV = calDAV;
+            this.logs = logs;
+            this.failed = failed;
+        }
 
         @ToString
         public static class ServiceInfo implements Serializable {

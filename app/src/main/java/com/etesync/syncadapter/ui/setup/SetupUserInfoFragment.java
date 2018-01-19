@@ -9,9 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.widget.TextView;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
@@ -22,7 +20,6 @@ import com.etesync.syncadapter.journalmanager.Constants;
 import com.etesync.syncadapter.journalmanager.Crypto;
 import com.etesync.syncadapter.journalmanager.UserInfoManager;
 
-import lombok.RequiredArgsConstructor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
@@ -137,10 +134,14 @@ public class SetupUserInfoFragment extends DialogFragment {
             dismissAllowingStateLoss();
         }
 
-        @RequiredArgsConstructor
         class SetupUserInfoResult {
             final Crypto.AsymmetricKeyPair keyPair;
             final Exception exception;
+
+            SetupUserInfoResult(final Crypto.AsymmetricKeyPair keyPair, final Exception exception) {
+                this.keyPair = keyPair;
+                this.exception = exception;
+            }
         }
     }
 }

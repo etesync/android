@@ -43,7 +43,6 @@ import java.util.logging.Level;
 
 import ezvcard.Ezvcard;
 import lombok.Cleanup;
-import lombok.RequiredArgsConstructor;
 
 public class AboutActivity extends BaseActivity {
 
@@ -62,12 +61,19 @@ public class AboutActivity extends BaseActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-
-    @RequiredArgsConstructor
     private static class ComponentInfo {
         final String title, version, website, copyright;
         final int licenseInfo;
         final String licenseTextFile;
+
+        ComponentInfo(final String title, final String version, final String website, final String copyright, final int licenseInfo, final String licenseTextFile) {
+            this.title = title;
+            this.version = version;
+            this.website = website;
+            this.copyright = copyright;
+            this.licenseInfo = licenseInfo;
+            this.licenseTextFile = licenseTextFile;
+        }
     }
 
     private final static ComponentInfo components[] = {
