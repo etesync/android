@@ -44,12 +44,9 @@ import at.bitfire.vcard4android.CachedGroupMembership;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import ezvcard.VCardVersion;
-import lombok.Cleanup;
-import lombok.ToString;
 
 import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
-@ToString(callSuper=true)
 public class LocalGroup extends AndroidGroup implements LocalResource {
     protected String uuid;
     /** marshalled list of member UIDs, as sent by server */
@@ -136,10 +133,11 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
     protected ContentValues contentValues() {
         ContentValues values = super.contentValues();
 
-        @Cleanup("recycle") Parcel members = Parcel.obtain();
+        Parcel members = Parcel.obtain();
         members.writeStringList(contact.members);
         values.put(COLUMN_PENDING_MEMBERS, members.marshall());
 
+        members.recycle();
         return values;
     }
 
@@ -169,7 +167,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
      */
     public static void applyPendingMemberships(LocalAddressBook addressBook) throws ContactsStorageException {
         try {
-            @Cleanup Cursor cursor = addressBook.provider.query(
+            Cursor cursor = addressBook.provider.query(
                     addressBook.syncAdapterURI(Groups.CONTENT_URI),
                     new String[] { Groups._ID, COLUMN_PENDING_MEMBERS },
                     COLUMN_PENDING_MEMBERS + " IS NOT NULL", new String[] {},
@@ -193,10 +191,11 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
                 // extract list of member UIDs
                 List<String> members = new LinkedList<>();
                 byte[] raw = cursor.getBlob(1);
-                @Cleanup("recycle") Parcel parcel = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 parcel.unmarshall(raw, 0, raw.length);
                 parcel.setDataPosition(0);
                 parcel.readStringList(members);
+                parcel.recycle();
 
                 // insert memberships
                 for (String uid : members) {
@@ -226,6 +225,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
 
                 batch.commit();
             }
+            cursor.close();
         } catch(RemoteException e) {
             throw new ContactsStorageException("Couldn't get pending memberships", e);
         }
@@ -248,7 +248,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
         assertID();
         List<Long> members = new LinkedList<>();
         try {
-            @Cleanup Cursor cursor = addressBook.provider.query(
+            Cursor cursor = addressBook.provider.query(
                     addressBook.syncAdapterURI(ContactsContract.Data.CONTENT_URI),
                     new String[] { Data.RAW_CONTACT_ID },
                     GroupMembership.MIMETYPE + "=? AND " + GroupMembership.GROUP_ROW_ID + "=?",
@@ -257,12 +257,18 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
             );
             while (cursor != null && cursor.moveToNext())
                 members.add(cursor.getLong(0));
+            cursor.close();
         } catch(RemoteException e) {
             throw new ContactsStorageException("Couldn't list group members", e);
         }
         return ArrayUtils.toPrimitive(members.toArray(new Long[members.size()]));
     }
 
+    @java.lang.Override
+    @java.lang.SuppressWarnings("all")
+    public java.lang.String toString() {
+        return "LocalGroup(super=" + super.toString() + ", uuid=" + this.getUuid() + ")";
+    }
 
     // factory
 

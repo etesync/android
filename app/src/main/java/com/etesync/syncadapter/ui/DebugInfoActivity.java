@@ -56,7 +56,6 @@ import java.util.logging.Level;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
@@ -270,8 +269,9 @@ public class DebugInfoActivity extends BaseActivity implements LoaderManager.Loa
             report.append("\n");
 
             report.append("SQLITE DUMP\n");
-            @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(context);
+            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(context);
             dbHelper.dump(report);
+            dbHelper.close();
             report.append("\n");
 
             report.append("SERVICES DUMP\n");

@@ -43,7 +43,6 @@ import java.util.logging.Level;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 
@@ -69,7 +68,7 @@ public class AddressBooksSyncAdapterService extends SyncAdapterService {
             notificationManager.cancel();
 
             try {
-                @Cleanup("release") ContentProviderClient contactsProvider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
+                ContentProviderClient contactsProvider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
                 if (contactsProvider == null) {
                     App.log.severe("Couldn't access contacts provider");
                     syncResult.databaseError = true;
@@ -83,6 +82,8 @@ public class AddressBooksSyncAdapterService extends SyncAdapterService {
                 new RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run();
 
                 updateLocalAddressBooks(contactsProvider, account);
+
+                contactsProvider.release();
 
                 AccountManager accountManager = AccountManager.get(getContext());
                 for (Account addressBookAccount : accountManager.getAccountsByType(App.getAddressBookAccountType())) {

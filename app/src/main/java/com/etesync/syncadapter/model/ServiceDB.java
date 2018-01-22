@@ -8,21 +8,15 @@
 
 package com.etesync.syncadapter.model;
 
-import android.accounts.Account;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 
 import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.Constants;
-import lombok.Cleanup;
 
 public class ServiceDB {
 
@@ -101,11 +95,11 @@ public class ServiceDB {
             db.beginTransactionNonExclusive();
 
             // iterate through all tables
-            @Cleanup Cursor cursorTables = db.query("sqlite_master", new String[]{"name"}, "type='table'", null, null, null, null);
+            Cursor cursorTables = db.query("sqlite_master", new String[]{"name"}, "type='table'", null, null, null, null);
             while (cursorTables.moveToNext()) {
                 String table = cursorTables.getString(0);
                 sb.append(table).append("\n");
-                @Cleanup Cursor cursor = db.query(table, null, null, null, null, null, null);
+                Cursor cursor = db.query(table, null, null, null, null, null, null);
 
                 // print columns
                 int cols = cursor.getColumnCount();
@@ -138,8 +132,10 @@ public class ServiceDB {
                     }
                     sb.append("\n");
                 }
+                cursor.close();
                 sb.append("----------\n");
             }
+            cursorTables.close();
             db.endTransaction();
         }
     }

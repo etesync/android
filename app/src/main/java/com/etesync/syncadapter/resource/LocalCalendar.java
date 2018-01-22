@@ -40,8 +40,6 @@ import at.bitfire.ical4android.AndroidCalendarFactory;
 import at.bitfire.ical4android.BatchOperation;
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.DateUtils;
-import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Cleanup;
 
 public class LocalCalendar extends AndroidCalendar implements LocalCollection {
 
@@ -167,7 +165,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         // process deleted exceptions
         App.log.info("Processing deleted exceptions");
         try {
-            @Cleanup Cursor cursor = provider.query(
+            Cursor cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     new String[] { Events._ID, Events.ORIGINAL_ID, LocalEvent.COLUMN_SEQUENCE },
                     Events.DELETED + "!=0 AND " + Events.ORIGINAL_ID + " IS NOT NULL", null, null);
@@ -177,12 +175,13 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
                         originalID = cursor.getLong(1);     // can't be null (by query)
 
                 // get original event's SEQUENCE
-                @Cleanup Cursor cursor2 = provider.query(
+                Cursor cursor2 = provider.query(
                         syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, originalID)),
                         new String[] { LocalEvent.COLUMN_SEQUENCE },
                         null, null, null);
                 int originalSequence = (cursor2 == null || cursor2.isNull(0)) ? 0 : cursor2.getInt(0);
 
+                cursor2.close();
                 BatchOperation batch = new BatchOperation(provider);
                 // re-schedule original event and set it to DIRTY
                 batch.enqueue(new BatchOperation.Operation(
@@ -196,6 +195,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
                 ));
                 batch.commit();
             }
+            cursor.close();
         } catch (RemoteException e) {
             throw new CalendarStorageException("Couldn't process locally modified exception", e);
         }
@@ -203,7 +203,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         // process dirty exceptions
         App.log.info("Processing dirty exceptions");
         try {
-            @Cleanup Cursor cursor = provider.query(
+            Cursor cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     new String[] { Events._ID, Events.ORIGINAL_ID, LocalEvent.COLUMN_SEQUENCE },
                     Events.DIRTY + "!=0 AND " + Events.ORIGINAL_ID + " IS NOT NULL", null, null);
@@ -227,6 +227,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
                 ));
                 batch.commit();
             }
+            cursor.close();
         } catch (RemoteException e) {
             throw new CalendarStorageException("Couldn't process locally modified exception", e);
         }
@@ -238,11 +239,15 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         String whereArgs[] = {String.valueOf(id)};
 
         try {
-            @Cleanup Cursor cursor = provider.query(
+            Cursor cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     null,
                     where, whereArgs, null);
-            return cursor.getCount();
+            try {
+                return cursor.getCount();
+            } finally {
+                cursor.close();
+            }
         } catch (RemoteException e) {
             throw new CalendarStorageException("Couldn't query calendar events", e);
         }

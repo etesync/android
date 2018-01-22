@@ -43,7 +43,6 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import tourguide.tourguide.ToolTip;
 import tourguide.tourguide.TourGuide;
 
@@ -213,8 +212,9 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
 
             if (info.type == CollectionInfo.Type.CALENDAR) {
                 try {
-                    @Cleanup("release") ContentProviderClient providerClient = getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI);
+                    ContentProviderClient providerClient = getContentResolver().acquireContentProviderClient(CalendarContract.CONTENT_URI);
                     LocalCalendar resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory.INSTANCE, info.uid);
+                    providerClient.release();
                     if (resource == null) {
                         return null;
                     }
@@ -225,8 +225,9 @@ public class ViewCollectionActivity extends BaseActivity implements Refreshable 
                 }
             } else {
                 try {
-                    @Cleanup("release") ContentProviderClient providerClient = getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI);
+                    ContentProviderClient providerClient = getContentResolver().acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI);
                     LocalAddressBook resource = LocalAddressBook.findByUid(ViewCollectionActivity.this, providerClient, account, info.uid);
+                    providerClient.release();
                     if (resource == null) {
                         return null;
                     }

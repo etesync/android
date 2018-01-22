@@ -38,7 +38,6 @@ import java.util.logging.Level;
 
 import at.bitfire.vcard4android.ContactsStorageException;
 import at.bitfire.vcard4android.GroupMethod;
-import lombok.Cleanup;
 
 public class AccountSettings {
     private final static int CURRENT_VERSION = 2;
@@ -255,7 +254,7 @@ public class AccountSettings {
         if (fromVersion < 2) {
             long affected = -1;
             long newCount = -1;
-            @Cleanup("release") ContentProviderClient provider = context.getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
+            ContentProviderClient provider = context.getContentResolver().acquireContentProviderClient(ContactsContract.AUTHORITY);
             if (provider == null)
                 // no access to contacts provider
                 return;
@@ -267,14 +266,15 @@ public class AccountSettings {
 
             try {
                 // get previous address book settings (including URL)
-                @Cleanup("recycle") Parcel parcel = Parcel.obtain();
                 byte[] raw = ContactsContract.SyncState.get(provider, account);
                 if (raw == null)
                     App.log.info("No contacts sync state, ignoring account");
                 else {
+                    Parcel parcel = Parcel.obtain();
                     parcel.unmarshall(raw, 0, raw.length);
                     parcel.setDataPosition(0);
                     Bundle params = parcel.readBundle();
+                    parcel.recycle();
                     String url = params.getString("url");
                     if (url == null)
                         App.log.info("No address book URL, ignoring account");
@@ -313,6 +313,8 @@ public class AccountSettings {
             } catch (RemoteException e) {
                 throw new ContactsStorageException("Couldn't migrate contacts to new address book", e);
             }
+
+            provider.release();
 
             // request sync of new address book account
             ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 1);

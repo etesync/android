@@ -13,8 +13,6 @@ import com.etesync.syncadapter.R;
 
 import java.io.Serializable;
 
-import lombok.ToString;
-
 /**
  * Created by tal on 30/03/17.
  */
@@ -75,7 +73,6 @@ public class ResultFragment extends DialogFragment {
                 .create();
     }
 
-    @ToString
     public static class ImportResult implements Serializable {
         public long total;
         public long added;
@@ -88,6 +85,12 @@ public class ResultFragment extends DialogFragment {
 
         public long getSkipped() {
             return total - (added + updated);
+        }
+
+        @java.lang.Override
+        @java.lang.SuppressWarnings("all")
+        public java.lang.String toString() {
+            return "ResultFragment.ImportResult(total=" + this.total + ", added=" + this.added + ", updated=" + this.updated + ", e=" + this.e + ")";
         }
     }
 

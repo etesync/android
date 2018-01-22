@@ -13,8 +13,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
-import lombok.Cleanup;
-
 public class Settings {
 
     final SQLiteDatabase db;
@@ -25,12 +23,16 @@ public class Settings {
 
 
     public boolean getBoolean(String name, boolean defaultValue) {
-        @Cleanup Cursor cursor = db.query(ServiceDB.Settings._TABLE, new String[] { ServiceDB.Settings.VALUE },
+        Cursor cursor = db.query(ServiceDB.Settings._TABLE, new String[] { ServiceDB.Settings.VALUE },
                 ServiceDB.Settings.NAME + "=?", new String[] { name }, null, null, null);
-        if (cursor.moveToNext() && !cursor.isNull(0))
-            return cursor.getInt(0) != 0;
-        else
-            return defaultValue;
+        try {
+            if (cursor.moveToNext() && !cursor.isNull(0))
+                return cursor.getInt(0) != 0;
+            else
+                return defaultValue;
+        } finally {
+            cursor.close();
+        }
     }
 
     public void putBoolean(String name, boolean value) {
@@ -42,12 +44,16 @@ public class Settings {
 
 
     public int getInt(String name, int defaultValue) {
-        @Cleanup Cursor cursor = db.query(ServiceDB.Settings._TABLE, new String[] { ServiceDB.Settings.VALUE },
+        Cursor cursor = db.query(ServiceDB.Settings._TABLE, new String[] { ServiceDB.Settings.VALUE },
                 ServiceDB.Settings.NAME + "=?", new String[] { name }, null, null, null);
-        if (cursor.moveToNext() && !cursor.isNull(0))
-            return cursor.isNull(0) ? defaultValue : cursor.getInt(0);
-        else
-            return defaultValue;
+        try {
+            if (cursor.moveToNext() && !cursor.isNull(0))
+                return cursor.isNull(0) ? defaultValue : cursor.getInt(0);
+            else
+                return defaultValue;
+        } finally {
+            cursor.close();
+        }
     }
 
     public void putInt(String name, int value) {
@@ -60,12 +66,16 @@ public class Settings {
 
     @Nullable
     public String getString(String name, @Nullable String defaultValue) {
-        @Cleanup Cursor cursor = db.query(ServiceDB.Settings._TABLE, new String[] { ServiceDB.Settings.VALUE },
+        Cursor cursor = db.query(ServiceDB.Settings._TABLE, new String[] { ServiceDB.Settings.VALUE },
                 ServiceDB.Settings.NAME + "=?", new String[] { name }, null, null, null);
-        if (cursor.moveToNext())
-            return cursor.getString(0);
-        else
-            return defaultValue;
+        try {
+            if (cursor.moveToNext())
+                return cursor.getString(0);
+            else
+                return defaultValue;
+        } finally {
+            cursor.close();
+        }
     }
 
     public void putString(String name, @Nullable String value) {

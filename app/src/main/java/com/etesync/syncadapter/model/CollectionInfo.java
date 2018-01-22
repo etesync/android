@@ -20,9 +20,7 @@ import java.io.Serializable;
 
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
-import lombok.ToString;
 
-@ToString(exclude = {"id"})
 public class CollectionInfo implements Serializable {
     @Deprecated
     public long id;
@@ -110,4 +108,9 @@ public class CollectionInfo implements Serializable {
         return (i == null) ? null : (i != 0);
     }
 
+    @java.lang.Override
+    @java.lang.SuppressWarnings("all")
+    public java.lang.String toString() {
+        return "CollectionInfo(serviceID=" + this.serviceID + ", version=" + this.version + ", type=" + this.type + ", uid=" + this.uid + ", displayName=" + this.displayName + ", description=" + this.description + ", color=" + this.color + ", timeZone=" + this.timeZone + ", selected=" + this.selected + ")";
+    }
 }

@@ -77,7 +77,6 @@ import io.requery.android.sqlite.DatabaseSource;
 import io.requery.meta.EntityModel;
 import io.requery.sql.Configuration;
 import io.requery.sql.EntityDataStore;
-import lombok.Cleanup;
 import okhttp3.internal.tls.OkHostnameVerifier;
 
 @AcraCore(buildConfigClass = BuildConfig.class)
@@ -171,11 +170,13 @@ public class App extends Application {
     }
 
     private void loadLanguage() {
-        @Cleanup ServiceDB.OpenHelper serviceDB = new ServiceDB.OpenHelper(this);
+        ServiceDB.OpenHelper serviceDB = new ServiceDB.OpenHelper(this);
         String lang = new Settings(serviceDB.getReadableDatabase()).getString(App.FORCE_LANGUAGE, null);
         if (lang != null && !lang.equals(DEFAULT_LANGUAGE)) {
             LanguageUtils.setLanguage(this, lang);
         }
+
+        serviceDB.close();
     }
 
     public void reinitCertManager() {
@@ -183,17 +184,19 @@ public class App extends Application {
             if (certManager != null)
                 certManager.close();
 
-            @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
+            ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
             Settings settings = new Settings(dbHelper.getReadableDatabase());
 
             certManager = new CustomCertManager(this, !settings.getBoolean(DISTRUST_SYSTEM_CERTIFICATES, false));
             sslSocketFactoryCompat = new SSLSocketFactoryCompat(certManager);
             hostnameVerifier = certManager.hostnameVerifier(OkHostnameVerifier.INSTANCE);
+
+            dbHelper.close();
         }
     }
 
     public void reinitLogger() {
-        @Cleanup ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
+        ServiceDB.OpenHelper dbHelper = new ServiceDB.OpenHelper(this);
         Settings settings = new Settings(dbHelper.getReadableDatabase());
 
         boolean logToFile = settings.getBoolean(LOG_TO_EXTERNAL_STORAGE, false),
@@ -250,6 +253,8 @@ public class App extends Application {
             nm.notify(Constants.NOTIFICATION_EXTERNAL_FILE_LOGGING, builder.build());
         } else
             nm.cancel(Constants.NOTIFICATION_EXTERNAL_FILE_LOGGING);
+
+        dbHelper.close();
     }
 
     @Nullable
@@ -353,8 +358,9 @@ public class App extends Application {
                 data.insert(journalEntity);
             }
 
-            @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(ServiceDB.Collections._TABLE, null, null);
+            db.close();
         }
 
         if (fromVersion < 7) {
@@ -414,21 +420,24 @@ public class App extends Application {
 
     @NonNull
     private List<CollectionInfo> readCollections(ServiceDB.OpenHelper dbHelper) {
-        @Cleanup SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         List<CollectionInfo> collections = new LinkedList<>();
-        @Cleanup Cursor cursor = db.query(ServiceDB.Collections._TABLE, null, null, null, null, null, null);
+        Cursor cursor = db.query(ServiceDB.Collections._TABLE, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             ContentValues values = new ContentValues();
             DatabaseUtils.cursorRowToContentValues(cursor, values);
             collections.add(CollectionInfo.fromDB(values));
         }
+
+        db.close();
+        cursor.close();
         return collections;
     }
 
     public void migrateServices(ServiceDB.OpenHelper dbHelper) {
-        @Cleanup SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         EntityDataStore<Persistable> data = this.getData();
-        @Cleanup Cursor cursor = db.query(ServiceDB.Services._TABLE, null, null, null, null, null, null);
+        Cursor cursor = db.query(ServiceDB.Services._TABLE, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             ContentValues values = new ContentValues();
             DatabaseUtils.cursorRowToContentValues(cursor, values);
@@ -444,5 +453,7 @@ public class App extends Application {
         }
 
         db.delete(ServiceDB.Services._TABLE, null, null);
+        db.close();
+        cursor.close();
     }
 }

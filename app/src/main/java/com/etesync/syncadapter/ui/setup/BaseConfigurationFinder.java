@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import lombok.ToString;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
@@ -84,7 +83,6 @@ public class BaseConfigurationFinder {
 
     // data classes
 
-    @ToString(exclude={"logs", "authtoken", "rawPassword", "password"})
     public static class Configuration implements Serializable {
         // We have to use URI here because HttpUrl is not serializable!
 
@@ -98,9 +96,14 @@ public class BaseConfigurationFinder {
             this.failed = failed;
         }
 
-        @ToString
         public static class ServiceInfo implements Serializable {
             public final Map<String, CollectionInfo> collections = new HashMap<>();
+
+            @java.lang.Override
+            @java.lang.SuppressWarnings("all")
+            public java.lang.String toString() {
+                return "BaseConfigurationFinder.Configuration.ServiceInfo(collections=" + this.collections + ")";
+            }
         }
 
         public final URI url;
@@ -121,6 +124,12 @@ public class BaseConfigurationFinder {
 
         public boolean isFailed() {
             return failed;
+        }
+
+        @java.lang.Override
+        @java.lang.SuppressWarnings("all")
+        public java.lang.String toString() {
+            return "BaseConfigurationFinder.Configuration(url=" + this.url + ", userName=" + this.userName + ", keyPair=" + this.keyPair + ", cardDAV=" + this.cardDAV + ", calDAV=" + this.calDAV + ", error=" + this.error + ", failed=" + this.isFailed() + ")";
         }
     }
 

@@ -49,7 +49,6 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.BatchOperation;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Cleanup;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -273,11 +272,16 @@ public class ContactsSyncManager extends SyncManager {
 
                 ResponseBody body = response.body();
                 if (body != null) {
-                    @Cleanup InputStream stream = body.byteStream();
-                    if (response.isSuccessful() && stream != null) {
-                        return IOUtils.toByteArray(stream);
-                    } else
-                        App.log.severe("Couldn't download external resource");
+                    InputStream stream = body.byteStream();
+                    try {
+                        if (response.isSuccessful() && stream != null) {
+                            return IOUtils.toByteArray(stream);
+                        } else
+                            App.log.severe("Couldn't download external resource");
+                    } finally {
+                        if (stream != null)
+                            stream.close();
+                    }
                 }
             } catch (IOException e) {
                 App.log.log(Level.SEVERE, "Couldn't download external resource", e);

@@ -36,7 +36,6 @@ import at.bitfire.ical4android.AndroidEventFactory;
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
 import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Cleanup;
 
 @TargetApi(17)
 public class LocalEvent extends AndroidEvent implements LocalResource {
@@ -154,12 +153,13 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
     public void prepareForUpload() throws CalendarStorageException {
         try {
             String uid = null;
-            @Cleanup Cursor c = calendar.provider.query(eventSyncURI(), new String[] { COLUMN_UID }, null, null, null);
+            Cursor c = calendar.provider.query(eventSyncURI(), new String[] { COLUMN_UID }, null, null, null);
             if (c.moveToNext())
                 uid = c.getString(0);
             if (uid == null)
                 uid = UUID.randomUUID().toString();
 
+            c.close();
             final String newFileName = uid;
 
             ContentValues values = new ContentValues(2);

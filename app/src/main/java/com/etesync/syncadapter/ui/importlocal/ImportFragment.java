@@ -39,11 +39,10 @@ import at.bitfire.ical4android.Event;
 import at.bitfire.ical4android.InvalidCalendarException;
 import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Cleanup;
 
 import static com.etesync.syncadapter.Constants.KEY_ACCOUNT;
 import static com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO;
-import static com.etesync.syncadapter.ui.importlocal.ResultFragment.*;
+import static com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult;
 
 public class ImportFragment extends DialogFragment {
     private static final int REQUEST_CODE = 6384; // onActivityResult request
@@ -247,10 +246,11 @@ public class ImportFragment extends DialogFragment {
             ImportResult result = new ImportResult();
 
             try {
-                @Cleanup FileInputStream importStream = new FileInputStream(importFile);
+                FileInputStream importStream = new FileInputStream(importFile);
 
                 if (info.type.equals(CollectionInfo.Type.CALENDAR)) {
                     final Event[] events = Event.fromStream(importStream, Charsets.UTF_8);
+                    importStream.close();
 
                     if (events.length == 0) {
                         App.log.warning("Empty/invalid file.");
@@ -306,7 +306,7 @@ public class ImportFragment extends DialogFragment {
 
                     finishParsingFile(contacts.length);
 
-                    @Cleanup ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
+                    ContentProviderClient provider = getContext().getContentResolver().acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI);
                     LocalAddressBook localAddressBook = LocalAddressBook.findByUid(getContext(), provider, account, info.uid);
 
                     for (Contact contact : contacts) {
@@ -326,6 +326,7 @@ public class ImportFragment extends DialogFragment {
 
                         entryProcessed();
                     }
+                    provider.release();
                 }
 
                 return result;

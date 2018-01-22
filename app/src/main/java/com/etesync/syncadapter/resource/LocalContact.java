@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.BuildConfig;
 import com.etesync.syncadapter.Constants;
 import com.etesync.syncadapter.model.UnknownProperties;
 
@@ -43,7 +42,6 @@ import at.bitfire.vcard4android.Contact;
 import at.bitfire.vcard4android.ContactsStorageException;
 import ezvcard.Ezvcard;
 import ezvcard.VCardVersion;
-import lombok.Cleanup;
 
 import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
@@ -236,10 +234,15 @@ public class LocalContact extends AndroidContact implements LocalResource {
             App.log.severe("getLastHashCode() should not be called on Android <7");
 
         try {
-            @Cleanup Cursor c = addressBook.provider.query(rawContactSyncURI(), new String[] { COLUMN_HASHCODE }, null, null, null);
-            if (c == null || !c.moveToNext() || c.isNull(0))
-                return 0;
-            return c.getInt(0);
+            Cursor c = addressBook.provider.query(rawContactSyncURI(), new String[] { COLUMN_HASHCODE }, null, null, null);
+            try {
+                if (c == null || !c.moveToNext() || c.isNull(0))
+                    return 0;
+                return c.getInt(0);
+            } finally {
+                if (c != null)
+                    c.close();
+            }
         } catch(RemoteException e) {
             throw new ContactsStorageException("Could't read last hash code", e);
         }

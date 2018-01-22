@@ -42,7 +42,6 @@ import java.io.InputStream;
 import java.util.logging.Level;
 
 import ezvcard.Ezvcard;
-import lombok.Cleanup;
 
 public class AboutActivity extends BaseActivity {
 
@@ -215,8 +214,9 @@ public class AboutActivity extends BaseActivity {
         public Spanned loadInBackground() {
             App.log.fine("Loading license file " + fileName);
             try {
-                @Cleanup InputStream is = getContext().getResources().getAssets().open(fileName);
+                InputStream is = getContext().getResources().getAssets().open(fileName);
                 byte[] raw = IOUtils.toByteArray(is);
+                is.close();
                 return content = Html.fromHtml(new String(raw));
             } catch (IOException e) {
                 App.log.log(Level.SEVERE, "Couldn't read license file", e);

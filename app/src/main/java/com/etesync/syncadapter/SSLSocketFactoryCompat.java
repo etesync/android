@@ -8,7 +8,6 @@
 
 package com.etesync.syncadapter;
 
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -27,8 +26,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
-import lombok.Cleanup;
-
 public class SSLSocketFactoryCompat extends SSLSocketFactory {
 
     private SSLSocketFactory delegate;
@@ -39,7 +36,7 @@ public class SSLSocketFactoryCompat extends SSLSocketFactory {
     static String protocols[] = null, cipherSuites[] = null;
     static {
         try {
-            @Cleanup SSLSocket socket = (SSLSocket)SSLSocketFactory.getDefault().createSocket();
+            SSLSocket socket = (SSLSocket)SSLSocketFactory.getDefault().createSocket();
             if (socket != null) {
                 /* set reasonable protocol versions */
                 // - enable all supported protocols (enables TLSv1.1 and TLSv1.2 on Android <5.0)
@@ -92,6 +89,7 @@ public class SSLSocketFactoryCompat extends SSLSocketFactory {
 
                 App.log.info("Enabling (only) those TLS ciphers: " + TextUtils.join(", ", enabledCiphers));
                 SSLSocketFactoryCompat.cipherSuites = enabledCiphers.toArray(new String[enabledCiphers.size()]);
+                socket.close();
             }
         } catch (IOException e) {
             App.log.severe("Couldn't determine default TLS settings");

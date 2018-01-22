@@ -49,7 +49,6 @@ import at.bitfire.vcard4android.AndroidContact;
 import at.bitfire.vcard4android.AndroidGroup;
 import at.bitfire.vcard4android.CachedGroupMembership;
 import at.bitfire.vcard4android.ContactsStorageException;
-import lombok.Cleanup;
 
 
 public class LocalAddressBook extends AndroidAddressBook implements LocalCollection {
@@ -245,11 +244,14 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     @Override
     public long count() throws ContactsStorageException {
         try {
-            @Cleanup Cursor cursor = provider.query(syncAdapterURI(RawContacts.CONTENT_URI),
+            Cursor cursor = provider.query(syncAdapterURI(RawContacts.CONTENT_URI),
                     null,
                     null, null, null);
-
-            return cursor.getCount();
+            try {
+                return cursor.getCount();
+            } finally {
+                cursor.close();
+            }
         } catch (RemoteException e) {
             throw new ContactsStorageException("Couldn't query contacts", e);
         }
@@ -282,7 +284,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
 
     @NonNull LocalContact[] getByGroupMembership(long groupID) throws ContactsStorageException {
         try {
-            @Cleanup Cursor cursor = provider.query(syncAdapterURI(ContactsContract.Data.CONTENT_URI),
+            Cursor cursor = provider.query(syncAdapterURI(ContactsContract.Data.CONTENT_URI),
                     new String[] { RawContacts.Data.RAW_CONTACT_ID },
                     "(" + GroupMembership.MIMETYPE + "=? AND " + GroupMembership.GROUP_ROW_ID + "=?) OR (" + CachedGroupMembership.MIMETYPE + "=? AND " + CachedGroupMembership.GROUP_ID + "=?)",
                     new String[] { GroupMembership.CONTENT_ITEM_TYPE, String.valueOf(groupID), CachedGroupMembership.CONTENT_ITEM_TYPE, String.valueOf(groupID) },
@@ -291,6 +293,8 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
             Set<Long> ids = new HashSet<>();
             while (cursor != null && cursor.moveToNext())
                 ids.add(cursor.getLong(0));
+
+            cursor.close();
 
             LocalContact[] contacts = new LocalContact[ids.size()];
             int i = 0;
@@ -322,12 +326,16 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
      */
     public long findOrCreateGroup(@NonNull String title) throws ContactsStorageException {
         try {
-            @Cleanup Cursor cursor = provider.query(syncAdapterURI(Groups.CONTENT_URI),
+            Cursor cursor = provider.query(syncAdapterURI(Groups.CONTENT_URI),
                     new String[] { Groups._ID  },
                     Groups.TITLE + "=?", new String[] { title },
                     null);
-            if (cursor != null && cursor.moveToNext())
-                return cursor.getLong(0);
+            try {
+                if (cursor != null && cursor.moveToNext())
+                    return cursor.getLong(0);
+            } finally {
+                cursor.close();
+            }
 
             ContentValues values = new ContentValues();
             values.put(Groups.TITLE, title);
