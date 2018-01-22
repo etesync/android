@@ -105,9 +105,7 @@ public class ImportActivity extends BaseActivity implements SelectImportMethod, 
     @Override
     public void onImportResult(ResultFragment.ImportResult importResult) {
         ResultFragment fragment = ResultFragment.newInstance(importResult);
-        getSupportFragmentManager().beginTransaction()
-                .show(fragment)
-                .commitAllowingStateLoss();
+        fragment.show(getSupportFragmentManager(), "importResult");
     }
 
     @Override
