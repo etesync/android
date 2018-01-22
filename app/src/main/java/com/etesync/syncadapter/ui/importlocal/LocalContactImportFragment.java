@@ -165,7 +165,6 @@ public class LocalContactImportFragment extends Fragment {
                 int progress = 0;
                 for (LocalContact currentLocalContact : localContacts) {
                     Contact contact = currentLocalContact.getContact();
-                    (new LocalContact(addressBook, contact, null, null)).createAsDirty();
 
                     try {
                         LocalContact localContact = new LocalContact(addressBook, contact, null, null);
