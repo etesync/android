@@ -11,10 +11,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-kapt {
-    generateStubs = true
-}
-
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.1'
@@ -122,10 +118,6 @@ dependencies {
     implementation "ch.acra:acra-mail:$acraVersion"
     implementation "ch.acra:acra-toast:$acraVersion"
 
-    compile project(':cert4android')
-    compile project(':ical4android')
-    compile project(':vcard4android')
-
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.android.support:design:26.+'
@@ -139,7 +131,6 @@ dependencies {
     compile 'io.requery:requery:1.5.0'
     compile 'io.requery:requery-android:1.5.0'
     compile 'io.requery:requery-kotlin:1.5.0'
-    annotationProcessor 'io.requery:requery-processor:1.5.0'
     kapt 'io.requery:requery-processor:1.5.0'
 
     compile group: 'com.madgag.spongycastle', name: 'core', version: '1.54.0.0'
@@ -150,6 +141,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.20'
     annotationProcessor 'org.projectlombok:lombok:1.16.20'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+
+    compile project(':cert4android')
+    compile project(':ical4android')
+    compile project(':vcard4android')
 
     // for tests
     androidTestCompile('com.android.support.test:runner:0.5') {
