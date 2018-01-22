@@ -108,6 +108,9 @@ public class LocalContactImportFragment extends Fragment {
             }
         }
 
+        cursor.close();
+        provider.release();
+
         recyclerView.setAdapter(new ImportContactAdapter(getContext(), localAddressBooks, new OnAccountSelected() {
             @Override
             public void accountSelected(int index) {
@@ -162,19 +165,12 @@ public class LocalContactImportFragment extends Fragment {
                 int progress = 0;
                 for (LocalContact currentLocalContact : localContacts) {
                     Contact contact = currentLocalContact.getContact();
-                    (new LocalContact(addressBook, contact, contact.uid, null)).createAsDirty();
+                    (new LocalContact(addressBook, contact, null, null)).createAsDirty();
 
                     try {
-                        LocalContact localContact = contact.uid == null ?
-                                null : (LocalContact) addressBook.getByUid(contact.uid);
-                        if (localContact != null) {
-                            localContact.updateAsDirty(contact);
-                            result.updated++;
-                        } else {
-                            localContact = new LocalContact(addressBook, contact, contact.uid, null);
-                            localContact.createAsDirty();
-                            result.added++;
-                        }
+                        LocalContact localContact = new LocalContact(addressBook, contact, null, null);
+                        localContact.createAsDirty();
+                        result.added++;
                     } catch (ContactsStorageException e) {
                         e.printStackTrace();
                         result.e = e;

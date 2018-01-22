@@ -277,15 +277,9 @@ public class ImportFragment extends DialogFragment {
 
                     for (Event event : events) {
                         try {
-                            LocalEvent localEvent = localCalendar.getByUid(event.uid);
-                            if (localEvent != null) {
-                                localEvent.updateAsDirty(event);
-                                result.updated++;
-                            } else {
-                                localEvent = new LocalEvent(localCalendar, event, event.uid, null);
-                                localEvent.addAsDirty();
-                                result.added++;
-                            }
+                            LocalEvent localEvent = new LocalEvent(localCalendar, event, event.uid, null);
+                            localEvent.addAsDirty();
+                            result.added++;
                         } catch (CalendarStorageException e) {
                             e.printStackTrace();
                         }
@@ -311,15 +305,9 @@ public class ImportFragment extends DialogFragment {
 
                     for (Contact contact : contacts) {
                         try {
-                            LocalContact localContact = (LocalContact) localAddressBook.getByUid(contact.uid);
-                            if (localContact != null) {
-                                localContact.updateAsDirty(contact);
-                                result.updated++;
-                            } else {
-                                localContact = new LocalContact(localAddressBook, contact, contact.uid, null);
-                                localContact.createAsDirty();
-                                result.added++;
-                            }
+                            LocalContact localContact = new LocalContact(localAddressBook, contact, null, null);
+                            localContact.createAsDirty();
+                            result.added++;
                         } catch (ContactsStorageException e) {
                             e.printStackTrace();
                         }

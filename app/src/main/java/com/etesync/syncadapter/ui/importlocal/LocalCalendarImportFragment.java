@@ -248,17 +248,9 @@ public class LocalCalendarImportFragment extends ListFragment {
                 for (LocalEvent currentLocalEvent : localEvents) {
                     Event event = currentLocalEvent.getEvent();
                     try {
-                        LocalEvent localEvent = event.uid == null ? null :
-                                localCalendar.getByUid(event.uid);
-
-                        if (localEvent != null) {
-                            localEvent.updateAsDirty(event);
-                            result.updated++;
-                        } else {
-                            localEvent = new LocalEvent(localCalendar, event, event.uid, null);
-                            localEvent.addAsDirty();
-                            result.added++;
-                        }
+                        LocalEvent localEvent = new LocalEvent(localCalendar, event, null, null);
+                        localEvent.addAsDirty();
+                        result.added++;
                     } catch (CalendarStorageException e) {
                         e.printStackTrace();
 
