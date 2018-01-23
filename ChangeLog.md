@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 0.20.0
+* Automatically generate stack traces on crashes and offer to send them by email. (Powered by ACRA).
+* Detect and alert potential vendor specific bugs (namely with Xiaomi devices).
+* Import: fix showing of the "import has finished" dialog.
+* Import: remove duplicate detection, this didn't work well and was causing issues.
+* Contact import: fix potential double-import.
+* Make journal ownership tests case insensitive (as emails are).
+* Update gradle, support libs and requery, and get rid of lombok.
+* Make it more obvious that file-logging notification is persistent.
+
 ## Version 0.19.6
 * Fix confusing error message when creating/fetching user info.
 
