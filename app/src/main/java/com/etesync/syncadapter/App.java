@@ -79,7 +79,8 @@ import io.requery.sql.Configuration;
 import io.requery.sql.EntityDataStore;
 import okhttp3.internal.tls.OkHostnameVerifier;
 
-@AcraCore(buildConfigClass = BuildConfig.class)
+@AcraCore(buildConfigClass = BuildConfig.class,
+        logcatArguments = {"-t", "500", "-v", "time"})
 @AcraMailSender(mailTo = "reports@etesync.com",
         subject = R.string.crash_email_subject,
         reportFileName = "ACRA-report.stacktrace.json")
