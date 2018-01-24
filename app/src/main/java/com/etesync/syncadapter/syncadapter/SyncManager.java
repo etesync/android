@@ -40,6 +40,7 @@ import org.apache.commons.collections4.ListUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -173,26 +174,28 @@ abstract public class SyncManager {
                 applyRemoteEntries();
             } while (remoteEntries.size() == MAX_FETCH);
 
-            /* Create journal entries out of local changes. */
-            if (Thread.interrupted())
-                throw new InterruptedException();
-            syncPhase = R.string.sync_phase_create_local_entries;
-            App.log.info("Sync phase: " + context.getString(syncPhase));
-            createLocalEntries();
+            do {
+                /* Create journal entries out of local changes. */
+                if (Thread.interrupted())
+                    throw new InterruptedException();
+                syncPhase = R.string.sync_phase_create_local_entries;
+                App.log.info("Sync phase: " + context.getString(syncPhase));
+                createLocalEntries();
 
-            if (Thread.interrupted())
-                throw new InterruptedException();
-            syncPhase = R.string.sync_phase_apply_local_entries;
-            App.log.info("Sync phase: " + context.getString(syncPhase));
-            /* FIXME: Skipping this now, because we already override with remote.
-            applyLocalEntries();
-            */
+                if (Thread.interrupted())
+                    throw new InterruptedException();
+                syncPhase = R.string.sync_phase_apply_local_entries;
+                App.log.info("Sync phase: " + context.getString(syncPhase));
+                /* FIXME: Skipping this now, because we already override with remote.
+                applyLocalEntries();
+                */
 
-            if (Thread.interrupted())
-                throw new InterruptedException();
-            syncPhase = R.string.sync_phase_push_entries;
-            App.log.info("Sync phase: " + context.getString(syncPhase));
-            pushEntries();
+                if (Thread.interrupted())
+                    throw new InterruptedException();
+                syncPhase = R.string.sync_phase_push_entries;
+                App.log.info("Sync phase: " + context.getString(syncPhase));
+                pushEntries();
+            } while (localEntries.size() == MAX_PUSH);
 
             /* Cleanup and finalize changes */
             if (Thread.interrupted())
@@ -382,26 +385,30 @@ abstract public class SyncManager {
         // FIXME: Deal with failure (someone else uploaded before we go here)
         try {
             if (!localEntries.isEmpty()) {
-                for (List<JournalEntryManager.Entry> entries : ListUtils.partition(localEntries, MAX_PUSH)) {
-                    journal.create(entries, remoteCTag);
-                    // Persist the entries after they've been pushed
-                    for (JournalEntryManager.Entry entry : entries) {
-                        SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
-                        persistSyncEntry(entry.getUid(), cEntry);
-                    }
-                    remoteCTag = entries.get(entries.size() - 1).getUid();
-                    pushed += entries.size();
+                List<JournalEntryManager.Entry> entries = localEntries;
+                journal.create(entries, remoteCTag);
+                // Persist the entries after they've been pushed
+                for (JournalEntryManager.Entry entry : entries) {
+                    SyncEntry cEntry = SyncEntry.fromJournalEntry(crypto, entry);
+                    persistSyncEntry(entry.getUid(), cEntry);
                 }
+                remoteCTag = entries.get(entries.size() - 1).getUid();
+                pushed += entries.size();
             }
         } finally {
             // FIXME: A bit fragile, we assume the order in createLocalEntries
+            int left = pushed;
             for (LocalResource local : localDeleted) {
                 if (pushed-- <= 0) {
                     break;
                 }
                 local.delete();
             }
+            if (left > 0) {
+                localDeleted.subList(0, Math.min(left, localDeleted.size())).clear();
+            }
 
+            left = pushed;
             for (LocalResource local : localDirty) {
                 if (pushed-- <= 0) {
                     break;
@@ -409,13 +416,13 @@ abstract public class SyncManager {
                 App.log.info("Added/changed resource with UUID: " + local.getUuid());
                 local.clearDirty(local.getUuid());
             }
+            if (left > 0) {
+                localDirty = Arrays.copyOfRange(localDirty, left, localDirty.length);
+            }
 
             if (pushed > 0) {
                 App.log.severe("Unprocessed localentries left, this should never happen!");
             }
-
-            localDirty = null;
-            localDeleted = null;
         }
     }
 
@@ -431,6 +438,10 @@ abstract public class SyncManager {
             tmp.update(crypto, entry.toJson(), previousEntry);
             previousEntry = tmp;
             localEntries.add(previousEntry);
+
+            if (localEntries.size() == MAX_PUSH) {
+                return;
+            }
         }
 
         for (LocalResource local : localDirty) {
@@ -446,6 +457,10 @@ abstract public class SyncManager {
             tmp.update(crypto, entry.toJson(), previousEntry);
             previousEntry = tmp;
             localEntries.add(previousEntry);
+
+            if (localEntries.size() == MAX_PUSH) {
+                return;
+            }
         }
     }
 
