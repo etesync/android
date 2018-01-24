@@ -184,7 +184,9 @@ abstract public class SyncManager {
                 throw new InterruptedException();
             syncPhase = R.string.sync_phase_apply_local_entries;
             App.log.info("Sync phase: " + context.getString(syncPhase));
+            /* FIXME: Skipping this now, because we already override with remote.
             applyLocalEntries();
+            */
 
             if (Thread.interrupted())
                 throw new InterruptedException();
