@@ -43,6 +43,7 @@ import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
 import com.etesync.syncadapter.resource.LocalAddressBook;
 
+import org.acra.ACRA;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -89,48 +90,10 @@ public class DebugInfoActivity extends BaseActivity implements LoaderManager.Loa
 
 
     public void onShare(MenuItem item) {
-        if (!TextUtils.isEmpty(report)) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.setType("text/plain");
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " debug info");
-
-            // since Android 4.1, FileProvider permissions are handled in a useful way (using ClipData)
-            boolean asAttachment = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-
-            if (asAttachment)
-                try {
-                    File debugInfoDir = new File(getCacheDir(), "debug-info");
-                    debugInfoDir.mkdir();
-
-                    reportFile = new File(debugInfoDir, "debug.txt");
-                    App.log.fine("Writing debug info to " + reportFile.getAbsolutePath());
-                    FileWriter writer = new FileWriter(reportFile);
-                    writer.write(report);
-                    writer.close();
-
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, getString(R.string.authority_log_provider), reportFile));
-                    sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                } catch(IOException e) {
-                    // creating an attachment failed, so send it inline
-                    asAttachment = false;
-
-                    StringBuilder builder = new StringBuilder();
-                    builder .append("Couldn't write debug info file:\n")
-                            .append(ExceptionUtils.getStackTrace(e))
-                            .append("\n\n")
-                            .append(report);
-                    report = builder.toString();
-                }
-
-            if (!asAttachment)
-                sendIntent.putExtra(Intent.EXTRA_TEXT, report);
-
-            startActivity(Intent.createChooser(sendIntent, null));
-        }
+        ACRA.getErrorReporter().putCustomData("debug_info", report);
+        ACRA.getErrorReporter().handleSilentException(null);
+        ACRA.getErrorReporter().removeCustomData("debug_info");
     }
-
 
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
