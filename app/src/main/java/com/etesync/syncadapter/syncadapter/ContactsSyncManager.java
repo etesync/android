@@ -185,7 +185,7 @@ public class ContactsSyncManager extends SyncManager {
         String uuid = newData.uid;
         // update local contact, if it exists
         if (local != null) {
-            App.log.log(Level.INFO, "Updating " + uuid + " in local address book", newData);
+            App.log.log(Level.INFO, "Updating " + uuid + " in local address book");
 
             if (local instanceof LocalGroup && newData.group) {
                 // update group
@@ -214,13 +214,13 @@ public class ContactsSyncManager extends SyncManager {
 
         if (local == null) {
             if (newData.group) {
-                App.log.log(Level.INFO, "Creating local group", newData);
+                App.log.log(Level.INFO, "Creating local group", newData.uid);
                 LocalGroup group = new LocalGroup(localAddressBook(), newData, uuid, uuid);
                 group.create();
 
                 local = group;
             } else {
-                App.log.log(Level.INFO, "Creating local contact", newData);
+                App.log.log(Level.INFO, "Creating local contact", newData.uid);
                 LocalContact contact = new LocalContact(localAddressBook(), newData, uuid, uuid);
                 contact.create();
 
