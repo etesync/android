@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.20.1
+* Fix issue with contacts sometimes not syncing or syncing very slowly after big and heavy imports.
+* Remove some potentially sensitive info from logs (needed now that we suggest sharing logs on crashes).
+* ACRA: increase the number of last log-lines shared in crash reports to 500.
+* Use ACRA when sharing the debug log from the debug activity (it also shares more info).
+
 ## Version 0.20.0
 * Automatically generate stack traces on crashes and offer to send them by email. (Powered by ACRA).
 * Detect and alert potential vendor specific bugs (namely with Xiaomi devices).
