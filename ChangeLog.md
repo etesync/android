@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.20.2
+* Make HTTP request/response logging more verbose when logging to file (useful when debugging).
+
 ## Version 0.20.1
 * Fix issue with contacts sometimes not syncing or syncing very slowly after big and heavy imports.
 * Remove some potentially sensitive info from logs (needed now that we suggest sharing logs on crashes).
