@@ -3,6 +3,7 @@ package com.etesync.syncadapter.ui;
 import android.accounts.Account;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ public class AddMemberFragment extends DialogFragment {
     final static private String KEY_MEMBER = "memberEmail";
     private Account account;
     private AccountSettings settings;
-    private OkHttpClient httpClient;
+    private Context ctx;
     private HttpUrl remote;
     private CollectionInfo info;
     private String memberEmail;
@@ -52,9 +53,9 @@ public class AddMemberFragment extends DialogFragment {
         account = getArguments().getParcelable(Constants.KEY_ACCOUNT);
         info = (CollectionInfo) getArguments().getSerializable(Constants.KEY_COLLECTION_INFO);
         memberEmail = getArguments().getString(KEY_MEMBER);
+        ctx = getContext();
         try {
-            settings = new AccountSettings(getContext(), account);
-            httpClient = HttpClient.create(getContext(), settings);
+            settings = new AccountSettings(ctx, account);
         } catch (InvalidAccountException e) {
             e.printStackTrace();
         }
@@ -79,6 +80,7 @@ public class AddMemberFragment extends DialogFragment {
         @Override
         protected AddResult doInBackground(Void... voids) {
             try {
+                OkHttpClient httpClient = HttpClient.create(ctx, settings);
                 UserInfoManager userInfoManager = new UserInfoManager(httpClient, remote);
 
                 UserInfoManager.UserInfo userInfo = userInfoManager.get(memberEmail);
@@ -143,6 +145,7 @@ public class AddMemberFragment extends DialogFragment {
         @Override
         protected AddResultSecond doInBackground(Void... voids) {
             try {
+                OkHttpClient httpClient = HttpClient.create(ctx, settings);
                 JournalManager journalsManager = new JournalManager(httpClient, remote);
 
                 JournalManager.Journal journal = JournalManager.Journal.fakeWithUid(info.uid);
