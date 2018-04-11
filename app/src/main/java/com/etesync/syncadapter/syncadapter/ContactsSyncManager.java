@@ -176,8 +176,12 @@ public class ContactsSyncManager extends SyncManager {
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
             processContact(contact, local);
         } else {
-            App.log.info("Removing local record #" + local.getId() + " which has been deleted on the server");
-            local.delete();
+            if (local != null) {
+                App.log.info("Removing local record #" + local.getId() + " which has been deleted on the server");
+                local.delete();
+            } else {
+                App.log.warning("Tried deleting a non-existent record: " + contact.uid);
+            }
         }
     }
 
