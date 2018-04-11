@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.20.3
+* Fix adding journal members on some devices.
+* Don't crash when trying to delete non-existent records.
+
 ## Version 0.20.2
 * Make HTTP request/response logging more verbose when logging to file (useful when debugging).
 
