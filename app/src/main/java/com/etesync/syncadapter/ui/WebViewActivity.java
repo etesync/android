@@ -55,7 +55,10 @@ public class WebViewActivity extends BaseActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl(uri.toString());
+        if (savedInstanceState == null) {
+            mWebView.loadUrl(uri.toString());
+        }
+
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -188,6 +191,12 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         mWebView.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mWebView.restoreState(savedInstanceState);
     }
 
     @Override
