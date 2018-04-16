@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.20.4
+* Restore the webview state after device rotation.
+
 ## Version 0.20.3
 * Fix adding journal members on some devices.
 * Don't crash when trying to delete non-existent records.
