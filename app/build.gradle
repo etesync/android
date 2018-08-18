@@ -19,7 +19,7 @@ android {
         applicationId "com.etesync.syncadapter"
 
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
 
         versionCode 29
         versionName "0.20.4"
@@ -110,7 +110,6 @@ android {
     } else {
          buildTypes.release.signingConfig = null
     }
-
 }
 
 dependencies {
