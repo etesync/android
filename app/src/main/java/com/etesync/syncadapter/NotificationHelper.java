@@ -1,11 +1,14 @@
 package com.etesync.syncadapter;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -21,6 +24,8 @@ import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.vcard4android.ContactsStorageException;
 
 public class NotificationHelper {
+    private static final String CHANNEL_ID = "EteSync_default";
+
     final NotificationManagerCompat notificationManager;
     final Context context;
     final String notificationTag;
@@ -77,10 +82,10 @@ public class NotificationHelper {
     }
 
     public void notify(String title, String content, String bigText, Intent intent) {
+        createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         int icon;
         String category;
-        String tag;
         //Check if error was configured
         if (throwable == null) {
             icon = R.drawable.ic_sync_dark;
@@ -93,6 +98,7 @@ public class NotificationHelper {
         builder.setLargeIcon(App.getLauncherBitmap(context))
                 .setContentTitle(title)
                 .setContentText(content)
+                .setChannelId(CHANNEL_ID)
                 .setAutoCancel(true)
                 .setCategory(category)
                 .setSmallIcon(icon)
@@ -140,4 +146,15 @@ public class NotificationHelper {
             finish();
         }
     }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = context.getString(R.string.notification_channel_name);
+            NotificationChannel channel =
+                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 }

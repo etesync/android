@@ -339,4 +339,8 @@
 
     <!-- Event (from Etar) -->
     <string name="event_info_organizer">Organizer:</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">EteSync</string>
+    <string name="notification_channel_description">EteSync notifications</string>
 </resources>
