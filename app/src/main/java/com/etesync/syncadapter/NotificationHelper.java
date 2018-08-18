@@ -82,17 +82,22 @@ public class NotificationHelper {
     }
 
     public void notify(String title, String content, String bigText, Intent intent) {
+        notify(title, content, bigText, intent, -1);
+    }
+
+    public void notify(String title, String content, String bigText, Intent intent, int icon) {
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        int icon;
-        String category;
-        //Check if error was configured
-        if (throwable == null) {
-            icon = R.drawable.ic_sync_dark;
-            category = NotificationCompat.CATEGORY_STATUS;
-        } else {
-            icon = R.drawable.ic_error_light;
-            category = NotificationCompat.CATEGORY_ERROR;
+        String category =
+                throwable == null ?
+                        NotificationCompat.CATEGORY_STATUS : NotificationCompat.CATEGORY_ERROR;
+        if (icon == -1) {
+            //Check if error was configured
+            if (throwable == null) {
+                icon = R.drawable.ic_sync_dark;
+            } else {
+                icon = R.drawable.ic_error_light;
+            }
         }
 
         builder.setLargeIcon(App.getLauncherBitmap(context))

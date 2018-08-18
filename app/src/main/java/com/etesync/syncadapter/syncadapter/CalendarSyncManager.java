@@ -10,12 +10,16 @@ package com.etesync.syncadapter.syncadapter;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.etesync.syncadapter.AccountSettings;
 import com.etesync.syncadapter.App;
 import com.etesync.syncadapter.Constants;
+import com.etesync.syncadapter.NotificationHelper;
 import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
@@ -25,11 +29,23 @@ import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalEvent;
 import com.etesync.syncadapter.resource.LocalResource;
 
+import net.fortuna.ical4j.model.property.Attendee;
+
+import org.acra.attachment.AcraContentProvider;
+import org.acra.util.IOUtils;
 import org.apache.commons.codec.Charsets;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
@@ -61,8 +77,8 @@ public class CalendarSyncManager extends SyncManager {
 
     @Override
     protected String getSyncSuccessfullyTitle() {
-       return context.getString(R.string.sync_successfully_calendar, info.displayName,
-               account.name);
+        return context.getString(R.string.sync_successfully_calendar, info.displayName,
+                account.name);
     }
 
     @Override
@@ -95,8 +111,9 @@ public class CalendarSyncManager extends SyncManager {
         if (events.length == 0) {
             App.log.warning("Received VCard without data, ignoring");
             return;
-        } else if (events.length > 1)
+        } else if (events.length > 1) {
             App.log.warning("Received multiple VCALs, using first one");
+        }
 
         Event event = events[0];
         LocalEvent local = (LocalEvent) localCollection.getByUid(event.uid);
@@ -111,6 +128,57 @@ public class CalendarSyncManager extends SyncManager {
                 App.log.warning("Tried deleting a non-existent record: " + event.uid);
             }
         }
+    }
+
+    protected void createLocalEntries() throws CalendarStorageException, ContactsStorageException, IOException {
+        super.createLocalEntries();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            createInviteAttendeesNotification();
+        }
+    }
+
+    private void createInviteAttendeesNotification() throws CalendarStorageException, ContactsStorageException, IOException {
+        for (LocalResource local : localDirty) {
+            Event event = ((LocalEvent) local).getEvent();
+
+            if (event.attendees.isEmpty()) {
+                return;
+            }
+            createInviteAttendeesNotification(event, local.getContent());
+        }
+    }
+
+    private void createInviteAttendeesNotification(Event event, String icsContent) {
+        NotificationHelper notificationHelper = new NotificationHelper(context, event.uid, event.uid.hashCode());
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_EMAIL, getEmailAddresses(event.attendees ,false));
+        final DateFormat dateFormatDate =
+                new SimpleDateFormat("EEEE, MMM dd", Locale.US);
+        intent.putExtra(Intent.EXTRA_SUBJECT,
+                context.getString(R.string.sync_calendar_attendees_email_subject,
+                        event.summary,
+                        dateFormatDate.format(event.dtStart.getDate())));
+        intent.putExtra(Intent.EXTRA_TEXT,
+                context.getString(R.string.sync_calendar_attendees_email_content,
+                        event.summary,
+                        formatEventDates(event),
+                        formatAttendees(event.attendees)));
+        Uri uri = createAttachmentFromString(context, event.uid, icsContent);
+        if (uri == null) {
+            App.log.severe("Unable to create attachment from calendar event");
+            return;
+        }
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        notificationHelper.notify(
+                context.getString(
+                        R.string.sync_calendar_attendees_notification_title, event.summary),
+                context.getString(R.string.sync_calendar_attendees_notification_content),
+                null,
+                intent,
+                R.drawable.ic_email_black);
     }
 
     private LocalResource processEvent(final Event newData, LocalEvent localEvent) throws IOException, ContactsStorageException, CalendarStorageException {
@@ -128,5 +196,64 @@ public class CalendarSyncManager extends SyncManager {
         }
 
         return localEvent;
+    }
+
+    private String[] getEmailAddresses(List<Attendee> attendees,
+                                              boolean shouldIncludeAccount) {
+        List<String> attendeesEmails = new ArrayList<>(attendees.size());
+        for (Attendee attendee : attendees) {
+            String attendeeEmail = attendee.getValue().replace("mailto:", "");
+            if (!shouldIncludeAccount && attendeeEmail.equals(account.name)) {
+                continue;
+            }
+            attendeesEmails.add(attendeeEmail);
+        }
+        return attendeesEmails.toArray(new String[0]);
+    }
+
+    private String formatAttendees(List<Attendee> attendeesList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String[] attendees = getEmailAddresses(attendeesList, true);
+        for (String attendee : attendees) {
+            stringBuilder.append("\n    ").append(attendee);
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String formatEventDates(Event event) {
+        final String dateFormatString =
+                event.isAllDay() ? "EEEE, MMM dd" : "EEEE, MMM dd @ hh:mm a";
+        final DateFormat dateFormat =
+                new SimpleDateFormat(dateFormatString,
+                        Locale.US);
+        Date startDate = event.dtStart.getDate();
+        Date endDate = event.dtEnd.getDate();
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(startDate);
+        cal2.setTime(endDate);
+        boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+        if (sameDay && event.isAllDay()) {
+            return dateFormat.format(startDate);
+        }
+        return sameDay ?
+                String.format("%s - %s",
+                        dateFormat.format(startDate),
+                        new SimpleDateFormat("hh:mm a", Locale.US).format(endDate)) :
+                String.format("%s - %s", dateFormat.format(startDate), dateFormat.format(endDate));
+    }
+
+    private Uri createAttachmentFromString(Context context, String name, String content) {
+        final File parentDir = new File (context.getCacheDir(), name);
+        parentDir.mkdirs();
+        final File cache = new File(parentDir, "invite.ics");
+        try {
+            IOUtils.writeStringToFile(cache, content);
+            return AcraContentProvider.getUriForFile(context, cache);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
