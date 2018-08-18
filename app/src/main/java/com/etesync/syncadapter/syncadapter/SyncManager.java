@@ -35,8 +35,6 @@ import com.etesync.syncadapter.resource.LocalResource;
 import com.etesync.syncadapter.ui.DebugInfoActivity;
 import com.etesync.syncadapter.ui.ViewCollectionActivity;
 
-import org.apache.commons.collections4.ListUtils;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,7 +99,7 @@ abstract public class SyncManager {
      * Dirty and deleted resources. We need to save them so we safely ignore ones that were added after we started.
      */
     private List<LocalResource> localDeleted;
-    private LocalResource[] localDirty;
+    protected LocalResource[] localDirty;
 
     public SyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult syncResult, String journalUid, CollectionInfo.Type serviceType, String accountName) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {
         this.context = context;
