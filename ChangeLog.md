@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.0
+* Add a notification to send email invites whenever an event has atendees.
+
 ## Version 0.20.4
 * Restore the webview state after device rotation.
 
