@@ -322,10 +322,12 @@
     <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s modified.</string>
     <string name="sync_successfully_modified_full" formatted="false">%s added.\n%s updated.\n%s deleted.</string>
+
+    <!-- Calendar invites -->
     <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
     <string name="sync_calendar_attendees_notification_content">Send invitations to guests?</string>
     <string name="sync_calendar_attendees_email_subject" formatted="false">Invitation: %s @ %s</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">You have been invited to the following event:\n\n%s\nWhen: %s\nAttendees: %s</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">You have been invited to the following event:\n\n%s\nWhen: %s\nAttendees: %s\n\n--\nThis email was created by EteSync.\nSecure, encrypted and journaled cloud sync.</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>
