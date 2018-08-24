@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.1
+* Trigger F-Droid build
+
 ## Version 0.21.0
 * Add a notification to send email invites whenever an event has atendees.
 
