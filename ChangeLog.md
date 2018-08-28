@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.2
+* Fix sync when events have attendees and a duration rather than an end date.
+
 ## Version 0.21.1
 * Trigger F-Droid build
 
