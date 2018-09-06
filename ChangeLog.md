@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.4
+* Fix previous broken build because of bad submodules.
+
 ## Version 0.21.3
 * Fix issue with events being saved with both duration and an end date.
 
