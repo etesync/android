@@ -227,7 +227,7 @@ public class CalendarSyncManager extends SyncManager {
                 new SimpleDateFormat(dateFormatString,
                         Locale.US);
         Date startDate = event.dtStart.getDate();
-        Date endDate = event.dtEnd.getDate();
+        Date endDate = event.getEndDate(true).getDate();
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(startDate);
