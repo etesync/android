@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.3
+* Fix issue with events being saved with both duration and an end date.
+
 ## Version 0.21.2
 * Fix sync when events have attendees and a duration rather than an end date.
 
