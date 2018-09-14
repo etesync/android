@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.5
+* Fix issue when viewing journal entries for contacts with malformed (empty but existing) nicknames
+
 ## Version 0.21.4
 * Fix previous broken build because of bad submodules.
 
