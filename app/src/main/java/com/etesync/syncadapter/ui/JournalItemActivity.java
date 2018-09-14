@@ -359,7 +359,7 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
                 }
 
                 // NICKNAME
-                if (contact.nickName != null) {
+                if (contact.nickName != null && contact.nickName.getValues().size() > 0) {
                     addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName.getValues().get(0));
                 }
 
