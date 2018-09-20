@@ -32,7 +32,11 @@ import org.apache.commons.codec.Charsets;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Formatter;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,6 +54,7 @@ import ezvcard.property.Impp;
 import ezvcard.property.Related;
 import ezvcard.property.Telephone;
 import ezvcard.property.Url;
+import ezvcard.util.PartialDate;
 import io.requery.Persistable;
 import io.requery.sql.EntityDataStore;
 
@@ -382,13 +387,11 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
                 // ANNIVERSARY
                 if (contact.anniversary != null) {
-                    String date = getDisplayedDatetime(contact.anniversary.getDate().getTime(), contact.anniversary.getDate().getTime(), true, getContext());
-                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_anniversary), null, date);
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary.getDate(), contact.anniversary.getPartialDate()));
                 }
                 // BDAY
                 if (contact.birthDay != null) {
-                    String date = getDisplayedDatetime(contact.birthDay.getDate().getTime(), contact.birthDay.getDate().getTime(), true, getContext());
-                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_birthday), null, date);
+                    addInfoItem(view.getContext(), aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay.getDate(), contact.birthDay.getPartialDate()));
                 }
 
                 // RELATED
@@ -400,6 +403,19 @@ public class JournalItemActivity extends BaseActivity implements Refreshable {
 
                 // PHOTO
                 // if (contact.photo != null)
+            }
+        }
+
+        private String getDisplayedDate(Date date, PartialDate partialDate) {
+            if (date != null) {
+                long epochDate = date.getTime();
+                return getDisplayedDatetime(epochDate, epochDate, true, getContext());
+            } else {
+                SimpleDateFormat formatter = new SimpleDateFormat("d MMMM", Locale.getDefault());
+                GregorianCalendar calendar = new GregorianCalendar();
+                calendar.set(Calendar.DAY_OF_MONTH, partialDate.getDate());
+                calendar.set(Calendar.MONTH, partialDate.getMonth() - 1);
+                return formatter.format(calendar.getTime());
             }
         }
 
