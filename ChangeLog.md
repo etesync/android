@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.21.6
+* Fix handling of partial dates in the jorunal contact view.
+
 ## Version 0.21.5
 * Fix issue when viewing journal entries for contacts with malformed (empty but existing) nicknames
 
