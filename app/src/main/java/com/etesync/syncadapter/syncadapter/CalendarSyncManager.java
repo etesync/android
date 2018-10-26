@@ -24,6 +24,8 @@ import com.etesync.syncadapter.R;
 import com.etesync.syncadapter.journalmanager.Exceptions;
 import com.etesync.syncadapter.journalmanager.JournalEntryManager;
 import com.etesync.syncadapter.model.CollectionInfo;
+import com.etesync.syncadapter.model.ServiceDB;
+import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalEvent;
@@ -57,6 +59,11 @@ import okhttp3.HttpUrl;
  * <p>Synchronization manager for CardDAV collections; handles contacts and groups.</p>
  */
 public class CalendarSyncManager extends SyncManager {
+    private enum ChangeNotification {
+        ALL_CHANGES,
+        NONE
+    }
+
     final private HttpUrl remote;
 
     public CalendarSyncManager(Context context, Account account, AccountSettings settings, Bundle extras, String authority, SyncResult result, LocalCalendar calendar, HttpUrl remote) throws Exceptions.IntegrityException, Exceptions.GenericCryptoException {
@@ -79,6 +86,15 @@ public class CalendarSyncManager extends SyncManager {
     protected String getSyncSuccessfullyTitle() {
         return context.getString(R.string.sync_successfully_calendar, info.displayName,
                 account.name);
+    }
+
+    @Override
+    protected boolean shouldNotifyUserOnSync() {
+        int changeNotificationIndex =
+                new Settings(new ServiceDB.OpenHelper(context).getReadableDatabase())
+                        .getInt(App.CHANGE_NOTIFICATION, 0);
+        ChangeNotification changeNotification = ChangeNotification.values()[changeNotificationIndex];
+        return changeNotification.equals(ChangeNotification.ALL_CHANGES);
     }
 
     @Override

@@ -240,8 +240,10 @@ abstract public class SyncManager {
         }
     }
 
+    protected abstract boolean shouldNotifyUserOnSync();
+
     private void notifyUserOnSync() {
-        if (remoteEntries.isEmpty()) {
+        if (remoteEntries.isEmpty() || !shouldNotifyUserOnSync()) {
             return;
         }
         NotificationHelper notificationHelper = new NotificationHelper(context,

@@ -86,6 +86,11 @@ public class ContactsSyncManager extends SyncManager {
     }
 
     @Override
+    protected boolean shouldNotifyUserOnSync() {
+        return true;
+    }
+
+    @Override
     protected boolean prepare() throws ContactsStorageException, CalendarStorageException {
         if (!super.prepare())
             return false;

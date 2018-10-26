@@ -93,7 +93,8 @@ public class App extends Application {
             OVERRIDE_PROXY = "overrideProxy",
             OVERRIDE_PROXY_HOST = "overrideProxyHost",
             OVERRIDE_PROXY_PORT = "overrideProxyPort",
-            FORCE_LANGUAGE = "forceLanguage";
+            FORCE_LANGUAGE = "forceLanguage",
+            CHANGE_NOTIFICATION = "changeNotification";
 
     public static final String OVERRIDE_PROXY_HOST_DEFAULT = "localhost";
     public static final int OVERRIDE_PROXY_PORT_DEFAULT = 8118;
