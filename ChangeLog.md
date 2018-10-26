@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.22.0
+* Add a setting to disable the "New Journal Entries" notifications
+
 ## Version 0.21.6
 * Fix handling of partial dates in the jorunal contact view.
 
