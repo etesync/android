@@ -11,6 +11,13 @@
 
     <PreferenceCategory android:title="@string/app_settings_user_interface">
 
+        <ListPreference
+            android:dialogTitle="@string/app_settings_change_notification"
+            android:entryValues="@array/app_settings_change_notification_values"
+            android:entries="@array/app_settings_change_notification_values"
+            android:key="change_notification"
+            android:title="@string/app_settings_change_notification"/>
+
         <Preference
             android:key="reset_hints"
             android:title="@string/app_settings_reset_hints"
