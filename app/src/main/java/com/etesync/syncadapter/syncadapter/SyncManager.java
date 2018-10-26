@@ -28,7 +28,9 @@ import com.etesync.syncadapter.model.CollectionInfo;
 import com.etesync.syncadapter.model.EntryEntity;
 import com.etesync.syncadapter.model.JournalEntity;
 import com.etesync.syncadapter.model.JournalModel;
+import com.etesync.syncadapter.model.ServiceDB;
 import com.etesync.syncadapter.model.ServiceEntity;
+import com.etesync.syncadapter.model.Settings;
 import com.etesync.syncadapter.model.SyncEntry;
 import com.etesync.syncadapter.resource.LocalCollection;
 import com.etesync.syncadapter.resource.LocalResource;
@@ -241,7 +243,11 @@ abstract public class SyncManager {
     }
 
     private void notifyUserOnSync() {
-        if (remoteEntries.isEmpty()) {
+        Settings.ChangeNotification changeNotification =
+                new Settings(new ServiceDB.OpenHelper(context).getReadableDatabase())
+                        .getChangeNotification(App.CHANGE_NOTIFICATION);
+        if (remoteEntries.isEmpty() ||
+                changeNotification.equals(Settings.ChangeNotification.NONE)) {
             return;
         }
         NotificationHelper notificationHelper = new NotificationHelper(context,

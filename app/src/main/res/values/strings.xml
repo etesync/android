@@ -98,6 +98,11 @@
     <string name="app_settings_show_debug_info_details">View/share software and configuration details</string>
     <string name="app_settings_force_language">Force Language</string>
     <string name="app_settings_force_language_default">Auto</string>
+    <string name="app_settings_change_notification">Show change notifications</string>
+    <string-array name="app_settings_change_notification_values">
+        <item>For all changes</item>
+        <item>None</item>
+    </string-array>
 
     <!-- AccountActivity -->
     <string name="account_synchronize_now">Synchronize now</string>
