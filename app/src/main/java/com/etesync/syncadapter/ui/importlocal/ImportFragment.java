@@ -25,6 +25,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook;
 import com.etesync.syncadapter.resource.LocalCalendar;
 import com.etesync.syncadapter.resource.LocalContact;
 import com.etesync.syncadapter.resource.LocalEvent;
+import com.etesync.syncadapter.syncadapter.ContactsSyncManager;
 import com.etesync.syncadapter.ui.Refreshable;
 
 import org.apache.commons.codec.Charsets;
@@ -288,7 +289,8 @@ public class ImportFragment extends DialogFragment {
                     }
                 } else if (info.type.equals(CollectionInfo.Type.ADDRESS_BOOK)) {
                     // FIXME: Handle groups and download icon?
-                    final Contact[] contacts = Contact.fromStream(importStream, Charsets.UTF_8, null);
+                    Contact.Downloader downloader = new ContactsSyncManager.ResourceDownloader(getContext());
+                    final Contact[] contacts = Contact.fromStream(importStream, Charsets.UTF_8, downloader);
 
                     if (contacts.length == 0) {
                         App.log.warning("Empty/invalid file.");

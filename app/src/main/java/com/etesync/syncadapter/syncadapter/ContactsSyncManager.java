@@ -160,7 +160,7 @@ public class ContactsSyncManager extends SyncManager {
 
     protected void processSyncEntry(SyncEntry cEntry) throws IOException, ContactsStorageException, CalendarStorageException {
         InputStream is = new ByteArrayInputStream(cEntry.getContent().getBytes(Charsets.UTF_8));
-        Contact.Downloader downloader = new ResourceDownloader();
+        Contact.Downloader downloader = new ResourceDownloader(context);
 
         Contact[] contacts = Contact.fromStream(is, Charsets.UTF_8, downloader);
         if (contacts.length == 0) {
@@ -242,7 +242,13 @@ public class ContactsSyncManager extends SyncManager {
 
     // downloader helper class
 
-    private class ResourceDownloader implements Contact.Downloader {
+    public static class ResourceDownloader implements Contact.Downloader {
+        Context context;
+
+        public ResourceDownloader(Context context) {
+            this.context = context;
+        }
+
         @Override
         public byte[] download(String url, String accepts) {
             HttpUrl httpUrl = HttpUrl.parse(url);
