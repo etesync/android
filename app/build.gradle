@@ -13,7 +13,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.etesync.syncadapter"
@@ -117,12 +117,14 @@ dependencies {
     implementation "ch.acra:acra-mail:$acraVersion"
     implementation "ch.acra:acra-toast:$acraVersion"
 
-    implementation 'com.android.support:support-compat:27.1.0'
-    implementation 'com.android.support:support-fragment:27.1.0'
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:cardview-v7:27.1.0'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.android.support:preference-v14:27.1.0'
+    def supportVersion = '27.1.1'
+    implementation "com.android.support:support-core-ui:$supportVersion"
+    implementation "com.android.support:support-compat:$supportVersion"
+    implementation "com.android.support:support-fragment:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:preference-v14:$supportVersion"
 
     compile 'com.github.yukuku:ambilwarna:2.0.1'
     compile ('com.github.worker8:tourguide:1.0.17-SNAPSHOT@aar'){
