@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.22.2
+* Really fix the crashes because of the missing support lib dependencies
+* Fix crash when importing a contact with a remote (not-embedded) picture
+
 ## Version 0.22.1
 * Fix crashes because of missing support lib dependencies
 
