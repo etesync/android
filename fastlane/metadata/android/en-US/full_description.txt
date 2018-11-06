@@ -1,6 +1,6 @@
 Secure, End-to-End encrypted and journalized personal information synchronization for Android, the desktop and the web. Currently supports contacts and calendars, with more on the way.
 
-In order to use this application you need to have an account with EteSync, or run your own instance. Check out https://www.etesync.com/ for more information. The server code is available at https://github.com/etesync/journal-manager
+In order to use this application you need to have an account with EteSync. It costs only $14 a year with no hidden fees, signing up will give you a two week free trial (No payment info required!) Alternatively, you can run your own server for free. Check out https://www.etesync.com/ for more information. The server code is available at https://github.com/etesync/journal-manager
 
 Easy to Use
 ===========
