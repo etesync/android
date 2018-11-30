@@ -46,6 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import at.bitfire.ical4android.CalendarStorageException;
 import at.bitfire.ical4android.Event;
@@ -221,13 +222,17 @@ public class CalendarSyncManager extends SyncManager {
     }
 
     private static String formatEventDates(Event event) {
+        final Locale locale = Locale.US;
         final String dateFormatString =
                 event.isAllDay() ? "EEEE, MMM dd" : "EEEE, MMM dd @ hh:mm a";
         final DateFormat dateFormat =
-                new SimpleDateFormat(dateFormatString,
-                        Locale.US);
+                new SimpleDateFormat(dateFormatString, locale);
+        final TimeZone timezone = event.dtStart.getTimeZone();
         Date startDate = event.dtStart.getDate();
         Date endDate = event.getEndDate(true).getDate();
+        final String tzName = (timezone != null) ?
+                timezone.getDisplayName(timezone.inDaylightTime(startDate), TimeZone.SHORT)
+                : "UTC";
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(startDate);
@@ -238,10 +243,11 @@ public class CalendarSyncManager extends SyncManager {
             return dateFormat.format(startDate);
         }
         return sameDay ?
-                String.format("%s - %s",
+                String.format("%s - %s (%s)",
                         dateFormat.format(startDate),
-                        new SimpleDateFormat("hh:mm a", Locale.US).format(endDate)) :
-                String.format("%s - %s", dateFormat.format(startDate), dateFormat.format(endDate));
+                        new SimpleDateFormat("hh:mm a", Locale.US).format(endDate),
+                        tzName) :
+                String.format("%s - %s (%s)", dateFormat.format(startDate), dateFormat.format(endDate), tzName);
     }
 
     private Uri createAttachmentFromString(Context context, String name, String content) {
