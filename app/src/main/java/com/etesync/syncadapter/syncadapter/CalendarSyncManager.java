@@ -165,6 +165,7 @@ public class CalendarSyncManager extends SyncManager {
                 context.getString(R.string.sync_calendar_attendees_email_content,
                         event.summary,
                         formatEventDates(event),
+                        (event.location != null) ? event.location : "",
                         formatAttendees(event.attendees)));
         Uri uri = createAttachmentFromString(context, event.uid, icsContent);
         if (uri == null) {
