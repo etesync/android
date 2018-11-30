@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.22.3
+* Event invitations: add timezone and location information to email summary.
+* Update ical4j dependency.
+
 ## Version 0.22.2
 * Really fix the crashes because of the missing support lib dependencies
 * Fix crash when importing a contact with a remote (not-embedded) picture
