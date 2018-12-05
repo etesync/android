@@ -223,7 +223,7 @@ public class CalendarSyncManager extends SyncManager {
     }
 
     private static String formatEventDates(Event event) {
-        final Locale locale = Locale.US;
+        final Locale locale = Locale.getDefault();
         final String dateFormatString =
                 event.isAllDay() ? "EEEE, MMM dd" : "EEEE, MMM dd @ hh:mm a";
         final DateFormat dateFormat =
@@ -246,7 +246,7 @@ public class CalendarSyncManager extends SyncManager {
         return sameDay ?
                 String.format("%s - %s (%s)",
                         dateFormat.format(startDate),
-                        new SimpleDateFormat("hh:mm a", Locale.US).format(endDate),
+                        new SimpleDateFormat("hh:mm a", locale).format(endDate),
                         tzName) :
                 String.format("%s - %s (%s)", dateFormat.format(startDate), dateFormat.format(endDate), tzName);
     }
