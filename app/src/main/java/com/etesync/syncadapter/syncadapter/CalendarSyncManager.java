@@ -224,11 +224,16 @@ public class CalendarSyncManager extends SyncManager {
 
     private static String formatEventDates(Event event) {
         final Locale locale = Locale.getDefault();
+        final TimeZone timezone = event.dtStart.getTimeZone();
         final String dateFormatString =
                 event.isAllDay() ? "EEEE, MMM dd" : "EEEE, MMM dd @ hh:mm a";
-        final DateFormat dateFormat =
+        final DateFormat longDateFormat =
                 new SimpleDateFormat(dateFormatString, locale);
-        final TimeZone timezone = event.dtStart.getTimeZone();
+        longDateFormat.setTimeZone(timezone);
+        final DateFormat shortDateFormat =
+                new SimpleDateFormat("hh:mm a", locale);
+        shortDateFormat.setTimeZone(timezone);
+
         Date startDate = event.dtStart.getDate();
         Date endDate = event.getEndDate(true).getDate();
         final String tzName = (timezone != null) ?
@@ -241,14 +246,14 @@ public class CalendarSyncManager extends SyncManager {
         boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
         if (sameDay && event.isAllDay()) {
-            return dateFormat.format(startDate);
+            return longDateFormat.format(startDate);
         }
         return sameDay ?
                 String.format("%s - %s (%s)",
-                        dateFormat.format(startDate),
-                        new SimpleDateFormat("hh:mm a", locale).format(endDate),
+                        longDateFormat.format(startDate),
+                        shortDateFormat.format(endDate),
                         tzName) :
-                String.format("%s - %s (%s)", dateFormat.format(startDate), dateFormat.format(endDate), tzName);
+                String.format("%s - %s (%s)", longDateFormat.format(startDate), longDateFormat.format(endDate), tzName);
     }
 
     private Uri createAttachmentFromString(Context context, String name, String content) {
