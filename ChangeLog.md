@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.22.4
+* Event invitations: fix issue with times showing wrong across timezones.
+* Fix group memberships to show with more Contacts apps
+* Fix bug causing groups to get duplicated on modifications rather than just updated.
+
 ## Version 0.22.3
 * Event invitations: add timezone and location information to email summary.
 * Update ical4j dependency.
