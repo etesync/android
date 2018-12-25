@@ -89,7 +89,7 @@ public class LocalContactImportFragment extends Fragment {
                     , null, null,
                     ContactsContract.RawContacts.ACCOUNT_NAME + " ASC, " + ContactsContract.RawContacts.ACCOUNT_TYPE);
         } catch (Exception except) {
-            Log.w(TAG, "Calendar provider is missing columns, continuing anyway");
+            Log.w(TAG, "Addressbook provider is missing columns, continuing anyway");
 
             except.printStackTrace();
             return;
