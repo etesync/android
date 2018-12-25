@@ -48,12 +48,11 @@ import ezvcard.VCardVersion;
 import static at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS;
 
 public class LocalGroup extends AndroidGroup implements LocalResource {
-    protected String uuid;
     /** marshalled list of member UIDs, as sent by server */
     public static final String COLUMN_PENDING_MEMBERS = Groups.SYNC3;
 
     public String getUuid() {
-        return uuid;
+        return getFileName();
     }
 
     public LocalGroup(AndroidAddressBook addressBook, long id, String fileName, String eTag) {
