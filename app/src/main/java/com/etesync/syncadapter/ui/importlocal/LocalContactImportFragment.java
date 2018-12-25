@@ -102,9 +102,11 @@ public class LocalContactImportFragment extends Fragment {
         while (cursor.moveToNext()) {
             String accountName = cursor.getString(accountNameIndex);
             String accountType = cursor.getString(accountTypeIndex);
-            if (account == null || (!account.name.equals(accountName) || !account.type.equals(accountType))) {
-                account = new Account(accountName, accountType);
-                localAddressBooks.add(new LocalAddressBook(getContext(), account, provider));
+            if (account == null || !(account.name.equals(accountName) && account.type.equals(accountType))) {
+                if ((accountName != null) && (accountType != null)) {
+                    account = new Account(accountName, accountType);
+                    localAddressBooks.add(new LocalAddressBook(getContext(), account, provider));
+                }
             }
         }
 
