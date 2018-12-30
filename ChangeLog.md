@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.22.5
+* Fix rare crash when trying to import contacts from an account on the phone.
+
 ## Version 0.22.4
 * Event invitations: fix issue with times showing wrong across timezones.
 * Fix group memberships to show with more Contacts apps
