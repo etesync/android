@@ -21,8 +21,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
 
-        versionCode 42
-        versionName "0.22.5"
+        versionCode 43
+        versionName "0.22.6"
 
         buildConfigField "long", "buildTime", System.currentTimeMillis() + "L"
         buildConfigField "boolean", "customCerts", "true"
