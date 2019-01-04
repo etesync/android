@@ -224,7 +224,7 @@ public class CalendarSyncManager extends SyncManager {
 
     private static String formatEventDates(Event event) {
         final Locale locale = Locale.getDefault();
-        final TimeZone timezone = event.dtStart.getTimeZone();
+        final TimeZone timezone = (event.dtStart.getTimeZone() != null) ? event.dtStart.getTimeZone() : TimeZone.getTimeZone("UTC");
         final String dateFormatString =
                 event.isAllDay() ? "EEEE, MMM dd" : "EEEE, MMM dd @ hh:mm a";
         final DateFormat longDateFormat =
@@ -236,9 +236,8 @@ public class CalendarSyncManager extends SyncManager {
 
         Date startDate = event.dtStart.getDate();
         Date endDate = event.getEndDate(true).getDate();
-        final String tzName = (timezone != null) ?
-                timezone.getDisplayName(timezone.inDaylightTime(startDate), TimeZone.SHORT)
-                : "UTC";
+        final String tzName = timezone.getDisplayName(timezone.inDaylightTime(startDate), TimeZone.SHORT);
+
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(startDate);
