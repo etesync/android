@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.22.6
+* Fix rare crash when importing / creating events with a missing or invalid timezone.
+
 ## Version 0.22.5
 * Fix rare crash when trying to import contacts from an account on the phone.
 
