@@ -51,6 +51,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.resource.LocalCollection
 import okhttp3.HttpUrl
 
 /**
@@ -68,7 +69,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                 account.name)
 
     init {
-        localCollection = calendar
+        localCollection = calendar as LocalCollection<LocalResource>
     }
 
     override fun notificationId(): Int {
@@ -142,7 +143,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             if (event.attendees.isEmpty()) {
                 return
             }
-            createInviteAttendeesNotification(event, local.getContent())
+            createInviteAttendeesNotification(event, local.content)
         }
     }
 

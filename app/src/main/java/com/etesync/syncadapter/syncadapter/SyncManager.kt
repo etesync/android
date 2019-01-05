@@ -60,7 +60,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     protected val notificationManager: NotificationHelper
     protected val info: CollectionInfo
-    protected var localCollection: LocalCollection? = null
+    protected var localCollection: LocalCollection<LocalResource>? = null
 
     protected var httpClient: OkHttpClient
 
@@ -409,7 +409,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                     break
                 }
                 App.log.info("Added/changed resource with UUID: " + local.uuid)
-                local.clearDirty(local.uuid)
+                local.clearDirty(local.uuid!!)
             }
             if (left > 0) {
                 localDirty = Arrays.copyOfRange(localDirty, left, localDirty.size)

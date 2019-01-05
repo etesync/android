@@ -199,7 +199,7 @@ class LocalCalendarImportFragment : ListFragment() {
             try {
                 val localCalendar = LocalCalendar.findByName(account,
                         context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI),
-                        LocalCalendar.Factory.INSTANCE, info!!.uid)
+                        LocalCalendar.Factory.INSTANCE, info!!.uid!!)
                 val localEvents = fromCalendar.all
                 val total = localEvents.size
                 progressDialog!!.max = total

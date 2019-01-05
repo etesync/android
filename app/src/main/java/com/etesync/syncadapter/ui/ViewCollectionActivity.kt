@@ -171,7 +171,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             if (info.type == CollectionInfo.Type.CALENDAR) {
                 try {
                     val providerClient = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
-                    val resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory.INSTANCE, info.uid)
+                    val resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory.INSTANCE, info.uid!!)
                     providerClient!!.release()
                     if (resource == null) {
                         return null
@@ -188,7 +188,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             } else {
                 try {
                     val providerClient = contentResolver.acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI)
-                    val resource = LocalAddressBook.findByUid(this@ViewCollectionActivity, providerClient!!, account, info.uid)
+                    val resource = LocalAddressBook.findByUid(this@ViewCollectionActivity, providerClient!!, account, info.uid!!)
                     providerClient.release()
                     if (resource == null) {
                         return null

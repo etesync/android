@@ -83,7 +83,7 @@ class LocalContactImportFragment : Fragment() {
             if (account == null || !(account.name == accountName && account.type == accountType)) {
                 if (accountName != null && accountType != null) {
                     account = Account(accountName, accountType)
-                    localAddressBooks.add(LocalAddressBook(context, account, provider))
+                    localAddressBooks.add(LocalAddressBook(context!!, account, provider))
                 }
             }
         }
@@ -132,7 +132,7 @@ class LocalContactImportFragment : Fragment() {
             try {
                 val addressBook = LocalAddressBook.findByUid(context!!,
                         context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
-                        account, info!!.uid)
+                        account, info!!.uid!!)
                 val localContacts = localAddressBook.all
                 val total = localContacts.size
                 progressDialog!!.max = total
@@ -142,7 +142,7 @@ class LocalContactImportFragment : Fragment() {
                     val contact = currentLocalContact.contact
 
                     try {
-                        val localContact = LocalContact(addressBook, contact, null, null)
+                        val localContact = LocalContact(addressBook!!, contact, null, null)
                         localContact.createAsDirty()
                         result.added++
                     } catch (e: ContactsStorageException) {
