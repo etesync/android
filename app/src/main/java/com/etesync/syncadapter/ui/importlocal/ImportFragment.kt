@@ -223,7 +223,7 @@ class ImportFragment : DialogFragment() {
                     val provider = context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
                     val localCalendar: LocalCalendar?
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory.INSTANCE, info!!.uid)
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory.INSTANCE, info!!.uid!!)
                         if (localCalendar == null) {
                             throw FileNotFoundException("Failed to load local resource.")
                         }
@@ -264,11 +264,11 @@ class ImportFragment : DialogFragment() {
                     finishParsingFile(contacts.size)
 
                     val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
-                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider!!, account, info!!.uid)
+                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider!!, account, info!!.uid!!)
 
                     for (contact in contacts) {
                         try {
-                            val localContact = LocalContact(localAddressBook, contact, null, null)
+                            val localContact = LocalContact(localAddressBook!!, contact, null, null)
                             localContact.createAsDirty()
                             result.added++
                         } catch (e: ContactsStorageException) {

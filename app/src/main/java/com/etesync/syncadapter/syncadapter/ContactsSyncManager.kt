@@ -59,7 +59,7 @@ import okhttp3.ResponseBody
  * Synchronization manager for CardDAV collections; handles contacts and groups.
  */
 class ContactsSyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class, ContactsStorageException::class)
-constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager(context, account, settings, extras, authority, result, localAddressBook.url, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
+constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager(context, account, settings, extras, authority, result, localAddressBook.url!!, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
 
     protected override val syncErrorTitle: String
         get() = context.getString(R.string.sync_error_contacts, account.name)
@@ -98,7 +98,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
         localAddressBook.updateSettings(values)
 
-        journal = JournalEntryManager(httpClient, remote, localAddressBook.url)
+        journal = JournalEntryManager(httpClient, remote, localAddressBook.url!!)
 
         localAddressBook.includeGroups = true
 
