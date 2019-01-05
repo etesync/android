@@ -95,11 +95,11 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
     private static ContentValues valuesFromCollectionInfo(JournalEntity journalEntity, boolean withColor) {
         CollectionInfo info = journalEntity.getInfo();
         ContentValues values = new ContentValues();
-        values.put(Calendars.NAME, info.uid);
-        values.put(Calendars.CALENDAR_DISPLAY_NAME, info.displayName);
+        values.put(Calendars.NAME, info.getUid());
+        values.put(Calendars.CALENDAR_DISPLAY_NAME, info.getDisplayName());
 
         if (withColor)
-            values.put(Calendars.CALENDAR_COLOR, info.color != null ? info.color : defaultColor);
+            values.put(Calendars.CALENDAR_COLOR, info.getColor() != null ? info.getColor() : defaultColor);
 
         if (journalEntity.isReadOnly())
             values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_READ);
@@ -109,8 +109,8 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
             values.put(Calendars.CAN_ORGANIZER_RESPOND, 1);
         }
 
-        if (!TextUtils.isEmpty(info.timeZone)) {
-            VTimeZone timeZone = DateUtils.parseVTimeZone(info.timeZone);
+        if (!TextUtils.isEmpty(info.getTimeZone())) {
+            VTimeZone timeZone = DateUtils.parseVTimeZone(info.getTimeZone());
             if (timeZone != null && timeZone.getTimeZoneId() != null)
                 values.put(Calendars.CALENDAR_TIME_ZONE, DateUtils.findAndroidTimezoneID(timeZone.getTimeZoneId().getValue()));
         }

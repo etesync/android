@@ -59,11 +59,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
 
         val colorSquare = findViewById<View>(R.id.color)
         if (info.type == CollectionInfo.Type.CALENDAR) {
-            if (info.color != null) {
-                colorSquare.setBackgroundColor(info.color)
-            } else {
-                colorSquare.setBackgroundColor(LocalCalendar.defaultColor)
-            }
+            colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
         } else {
             colorSquare.visibility = View.GONE
         }

@@ -155,9 +155,10 @@ abstract class SyncAdapterService : Service() {
 
                 if (journals.isEmpty()) {
                     val info = CollectionInfo.defaultForServiceType(serviceType)
-                    info.uid = JournalManager.Journal.genUid()
-                    val crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid)
-                    val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+                    val uid = JournalManager.Journal.genUid()
+                    info.uid = uid
+                    val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                    val journal = JournalManager.Journal(crypto, info.toJson(), uid)
                     journalsManager.create(journal)
                     journals.add(Pair(journal, info))
                 }

@@ -68,11 +68,11 @@ public class LocalTaskList extends AndroidTaskList implements LocalCollection {
 
     private static ContentValues valuesFromCollectionInfo(CollectionInfo info, boolean withColor) {
         ContentValues values = new ContentValues();
-        values.put(TaskLists._SYNC_ID, info.uid);
-        values.put(TaskLists.LIST_NAME, info.displayName);
+        values.put(TaskLists._SYNC_ID, info.getUid());
+        values.put(TaskLists.LIST_NAME, info.getDisplayName());
 
         if (withColor)
-            values.put(TaskLists.LIST_COLOR, info.color != null ? info.color : defaultColor);
+            values.put(TaskLists.LIST_COLOR, info.getColor() != null ? info.getColor() : defaultColor);
 
         return values;
     }

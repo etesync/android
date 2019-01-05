@@ -101,8 +101,8 @@ class AddMemberFragment : DialogFragment() {
                 val httpClient = HttpClient.create(ctx!!, settings!!)
                 val journalsManager = JournalManager(httpClient, remote!!)
 
-                val journal = JournalManager.Journal.fakeWithUid(info!!.uid)
-                val crypto = Crypto.CryptoManager(info!!.version, settings!!.password(), info!!.uid)
+                val journal = JournalManager.Journal.fakeWithUid(info!!.uid!!)
+                val crypto = Crypto.CryptoManager(info!!.version, settings!!.password(), info!!.uid!!)
 
                 val encryptedKey = crypto.getEncryptedKey(settings!!.keyPair!!, memberPubKey!!)
                 val member = JournalManager.Member(memberEmail!!, encryptedKey!!)

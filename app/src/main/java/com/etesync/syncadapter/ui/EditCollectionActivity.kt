@@ -32,11 +32,7 @@ class EditCollectionActivity : CreateCollectionActivity() {
 
         if (info!!.type == CollectionInfo.Type.CALENDAR) {
             val colorSquare = findViewById<View>(R.id.color)
-            if (info!!.color != null) {
-                colorSquare.setBackgroundColor(info!!.color)
-            } else {
-                colorSquare.setBackgroundColor(LocalCalendar.defaultColor)
-            }
+            colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
         }
 
         val edit = findViewById<View>(R.id.display_name) as EditText

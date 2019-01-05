@@ -53,8 +53,8 @@ public class JournalModel {
 
         @PostLoad
         void afterLoad() {
-            this.info.serviceID = this.serviceModel.id;
-            this.info.uid = uid;
+            this.info.setServiceID(this.serviceModel.id);
+            this.info.setUid(uid);
         }
 
         public Journal() {
@@ -64,7 +64,7 @@ public class JournalModel {
         public Journal(EntityDataStore<Persistable> data, CollectionInfo info) {
             this();
             this.info = info;
-            this.uid = info.uid;
+            this.uid = info.getUid();
             this.serviceModel = info.getServiceEntity(data);
         }
 
@@ -87,7 +87,7 @@ public class JournalModel {
         }
 
         public static JournalEntity fetchOrCreate(EntityDataStore<Persistable> data, CollectionInfo collection) {
-            JournalEntity journalEntity = fetch(data, collection.getServiceEntity(data), collection.uid);
+            JournalEntity journalEntity = fetch(data, collection.getServiceEntity(data), collection.getUid());
             if (journalEntity == null) {
                 journalEntity = new JournalEntity(data, collection);
             } else {
@@ -173,7 +173,7 @@ public class JournalModel {
 
         @Override
         public CollectionInfo convertToMapped(Class<? extends CollectionInfo> type, String value) {
-            return value == null ? null : CollectionInfo.fromJson(value);
+            return value == null ? null : CollectionInfo.Companion.fromJson(value);
         }
     }
 

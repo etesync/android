@@ -102,14 +102,16 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 val principal = HttpUrl.get(settings.uri!!)
 
                 val journalManager = JournalManager(HttpClient.create(context, settings), principal!!)
-                if (info.uid == null) {
-                    info.uid = JournalManager.Journal.genUid()
-                    val crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid)
-                    val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+                var uid = info.uid
+                if (uid == null) {
+                    uid = JournalManager.Journal.genUid()
+                    info.uid = uid
+                    val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                    val journal = JournalManager.Journal(crypto, info.toJson(), uid)
                     journalManager.create(journal)
                 } else {
-                    val crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid)
-                    val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+                    val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                    val journal = JournalManager.Journal(crypto, info.toJson(), uid)
                     journalManager.update(journal)
                 }
 

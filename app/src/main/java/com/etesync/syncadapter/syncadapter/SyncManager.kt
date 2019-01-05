@@ -117,7 +117,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         if (journalEntity.encryptedKey != null) {
             crypto = Crypto.CryptoManager(info.version, settings.keyPair!!, journalEntity.encryptedKey)
         } else {
-            crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid)
+            crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid!!)
         }
     }
 
@@ -191,7 +191,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
             notifyUserOnSync()
 
-            App.log.info("Finished sync with CTag=" + remoteCTag!!)
+            App.log.info("Finished sync with CTag=$remoteCTag")
         } catch (e: IOException) {
             App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e)
             syncResult.stats.numIoExceptions++

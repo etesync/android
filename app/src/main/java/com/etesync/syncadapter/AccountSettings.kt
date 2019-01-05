@@ -228,7 +228,7 @@ constructor(internal val context: Context, internal val account: Account) {
                         if (!accountManager.addAccountExplicitly(addressBookAccount, null, null))
                             throw ContactsStorageException("Couldn't create address book account")
 
-                        LocalAddressBook.setUserData(accountManager, addressBookAccount, account, info.uid)
+                        LocalAddressBook.setUserData(accountManager, addressBookAccount, account, info.uid!!)
                         val newAddressBook = LocalAddressBook(context, addressBookAccount, provider)
 
                         // move contacts to new address book

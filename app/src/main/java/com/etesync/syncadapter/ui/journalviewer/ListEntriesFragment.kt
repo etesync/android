@@ -28,7 +28,7 @@ import io.requery.sql.EntityDataStore
 
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
-    private var data: EntityDataStore<Persistable>? = null
+    private lateinit var data: EntityDataStore<Persistable>
     private lateinit var info: CollectionInfo
     private var journalEntity: JournalEntity? = null
     private var asyncTask: AsyncTask<*, *, *>? = null
@@ -92,8 +92,8 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     private inner class JournalFetch : AsyncTask<Void, Void, List<EntryEntity>>() {
 
         override fun doInBackground(vararg voids: Void): List<EntryEntity> {
-            journalEntity = JournalModel.Journal.fetch(data!!, info!!.getServiceEntity(data), info!!.uid)
-            return data!!.select(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList()
+            journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
+            return data.select(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList()
         }
 
         override fun onPostExecute(result: List<EntryEntity>) {

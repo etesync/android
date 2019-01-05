@@ -52,7 +52,7 @@ class RemoveMemberFragment : DialogFragment() {
         override fun doInBackground(vararg voids: Void): RemoveResult {
             try {
                 val journalsManager = JournalManager(httpClient!!, remote!!)
-                val journal = JournalManager.Journal.fakeWithUid(info!!.uid)
+                val journal = JournalManager.Journal.fakeWithUid(info!!.uid!!)
 
                 val member = JournalManager.Member(memberEmail!!, "placeholder".toByteArray(Charsets.UTF_8))
                 journalsManager.deleteMember(journal, member)

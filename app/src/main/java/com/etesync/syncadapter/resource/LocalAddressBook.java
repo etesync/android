@@ -102,10 +102,10 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         if (!accountManager.addAccountExplicitly(account, null, null))
             throw new ContactsStorageException("Couldn't create address book account");
 
-        setUserData(accountManager, account, mainAccount, info.uid);
+        setUserData(accountManager, account, mainAccount, info.getUid());
         LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
         addressBook.setMainAccount(mainAccount);
-        addressBook.setURL(info.uid);
+        addressBook.setURL(info.getUid());
 
         ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
 
@@ -403,12 +403,12 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     // HELPERS
 
     public static String accountName(@NonNull Account mainAccount, @NonNull CollectionInfo info) {
-        String displayName = (info.displayName != null) ? info.displayName : info.uid;
+        String displayName = (info.getDisplayName() != null) ? info.getDisplayName() : info.getUid();
         StringBuilder sb = new StringBuilder(displayName);
         sb      .append(" (")
                 .append(mainAccount.name)
                 .append(" ")
-                .append(info.uid.substring(0, 4))
+                .append(info.getUid().substring(0, 4))
                 .append(")");
         return sb.toString();
     }

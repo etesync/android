@@ -335,11 +335,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
                 vColor.visibility = View.GONE
             } else {
-                if (info.color != null) {
-                    vColor.setBackgroundColor(info.color)
-                } else {
-                    vColor.setBackgroundColor(LocalCalendar.defaultColor)
-                }
+                vColor.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
             }
 
             val readOnly = v.findViewById<View>(R.id.read_only)
