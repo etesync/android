@@ -26,7 +26,6 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.etesync.syncadapter.AccountsChangedReceiver
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 
@@ -80,11 +79,11 @@ class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<
         }
 
         override fun onStartLoading() {
-            AccountsChangedReceiver.registerListener(this, true)
+            accountManager.addOnAccountsUpdatedListener(this, null, true)
         }
 
         override fun onStopLoading() {
-            AccountsChangedReceiver.unregisterListener(this)
+            accountManager.removeOnAccountsUpdatedListener(this)
         }
 
         override fun onAccountsUpdated(accounts: Array<Account>) {
