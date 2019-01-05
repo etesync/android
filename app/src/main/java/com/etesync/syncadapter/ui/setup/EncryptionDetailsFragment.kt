@@ -9,6 +9,7 @@
 package com.etesync.syncadapter.ui.setup
 
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +19,9 @@ import android.widget.TextView
 
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.ui.widget.EditPassword
 
 class EncryptionDetailsFragment : Fragment() {
-    internal var editPassword: EditPassword? = null
+    internal lateinit var editPassword: TextInputLayout
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,7 +35,7 @@ class EncryptionDetailsFragment : Fragment() {
         val accountName = v.findViewById<View>(R.id.account_name) as TextView
         accountName.text = getString(R.string.login_encryption_account_label) + " " + config.userName
 
-        editPassword = v.findViewById<View>(R.id.encryption_password) as EditPassword
+        editPassword = v.findViewById<View>(R.id.encryption_password) as TextInputLayout
 
         val btnCreate = v.findViewById<View>(R.id.create_account) as Button
         btnCreate.setOnClickListener(View.OnClickListener {
@@ -54,9 +54,9 @@ class EncryptionDetailsFragment : Fragment() {
 
     private fun validateEncryptionData(config: BaseConfigurationFinder.Configuration): BaseConfigurationFinder.Configuration? {
         var valid = true
-        val password = editPassword!!.text.toString()
+        val password = editPassword.editText?.text.toString()
         if (password.isEmpty()) {
-            editPassword!!.setError(getString(R.string.login_password_required))
+            editPassword.error = getString(R.string.login_password_required)
             valid = false
         }
 

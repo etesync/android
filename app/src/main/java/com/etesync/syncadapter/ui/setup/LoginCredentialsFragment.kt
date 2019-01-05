@@ -9,6 +9,7 @@
 package com.etesync.syncadapter.ui.setup
 
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,14 +21,13 @@ import android.widget.TextView
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.WebViewActivity
-import com.etesync.syncadapter.ui.widget.EditPassword
 import net.cachapa.expandablelayout.ExpandableLayout
 import okhttp3.HttpUrl
 import java.net.URI
 
 class LoginCredentialsFragment : Fragment() {
     internal lateinit var editUserName: EditText
-    internal lateinit var editUrlPassword: EditPassword
+    internal lateinit var editUrlPassword: TextInputLayout
 
     internal lateinit var showAdvanced: CheckedTextView
     internal lateinit var customServer: EditText
@@ -37,7 +37,7 @@ class LoginCredentialsFragment : Fragment() {
         val v = inflater.inflate(R.layout.login_credentials_fragment, container, false)
 
         editUserName = v.findViewById<View>(R.id.user_name) as EditText
-        editUrlPassword = v.findViewById<View>(R.id.url_password) as EditPassword
+        editUrlPassword = v.findViewById<View>(R.id.url_password) as TextInputLayout
         showAdvanced = v.findViewById<View>(R.id.show_advanced) as CheckedTextView
         customServer = v.findViewById<View>(R.id.custom_server) as EditText
 
@@ -50,7 +50,7 @@ class LoginCredentialsFragment : Fragment() {
                 val password = intent.getStringExtra(LoginActivity.EXTRA_PASSWORD)
 
                 editUserName.setText(username)
-                editUrlPassword.setText(password)
+                editUrlPassword.editText?.setText(password)
             }
         }
 
@@ -94,9 +94,9 @@ class LoginCredentialsFragment : Fragment() {
             valid = false
         }
 
-        val password = editUrlPassword.text.toString()
+        val password = editUrlPassword.editText?.text.toString()
         if (password.isEmpty()) {
-            editUrlPassword.setError(getString(R.string.login_password_required))
+            editUrlPassword.error = getString(R.string.login_password_required)
             valid = false
         }
 

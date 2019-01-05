@@ -8,9 +8,10 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,11 +36,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <com.etesync.syncadapter.ui.widget.EditPassword
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/encryption_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login_encryption_password"/>
+                app:passwordToggleEnabled="true">
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:inputType="textPassword"
+                    android:hint="@string/login_encryption_password"/>
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"
