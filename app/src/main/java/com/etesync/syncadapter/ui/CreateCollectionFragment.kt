@@ -1,0 +1,160 @@
+/*
+ * Copyright © 2013 – 2016 Ricki Hirner (bitfire web engineering).
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ */
+
+package com.etesync.syncadapter.ui
+
+import android.accounts.Account
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.content.ContentResolver
+import android.content.Context
+import android.os.Bundle
+import android.provider.CalendarContract
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.AsyncTaskLoader
+import android.support.v4.content.Loader
+import com.etesync.syncadapter.*
+import com.etesync.syncadapter.journalmanager.Crypto
+import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.journalmanager.JournalManager
+import com.etesync.syncadapter.model.CollectionInfo
+import com.etesync.syncadapter.model.JournalEntity
+import com.etesync.syncadapter.model.JournalModel
+import okhttp3.HttpUrl
+
+class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Exception> {
+
+    protected lateinit var account: Account
+    protected lateinit var info: CollectionInfo
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        account = arguments!!.getParcelable(ARG_ACCOUNT)
+        info = arguments!!.getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
+
+        loaderManager.initLoader(0, null, this)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val progress = ProgressDialog(context)
+        progress.setTitle(R.string.create_collection_creating)
+        progress.setMessage(getString(R.string.please_wait))
+        progress.isIndeterminate = true
+        progress.setCanceledOnTouchOutside(false)
+        isCancelable = false
+        return progress
+    }
+
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Exception> {
+        return CreateCollectionLoader(context!!, account, info)
+    }
+
+    override fun onLoadFinished(loader: Loader<Exception>, exception: Exception?) {
+        dismissAllowingStateLoss()
+
+        val parent = activity
+        if (parent != null) {
+            if (exception != null)
+                fragmentManager!!.beginTransaction()
+                        .add(ExceptionInfoFragment.newInstance(exception, account), null)
+                        .commitAllowingStateLoss()
+            else
+                parent.finish()
+        }
+
+    }
+
+    override fun onLoaderReset(loader: Loader<Exception>) {}
+
+
+    protected class CreateCollectionLoader(context: Context, internal val account: Account, internal val info: CollectionInfo) : AsyncTaskLoader<Exception>(context) {
+
+        override fun onStartLoading() {
+            forceLoad()
+        }
+
+        override fun loadInBackground(): Exception? {
+            try {
+                var authority: String
+
+                val data = (context.applicationContext as App).data
+
+                // 1. find service ID
+                if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
+                    authority = App.getAddressBooksAuthority()
+                } else if (info.type == CollectionInfo.Type.CALENDAR) {
+                    authority = CalendarContract.AUTHORITY
+                } else {
+                    throw IllegalArgumentException("Collection must be an address book or calendar")
+                }
+
+                val serviceEntity = JournalModel.Service.fetch(data, account.name, info.type)
+
+                val settings = AccountSettings(context, account)
+                val principal = HttpUrl.get(settings.uri!!)
+
+                val journalManager = JournalManager(HttpClient.create(context, settings), principal!!)
+                if (info.uid == null) {
+                    info.uid = JournalManager.Journal.genUid()
+                    val crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid)
+                    val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+                    journalManager.create(journal)
+                } else {
+                    val crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid)
+                    val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+                    journalManager.update(journal)
+                }
+
+                // 2. add collection to service
+                info.serviceID = serviceEntity.id
+                val journalEntity = JournalEntity.fetchOrCreate(data, info)
+                data.upsert(journalEntity)
+
+
+                requestSync(authority)
+            } catch (e: IllegalStateException) {
+                return e
+            } catch (e: Exceptions.HttpException) {
+                return e
+            } catch (e: InvalidAccountException) {
+                return e
+            } catch (e: Exceptions.IntegrityException) {
+                return e
+            } catch (e: Exceptions.GenericCryptoException) {
+                return e
+            }
+
+            return null
+        }
+
+        private fun requestSync(authority: String) {
+            val extras = Bundle()
+            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)        // manual sync
+            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)     // run immediately (don't queue)
+            ContentResolver.requestSync(account, authority, extras)
+        }
+    }
+
+    companion object {
+        private val ARG_ACCOUNT = "account"
+        private val ARG_COLLECTION_INFO = "collectionInfo"
+
+        fun newInstance(account: Account, info: CollectionInfo): CreateCollectionFragment {
+            val frag = CreateCollectionFragment()
+            val args = Bundle(2)
+            args.putParcelable(ARG_ACCOUNT, account)
+            args.putSerializable(ARG_COLLECTION_INFO, info)
+            frag.arguments = args
+            return frag
+        }
+    }
+
+}

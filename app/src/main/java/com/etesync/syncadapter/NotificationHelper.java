@@ -72,7 +72,7 @@ public class NotificationHelper {
         }
 
         detailsIntent = new Intent(context, NotificationHandlerActivity.class);
-        detailsIntent.putExtra(DebugInfoActivity.KEY_THROWABLE, e);
+        detailsIntent.putExtra(DebugInfoActivity.Companion.getKEY_THROWABLE(), e);
         detailsIntent.setData(Uri.parse("uri://" + getClass().getName() + "/" + notificationTag));
     }
 
@@ -127,16 +127,16 @@ public class NotificationHelper {
         public void onCreate(Bundle savedBundle) {
             super.onCreate(savedBundle);
             Bundle extras = getIntent().getExtras();
-            Exception e = (Exception) extras.get(DebugInfoActivity.KEY_THROWABLE);
+            Exception e = (Exception) extras.get(DebugInfoActivity.Companion.getKEY_THROWABLE());
 
             Intent detailsIntent;
             if (e instanceof Exceptions.UnauthorizedException) {
                 detailsIntent = new Intent(this, AccountSettingsActivity.class);
             } else if (e instanceof Exceptions.UserInactiveException) {
-                WebViewActivity.openUrl(this, Constants.dashboard);
+                WebViewActivity.Companion.openUrl(this, Constants.dashboard);
                 return;
             } else if (e instanceof AccountSettings.AccountMigrationException) {
-                WebViewActivity.openUrl(this, Constants.faqUri.buildUpon().encodedFragment("account-migration-error").build());
+                WebViewActivity.Companion.openUrl(this, Constants.faqUri.buildUpon().encodedFragment("account-migration-error").build());
                 return;
             } else {
                 detailsIntent = new Intent(this, DebugInfoActivity.class);

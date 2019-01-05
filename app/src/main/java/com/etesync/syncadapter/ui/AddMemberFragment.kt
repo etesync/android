@@ -1,0 +1,146 @@
+package com.etesync.syncadapter.ui
+
+import android.accounts.Account
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.content.Context
+import android.os.AsyncTask
+import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
+import com.etesync.syncadapter.*
+import com.etesync.syncadapter.journalmanager.Crypto
+import com.etesync.syncadapter.journalmanager.JournalManager
+import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.syncadapter.model.CollectionInfo
+import okhttp3.HttpUrl
+
+class AddMemberFragment : DialogFragment() {
+    private var account: Account? = null
+    private var settings: AccountSettings? = null
+    private var ctx: Context? = null
+    private var remote: HttpUrl? = null
+    private var info: CollectionInfo? = null
+    private var memberEmail: String? = null
+    private var memberPubKey: ByteArray? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)
+        info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
+        memberEmail = arguments!!.getString(KEY_MEMBER)
+        ctx = context
+        try {
+            settings = AccountSettings(ctx!!, account!!)
+        } catch (e: InvalidAccountException) {
+            e.printStackTrace()
+        }
+
+        remote = HttpUrl.get(settings!!.uri!!)
+
+        MemberAdd().execute()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val progress = ProgressDialog(context)
+        progress.setTitle(R.string.collection_members_adding)
+        progress.setMessage(getString(R.string.please_wait))
+        progress.isIndeterminate = true
+        progress.setCanceledOnTouchOutside(false)
+        isCancelable = false
+        return progress
+    }
+
+    private inner class MemberAdd : AsyncTask<Void, Void, MemberAdd.AddResult>() {
+        override fun doInBackground(vararg voids: Void): AddResult {
+            try {
+                val httpClient = HttpClient.create(ctx!!, settings!!)
+                val userInfoManager = UserInfoManager(httpClient, remote!!)
+
+                val userInfo = userInfoManager[memberEmail!!]
+                        ?: throw Exception(getString(R.string.collection_members_error_user_not_found, memberEmail))
+                memberPubKey = userInfo.pubkey
+                return AddResult(null)
+            } catch (e: Exception) {
+                return AddResult(e)
+            }
+
+        }
+
+        override fun onPostExecute(result: AddResult) {
+            if (result.throwable == null) {
+                val fingerprint = Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(memberPubKey!!)
+                val view = LayoutInflater.from(context).inflate(R.layout.fingerprint_alertdialog, null)
+                (view.findViewById<View>(R.id.body) as TextView).text = getString(R.string.trust_fingerprint_body, memberEmail)
+                (view.findViewById<View>(R.id.fingerprint) as TextView).text = fingerprint
+                AlertDialog.Builder(activity!!)
+                        .setIcon(R.drawable.ic_fingerprint_dark)
+                        .setTitle(R.string.trust_fingerprint_title)
+                        .setView(view)
+                        .setPositiveButton(android.R.string.ok) { dialog, which -> MemberAddSecond().execute() }
+                        .setNegativeButton(android.R.string.cancel) { dialog, which -> dismiss() }.show()
+            } else {
+                AlertDialog.Builder(activity!!)
+                        .setIcon(R.drawable.ic_error_dark)
+                        .setTitle(R.string.collection_members_add_error)
+                        .setMessage(result.throwable.message)
+                        .setPositiveButton(android.R.string.yes) { dialog, which -> }.show()
+                dismiss()
+            }
+        }
+
+        internal inner class AddResult(val throwable: Throwable?)
+    }
+
+    private inner class MemberAddSecond : AsyncTask<Void, Void, MemberAddSecond.AddResultSecond>() {
+        override fun doInBackground(vararg voids: Void): AddResultSecond {
+            try {
+                val httpClient = HttpClient.create(ctx!!, settings!!)
+                val journalsManager = JournalManager(httpClient, remote!!)
+
+                val journal = JournalManager.Journal.fakeWithUid(info!!.uid)
+                val crypto = Crypto.CryptoManager(info!!.version, settings!!.password(), info!!.uid)
+
+                val encryptedKey = crypto.getEncryptedKey(settings!!.keyPair!!, memberPubKey!!)
+                val member = JournalManager.Member(memberEmail!!, encryptedKey!!)
+                journalsManager.addMember(journal, member)
+                return AddResultSecond(null)
+            } catch (e: Exception) {
+                return AddResultSecond(e)
+            }
+
+        }
+
+        override fun onPostExecute(result: AddResultSecond) {
+            if (result.throwable == null) {
+                (activity as Refreshable).refresh()
+            } else {
+                AlertDialog.Builder(activity!!)
+                        .setIcon(R.drawable.ic_error_dark)
+                        .setTitle(R.string.collection_members_add_error)
+                        .setMessage(result.throwable.message)
+                        .setPositiveButton(android.R.string.yes) { dialog, which -> }.show()
+            }
+            dismiss()
+        }
+
+        internal inner class AddResultSecond(val throwable: Throwable?)
+    }
+
+    companion object {
+        private val KEY_MEMBER = "memberEmail"
+
+        fun newInstance(account: Account, info: CollectionInfo, email: String): AddMemberFragment {
+            val frag = AddMemberFragment()
+            val args = Bundle(1)
+            args.putParcelable(Constants.KEY_ACCOUNT, account)
+            args.putSerializable(Constants.KEY_COLLECTION_INFO, info)
+            args.putString(KEY_MEMBER, email)
+            frag.arguments = args
+            return frag
+        }
+    }
+}

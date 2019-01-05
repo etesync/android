@@ -395,7 +395,7 @@ public class App extends Application {
         }
 
         if (fromVersion < 10) {
-            HintManager.setHintSeen(this, AccountsActivity.HINT_ACCOUNT_ADD, true);
+            HintManager.setHintSeen(this, AccountsActivity.Companion.getHINT_ACCOUNT_ADD(), true);
         }
 
         if (fromVersion < 11) {
