@@ -77,7 +77,7 @@ import io.requery.sql.EntityDataStore
 import okhttp3.internal.tls.OkHostnameVerifier
 
 @AcraCore(buildConfigClass = BuildConfig::class, logcatArguments = arrayOf("-t", "500", "-v", "time"))
-@AcraMailSender(mailTo = "reports@etesync.com", subject = R.string.crash_email_subject, reportFileName = "ACRA-report.stacktrace.json")
+@AcraMailSender(mailTo = "reports@etesync.com", resSubject = R.string.crash_email_subject, reportFileName = "ACRA-report.stacktrace.json")
 @AcraToast(resText = R.string.crash_message, length = Toast.LENGTH_LONG)
 class App : Application() {
 
