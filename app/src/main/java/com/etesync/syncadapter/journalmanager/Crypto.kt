@@ -171,7 +171,7 @@ object Crypto {
             return cipher
         }
 
-        internal fun decrypt(_data: ByteArray): ByteArray? {
+        fun decrypt(_data: ByteArray): ByteArray? {
             val iv = Arrays.copyOfRange(_data, 0, blockSize)
             val data = Arrays.copyOfRange(_data, blockSize, _data.size)
 
@@ -194,7 +194,7 @@ object Crypto {
             return out
         }
 
-        internal fun encrypt(data: ByteArray): ByteArray? {
+        fun encrypt(data: ByteArray): ByteArray? {
             val iv = ByteArray(blockSize)
             random.nextBytes(iv)
 
@@ -214,7 +214,7 @@ object Crypto {
             return buf
         }
 
-        internal fun hmac(data: ByteArray): ByteArray {
+        fun hmac(data: ByteArray): ByteArray {
             return if (version.toInt() == 1) {
                 hmac256(hmacKey, data)
             } else {

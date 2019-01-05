@@ -75,7 +75,7 @@ class JournalEntryManager(httpClient: OkHttpClient, remote: HttpUrl, val uid: St
 
     class Entry : BaseManager.Base() {
 
-        fun update(crypto: Crypto.CryptoManager, content: String, previous: Entry) {
+        fun update(crypto: Crypto.CryptoManager, content: String, previous: Entry?) {
             setContent(crypto, content)
             uid = calculateHmac(crypto, previous)
         }

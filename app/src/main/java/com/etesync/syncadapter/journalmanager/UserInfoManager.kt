@@ -92,7 +92,7 @@ class UserInfoManager(httpClient: OkHttpClient, remote: HttpUrl) : BaseManager()
             return crypto.decrypt(content)
         }
 
-        internal fun setContent(crypto: Crypto.CryptoManager, rawContent: ByteArray) {
+        fun setContent(crypto: Crypto.CryptoManager, rawContent: ByteArray) {
             val content = crypto.encrypt(rawContent)
             this.content = Arrays.concatenate(calculateHmac(crypto, content), content)
         }
