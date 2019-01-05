@@ -31,7 +31,7 @@ class AddMemberFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)
         info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
-        memberEmail = arguments!!.getString(KEY_MEMBER)
+        memberEmail = arguments!!.getString(KEY_MEMBER).toLowerCase()
         ctx = context
         try {
             settings = AccountSettings(ctx!!, account!!)
