@@ -201,7 +201,7 @@ public class JournalModel {
 
         @Override
         public SyncEntry convertToMapped(Class<? extends SyncEntry> type, String value) {
-            return value == null ? null : SyncEntry.fromJson(value);
+            return value == null ? null : SyncEntry.Companion.fromJson(value);
         }
     }
 }
