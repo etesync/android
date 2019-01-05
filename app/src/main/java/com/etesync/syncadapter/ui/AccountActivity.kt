@@ -180,7 +180,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<AccountInfo> {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountInfo> {
         return AccountLoader(this, account!!)
     }
 

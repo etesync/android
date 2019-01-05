@@ -60,7 +60,7 @@ class AppSettingsActivity : BaseActivity() {
             dbHelper.close()
         }
 
-        override fun onCreatePreferences(bundle: Bundle, s: String) {
+        override fun onCreatePreferences(bundle: Bundle?, s: String?) {
             addPreferencesFromResource(R.xml.settings_app)
 
             prefResetHints = findPreference("reset_hints")

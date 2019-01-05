@@ -163,7 +163,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             App.log.warning("Received multiple VCards, using first one")
 
         val contact = contacts[0]
-        val local = localCollection!!.getByUid(contact.uid) as LocalResource
+        val local = localCollection!!.getByUid(contact.uid) as LocalResource?
 
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {

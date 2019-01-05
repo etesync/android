@@ -111,7 +111,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         }
 
         val event = events[0]
-        val local = localCollection!!.getByUid(event.uid) as LocalEvent
+        val local = localCollection!!.getByUid(event.uid) as LocalEvent?
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
             processEvent(event, local)

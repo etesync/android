@@ -72,7 +72,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
         ACRA.getErrorReporter().removeCustomData("debug_info")
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<String> {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<String> {
         return ReportLoader(this, args)
     }
 
@@ -101,7 +101,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
             var phase: String? = null
 
             if (extras != null) {
-                throwable = extras.getSerializable(KEY_THROWABLE) as Throwable
+                throwable = extras.getSerializable(KEY_THROWABLE) as Throwable?
                 logs = extras.getString(KEY_LOGS)
                 account = extras.getParcelable(KEY_ACCOUNT)
                 authority = extras.getString(KEY_AUTHORITY)
