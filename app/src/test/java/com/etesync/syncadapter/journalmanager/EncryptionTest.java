@@ -82,6 +82,6 @@ public class EncryptionTest {
 
         // Mostly for coverage. Make sure it's the expected sha256 value.
         assertEquals("ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
-                     Hex.toHexString(Crypto.AsymmetricCryptoManager.getKeyFingerprint("a".getBytes(Charsets.UTF_8))).toLowerCase());
+                     Hex.toHexString(Crypto.AsymmetricCryptoManager.Companion.getKeyFingerprint("a".getBytes(Charsets.UTF_8))).toLowerCase());
     }
 }

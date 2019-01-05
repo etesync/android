@@ -155,10 +155,10 @@ public class DebugInfoActivity extends BaseActivity implements LoaderManager.Loa
 
             if (throwable instanceof HttpException) {
                 HttpException http = (HttpException)throwable;
-                if (http.request != null)
-                    report.append("\nHTTP REQUEST:\n").append(http.request).append("\n\n");
-                if (http.response != null)
-                    report.append("HTTP RESPONSE:\n").append(http.response).append("\n");
+                if (http.getRequest() != null)
+                    report.append("\nHTTP REQUEST:\n").append(http.getRequest()).append("\n\n");
+                if (http.getRequest() != null)
+                    report.append("HTTP RESPONSE:\n").append(http.getRequest()).append("\n");
             }
 
             if (throwable != null)

@@ -212,7 +212,7 @@ abstract public class SyncManager {
             syncResult.stats.numIoExceptions++;
         } catch (Exceptions.ServiceUnavailableException e) {
             syncResult.stats.numIoExceptions++;
-            syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
+            syncResult.delayUntil = (e.getRetryAfter() > 0) ? e.getRetryAfter() : Constants.DEFAULT_RETRY_DELAY;
         } catch (InterruptedException e) {
             // Restart sync if interrupted
             syncResult.fullSyncRequested = true;

@@ -82,7 +82,7 @@ public class CalendarsSyncAdapterService extends SyncAdapterService {
                 }
             } catch (Exceptions.ServiceUnavailableException e) {
                 syncResult.stats.numIoExceptions++;
-                syncResult.delayUntil = (e.retryAfter > 0) ? e.retryAfter : Constants.DEFAULT_RETRY_DELAY;
+                syncResult.delayUntil = (e.getRetryAfter() > 0) ? e.getRetryAfter() : Constants.DEFAULT_RETRY_DELAY;
             } catch (Exception | OutOfMemoryError e) {
                 if (e instanceof CalendarStorageException || e instanceof SQLiteException) {
                     App.log.log(Level.SEVERE, "Couldn't prepare local calendars", e);
