@@ -105,7 +105,7 @@ public class DavResourceFinderTest {
                                 "</resourcetype>";
                         break;
                 }
-                App.log.info("Sending props: " + props);
+                App.Companion.getLog().info("Sending props: " + props);
                 return new MockResponse()
                         .setResponseCode(207)
                         .setBody("<multistatus xmlns='DAV:' xmlns:CARD='urn:ietf:params:xml:ns:carddav'>" +

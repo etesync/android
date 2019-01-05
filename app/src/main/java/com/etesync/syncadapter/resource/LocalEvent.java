@@ -81,7 +81,7 @@ public class LocalEvent extends AndroidEvent implements LocalResource {
 
     @Override
     public String getContent() throws IOException, ContactsStorageException, CalendarStorageException {
-        App.log.log(Level.FINE, "Preparing upload of event " + getFileName(), getEvent());
+        App.Companion.getLog().log(Level.FINE, "Preparing upload of event " + getFileName(), getEvent());
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         getEvent().write(os);

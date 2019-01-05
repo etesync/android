@@ -97,7 +97,7 @@ class AccountSettingsActivity : BaseActivity() {
 
             // category: synchronization
             val prefSyncContacts = findPreference("sync_interval_contacts") as ListPreference
-            val syncIntervalContacts = settings.getSyncInterval(App.getAddressBooksAuthority())
+            val syncIntervalContacts = settings.getSyncInterval(App.addressBooksAuthority)
             if (syncIntervalContacts != null) {
                 prefSyncContacts.value = syncIntervalContacts.toString()
                 if (syncIntervalContacts == AccountSettings.SYNC_INTERVAL_MANUALLY)
@@ -105,7 +105,7 @@ class AccountSettingsActivity : BaseActivity() {
                 else
                     prefSyncContacts.summary = getString(R.string.settings_sync_summary_periodically, prefSyncContacts.entry)
                 prefSyncContacts.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-                    settings.setSyncInterval(App.getAddressBooksAuthority(), java.lang.Long.parseLong(newValue as String))
+                    settings.setSyncInterval(App.addressBooksAuthority, java.lang.Long.parseLong(newValue as String))
                     loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
                     false
                 }

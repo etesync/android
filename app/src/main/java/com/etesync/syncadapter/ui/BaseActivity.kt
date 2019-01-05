@@ -20,15 +20,17 @@ open class BaseActivity : AppCompatActivity() {
         super.onResume()
 
         val app = applicationContext as App
-        if (app.certManager != null)
-            app.certManager.appInForeground = true
+        val certManager = app.certManager
+        if (certManager != null)
+            certManager.appInForeground = true
     }
 
     override fun onPause() {
         super.onPause()
 
         val app = applicationContext as App
-        if (app.certManager != null)
-            app.certManager.appInForeground = false
+        val certManager = app.certManager
+        if (certManager != null)
+            certManager.appInForeground = false
     }
 }

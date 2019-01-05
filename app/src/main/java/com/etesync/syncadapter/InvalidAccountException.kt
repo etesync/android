@@ -6,14 +6,8 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-package com.etesync.syncadapter;
+package com.etesync.syncadapter
 
-import android.accounts.Account;
+import android.accounts.Account
 
-public class InvalidAccountException extends Exception {
-
-    public InvalidAccountException(Account account) {
-        super("Invalid account: " + account);
-    }
-
-}
+class InvalidAccountException(account: Account) : Exception("Invalid account: $account")

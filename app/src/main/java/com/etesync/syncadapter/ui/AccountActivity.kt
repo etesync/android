@@ -281,11 +281,11 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 if (service == CollectionInfo.Type.ADDRESS_BOOK) {
                     info.carddav = AccountInfo.ServiceInfo()
                     info.carddav!!.id = id
-                    info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.getAddressBooksAuthority())
+                    info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.addressBooksAuthority)
                     info.carddav!!.journals = JournalEntity.getJournals(data, serviceEntity)
 
                     val accountManager = AccountManager.get(context)
-                    for (addrBookAccount in accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+                    for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
                         val addressBook = LocalAddressBook(context, addrBookAccount, null)
                         try {
                             if (account == addressBook.mainAccount)
@@ -396,7 +396,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         private val HINT_VIEW_COLLECTION = "ViewCollection"
 
         protected fun requestSync(account: Account?) {
-            val authorities = arrayOf(App.getAddressBooksAuthority(), CalendarContract.AUTHORITY, TaskProvider.ProviderName.OpenTasks.authority)
+            val authorities = arrayOf(App.addressBooksAuthority, CalendarContract.AUTHORITY, TaskProvider.ProviderName.OpenTasks.authority)
 
             for (authority in authorities) {
                 val extras = Bundle()

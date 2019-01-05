@@ -69,7 +69,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
                     return
                 }
 
-                settings.setAuthToken(data.authtoken!!)
+                settings.authToken = data.authtoken!!
             }
         } else
             App.log.severe("Configuration detection failed")

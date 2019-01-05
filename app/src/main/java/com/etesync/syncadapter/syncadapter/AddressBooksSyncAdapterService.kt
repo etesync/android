@@ -78,7 +78,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
                 contactsProvider.release()
 
                 val accountManager = AccountManager.get(context)
-                for (addressBookAccount in accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+                for (addressBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
                     App.log.log(Level.INFO, "Running sync for address book", addressBookAccount)
                     val syncExtras = Bundle(extras)
                     syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true)

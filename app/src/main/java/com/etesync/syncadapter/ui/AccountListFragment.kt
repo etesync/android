@@ -93,7 +93,7 @@ class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<
 
         @SuppressLint("MissingPermission")
         override fun loadInBackground(): Array<Account>? {
-            return accountManager.getAccountsByType(App.getAccountType())
+            return accountManager.getAccountsByType(App.accountType)
         }
     }
 

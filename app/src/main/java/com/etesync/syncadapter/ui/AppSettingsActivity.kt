@@ -155,7 +155,7 @@ class AppSettingsActivity : BaseActivity() {
         }
 
         private fun resetCertificates() {
-            (context!!.applicationContext as App).certManager.resetCertificates()
+            (context!!.applicationContext as App).certManager?.resetCertificates()
             Snackbar.make(view!!, getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
         }
 

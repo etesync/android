@@ -96,7 +96,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
                 // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
                 int hashCode = dataHashCode();
                 values.put(COLUMN_HASHCODE, hashCode);
-                App.log.finer("Clearing dirty flag with eTag = " + eTag + ", contact hash = " + hashCode);
+                App.Companion.getLog().finer("Clearing dirty flag with eTag = " + eTag + ", contact hash = " + hashCode);
             }
 
             addressBook.provider.update(rawContactSyncURI(), values, null, null);
@@ -128,7 +128,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
         final Contact contact;
         contact = getContact();
 
-        App.log.log(Level.FINE, "Preparing upload of VCard " + getUuid(), contact);
+        App.Companion.getLog().log(Level.FINE, "Preparing upload of VCard " + getUuid(), contact);
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         contact.write(VCardVersion.V4_0, GROUP_VCARDS, os);
@@ -194,7 +194,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
      */
     protected int dataHashCode() throws FileNotFoundException, ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            App.log.severe("dataHashCode() should not be called on Android <7");
+            App.Companion.getLog().severe("dataHashCode() should not be called on Android <7");
 
         // reset contact so that getContact() reads from database
         contact = null;
@@ -202,18 +202,18 @@ public class LocalContact extends AndroidContact implements LocalResource {
         // groupMemberships is filled by getContact()
         int dataHash = getContact().hashCode(),
             groupHash = groupMemberships.hashCode();
-        App.log.finest("Calculated data hash = " + dataHash + ", group memberships hash = " + groupHash);
+        App.Companion.getLog().finest("Calculated data hash = " + dataHash + ", group memberships hash = " + groupHash);
         return dataHash ^ groupHash;
     }
 
     public void updateHashCode(@Nullable BatchOperation batch) throws ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            App.log.severe("updateHashCode() should not be called on Android <7");
+            App.Companion.getLog().severe("updateHashCode() should not be called on Android <7");
 
         ContentValues values = new ContentValues(1);
         try {
             int hashCode = dataHashCode();
-            App.log.fine("Storing contact hash = " + hashCode);
+            App.Companion.getLog().fine("Storing contact hash = " + hashCode);
             values.put(COLUMN_HASHCODE, hashCode);
 
             if (batch == null)
@@ -231,7 +231,7 @@ public class LocalContact extends AndroidContact implements LocalResource {
 
     public int getLastHashCode() throws ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            App.log.severe("getLastHashCode() should not be called on Android <7");
+            App.Companion.getLog().severe("getLastHashCode() should not be called on Android <7");
 
         try {
             Cursor c = addressBook.provider.query(rawContactSyncURI(), new String[] { COLUMN_HASHCODE }, null, null, null);

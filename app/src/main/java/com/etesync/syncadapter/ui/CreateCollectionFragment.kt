@@ -89,7 +89,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
 
                 // 1. find service ID
                 if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    authority = App.getAddressBooksAuthority()
+                    authority = App.addressBooksAuthority
                 } else if (info.type == CollectionInfo.Type.CALENDAR) {
                     authority = CalendarContract.AUTHORITY
                 } else {

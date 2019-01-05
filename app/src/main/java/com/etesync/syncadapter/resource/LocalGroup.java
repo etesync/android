@@ -68,7 +68,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
         final Contact contact;
         contact = getContact();
 
-        App.log.log(Level.FINE, "Preparing upload of VCard " + getUuid(), contact);
+        App.Companion.getLog().log(Level.FINE, "Preparing upload of VCard " + getUuid(), contact);
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         contact.write(VCardVersion.V4_0, GROUP_VCARDS, os);
@@ -176,7 +176,7 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
             BatchOperation batch = new BatchOperation(addressBook.provider);
             while (cursor != null && cursor.moveToNext()) {
                 long id = cursor.getLong(0);
-                App.log.fine("Assigning members to group " + id);
+                App.Companion.getLog().fine("Assigning members to group " + id);
 
                 // required for workaround for Android 7 which sets DIRTY flag when only meta-data is changed
                 Set<Long> changeContactIDs = new HashSet<>();
@@ -198,13 +198,13 @@ public class LocalGroup extends AndroidGroup implements LocalResource {
 
                 // insert memberships
                 for (String uid : members) {
-                    App.log.fine("Assigning member: " + uid);
+                    App.Companion.getLog().fine("Assigning member: " + uid);
                     try {
                         LocalContact member = addressBook.findContactByUID(uid);
                         member.addToGroup(batch, id);
                         changeContactIDs.add(member.getId());
                     } catch(FileNotFoundException e) {
-                        App.log.log(Level.WARNING, "Group member not found: " + uid, e);
+                        App.Companion.getLog().log(Level.WARNING, "Group member not found: " + uid, e);
                     }
                 }
 

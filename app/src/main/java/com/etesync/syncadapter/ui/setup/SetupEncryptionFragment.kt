@@ -94,7 +94,7 @@ class SetupEncryptionFragment : DialogFragment() {
 
             try {
                 val cryptoManager: Crypto.CryptoManager
-                val httpClient = HttpClient.create(getContext(), config.url, config.authtoken)
+                val httpClient = HttpClient.create(getContext(), config.url, config.authtoken!!)
 
                 val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(config.url)!!)
                 val userInfo = userInfoManager[config.userName]
@@ -116,7 +116,7 @@ class SetupEncryptionFragment : DialogFragment() {
 
     @Throws(InvalidAccountException::class)
     protected fun createAccount(accountName: String, config: BaseConfigurationFinder.Configuration): Boolean {
-        val account = Account(accountName, App.getAccountType())
+        val account = Account(accountName, App.accountType)
 
         // create Android account
         App.log.log(Level.INFO, "Creating Android account with initial config", arrayOf(account, config.userName, config.url))
@@ -132,7 +132,7 @@ class SetupEncryptionFragment : DialogFragment() {
         try {
             val settings = AccountSettings(context!!, account)
 
-            settings.authToken = config.authtoken
+            settings.authToken = config.authtoken!!
             if (config.keyPair != null) {
                 settings.keyPair = config.keyPair!!
             }
@@ -142,9 +142,9 @@ class SetupEncryptionFragment : DialogFragment() {
                 insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV)
 
                 // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
-                settings.setSyncInterval(App.getAddressBooksAuthority(), Constants.DEFAULT_SYNC_INTERVAL.toLong())
+                settings.setSyncInterval(App.addressBooksAuthority, Constants.DEFAULT_SYNC_INTERVAL.toLong())
             } else {
-                ContentResolver.setIsSyncable(account, App.getAddressBooksAuthority(), 0)
+                ContentResolver.setIsSyncable(account, App.addressBooksAuthority, 0)
             }
 
             if (config.calDAV != null) {

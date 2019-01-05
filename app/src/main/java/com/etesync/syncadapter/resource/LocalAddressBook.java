@@ -73,7 +73,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         AccountManager accountManager = AccountManager.get(context);
 
         List<LocalAddressBook> result = new LinkedList<>();
-        for (Account account : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+        for (Account account : accountManager.getAccountsByType(App.Companion.getAddressBookAccountType())) {
             LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
             if (mainAccount == null || addressBook.getMainAccount().equals(mainAccount))
                 result.add(addressBook);
@@ -85,7 +85,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
     public static LocalAddressBook findByUid(@NonNull Context context, @NonNull ContentProviderClient provider, @Nullable Account mainAccount, String uid) throws ContactsStorageException {
         AccountManager accountManager = AccountManager.get(context);
 
-        for (Account account : accountManager.getAccountsByType(App.getAddressBookAccountType())) {
+        for (Account account : accountManager.getAccountsByType(App.Companion.getAddressBookAccountType())) {
             LocalAddressBook addressBook = new LocalAddressBook(context, account, provider);
             if (addressBook.getURL().equals(uid) && (mainAccount == null || addressBook.getMainAccount().equals(mainAccount)))
                 return addressBook;
@@ -98,7 +98,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         CollectionInfo info = journalEntity.getInfo();
         AccountManager accountManager = AccountManager.get(context);
 
-        Account account = new Account(accountName(mainAccount, info), App.getAddressBookAccountType());
+        Account account = new Account(accountName(mainAccount, info), App.Companion.getAddressBookAccountType());
         if (!accountManager.addAccountExplicitly(account, null, null))
             throw new ContactsStorageException("Couldn't create address book account");
 
@@ -129,7 +129,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
                                     new String[] { account.name, account.type });
                         }
                     } catch(RemoteException e) {
-                        App.log.log(Level.WARNING, "Couldn't re-assign contacts to new account name", e);
+                        App.Companion.getLog().log(Level.WARNING, "Couldn't re-assign contacts to new account name", e);
                     }
                 }
             }, null);
@@ -180,7 +180,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
      */
     public int verifyDirty() throws ContactsStorageException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            App.log.severe("verifyDirty() should not be called on Android <7");
+            App.Companion.getLog().severe("verifyDirty() should not be called on Android <7");
 
         int reallyDirty = 0;
         for (LocalContact contact : getDirtyContacts()) {
@@ -189,10 +189,10 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
                     currentHash = contact.dataHashCode();
                 if (lastHash == currentHash) {
                     // hash is code still the same, contact is not "really dirty" (only metadata been have changed)
-                    App.log.log(Level.FINE, "Contact data hash has not changed, resetting dirty flag", contact);
+                    App.Companion.getLog().log(Level.FINE, "Contact data hash has not changed, resetting dirty flag", contact);
                     contact.resetDirty();
                 } else {
-                    App.log.log(Level.FINE, "Contact data has changed from hash " + lastHash + " to " + currentHash, contact);
+                    App.Companion.getLog().log(Level.FINE, "Contact data has changed from hash " + lastHash + " to " + currentHash, contact);
                     reallyDirty++;
                 }
             } catch(FileNotFoundException e) {
@@ -351,7 +351,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         /** should be done using {@link Groups.SUMMARY_COUNT}, but it's not implemented in Android yet */
         for (LocalGroup group : (LocalGroup[])queryGroups(null, null))
             if (group.getMembers().length == 0) {
-                App.log.log(Level.FINE, "Deleting group", group);
+                App.Companion.getLog().log(Level.FINE, "Deleting group", group);
                 group.delete();
             }
     }
@@ -424,7 +424,7 @@ public class LocalAddressBook extends AndroidAddressBook implements LocalCollect
         try {
             int fixed = provider.update(syncAdapterURI(RawContacts.CONTENT_URI),
                     values, where, null);
-            App.log.info("Fixed entries: " + String.valueOf(fixed));
+            App.Companion.getLog().info("Fixed entries: " + String.valueOf(fixed));
         } catch (RemoteException e) {
             throw new ContactsStorageException("Couldn't query contacts", e);
         }

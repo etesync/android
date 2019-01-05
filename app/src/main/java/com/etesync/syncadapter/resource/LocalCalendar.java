@@ -87,7 +87,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         if (ret.length == 1) {
             return (LocalCalendar) ret[0];
         } else {
-            App.log.severe("No calendar found for name " + name);
+            App.Companion.getLog().severe("No calendar found for name " + name);
             return null;
         }
     }
@@ -163,14 +163,14 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
     @SuppressWarnings("Recycle")
     public void processDirtyExceptions() throws CalendarStorageException {
         // process deleted exceptions
-        App.log.info("Processing deleted exceptions");
+        App.Companion.getLog().info("Processing deleted exceptions");
         try {
             Cursor cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     new String[] { Events._ID, Events.ORIGINAL_ID, LocalEvent.COLUMN_SEQUENCE },
                     Events.DELETED + "!=0 AND " + Events.ORIGINAL_ID + " IS NOT NULL", null, null);
             while (cursor != null && cursor.moveToNext()) {
-                App.log.fine("Found deleted exception, removing; then re-schuling original event");
+                App.Companion.getLog().fine("Found deleted exception, removing; then re-schuling original event");
                 long    id = cursor.getLong(0),             // can't be null (by definition)
                         originalID = cursor.getLong(1);     // can't be null (by query)
 
@@ -201,14 +201,14 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         }
 
         // process dirty exceptions
-        App.log.info("Processing dirty exceptions");
+        App.Companion.getLog().info("Processing dirty exceptions");
         try {
             Cursor cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     new String[] { Events._ID, Events.ORIGINAL_ID, LocalEvent.COLUMN_SEQUENCE },
                     Events.DIRTY + "!=0 AND " + Events.ORIGINAL_ID + " IS NOT NULL", null, null);
             while (cursor != null && cursor.moveToNext()) {
-                App.log.fine("Found dirty exception, increasing SEQUENCE to re-schedule");
+                App.Companion.getLog().fine("Found dirty exception, increasing SEQUENCE to re-schedule");
                 long    id = cursor.getLong(0),             // can't be null (by definition)
                         originalID = cursor.getLong(1);     // can't be null (by query)
                 int sequence = cursor.isNull(2) ? 0 : cursor.getInt(2);
@@ -279,7 +279,7 @@ public class LocalCalendar extends AndroidCalendar implements LocalCollection {
         try {
             int fixed = provider.update(syncAdapterURI(Events.CONTENT_URI),
                     values, where, whereArgs);
-            App.log.info("Fixed entries: " + String.valueOf(fixed));
+            App.Companion.getLog().info("Fixed entries: " + String.valueOf(fixed));
         } catch (RemoteException e) {
             throw new CalendarStorageException("Couldn't fix etags", e);
         }

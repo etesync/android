@@ -75,7 +75,7 @@ public class ServiceDB {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            App.log.info("Creating database " + db.getPath());
+            App.Companion.getLog().info("Creating database " + db.getPath());
 
             db.execSQL("CREATE TABLE " + Settings._TABLE + "(" +
                     Settings.NAME + " TEXT NOT NULL," +

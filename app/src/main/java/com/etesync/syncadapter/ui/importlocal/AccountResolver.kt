@@ -20,8 +20,8 @@ internal class AccountResolver(private val context: Context) {
         // Hardcoded swaps for known accounts:
         if (accountName == "com.google") {
             accountName = "com.google.android.googlequicksearchbox"
-        } else if (accountName == App.getAddressBookAccountType()) {
-            accountName = App.getAccountType()
+        } else if (accountName == App.addressBookAccountType) {
+            accountName = App.accountType
         } else if (accountName == "at.bitfire.davdroid.address_book") {
             accountName = "at.bitfire.davdroid"
         }

@@ -168,7 +168,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
             for (acct in accountManager.getAccountsByType(context.getString(R.string.account_type)))
                 try {
                     val settings = AccountSettings(context, acct)
-                    report.append("Account: ").append(acct.name).append("\n" + "  Address book sync. interval: ").append(syncStatus(settings, App.getAddressBooksAuthority())).append("\n" + "  Calendar     sync. interval: ").append(syncStatus(settings, CalendarContract.AUTHORITY)).append("\n" + "  OpenTasks    sync. interval: ").append(syncStatus(settings, "org.dmfs.tasks")).append("\n" + "  WiFi only: ").append(settings.syncWifiOnly)
+                    report.append("Account: ").append(acct.name).append("\n" + "  Address book sync. interval: ").append(syncStatus(settings, App.addressBooksAuthority)).append("\n" + "  Calendar     sync. interval: ").append(syncStatus(settings, CalendarContract.AUTHORITY)).append("\n" + "  OpenTasks    sync. interval: ").append(syncStatus(settings, "org.dmfs.tasks")).append("\n" + "  WiFi only: ").append(settings.syncWifiOnly)
                     if (settings.syncWifiOnlySSID != null)
                         report.append(", SSID: ").append(settings.syncWifiOnlySSID)
                     report.append("\n  [CardDAV] Contact group method: ").append(settings.groupMethod)
@@ -179,7 +179,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                 }
 
             // address book accounts
-            for (acct in accountManager.getAccountsByType(App.getAddressBookAccountType()))
+            for (acct in accountManager.getAccountsByType(App.addressBookAccountType))
                 try {
                     val addressBook = LocalAddressBook(context, acct, null)
                     report.append("Address book account: ").append(acct.name).append("\n" + "  Main account: ").append(addressBook.mainAccount).append("\n" + "  URL: ").append(addressBook.url).append("\n" + "  Sync automatically: ").append(ContentResolver.getSyncAutomatically(acct, ContactsContract.AUTHORITY)).append("\n")
