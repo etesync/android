@@ -46,7 +46,7 @@ import java.util.logging.Level
 
 class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
 
-    private var account: Account? = null
+    private lateinit var account: Account
     private var accountInfo: AccountInfo? = null
 
     internal var listCalDAV: ListView? = null

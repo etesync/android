@@ -16,8 +16,8 @@ import com.etesync.syncadapter.journalmanager.UserInfoManager
 import okhttp3.HttpUrl
 
 class SetupUserInfoFragment : DialogFragment() {
-    private var account: Account? = null
-    private var settings: AccountSettings? = null
+    private lateinit var account: Account
+    private lateinit var settings: AccountSettings
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)

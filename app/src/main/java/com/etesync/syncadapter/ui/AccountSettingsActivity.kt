@@ -31,7 +31,7 @@ import com.etesync.syncadapter.ui.setup.LoginCredentials
 import com.etesync.syncadapter.ui.setup.LoginCredentialsChangeFragment
 
 class AccountSettingsActivity : BaseActivity() {
-    private var account: Account? = null
+    private lateinit var account: Account
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

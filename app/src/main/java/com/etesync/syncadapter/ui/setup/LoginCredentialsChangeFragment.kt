@@ -28,7 +28,7 @@ import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 import java.util.logging.Level
 
 class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Configuration> {
-    private var account: Account? = null
+    private lateinit var account: Account
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)

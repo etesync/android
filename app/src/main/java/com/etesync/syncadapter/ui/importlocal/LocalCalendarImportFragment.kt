@@ -24,8 +24,8 @@ import com.etesync.syncadapter.resource.LocalEvent
 
 class LocalCalendarImportFragment : ListFragment() {
 
-    private var account: Account? = null
-    private var info: CollectionInfo? = null
+    private lateinit var account: Account
+    private lateinit var info: CollectionInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

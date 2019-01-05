@@ -19,13 +19,13 @@ import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
 
 class AddMemberFragment : DialogFragment() {
-    private var account: Account? = null
+    private lateinit var account: Account
     private var settings: AccountSettings? = null
     private var ctx: Context? = null
     private var remote: HttpUrl? = null
-    private var info: CollectionInfo? = null
-    private var memberEmail: String? = null
-    private var memberPubKey: ByteArray? = null
+    private lateinit var info: CollectionInfo
+    private lateinit var memberEmail: String
+    private lateinit var memberPubKey: ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,7 @@ class AddMemberFragment : DialogFragment() {
 
                 val userInfo = userInfoManager[memberEmail!!]
                         ?: throw Exception(getString(R.string.collection_members_error_user_not_found, memberEmail))
-                memberPubKey = userInfo.pubkey
+                memberPubKey = userInfo.pubkey!!
                 return AddResult(null)
             } catch (e: Exception) {
                 return AddResult(e)

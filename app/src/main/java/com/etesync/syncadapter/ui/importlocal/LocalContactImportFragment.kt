@@ -31,8 +31,8 @@ import java.util.*
 
 class LocalContactImportFragment : Fragment() {
 
-    private var account: Account? = null
-    private var info: CollectionInfo? = null
+    private lateinit var account: Account
+    private lateinit var info: CollectionInfo
     private var recyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

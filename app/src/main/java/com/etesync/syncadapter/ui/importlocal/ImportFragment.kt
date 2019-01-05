@@ -39,8 +39,8 @@ import java.io.IOException
 
 class ImportFragment : DialogFragment() {
 
-    private var account: Account? = null
-    private var info: CollectionInfo? = null
+    private lateinit var account: Account
+    private lateinit var info: CollectionInfo
     private var importFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
