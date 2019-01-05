@@ -176,7 +176,7 @@ public class App extends Application {
         ServiceDB.OpenHelper serviceDB = new ServiceDB.OpenHelper(this);
         String lang = new Settings(serviceDB.getReadableDatabase()).getString(App.FORCE_LANGUAGE, null);
         if (lang != null && !lang.equals(DEFAULT_LANGUAGE)) {
-            LanguageUtils.setLanguage(this, lang);
+            LanguageUtils.INSTANCE.setLanguage(this, lang);
         }
 
         serviceDB.close();
@@ -395,7 +395,7 @@ public class App extends Application {
         }
 
         if (fromVersion < 10) {
-            HintManager.setHintSeen(this, AccountsActivity.Companion.getHINT_ACCOUNT_ADD(), true);
+            HintManager.INSTANCE.setHintSeen(this, AccountsActivity.Companion.getHINT_ACCOUNT_ADD(), true);
         }
 
         if (fromVersion < 11) {

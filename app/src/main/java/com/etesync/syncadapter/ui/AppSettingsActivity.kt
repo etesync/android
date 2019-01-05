@@ -139,7 +139,7 @@ class AppSettingsActivity : BaseActivity() {
         }
 
         private fun resetHints() {
-            HintManager.resetHints(context)
+            HintManager.resetHints(context!!)
             Snackbar.make(view!!, R.string.app_settings_reset_hints_success, Snackbar.LENGTH_LONG).show()
         }
 
@@ -188,7 +188,7 @@ class AppSettingsActivity : BaseActivity() {
                     val value = newValue.toString()
                     if (value == (preference as ListPreference).value) return@OnPreferenceChangeListener true
 
-                    LanguageUtils.setLanguage(context, value)
+                    LanguageUtils.setLanguage(context!!, value)
 
                     settings.putString(App.FORCE_LANGUAGE, newValue.toString())
 

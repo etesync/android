@@ -148,7 +148,7 @@ class ImportFragment : DialogFragment() {
                     val uri = data.data
                     App.log.info("Importing uri = " + uri!!.toString())
                     try {
-                        importFile = File(com.etesync.syncadapter.utils.FileUtils.getPath(context, uri))
+                        importFile = File(com.etesync.syncadapter.utils.FileUtils.getPath(context!!, uri))
 
                         Thread(ImportCalendarsLoader()).start()
                     } catch (e: Exception) {
