@@ -49,6 +49,15 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             buildConfigField 'String', 'DEBUG_REMOTE_URL', 'null'
+
+            // Configure Kotlin compiler optimisations for releases
+            kotlinOptions {
+                freeCompilerArgs = [
+                        '-Xno-param-assertions',
+                        '-Xno-call-assertions',
+                        '-Xno-receiver-assertions'
+                ]
+            }
         }
     }
 
