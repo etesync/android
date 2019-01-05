@@ -8,17 +8,12 @@
 
 package com.etesync.syncadapter
 
-import android.text.TextUtils
-
+import android.os.Build
 import java.io.IOException
 import java.net.InetAddress
 import java.net.Socket
 import java.security.GeneralSecurityException
-import java.util.Arrays
-import java.util.HashSet
-import java.util.LinkedList
-import java.util.Locale
-
+import java.util.*
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
@@ -97,75 +92,77 @@ class SSLSocketFactoryCompat(trustManager: X509TrustManager) : SSLSocketFactory(
     }
 
     companion object {
-
-        // Android 5.0+ (API level21) provides reasonable default settings
+        // Android 5.0+ (API level 21) provides reasonable default settings
         // but it still allows SSLv3
         // https://developer.android.com/reference/javax/net/ssl/SSLSocket.html
-        internal var protocols: Array<String>? = null
-        internal var cipherSuites: Array<String>? = null
-
+        var protocols: Array<String>? = null
+        var cipherSuites: Array<String>? = null
         init {
-            try {
-                val socket = SSLSocketFactory.getDefault().createSocket() as SSLSocket
-                if (socket != null) {
-                    /* set reasonable protocol versions */
-                    // - enable all supported protocols (enables TLSv1.1 and TLSv1.2 on Android <5.0)
-                    // - remove all SSL versions (especially SSLv3) because they're insecure now
-                    val protocols = LinkedList<String>()
-                    for (protocol in socket.supportedProtocols)
-                        if (!protocol.toUpperCase(Locale.US).contains("SSL"))
-                            protocols.add(protocol)
-                    App.log.info("Setting allowed TLS protocols: " + TextUtils.join(", ", protocols))
-                    SSLSocketFactoryCompat.protocols = protocols.toTypedArray()
+            if (Build.VERSION.SDK_INT >= 23) {
+                // Since Android 6.0 (API level 23),
+                // - TLSv1.1 and TLSv1.2 is enabled by default
+                // - SSLv3 is disabled by default
+                // - all modern ciphers are activated by default
+                protocols = null
+                cipherSuites = null
+                App.log.fine("Using device default TLS protocols/ciphers")
+            } else {
+                (SSLSocketFactory.getDefault().createSocket() as? SSLSocket)?.use { socket ->
+                    try {
+                        /* set reasonable protocol versions */
+                        // - enable all supported protocols (enables TLSv1.1 and TLSv1.2 on Android <5.0)
+                        // - remove all SSL versions (especially SSLv3) because they're insecure now
+                        val whichProtocols = LinkedList<String>()
+                        for (protocol in socket.supportedProtocols.filterNot { it.contains("SSL", true) })
+                            whichProtocols += protocol
+                        App.log.info("Enabling (only) these TLS protocols: ${whichProtocols.joinToString(", ")}")
+                        protocols = whichProtocols.toTypedArray()
 
-                    /* set up reasonable cipher suites */
-                    // choose known secure cipher suites
-                    val allowedCiphers = Arrays.asList(
-                            // first priority
-                            "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
-                            "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
-                            "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
-                            "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
-                            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-                            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-                            "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
-                            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-                            // second priority
-                            "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
-                            "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
-                            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
-                            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
-                            // compat
-                            "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
-                            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
-                            "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
-                            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
-                    )
-                    val availableCiphers = Arrays.asList(*socket.supportedCipherSuites)
-                    App.log.info("Available cipher suites: " + TextUtils.join(", ", availableCiphers))
+                        /* set up reasonable cipher suites */
+                        val knownCiphers = arrayOf(
+                                // TLS 1.2
+                                "TLS_RSA_WITH_AES_256_GCM_SHA384",
+                                "TLS_RSA_WITH_AES_128_GCM_SHA256",
+                                "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+                                "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                                "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+                                "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+                                "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                                // maximum interoperability
+                                "TLS_RSA_WITH_3DES_EDE_CBC_SHA",
+                                "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+                                "TLS_RSA_WITH_AES_128_CBC_SHA",
+                                // additionally
+                                "TLS_RSA_WITH_AES_256_CBC_SHA",
+                                "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
+                                "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+                                "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA",
+                                "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
+                        )
+                        val availableCiphers = socket.supportedCipherSuites
+                        App.log.info("Available cipher suites: ${availableCiphers.joinToString(", ")}")
 
-                    /* For maximum security, preferredCiphers should *replace* enabled ciphers (thus
-                 * disabling ciphers which are enabled by default, but have become unsecure), but for
-                 * the security level of DAVdroid and maximum compatibility, disabling of insecure
-                 * ciphers should be a server-side task */
+                        /* For maximum security, preferredCiphers should *replace* enabled ciphers (thus
+                         * disabling ciphers which are enabled by default, but have become unsecure), but for
+                         * the security level of DAVx5 and maximum compatibility, disabling of insecure
+                         * ciphers should be a server-side task */
 
-                    // for the final set of enabled ciphers, take the ciphers enabled by default, ...
-                    val enabledCiphers = HashSet(Arrays.asList(*socket.enabledCipherSuites))
-                    App.log.info("Cipher suites enabled by default: " + TextUtils.join(", ", enabledCiphers))
-                    // ... add explicitly allowed ciphers ...
-                    enabledCiphers.addAll(allowedCiphers)
-                    // ... and keep only those which are actually available
-                    enabledCiphers.retainAll(availableCiphers)
+                        // for the final set of enabled ciphers, take the ciphers enabled by default, ...
+                        val whichCiphers = LinkedList<String>()
+                        whichCiphers.addAll(socket.enabledCipherSuites)
+                        App.log.fine("Cipher suites enabled by default: ${whichCiphers.joinToString(", ")}")
+                        // ... add explicitly allowed ciphers ...
+                        whichCiphers.addAll(knownCiphers)
+                        // ... and keep only those which are actually available
+                        whichCiphers.retainAll(availableCiphers)
 
-                    App.log.info("Enabling (only) those TLS ciphers: " + TextUtils.join(", ", enabledCiphers))
-                    SSLSocketFactoryCompat.cipherSuites = enabledCiphers.toTypedArray()
-                    socket.close()
+                        App.log.info("Enabling (only) these TLS ciphers: " + whichCiphers.joinToString(", "))
+                        cipherSuites = whichCiphers.toTypedArray()
+                    } catch (e: IOException) {
+                        App.log.severe("Couldn't determine default TLS settings")
+                    }
                 }
-            } catch (e: IOException) {
-                App.log.severe("Couldn't determine default TLS settings")
             }
-
         }
     }
-
 }
