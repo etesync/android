@@ -12,6 +12,7 @@ interface LocalCollection<out T: LocalResource<*>> {
     fun findDeleted(): List<T>
     fun findDirty(): List<T>
     fun findWithoutFileName(): List<T>
+    fun findAll(): List<T>
 
     fun findByUid(uid: String): T?
 
