@@ -121,11 +121,13 @@ class App : Application() {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
 
-        // The following line triggers the initialization of ACRA
-        ACRA.init(this)
-        val pm = base.packageManager
-        var installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID)
-        ACRA.getErrorReporter().putCustomData("installedFrom", installedFrom);
+        if (!BuildConfig.DEBUG) {
+            // The following line triggers the initialization of ACRA
+            ACRA.init(this)
+            val pm = base.packageManager
+            var installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID)
+            ACRA.getErrorReporter().putCustomData("installedFrom", installedFrom);
+        }
     }
 
     private fun loadLanguage() {
