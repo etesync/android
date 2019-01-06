@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.etesync.syncadapter"
 
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 26
 
         versionCode 43

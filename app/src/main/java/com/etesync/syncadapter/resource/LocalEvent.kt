@@ -8,36 +8,34 @@
 
 package com.etesync.syncadapter.resource
 
-import android.annotation.TargetApi
 import android.content.ContentProviderOperation
 import android.content.ContentValues
-import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.RemoteException
 import android.provider.CalendarContract
 import android.provider.CalendarContract.Events
 import android.text.TextUtils
-
+import at.bitfire.ical4android.*
+import at.bitfire.ical4android.Constants.ical4jVersion
+import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
-
 import net.fortuna.ical4j.model.property.ProdId
-
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.util.UUID
+import java.util.*
 import java.util.logging.Level
 
-import at.bitfire.ical4android.AndroidCalendar
-import at.bitfire.ical4android.AndroidEvent
-import at.bitfire.ical4android.AndroidEventFactory
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.ical4android.Event
-import at.bitfire.vcard4android.ContactsStorageException
+class LocalEvent : AndroidEvent, LocalResource<Event> {
+    companion object {
+        init {
+            ICalendar.prodId = ProdId(Constants.PRODID_BASE + " ical4j/" + ical4jVersion)
+        }
 
-@TargetApi(17)
-class LocalEvent : AndroidEvent, LocalResource {
+        internal const val COLUMN_ETAG = CalendarContract.Events.SYNC_DATA1
+        internal const val COLUMN_UID = Events.UID_2445
+        internal const val COLUMN_SEQUENCE = CalendarContract.Events.SYNC_DATA3
+    }
 
     private var saveAsDirty = false // When true, the resource will be saved as dirty
 
@@ -47,12 +45,11 @@ class LocalEvent : AndroidEvent, LocalResource {
     var weAreOrganizer = true
 
     override val content: String
-        @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
         get() {
-            App.log.log(Level.FINE, "Preparing upload of event " + fileName!!, getEvent())
+            App.log.log(Level.FINE, "Preparing upload of event " + fileName!!, event)
 
             val os = ByteArrayOutputStream()
-            getEvent().write(os)
+            event?.write(os)
 
             return os.toString()
         }
@@ -64,34 +61,27 @@ class LocalEvent : AndroidEvent, LocalResource {
     val uuid: String?
         get() = fileName
 
-    constructor(calendar: AndroidCalendar, event: Event, fileName: String?, eTag: String?) : super(calendar, event) {
+    constructor(calendar: AndroidCalendar<*>, event: Event, fileName: String?, eTag: String?) : super(calendar, event) {
         this.fileName = fileName
         this.eTag = eTag
     }
 
-    protected constructor(calendar: AndroidCalendar, id: Long, baseInfo: ContentValues?) : super(calendar, id, baseInfo) {
-        if (baseInfo != null) {
-            fileName = baseInfo.getAsString(Events._SYNC_ID)
-            eTag = baseInfo.getAsString(COLUMN_ETAG)
-        }
+    protected constructor(calendar: AndroidCalendar<*>, baseInfo: ContentValues) : super(calendar, baseInfo) {
+        fileName = baseInfo.getAsString(Events._SYNC_ID)
+        eTag = baseInfo.getAsString(COLUMN_ETAG)
     }
 
     /* process LocalEvent-specific fields */
 
-    override fun populateEvent(values: ContentValues) {
-        super.populateEvent(values)
-        fileName = values.getAsString(Events._SYNC_ID)
-        eTag = values.getAsString(COLUMN_ETAG)
-        event.uid = values.getAsString(COLUMN_UID)
+    override fun populateEvent(row: ContentValues) {
+        super.populateEvent(row)
+        fileName = row.getAsString(Events._SYNC_ID)
+        eTag = row.getAsString(COLUMN_ETAG)
+        event?.uid = row.getAsString(COLUMN_UID)
 
-        event.sequence = values.getAsInteger(COLUMN_SEQUENCE)
-        if (Build.VERSION.SDK_INT >= 17) {
-            val isOrganizer = values.getAsInteger(Events.IS_ORGANIZER)
-            weAreOrganizer = isOrganizer != null && isOrganizer != 0
-        } else {
-            val organizer = values.getAsString(Events.ORGANIZER)
-            weAreOrganizer = organizer == null || organizer == calendar.account.name
-        }
+        event.sequence = row.getAsInteger(COLUMN_SEQUENCE)
+        val isOrganizer = row.getAsInteger(Events.IS_ORGANIZER)
+        weAreOrganizer = isOrganizer != null && isOrganizer != 0
     }
 
     override fun buildEvent(recurrence: Event?, builder: ContentProviderOperation.Builder) {
@@ -126,77 +116,42 @@ class LocalEvent : AndroidEvent, LocalResource {
 
     /* custom queries */
 
-    @Throws(CalendarStorageException::class)
     override fun prepareForUpload() {
-        try {
-            var uid: String? = null
-            val c = calendar.provider.query(eventSyncURI(), arrayOf(COLUMN_UID), null, null, null)
-            if (c.moveToNext())
-                uid = c.getString(0)
-            if (uid == null)
-                uid = UUID.randomUUID().toString()
+        var uid: String? = null
+        val c = calendar.provider.query(eventSyncURI(), arrayOf(COLUMN_UID), null, null, null)
+        if (c.moveToNext())
+            uid = c.getString(0)
+        if (uid == null)
+            uid = UUID.randomUUID().toString()
 
-            c.close()
-            val newFileName = uid
+        c.close()
+        val newFileName = uid
 
-            val values = ContentValues(2)
-            values.put(Events._SYNC_ID, newFileName)
-            values.put(COLUMN_UID, uid)
-            calendar.provider.update(eventSyncURI(), values, null, null)
+        val values = ContentValues(2)
+        values.put(Events._SYNC_ID, newFileName)
+        values.put(COLUMN_UID, uid)
+        calendar.provider.update(eventSyncURI(), values, null, null)
 
-            fileName = newFileName
-            if (event != null)
-                event.uid = uid
+        fileName = newFileName
 
-        } catch (e: RemoteException) {
-            throw CalendarStorageException("Couldn't update UID", e)
-        }
-
+        val event = this.event
+        if (event != null)
+            event.uid = uid
     }
 
-    @Throws(CalendarStorageException::class)
     override fun clearDirty(eTag: String) {
-        try {
-            val values = ContentValues(2)
-            values.put(CalendarContract.Events.DIRTY, 0)
-            values.put(COLUMN_ETAG, eTag)
-            if (event != null)
-                values.put(COLUMN_SEQUENCE, event.sequence)
-            calendar.provider.update(eventSyncURI(), values, null, null)
+        val values = ContentValues(2)
+        values.put(CalendarContract.Events.DIRTY, 0)
+        values.put(COLUMN_ETAG, eTag)
+        if (event != null)
+            values.put(COLUMN_SEQUENCE, event?.sequence)
+        calendar.provider.update(eventSyncURI(), values, null, null)
 
-            this.eTag = eTag
-        } catch (e: RemoteException) {
-            throw CalendarStorageException("Couldn't update UID", e)
-        }
-
+        this.eTag = eTag
     }
 
-    internal class Factory : AndroidEventFactory {
-
-        override fun newInstance(calendar: AndroidCalendar, id: Long, baseInfo: ContentValues): AndroidEvent {
-            return LocalEvent(calendar, id, baseInfo)
-        }
-
-        override fun newInstance(calendar: AndroidCalendar, event: Event): AndroidEvent {
-            return LocalEvent(calendar, event, null, null)
-        }
-
-        override fun newArray(size: Int): Array<AndroidEvent?> {
-            return arrayOfNulls(size)
-        }
-
-        companion object {
-            val INSTANCE = Factory()
-        }
-    }
-
-    companion object {
-        init {
-            Event.prodId = ProdId(Constants.PRODID_BASE + " ical4j/2.x")
-        }
-
-        internal val COLUMN_ETAG = CalendarContract.Events.SYNC_DATA1
-        internal val COLUMN_UID = if (Build.VERSION.SDK_INT >= 17) Events.UID_2445 else Events.SYNC_DATA2
-        internal val COLUMN_SEQUENCE = CalendarContract.Events.SYNC_DATA3
+    object Factory: AndroidEventFactory<LocalEvent> {
+        override fun fromProvider(calendar: AndroidCalendar<AndroidEvent>, values: ContentValues): LocalEvent =
+                LocalEvent(calendar, values)
     }
 }

@@ -8,12 +8,10 @@
 
 package com.etesync.syncadapter.resource
 
-import java.io.IOException
-
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 
-interface LocalResource {
+interface LocalResource<in TData: Any> {
     val uuid: String?
 
     /** True if doesn't exist on server yet, false otherwise.  */
@@ -22,13 +20,9 @@ interface LocalResource {
     /** Returns a string of how this should be represented for example: vCard.  */
     val content: String
 
-    @Throws(CalendarStorageException::class, ContactsStorageException::class)
     fun delete(): Int
 
-    @Throws(CalendarStorageException::class, ContactsStorageException::class)
     fun prepareForUpload()
 
-    @Throws(CalendarStorageException::class, ContactsStorageException::class)
     fun clearDirty(eTag: String)
-
 }
