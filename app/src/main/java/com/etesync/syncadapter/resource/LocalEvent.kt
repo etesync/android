@@ -90,7 +90,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         val buildException = recurrence != null
         val eventToBuild = if (buildException) recurrence else event
 
-        builder.withValue(COLUMN_UID, event.uid)
+        builder.withValue(COLUMN_UID, event?.uid)
                 .withValue(COLUMN_SEQUENCE, eventToBuild?.sequence)
                 .withValue(CalendarContract.Events.DIRTY, if (saveAsDirty) 1 else 0)
                 .withValue(CalendarContract.Events.DELETED, 0)

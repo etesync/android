@@ -199,7 +199,7 @@ class LocalAddressBook(
             accountManager.removeAccount(account, null, null)
     }
 
-    override fun findAll(): List<LocalAddress> = queryContacts(RawContacts.DELETED + "== 0", null)
+    override fun findAll(): List<LocalContact> = queryContacts(RawContacts.DELETED + "== 0", null)
 
     /**
      * Returns an array of local contacts/groups which have been deleted locally. (DELETED != 0).

@@ -56,12 +56,12 @@ import okhttp3.HttpUrl
  * Synchronization manager for CardDAV collections; handles contacts and groups.
  */
 class CalendarSyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
-constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, result: SyncResult, calendar: LocalCalendar, private val remote: HttpUrl) : SyncManager(context, account, settings, extras, authority, result, calendar.name, CollectionInfo.Type.CALENDAR, account.name) {
+constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, result: SyncResult, calendar: LocalCalendar, private val remote: HttpUrl) : SyncManager(context, account, settings, extras, authority, result, calendar.name!!, CollectionInfo.Type.CALENDAR, account.name) {
 
-    protected override val syncErrorTitle: String
+    override val syncErrorTitle: String
         get() = context.getString(R.string.sync_error_calendar, account.name)
 
-    protected override val syncSuccessfullyTitle: String
+    override val syncSuccessfullyTitle: String
         get() = context.getString(R.string.sync_successfully_calendar, info.displayName,
                 account.name)
 
@@ -78,7 +78,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         if (!super.prepare())
             return false
 
-        journal = JournalEntryManager(httpClient, remote, localCalendar().name)
+        journal = JournalEntryManager(httpClient, remote, localCalendar().name!!)
         return true
     }
 
@@ -137,7 +137,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         for (local in localDirty) {
             val event = (local as LocalEvent).event
 
-            if (event.attendees.isEmpty()) {
+            if (event?.attendees?.isEmpty()!!) {
                 return
             }
             createInviteAttendeesNotification(event, local.content)
@@ -145,7 +145,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     private fun createInviteAttendeesNotification(event: Event, icsContent: String) {
-        val notificationHelper = NotificationHelper(context, event.uid, event.uid.hashCode())
+        val notificationHelper = NotificationHelper(context, event.uid!!, event.uid!!.hashCode())
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_EMAIL, getEmailAddresses(event.attendees, false))

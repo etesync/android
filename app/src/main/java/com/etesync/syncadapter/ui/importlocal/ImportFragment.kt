@@ -32,10 +32,7 @@ import com.etesync.syncadapter.syncadapter.ContactsSyncManager
 import com.etesync.syncadapter.ui.Refreshable
 import com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult
 import org.apache.commons.codec.Charsets
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
+import java.io.*
 
 class ImportFragment : DialogFragment() {
 
@@ -204,11 +201,11 @@ class ImportFragment : DialogFragment() {
             val result = ImportResult()
 
             try {
-                val importStream = FileInputStream(importFile!!)
+                val importReader = FileReader(importFile!!)
 
                 if (info!!.type == CollectionInfo.Type.CALENDAR) {
-                    val events = Event.fromStream(importStream, Charsets.UTF_8)
-                    importStream.close()
+                    val events = Event.fromReader(importReader, null)
+                    importReader.close()
 
                     if (events.size == 0) {
                         App.log.warning("Empty/invalid file.")
@@ -223,7 +220,7 @@ class ImportFragment : DialogFragment() {
                     val provider = context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
                     val localCalendar: LocalCalendar?
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory.INSTANCE, info!!.uid!!)
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info!!.uid!!)
                         if (localCalendar == null) {
                             throw FileNotFoundException("Failed to load local resource.")
                         }
@@ -251,7 +248,7 @@ class ImportFragment : DialogFragment() {
                 } else if (info!!.type == CollectionInfo.Type.ADDRESS_BOOK) {
                     // FIXME: Handle groups and download icon?
                     val downloader = ContactsSyncManager.ResourceDownloader(context!!)
-                    val contacts = Contact.fromStream(importStream, Charsets.UTF_8, downloader)
+                    val contacts = Contact.fromReader(importReader, downloader)
 
                     if (contacts.size == 0) {
                         App.log.warning("Empty/invalid file.")

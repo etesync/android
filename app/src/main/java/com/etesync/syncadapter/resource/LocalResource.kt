@@ -12,7 +12,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 
 interface LocalResource<in TData: Any> {
-    val uuid: String
+    val uuid: String?
 
     /** True if doesn't exist on server yet, false otherwise.  */
     val isLocalOnly: Boolean

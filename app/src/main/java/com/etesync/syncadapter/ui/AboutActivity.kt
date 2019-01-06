@@ -32,7 +32,6 @@ import com.etesync.syncadapter.BuildConfig
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import ezvcard.Ezvcard
-import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.time.DateFormatUtils
 import java.io.IOException
 import java.util.logging.Level
@@ -143,9 +142,9 @@ class AboutActivity : BaseActivity() {
         override fun loadInBackground(): Spanned? {
             App.log.fine("Loading license file $fileName")
             try {
-                val `is` = context.resources.assets.open(fileName)
-                val raw = IOUtils.toByteArray(`is`)
-                `is`.close()
+                val inputStream = context.resources.assets.open(fileName)
+                val raw = inputStream.readBytes()
+                inputStream.close()
                 content = Html.fromHtml(String(raw))
                 return content
             } catch (e: IOException) {
