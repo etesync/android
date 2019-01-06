@@ -270,7 +270,14 @@ class LocalAddressBook(
         return reallyDirty
     }
 
-    override fun findByUid(uid: String): LocalAddress? = findContactByUID(uid)
+    override fun findByUid(uid: String): LocalAddress? {
+        val found = findContactByUID(uid)
+        if (found != null) {
+            return found
+        } else {
+            return queryGroups("${AndroidGroup.COLUMN_UID}=?", arrayOf(uid)).firstOrNull()
+        }
+    }
 
     override fun count(): Long {
         try {
