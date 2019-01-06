@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 0.23.0
+* Migrate almost all of the code to Kotlin
+* Upgraded vcard4android and ical4android deps to latest (after more than a year!)
+* Drop the custom password entry widget in favour of the stock one
+* Improve debug reporting code. It now sends more information, and sends the information in the email's body so it works with clients that don't support attachments.
+* Fix the shared-to user in shared journals to be case insensitive
+* Update HTTPS trusted ciphers list.
+* Fix account deletion issues on some devices.
+
 ## Version 0.22.6
 * Fix rare crash when importing / creating events with a missing or invalid timezone.
 
