@@ -49,6 +49,8 @@ class LocalContact : AndroidContact, LocalAddress {
         }
 
         internal const val COLUMN_HASHCODE = ContactsContract.RawContacts.SYNC3
+
+        internal val HASH_HACK = Build.VERSION_CODES.N <= Build.VERSION.SDK_INT && Build.VERSION.SDK_INT < Build.VERSION_CODES.O
     }
 
     private var saveAsDirty = false // When true, the resource will be saved as dirty
@@ -99,7 +101,7 @@ class LocalContact : AndroidContact, LocalAddress {
         values.put(AndroidContact.COLUMN_ETAG, eTag)
         values.put(ContactsContract.RawContacts.DIRTY, 0)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (LocalContact.HASH_HACK) {
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             val hashCode = dataHashCode()
             values.put(COLUMN_HASHCODE, hashCode)
@@ -170,7 +172,7 @@ class LocalContact : AndroidContact, LocalAddress {
      * @return hash code of contact data (including group memberships)
      */
     internal fun dataHashCode(): Int {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (!LocalContact.HASH_HACK)
             throw IllegalStateException("dataHashCode() should not be called on Android != 7")
 
         // reset contact so that getContact() reads from database
@@ -184,7 +186,7 @@ class LocalContact : AndroidContact, LocalAddress {
     }
 
     fun updateHashCode(batch: BatchOperation?) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (!LocalContact.HASH_HACK)
             throw IllegalStateException("updateHashCode() should not be called on Android != 7")
 
         val values = ContentValues(1)
@@ -203,7 +205,7 @@ class LocalContact : AndroidContact, LocalAddress {
     }
 
     fun getLastHashCode(): Int {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (!LocalContact.HASH_HACK)
             throw IllegalStateException("getLastHashCode() should not be called on Android != 7")
 
         addressBook.provider!!.query(rawContactSyncURI(), arrayOf(COLUMN_HASHCODE), null, null, null)?.use { c ->

@@ -92,7 +92,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
                         } ?: Constants.log.warning("Group member not found: $uid")
                     }
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                    if (LocalContact.HASH_HACK)
                     // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
                         changeContactIDs
                                 .map { addressBook.findContactByID(it) }

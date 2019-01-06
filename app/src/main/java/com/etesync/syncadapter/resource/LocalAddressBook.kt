@@ -249,7 +249,7 @@ class LocalAddressBook(
      * @return number of "really dirty" contacts
      */
     fun verifyDirty(): Int {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (!LocalContact.HASH_HACK)
             throw IllegalStateException("verifyDirty() should not be called on Android != 7")
 
         var reallyDirty = 0

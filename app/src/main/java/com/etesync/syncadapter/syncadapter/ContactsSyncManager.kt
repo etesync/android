@@ -75,7 +75,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             return false
         val localAddressBook = localAddressBook()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (LocalContact.HASH_HACK) {
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             val reallyDirty = localAddressBook.verifyDirty()
             val deleted = localAddressBook.findDeleted().size
@@ -221,7 +221,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             syncResult.stats.numInserts++
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && local is LocalContact)
+        if (LocalContact.HASH_HACK && local is LocalContact)
         // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             local.updateHashCode(null)
 
