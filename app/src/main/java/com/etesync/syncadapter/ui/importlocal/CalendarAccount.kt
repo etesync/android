@@ -77,7 +77,7 @@ class CalendarAccount protected constructor(val account: Account) {
                 try {
                     val localCalendar = LocalCalendar.findByName(calendarAccount.account,
                             contentProviderClient,
-                            LocalCalendar.Factory.INSTANCE, getString(cur, Calendars.NAME)!!)
+                            LocalCalendar.Factory, getString(cur, Calendars.NAME)!!)
                     if (localCalendar != null) calendarAccount.calendars.add(localCalendar)
                 } catch (ex: Exception) {
                     ex.printStackTrace()

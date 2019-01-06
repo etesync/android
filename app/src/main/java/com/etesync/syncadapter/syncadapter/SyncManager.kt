@@ -55,12 +55,12 @@ import okhttp3.OkHttpClient
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
 
-abstract class SyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
+abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
 constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String) {
 
     protected val notificationManager: NotificationHelper
     protected val info: CollectionInfo
-    protected var localCollection: LocalCollection<LocalResource>? = null
+    protected var localCollection: LocalCollection<T>? = null
 
     protected var httpClient: OkHttpClient
 
@@ -89,8 +89,8 @@ constructor(protected val context: Context, protected val account: Account, prot
     /**
      * Dirty and deleted resources. We need to save them so we safely ignore ones that were added after we started.
      */
-    private var localDeleted: List<LocalResource>? = null
-    protected var localDirty: Array<LocalResource> = arrayOf()
+    private var localDeleted: List<T>? = null
+    protected var localDirty: List<T> = LinkedList()
 
     protected abstract val syncErrorTitle: String
 
@@ -227,8 +227,6 @@ constructor(protected val context: Context, protected val account: Account, prot
         } catch (e: OutOfMemoryError) {
             if (e is Exceptions.HttpException) {
                 syncResult.stats.numParseExceptions++
-            } else if (e is CalendarStorageException || e is ContactsStorageException) {
-                syncResult.databaseError = true
             } else {
                 syncResult.stats.numParseExceptions++
             }
@@ -400,7 +398,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 local.delete()
             }
             if (left > 0) {
-                localDeleted?.drop(left)
+                localDeleted = localDeleted?.drop(left)
             }
 
             left = pushed
@@ -412,7 +410,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 local.clearDirty(local.uuid!!)
             }
             if (left > 0) {
-                localDirty = Arrays.copyOfRange(localDirty, left, localDirty.size)
+                localDirty = localDirty.drop(left)
             }
 
             if (pushed > 0) {
@@ -450,7 +448,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
             val entry = SyncEntry(local.content, action)
             val tmp = JournalEntryManager.Entry()
-            tmp.update(crypto, entry.toJson(), previousEntry!!)
+            tmp.update(crypto, entry.toJson(), previousEntry)
             previousEntry = tmp
             localEntries!!.add(previousEntry)
 
@@ -467,7 +465,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         remoteCTag = journalEntity.getLastUid(data)
 
         localDeleted = processLocallyDeleted()
-        localDirty = localCollection!!.dirty
+        localDirty = localCollection!!.findDirty()
         // This is done after fetching the local dirty so all the ones we are using will be prepared
         prepareDirty()
     }
@@ -478,9 +476,9 @@ constructor(protected val context: Context, protected val account: Account, prot
      * Checks Thread.interrupted() before each request to allow quick sync cancellation.
      */
     @Throws(CalendarStorageException::class, ContactsStorageException::class)
-    private fun processLocallyDeleted(): List<LocalResource> {
-        val localList = localCollection!!.deleted
-        val ret = ArrayList<LocalResource>(localList.size)
+    private fun processLocallyDeleted(): List<T> {
+        val localList = localCollection!!.findDeleted()
+        val ret = ArrayList<T>(localList.size)
 
         for (local in localList) {
             if (Thread.interrupted())
@@ -504,7 +502,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 continue
             }
 
-            App.log.fine("Found local record #" + local.id + " without file name; generating file name/UID if necessary")
+            App.log.fine("Found local record without file name; generating file name/UID if necessary")
             local.prepareForUpload()
         }
     }

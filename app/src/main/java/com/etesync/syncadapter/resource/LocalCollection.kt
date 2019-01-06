@@ -8,21 +8,14 @@
 
 package com.etesync.syncadapter.resource
 
-import java.io.FileNotFoundException
+interface LocalCollection<out T: LocalResource<*>> {
+    fun findDeleted(): List<T>
+    fun findDirty(): List<T>
+    fun findWithoutFileName(): List<T>
+    fun findAll(): List<T>
 
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.vcard4android.ContactsStorageException
+    fun findByUid(uid: String): T?
 
-interface LocalCollection<T> {
 
-    val deleted: Array<T>
-    val withoutFileName: Array<T>
-    /** Dirty *non-deleted* entries  */
-    val dirty: Array<T>
-
-    @Throws(CalendarStorageException::class, ContactsStorageException::class)
-    fun getByUid(uid: String): T?
-
-    @Throws(CalendarStorageException::class, ContactsStorageException::class)
     fun count(): Long
 }

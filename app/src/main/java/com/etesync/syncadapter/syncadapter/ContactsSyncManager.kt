@@ -29,37 +29,30 @@ import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry
-import com.etesync.syncadapter.resource.LocalAddressBook
-import com.etesync.syncadapter.resource.LocalContact
-import com.etesync.syncadapter.resource.LocalGroup
-import com.etesync.syncadapter.resource.LocalResource
 
 import org.apache.commons.codec.Charsets
 import org.apache.commons.collections4.SetUtils
-import org.apache.commons.io.IOUtils
 
 import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.util.logging.Level
 
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.resource.*
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import okhttp3.ResponseBody
+import java.io.StringReader
 
 /**
  *
  * Synchronization manager for CardDAV collections; handles contacts and groups.
  */
 class ContactsSyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class, ContactsStorageException::class)
-constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager(context, account, settings, extras, authority, result, localAddressBook.url!!, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
+constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager<LocalAddress>(context, account, settings, extras, authority, result, localAddressBook.url!!, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
 
     protected override val syncErrorTitle: String
         get() = context.getString(R.string.sync_error_contacts, account.name)
@@ -85,7 +78,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             val reallyDirty = localAddressBook.verifyDirty()
-            val deleted = localAddressBook.deleted.size
+            val deleted = localAddressBook.findDeleted().size
             if (extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD) && reallyDirty == 0 && deleted == 0) {
                 App.log.info("This sync was called to up-sync dirty/deleted contacts, but no contacts have been changed")
                 return false
@@ -96,7 +89,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         val values = ContentValues(2)
         values.put(ContactsContract.Settings.SHOULD_SYNC, 1)
         values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
-        localAddressBook.updateSettings(values)
+        localAddressBook.settings.putAll(values)
 
         journal = JournalEntryManager(httpClient, remote, localAddressBook.url!!)
 
@@ -114,12 +107,12 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         /* groups as separate VCards: there are group contacts and individual contacts */
 
         // mark groups with changed members as dirty
-        val batch = BatchOperation(addressBook.provider)
-        for (contact in addressBook.dirtyContacts) {
+        val batch = BatchOperation(addressBook.provider!!)
+        for (contact in addressBook.findDirtyContacts()) {
             try {
                 App.log.fine("Looking for changed group memberships of contact " + contact.fileName)
-                val cachedGroups = contact.cachedGroupMemberships
-                val currentGroups = contact.groupMemberships
+                val cachedGroups = contact.getCachedGroupMemberships()
+                val currentGroups = contact.getGroupMemberships()
                 for (groupID in SetUtils.disjunction(cachedGroups, currentGroups)) {
                     App.log.fine("Marking group as dirty: " + groupID!!)
                     batch.enqueue(BatchOperation.Operation(
@@ -152,10 +145,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
     override fun processSyncEntry(cEntry: SyncEntry) {
-        val `is` = ByteArrayInputStream(cEntry.content.toByteArray(Charsets.UTF_8))
+        val inputReader = StringReader(cEntry.content)
         val downloader = ResourceDownloader(context)
 
-        val contacts = Contact.fromStream(`is`, Charsets.UTF_8, downloader)
+        val contacts = Contact.fromReader(inputReader, downloader)
         if (contacts.size == 0) {
             App.log.warning("Received VCard without data, ignoring")
             return
@@ -163,14 +156,13 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             App.log.warning("Received multiple VCards, using first one")
 
         val contact = contacts[0]
-        val local = localCollection!!.getByUid(contact.uid) as LocalResource?
-
+        val local = localCollection!!.findByUid(contact.uid!!)
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
             processContact(contact, local)
         } else {
             if (local != null) {
-                App.log.info("Removing local record #" + local.id + " which has been deleted on the server")
+                App.log.info("Removing local record which has been deleted on the server")
                 local.delete()
             } else {
                 App.log.warning("Tried deleting a non-existent record: " + contact.uid)
@@ -179,7 +171,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     @Throws(IOException::class, ContactsStorageException::class)
-    private fun processContact(newData: Contact, local: LocalResource?): LocalResource {
+    private fun processContact(newData: Contact, local: LocalAddress?): LocalAddress {
         var local = local
         val uuid = newData.uid
         // update local contact, if it exists
@@ -188,14 +180,14 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
             if (local is LocalGroup && newData.group) {
                 // update group
-                val group = local as LocalGroup?
+                val group: LocalGroup = local
                 group!!.eTag = uuid
-                group.updateFromServer(newData)
+                group.update(newData)
                 syncResult.stats.numUpdates++
 
             } else if (local is LocalContact && !newData.group) {
                 // update contact
-                val contact = local as LocalContact?
+                val contact: LocalContact = local
                 contact!!.eTag = uuid
                 contact.update(newData)
                 syncResult.stats.numUpdates++
@@ -216,13 +208,13 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             if (newData.group) {
                 App.log.log(Level.INFO, "Creating local group", newData.uid)
                 val group = LocalGroup(localAddressBook(), newData, uuid, uuid)
-                group.create()
+                group.add()
 
                 local = group
             } else {
                 App.log.log(Level.INFO, "Creating local contact", newData.uid)
                 val contact = LocalContact(localAddressBook(), newData, uuid, uuid)
-                contact.create()
+                contact.add()
 
                 local = contact
             }
@@ -272,15 +264,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
                 val body = response.body()
                 if (body != null) {
-                    val stream = body.byteStream()
-                    try {
-                        if (response.isSuccessful && stream != null) {
-                            return IOUtils.toByteArray(stream)
-                        } else
-                            App.log.severe("Couldn't download external resource")
-                    } finally {
-                        stream?.close()
-                    }
+                    return body.bytes()
                 }
             } catch (e: IOException) {
                 App.log.log(Level.SEVERE, "Couldn't download external resource", e)

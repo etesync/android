@@ -38,12 +38,9 @@ import org.apache.commons.codec.Charsets
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -51,25 +48,25 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.resource.LocalCollection
 import okhttp3.HttpUrl
+import java.io.StringReader
 
 /**
  *
  * Synchronization manager for CardDAV collections; handles contacts and groups.
  */
 class CalendarSyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
-constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, result: SyncResult, calendar: LocalCalendar, private val remote: HttpUrl) : SyncManager(context, account, settings, extras, authority, result, calendar.name, CollectionInfo.Type.CALENDAR, account.name) {
+constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, result: SyncResult, calendar: LocalCalendar, private val remote: HttpUrl) : SyncManager<LocalEvent>(context, account, settings, extras, authority, result, calendar.name!!, CollectionInfo.Type.CALENDAR, account.name) {
 
-    protected override val syncErrorTitle: String
+    override val syncErrorTitle: String
         get() = context.getString(R.string.sync_error_calendar, account.name)
 
-    protected override val syncSuccessfullyTitle: String
+    override val syncSuccessfullyTitle: String
         get() = context.getString(R.string.sync_successfully_calendar, info.displayName,
                 account.name)
 
     init {
-        localCollection = calendar as LocalCollection<LocalResource>
+        localCollection = calendar
     }
 
     override fun notificationId(): Int {
@@ -81,7 +78,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         if (!super.prepare())
             return false
 
-        journal = JournalEntryManager(httpClient, remote, localCalendar().name)
+        journal = JournalEntryManager(httpClient, remote, localCalendar().name!!)
         return true
     }
 
@@ -101,9 +98,9 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, InvalidCalendarException::class)
     override fun processSyncEntry(cEntry: SyncEntry) {
-        val `is` = ByteArrayInputStream(cEntry.content.toByteArray(Charsets.UTF_8))
+        val inputReader = StringReader(cEntry.content)
 
-        val events = Event.fromStream(`is`, Charsets.UTF_8)
+        val events = Event.fromReader(inputReader)
         if (events.size == 0) {
             App.log.warning("Received VCard without data, ignoring")
             return
@@ -112,7 +109,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         }
 
         val event = events[0]
-        val local = localCollection!!.getByUid(event.uid) as LocalEvent?
+        val local = localCollection!!.findByUid(event.uid!!)
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
             processEvent(event, local)
@@ -140,7 +137,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         for (local in localDirty) {
             val event = (local as LocalEvent).event
 
-            if (event.attendees.isEmpty()) {
+            if (event?.attendees?.isEmpty()!!) {
                 return
             }
             createInviteAttendeesNotification(event, local.content)
@@ -148,7 +145,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     private fun createInviteAttendeesNotification(event: Event, icsContent: String) {
-        val notificationHelper = NotificationHelper(context, event.uid, event.uid.hashCode())
+        val notificationHelper = NotificationHelper(context, event.uid!!, event.uid!!.hashCode())
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_EMAIL, getEmailAddresses(event.attendees, false))
@@ -156,14 +153,14 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         intent.putExtra(Intent.EXTRA_SUBJECT,
                 context.getString(R.string.sync_calendar_attendees_email_subject,
                         event.summary,
-                        dateFormatDate.format(event.dtStart.date)))
+                        dateFormatDate.format(event.dtStart?.date)))
         intent.putExtra(Intent.EXTRA_TEXT,
                 context.getString(R.string.sync_calendar_attendees_email_content,
                         event.summary,
                         formatEventDates(event),
                         if (event.location != null) event.location else "",
                         formatAttendees(event.attendees)))
-        val uri = createAttachmentFromString(context, event.uid, icsContent)
+        val uri = createAttachmentFromString(context, event.uid!!, icsContent)
         if (uri == null) {
             App.log.severe("Unable to create attachment from calendar event")
             return
@@ -179,7 +176,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
-    private fun processEvent(newData: Event, localEvent: LocalEvent?): LocalResource {
+    private fun processEvent(newData: Event, localEvent: LocalEvent?): LocalEvent {
         var localEvent = localEvent
         // delete local event, if it exists
         if (localEvent != null) {
@@ -221,23 +218,23 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
     private fun formatEventDates(event: Event): String {
         val locale = Locale.getDefault()
-        val timezone = if (event.dtStart.timeZone != null) event.dtStart.timeZone else TimeZone.getTimeZone("UTC")
-        val dateFormatString = if (event.isAllDay) "EEEE, MMM dd" else "EEEE, MMM dd @ hh:mm a"
+        val timezone = if (event.dtStart?.timeZone != null) event.dtStart?.timeZone else TimeZone.getTimeZone("UTC")
+        val dateFormatString = if (event.isAllDay()) "EEEE, MMM dd" else "EEEE, MMM dd @ hh:mm a"
         val longDateFormat = SimpleDateFormat(dateFormatString, locale)
         longDateFormat.timeZone = timezone
         val shortDateFormat = SimpleDateFormat("hh:mm a", locale)
         shortDateFormat.timeZone = timezone
 
-        val startDate = event.dtStart.date
+        val startDate = event.dtStart?.date
         val endDate = event.getEndDate(true)!!.date
-        val tzName = timezone.getDisplayName(timezone.inDaylightTime(startDate), TimeZone.SHORT)
+        val tzName = timezone?.getDisplayName(timezone?.inDaylightTime(startDate)!!, TimeZone.SHORT)
 
         val cal1 = Calendar.getInstance()
         val cal2 = Calendar.getInstance()
         cal1.time = startDate
         cal2.time = endDate
         val sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
-        if (sameDay && event.isAllDay) {
+        if (sameDay && event.isAllDay()) {
             return longDateFormat.format(startDate)
         }
         return if (sameDay)

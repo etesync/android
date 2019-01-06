@@ -108,10 +108,6 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
 
                 notificationManager.notify(title, context.getString(syncPhase))
             } catch (e: OutOfMemoryError) {
-                if (e is ContactsStorageException || e is SQLiteException) {
-                    App.log.log(Level.SEVERE, "Couldn't prepare local address books", e)
-                    syncResult.databaseError = true
-                }
                 val syncPhase = R.string.sync_phase_journals
                 val title = context.getString(R.string.sync_error_contacts, account.name)
                 notificationManager.setThrowable(e)

@@ -27,9 +27,8 @@ import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
 import ezvcard.util.PartialDate
-import org.apache.commons.codec.Charsets
-import java.io.ByteArrayInputStream
 import java.io.IOException
+import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -154,10 +153,10 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
         private inner class LoadEventTask internal constructor(internal var view: View) : AsyncTask<Void, Void, Event>() {
             override fun doInBackground(vararg aVoids: Void): Event? {
-                val `is` = ByteArrayInputStream(syncEntry.content.toByteArray(Charsets.UTF_8))
+                val inputReader = StringReader(syncEntry.content)
 
                 try {
-                    return Event.fromStream(`is`, Charsets.UTF_8, null)[0]
+                    return Event.fromReader(inputReader, null)[0]
                 } catch (e: InvalidCalendarException) {
                     e.printStackTrace()
                 } catch (e: IOException) {
@@ -175,16 +174,17 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
                 setTextViewText(view, R.id.title, event.summary)
 
-                setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(event.dtStart.date.time, event.dtEnd.date.time, event.isAllDay, context))
+                setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(event.dtStart?.date?.time!!, event.dtEnd?.date!!.time, event.isAllDay(), context))
 
                 setTextViewText(view, R.id.where, event.location)
 
-                if (event.organizer != null) {
+                val organizer = event.organizer
+                if (organizer != null) {
                     val tv = view.findViewById<View>(R.id.organizer) as TextView
-                    tv.text = event.organizer.calAddress.toString().replaceFirst("mailto:".toRegex(), "")
+                    tv.text = organizer.calAddress.toString().replaceFirst("mailto:".toRegex(), "")
                 } else {
-                    val organizer = view.findViewById<View>(R.id.organizer_container)
-                    organizer.visibility = View.GONE
+                    val organizerView = view.findViewById<View>(R.id.organizer_container)
+                    organizerView.visibility = View.GONE
                 }
 
                 setTextViewText(view, R.id.description, event.description)
@@ -220,10 +220,10 @@ class JournalItemActivity : BaseActivity(), Refreshable {
         private inner class LoadContactTask internal constructor(internal var view: View) : AsyncTask<Void, Void, Contact>() {
 
             override fun doInBackground(vararg aVoids: Void): Contact? {
-                val `is` = ByteArrayInputStream(syncEntry.content.toByteArray(Charsets.UTF_8))
+                val reader = StringReader(syncEntry.content)
 
                 try {
-                    return Contact.fromStream(`is`, Charsets.UTF_8, null)[0]
+                    return Contact.fromReader(reader, null)[0]
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -279,7 +279,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
                 // ORG, TITLE, ROLE
                 if (contact.organization != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization.values[0])
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization?.values!![0])
                 }
                 if (contact.jobDescription != null) {
                     addInfoItem(view.context, aboutCard, getString(R.string.journal_item_job_description), null, contact.jobTitle)
@@ -291,8 +291,8 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 }
 
                 // NICKNAME
-                if (contact.nickName != null && contact.nickName.values.size > 0) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName.values[0])
+                if (contact.nickName != null && !contact.nickName?.values?.isEmpty()!!) {
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName?.values!![0])
                 }
 
                 // ADR
@@ -314,11 +314,11 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
                 // ANNIVERSARY
                 if (contact.anniversary != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary.date, contact.anniversary.partialDate))
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary?.date, contact.anniversary?.partialDate))
                 }
                 // BDAY
                 if (contact.birthDay != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay.date, contact.birthDay.partialDate))
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay?.date, contact.birthDay?.partialDate))
                 }
 
                 // RELATED
@@ -333,17 +333,19 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             }
         }
 
-        private fun getDisplayedDate(date: Date?, partialDate: PartialDate): String? {
+        private fun getDisplayedDate(date: Date?, partialDate: PartialDate?): String? {
             if (date != null) {
                 val epochDate = date.time
                 return getDisplayedDatetime(epochDate, epochDate, true, context)
-            } else {
+            } else if (partialDate != null){
                 val formatter = SimpleDateFormat("d MMMM", Locale.getDefault())
                 val calendar = GregorianCalendar()
                 calendar.set(Calendar.DAY_OF_MONTH, partialDate.date!!)
                 calendar.set(Calendar.MONTH, partialDate.month!! - 1)
                 return formatter.format(calendar.time)
             }
+
+            return null
         }
 
         companion object {

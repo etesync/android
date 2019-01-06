@@ -78,7 +78,7 @@ class LocalCalendarImportFragment : ListFragment() {
         }
 
         override fun getChild(groupPosition: Int, childPosititon: Int): Any {
-            return calendarAccounts[groupPosition].getCalendars()[childPosititon].displayName
+            return calendarAccounts[groupPosition].getCalendars()[childPosititon].displayName!!
         }
 
         override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -198,9 +198,9 @@ class LocalCalendarImportFragment : ListFragment() {
             val result = ResultFragment.ImportResult()
             try {
                 val localCalendar = LocalCalendar.findByName(account,
-                        context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI),
-                        LocalCalendar.Factory.INSTANCE, info!!.uid!!)
-                val localEvents = fromCalendar.all
+                        context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!,
+                        LocalCalendar.Factory, info!!.uid!!)
+                val localEvents = fromCalendar.findAll()
                 val total = localEvents.size
                 progressDialog!!.max = total
                 result.total = total.toLong()
@@ -208,7 +208,7 @@ class LocalCalendarImportFragment : ListFragment() {
                 for (currentLocalEvent in localEvents) {
                     val event = currentLocalEvent.event
                     try {
-                        val localEvent = LocalEvent(localCalendar!!, event, null, null)
+                        val localEvent = LocalEvent(localCalendar!!, event!!, null, null)
                         localEvent.addAsDirty()
                         result.added++
                     } catch (e: CalendarStorageException) {

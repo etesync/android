@@ -359,11 +359,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 try {
                     if (future.result.getBoolean(AccountManager.KEY_BOOLEAN_RESULT))
                         finish()
-                } catch (e: OperationCanceledException) {
-                    App.log.log(Level.SEVERE, "Couldn't remove account", e)
-                } catch (e: IOException) {
-                    App.log.log(Level.SEVERE, "Couldn't remove account", e)
-                } catch (e: AuthenticatorException) {
+                } catch(e: Exception) {
                     App.log.log(Level.SEVERE, "Couldn't remove account", e)
                 }
             }, null)
@@ -372,15 +368,12 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 try {
                     if (future.result)
                         finish()
-                } catch (e: OperationCanceledException) {
-                    App.log.log(Level.SEVERE, "Couldn't remove account", e)
-                } catch (e: IOException) {
-                    App.log.log(Level.SEVERE, "Couldn't remove account", e)
-                } catch (e: AuthenticatorException) {
+                } catch (e: Exception) {
                     App.log.log(Level.SEVERE, "Couldn't remove account", e)
                 }
             }, null)
     }
+
 
     private fun requestSync() {
         requestSync(account)

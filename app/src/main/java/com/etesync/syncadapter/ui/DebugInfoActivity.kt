@@ -149,7 +149,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
 
             report.append("CONFIGURATION\n")
             // power saving
-            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
             if (powerManager != null && Build.VERSION.SDK_INT >= 23)
                 report.append("Power saving disabled: ")
                         .append(if (powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) "yes" else "no")

@@ -9,82 +9,95 @@
 package com.etesync.syncadapter.resource
 
 import android.accounts.Account
-import android.content.ContentProviderClient
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.RemoteException
-
-import com.etesync.syncadapter.model.CollectionInfo
-
-import org.dmfs.provider.tasks.TaskContract.TaskLists
-import org.dmfs.provider.tasks.TaskContract.Tasks
-
-import java.io.FileNotFoundException
-
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.AndroidTaskListFactory
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
+import com.etesync.syncadapter.model.JournalEntity
+import org.dmfs.tasks.contract.TaskContract.TaskLists
+import org.dmfs.tasks.contract.TaskContract.Tasks
 
-class LocalTaskList protected constructor(account: Account, provider: TaskProvider, id: Long) : AndroidTaskList(account, provider, LocalTask.Factory.INSTANCE, id), LocalCollection<LocalTask> {
+class LocalTaskList private constructor(
+        account: Account,
+        provider: TaskProvider,
+        id: Long
+): AndroidTaskList<LocalTask>(account, provider, LocalTask.Factory, id), LocalCollection<LocalTask> {
+    companion object {
+        val defaultColor = -0x3c1592     // "DAVdroid green"
 
-    override val deleted: Array<LocalTask>
-        @Throws(CalendarStorageException::class)
-        get() = queryTasks(Tasks._DELETED + "!=0", null) as Array<LocalTask>
-
-    override val withoutFileName: Array<LocalTask>
-        @Throws(CalendarStorageException::class)
-        get() = queryTasks(Tasks._SYNC_ID + " IS NULL", null) as Array<LocalTask>
-
-    override// sequence has not been assigned yet (i.e. this task was just locally created)
-    val dirty: Array<LocalTask>
-        @Throws(CalendarStorageException::class, FileNotFoundException::class)
-        get() {
-            val tasks = queryTasks(Tasks._DIRTY + "!=0 AND " + Tasks._DELETED + "== 0", null) as Array<LocalTask>
-            for (task in tasks) {
-                if (task.task.sequence == null)
-                    task.task.sequence = 0
-                else
-                    task.task.sequence++
+        fun tasksProviderAvailable(context: Context): Boolean {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                return context.packageManager.resolveContentProvider(TaskProvider.ProviderName.OpenTasks.authority, 0) != null
+            else {
+                val provider = TaskProvider.acquire(context, TaskProvider.ProviderName.OpenTasks)
+                provider?.use { return true }
+                return false
             }
-            return tasks
         }
 
+        fun create(account: Account, provider: TaskProvider, journalEntity: JournalEntity): Uri {
+            val values = valuesFromCollectionInfo(journalEntity, true)
+            values.put(TaskLists.OWNER, account.name)
+            values.put(TaskLists.SYNC_ENABLED, 1)
+            values.put(TaskLists.VISIBLE, 1)
+            return create(account, provider, values)
+        }
 
-    override fun taskBaseInfoColumns(): Array<String> {
-        return BASE_INFO_COLUMNS
+        private fun valuesFromCollectionInfo(journalEntity: JournalEntity, withColor: Boolean): ContentValues {
+            val info = journalEntity.info
+            val values = ContentValues(3)
+            values.put(TaskLists._SYNC_ID, info.uid)
+            values.put(TaskLists.LIST_NAME, if (info.displayName.isNullOrBlank()) info.uid else info.displayName)
+
+            if (withColor)
+                values.put(TaskLists.LIST_COLOR, info.color ?: defaultColor)
+
+            return values
+        }
+
     }
 
-    @Throws(CalendarStorageException::class)
-    fun update(info: CollectionInfo, updateColor: Boolean) {
-        update(valuesFromCollectionInfo(info, updateColor))
+    fun update(journalEntity: JournalEntity, updateColor: Boolean) =
+            update(valuesFromCollectionInfo(journalEntity, updateColor))
+
+    override fun findDeleted() = queryTasks("${Tasks._DELETED}!=0", null)
+
+    override fun findDirty(): List<LocalTask> {
+        val tasks = queryTasks("${Tasks._DIRTY}!=0", null)
+        for (localTask in tasks) {
+            val task = requireNotNull(localTask.task)
+            val sequence = task.sequence
+            if (sequence == null)    // sequence has not been assigned yet (i.e. this task was just locally created)
+                task.sequence = 0
+            else
+                task.sequence = sequence + 1
+        }
+        return tasks
     }
 
-    @Throws(CalendarStorageException::class)
-    override fun getByUid(uid: String): LocalTask? {
-        val ret = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(uid)) as Array<LocalTask>
-        return if (ret != null && ret.size > 0) {
-            ret[0]
-        } else null
-    }
+    override fun findAll(): List<LocalTask>
+            = queryTasks(null, null)
 
-    @Throws(CalendarStorageException::class)
+    override fun findWithoutFileName(): List<LocalTask>
+        = queryTasks(Tasks._SYNC_ID + " IS NULL", null)
+
+    override fun findByUid(uid: String): LocalTask?
+        = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(uid)).firstOrNull()
+
     override fun count(): Long {
-        val where = Tasks.LIST_ID + "=?"
-        val whereArgs = arrayOf(id.toString())
-
         try {
             val cursor = provider.client.query(
-                    syncAdapterURI(provider.tasksUri()), null,
-                    where, whereArgs, null)
+                    TaskProvider.syncAdapterUri(provider.tasksUri(), account), null,
+                    Tasks.LIST_ID + "=?", arrayOf(id.toString()), null)
             try {
-                return cursor.count.toLong()
+                return cursor?.count?.toLong()!!
             } finally {
-                cursor.close()
+                cursor?.close()
             }
         } catch (e: RemoteException) {
             throw CalendarStorageException("Couldn't query calendar events", e)
@@ -92,78 +105,10 @@ class LocalTaskList protected constructor(account: Account, provider: TaskProvid
 
     }
 
+    object Factory: AndroidTaskListFactory<LocalTaskList> {
 
-    class Factory : AndroidTaskListFactory {
+        override fun newInstance(account: Account, provider: TaskProvider, id: Long) =
+                LocalTaskList(account, provider, id)
 
-        override fun newInstance(account: Account, provider: TaskProvider, id: Long): AndroidTaskList {
-            return LocalTaskList(account, provider, id)
-        }
-
-        override fun newArray(size: Int): Array<AndroidTaskList?> {
-            return arrayOfNulls<LocalTaskList>(size) as Array<AndroidTaskList?>
-        }
-
-        companion object {
-            val INSTANCE = Factory()
-        }
     }
-
-    companion object {
-
-        val defaultColor = -0x3c1592     // "DAVdroid green"
-
-        val COLUMN_CTAG = TaskLists.SYNC_VERSION
-
-        internal var BASE_INFO_COLUMNS = arrayOf(Tasks._ID, Tasks._SYNC_ID, LocalTask.COLUMN_ETAG)
-
-        @Throws(CalendarStorageException::class)
-        fun create(account: Account, provider: TaskProvider, info: CollectionInfo): Uri {
-            val values = valuesFromCollectionInfo(info, true)
-            values.put(TaskLists.OWNER, account.name)
-            values.put(TaskLists.SYNC_ENABLED, 1)
-            values.put(TaskLists.VISIBLE, 1)
-            return AndroidTaskList.create(account, provider, values)
-        }
-
-        private fun valuesFromCollectionInfo(info: CollectionInfo, withColor: Boolean): ContentValues {
-            val values = ContentValues()
-            values.put(TaskLists._SYNC_ID, info.uid)
-            values.put(TaskLists.LIST_NAME, info.displayName)
-
-            if (withColor)
-                values.put(TaskLists.LIST_COLOR, if (info.color != null) info.color else defaultColor)
-
-            return values
-        }
-
-        // helpers
-
-        fun tasksProviderAvailable(context: Context): Boolean {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                return context.packageManager.resolveContentProvider(TaskProvider.ProviderName.OpenTasks.authority, 0) != null
-            else {
-                val provider = TaskProvider.acquire(context.contentResolver, TaskProvider.ProviderName.OpenTasks)
-                try {
-                    return provider != null
-                } finally {
-                    provider?.close()
-                }
-            }
-        }
-
-
-        // HELPERS
-
-        @Throws(RemoteException::class)
-        fun onRenameAccount(resolver: ContentResolver, oldName: String, newName: String) {
-            val client = resolver.acquireContentProviderClient(TaskProvider.ProviderName.OpenTasks.authority)
-            if (client != null) {
-                val values = ContentValues(1)
-                values.put(Tasks.ACCOUNT_NAME, newName)
-                client.update(Tasks.getContentUri(TaskProvider.ProviderName.OpenTasks.authority), values, Tasks.ACCOUNT_NAME + "=?", arrayOf(oldName))
-                client.release()
-            }
-        }
-    }
-
 }
