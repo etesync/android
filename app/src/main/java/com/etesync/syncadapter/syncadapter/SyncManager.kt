@@ -398,7 +398,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 local.delete()
             }
             if (left > 0) {
-                localDeleted?.drop(left)
+                localDeleted = localDeleted?.drop(left)
             }
 
             left = pushed
