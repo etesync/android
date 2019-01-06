@@ -38,12 +38,9 @@ import org.apache.commons.codec.Charsets
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -112,7 +109,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         }
 
         val event = events[0]
-        val local = localCollection!!.getByUid(event.uid) as LocalEvent?
+        val local = localCollection!!.findByUid(event.uid) as LocalEvent?
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
             processEvent(event, local)

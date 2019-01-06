@@ -81,7 +81,7 @@ class LocalCalendar protected constructor(account: Account, provider: ContentPro
     }
 
     @Throws(CalendarStorageException::class)
-    override fun getByUid(uid: String): LocalEvent? {
+    override fun findByUid(uid: String): LocalEvent? {
         val ret = queryEvents(Events._SYNC_ID + " =? ", arrayOf(uid)) as Array<LocalEvent>
         return if (ret != null && ret.size > 0) {
             ret[0]

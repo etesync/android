@@ -199,7 +199,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
      * Marks all members of the current group as dirty.
      */
     fun markMembersDirty() {
-]        val batch = BatchOperation(addressBook.provider!!)
+        val batch = BatchOperation(addressBook.provider!!)
 
         for (member in getMembers())
             batch.enqueue(BatchOperation.Operation(

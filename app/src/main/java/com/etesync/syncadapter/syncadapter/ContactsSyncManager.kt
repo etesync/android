@@ -41,7 +41,6 @@ import org.apache.commons.io.IOUtils
 import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.util.logging.Level
 
 import at.bitfire.ical4android.CalendarStorageException
@@ -49,10 +48,7 @@ import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import okhttp3.ResponseBody
 
 /**
  *
@@ -163,7 +159,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             App.log.warning("Received multiple VCards, using first one")
 
         val contact = contacts[0]
-        val local = localCollection!!.getByUid(contact.uid) as LocalResource?
+        val local = localCollection!!.findByUid(contact.uid) as LocalResource?
 
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {

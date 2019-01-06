@@ -65,7 +65,7 @@ class LocalTaskList protected constructor(account: Account, provider: TaskProvid
     }
 
     @Throws(CalendarStorageException::class)
-    override fun getByUid(uid: String): LocalTask? {
+    override fun findByUid(uid: String): LocalTask? {
         val ret = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(uid)) as Array<LocalTask>
         return if (ret != null && ret.size > 0) {
             ret[0]
