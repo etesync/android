@@ -133,7 +133,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
     constructor(addressBook: AndroidAddressBook<out AndroidContact, LocalGroup>, values: ContentValues)
             : super(addressBook, values) {}
 
-    constructor(addressBook: AndroidAddressBook<out AndroidContact, LocalGroup>, contact: Contact, fileName: String?, eTag: String?, flags: Int)
+    constructor(addressBook: AndroidAddressBook<out AndroidContact, LocalGroup>, contact: Contact, fileName: String?, eTag: String?)
             : super(addressBook, contact, fileName, eTag) {}
 
     override fun contentValues(): ContentValues  {

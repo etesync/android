@@ -227,7 +227,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
         val startDate = event.dtStart?.date
         val endDate = event.getEndDate(true)!!.date
-        val tzName = timezone.getDisplayName(timezone?.inDaylightTime(startDate)!!, TimeZone.SHORT)
+        val tzName = timezone?.getDisplayName(timezone?.inDaylightTime(startDate)!!, TimeZone.SHORT)
 
         val cal1 = Calendar.getInstance()
         val cal2 = Calendar.getInstance()

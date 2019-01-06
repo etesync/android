@@ -17,6 +17,7 @@ import android.content.SyncResult
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.provider.CalendarContract
+import at.bitfire.ical4android.AndroidCalendar
 
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.App
@@ -67,7 +68,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
 
                 val principal = HttpUrl.get(settings.uri!!)!!
 
-                for (calendar in LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null) as Array<LocalCalendar>) {
+                for (calendar in AndroidCalendar.find(account, provider, LocalCalendar.Factory, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null) as Array<LocalCalendar>) {
                     App.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)
                     val syncManager = CalendarSyncManager(context, account, settings, extras, authority, syncResult, calendar, principal)
                     syncManager.performSync()
@@ -95,10 +96,6 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
 
                 notificationManager.notify(title, context.getString(syncPhase))
             } catch (e: OutOfMemoryError) {
-                if (e is CalendarStorageException || e is SQLiteException) {
-                    App.log.log(Level.SEVERE, "Couldn't prepare local calendars", e)
-                    syncResult.databaseError = true
-                }
                 val syncPhase = R.string.sync_phase_journals
                 val title = context.getString(R.string.sync_error_calendar, account.name)
                 notificationManager.setThrowable(e)
@@ -121,7 +118,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
                 remote[journalEntity.uid] = journalEntity
             }
 
-            val local = LocalCalendar.find(account, provider, LocalCalendar.Factory.INSTANCE, null, null) as Array<LocalCalendar>
+            val local = AndroidCalendar.find(account, provider, LocalCalendar.Factory, null, null) as Array<LocalCalendar>
 
             val updateColors = settings.manageCalendarColors
 
