@@ -192,9 +192,11 @@ class LocalAddressBook(
 
     fun delete() {
         val accountManager = AccountManager.get(context)
+
         @Suppress("DEPRECATION")
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
         if (Build.VERSION.SDK_INT >= 22)
-            accountManager.removeAccount(account, null, null, null)
+            accountManager.removeAccountExplicitly(account)
         else
             accountManager.removeAccount(account, null, null)
     }
