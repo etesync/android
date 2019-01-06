@@ -141,10 +141,13 @@ dependencies {
     compile('com.github.worker8:tourguide:1.0.17-SNAPSHOT@aar') {
         transitive = true
     }
-    compile 'io.requery:requery:1.5.0'
-    compile 'io.requery:requery-android:1.5.0'
-    compile 'io.requery:requery-kotlin:1.5.0'
-    kapt 'io.requery:requery-processor:1.5.0'
+
+    def requeryVersion = '1.5.1'
+    implementation "io.requery:requery:$requeryVersion"
+    implementation "io.requery:requery-android:$requeryVersion"
+    implementation "io.requery:requery-kotlin:$requeryVersion"
+    kapt "io.requery:requery-processor:$requeryVersion"
+
     compile 'com.madgag.spongycastle:core:1.54.0.0'
     compile 'com.madgag.spongycastle:prov:1.54.0.0'
     compile 'com.google.code.gson:gson:1.7.2'
