@@ -9,6 +9,8 @@
 package com.etesync.syncadapter.resource
 
 interface LocalCollection<out T: LocalResource<*>> {
+    val url: String?
+
     fun findDeleted(): List<T>
     fun findDirty(): List<T>
     fun findWithoutFileName(): List<T>

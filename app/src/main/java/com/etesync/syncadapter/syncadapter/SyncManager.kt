@@ -10,9 +10,7 @@ package com.etesync.syncadapter.syncadapter
 import android.accounts.Account
 import android.annotation.TargetApi
 import android.content.Context
-import android.content.Intent
 import android.content.SyncResult
-import android.content.res.Resources
 import android.os.Bundle
 
 import com.etesync.syncadapter.AccountSettings
@@ -40,7 +38,6 @@ import com.etesync.syncadapter.ui.ViewCollectionActivity
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.ArrayList
-import java.util.Arrays
 import java.util.LinkedList
 import java.util.Locale
 import java.util.logging.Level

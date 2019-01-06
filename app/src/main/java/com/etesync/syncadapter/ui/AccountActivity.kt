@@ -278,29 +278,32 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             for (serviceEntity in data.select(ServiceEntity::class.java).where(ServiceEntity.ACCOUNT.eq(account.name)).get()) {
                 val id = serviceEntity.id.toLong()
                 val service = serviceEntity.type
-                if (service == CollectionInfo.Type.ADDRESS_BOOK) {
-                    info.carddav = AccountInfo.ServiceInfo()
-                    info.carddav!!.id = id
-                    info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.addressBooksAuthority)
-                    info.carddav!!.journals = JournalEntity.getJournals(data, serviceEntity)
+                when (service) {
+                    CollectionInfo.Type.ADDRESS_BOOK -> {
+                        info.carddav = AccountInfo.ServiceInfo()
+                        info.carddav!!.id = id
+                        info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.addressBooksAuthority)
+                        info.carddav!!.journals = JournalEntity.getJournals(data, serviceEntity)
 
-                    val accountManager = AccountManager.get(context)
-                    for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
-                        val addressBook = LocalAddressBook(context, addrBookAccount, null)
-                        try {
-                            if (account == addressBook.mainAccount)
-                                info.carddav!!.refreshing = info.carddav!!.refreshing or ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY)
-                        } catch (e: ContactsStorageException) {
+                        val accountManager = AccountManager.get(context)
+                        for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
+                            val addressBook = LocalAddressBook(context, addrBookAccount, null)
+                            try {
+                                if (account == addressBook.mainAccount)
+                                    info.carddav!!.refreshing = info.carddav!!.refreshing or ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY)
+                            } catch (e: ContactsStorageException) {
+                            }
+
                         }
-
                     }
-                } else if (service == CollectionInfo.Type.CALENDAR) {
-                    info.caldav = AccountInfo.ServiceInfo()
-                    info.caldav!!.id = id
-                    info.caldav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                            ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
-                            ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority)
-                    info.caldav!!.journals = JournalEntity.getJournals(data, serviceEntity)
+                    CollectionInfo.Type.CALENDAR -> {
+                        info.caldav = AccountInfo.ServiceInfo()
+                        info.caldav!!.id = id
+                        info.caldav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
+                                ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
+                                ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority)
+                        info.caldav!!.journals = JournalEntity.getJournals(data, serviceEntity)
+                    }
                 }
             }
             return info

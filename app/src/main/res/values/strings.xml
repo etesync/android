@@ -306,6 +306,7 @@
     <string name="sync_error_permissions_text">Additional permissions required</string>
     <string name="sync_error_calendar">Calendar sync failed (%s)</string>
     <string name="sync_error_contacts">Contacts sync failed (%s)</string>
+    <string name="sync_error_tasks">Tasks sync failed (%s)</string>
     <string name="sync_error">Error while %s</string>
     <string name="sync_error_integrity">Integrity error while %s</string>
     <string name="sync_error_http_dav">Server error while %s</string>
@@ -325,6 +326,7 @@
     <string name="sync_error_user_inactive">User is inactive</string>
     <string name="sync_successfully_calendar" formatted="false">Calendar \"%s\" modified (%s)</string>
     <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
+    <string name="sync_successfully_tasks" formatted="false">Tasks \"%s\" modified (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s modified.</string>
     <string name="sync_successfully_modified_full" formatted="false">%s added.\n%s updated.\n%s deleted.</string>
 

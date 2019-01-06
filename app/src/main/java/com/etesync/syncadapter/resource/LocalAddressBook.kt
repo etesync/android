@@ -151,7 +151,7 @@ class LocalAddressBook(
             _mainAccount = newMainAccount
         }
 
-    var url: String
+    override var url: String
         get() = AccountManager.get(context).getUserData(account, USER_DATA_URL)
                 ?: throw IllegalStateException("Address book has no URL")
         set(url) = AccountManager.get(context).setUserData(account, USER_DATA_URL, url)

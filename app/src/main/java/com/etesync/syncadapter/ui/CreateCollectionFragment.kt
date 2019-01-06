@@ -19,6 +19,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.AsyncTaskLoader
 import android.support.v4.content.Loader
+import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
@@ -83,17 +84,15 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
 
         override fun loadInBackground(): Exception? {
             try {
-                var authority: String
+                var authority: String = ""
 
                 val data = (context.applicationContext as App).data
 
                 // 1. find service ID
-                if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    authority = App.addressBooksAuthority
-                } else if (info.type == CollectionInfo.Type.CALENDAR) {
-                    authority = CalendarContract.AUTHORITY
-                } else {
-                    throw IllegalArgumentException("Collection must be an address book or calendar")
+                when (info.type){
+                    CollectionInfo.Type.ADDRESS_BOOK -> authority = App.addressBooksAuthority
+                    CollectionInfo.Type.CALENDAR -> authority = CalendarContract.AUTHORITY
+                    CollectionInfo.Type.TASKS -> authority = TaskProvider.ProviderName.OpenTasks.authority
                 }
 
                 val serviceEntity = JournalModel.Service.fetch(data, account.name, info.type)

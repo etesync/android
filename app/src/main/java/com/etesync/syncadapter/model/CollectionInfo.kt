@@ -51,7 +51,8 @@ class CollectionInfo : Serializable {
 
     enum class Type {
         ADDRESS_BOOK,
-        CALENDAR
+        CALENDAR,
+        TASKS,
     }
 
     init {

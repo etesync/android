@@ -80,7 +80,7 @@ class PermissionsActivity : BaseActivity() {
         val PERMISSION_WRITE_TASKS = "org.dmfs.permission.WRITE_TASKS"
 
         fun requestAllPermissions(activity: Activity) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS), REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS)
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, PERMISSION_READ_TASKS, PERMISSION_WRITE_TASKS), REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS)
         }
     }
 }

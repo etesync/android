@@ -62,6 +62,9 @@ class LocalTaskList private constructor(
 
     }
 
+    override val url: String?
+        get() = syncId
+
     fun update(journalEntity: JournalEntity, updateColor: Boolean) =
             update(valuesFromCollectionInfo(journalEntity, updateColor))
 

@@ -43,26 +43,29 @@ open class CreateCollectionActivity : BaseActivity() {
         setContentView(R.layout.activity_create_collection)
 
         val displayName = findViewById<View>(R.id.display_name) as EditText
-        if (info!!.type == CollectionInfo.Type.CALENDAR) {
-            setTitle(R.string.create_calendar)
-            displayName.setHint(R.string.create_calendar_display_name_hint)
+        when (info.type) {
+            CollectionInfo.Type.CALENDAR, CollectionInfo.Type.TASKS -> {
+                setTitle(R.string.create_calendar)
+                displayName.setHint(R.string.create_calendar_display_name_hint)
 
-            val colorSquare = findViewById<View>(R.id.color)
-            colorSquare.setOnClickListener {
-                AmbilWarnaDialog(this@CreateCollectionActivity, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {
-                    override fun onCancel(dialog: AmbilWarnaDialog) {}
+                val colorSquare = findViewById<View>(R.id.color)
+                colorSquare.setOnClickListener {
+                    AmbilWarnaDialog(this@CreateCollectionActivity, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {
+                        override fun onCancel(dialog: AmbilWarnaDialog) {}
 
-                    override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
-                        colorSquare.setBackgroundColor(color)
-                    }
-                }).show()
+                        override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
+                            colorSquare.setBackgroundColor(color)
+                        }
+                    }).show()
+                }
             }
-        } else {
-            setTitle(R.string.create_addressbook)
-            displayName.setHint(R.string.create_addressbook_display_name_hint)
+            CollectionInfo.Type.ADDRESS_BOOK -> {
+                setTitle(R.string.create_addressbook)
+                displayName.setHint(R.string.create_addressbook_display_name_hint)
 
-            val colorGroup = findViewById<View>(R.id.color_group)
-            colorGroup.visibility = View.GONE
+                val colorGroup = findViewById<View>(R.id.color_group)
+                colorGroup.visibility = View.GONE
+            }
         }
     }
 

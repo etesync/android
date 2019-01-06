@@ -88,6 +88,9 @@ class LocalCalendar private constructor(
         }
     }
 
+    override val url: String?
+        get() = name
+
     fun update(journalEntity: JournalEntity, updateColor: Boolean) =
             update(valuesFromCollectionInfo(journalEntity, updateColor))
 

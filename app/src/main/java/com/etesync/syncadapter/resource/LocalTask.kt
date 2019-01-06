@@ -48,7 +48,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
     val uuid: String?
         get() = fileName
 
-    constructor(taskList: AndroidTaskList<*>, task: Task, fileName: String?, eTag: String?, flags: Int)
+    constructor(taskList: AndroidTaskList<*>, task: Task, fileName: String?, eTag: String?)
             : super(taskList, task) {
         this.fileName = fileName
         this.eTag = eTag
@@ -63,6 +63,15 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     /* process LocalTask-specific fields */
 
+    override fun populateTask(values: ContentValues) {
+        super.populateTask(values)
+        fileName = values.getAsString(TaskContract.Tasks._SYNC_ID)
+        eTag = values.getAsString(COLUMN_ETAG)
+        task?.uid = values.getAsString(COLUMN_UID)
+
+        task?.sequence = values.getAsInteger(COLUMN_SEQUENCE)
+    }
+
     override fun buildTask(builder: ContentProviderOperation.Builder, update: Boolean) {
         super.buildTask(builder, update)
         builder.withValue(TaskContract.Tasks._SYNC_ID, fileName)
@@ -75,7 +84,14 @@ class LocalTask : AndroidTask, LocalResource<Task> {
     /* custom queries */
 
     override fun prepareForUpload() {
-        val uid = UUID.randomUUID().toString()
+        var uid: String? = null
+        val c = taskList.provider.client.query(taskSyncURI(), arrayOf(COLUMN_UID), null, null, null)
+        if (c.moveToNext())
+            uid = c.getString(0)
+        if (uid == null)
+            uid = UUID.randomUUID().toString()
+
+        c.close()
 
         val values = ContentValues(2)
         values.put(TaskContract.Tasks._SYNC_ID, uid)

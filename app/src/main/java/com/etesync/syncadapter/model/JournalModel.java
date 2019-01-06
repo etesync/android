@@ -146,7 +146,15 @@ public class JournalModel {
         CollectionInfo.Type type;
 
         public static ServiceEntity fetch(EntityDataStore<Persistable> data, String account, CollectionInfo.Type type) {
-            return data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account).and(ServiceEntity.TYPE.eq(type))).limit(1).get().firstOrNull();
+            ServiceEntity service = data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account).and(ServiceEntity.TYPE.eq(type))).limit(1).get().firstOrNull();
+            if (service == null) {
+                // If our first time, create service and a journal
+                ServiceEntity serviceEntity = new ServiceEntity();
+                serviceEntity.account = account;
+                serviceEntity.type = CollectionInfo.Type.TASKS;
+                service = data.insert(serviceEntity);
+            }
+            return service;
         }
     }
 
