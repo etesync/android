@@ -12,29 +12,18 @@ import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver
-import android.content.ContentProviderClient
 import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.PeriodicSync
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcel
-import android.os.RemoteException
-import android.provider.ContactsContract
-
+import at.bitfire.vcard4android.ContactsStorageException
+import at.bitfire.vcard4android.GroupMethod
 import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.utils.Base64
-
 import java.net.URI
 import java.net.URISyntaxException
 import java.util.logging.Level
-
-import at.bitfire.vcard4android.ContactsStorageException
-import at.bitfire.vcard4android.GroupMethod
 
 class AccountSettings @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @Throws(InvalidAccountException::class)
@@ -192,79 +181,6 @@ constructor(internal val context: Context, internal val account: Account) {
     @Throws(ContactsStorageException::class)
     private fun updateInner(fromVersion: Int) {
         if (fromVersion < 2) {
-            var affected: Long = -1
-            var newCount: Long = -1
-            val provider = context.contentResolver.acquireContentProviderClient(ContactsContract.AUTHORITY)
-                    ?: // no access to contacts provider
-                    return
-
-            // don't run syncs during the migration
-            ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 0)
-            ContentResolver.setIsSyncable(account, App.addressBooksAuthority, 0)
-            ContentResolver.cancelSync(account, null)
-
-            try {
-                // get previous address book settings (including URL)
-                val raw = ContactsContract.SyncState.get(provider, account)
-                if (raw == null)
-                    App.log.info("No contacts sync state, ignoring account")
-                else {
-                    val parcel = Parcel.obtain()
-                    parcel.unmarshall(raw, 0, raw.size)
-                    parcel.setDataPosition(0)
-                    val params = parcel.readBundle()
-                    parcel.recycle()
-                    val url = params.getString("url")
-                    if (url == null)
-                        App.log.info("No address book URL, ignoring account")
-                    else {
-                        // create new address book
-                        val info = CollectionInfo()
-                        info.type = CollectionInfo.Type.ADDRESS_BOOK
-                        info.uid = url
-                        info.displayName = account.name
-                        App.log.log(Level.INFO, "Creating new address book account", url)
-                        val addressBookAccount = Account(LocalAddressBook.accountName(account, info), App.addressBookAccountType)
-                        if (!accountManager.addAccountExplicitly(addressBookAccount, null, null))
-                            throw ContactsStorageException("Couldn't create address book account")
-
-                        LocalAddressBook.setUserData(accountManager, addressBookAccount, account, info.uid!!)
-                        val newAddressBook = LocalAddressBook(context, addressBookAccount, provider)
-
-                        // move contacts to new address book
-                        App.log.info("Moving contacts from $account to $addressBookAccount")
-                        val newAccount = ContentValues(2)
-                        newAccount.put(ContactsContract.RawContacts.ACCOUNT_NAME, addressBookAccount.name)
-                        newAccount.put(ContactsContract.RawContacts.ACCOUNT_TYPE, addressBookAccount.type)
-                        affected = provider.update(ContactsContract.RawContacts.CONTENT_URI.buildUpon()
-                                .appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_NAME, account.name)
-                                .appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_TYPE, account.type)
-                                .appendQueryParameter(ContactsContract.CALLER_IS_SYNCADAPTER, "true").build(),
-                                newAccount,
-                                ContactsContract.RawContacts.ACCOUNT_NAME + "=? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + "=?",
-                                arrayOf(account.name, account.type)).toLong()
-                        App.log.info(affected.toString() + " contacts moved to new address book")
-                        newCount = newAddressBook.count()
-                    }
-
-                    ContactsContract.SyncState.set(provider, account, null)
-                }
-            } catch (e: RemoteException) {
-                throw ContactsStorageException("Couldn't migrate contacts to new address book", e)
-            }
-
-            provider.release()
-
-            // request sync of new address book account
-            ContentResolver.setIsSyncable(account, App.addressBooksAuthority, 1)
-            setSyncInterval(App.addressBooksAuthority!!, Constants.DEFAULT_SYNC_INTERVAL.toLong())
-
-            // Error handling
-            if (affected != -1L && affected != newCount) {
-                val notificationHelper = NotificationHelper(context, "account-migration", Constants.NOTIFICATION_ACCOUNT_UPDATE)
-                notificationHelper.setThrowable(AccountMigrationException("Failed to upgrade account"))
-                notificationHelper.notify("Account upgrade failed", "upgrading account")
-            }
         }
     }
 
