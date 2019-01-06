@@ -314,11 +314,11 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
                 // ANNIVERSARY
                 if (contact.anniversary != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary?.date, contact.anniversary?.partialDate!!))
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary?.date, contact.anniversary?.partialDate))
                 }
                 // BDAY
                 if (contact.birthDay != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay?.date, contact.birthDay?.partialDate!!))
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay?.date, contact.birthDay?.partialDate))
                 }
 
                 // RELATED
@@ -333,17 +333,19 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             }
         }
 
-        private fun getDisplayedDate(date: Date?, partialDate: PartialDate): String? {
+        private fun getDisplayedDate(date: Date?, partialDate: PartialDate?): String? {
             if (date != null) {
                 val epochDate = date.time
                 return getDisplayedDatetime(epochDate, epochDate, true, context)
-            } else {
+            } else if (partialDate != null){
                 val formatter = SimpleDateFormat("d MMMM", Locale.getDefault())
                 val calendar = GregorianCalendar()
                 calendar.set(Calendar.DAY_OF_MONTH, partialDate.date!!)
                 calendar.set(Calendar.MONTH, partialDate.month!! - 1)
                 return formatter.format(calendar.time)
             }
+
+            return null
         }
 
         companion object {

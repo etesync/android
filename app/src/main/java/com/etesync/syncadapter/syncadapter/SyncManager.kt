@@ -448,7 +448,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
             val entry = SyncEntry(local.content, action)
             val tmp = JournalEntryManager.Entry()
-            tmp.update(crypto, entry.toJson(), previousEntry!!)
+            tmp.update(crypto, entry.toJson(), previousEntry)
             previousEntry = tmp
             localEntries!!.add(previousEntry)
 
