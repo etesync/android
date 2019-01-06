@@ -279,7 +279,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
                 // ORG, TITLE, ROLE
                 if (contact.organization != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization.values[0])
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization?.values!![0])
                 }
                 if (contact.jobDescription != null) {
                     addInfoItem(view.context, aboutCard, getString(R.string.journal_item_job_description), null, contact.jobTitle)
@@ -291,8 +291,8 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 }
 
                 // NICKNAME
-                if (contact.nickName != null && contact.nickName.values.size > 0) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName.values[0])
+                if (contact.nickName != null && !contact.nickName?.values?.isEmpty()!!) {
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName?.values!![0])
                 }
 
                 // ADR
@@ -314,11 +314,11 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
                 // ANNIVERSARY
                 if (contact.anniversary != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary.date, contact.anniversary.partialDate))
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary?.date, contact.anniversary?.partialDate!!))
                 }
                 // BDAY
                 if (contact.birthDay != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay.date, contact.birthDay.partialDate))
+                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay?.date, contact.birthDay?.partialDate!!))
                 }
 
                 // RELATED
