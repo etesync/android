@@ -224,8 +224,8 @@ class LocalAddressBook(
             else
                 findDirtyContacts()
 
-    fun findDirtyContacts() = queryContacts("${RawContacts.DIRTY}!=0", null)
-    fun findDirtyGroups() = queryGroups("${Groups.DIRTY}!=0", null)
+    fun findDirtyContacts() = queryContacts("${RawContacts.DIRTY}!=0 AND ${RawContacts.DELETED}==0", null)
+    fun findDirtyGroups() = queryGroups("${Groups.DIRTY}!=0 AND ${Groups.DELETED}==0", null)
 
     /**
      * Returns an array of local contacts which don't have a file name yet.
