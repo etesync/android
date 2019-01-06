@@ -67,6 +67,7 @@ import java.util.logging.Logger
 import javax.net.ssl.HostnameVerifier
 
 import at.bitfire.cert4android.CustomCertManager
+import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 import io.requery.Persistable
@@ -294,8 +295,8 @@ class App : Application() {
                     // Generate account settings to make sure account is migrated.
                     AccountSettings(this, account)
 
-                    val calendars = LocalCalendar.find(account, this.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!,
-                            LocalCalendar.Factory.INSTANCE, null, null) as Array<LocalCalendar>
+                    val calendars = AndroidCalendar.find(account, this.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!,
+                            LocalCalendar.Factory, null, null)
                     for (calendar in calendars) {
                         calendar.fixEtags()
                     }

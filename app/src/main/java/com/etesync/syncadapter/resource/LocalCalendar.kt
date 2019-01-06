@@ -201,7 +201,7 @@ class LocalCalendar private constructor(
                     syncAdapterURI(Events.CONTENT_URI), null,
                     Events.CALENDAR_ID + "=?", arrayOf(id.toString()), null)
             try {
-                return cursor?.count.toLong()
+                return cursor?.count?.toLong()!!
             } finally {
                 cursor?.close()
             }

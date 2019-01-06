@@ -65,7 +65,7 @@ class LocalAddressBook(
             val accountManager = AccountManager.get(context)
 
             val account = Account(accountName(mainAccount, info), App.addressBookAccountType)
-            if (!accountManager.addAccountExplicitly(account, null, initialUserData(mainAccount, info.url.toString())))
+            if (!accountManager.addAccountExplicitly(account, null, initialUserData(mainAccount, info.uid!!)))
                 throw ContactsStorageException("Couldn't create address book account")
 
             val addressBook = LocalAddressBook(context, account, provider)
@@ -276,7 +276,7 @@ class LocalAddressBook(
         try {
             val cursor = provider?.query(syncAdapterURI(RawContacts.CONTENT_URI), null, null, null, null)
             try {
-                return cursor?.count.toLong()
+                return cursor?.count?.toLong()!!
             } finally {
                 cursor?.close()
             }
@@ -286,31 +286,6 @@ class LocalAddressBook(
 
     }
 
-    internal fun getByGroupMembership(groupID: Long): Array<LocalContact> {
-        try {
-            val cursor = provider.query(syncAdapterURI(ContactsContract.Data.CONTENT_URI),
-                    arrayOf(RawContacts.Data.RAW_CONTACT_ID),
-                    "(" + GroupMembership.MIMETYPE + "=? AND " + GroupMembership.GROUP_ROW_ID + "=?) OR (" + CachedGroupMembership.MIMETYPE + "=? AND " + CachedGroupMembership.GROUP_ID + "=?)",
-                    arrayOf(GroupMembership.CONTENT_ITEM_TYPE, groupID.toString(), CachedGroupMembership.CONTENT_ITEM_TYPE, groupID.toString()), null)
-
-            val ids = HashSet<Long>()
-            while (cursor != null && cursor.moveToNext())
-                ids.add(cursor.getLong(0))
-
-            cursor!!.close()
-
-            val contacts = arrayOfNulls<LocalContact>(ids.size)
-            var i = 0
-            for (id in ids)
-                contacts[i++] = LocalContact(this, id, null, null)
-            return contacts
-        } catch (e: RemoteException) {
-            throw ContactsStorageException("Couldn't query contacts", e)
-        }
-
-    }
-
-
     fun deleteAll() {
         try {
             provider?.delete(syncAdapterURI(RawContacts.CONTENT_URI), null, null)
@@ -319,6 +294,22 @@ class LocalAddressBook(
             throw ContactsStorageException("Couldn't delete all local contacts and groups", e)
         }
 
+    }
+
+
+    /* special group operations */
+    fun getByGroupMembership(groupID: Long): List<LocalContact> {
+        val ids = HashSet<Long>()
+        provider!!.query(syncAdapterURI(ContactsContract.Data.CONTENT_URI),
+                arrayOf(RawContacts.Data.RAW_CONTACT_ID),
+                "(${GroupMembership.MIMETYPE}=? AND ${GroupMembership.GROUP_ROW_ID}=?) OR (${CachedGroupMembership.MIMETYPE}=? AND ${CachedGroupMembership.GROUP_ID}=?)",
+                arrayOf(GroupMembership.CONTENT_ITEM_TYPE, groupID.toString(), CachedGroupMembership.CONTENT_ITEM_TYPE, groupID.toString()),
+                null)?.use { cursor ->
+            while (cursor.moveToNext())
+                ids += cursor.getLong(0)
+        }
+
+        return ids.map { findContactByID(it) }
     }
 
 
@@ -356,7 +347,6 @@ class LocalAddressBook(
 
     /** Fix all of the etags of all of the non-dirty contacts to be non-null.
      * Currently set to all ones.  */
-    @Throws(ContactsStorageException::class)
     fun fixEtags() {
         val newEtag = "1111111111111111111111111111111111111111111111111111111111111111"
         val where = ContactsContract.RawContacts.DIRTY + "=0 AND " + AndroidContact.COLUMN_ETAG + " IS NULL"
@@ -364,7 +354,7 @@ class LocalAddressBook(
         val values = ContentValues(1)
         values.put(AndroidContact.COLUMN_ETAG, newEtag)
         try {
-            val fixed = provider.update(syncAdapterURI(RawContacts.CONTENT_URI),
+            val fixed = provider?.update(syncAdapterURI(RawContacts.CONTENT_URI),
                     values, where, null)
             App.log.info("Fixed entries: " + fixed.toString())
         } catch (e: RemoteException) {

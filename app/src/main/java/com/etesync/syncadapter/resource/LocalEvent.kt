@@ -79,7 +79,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         eTag = row.getAsString(COLUMN_ETAG)
         event?.uid = row.getAsString(COLUMN_UID)
 
-        event.sequence = row.getAsInteger(COLUMN_SEQUENCE)
+        event?.sequence = row.getAsInteger(COLUMN_SEQUENCE)
         val isOrganizer = row.getAsInteger(Events.IS_ORGANIZER)
         weAreOrganizer = isOrganizer != null && isOrganizer != 0
     }

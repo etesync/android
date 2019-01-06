@@ -80,6 +80,9 @@ class LocalTaskList private constructor(
         return tasks
     }
 
+    override fun findAll(): List<LocalTask>
+            = queryTasks(null, null)
+
     override fun findWithoutFileName(): List<LocalTask>
         = queryTasks(Tasks._SYNC_ID + " IS NULL", null)
 
@@ -89,10 +92,10 @@ class LocalTaskList private constructor(
     override fun count(): Long {
         try {
             val cursor = provider.client.query(
-                    TaskProvider.syncAdapterUri(provider.tasksUri()), null,
+                    TaskProvider.syncAdapterUri(provider.tasksUri(), account), null,
                     Tasks.LIST_ID + "=?", arrayOf(id.toString()), null)
             try {
-                return cursor?.count.toLong()
+                return cursor?.count?.toLong()!!
             } finally {
                 cursor?.close()
             }

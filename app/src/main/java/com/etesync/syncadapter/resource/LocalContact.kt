@@ -117,7 +117,7 @@ class LocalContact : AndroidContact, LocalAddress {
         val values = ContentValues(2)
         values.put(AndroidContact.COLUMN_FILENAME, uid)
         values.put(AndroidContact.COLUMN_UID, uid)
-        addressBook.provider.update(rawContactSyncURI(), values, null, null)
+        addressBook.provider?.update(rawContactSyncURI(), values, null, null)
 
         fileName = uid
     }
@@ -133,7 +133,7 @@ class LocalContact : AndroidContact, LocalAddress {
     override fun insertDataRows(batch: BatchOperation) {
         super.insertDataRows(batch)
 
-        if (contact.unknownProperties != null) {
+        if (contact?.unknownProperties != null) {
             val op: BatchOperation.Operation
             val builder = ContentProviderOperation.newInsert(dataSyncURI())
             if (id == null) {
@@ -143,7 +143,7 @@ class LocalContact : AndroidContact, LocalAddress {
                 builder.withValue(UnknownProperties.RAW_CONTACT_ID, id)
             }
             builder.withValue(UnknownProperties.MIMETYPE, UnknownProperties.CONTENT_ITEM_TYPE)
-                    .withValue(UnknownProperties.UNKNOWN_PROPERTIES, contact.unknownProperties)
+                    .withValue(UnknownProperties.UNKNOWN_PROPERTIES, contact?.unknownProperties)
             batch.enqueue(op)
         }
 
