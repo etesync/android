@@ -194,23 +194,6 @@ class LocalGroup : AndroidGroup, LocalAddress {
         fileName = uid
     }
 
-
-    /**
-     * Marks all members of the current group as dirty.
-     */
-    fun markMembersDirty() {
-        val batch = BatchOperation(addressBook.provider!!)
-
-        for (member in getMembers())
-            batch.enqueue(BatchOperation.Operation(
-                    ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(RawContacts.CONTENT_URI, member)))
-                            .withValue(RawContacts.DIRTY, 1)
-                            .withYieldAllowed(true)
-            ))
-
-        batch.commit()
-    }
-
     override fun resetDeleted() {
         val values = ContentValues(1)
         values.put(Groups.DELETED, 0)
