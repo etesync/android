@@ -18,6 +18,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
@@ -76,10 +77,9 @@ import io.requery.meta.EntityModel
 import io.requery.sql.Configuration
 import io.requery.sql.EntityDataStore
 import okhttp3.internal.tls.OkHostnameVerifier
+import org.acra.config.CoreConfigurationBuilder
 
-@AcraCore(buildConfigClass = BuildConfig::class, logcatArguments = arrayOf("-t", "500", "-v", "time"))
-@AcraMailSender(mailTo = "reports@etesync.com", resSubject = R.string.crash_email_subject, reportAsFile = false, reportFileName = "ACRA-report.stacktrace.json")
-@AcraToast(resText = R.string.crash_message, length = Toast.LENGTH_LONG)
+
 class App : Application() {
 
     var certManager: CustomCertManager? = null
@@ -123,7 +123,7 @@ class App : Application() {
 
         if (!BuildConfig.DEBUG) {
             // The following line triggers the initialization of ACRA
-            ACRA.init(this)
+            ACRA.init(this, AcraConfiguration.getConfig(this))
             val pm = base.packageManager
             var installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID)
             ACRA.getErrorReporter().putCustomData("installedFrom", installedFrom);
