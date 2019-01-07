@@ -1,6 +1,8 @@
 # Changelog
 
 ## Version 0.23.0
+* Add Tasks support via OpenTasks!
+* Minimum Android version is now KitKat (4.4)
 * Migrate almost all of the code to Kotlin
 * Upgraded vcard4android and ical4android deps to latest (after more than a year!)
 * Drop the custom password entry widget in favour of the stock one
