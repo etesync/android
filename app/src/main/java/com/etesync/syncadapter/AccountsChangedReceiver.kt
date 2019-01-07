@@ -22,7 +22,11 @@ class AccountsChangedReceiver : BroadcastReceiver() {
         if (AccountManager.LOGIN_ACCOUNTS_CHANGED_ACTION == intent.action) {
             val serviceIntent = Intent(context, AccountUpdateService::class.java)
             serviceIntent.action = AccountUpdateService.ACTION_ACCOUNTS_UPDATED
-            context.startService(serviceIntent)
+            try {
+                context.startService(serviceIntent)
+            } catch (e: IllegalStateException) {
+                App.log.warning("Got an illegal state exception! Ignoring...")
+            }
 
             for (listener in listeners)
                 listener.onAccountsUpdated(null)
