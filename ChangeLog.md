@@ -4,7 +4,7 @@
 * Migrate almost all of the code to Kotlin
 * Upgraded vcard4android and ical4android deps to latest (after more than a year!)
 * Drop the custom password entry widget in favour of the stock one
-* Improve debug reporting code. It now sends more information, and sends the information in the email's body so it works with clients that don't support attachments.
+* Debug handler now sends the report as body if ProtonMail (doesn't support attachments) is installed
 * Fix the shared-to user in shared journals to be case insensitive
 * Update HTTPS trusted ciphers list.
 * Fix account deletion issues on some devices.
