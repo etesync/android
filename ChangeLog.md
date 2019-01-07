@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.23.1
+* Catch IllegalStateExceptions in the account changed receiver.
+
 ## Version 0.23.0
 * Add Tasks support via OpenTasks!
 * Minimum Android version is now KitKat (4.4)
