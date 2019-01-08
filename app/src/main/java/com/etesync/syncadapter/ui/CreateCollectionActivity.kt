@@ -44,9 +44,24 @@ open class CreateCollectionActivity : BaseActivity() {
 
         val displayName = findViewById<View>(R.id.display_name) as EditText
         when (info.type) {
-            CollectionInfo.Type.CALENDAR, CollectionInfo.Type.TASKS -> {
+            CollectionInfo.Type.CALENDAR -> {
                 setTitle(R.string.create_calendar)
                 displayName.setHint(R.string.create_calendar_display_name_hint)
+
+                val colorSquare = findViewById<View>(R.id.color)
+                colorSquare.setOnClickListener {
+                    AmbilWarnaDialog(this@CreateCollectionActivity, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {
+                        override fun onCancel(dialog: AmbilWarnaDialog) {}
+
+                        override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
+                            colorSquare.setBackgroundColor(color)
+                        }
+                    }).show()
+                }
+            }
+            CollectionInfo.Type.TASKS -> {
+                setTitle(R.string.create_tasklist)
+                displayName.setHint(R.string.create_tasklist_display_name_hint)
 
                 val colorSquare = findViewById<View>(R.id.color)
                 colorSquare.setOnClickListener {

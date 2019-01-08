@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
@@ -30,10 +31,12 @@ import com.etesync.syncadapter.model.EntryEntity
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.importlocal.ImportActivity
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
+import org.dmfs.tasks.contract.TaskContract
 import tourguide.tourguide.ToolTip
 import java.io.FileNotFoundException
 import java.util.*
@@ -58,10 +61,16 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
         isOwner = journalEntity!!.isOwner(account.name)
 
         val colorSquare = findViewById<View>(R.id.color)
-        if (info.type == CollectionInfo.Type.CALENDAR) {
-            colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
-        } else {
-            colorSquare.visibility = View.GONE
+        when (info.type) {
+            CollectionInfo.Type.CALENDAR -> {
+                colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
+            }
+            CollectionInfo.Type.TASKS -> {
+                colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
+            }
+            CollectionInfo.Type.ADDRESS_BOOK -> {
+                colorSquare.visibility = View.GONE
+            }
         }
 
         LoadCountTask().execute()
@@ -134,6 +143,14 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
     }
 
     fun onImport(item: MenuItem) {
+        if (info.type == CollectionInfo.Type.TASKS) {
+            val dialog = AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle("Not Implemented")
+                    .setMessage("Importing tasks is not yet implemented")
+            dialog.show()
+            return
+        }
         startActivity(ImportActivity.newIntent(this@ViewCollectionActivity, account, info))
     }
 
@@ -166,39 +183,40 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             val journalEntity = JournalEntity.fetch(data, info.getServiceEntity(data), info.uid)
 
             entryCount = data.count(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value()
-            val count: Long
+            var count: Long = -1
 
-            if (info.type == CollectionInfo.Type.CALENDAR) {
-                try {
-                    val providerClient = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
-                    val resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory, info.uid!!)
-                    providerClient!!.release()
-                    if (resource == null) {
-                        return null
+            when (info.type) {
+                CollectionInfo.Type.CALENDAR -> {
+                    try {
+                        val providerClient = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
+                        val resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory, info.uid!!)
+                        providerClient!!.release()
+                        if (resource == null) {
+                            return null
+                        }
+                        count = resource.count()
+                    } catch (e: FileNotFoundException) {
+                        e.printStackTrace()
+                    } catch (e: CalendarStorageException) {
+                        e.printStackTrace()
                     }
-                    count = resource.count()
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace()
-                    return null
-                } catch (e: CalendarStorageException) {
-                    e.printStackTrace()
-                    return null
                 }
-
-            } else {
-                try {
-                    val providerClient = contentResolver.acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI)
-                    val resource = LocalAddressBook.findByUid(this@ViewCollectionActivity, providerClient!!, account, info.uid!!)
-                    providerClient.release()
-                    if (resource == null) {
-                        return null
+                CollectionInfo.Type.TASKS -> {
+                    count = -1
+                }
+                CollectionInfo.Type.ADDRESS_BOOK -> {
+                    try {
+                        val providerClient = contentResolver.acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI)
+                        val resource = LocalAddressBook.findByUid(this@ViewCollectionActivity, providerClient!!, account, info.uid!!)
+                        providerClient.release()
+                        if (resource == null) {
+                            return null
+                        }
+                        count = resource.count()
+                    } catch (e: ContactsStorageException) {
+                        e.printStackTrace()
                     }
-                    count = resource.count()
-                } catch (e: ContactsStorageException) {
-                    e.printStackTrace()
-                    return null
                 }
-
             }
             return count
         }
@@ -210,12 +228,19 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             if (result == null) {
                 stats.text = "Stats loading error."
             } else {
-                if (info.type == CollectionInfo.Type.CALENDAR) {
-                    stats.text = String.format(Locale.getDefault(), "Events: %d, Journal entries: %d",
-                            result, entryCount)
-                } else {
-                    stats.text = String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d",
-                            result, entryCount)
+                when (info.type) {
+                    CollectionInfo.Type.CALENDAR -> {
+                        stats.text = String.format(Locale.getDefault(), "Events: %d, Journal entries: %d",
+                                result, entryCount)
+                    }
+                    CollectionInfo.Type.TASKS -> {
+                        stats.text = String.format(Locale.getDefault(), "Tasks: (TBD), Journal entries: %d",
+                                entryCount)
+                    }
+                    CollectionInfo.Type.ADDRESS_BOOK -> {
+                        stats.text = String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d",
+                                result, entryCount)
+                    }
                 }
             }
         }

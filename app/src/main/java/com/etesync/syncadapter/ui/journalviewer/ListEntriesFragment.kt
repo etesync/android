@@ -137,12 +137,16 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
             // FIXME: hacky way to make it show sensible info
             val fullContent = syncEntry.content
-            val prefix: String
-            if (info.type == CollectionInfo.Type.CALENDAR) {
-                prefix = "SUMMARY:"
-            } else {
-                prefix = "FN:"
+            var prefix = ""
+            when (info.type) {
+                CollectionInfo.Type.CALENDAR, CollectionInfo.Type.TASKS -> {
+                    prefix = "SUMMARY:"
+                }
+                CollectionInfo.Type.ADDRESS_BOOK -> {
+                    prefix = "FN:"
+                }
             }
+
             var content = getLine(fullContent, prefix)
             content = content ?: "Not found"
             tv.text = content

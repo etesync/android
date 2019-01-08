@@ -10,8 +10,6 @@ package com.etesync.syncadapter.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.accounts.AuthenticatorException
-import android.accounts.OperationCanceledException
 import android.app.LoaderManager
 import android.content.*
 import android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
@@ -41,7 +39,6 @@ import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
 import tourguide.tourguide.ToolTip
-import java.io.IOException
 import java.util.logging.Level
 
 class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
@@ -51,6 +48,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
     internal var listCalDAV: ListView? = null
     internal var listCardDAV: ListView? = null
+    internal var listTaskDAV: ListView? = null
 
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
         val list = parent as ListView
@@ -97,6 +95,13 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         tbCalDAV.inflateMenu(R.menu.caldav_actions)
         tbCalDAV.setOnMenuItemClickListener(this)
         tbCalDAV.setTitle(R.string.settings_caldav)
+
+        // TaskDAV toolbar
+        val tbTaskDAV = findViewById<View>(R.id.taskdav_menu) as Toolbar
+        tbTaskDAV.overflowIcon = icMenu
+        tbTaskDAV.inflateMenu(R.menu.taskdav_actions)
+        tbTaskDAV.setOnMenuItemClickListener(this)
+        tbTaskDAV.setTitle(R.string.settings_taskdav)
 
         // load CardDAV/CalDAV journals
         loaderManager.initLoader(0, intent.extras, this)
@@ -157,6 +162,11 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 info.type = CollectionInfo.Type.CALENDAR
                 startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account!!, info))
             }
+            R.id.create_tasklist -> {
+                info = CollectionInfo()
+                info.type = CollectionInfo.Type.TASKS
+                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account!!, info))
+            }
             R.id.create_addressbook -> {
                 info = CollectionInfo()
                 info.type = CollectionInfo.Type.ADDRESS_BOOK
@@ -171,6 +181,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     class AccountInfo {
         internal var carddav: ServiceInfo? = null
         internal var caldav: ServiceInfo? = null
+        internal var taskdav: ServiceInfo? = null
 
         class ServiceInfo {
             internal var id: Long = 0
@@ -222,6 +233,22 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listCalDAV!!.onItemClickListener = onItemClickListener
         } else
             card.visibility = View.GONE
+
+        card = findViewById<View>(R.id.caldav) as CardView
+        if (info.taskdav != null) {
+            val progress = findViewById<View>(R.id.taskdav_refreshing) as ProgressBar
+            progress.visibility = if (info.taskdav!!.refreshing) View.VISIBLE else View.GONE
+
+            listTaskDAV = findViewById<View>(R.id.tasklists) as ListView
+            listTaskDAV!!.isEnabled = !info.taskdav!!.refreshing
+            listTaskDAV!!.setAlpha(if (info.taskdav!!.refreshing) 0.5f else 1f)
+
+            val adapter = CollectionListAdapter(this, account!!)
+            adapter.addAll(info.taskdav!!.journals!!)
+            listTaskDAV!!.adapter = adapter
+            listTaskDAV!!.onItemClickListener = onItemClickListener
+        } else
+            card.visibility = View.GONE
     }
 
     override fun onLoaderReset(loader: Loader<AccountInfo>) {
@@ -230,6 +257,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
         if (listCalDAV != null)
             listCalDAV!!.adapter = null
+
+        if (listTaskDAV != null)
+            listTaskDAV!!.adapter = null
     }
 
 
@@ -300,9 +330,15 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         info.caldav = AccountInfo.ServiceInfo()
                         info.caldav!!.id = id
                         info.caldav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY) ||
-                                ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority)
+                                ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
                         info.caldav!!.journals = JournalEntity.getJournals(data, serviceEntity)
+                    }
+                    CollectionInfo.Type.TASKS -> {
+                        info.taskdav = AccountInfo.ServiceInfo()
+                        info.taskdav!!.id = id
+                        info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
+                                ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority)
+                        info.taskdav!!.journals = JournalEntity.getJournals(data, serviceEntity)
                     }
                 }
             }

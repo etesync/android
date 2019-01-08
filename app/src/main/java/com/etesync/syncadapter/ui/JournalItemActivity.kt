@@ -2,7 +2,6 @@ package com.etesync.syncadapter.ui
 
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -18,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
+import at.bitfire.ical4android.Task
 import at.bitfire.vcard4android.Contact
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
@@ -143,6 +143,10 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                     v = inflater.inflate(R.layout.event_info, container, false)
                     asyncTask = loadEventTask(v)
                 }
+                CollectionInfo.Type.TASKS -> {
+                    v = inflater.inflate(R.layout.task_info, container, false)
+                    asyncTask = loadTaskTask(v)
+                }
             }
 
             return v
@@ -216,6 +220,45 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                             sb.append(alarm.trigger.value)
                         }
                         setTextViewText(view, R.id.reminders, sb.toString())
+                    }
+                }
+            }
+        }
+
+        private fun loadTaskTask(view: View): Future<Unit> {
+            return doAsync {
+                var task: Task? = null
+                val inputReader = StringReader(syncEntry.content)
+
+                try {
+                    task = Task.fromReader(inputReader)[0]
+                } catch (e: InvalidCalendarException) {
+                    e.printStackTrace()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+                if (task != null) {
+                    uiThread {
+                        val loader = view.findViewById<View>(R.id.task_info_loading_msg)
+                        loader.visibility = View.GONE
+                        val contentContainer = view.findViewById<View>(R.id.task_info_scroll_view)
+                        contentContainer.visibility = View.VISIBLE
+
+                        setTextViewText(view, R.id.title, task.summary)
+
+                        setTextViewText(view, R.id.where, task.location)
+
+                        val organizer = task.organizer
+                        if (organizer != null) {
+                            val tv = view.findViewById<View>(R.id.organizer) as TextView
+                            tv.text = organizer.calAddress.toString().replaceFirst("mailto:".toRegex(), "")
+                        } else {
+                            val organizerView = view.findViewById<View>(R.id.organizer_container)
+                            organizerView.visibility = View.GONE
+                        }
+
+                        setTextViewText(view, R.id.description, task.description)
                     }
                 }
             }

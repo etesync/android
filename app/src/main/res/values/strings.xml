@@ -267,12 +267,15 @@
     <string name="settings_sync_wifi_only_ssid_message">Enter the name of a WiFi network (SSID) to restrict synchronization to this network, or leave blank for all WiFi connections.</string>
     <string name="settings_carddav">Contacts</string>
     <string name="settings_caldav">Calendar</string>
+    <string name="settings_taskdav">Tasks</string>
 
     <!-- collection management -->
     <string name="create_addressbook">Create address book</string>
     <string name="create_addressbook_display_name_hint">My Address Book</string>
     <string name="create_calendar">Create calendar</string>
     <string name="create_calendar_display_name_hint">My Calendar</string>
+    <string name="create_tasklist">Create task list</string>
+    <string name="create_tasklist_display_name_hint">My Task List</string>
     <string name="edit_collection">Edit collection</string>
     <string name="create_collection_color">Set the calendar\'s color</string>
     <string name="create_collection_creating">Creating collection</string>
