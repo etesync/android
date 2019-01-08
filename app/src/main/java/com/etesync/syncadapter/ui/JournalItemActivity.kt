@@ -27,10 +27,13 @@ import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
 import ezvcard.util.PartialDate
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Future
 
 class JournalItemActivity : BaseActivity(), Refreshable {
     private var journalEntity: JournalEntity? = null
@@ -123,7 +126,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
     class PrettyFragment : Fragment() {
         internal lateinit var info: CollectionInfo
         internal lateinit var syncEntry: SyncEntry
-        private var asyncTask: AsyncTask<*, *, *>? = null
+        private var asyncTask: Future<Unit>? = null
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             var v: View? = null
@@ -134,11 +137,11 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             when (info.type) {
                 CollectionInfo.Type.ADDRESS_BOOK -> {
                     v = inflater.inflate(R.layout.contact_info, container, false)
-                    asyncTask = LoadContactTask(v).execute()
+                    asyncTask = loadContactTask(v)
                 }
                 CollectionInfo.Type.CALENDAR -> {
                     v = inflater.inflate(R.layout.event_info, container, false)
-                    asyncTask = LoadEventTask(v).execute()
+                    asyncTask = loadEventTask(v)
                 }
             }
 
@@ -151,186 +154,191 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 asyncTask!!.cancel(true)
         }
 
-        private inner class LoadEventTask internal constructor(internal var view: View) : AsyncTask<Void, Void, Event>() {
-            override fun doInBackground(vararg aVoids: Void): Event? {
+        private fun loadEventTask(view: View): Future<Unit> {
+            return doAsync {
+                var event: Event? = null
                 val inputReader = StringReader(syncEntry.content)
 
                 try {
-                    return Event.fromReader(inputReader, null)[0]
+                    event = Event.fromReader(inputReader, null)[0]
                 } catch (e: InvalidCalendarException) {
                     e.printStackTrace()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
 
-                return null
-            }
+                if (event != null) {
+                    uiThread {
+                        val loader = view.findViewById<View>(R.id.event_info_loading_msg)
+                        loader.visibility = View.GONE
+                        val contentContainer = view.findViewById<View>(R.id.event_info_scroll_view)
+                        contentContainer.visibility = View.VISIBLE
 
-            override fun onPostExecute(event: Event) {
-                val loader = view.findViewById<View>(R.id.event_info_loading_msg)
-                loader.visibility = View.GONE
-                val contentContainer = view.findViewById<View>(R.id.event_info_scroll_view)
-                contentContainer.visibility = View.VISIBLE
+                        setTextViewText(view, R.id.title, event.summary)
 
-                setTextViewText(view, R.id.title, event.summary)
+                        setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(event.dtStart?.date?.time!!, event.dtEnd?.date!!.time, event.isAllDay(), context))
 
-                setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(event.dtStart?.date?.time!!, event.dtEnd?.date!!.time, event.isAllDay(), context))
+                        setTextViewText(view, R.id.where, event.location)
 
-                setTextViewText(view, R.id.where, event.location)
+                        val organizer = event.organizer
+                        if (organizer != null) {
+                            val tv = view.findViewById<View>(R.id.organizer) as TextView
+                            tv.text = organizer.calAddress.toString().replaceFirst("mailto:".toRegex(), "")
+                        } else {
+                            val organizerView = view.findViewById<View>(R.id.organizer_container)
+                            organizerView.visibility = View.GONE
+                        }
 
-                val organizer = event.organizer
-                if (organizer != null) {
-                    val tv = view.findViewById<View>(R.id.organizer) as TextView
-                    tv.text = organizer.calAddress.toString().replaceFirst("mailto:".toRegex(), "")
-                } else {
-                    val organizerView = view.findViewById<View>(R.id.organizer_container)
-                    organizerView.visibility = View.GONE
-                }
+                        setTextViewText(view, R.id.description, event.description)
 
-                setTextViewText(view, R.id.description, event.description)
+                        var first = true
+                        var sb = StringBuilder()
+                        for (attendee in event.attendees) {
+                            if (first) {
+                                first = false
+                                sb.append(getString(R.string.journal_item_attendees)).append(": ")
+                            } else {
+                                sb.append(", ")
+                            }
+                            sb.append(attendee.calAddress.toString().replaceFirst("mailto:".toRegex(), ""))
+                        }
+                        setTextViewText(view, R.id.attendees, sb.toString())
 
-                var first = true
-                var sb = StringBuilder()
-                for (attendee in event.attendees) {
-                    if (first) {
-                        first = false
-                        sb.append(getString(R.string.journal_item_attendees)).append(": ")
-                    } else {
-                        sb.append(", ")
+                        first = true
+                        sb = StringBuilder()
+                        for (alarm in event.alarms) {
+                            if (first) {
+                                first = false
+                                sb.append(getString(R.string.journal_item_reminders)).append(": ")
+                            } else {
+                                sb.append(", ")
+                            }
+                            sb.append(alarm.trigger.value)
+                        }
+                        setTextViewText(view, R.id.reminders, sb.toString())
                     }
-                    sb.append(attendee.calAddress.toString().replaceFirst("mailto:".toRegex(), ""))
                 }
-                setTextViewText(view, R.id.attendees, sb.toString())
-
-                first = true
-                sb = StringBuilder()
-                for (alarm in event.alarms) {
-                    if (first) {
-                        first = false
-                        sb.append(getString(R.string.journal_item_reminders)).append(": ")
-                    } else {
-                        sb.append(", ")
-                    }
-                    sb.append(alarm.trigger.value)
-                }
-                setTextViewText(view, R.id.reminders, sb.toString())
             }
         }
 
-        private inner class LoadContactTask internal constructor(internal var view: View) : AsyncTask<Void, Void, Contact>() {
-
-            override fun doInBackground(vararg aVoids: Void): Contact? {
+        private fun loadContactTask(view: View): Future<Unit> {
+            return doAsync {
+                var contact: Contact? = null
                 val reader = StringReader(syncEntry.content)
 
                 try {
-                    return Contact.fromReader(reader, null)[0]
+                    contact = Contact.fromReader(reader, null)[0]
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
 
-                return null
-            }
+                if (contact != null) {
+                    uiThread {
+                        val loader = view.findViewById<View>(R.id.loading_msg)
+                        loader.visibility = View.GONE
+                        val contentContainer = view.findViewById<View>(R.id.content_container)
+                        contentContainer.visibility = View.VISIBLE
 
-            override fun onPostExecute(contact: Contact) {
-                val loader = view.findViewById<View>(R.id.loading_msg)
-                loader.visibility = View.GONE
-                val contentContainer = view.findViewById<View>(R.id.content_container)
-                contentContainer.visibility = View.VISIBLE
+                        val tv = view.findViewById<View>(R.id.display_name) as TextView
+                        tv.text = contact.displayName
 
-                val tv = view.findViewById<View>(R.id.display_name) as TextView
-                tv.text = contact.displayName
-
-                if (contact.group) {
-                    showGroup(contact)
-                } else {
-                    showContact(contact)
+                        if (contact.group) {
+                            showGroup(contact)
+                        } else {
+                            showContact(contact)
+                        }
+                    }
                 }
             }
+        }
 
-            private fun showGroup(contact: Contact) {
-                val mainCard = view.findViewById<View>(R.id.main_card) as ViewGroup
 
-                addInfoItem(view.context, mainCard, getString(R.string.journal_item_member_count), null, contact.members.size.toString())
+        private fun showGroup(contact: Contact) {
+            val view = this.view!!
 
-                for (member in contact.members) {
-                    addInfoItem(view.context, mainCard, getString(R.string.journal_item_member), null, member)
-                }
+            val mainCard = view.findViewById<View>(R.id.main_card) as ViewGroup
+
+            addInfoItem(view.context, mainCard, getString(R.string.journal_item_member_count), null, contact.members.size.toString())
+
+            for (member in contact.members) {
+                addInfoItem(view.context, mainCard, getString(R.string.journal_item_member), null, member)
+            }
+        }
+
+
+        private fun showContact(contact: Contact) {
+            val view = this.view!!
+            val mainCard = view.findViewById<View>(R.id.main_card) as ViewGroup
+            val aboutCard = view.findViewById<View>(R.id.about_card) as ViewGroup
+            aboutCard.findViewById<View>(R.id.title_container).visibility = View.VISIBLE
+
+            // TEL
+            for (labeledPhone in contact.phoneNumbers) {
+                val types = labeledPhone.property.types
+                val type = if (types.size > 0) types[0].value else null
+                addInfoItem(view.context, mainCard, getString(R.string.journal_item_phone), type, labeledPhone.property.text)
             }
 
-
-            private fun showContact(contact: Contact) {
-                val mainCard = view.findViewById<View>(R.id.main_card) as ViewGroup
-                val aboutCard = view.findViewById<View>(R.id.about_card) as ViewGroup
-                aboutCard.findViewById<View>(R.id.title_container).visibility = View.VISIBLE
-
-                // TEL
-                for (labeledPhone in contact.phoneNumbers) {
-                    val types = labeledPhone.property.types
-                    val type = if (types.size > 0) types[0].value else null
-                    addInfoItem(view.context, mainCard, getString(R.string.journal_item_phone), type, labeledPhone.property.text)
-                }
-
-                // EMAIL
-                for (labeledEmail in contact.emails) {
-                    val types = labeledEmail.property.types
-                    val type = if (types.size > 0) types[0].value else null
-                    addInfoItem(view.context, mainCard, getString(R.string.journal_item_email), type, labeledEmail.property.value)
-                }
-
-                // ORG, TITLE, ROLE
-                if (contact.organization != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization?.values!![0])
-                }
-                if (contact.jobDescription != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_job_description), null, contact.jobTitle)
-                }
-
-                // IMPP
-                for (labeledImpp in contact.impps) {
-                    addInfoItem(view.context, mainCard, getString(R.string.journal_item_impp), labeledImpp.property.protocol, labeledImpp.property.handle)
-                }
-
-                // NICKNAME
-                if (contact.nickName != null && !contact.nickName?.values?.isEmpty()!!) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName?.values!![0])
-                }
-
-                // ADR
-                for (labeledAddress in contact.addresses) {
-                    val types = labeledAddress.property.types
-                    val type = if (types.size > 0) types[0].value else null
-                    addInfoItem(view.context, mainCard, getString(R.string.journal_item_address), type, labeledAddress.property.label)
-                }
-
-                // NOTE
-                if (contact.note != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_note), null, contact.note)
-                }
-
-                // URL
-                for (labeledUrl in contact.urls) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_website), null, labeledUrl.property.value)
-                }
-
-                // ANNIVERSARY
-                if (contact.anniversary != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary?.date, contact.anniversary?.partialDate))
-                }
-                // BDAY
-                if (contact.birthDay != null) {
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay?.date, contact.birthDay?.partialDate))
-                }
-
-                // RELATED
-                for (related in contact.relations) {
-                    val types = related.types
-                    val type = if (types.size > 0) types[0].value else null
-                    addInfoItem(view.context, aboutCard, getString(R.string.journal_item_relation), type, related.text)
-                }
-
-                // PHOTO
-                // if (contact.photo != null)
+            // EMAIL
+            for (labeledEmail in contact.emails) {
+                val types = labeledEmail.property.types
+                val type = if (types.size > 0) types[0].value else null
+                addInfoItem(view.context, mainCard, getString(R.string.journal_item_email), type, labeledEmail.property.value)
             }
+
+            // ORG, TITLE, ROLE
+            if (contact.organization != null) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_organization), contact.jobTitle, contact.organization?.values!![0])
+            }
+            if (contact.jobDescription != null) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_job_description), null, contact.jobTitle)
+            }
+
+            // IMPP
+            for (labeledImpp in contact.impps) {
+                addInfoItem(view.context, mainCard, getString(R.string.journal_item_impp), labeledImpp.property.protocol, labeledImpp.property.handle)
+            }
+
+            // NICKNAME
+            if (contact.nickName != null && !contact.nickName?.values?.isEmpty()!!) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_nickname), null, contact.nickName?.values!![0])
+            }
+
+            // ADR
+            for (labeledAddress in contact.addresses) {
+                val types = labeledAddress.property.types
+                val type = if (types.size > 0) types[0].value else null
+                addInfoItem(view.context, mainCard, getString(R.string.journal_item_address), type, labeledAddress.property.label)
+            }
+
+            // NOTE
+            if (contact.note != null) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_note), null, contact.note)
+            }
+
+            // URL
+            for (labeledUrl in contact.urls) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_website), null, labeledUrl.property.value)
+            }
+
+            // ANNIVERSARY
+            if (contact.anniversary != null) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_anniversary), null, getDisplayedDate(contact.anniversary?.date, contact.anniversary?.partialDate))
+            }
+            // BDAY
+            if (contact.birthDay != null) {
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_birthday), null, getDisplayedDate(contact.birthDay?.date, contact.birthDay?.partialDate))
+            }
+
+            // RELATED
+            for (related in contact.relations) {
+                val types = related.types
+                val type = if (types.size > 0) types[0].value else null
+                addInfoItem(view.context, aboutCard, getString(R.string.journal_item_relation), type, related.text)
+            }
+
+            // PHOTO
+            // if (contact.photo != null)
         }
 
         private fun getDisplayedDate(date: Date?, partialDate: PartialDate?): String? {

@@ -2,7 +2,6 @@ package com.etesync.syncadapter.ui
 
 import android.accounts.Account
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.ListFragment
 import android.support.v7.app.AlertDialog
@@ -20,13 +19,16 @@ import com.etesync.syncadapter.model.JournalModel
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
 import okhttp3.HttpUrl
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import java.util.concurrent.Future
 
 class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickListener, Refreshable {
     private lateinit var data: EntityDataStore<Persistable>
     private lateinit var account: Account
     private lateinit var info: CollectionInfo
     private lateinit var journalEntity: JournalEntity
-    private var asyncTask: AsyncTask<*, *, *>? = null
+    private var asyncTask: Future<Unit>? = null
 
     private var emptyTextView: TextView? = null
 
@@ -48,7 +50,30 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     }
 
     override fun refresh() {
-        asyncTask = JournalMembersFetch().execute()
+        asyncTask = doAsync {
+            var members: List<JournalManager.Member>? = null;
+            try {
+                val settings = AccountSettings(context!!, account!!)
+                val httpClient = HttpClient.create(context!!, settings)
+                val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
+
+                val journal = JournalManager.Journal.fakeWithUid(journalEntity!!.uid)
+                members = journalsManager.listMembers(journal)
+            } catch (e: Exception) {
+                uiThread {
+                    emptyTextView!!.text = e.localizedMessage
+                }
+            }
+
+            uiThread {
+                val listAdapter = MembersListAdapter(context!!)
+                setListAdapter(listAdapter)
+
+                listAdapter.addAll(members)
+
+                emptyTextView!!.setText(R.string.collection_members_list_empty)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,37 +117,6 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
             tv.text = member!!.user
             return v
         }
-    }
-
-    private inner class JournalMembersFetch : AsyncTask<Void, Void, JournalMembersFetch.MembersResult>() {
-        override fun doInBackground(vararg voids: Void): MembersResult {
-            try {
-                val settings = AccountSettings(context!!, account!!)
-                val httpClient = HttpClient.create(context!!, settings)
-                val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
-
-                val journal = JournalManager.Journal.fakeWithUid(journalEntity!!.uid)
-                return MembersResult(journalsManager.listMembers(journal), null)
-            } catch (e: Exception) {
-                return MembersResult(null, e)
-            }
-
-        }
-
-        override fun onPostExecute(result: MembersResult) {
-            if (result.throwable == null) {
-                val listAdapter = MembersListAdapter(context!!)
-                setListAdapter(listAdapter)
-
-                listAdapter.addAll(result.members)
-
-                emptyTextView!!.setText(R.string.collection_members_list_empty)
-            } else {
-                emptyTextView!!.text = result.throwable.localizedMessage
-            }
-        }
-
-        internal inner class MembersResult(val members: List<JournalManager.Member>?, val throwable: Throwable?)
     }
 
     companion object {

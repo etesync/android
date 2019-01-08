@@ -9,7 +9,6 @@
 package com.etesync.syncadapter.ui.journalviewer
 
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.ListFragment
 import android.view.LayoutInflater
@@ -25,13 +24,16 @@ import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.ui.JournalItemActivity
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import java.util.concurrent.Future
 
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     private lateinit var data: EntityDataStore<Persistable>
     private lateinit var info: CollectionInfo
     private var journalEntity: JournalEntity? = null
-    private var asyncTask: AsyncTask<*, *, *>? = null
+    private var asyncTask: Future<Unit>? = null
 
     private var emptyTextView: TextView? = null
 
@@ -51,10 +53,26 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
         return view
     }
 
+    fun loadEntries(): List<EntryEntity> {
+        journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
+        return data.select(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        asyncTask = JournalFetch().execute()
+        asyncTask = doAsync {
+            val entries = loadEntries()
+
+            uiThread {
+                val listAdapter = EntriesListAdapter(context!!)
+                setListAdapter(listAdapter)
+
+                listAdapter.addAll(entries)
+
+                emptyTextView!!.text = getString(R.string.journal_entries_list_empty)
+            }
+        }
 
         listView.onItemClickListener = this
     }
@@ -86,23 +104,6 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
             setJournalEntryView(v, info, entryEntity!!.content)
 
             return v
-        }
-    }
-
-    private inner class JournalFetch : AsyncTask<Void, Void, List<EntryEntity>>() {
-
-        override fun doInBackground(vararg voids: Void): List<EntryEntity> {
-            journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
-            return data.select(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).orderBy(EntryEntity.ID.desc()).get().toList()
-        }
-
-        override fun onPostExecute(result: List<EntryEntity>) {
-            val listAdapter = EntriesListAdapter(context!!)
-            setListAdapter(listAdapter)
-
-            listAdapter.addAll(result)
-
-            emptyTextView!!.text = getString(R.string.journal_entries_list_empty)
         }
     }
 
