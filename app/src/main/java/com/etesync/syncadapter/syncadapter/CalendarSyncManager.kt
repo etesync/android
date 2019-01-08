@@ -15,41 +15,26 @@ import android.content.SyncResult
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.NotificationHelper
-import com.etesync.syncadapter.R
+import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.Event
+import at.bitfire.ical4android.InvalidCalendarException
+import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
-import com.etesync.syncadapter.resource.LocalResource
-
 import net.fortuna.ical4j.model.property.Attendee
-
+import okhttp3.HttpUrl
 import org.acra.attachment.AcraContentProvider
 import org.acra.util.IOUtils
-import org.apache.commons.codec.Charsets
-
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.ArrayList
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
-
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.ical4android.Event
-import at.bitfire.ical4android.InvalidCalendarException
-import at.bitfire.vcard4android.ContactsStorageException
-import okhttp3.HttpUrl
 import java.io.StringReader
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  *
@@ -160,7 +145,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                         formatEventDates(event),
                         if (event.location != null) event.location else "",
                         formatAttendees(event.attendees)))
-        val uri = createAttachmentFromString(context, event.uid!!, icsContent)
+        val uri = createAttachmentFromString(context, icsContent)
         if (uri == null) {
             App.log.severe("Unable to create attachment from calendar event")
             return
@@ -246,7 +231,8 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             String.format("%s - %s (%s)", longDateFormat.format(startDate), longDateFormat.format(endDate), tzName)
     }
 
-    private fun createAttachmentFromString(context: Context, name: String, content: String): Uri? {
+    private fun createAttachmentFromString(context: Context, content: String): Uri? {
+        val name = UUID.randomUUID().toString()
         val parentDir = File(context.cacheDir, name)
         parentDir.mkdirs()
         val cache = File(parentDir, "invite.ics")
