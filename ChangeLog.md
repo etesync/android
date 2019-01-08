@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.23.2
+* Tasks: add ability to create, edit, deleted and view task journals
+
 ## Version 0.23.1
 * Catch IllegalStateExceptions in the account changed receiver.
 
