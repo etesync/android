@@ -8,6 +8,7 @@
 
 package com.etesync.syncadapter.ui.journalviewer
 
+import android.accounts.Account
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.ListFragment
@@ -22,6 +23,7 @@ import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.ui.JournalItemActivity
+import com.etesync.syncadapter.ui.ViewCollectionActivity
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
 import org.jetbrains.anko.doAsync
@@ -31,6 +33,7 @@ import java.util.concurrent.Future
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     private lateinit var data: EntityDataStore<Persistable>
+    private lateinit var account: Account
     private lateinit var info: CollectionInfo
     private var journalEntity: JournalEntity? = null
     private var asyncTask: Future<Unit>? = null
@@ -40,6 +43,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = (context!!.applicationContext as App).data
+        account = arguments!!.getParcelable(ViewCollectionActivity.EXTRA_ACCOUNT)!!
         info = arguments!!.getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
     }
 
@@ -85,7 +89,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val entry = listAdapter.getItem(position) as EntryEntity
-        startActivity(JournalItemActivity.newIntent(context!!, info, entry.content))
+        startActivity(JournalItemActivity.newIntent(context!!, account, info, entry.content))
     }
 
     internal inner class EntriesListAdapter(context: Context) : ArrayAdapter<EntryEntity>(context, R.layout.journal_viewer_list_item) {
@@ -110,9 +114,10 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     companion object {
         protected val EXTRA_COLLECTION_INFO = "collectionInfo"
 
-        fun newInstance(info: CollectionInfo): ListEntriesFragment {
+        fun newInstance(account: Account, info: CollectionInfo): ListEntriesFragment {
             val frag = ListEntriesFragment()
             val args = Bundle(1)
+            args.putParcelable(ViewCollectionActivity.EXTRA_ACCOUNT, account)
             args.putSerializable(EXTRA_COLLECTION_INFO, info)
             frag.arguments = args
             return frag

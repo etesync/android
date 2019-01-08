@@ -1,5 +1,6 @@
 package com.etesync.syncadapter.ui
 
+import android.accounts.Account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,9 +12,7 @@ import android.support.v4.view.ViewPager
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.text.format.Time
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
@@ -26,6 +25,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
+import com.etesync.syncadapter.utils.EventEmailInvitation
 import ezvcard.util.PartialDate
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -37,8 +37,11 @@ import java.util.concurrent.Future
 
 class JournalItemActivity : BaseActivity(), Refreshable {
     private var journalEntity: JournalEntity? = null
+    private lateinit var account: Account
     protected lateinit var info: CollectionInfo
     private lateinit var syncEntry: SyncEntry
+    private var emailInvitationEvent: Event? = null
+    private var emailInvitationEventString: String? = null
 
     override fun refresh() {
         val data = (applicationContext as App).data
@@ -49,6 +52,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             return
         }
 
+        account = intent.extras!!.getParcelable(ViewCollectionActivity.EXTRA_ACCOUNT)!!
         info = journalEntity!!.info
 
         title = info.displayName
@@ -73,6 +77,24 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
         val tabLayout = findViewById<View>(R.id.tabs) as TabLayout
         tabLayout.setupWithViewPager(viewPager)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (emailInvitationEvent != null) {
+            menuInflater.inflate(R.menu.activity_journal_item, menu)
+        }
+        return true
+    }
+
+    fun allowSendEmail(event: Event?, icsContent: String) {
+        emailInvitationEvent = event
+        emailInvitationEventString = icsContent
+        invalidateOptionsMenu()
+    }
+
+    fun sendEventInvite(item: MenuItem) {
+        val intent = EventEmailInvitation(this, account).createIntent(emailInvitationEvent!!, emailInvitationEventString!!)
+        startActivity(intent)
     }
 
     private class TabsAdapter(fm: FragmentManager, private val context: Context, private val info: CollectionInfo, private val syncEntry: SyncEntry) : FragmentPagerAdapter(fm) {
@@ -220,6 +242,10 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                             sb.append(alarm.trigger.value)
                         }
                         setTextViewText(view, R.id.reminders, sb.toString())
+
+                        if (event.attendees.isNotEmpty() && activity != null) {
+                            (activity as JournalItemActivity).allowSendEmail(event, syncEntry.content)
+                        }
                     }
                 }
             }
@@ -467,8 +493,9 @@ class JournalItemActivity : BaseActivity(), Refreshable {
     companion object {
         private val KEY_SYNC_ENTRY = "syncEntry"
 
-        fun newIntent(context: Context, info: CollectionInfo, syncEntry: SyncEntry): Intent {
+        fun newIntent(context: Context, account: Account, info: CollectionInfo, syncEntry: SyncEntry): Intent {
             val intent = Intent(context, JournalItemActivity::class.java)
+            intent.putExtra(ViewCollectionActivity.EXTRA_ACCOUNT, account)
             intent.putExtra(Constants.KEY_COLLECTION_INFO, info)
             intent.putExtra(KEY_SYNC_ENTRY, syncEntry)
             return intent

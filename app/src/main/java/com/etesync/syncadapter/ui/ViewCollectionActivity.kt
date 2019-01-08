@@ -102,7 +102,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(R.id.list_entries_container, ListEntriesFragment.newInstance(info))
+                    .add(R.id.list_entries_container, ListEntriesFragment.newInstance(account, info))
                     .commit()
         }
 
