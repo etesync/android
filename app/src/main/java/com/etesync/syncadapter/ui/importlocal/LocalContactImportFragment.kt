@@ -132,7 +132,7 @@ class LocalContactImportFragment : Fragment() {
             try {
                 val addressBook = LocalAddressBook.findByUid(context!!,
                         context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
-                        account, info!!.uid!!)
+                        account, info.uid!!)
                 val localContacts = localAddressBook.findAll()
                 val total = localContacts.size
                 progressDialog!!.max = total

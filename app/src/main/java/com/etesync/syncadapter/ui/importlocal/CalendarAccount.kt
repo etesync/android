@@ -60,7 +60,7 @@ class CalendarAccount protected constructor(val account: Account) {
 
             var calendarAccount: CalendarAccount? = null
 
-            val contentProviderClient = resolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
+            val contentProviderClient = resolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
             while (cur.moveToNext()) {
                 if (getLong(cur, Calendars.DELETED) != 0L)
                     continue
@@ -84,7 +84,7 @@ class CalendarAccount protected constructor(val account: Account) {
                 }
 
             }
-            contentProviderClient!!.release()
+            contentProviderClient.release()
             cur.close()
             return calendarAccounts
         }

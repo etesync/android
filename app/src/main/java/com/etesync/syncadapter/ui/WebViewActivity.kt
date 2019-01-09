@@ -116,8 +116,8 @@ class WebViewActivity : BaseActivity() {
         mWebView!!.invalidate()
     }
 
-    private fun shouldOverrideUrl(uri: Uri): Boolean {
-        var uri = uri
+    private fun shouldOverrideUrl(_uri: Uri): Boolean {
+        var uri = _uri
         if (isAllowedUrl(uri)) {
             if (uri.getQueryParameter(QUERY_KEY_EMBEDDED) != null) {
                 return false

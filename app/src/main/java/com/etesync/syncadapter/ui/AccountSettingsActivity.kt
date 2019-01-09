@@ -134,7 +134,7 @@ class AccountSettingsActivity : BaseActivity() {
 
             val prefWifiOnly = findPreference("sync_wifi_only") as SwitchPreferenceCompat
             prefWifiOnly.isChecked = settings.syncWifiOnly
-            prefWifiOnly.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, wifiOnly ->
+            prefWifiOnly.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, wifiOnly ->
                 settings.setSyncWiFiOnly(wifiOnly as Boolean)
                 loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
                 false

@@ -35,15 +35,15 @@ class ExceptionInfoFragment : DialogFragment() {
         val dialog = AlertDialog.Builder(context!!)
                 .setIcon(R.drawable.ic_error_dark)
                 .setTitle(title)
-                .setMessage(exception.javaClass.canonicalName + "\n" + exception.localizedMessage)
-                .setNegativeButton(R.string.exception_show_details) { dialog, which ->
+                .setMessage("${exception.javaClass.canonicalName}\n" + exception.localizedMessage)
+                .setNegativeButton(R.string.exception_show_details) { _, _ ->
                     val intent = Intent(context, DebugInfoActivity::class.java)
                     intent.putExtra(DebugInfoActivity.KEY_THROWABLE, exception)
                     if (account != null)
                         intent.putExtra(Constants.KEY_ACCOUNT, account)
                     startActivity(intent)
                 }
-                .setPositiveButton(android.R.string.ok) { dialog, which -> }
+                .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .create()
         isCancelable = false
         return dialog

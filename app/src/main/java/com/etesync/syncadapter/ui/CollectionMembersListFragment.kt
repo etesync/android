@@ -105,8 +105,8 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
 
     internal inner class MembersListAdapter(context: Context) : ArrayAdapter<JournalManager.Member>(context, R.layout.collection_members_list_item) {
 
-        override fun getView(position: Int, v: View?, parent: ViewGroup): View {
-            var v = v
+        override fun getView(position: Int, _v: View?, parent: ViewGroup): View {
+            var v = _v
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.collection_members_list_item, parent, false)
 

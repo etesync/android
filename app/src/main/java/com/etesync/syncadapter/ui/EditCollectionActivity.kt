@@ -30,16 +30,16 @@ class EditCollectionActivity : CreateCollectionActivity() {
 
         setTitle(R.string.edit_collection)
 
-        if (info!!.type == CollectionInfo.Type.CALENDAR) {
+        if (info.type == CollectionInfo.Type.CALENDAR) {
             val colorSquare = findViewById<View>(R.id.color)
             colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
         }
 
         val edit = findViewById<View>(R.id.display_name) as EditText
-        edit.setText(info!!.displayName)
+        edit.setText(info.displayName)
 
         val desc = findViewById<View>(R.id.description) as EditText
-        desc.setText(info!!.description)
+        desc.setText(info.description)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,7 +57,7 @@ class EditCollectionActivity : CreateCollectionActivity() {
 
     fun onDeleteCollection(item: MenuItem) {
         val data = (application as App).data
-        val journalCount = data.count(JournalEntity::class.java).where(JournalEntity.SERVICE_MODEL.eq(info!!.getServiceEntity(data))).get().value()
+        val journalCount = data.count(JournalEntity::class.java).where(JournalEntity.SERVICE_MODEL.eq(info.getServiceEntity(data))).get().value()
 
         if (journalCount < 2) {
             AlertDialog.Builder(this)

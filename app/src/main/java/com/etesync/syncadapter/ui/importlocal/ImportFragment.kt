@@ -47,7 +47,7 @@ class ImportFragment : DialogFragment() {
         isCancelable = false
         retainInstance = true
 
-        account = arguments!!.getParcelable(KEY_ACCOUNT)
+        account = arguments!!.getParcelable(KEY_ACCOUNT)!!
         info = arguments!!.getSerializable(KEY_COLLECTION_INFO) as CollectionInfo
     }
 
@@ -118,9 +118,9 @@ class ImportFragment : DialogFragment() {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.action = Intent.ACTION_GET_CONTENT
 
-        if (info!!.type == CollectionInfo.Type.CALENDAR) {
+        if (info.type == CollectionInfo.Type.CALENDAR) {
             intent.type = "text/calendar"
-        } else if (info!!.type == CollectionInfo.Type.ADDRESS_BOOK) {
+        } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
             intent.type = "text/x-vcard"
         }
 
@@ -205,7 +205,7 @@ class ImportFragment : DialogFragment() {
             try {
                 val importReader = FileReader(importFile!!)
 
-                if (info!!.type == CollectionInfo.Type.CALENDAR) {
+                if (info.type == CollectionInfo.Type.CALENDAR) {
                     val events = Event.fromReader(importReader, null)
                     importReader.close()
 
@@ -219,10 +219,10 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(events.size)
 
-                    val provider = context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
+                    val provider = context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
                     val localCalendar: LocalCalendar?
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info!!.uid!!)
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)
                         if (localCalendar == null) {
                             throw FileNotFoundException("Failed to load local resource.")
                         }
@@ -247,7 +247,7 @@ class ImportFragment : DialogFragment() {
 
                         entryProcessed()
                     }
-                } else if (info!!.type == CollectionInfo.Type.ADDRESS_BOOK) {
+                } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
                     // FIXME: Handle groups and download icon?
                     val downloader = ContactsSyncManager.ResourceDownloader(context!!)
                     val contacts = Contact.fromReader(importReader, downloader)
@@ -263,7 +263,7 @@ class ImportFragment : DialogFragment() {
                     finishParsingFile(contacts.size)
 
                     val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
-                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider!!, account, info!!.uid!!)
+                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider!!, account, info.uid!!)
 
                     for (contact in contacts) {
                         try {

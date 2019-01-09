@@ -465,7 +465,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                     flagsTime = flagsTime or DateUtils.FORMAT_24HOUR
                 }
 
-                var datetimeString: String? = null
+                val datetimeString: String
                 if (allDay) {
                     // For multi-day allday events or single-day all-day events that are not
                     // today or tomorrow, use framework formatter.

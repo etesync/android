@@ -35,7 +35,7 @@ open class CreateCollectionActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)
+        account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)!!
         info = intent.extras!!.getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -101,27 +101,25 @@ open class CreateCollectionActivity : BaseActivity() {
 
     fun onCreateCollection(item: MenuItem) {
         var ok = true
-        if (info == null) {
-            info = CollectionInfo()
-        }
+        info = CollectionInfo()
 
         var edit = findViewById<View>(R.id.display_name) as EditText
-        info!!.displayName = edit.text.toString()
-        if (TextUtils.isEmpty(info!!.displayName)) {
+        info.displayName = edit.text.toString()
+        if (TextUtils.isEmpty(info.displayName)) {
             edit.error = getString(R.string.create_collection_display_name_required)
             ok = false
         }
 
         edit = findViewById<View>(R.id.description) as EditText
-        info!!.description = StringUtils.trimToNull(edit.text.toString())
+        info.description = StringUtils.trimToNull(edit.text.toString())
 
         if (ok) {
-            if (info!!.type == CollectionInfo.Type.CALENDAR) {
+            if (info.type == CollectionInfo.Type.CALENDAR) {
                 val view = findViewById<View>(R.id.color)
-                info!!.color = (view.background as ColorDrawable).color
+                info.color = (view.background as ColorDrawable).color
             }
 
-            info!!.selected = true
+            info.selected = true
 
             CreateCollectionFragment.newInstance(account, info).show(supportFragmentManager, null)
         }

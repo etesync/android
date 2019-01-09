@@ -39,7 +39,7 @@ class StartupDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         isCancelable = false
 
-        val mode = Mode.valueOf(arguments!!.getString(ARGS_MODE))
+        val mode = Mode.valueOf(arguments!!.getString(ARGS_MODE)!!)
         when (mode) {
             StartupDialogFragment.Mode.BATTERY_OPTIMIZATIONS -> return AlertDialog.Builder(activity!!)
                     .setTitle(R.string.startup_battery_optimization)
@@ -87,7 +87,7 @@ class StartupDialogFragment : DialogFragment() {
 
             // battery optimization whitelisting
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !HintManager.getHintSeen(context, HINT_BATTERY_OPTIMIZATIONS)) {
-                val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+                val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
                 if (powerManager != null && !powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID))
                     dialogs.add(StartupDialogFragment.instantiate(Mode.BATTERY_OPTIMIZATIONS))
             }

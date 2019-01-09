@@ -94,14 +94,12 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     internal inner class EntriesListAdapter(context: Context) : ArrayAdapter<EntryEntity>(context, R.layout.journal_viewer_list_item) {
 
-        override fun getView(position: Int, v: View?, parent: ViewGroup): View {
-            var v = v
+        override fun getView(position: Int, _v: View?, parent: ViewGroup): View {
+            var v = _v
             if (v == null)
-                v = LayoutInflater.from(context).inflate(R.layout.journal_viewer_list_item, parent, false)
+                v = LayoutInflater.from(context).inflate(R.layout.journal_viewer_list_item, parent, false)!!
 
             val entryEntity = getItem(position)
-
-            val tv = v!!.findViewById<View>(R.id.title) as TextView
 
             // FIXME: hacky way to make it show sensible info
             val info = journalEntity!!.info

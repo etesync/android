@@ -67,7 +67,7 @@ class AppSettingsActivity : BaseActivity() {
 
             prefOverrideProxy = findPreference("override_proxy") as SwitchPreferenceCompat
             prefOverrideProxy.isChecked = settings.getBoolean(App.OVERRIDE_PROXY, false)
-            prefOverrideProxy.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            prefOverrideProxy.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 settings.putBoolean(App.OVERRIDE_PROXY, newValue as Boolean)
                 true
             }

@@ -71,7 +71,7 @@ class RemoveMemberFragment : DialogFragment() {
                         .setIcon(R.drawable.ic_error_dark)
                         .setTitle(R.string.collection_members_remove_error)
                         .setMessage(result.throwable.message)
-                        .setPositiveButton(android.R.string.yes) { dialog, which -> }.show()
+                        .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
             }
             dismiss()
         }

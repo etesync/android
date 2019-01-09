@@ -134,7 +134,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                     .setIcon(R.drawable.ic_info_dark)
                     .setTitle(R.string.not_allowed_title)
                     .setMessage(getString(R.string.edit_owner_only, journalEntity!!.owner))
-                    .setPositiveButton(android.R.string.yes) { dialog, which -> }.create()
+                    .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
             dialog.show()
         }
     }
@@ -157,7 +157,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                     .setIcon(R.drawable.ic_info_dark)
                     .setTitle(R.string.not_allowed_title)
                     .setMessage(R.string.members_old_journals_not_allowed)
-                    .setPositiveButton(android.R.string.yes) { dialog, which -> }.create()
+                    .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
             dialog.show()
         } else if (isOwner) {
             startActivity(CollectionMembersActivity.newIntent(this, account, info))
@@ -166,7 +166,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                     .setIcon(R.drawable.ic_info_dark)
                     .setTitle(R.string.not_allowed_title)
                     .setMessage(getString(R.string.members_owner_only, journalEntity!!.owner))
-                    .setPositiveButton(android.R.string.yes) { dialog, which -> }.create()
+                    .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
             dialog.show()
         }
     }

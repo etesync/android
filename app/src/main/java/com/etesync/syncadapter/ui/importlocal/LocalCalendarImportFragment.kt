@@ -31,7 +31,7 @@ class LocalCalendarImportFragment : ListFragment() {
         super.onCreate(savedInstanceState)
         retainInstance = true
 
-        account = arguments!!.getParcelable(KEY_ACCOUNT)
+        account = arguments!!.getParcelable(KEY_ACCOUNT)!!
         info = arguments!!.getSerializable(KEY_COLLECTION_INFO) as CollectionInfo
     }
 
