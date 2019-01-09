@@ -471,7 +471,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                     // today or tomorrow, use framework formatter.
                     val f = Formatter(StringBuilder(50), Locale.getDefault())
                     datetimeString = DateUtils.formatDateRange(context, f, startMillis,
-                            endMillis, flagsDate, Time.TIMEZONE_UTC).toString()
+                            endMillis, flagsDate).toString()
                 } else {
                     // For multiday events, shorten day/month names.
                     // Example format: "Fri Apr 6, 5:00pm - Sun, Apr 8, 6:00pm"
