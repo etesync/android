@@ -37,7 +37,7 @@ class AccountSettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         account = intent.getParcelableExtra(KEY_ACCOUNT)
-        title = getString(R.string.settings_title, account!!.name)
+        title = getString(R.string.settings_title, account.name)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -67,7 +67,7 @@ class AccountSettingsActivity : BaseActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
-            account = arguments!!.getParcelable(KEY_ACCOUNT)
+            account = arguments?.getParcelable(KEY_ACCOUNT)!!
 
             loaderManager.initLoader(0, arguments, this)
         }
@@ -88,9 +88,9 @@ class AccountSettingsActivity : BaseActivity() {
 
             // category: authentication
             val prefPassword = findPreference("password") as EditTextPreference
-            prefPassword.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-                val credentials = if (newValue != null) LoginCredentials(settings.uri, account!!.name, newValue as String) else null
-                LoginCredentialsChangeFragment.newInstance(account!!, credentials!!).show(fragmentManager!!, null)
+            prefPassword.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                val credentials = if (newValue != null) LoginCredentials(settings.uri, account.name, newValue as String) else null
+                LoginCredentialsChangeFragment.newInstance(account, credentials!!).show(fragmentManager!!, null)
                 loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
                 false
             }
@@ -104,7 +104,7 @@ class AccountSettingsActivity : BaseActivity() {
                     prefSyncContacts.setSummary(R.string.settings_sync_summary_manually)
                 else
                     prefSyncContacts.summary = getString(R.string.settings_sync_summary_periodically, prefSyncContacts.entry)
-                prefSyncContacts.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                prefSyncContacts.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                     settings.setSyncInterval(App.addressBooksAuthority, java.lang.Long.parseLong(newValue as String))
                     loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
                     false
@@ -122,7 +122,7 @@ class AccountSettingsActivity : BaseActivity() {
                     prefSyncCalendars.setSummary(R.string.settings_sync_summary_manually)
                 else
                     prefSyncCalendars.summary = getString(R.string.settings_sync_summary_periodically, prefSyncCalendars.entry)
-                prefSyncCalendars.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                prefSyncCalendars.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                     settings.setSyncInterval(CalendarContract.AUTHORITY, java.lang.Long.parseLong(newValue as String))
                     loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
                     false
@@ -147,7 +147,7 @@ class AccountSettingsActivity : BaseActivity() {
                 prefWifiOnlySSID.summary = getString(R.string.settings_sync_wifi_only_ssid_on, onlySSID)
             else
                 prefWifiOnlySSID.setSummary(R.string.settings_sync_wifi_only_ssid_off)
-            prefWifiOnlySSID.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            prefWifiOnlySSID.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 val ssid = newValue as String
                 settings.syncWifiOnlySSID = if (!TextUtils.isEmpty(ssid)) ssid else null
                 loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)

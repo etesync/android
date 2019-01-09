@@ -61,7 +61,7 @@ class SetupEncryptionFragment : DialogFragment() {
                         .setTitle(R.string.wrong_encryption_password)
                         .setIcon(R.drawable.ic_error_dark)
                         .setMessage(getString(R.string.wrong_encryption_password_content, config.error!!.localizedMessage))
-                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
                             // dismiss
                         }.show()
             } else {
@@ -76,7 +76,7 @@ class SetupEncryptionFragment : DialogFragment() {
                             .setTitle(R.string.account_creation_failed)
                             .setIcon(R.drawable.ic_error_dark)
                             .setMessage(e.localizedMessage)
-                            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
                                 // dismiss
                             }.show()
                 }

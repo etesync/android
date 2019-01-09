@@ -44,7 +44,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
         super.onCreate(savedInstanceState)
 
         loaderManager.initLoader(0, arguments, this)
-        account = arguments!!.getParcelable(ARG_ACCOUNT)
+        account = arguments!!.getParcelable(ARG_ACCOUNT)!!
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Configuration> {
@@ -62,7 +62,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
                 val settings: AccountSettings
 
                 try {
-                    settings = AccountSettings(activity!!, account!!)
+                    settings = AccountSettings(activity!!, account)
                 } catch (e: InvalidAccountException) {
                     App.log.log(Level.INFO, "Account is invalid or doesn't exist (anymore)", e)
                     activity!!.finish()

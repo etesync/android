@@ -102,8 +102,8 @@ class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<
 
     internal class AccountListAdapter(context: Context) : ArrayAdapter<Account>(context, R.layout.account_list_item) {
 
-        override fun getView(position: Int, v: View?, parent: ViewGroup): View {
-            var v = v
+        override fun getView(position: Int, _v: View?, parent: ViewGroup): View {
+            var v = _v
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.account_list_item, parent, false)
 

@@ -306,7 +306,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
             for (serviceEntity in data.select(ServiceEntity::class.java).where(ServiceEntity.ACCOUNT.eq(account.name)).get()) {
                 val id = serviceEntity.id.toLong()
-                val service = serviceEntity.type
+                val service = serviceEntity.type!!
                 when (service) {
                     CollectionInfo.Type.ADDRESS_BOOK -> {
                         info.carddav = AccountInfo.ServiceInfo()
@@ -350,8 +350,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
     class CollectionListAdapter(context: Context, private val account: Account) : ArrayAdapter<JournalEntity>(context, R.layout.account_collection_item) {
 
-        override fun getView(position: Int, v: View?, parent: ViewGroup): View {
-            var v = v
+        override fun getView(position: Int, _v: View?, parent: ViewGroup): View {
+            var v = _v
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.account_collection_item, parent, false)
 

@@ -49,7 +49,7 @@ class SetupUserInfoFragment : DialogFragment() {
                 val cryptoManager: Crypto.CryptoManager
                 val httpClient = HttpClient.create(context, settings)
 
-                val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings.uri)!!)
+                val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings.uri!!)!!)
                 var userInfo: UserInfoManager.UserInfo? = userInfoManager[account.name]
 
                 if (userInfo == null) {
@@ -81,7 +81,7 @@ class SetupUserInfoFragment : DialogFragment() {
                         .setTitle(R.string.login_user_info_error_title)
                         .setIcon(R.drawable.ic_error_dark)
                         .setMessage(result.exception.localizedMessage)
-                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
                             // dismiss
                         }
                         .create()

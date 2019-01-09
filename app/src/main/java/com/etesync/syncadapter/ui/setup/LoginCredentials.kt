@@ -17,11 +17,11 @@ import com.etesync.syncadapter.Constants
 import java.net.URI
 import java.net.URISyntaxException
 
-class LoginCredentials(uri: URI?, val userName: String, val password: String) : Parcelable {
+class LoginCredentials(_uri: URI?, val userName: String, val password: String) : Parcelable {
     val uri: URI?
 
     init {
-        var uri = uri
+        var uri = _uri
 
         if (uri == null) {
             try {
@@ -50,12 +50,12 @@ class LoginCredentials(uri: URI?, val userName: String, val password: String) : 
             override fun createFromParcel(source: Parcel): LoginCredentials {
                 return LoginCredentials(
                         source.readSerializable() as URI,
-                        source.readString(), source.readString()
+                        source.readString()!!, source.readString()!!
                 )
             }
 
-            override fun newArray(size: Int): Array<LoginCredentials> {
-                return arrayOfNulls<LoginCredentials>(size) as Array<LoginCredentials>
+            override fun newArray(size: Int): Array<LoginCredentials?> {
+                return arrayOfNulls(size)
             }
         }
     }

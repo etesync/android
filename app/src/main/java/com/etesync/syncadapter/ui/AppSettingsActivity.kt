@@ -76,10 +76,10 @@ class AppSettingsActivity : BaseActivity() {
             val proxyHost = settings.getString(App.OVERRIDE_PROXY_HOST, App.OVERRIDE_PROXY_HOST_DEFAULT)
             prefProxyHost.text = proxyHost
             prefProxyHost.summary = proxyHost
-            prefProxyHost.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            prefProxyHost.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 val host = newValue as String
                 try {
-                    val uri = URI(null, host, null, null)
+                    URI(null, host, null, null)
                 } catch (e: URISyntaxException) {
                     Snackbar.make(view!!, e.localizedMessage, Snackbar.LENGTH_LONG).show()
                     return@OnPreferenceChangeListener false
@@ -94,7 +94,7 @@ class AppSettingsActivity : BaseActivity() {
             val proxyPort = settings.getString(App.OVERRIDE_PROXY_PORT, App.OVERRIDE_PROXY_PORT_DEFAULT.toString())
             prefProxyPort.text = proxyPort
             prefProxyPort.summary = proxyPort
-            prefProxyPort.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            prefProxyPort.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 var port: Int
                 try {
                     port = Integer.parseInt(newValue as String)

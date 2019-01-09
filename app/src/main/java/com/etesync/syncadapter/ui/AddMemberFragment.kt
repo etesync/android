@@ -29,12 +29,12 @@ class AddMemberFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)
-        info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
-        memberEmail = arguments!!.getString(KEY_MEMBER).toLowerCase()
+        account = arguments?.getParcelable(Constants.KEY_ACCOUNT)!!
+        info = arguments?.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
+        memberEmail = arguments?.getString(KEY_MEMBER)!!.toLowerCase()
         ctx = context
         try {
-            settings = AccountSettings(ctx!!, account!!)
+            settings = AccountSettings(ctx!!, account)
         } catch (e: InvalidAccountException) {
             e.printStackTrace()
         }
@@ -60,7 +60,7 @@ class AddMemberFragment : DialogFragment() {
                 val httpClient = HttpClient.create(ctx!!, settings!!)
                 val userInfoManager = UserInfoManager(httpClient, remote!!)
 
-                val userInfo = userInfoManager[memberEmail!!]
+                val userInfo = userInfoManager[memberEmail]
                         ?: throw Exception(getString(R.string.collection_members_error_user_not_found, memberEmail))
                 memberPubKey = userInfo.pubkey!!
                 return AddResult(null)
@@ -72,7 +72,7 @@ class AddMemberFragment : DialogFragment() {
 
         override fun onPostExecute(result: AddResult) {
             if (result.throwable == null) {
-                val fingerprint = Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(memberPubKey!!)
+                val fingerprint = Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(memberPubKey)
                 val view = LayoutInflater.from(context).inflate(R.layout.fingerprint_alertdialog, null)
                 (view.findViewById<View>(R.id.body) as TextView).text = getString(R.string.trust_fingerprint_body, memberEmail)
                 (view.findViewById<View>(R.id.fingerprint) as TextView).text = fingerprint
@@ -80,14 +80,14 @@ class AddMemberFragment : DialogFragment() {
                         .setIcon(R.drawable.ic_fingerprint_dark)
                         .setTitle(R.string.trust_fingerprint_title)
                         .setView(view)
-                        .setPositiveButton(android.R.string.ok) { dialog, which -> MemberAddSecond().execute() }
-                        .setNegativeButton(android.R.string.cancel) { dialog, which -> dismiss() }.show()
+                        .setPositiveButton(android.R.string.ok) { _, _ -> MemberAddSecond().execute() }
+                        .setNegativeButton(android.R.string.cancel) { _, _ -> dismiss() }.show()
             } else {
                 AlertDialog.Builder(activity!!)
                         .setIcon(R.drawable.ic_error_dark)
                         .setTitle(R.string.collection_members_add_error)
                         .setMessage(result.throwable.message)
-                        .setPositiveButton(android.R.string.yes) { dialog, which -> }.show()
+                        .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
                 dismiss()
             }
         }
@@ -101,11 +101,11 @@ class AddMemberFragment : DialogFragment() {
                 val httpClient = HttpClient.create(ctx!!, settings!!)
                 val journalsManager = JournalManager(httpClient, remote!!)
 
-                val journal = JournalManager.Journal.fakeWithUid(info!!.uid!!)
-                val crypto = Crypto.CryptoManager(info!!.version, settings!!.password(), info!!.uid!!)
+                val journal = JournalManager.Journal.fakeWithUid(info.uid!!)
+                val crypto = Crypto.CryptoManager(info.version, settings!!.password(), info.uid!!)
 
-                val encryptedKey = crypto.getEncryptedKey(settings!!.keyPair!!, memberPubKey!!)
-                val member = JournalManager.Member(memberEmail!!, encryptedKey!!)
+                val encryptedKey = crypto.getEncryptedKey(settings!!.keyPair!!, memberPubKey)
+                val member = JournalManager.Member(memberEmail, encryptedKey!!)
                 journalsManager.addMember(journal, member)
                 return AddResultSecond(null)
             } catch (e: Exception) {
@@ -122,7 +122,7 @@ class AddMemberFragment : DialogFragment() {
                         .setIcon(R.drawable.ic_error_dark)
                         .setTitle(R.string.collection_members_add_error)
                         .setMessage(result.throwable.message)
-                        .setPositiveButton(android.R.string.yes) { dialog, which -> }.show()
+                        .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
             }
             dismiss()
         }

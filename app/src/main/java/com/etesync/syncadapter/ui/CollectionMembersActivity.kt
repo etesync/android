@@ -81,11 +81,11 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
         val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.collection_members_add)
                 .setIcon(R.drawable.ic_account_add_dark)
-                .setPositiveButton(android.R.string.yes) { dialog, which ->
+                .setPositiveButton(android.R.string.yes) { _, _ ->
                     val frag = AddMemberFragment.newInstance(account, info, input.text.toString())
                     frag.show(supportFragmentManager, null)
                 }
-                .setNegativeButton(android.R.string.no) { dialog, which -> }
+                .setNegativeButton(android.R.string.no) { _, _ -> }
         dialog.setView(input)
         dialog.show()
     }
