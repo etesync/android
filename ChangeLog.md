@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.24.1
+* Fix issue with Calendars missing from the account view.
+
 ## Version 0.24.0
 * Fix crash when setting up user info for the first time
 * Email invitations: fix invitations not being attached on event updates in some rare cases.
