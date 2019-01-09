@@ -233,7 +233,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         } else
             card.visibility = View.GONE
 
-        card = findViewById<View>(R.id.caldav) as CardView
+        card = findViewById<View>(R.id.taskdav) as CardView
         if (info.taskdav != null) {
             val progress = findViewById<View>(R.id.taskdav_refreshing) as ProgressBar
             progress.visibility = if (info.taskdav!!.refreshing) View.VISIBLE else View.GONE
