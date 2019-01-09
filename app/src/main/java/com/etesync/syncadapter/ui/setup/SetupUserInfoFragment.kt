@@ -44,12 +44,6 @@ class SetupUserInfoFragment : DialogFragment() {
     }
 
     protected inner class SetupUserInfo : AsyncTask<Account, Int, SetupUserInfo.SetupUserInfoResult>() {
-        internal var progressDialog = dialog as ProgressDialog
-
-        override fun onPreExecute() {
-            progressDialog = dialog as ProgressDialog
-        }
-
         override fun doInBackground(vararg accounts: Account): SetupUserInfo.SetupUserInfoResult {
             try {
                 val cryptoManager: Crypto.CryptoManager
