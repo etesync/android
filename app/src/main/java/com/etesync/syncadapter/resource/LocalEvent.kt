@@ -11,18 +11,15 @@ package com.etesync.syncadapter.resource
 import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.net.Uri
-import android.os.RemoteException
 import android.provider.CalendarContract
 import android.provider.CalendarContract.Events
 import android.text.TextUtils
 import at.bitfire.ical4android.*
 import at.bitfire.ical4android.Constants.ical4jVersion
-import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
 import net.fortuna.ical4j.model.property.ProdId
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.util.*
 import java.util.logging.Level
 

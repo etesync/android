@@ -1,11 +1,9 @@
 package com.etesync.syncadapter;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
 
-import org.acra.annotation.AcraCore;
 import org.acra.config.CoreConfigurationBuilder;
 import org.acra.config.MailSenderConfigurationBuilder;
 import org.acra.config.ToastConfigurationBuilder;

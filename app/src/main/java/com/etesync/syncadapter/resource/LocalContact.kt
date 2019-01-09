@@ -10,26 +10,12 @@ package com.etesync.syncadapter.resource
 
 import android.content.ContentProviderOperation
 import android.content.ContentValues
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import android.os.RemoteException
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership
 import android.provider.ContactsContract.RawContacts.Data
 import android.text.TextUtils
-
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.model.UnknownProperties
-
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.HashSet
-import java.util.UUID
-import java.util.logging.Level
-
 import at.bitfire.vcard4android.AndroidAddressBook
 import at.bitfire.vcard4android.AndroidContact
 import at.bitfire.vcard4android.AndroidContactFactory
@@ -37,10 +23,16 @@ import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.CachedGroupMembership
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
+import at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS
+import com.etesync.syncadapter.App
+import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.model.UnknownProperties
 import ezvcard.Ezvcard
 import ezvcard.VCardVersion
-
-import at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.util.*
+import java.util.logging.Level
 
 class LocalContact : AndroidContact, LocalAddress {
     companion object {

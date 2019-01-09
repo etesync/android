@@ -1,6 +1,5 @@
 package com.etesync.syncadapter.model;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import io.requery.Column;

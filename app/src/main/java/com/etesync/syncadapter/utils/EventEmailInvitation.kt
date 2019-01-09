@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import at.bitfire.ical4android.Event
 import com.etesync.syncadapter.App
-import com.etesync.syncadapter.NotificationHelper
 import com.etesync.syncadapter.R
 import net.fortuna.ical4j.model.property.Attendee
 import org.acra.attachment.AcraContentProvider

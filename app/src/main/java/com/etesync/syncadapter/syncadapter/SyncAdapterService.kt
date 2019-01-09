@@ -9,47 +9,27 @@
 package com.etesync.syncadapter.syncadapter
 
 import android.accounts.Account
-import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
-import android.content.AbstractThreadedSyncAdapter
-import android.content.ContentProviderClient
-import android.content.Context
-import android.content.Intent
-import android.content.SyncResult
+import android.content.*
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.util.Pair
-
-import java.util.HashMap
-import java.util.LinkedList
-import java.util.logging.Level
-
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.HttpClient
-import com.etesync.syncadapter.InvalidAccountException
-import com.etesync.syncadapter.R
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
-import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.ui.PermissionsActivity
-
-import io.requery.Persistable
-import io.requery.sql.EntityDataStore
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
+import java.util.*
+import java.util.logging.Level
 
 //import com.android.vending.billing.IInAppBillingService;
 

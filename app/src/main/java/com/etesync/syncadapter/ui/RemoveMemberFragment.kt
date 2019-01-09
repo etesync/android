@@ -12,7 +12,6 @@ import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
-import org.apache.commons.codec.Charsets
 
 class RemoveMemberFragment : DialogFragment() {
     private var settings: AccountSettings? = null

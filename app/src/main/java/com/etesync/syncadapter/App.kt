@@ -8,7 +8,6 @@
 
 package com.etesync.syncadapter
 
-import android.accounts.Account
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -17,14 +16,10 @@ import android.content.BroadcastReceiver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Process
 import android.os.StrictMode
@@ -34,50 +29,32 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import android.widget.Toast
-
+import at.bitfire.cert4android.CustomCertManager
+import at.bitfire.ical4android.AndroidCalendar
+import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.log.LogcatHandler
 import com.etesync.syncadapter.log.PlainTextFormatter
-import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.JournalEntity
-import com.etesync.syncadapter.model.Models
-import com.etesync.syncadapter.model.ServiceDB
-import com.etesync.syncadapter.model.ServiceEntity
-import com.etesync.syncadapter.model.Settings
+import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.LanguageUtils
-
-import org.acra.ACRA
-import org.acra.annotation.AcraCore
-import org.acra.annotation.AcraMailSender
-import org.acra.annotation.AcraToast
-import org.apache.commons.lang3.time.DateFormatUtils
-
-import java.io.File
-import java.io.IOException
-import java.util.LinkedList
-import java.util.Locale
-import java.util.logging.FileHandler
-import java.util.logging.Handler
-import java.util.logging.Level
-import java.util.logging.Logger
-
-import javax.net.ssl.HostnameVerifier
-
-import at.bitfire.cert4android.CustomCertManager
-import at.bitfire.ical4android.AndroidCalendar
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.vcard4android.ContactsStorageException
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.meta.EntityModel
-import io.requery.sql.Configuration
 import io.requery.sql.EntityDataStore
 import okhttp3.internal.tls.OkHostnameVerifier
-import org.acra.config.CoreConfigurationBuilder
+import org.acra.ACRA
+import org.apache.commons.lang3.time.DateFormatUtils
+import java.io.File
+import java.io.IOException
+import java.util.*
+import java.util.logging.FileHandler
+import java.util.logging.Level
+import java.util.logging.Logger
+import javax.net.ssl.HostnameVerifier
 
 
 class App : Application() {

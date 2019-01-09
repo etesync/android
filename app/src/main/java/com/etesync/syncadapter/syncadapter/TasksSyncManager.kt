@@ -12,8 +12,6 @@ import android.accounts.Account
 import android.content.Context
 import android.content.SyncResult
 import android.os.Bundle
-import at.bitfire.ical4android.Event
-import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.ical4android.Task
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.App
@@ -22,13 +20,10 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry
-import com.etesync.syncadapter.resource.LocalEvent
 import com.etesync.syncadapter.resource.LocalTask
 import com.etesync.syncadapter.resource.LocalTaskList
 import okhttp3.HttpUrl
-import java.io.Reader
 import java.io.StringReader
-import java.util.logging.Level
 
 /**
  * Synchronization manager for CalDAV collections; handles tasks (VTODO)

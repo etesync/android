@@ -21,7 +21,6 @@ import at.bitfire.ical4android.*
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.model.JournalEntity
 import org.apache.commons.lang3.StringUtils
-import java.io.FileNotFoundException
 import java.util.*
 import java.util.logging.Level
 

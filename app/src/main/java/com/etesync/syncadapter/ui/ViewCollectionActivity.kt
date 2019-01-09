@@ -22,7 +22,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
@@ -31,12 +30,10 @@ import com.etesync.syncadapter.model.EntryEntity
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
-import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.importlocal.ImportActivity
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
-import org.dmfs.tasks.contract.TaskContract
 import tourguide.tourguide.ToolTip
 import java.io.FileNotFoundException
 import java.util.*

@@ -8,13 +8,14 @@
 
 package com.etesync.syncadapter.ui.setup;
 
+import com.etesync.syncadapter.App;
+import com.etesync.syncadapter.HttpClient;
+
 import org.junit.After;
 import org.junit.Before;
 
 import java.net.URI;
 
-import com.etesync.syncadapter.App;
-import com.etesync.syncadapter.HttpClient;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;

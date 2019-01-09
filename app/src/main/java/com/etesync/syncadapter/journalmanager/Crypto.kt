@@ -3,7 +3,6 @@ package com.etesync.syncadapter.journalmanager
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.journalmanager.util.ByteUtil
 import com.etesync.syncadapter.utils.Base64
-import org.apache.commons.codec.Charsets
 import org.apache.commons.lang3.ArrayUtils
 import org.spongycastle.crypto.AsymmetricBlockCipher
 import org.spongycastle.crypto.BufferedBlockCipher

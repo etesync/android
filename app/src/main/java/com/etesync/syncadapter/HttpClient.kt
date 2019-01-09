@@ -9,28 +9,22 @@
 package com.etesync.syncadapter
 
 import android.content.Context
-import android.database.sqlite.SQLiteOpenHelper
 import android.os.Build
-
 import com.etesync.syncadapter.model.ServiceDB
 import com.etesync.syncadapter.model.Settings
-
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.URI
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
-
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 
 object HttpClient {
     private val client = OkHttpClient()

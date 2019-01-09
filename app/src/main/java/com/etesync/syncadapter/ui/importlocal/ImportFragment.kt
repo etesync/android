@@ -31,8 +31,10 @@ import com.etesync.syncadapter.resource.LocalEvent
 import com.etesync.syncadapter.syncadapter.ContactsSyncManager
 import com.etesync.syncadapter.ui.Refreshable
 import com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult
-import org.apache.commons.codec.Charsets
-import java.io.*
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileReader
+import java.io.IOException
 
 class ImportFragment : DialogFragment() {
 

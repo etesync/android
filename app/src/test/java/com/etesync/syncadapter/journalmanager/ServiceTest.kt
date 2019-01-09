@@ -11,27 +11,14 @@ package com.etesync.syncadapter.journalmanager
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.model.CollectionInfo
-
-import org.apache.commons.codec.Charsets
+import okhttp3.*
+import okio.BufferedSink
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-
 import java.io.IOException
-import java.util.LinkedList
-
-import okhttp3.HttpUrl
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
-import okio.BufferedSink
-
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import java.util.*
 
 class ServiceTest {
     private var httpClient: OkHttpClient? = null

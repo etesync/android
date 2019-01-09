@@ -9,20 +9,13 @@
 package com.etesync.syncadapter.journalmanager
 
 import com.etesync.syncadapter.HttpClient
-import com.etesync.syncadapter.utils.Base64
-
-import org.apache.commons.codec.Charsets
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-
-import java.io.IOException
-
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
-
-import org.junit.Assert.assertEquals
+import org.junit.After
 import org.junit.Assert.assertNotEquals
+import org.junit.Before
+import org.junit.Test
+import java.io.IOException
 
 class AuthenticatorTest {
     private var httpClient: OkHttpClient? = null

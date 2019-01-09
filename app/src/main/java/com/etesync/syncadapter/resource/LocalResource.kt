@@ -8,9 +8,6 @@
 
 package com.etesync.syncadapter.resource
 
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.vcard4android.ContactsStorageException
-
 interface LocalResource<in TData: Any> {
     val uuid: String?
 

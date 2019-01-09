@@ -11,34 +11,21 @@ package com.etesync.syncadapter.resource
 import android.content.ContentProviderOperation
 import android.content.ContentUris
 import android.content.ContentValues
-import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Parcel
 import android.os.RemoteException
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership
 import android.provider.ContactsContract.Groups
-import android.provider.ContactsContract.RawContacts
 import android.provider.ContactsContract.RawContacts.Data
 import android.text.TextUtils
 import at.bitfire.vcard4android.*
-
-import com.etesync.syncadapter.App
-
-import org.apache.commons.lang3.ArrayUtils
-
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.HashSet
-import java.util.LinkedList
-import java.util.UUID
-import java.util.logging.Level
-
-import ezvcard.VCardVersion
-
 import at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS
+import com.etesync.syncadapter.App
+import ezvcard.VCardVersion
+import java.io.ByteArrayOutputStream
+import java.util.*
+import java.util.logging.Level
 
 class LocalGroup : AndroidGroup, LocalAddress {
     companion object {

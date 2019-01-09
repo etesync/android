@@ -9,17 +9,13 @@
 package com.etesync.syncadapter.journalmanager
 
 import com.etesync.syncadapter.utils.Base64
-
-import org.apache.commons.codec.Charsets
 import org.junit.After
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.spongycastle.util.encoders.Hex
-
 import java.io.IOException
-
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
 
 class EncryptionTest {
     @Before

@@ -13,8 +13,7 @@ import android.accounts.OnAccountsUpdateListener
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-
-import java.util.LinkedList
+import java.util.*
 
 class AccountsChangedReceiver : BroadcastReceiver() {
 

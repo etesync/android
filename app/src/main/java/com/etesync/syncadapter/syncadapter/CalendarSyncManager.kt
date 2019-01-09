@@ -10,9 +10,7 @@ package com.etesync.syncadapter.syncadapter
 
 import android.accounts.Account
 import android.content.Context
-import android.content.Intent
 import android.content.SyncResult
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import at.bitfire.ical4android.CalendarStorageException
@@ -27,15 +25,9 @@ import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
 import com.etesync.syncadapter.utils.EventEmailInvitation
-import net.fortuna.ical4j.model.property.Attendee
 import okhttp3.HttpUrl
-import org.acra.attachment.AcraContentProvider
-import org.acra.util.IOUtils
-import java.io.File
 import java.io.IOException
 import java.io.StringReader
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  *

@@ -9,17 +9,8 @@ package com.etesync.syncadapter.resource
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.accounts.AccountManagerCallback
-import android.accounts.AccountManagerFuture
-import android.accounts.AuthenticatorException
 import android.annotation.TargetApi
-import android.content.ContentProviderClient
-import android.content.ContentResolver
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.database.Cursor
-import android.net.Uri
+import android.content.*
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
@@ -27,25 +18,12 @@ import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership
 import android.provider.ContactsContract.Groups
 import android.provider.ContactsContract.RawContacts
-import android.support.v4.os.OperationCanceledException
-
+import at.bitfire.vcard4android.*
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
-import com.etesync.syncadapter.utils.AndroidCompat
-
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.Collections
-import java.util.HashSet
-import java.util.LinkedList
+import java.util.*
 import java.util.logging.Level
-
-import at.bitfire.vcard4android.AndroidAddressBook
-import at.bitfire.vcard4android.AndroidContact
-import at.bitfire.vcard4android.AndroidGroup
-import at.bitfire.vcard4android.CachedGroupMembership
-import at.bitfire.vcard4android.ContactsStorageException
 
 
 class LocalAddressBook(

@@ -3,13 +3,9 @@ package com.etesync.syncadapter.utils
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
-
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
-
-import java.util.Arrays
-import java.util.Comparator
-import java.util.Locale
+import java.util.*
 
 /**
  * Created by tal on 11/09/17.

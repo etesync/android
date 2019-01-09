@@ -9,43 +9,29 @@
 package com.etesync.syncadapter.syncadapter
 
 import android.accounts.Account
-import android.content.ContentProviderClient
-import android.content.ContentProviderOperation
-import android.content.ContentResolver
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.content.SyncResult
-import android.os.Build
+import android.content.*
 import android.os.Bundle
 import android.provider.ContactsContract
-
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.HttpClient
-import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.journalmanager.JournalEntryManager
-import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.SyncEntry
-
-import org.apache.commons.codec.Charsets
-import org.apache.commons.collections4.SetUtils
-
-import java.io.ByteArrayInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.logging.Level
-
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.resource.*
+import com.etesync.syncadapter.*
+import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.syncadapter.model.CollectionInfo
+import com.etesync.syncadapter.model.SyncEntry
+import com.etesync.syncadapter.resource.LocalAddress
+import com.etesync.syncadapter.resource.LocalAddressBook
+import com.etesync.syncadapter.resource.LocalContact
+import com.etesync.syncadapter.resource.LocalGroup
 import okhttp3.HttpUrl
 import okhttp3.Request
+import org.apache.commons.collections4.SetUtils
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.io.StringReader
+import java.util.logging.Level
 
 /**
  *

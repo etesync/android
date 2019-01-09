@@ -8,37 +8,15 @@
 package com.etesync.syncadapter.syncadapter
 
 import android.accounts.Account
-import android.content.AbstractThreadedSyncAdapter
-import android.content.ContentProviderClient
-import android.content.ContentResolver
-import android.content.Context
-import android.content.Intent
-import android.content.SyncResult
+import android.content.*
 import android.os.Bundle
-
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.InvalidAccountException
-import com.etesync.syncadapter.NotificationHelper
-import com.etesync.syncadapter.R
+import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.*
+import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.JournalEntity
-import com.etesync.syncadapter.model.JournalModel
-import com.etesync.syncadapter.model.ServiceDB
-import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.ui.DebugInfoActivity
-
-import java.util.logging.Level
-
-import at.bitfire.vcard4android.ContactsStorageException
-import io.requery.Persistable
-import io.requery.sql.EntityDataStore
 import okhttp3.HttpUrl
-
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 
 class ContactsSyncAdapterService : SyncAdapterService() {
 

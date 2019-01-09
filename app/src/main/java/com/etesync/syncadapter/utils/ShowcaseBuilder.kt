@@ -1,8 +1,6 @@
 package com.etesync.syncadapter.utils
 
 import android.app.Activity
-import android.view.View
-
 import tourguide.tourguide.Overlay
 import tourguide.tourguide.Pointer
 import tourguide.tourguide.TourGuide

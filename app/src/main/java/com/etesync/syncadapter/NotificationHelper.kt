@@ -12,16 +12,13 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-
+import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.ui.AccountSettingsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.WebViewActivity
-
 import java.util.logging.Level
-
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.vcard4android.ContactsStorageException
 
 class NotificationHelper(internal val context: Context, internal val notificationTag: String, internal val notificationId: Int) {
 

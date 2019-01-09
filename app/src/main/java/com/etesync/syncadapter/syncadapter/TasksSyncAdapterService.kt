@@ -23,7 +23,6 @@ import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
-import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import okhttp3.HttpUrl

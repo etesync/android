@@ -9,17 +9,14 @@
 package com.etesync.syncadapter.model
 
 import android.content.ContentValues
-
 import com.etesync.syncadapter.journalmanager.Constants
 import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.model.ServiceDB.Collections
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.Expose
-
-import java.io.Serializable
-
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
+import java.io.Serializable
 
 class CollectionInfo : Serializable {
     @Deprecated("")

@@ -4,8 +4,6 @@ package com.etesync.syncadapter.utils
 import android.content.Context
 import android.content.SharedPreferences
 
-import java.util.LinkedList
-
 object HintManager {
     private val PREF_NAME = "hints"
 

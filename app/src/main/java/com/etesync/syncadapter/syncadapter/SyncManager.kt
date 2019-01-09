@@ -12,45 +12,27 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.SyncResult
 import android.os.Bundle
-
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.HttpClient
-import com.etesync.syncadapter.NotificationHelper
-import com.etesync.syncadapter.R
+import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.InvalidCalendarException
+import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.*
+import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
-import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.EntryEntity
-import com.etesync.syncadapter.model.JournalEntity
-import com.etesync.syncadapter.model.JournalModel
-import com.etesync.syncadapter.model.ServiceDB
-import com.etesync.syncadapter.model.ServiceEntity
-import com.etesync.syncadapter.model.Settings
-import com.etesync.syncadapter.model.SyncEntry
+import com.etesync.syncadapter.model.*
+import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
 import com.etesync.syncadapter.resource.LocalCollection
 import com.etesync.syncadapter.resource.LocalResource
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
-
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.ArrayList
-import java.util.LinkedList
-import java.util.Locale
-import java.util.logging.Level
-
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.ical4android.InvalidCalendarException
-import at.bitfire.vcard4android.ContactsStorageException
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
 import okhttp3.OkHttpClient
-
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.util.*
+import java.util.logging.Level
 
 abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
 constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String) {
