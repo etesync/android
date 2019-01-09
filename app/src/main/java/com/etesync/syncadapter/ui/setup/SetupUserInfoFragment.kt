@@ -32,10 +32,10 @@ class SetupUserInfoFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = arguments!!.getParcelable(KEY_ACCOUNT)
+        account = arguments!!.getParcelable(KEY_ACCOUNT)!!
 
         try {
-            settings = AccountSettings(context!!, account!!)
+            settings = AccountSettings(context!!, account)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -47,19 +47,19 @@ class SetupUserInfoFragment : DialogFragment() {
         override fun doInBackground(vararg accounts: Account): SetupUserInfo.SetupUserInfoResult {
             try {
                 val cryptoManager: Crypto.CryptoManager
-                val httpClient = HttpClient.create(context!!, settings!!)
+                val httpClient = HttpClient.create(context, settings)
 
-                val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings!!.uri!!)!!)
-                var userInfo: UserInfoManager.UserInfo? = userInfoManager[account!!.name]
+                val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings.uri)!!)
+                var userInfo: UserInfoManager.UserInfo? = userInfoManager[account.name]
 
                 if (userInfo == null) {
-                    App.log.info("Creating userInfo for " + account!!.name)
-                    cryptoManager = Crypto.CryptoManager(Constants.CURRENT_VERSION, settings!!.password(), "userInfo")
-                    userInfo = UserInfoManager.UserInfo.generate(cryptoManager, account!!.name)
+                    App.log.info("Creating userInfo for " + account.name)
+                    cryptoManager = Crypto.CryptoManager(Constants.CURRENT_VERSION, settings.password(), "userInfo")
+                    userInfo = UserInfoManager.UserInfo.generate(cryptoManager, account.name)
                     userInfoManager.create(userInfo)
                 } else {
-                    App.log.info("Fetched userInfo for " + account!!.name)
-                    cryptoManager = Crypto.CryptoManager(userInfo.version!!.toInt(), settings!!.password(), "userInfo")
+                    App.log.info("Fetched userInfo for " + account.name)
+                    cryptoManager = Crypto.CryptoManager(userInfo.version!!.toInt(), settings.password(), "userInfo")
                     userInfo.verify(cryptoManager)
                 }
 
@@ -75,7 +75,7 @@ class SetupUserInfoFragment : DialogFragment() {
 
         override fun onPostExecute(result: SetupUserInfoResult) {
             if (result.exception == null) {
-                settings!!.keyPair = result.keyPair
+                settings.keyPair = result.keyPair
             } else {
                 val dialog = AlertDialog.Builder(activity!!)
                         .setTitle(R.string.login_user_info_error_title)
