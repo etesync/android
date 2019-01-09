@@ -35,9 +35,9 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = (context!!.applicationContext as App).data
-        account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)
+        account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)!!
         info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
-        journalEntity = JournalModel.Journal.fetch(data!!, info!!.getServiceEntity(data), info!!.uid)
+        journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,27 +51,26 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
 
     override fun refresh() {
         asyncTask = doAsync {
-            var members: List<JournalManager.Member>? = null;
             try {
-                val settings = AccountSettings(context!!, account!!)
+                val settings = AccountSettings(context!!, account)
                 val httpClient = HttpClient.create(context!!, settings)
                 val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
 
-                val journal = JournalManager.Journal.fakeWithUid(journalEntity!!.uid)
-                members = journalsManager.listMembers(journal)
+                val journal = JournalManager.Journal.fakeWithUid(journalEntity.uid)
+                val members = journalsManager.listMembers(journal)
+
+                uiThread {
+                    val listAdapter = MembersListAdapter(context!!)
+                    setListAdapter(listAdapter)
+
+                    listAdapter.addAll(members)
+
+                    emptyTextView!!.setText(R.string.collection_members_list_empty)
+                }
             } catch (e: Exception) {
                 uiThread {
                     emptyTextView!!.text = e.localizedMessage
                 }
-            }
-
-            uiThread {
-                val listAdapter = MembersListAdapter(context!!)
-                setListAdapter(listAdapter)
-
-                listAdapter.addAll(members)
-
-                emptyTextView!!.setText(R.string.collection_members_list_empty)
             }
         }
     }
