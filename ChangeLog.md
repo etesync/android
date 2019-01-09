@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.24.0
+* Fix crash when setting up user info for the first time
+* Email invitations: fix invitations not being attached on event updates in some rare cases.
+* Email invitations: add a way to send an invite from the journal log.
+
 ## Version 0.23.2
 * Tasks: add ability to create, edit, deleted and view task journals
 
