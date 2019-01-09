@@ -157,8 +157,6 @@ dependencies {
     compile 'com.google.code.gson:gson:1.7.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'org.apache.commons:commons-collections4:4.1'
-    compileOnly 'org.projectlombok:lombok:1.16.20'
-    annotationProcessor 'org.projectlombok:lombok:1.16.20'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
     compile project(':cert4android')
     compile project(':ical4android')
