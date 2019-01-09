@@ -3,7 +3,6 @@ package com.etesync.syncadapter.journalmanager
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.GsonHelper
 import okhttp3.*
-import org.apache.commons.codec.Charsets
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -51,11 +50,11 @@ abstract class BaseManager {
         var uid: String? = null
 
         fun getContent(crypto: Crypto.CryptoManager): String {
-            return String(crypto.decrypt(content!!)!!, Charsets.UTF_8)
+            return String(crypto.decrypt(content!!)!!)
         }
 
         fun setContent(crypto: Crypto.CryptoManager, content: String) {
-            this.content = crypto.encrypt(content.toByteArray(Charsets.UTF_8))
+            this.content = crypto.encrypt(content.toByteArray())
         }
 
         fun calculateHmac(crypto: Crypto.CryptoManager, uuid: String?): ByteArray {
@@ -63,7 +62,7 @@ abstract class BaseManager {
 
             try {
                 if (uuid != null) {
-                    hashContent.write(uuid.toByteArray(Charsets.UTF_8))
+                    hashContent.write(uuid.toByteArray())
                 }
 
                 hashContent.write(content!!)

@@ -232,7 +232,7 @@ class ServiceTest {
         assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2!!.getContent(cryptoManager))
 
         // Update
-        userInfo.setContent(cryptoManager, "test".toByteArray(Charsets.UTF_8))
+        userInfo.setContent(cryptoManager, "test".toByteArray())
         manager.update(userInfo)
         userInfo2 = manager[Helpers.USER]
         assertNotNull(userInfo2)
@@ -260,7 +260,7 @@ class ServiceTest {
         assertEquals(journalManager.listMembers(journal).size.toLong(), 0)
 
         // Test inviting ourselves
-        val member = JournalManager.Member(Helpers.USER, "test".toByteArray(Charsets.UTF_8))
+        val member = JournalManager.Member(Helpers.USER, "test".toByteArray())
         try {
             caught = null
             journalManager.addMember(journal, member)
@@ -270,7 +270,7 @@ class ServiceTest {
 
         assertNotNull(caught)
 
-        val member2 = JournalManager.Member(Helpers.USER2, "test".toByteArray(Charsets.UTF_8))
+        val member2 = JournalManager.Member(Helpers.USER2, "test".toByteArray())
         journalManager.addMember(journal, member2)
         assertEquals(journalManager.listMembers(journal).size.toLong(), 1)
 

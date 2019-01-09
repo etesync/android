@@ -44,11 +44,11 @@ class EncryptionTest {
         val cryptoManager = Crypto.CryptoManager(1, Helpers.keyBase64, "TestSaltShouldBeJournalId")
 
         val clearText = "This Is Some Test Cleartext."
-        val cipher = cryptoManager.encrypt(clearText.toByteArray(Charsets.UTF_8))
-        assertEquals(clearText, String(cryptoManager.decrypt(cipher!!)!!, Charsets.UTF_8))
+        val cipher = cryptoManager.encrypt(clearText.toByteArray())
+        assertEquals(clearText, String(cryptoManager.decrypt(cipher!!)!!))
 
         val expected = "Lz+HUFzh1HdjxuGdQrBwBG1IzHT0ug6mO8fwePSbXtc="
-        assertEquals(expected, Base64.encodeToString(cryptoManager.hmac("Some test data".toByteArray(Charsets.UTF_8)), Base64.NO_WRAP))
+        assertEquals(expected, Base64.encodeToString(cryptoManager.hmac("Some test data".toByteArray()), Base64.NO_WRAP))
     }
 
     @Test
@@ -57,11 +57,11 @@ class EncryptionTest {
         val cryptoManager = Crypto.CryptoManager(2, Helpers.keyBase64, "TestSaltShouldBeJournalId")
 
         val clearText = "This Is Some Test Cleartext."
-        val cipher = cryptoManager.encrypt(clearText.toByteArray(Charsets.UTF_8))
-        assertEquals(clearText, String(cryptoManager.decrypt(cipher!!)!!, Charsets.UTF_8))
+        val cipher = cryptoManager.encrypt(clearText.toByteArray())
+        assertEquals(clearText, String(cryptoManager.decrypt(cipher!!)!!))
 
         val expected = "XQ/A0gentOaE98R9wzf3zEIAHj4OH1GF8J4C6JiJupo="
-        assertEquals(expected, Base64.encodeToString(cryptoManager.hmac("Some test data".toByteArray(Charsets.UTF_8)), Base64.NO_WRAP))
+        assertEquals(expected, Base64.encodeToString(cryptoManager.hmac("Some test data".toByteArray()), Base64.NO_WRAP))
     }
 
     @Test(expected = Exceptions.VersionTooNewException::class)
@@ -82,13 +82,13 @@ class EncryptionTest {
         val keyPair = Crypto.generateKeyPair()
         val cryptoManager = Crypto.AsymmetricCryptoManager(keyPair!!)
 
-        val clearText = "This Is Some Test Cleartext.".toByteArray(Charsets.UTF_8)
+        val clearText = "This Is Some Test Cleartext.".toByteArray()
         val cipher = cryptoManager.encrypt(keyPair.publicKey, clearText)
         val clearText2 = cryptoManager.decrypt(cipher!!)
         assertArrayEquals(clearText, clearText2)
 
         // Mostly for coverage. Make sure it's the expected sha256 value.
         assertEquals("ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
-                Hex.toHexString(Crypto.AsymmetricCryptoManager.getKeyFingerprint("a".toByteArray(Charsets.UTF_8))).toLowerCase())
+                Hex.toHexString(Crypto.AsymmetricCryptoManager.getKeyFingerprint("a".toByteArray())).toLowerCase())
     }
 }

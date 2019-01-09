@@ -72,8 +72,8 @@ class NotificationHelper(internal val context: Context, internal val notificatio
     }
 
     @JvmOverloads
-    fun notify(title: String, content: String, bigText: String?, intent: Intent, icon: Int = -1) {
-        var icon = icon
+    fun notify(title: String, content: String, bigText: String?, intent: Intent, _icon: Int = -1) {
+        var icon = _icon
         createNotificationChannel()
         val builder = NotificationCompat.Builder(context)
         val category = if (throwable == null)

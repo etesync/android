@@ -37,7 +37,7 @@ object Crypto {
     fun deriveKey(salt: String, password: String): String {
         val keySize = 190
 
-        return Base64.encodeToString(SCrypt.generate(password.toByteArray(Charsets.UTF_8), salt.toByteArray(Charsets.UTF_8), 16384, 8, 1, keySize), Base64.NO_WRAP)
+        return Base64.encodeToString(SCrypt.generate(password.toByteArray(), salt.toByteArray(), 16384, 8, 1, keySize), Base64.NO_WRAP)
     }
 
     @JvmStatic
@@ -130,8 +130,8 @@ object Crypto {
             get() = SecureRandom()
 
         private fun setDerivedKey(derivedKey: ByteArray?) {
-            cipherKey = hmac256("aes".toByteArray(Charsets.UTF_8), derivedKey)
-            hmacKey = hmac256("hmac".toByteArray(Charsets.UTF_8), derivedKey)
+            cipherKey = hmac256("aes".toByteArray(), derivedKey)
+            hmacKey = hmac256("hmac".toByteArray(), derivedKey)
         }
 
         constructor(version: Int, keyPair: AsymmetricKeyPair, encryptedKey: ByteArray) {
@@ -151,7 +151,7 @@ object Crypto {
             } else if (version == 1) {
                 derivedKey = Base64.decode(keyBase64, Base64.NO_WRAP)
             } else {
-                derivedKey = hmac256(salt.toByteArray(Charsets.UTF_8), Base64.decode(keyBase64, Base64.NO_WRAP))
+                derivedKey = hmac256(salt.toByteArray(), Base64.decode(keyBase64, Base64.NO_WRAP))
             }
 
             this.version = version.toByte()
@@ -246,7 +246,7 @@ object Crypto {
     }
 
     internal fun sha256(base: String): String {
-        return toHex(sha256(base.toByteArray(Charsets.UTF_8)))
+        return toHex(sha256(base.toByteArray()))
     }
 
     private fun sha256(base: ByteArray): ByteArray {

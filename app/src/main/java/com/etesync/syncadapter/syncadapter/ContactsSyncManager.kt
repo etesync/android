@@ -52,7 +52,7 @@ import java.io.StringReader
  * Synchronization manager for CardDAV collections; handles contacts and groups.
  */
 class ContactsSyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class, ContactsStorageException::class)
-constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager<LocalAddress>(context, account, settings, extras, authority, result, localAddressBook.url!!, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
+constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager<LocalAddress>(context, account, settings, extras, authority, result, localAddressBook.url, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
 
     protected override val syncErrorTitle: String
         get() = context.getString(R.string.sync_error_contacts, account.name)
@@ -171,8 +171,8 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     @Throws(IOException::class, ContactsStorageException::class)
-    private fun processContact(newData: Contact, local: LocalAddress?): LocalAddress {
-        var local = local
+    private fun processContact(newData: Contact, _local: LocalAddress?): LocalAddress {
+        var local = _local
         val uuid = newData.uid
         // update local contact, if it exists
         if (local != null) {
@@ -181,14 +181,14 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             if (local is LocalGroup && newData.group) {
                 // update group
                 val group: LocalGroup = local
-                group!!.eTag = uuid
+                group.eTag = uuid
                 group.update(newData)
                 syncResult.stats.numUpdates++
 
             } else if (local is LocalContact && !newData.group) {
                 // update contact
                 val contact: LocalContact = local
-                contact!!.eTag = uuid
+                contact.eTag = uuid
                 contact.update(newData)
                 syncResult.stats.numUpdates++
 

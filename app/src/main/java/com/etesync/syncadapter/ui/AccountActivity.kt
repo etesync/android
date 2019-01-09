@@ -50,20 +50,19 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     internal var listCardDAV: ListView? = null
     internal var listTaskDAV: ListView? = null
 
-    private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+    private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
         val list = parent as ListView
         val adapter = list.adapter as ArrayAdapter<*>
         val journalEntity = adapter.getItem(position) as JournalEntity
         val info = journalEntity.getInfo()
 
-        startActivity(ViewCollectionActivity.newIntent(this@AccountActivity, account!!, info))
+        startActivity(ViewCollectionActivity.newIntent(this@AccountActivity, account, info))
     }
 
     private val formattedFingerprint: String?
         get() {
-            var settings: AccountSettings? = null
             try {
-                settings = AccountSettings(this, account!!)
+                val settings = AccountSettings(this, account)
                 return Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(settings.keyPair!!.publicKey)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -76,7 +75,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         super.onCreate(savedInstanceState)
 
         account = intent.getParcelableExtra(EXTRA_ACCOUNT)
-        title = account!!.name
+        title = account.name
 
         setContentView(R.layout.activity_account)
 
@@ -113,8 +112,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             HintManager.setHintSeen(this, HINT_VIEW_COLLECTION, true)
         }
 
-        if (!SetupUserInfoFragment.hasUserInfo(this, account!!)) {
-            SetupUserInfoFragment.newInstance(account!!).show(supportFragmentManager, null)
+        if (!SetupUserInfoFragment.hasUserInfo(this, account)) {
+            SetupUserInfoFragment.newInstance(account).show(supportFragmentManager, null)
         }
     }
 
@@ -136,7 +135,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     .setTitle(R.string.account_delete_confirmation_title)
                     .setMessage(R.string.account_delete_confirmation_text)
                     .setNegativeButton(android.R.string.no, null)
-                    .setPositiveButton(android.R.string.yes) { dialog, which -> deleteAccount() }
+                    .setPositiveButton(android.R.string.yes) { _, _ -> deleteAccount() }
                     .show()
             R.id.show_fingerprint -> {
                 val view = layoutInflater.inflate(R.layout.fingerprint_alertdialog, null)
@@ -146,7 +145,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         .setIcon(R.drawable.ic_fingerprint_dark)
                         .setTitle(R.string.show_fingperprint_title)
                         .setView(view)
-                        .setPositiveButton(android.R.string.yes) { dialog, which -> }.create()
+                        .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
                 dialog.show()
             }
             else -> return super.onOptionsItemSelected(item)
@@ -160,17 +159,17 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             R.id.create_calendar -> {
                 info = CollectionInfo()
                 info.type = CollectionInfo.Type.CALENDAR
-                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account!!, info))
+                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
             R.id.create_tasklist -> {
                 info = CollectionInfo()
                 info.type = CollectionInfo.Type.TASKS
-                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account!!, info))
+                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
             R.id.create_addressbook -> {
                 info = CollectionInfo()
                 info.type = CollectionInfo.Type.ADDRESS_BOOK
-                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account!!, info))
+                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
         }
         return false
@@ -192,7 +191,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountInfo> {
-        return AccountLoader(this, account!!)
+        return AccountLoader(this, account)
     }
 
     override fun refresh() {
@@ -211,7 +210,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listCardDAV!!.isEnabled = !info.carddav!!.refreshing
             listCardDAV!!.setAlpha(if (info.carddav!!.refreshing) 0.5f else 1f)
 
-            val adapter = CollectionListAdapter(this, account!!)
+            val adapter = CollectionListAdapter(this, account)
             adapter.addAll(info.carddav!!.journals!!)
             listCardDAV!!.adapter = adapter
             listCardDAV!!.onItemClickListener = onItemClickListener
@@ -227,7 +226,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listCalDAV!!.isEnabled = !info.caldav!!.refreshing
             listCalDAV!!.setAlpha(if (info.caldav!!.refreshing) 0.5f else 1f)
 
-            val adapter = CollectionListAdapter(this, account!!)
+            val adapter = CollectionListAdapter(this, account)
             adapter.addAll(info.caldav!!.journals!!)
             listCalDAV!!.adapter = adapter
             listCalDAV!!.onItemClickListener = onItemClickListener
@@ -243,7 +242,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listTaskDAV!!.isEnabled = !info.taskdav!!.refreshing
             listTaskDAV!!.setAlpha(if (info.taskdav!!.refreshing) 0.5f else 1f)
 
-            val adapter = CollectionListAdapter(this, account!!)
+            val adapter = CollectionListAdapter(this, account)
             adapter.addAll(info.taskdav!!.journals!!)
             listTaskDAV!!.adapter = adapter
             listTaskDAV!!.onItemClickListener = onItemClickListener

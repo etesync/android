@@ -54,7 +54,7 @@ class RemoveMemberFragment : DialogFragment() {
                 val journalsManager = JournalManager(httpClient!!, remote!!)
                 val journal = JournalManager.Journal.fakeWithUid(info!!.uid!!)
 
-                val member = JournalManager.Member(memberEmail!!, "placeholder".toByteArray(Charsets.UTF_8))
+                val member = JournalManager.Member(memberEmail!!, "placeholder".toByteArray())
                 journalsManager.deleteMember(journal, member)
 
                 return RemoveResult(null)

@@ -105,7 +105,7 @@ class AboutActivity : BaseActivity() {
 
         override fun onLoadFinished(loader: Loader<Spanned>, license: Spanned) {
             if (view != null) {
-                val tv = view!!.findViewById<View>(R.id.license_text) as TextView
+                val tv = view!!.findViewById<View>(R.id.license_text) as TextView?
                 if (tv != null) {
                     tv.autoLinkMask = Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS
                     tv.text = license

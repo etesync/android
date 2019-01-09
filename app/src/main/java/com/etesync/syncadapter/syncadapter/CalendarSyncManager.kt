@@ -121,7 +121,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     @Throws(CalendarStorageException::class, ContactsStorageException::class, IOException::class)
     private fun createInviteAttendeesNotification() {
         for (local in localDirty) {
-            val event = (local as LocalEvent).event
+            val event = local.event
 
             if (event?.attendees?.isEmpty()!!) {
                 return
@@ -144,8 +144,8 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
-    private fun processEvent(newData: Event, localEvent: LocalEvent?): LocalEvent {
-        var localEvent = localEvent
+    private fun processEvent(newData: Event, _localEvent: LocalEvent?): LocalEvent {
+        var localEvent = _localEvent
         // delete local event, if it exists
         if (localEvent != null) {
             App.log.info("Updating " + newData.uid + " in local calendar")

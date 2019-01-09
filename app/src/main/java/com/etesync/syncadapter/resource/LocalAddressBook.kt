@@ -102,7 +102,7 @@ class LocalAddressBook(
         // HELPERS
 
         fun accountName(mainAccount: Account, info: CollectionInfo): String {
-            val displayName = if (info.displayName != null) info.displayName else info.uid
+            val displayName = info.displayName ?: info.uid!!
             val sb = StringBuilder(displayName)
             sb.append(" (")
                     .append(mainAccount.name)

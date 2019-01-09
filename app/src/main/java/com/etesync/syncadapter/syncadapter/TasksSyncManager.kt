@@ -99,8 +99,8 @@ class TasksSyncManager(
         }
     }
 
-    private fun processTask(newData: Task, localTask: LocalTask?): LocalTask {
-        var localTask = localTask
+    private fun processTask(newData: Task, _localTask: LocalTask?): LocalTask {
+        var localTask = _localTask
         // delete local Task, if it exists
         if (localTask != null) {
             App.log.info("Updating " + newData.uid + " in local calendar")
