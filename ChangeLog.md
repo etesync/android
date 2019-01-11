@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.25.0
+* Add support for the new associate account type
+* Handle exceptions for read only journals
+* Fix date being sometimes incorrect in the journal item preview.
+
 ## Version 0.24.1
 * Fix issue with Calendars missing from the account view.
 
