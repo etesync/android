@@ -44,6 +44,9 @@ class NotificationHelper(internal val context: Context, internal val notificatio
         } else if (e is Exceptions.ServiceUnavailableException) {
             App.log.log(Level.SEVERE, "Service unavailable")
             messageString = R.string.sync_error_unavailable
+        } else if (e is Exceptions.ReadOnlyException) {
+            App.log.log(Level.SEVERE, "Journal is read only", e)
+            messageString = R.string.sync_error_journal_readonly
         } else if (e is Exceptions.HttpException) {
             App.log.log(Level.SEVERE, "HTTP Exception during sync", e)
             messageString = R.string.sync_error_http_dav

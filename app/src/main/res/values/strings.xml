@@ -315,6 +315,7 @@
     <string name="sync_error_http_dav">Server error while %s</string>
     <string name="sync_error_unavailable">Could not connect to server while %s</string>
     <string name="sync_error_local_storage">Database error while %s</string>
+    <string name="sync_error_journal_readonly">Journal is read only</string>
     <string name="sync_phase_prepare">preparing synchronization</string>
     <string name="sync_phase_journals">syncronizing journals</string>
     <string name="sync_phase_query_capabilities">querying capabilities</string>

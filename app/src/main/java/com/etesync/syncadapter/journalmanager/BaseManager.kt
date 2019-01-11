@@ -34,8 +34,9 @@ abstract class BaseManager {
                         throw Exceptions.UserInactiveException(response, apiError.detail)
                     } else if (apiError.code == "associate_not_allowed") {
                         throw Exceptions.AssociateNotAllowedException(response, apiError.detail)
-                    }
-                }
+                    } else if (apiError.code == "journal_owner_inactive") {
+                        throw Exceptions.ReadOnlyException(response, apiError.detail)
+                    }                }
             }// Fall through. We want to always throw when unsuccessful.
 
             throw Exceptions.HttpException(response, apiError.detail)
