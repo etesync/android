@@ -131,6 +131,8 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 return e
             } catch (e: Exceptions.GenericCryptoException) {
                 return e
+            } catch (e: Exceptions.AssociateNotAllowedException) {
+                return e
             }
 
             return null

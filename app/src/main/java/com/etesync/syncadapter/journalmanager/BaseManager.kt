@@ -29,8 +29,12 @@ abstract class BaseManager {
             when (response.code()) {
                 HttpURLConnection.HTTP_UNAVAILABLE -> throw Exceptions.ServiceUnavailableException(response, "Service unavailable")
                 HttpURLConnection.HTTP_UNAUTHORIZED -> throw Exceptions.UnauthorizedException(response, "Unauthorized auth token")
-                HttpURLConnection.HTTP_FORBIDDEN -> if (apiError.code == "service_inactive") {
-                    throw Exceptions.UserInactiveException(response, apiError.detail)
+                HttpURLConnection.HTTP_FORBIDDEN -> {
+                    if (apiError.code == "service_inactive") {
+                        throw Exceptions.UserInactiveException(response, apiError.detail)
+                    } else if (apiError.code == "associate_not_allowed") {
+                        throw Exceptions.AssociateNotAllowedException(response, apiError.detail)
+                    }
                 }
             }// Fall through. We want to always throw when unsuccessful.
 

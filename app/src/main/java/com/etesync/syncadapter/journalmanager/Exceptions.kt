@@ -8,6 +8,8 @@ import java.io.Serializable
 import java.security.GeneralSecurityException
 
 class Exceptions {
+    class AssociateNotAllowedException(response: Response, message: String?) : HttpException(response, message)
+
     class UnauthorizedException(response: Response, message: String?) : HttpException(response, message)
 
     class UserInactiveException(response: Response, message: String?) : HttpException(response, message)
