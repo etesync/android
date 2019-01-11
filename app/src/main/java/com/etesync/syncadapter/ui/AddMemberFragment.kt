@@ -60,7 +60,7 @@ class AddMemberFragment : DialogFragment() {
                 val httpClient = HttpClient.create(ctx!!, settings!!)
                 val userInfoManager = UserInfoManager(httpClient, remote!!)
 
-                val userInfo = userInfoManager[memberEmail]
+                val userInfo = userInfoManager.fetch(memberEmail)
                         ?: throw Exception(getString(R.string.collection_members_error_user_not_found, memberEmail))
                 memberPubKey = userInfo.pubkey!!
                 return AddResult(null)

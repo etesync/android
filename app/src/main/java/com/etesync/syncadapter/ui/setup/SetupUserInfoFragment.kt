@@ -50,7 +50,7 @@ class SetupUserInfoFragment : DialogFragment() {
                 val httpClient = HttpClient.create(context, settings)
 
                 val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings.uri!!)!!)
-                var userInfo: UserInfoManager.UserInfo? = userInfoManager[account.name]
+                var userInfo: UserInfoManager.UserInfo? = userInfoManager.fetch(account.name)
 
                 if (userInfo == null) {
                     App.log.info("Creating userInfo for " + account.name)

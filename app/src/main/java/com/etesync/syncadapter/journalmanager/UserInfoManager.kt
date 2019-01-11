@@ -19,7 +19,7 @@ class UserInfoManager(httpClient: OkHttpClient, remote: HttpUrl) : BaseManager()
     }
 
     @Throws(Exceptions.HttpException::class)
-    operator fun get(owner: String): UserInfo? {
+    fun fetch(owner: String): UserInfo? {
         val remote = this.remote!!.newBuilder().addPathSegment(owner).addPathSegment("").build()
         val request = Request.Builder()
                 .get()

@@ -206,7 +206,7 @@ class ServiceTest {
         val manager = UserInfoManager(httpClient!!, remote!!)
 
         // Get when there's nothing
-        userInfo = manager[Helpers.USER]
+        userInfo = manager.fetch(Helpers.USER)
         assertNull(userInfo)
 
         // Create
@@ -214,20 +214,20 @@ class ServiceTest {
         manager.create(userInfo)
 
         // Get
-        userInfo2 = manager[Helpers.USER]
+        userInfo2 = manager.fetch(Helpers.USER)
         assertNotNull(userInfo2)
         assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2!!.getContent(cryptoManager))
 
         // Update
         userInfo.setContent(cryptoManager, "test".toByteArray())
         manager.update(userInfo)
-        userInfo2 = manager[Helpers.USER]
+        userInfo2 = manager.fetch(Helpers.USER)
         assertNotNull(userInfo2)
         assertArrayEquals(userInfo.getContent(cryptoManager), userInfo2!!.getContent(cryptoManager))
 
         // Delete
         manager.delete(userInfo)
-        userInfo = manager[Helpers.USER]
+        userInfo = manager.fetch(Helpers.USER)
         assertNull(userInfo)
     }
 
