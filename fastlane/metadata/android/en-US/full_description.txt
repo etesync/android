@@ -1,4 +1,4 @@
-Secure, End-to-End encrypted and journalized personal information synchronization for Android, the desktop and the web. Currently supports calendars, contacts and tasks (using OpenTasks), with more on the way.
+Secure and end-to-end encrypted personal information sync for Android, the desktop and the web. Currently supports calendars, contacts and tasks (using OpenTasks), with more on the way.
 
 In order to use this application you need to have an account with EteSync (paid hosting), or run your own instance (free and open source). Check out https://www.etesync.com/ for more information. The server code is available at https://github.com/etesync/journal-manager
 
@@ -8,9 +8,13 @@ EteSync is very easy to use. It seamlessly integrates with Android so you won't 
 
 Secure & Open
 ============
-Thanks to End-to-End encryption, not even we can see your data. Don't believe us? You shouldn't, just verify yourself, both the client and server are open source.
-
+Thanks to zero-knowledge end-to-end encryption, not even we can see your data. Don't believe us? You shouldn't, just verify yourself, both the client and server are open source.
 
 Full History
 =========
 A full history of your data is saved in an encrypted tamper-proof journal which means you can review, replay and revert any changes you have made at any point in time.
+
+
+How does it work?
+===============
+EteSync integrates seamlessly with your existing apps. All you need to do is sign up (or run your own instance), install the app, and enter your password. After that, you will be able to save your contacts, calendar events and tasks to EteSync using your existing Android apps, and EteSync will transparently encrypt your data and update the change journal in the background. More security, same work-flow.
