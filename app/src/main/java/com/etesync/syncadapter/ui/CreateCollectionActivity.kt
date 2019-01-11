@@ -101,7 +101,6 @@ open class CreateCollectionActivity : BaseActivity() {
 
     fun onCreateCollection(item: MenuItem) {
         var ok = true
-        info = CollectionInfo()
 
         var edit = findViewById<View>(R.id.display_name) as EditText
         info.displayName = edit.text.toString()
