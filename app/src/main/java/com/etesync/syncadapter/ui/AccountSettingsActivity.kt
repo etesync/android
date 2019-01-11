@@ -95,6 +95,13 @@ class AccountSettingsActivity : BaseActivity() {
                 false
             }
 
+            // Category: encryption
+            val prefEncryptionPassword = findPreference("encryption_password")
+            prefEncryptionPassword.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                startActivity(ChangeEncryptionPasswordActivity.newIntent(activity!!, account))
+                true
+            }
+
             // category: synchronization
             val prefSyncContacts = findPreference("sync_interval_contacts") as ListPreference
             val syncIntervalContacts = settings.getSyncInterval(App.addressBooksAuthority)

@@ -23,14 +23,12 @@
 
     <PreferenceCategory android:title="@string/settings_encryption">
 
-        <EditTextPreference
-            android:key="encryption_password"
+        <Preference
             android:title="@string/settings_encryption_password"
-            android:persistent="false"
-            android:inputType="textPassword"
-            android:enabled="false"
+            android:key="encryption_password"
             android:summary="@string/settings_encryption_password_summary"
-            android:dialogTitle="@string/settings_enter_encryption_password" />
+            android:persistent="false"
+        />
 
     </PreferenceCategory>
 

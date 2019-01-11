@@ -83,6 +83,8 @@ class UserInfoManager(httpClient: OkHttpClient, remote: HttpUrl) : BaseManager()
     class UserInfo {
         @Transient
         var owner: String? = null
+        @Transient
+        val plan: String? = null
         val version: Byte?
         val pubkey: ByteArray?
         private var content: ByteArray? = null

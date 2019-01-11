@@ -236,6 +236,7 @@
         <activity android:name=".ui.JournalItemActivity"/>
         <activity android:name=".ui.importlocal.ImportActivity"/>
         <activity android:name=".ui.AccountSettingsActivity"/>
+        <activity android:name=".ui.ChangeEncryptionPasswordActivity"/>
         <activity android:name=".ui.CreateCollectionActivity"/>
         <activity android:name=".ui.EditCollectionActivity"/>
 

@@ -184,7 +184,7 @@
     <string name="login_custom_server_error">Invalid URL found, did you forget to include https://?</string>
     <string name="login_toggle_advanced">Show advanced settings</string>
     <string name="login_encryption_password">Encryption Password</string>
-    <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be changed if wrong.</string>
+    <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be recovered if wrong!</string>
     <string name="login_encryption_extra_info">This password is used to encrypt your data, unlike the previous one, which is used to log into the service.\nYou are asked to choose a separate encryption password for security reasons. For more information, plesae refer to the FAQ at: %s</string>
     <string name="login_password_required">Password required</string>
     <string name="login_login">Log In</string>
@@ -207,11 +207,18 @@
 
     <string name="account_creation_failed">Account creation failed</string>
     <string name="wrong_encryption_password">Wrong encryption password</string>
-    <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\n\n%s</string>
+    <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\n\nError: %s</string>
+
+    <!-- ChangeEncryptionPasswordActivity -->
+    <string name="change_encryption_password_title">Change Encryption Password</string>
+    <string name="change_encryption_password_extra_info">Please don\'t use this tool if you believe your encryption password has been comporomised. Contact support instead.</string>
+    <string name="change_encryption_password_new_password">New encryption Password</string>
+    <string name="change_encryption_password_are_you_sure">Are you sure you would like to continue? The process can not be stopped half way or be undone, and may take a while to complete.</string>
+    <string name="change_encryption_password_success_title">Encryption Password Change</string>
+    <string name="change_encryption_password_success_body">Encryption password has been successfully changed!</string>
 
     <!-- SetupUserInfoFragment -->
     <string name="login_user_info_error_title">Error Setting User Info</string>
-
 
     <!-- ImportFragment -->
     <string name="import_dialog_title">Import</string>
@@ -230,7 +237,7 @@
     <string name="settings_password_summary">Change your authentication password</string>
     <string name="settings_enter_password">Enter your password:</string>
     <string name="settings_encryption_password">Encryption Password</string>
-    <string name="settings_encryption_password_summary">Change your encryption password (not implemented)</string>
+    <string name="settings_encryption_password_summary">Change your encryption password</string>
     <string name="settings_enter_encryption_password">Enter your encryption password:</string>
     <string name="settings_sync">Synchronization</string>
     <string name="settings_sync_interval_contacts">Contacts sync. interval</string>

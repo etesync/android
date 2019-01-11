@@ -126,7 +126,7 @@
   <string name="settings_password_summary">Ihr Anmelde-Passwort</string>
   <string name="settings_enter_password">Passwort eingeben:</string>
   <string name="settings_encryption_password">Verschlüsselungs-Passwort</string>
-  <string name="settings_encryption_password_summary">Verschlüsselungs-Passwort ändern (nicht implementiert)</string>
+  <string name="settings_encryption_password_summary">Verschlüsselungs-Passwort ändern</string>
   <string name="settings_enter_encryption_password">Verschlüsselungs-Passwort eingeben:</string>
   <string name="settings_sync">Synchronisation</string>
   <string name="settings_sync_interval_contacts">Häufigkeit der Kontakte-Synchronisation</string>

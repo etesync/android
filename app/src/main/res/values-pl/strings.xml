@@ -205,7 +205,7 @@
     <string name="settings_password_summary">Zmień hasło weryfikacji</string>
     <string name="settings_enter_password">Wprowadź obecne hasło:</string>
     <string name="settings_encryption_password">Hasło szyfrowania</string>
-    <string name="settings_encryption_password_summary">Zmień swoje hasło szyfrowania (niezaimpletowane)</string>
+    <string name="settings_encryption_password_summary">Zmień swoje hasło szyfrowania</string>
     <string name="settings_enter_encryption_password">Wprowadź obecne hasło szyfrowania:</string>
     <string name="settings_sync">Synchronizacja</string>
     <string name="settings_sync_interval_contacts">Okres synchronizacji kontaktów</string>
