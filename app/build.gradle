@@ -152,10 +152,14 @@ dependencies {
     implementation "io.requery:requery-kotlin:$requeryVersion"
     kapt "io.requery:requery-processor:$requeryVersion"
 
-    implementation 'com.madgag.spongycastle:core:1.54.0.0'
-    implementation 'com.madgag.spongycastle:prov:1.54.0.0'
+    def spongyCastleVersion = "1.54.0.0"
+    implementation "com.madgag.spongycastle:core:$spongyCastleVersion"
+    implementation "com.madgag.spongycastle:prov:$spongyCastleVersion"
+
+    def okhttp3Version = "3.8.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
+
     implementation 'com.google.code.gson:gson:1.7.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     implementation 'org.apache.commons:commons-collections4:4.1'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
 
@@ -171,7 +175,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.8.0'
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3Version"
     testImplementation 'junit:junit:4.12'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:3.8.0'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3Version"
 }
