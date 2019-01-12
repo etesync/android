@@ -68,8 +68,8 @@ class ServiceTest {
         val info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK)
         info.uid = JournalManager.Journal.genUid()
         info.displayName = "Test"
-        val crypto = Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid)
-        var journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+        val crypto = Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid!!)
+        var journal = JournalManager.Journal(crypto, info.toJson(), info.uid!!)
         journalManager.create(journal)
 
         // Try pushing the same journal (uid clash)
@@ -89,7 +89,7 @@ class ServiceTest {
 
         // Update journal
         info.displayName = "Test 2"
-        journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+        journal = JournalManager.Journal(crypto, info.toJson(), info.uid!!)
         journalManager.update(journal)
 
         journals = journalManager.list()
@@ -105,7 +105,7 @@ class ServiceTest {
 
         // Bad HMAC
         info.uid = JournalManager.Journal.genUid()
-        journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+        journal = JournalManager.Journal(crypto, info.toJson(), info.uid!!)
         info.displayName = "Test 3"
         //// We assume this doesn't update the hmac.
         journal.setContent(crypto, info.toJson())
@@ -133,11 +133,11 @@ class ServiceTest {
         val info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK)
         info.uid = JournalManager.Journal.genUid()
         info.displayName = "Test"
-        val crypto = Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid)
-        val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+        val crypto = Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid!!)
+        val journal = JournalManager.Journal(crypto, info.toJson(), info.uid!!)
         journalManager.create(journal)
 
-        val journalEntryManager = JournalEntryManager(httpClient!!, remote!!, info.uid)
+        val journalEntryManager = JournalEntryManager(httpClient!!, remote!!, info.uid!!)
         var previousEntry: JournalEntryManager.Entry? = null
         val entry = JournalEntryManager.Entry()
         entry.update(crypto, "Content", previousEntry)
@@ -240,8 +240,8 @@ class ServiceTest {
         val info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK)
         info.uid = JournalManager.Journal.genUid()
         info.displayName = "Test"
-        val crypto = Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid)
-        val journal = JournalManager.Journal(crypto, info.toJson(), info.uid)
+        val crypto = Crypto.CryptoManager(info.version, Helpers.keyBase64, info.uid!!)
+        val journal = JournalManager.Journal(crypto, info.toJson(), info.uid!!)
         journalManager.create(journal)
 
         assertEquals(journalManager.listMembers(journal).size.toLong(), 0)

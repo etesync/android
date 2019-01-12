@@ -377,8 +377,7 @@ class App : Application() {
         val DEFAULT_LANGUAGE = "default"
         var sDefaultLocacle = Locale.getDefault()
 
-        lateinit var appName: String
-            private set
+        var appName: String = "EteSync"
 
         var sslSocketFactoryCompat: SSLSocketFactoryCompat? = null
             private set
