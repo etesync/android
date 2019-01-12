@@ -235,7 +235,6 @@ class ServiceTest {
     @Test
     @Throws(IOException::class, Exceptions.HttpException::class, Exceptions.GenericCryptoException::class, Exceptions.IntegrityException::class)
     fun testJournalMember() {
-        var caught: Exception?
         val journalManager = JournalManager(httpClient!!, remote!!)
         val info = CollectionInfo.defaultForServiceType(CollectionInfo.Type.ADDRESS_BOOK)
         info.uid = JournalManager.Journal.genUid()
@@ -248,14 +247,11 @@ class ServiceTest {
 
         // Test inviting ourselves
         val member = JournalManager.Member(Helpers.USER, "test".toByteArray())
-        try {
-            caught = null
-            journalManager.addMember(journal, member)
-        } catch (e: Exceptions.HttpException) {
-            caught = e
-        }
-
-        assertNotNull(caught)
+        journalManager.addMember(journal, member)
+        // We shouldn't show in the list
+        assertEquals(journalManager.listMembers(journal).size.toLong(), 0)
+        // Though we should have a key in the journal
+        assertNotNull(journalManager.list().first().key)
 
         val member2 = JournalManager.Member(Helpers.USER2, "test".toByteArray())
         journalManager.addMember(journal, member2)
