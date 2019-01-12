@@ -156,7 +156,7 @@ dependencies {
     implementation "com.madgag.spongycastle:core:$spongyCastleVersion"
     implementation "com.madgag.spongycastle:prov:$spongyCastleVersion"
 
-    def okhttp3Version = "3.8.0"
+    def okhttp3Version = "3.12.1"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
 
     implementation 'com.google.code.gson:gson:1.7.2'

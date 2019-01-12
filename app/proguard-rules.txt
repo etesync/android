@@ -33,12 +33,14 @@
 -keep,includedescriptorclasses class net.fortuna.ical4j.** { *; }  # keep all model classes (properties/factories, created at runtime)
 
 # okhttp
--dontwarn java.nio.file.**   # not available on Android
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
--dontnote com.android.org.conscrypt.SSLParametersImpl
--dontnote org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
--dontnote dalvik.system.CloseGuard
--dontnote sun.security.ssl.SSLContextImpl
+# JSR 305 annotations are for embedding nullability information.
+-dontwarn javax.annotation.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+# Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+# OkHttp platform used only on JVM and when Conscrypt dependency is available.
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
 
 # DAVdroid + libs
 -keep,includedescriptorclasses class syncadapter.** { *; }    # all DAVdroid code and deps are required
