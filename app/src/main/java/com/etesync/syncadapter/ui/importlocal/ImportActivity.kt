@@ -26,7 +26,7 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
 
         title = getString(R.string.import_dialog_title)
 
-        account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)
+        account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)!!
         info = intent.extras!!.getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
 
         if (savedInstanceState == null)

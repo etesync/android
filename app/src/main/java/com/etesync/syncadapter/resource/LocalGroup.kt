@@ -47,16 +47,6 @@ class LocalGroup : AndroidGroup, LocalAddress {
                 val batch = BatchOperation(addressBook.provider)
                 while (cursor.moveToNext()) {
                     val id = cursor.getLong(0)
-                    Constants.log.fine("Assigning members to group $id")
-
-                    // required for workaround for Android 7 which sets DIRTY flag when only meta-data is changed
-                    val changeContactIDs = HashSet<Long>()
-
-                    // delete all memberships and cached memberships for this group
-                    for (contact in addressBook.getByGroupMembership(id)) {
-                        contact.removeGroupMemberships(batch)
-                        changeContactIDs += contact.id!!
-                    }
 
                     // extract list of member UIDs
                     val members = LinkedList<String>()
@@ -71,32 +61,21 @@ class LocalGroup : AndroidGroup, LocalAddress {
                     }
 
                     // insert memberships
-                    for (uid in members) {
+                    val membersIds = members.map {uid ->
                         Constants.log.fine("Assigning member: $uid")
-                        addressBook.findContactByUID(uid)?.let { member ->
-                            member.addToGroup(batch, id)
-                            changeContactIDs += member.id!!
-                        } ?: Constants.log.warning("Group member not found: $uid")
+                        (addressBook.findByUid(uid) as LocalContact).id!!
                     }
 
-                    if (LocalContact.HASH_HACK)
-                    // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
-                        changeContactIDs
-                                .map { addressBook.findContactByID(it) }
-                                .forEach { it.updateHashCode(batch) }
-
-                    // remove pending memberships
-                    batch.enqueue(BatchOperation.Operation(
-                            ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(Groups.CONTENT_URI, id)))
-                                    .withValue(COLUMN_PENDING_MEMBERS, null)
-                                    .withYieldAllowed(true)
-                    ))
+                    val group = addressBook.findGroupById(id)
+                    group.setMembers(batch, membersIds)
 
                     batch.commit()
                 }
             }
         }
     }
+
+    private var saveAsDirty = false // When true, the resource will be saved as dirty
 
     override val uuid: String?
         get() = fileName
@@ -132,6 +111,10 @@ class LocalGroup : AndroidGroup, LocalAddress {
             values.put(COLUMN_PENDING_MEMBERS, members.marshall())
         } finally {
             members.recycle()
+        }
+
+        if (saveAsDirty) {
+            values.put(Groups.DIRTY, true)
         }
         return values
     }
@@ -187,6 +170,54 @@ class LocalGroup : AndroidGroup, LocalAddress {
         addressBook.provider!!.update(groupSyncUri(), values, null, null)
     }
 
+    private fun setMembers(batch: BatchOperation, members: List<Long>) {
+        val id = id!!
+        val addressBook = this.addressBook as LocalAddressBook
+        Constants.log.fine("Assigning members to group $id")
+
+        // required for workaround for Android 7 which sets DIRTY flag when only meta-data is changed
+        val changeContactIDs = HashSet<Long>()
+
+        // delete all memberships and cached memberships for this group
+        for (contact in addressBook.getByGroupMembership(id)) {
+            contact.removeGroupMemberships(batch)
+            changeContactIDs += contact.id!!
+        }
+
+        // insert memberships
+        for (memberId in members) {
+            Constants.log.fine("Assigning member: $memberId")
+            addressBook.findContactByID(memberId).let { member ->
+                member.addToGroup(batch, id)
+                changeContactIDs += member.id!!
+            } ?: Constants.log.warning("Group member not found: $memberId")
+        }
+
+        if (LocalContact.HASH_HACK)
+        // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
+            changeContactIDs
+                    .map { addressBook.findContactByID(it) }
+                    .forEach { it.updateHashCode(batch) }
+
+        // remove pending memberships
+        batch.enqueue(BatchOperation.Operation(
+                ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(Groups.CONTENT_URI, id)))
+                        .withValue(COLUMN_PENDING_MEMBERS, null)
+                        .withYieldAllowed(true)
+        ))
+    }
+
+    fun createAsDirty(members: List<Long>): Uri {
+        saveAsDirty = true
+
+        val ret = this.add()
+
+        val batch = BatchOperation(addressBook.provider!!)
+        setMembers(batch, members)
+        batch.commit()
+
+        return ret
+    }
 
     // helpers
 

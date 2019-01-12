@@ -21,13 +21,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalContact
+import com.etesync.syncadapter.resource.LocalGroup
 import java.util.*
+import kotlin.collections.HashMap
 
 class LocalContactImportFragment : Fragment() {
 
@@ -132,9 +135,11 @@ class LocalContactImportFragment : Fragment() {
             try {
                 val addressBook = LocalAddressBook.findByUid(context!!,
                         context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
-                        account, info.uid!!)
-                val localContacts = localAddressBook.findAll()
-                val total = localContacts.size
+                        account, info.uid!!)!!
+                val localContacts = localAddressBook.findAllContacts()
+                val localGroups = localAddressBook.findAllGroups()
+                val oldIdToNewId = HashMap<Long, Long>()
+                val total = localContacts.size + localGroups.size
                 progressDialog!!.max = total
                 result.total = total.toLong()
                 var progress = 0
@@ -142,8 +147,27 @@ class LocalContactImportFragment : Fragment() {
                     val contact = currentLocalContact.contact
 
                     try {
-                        val localContact = LocalContact(addressBook!!, contact!!, null, null)
+                        val localContact = LocalContact(addressBook, contact!!, null, null)
                         localContact.createAsDirty()
+                        oldIdToNewId[currentLocalContact.id!!] = localContact.id!!
+                        result.added++
+                    } catch (e: ContactsStorageException) {
+                        e.printStackTrace()
+                        result.e = e
+                    }
+
+                    publishProgress(++progress)
+                }
+                for (currentLocalGroup in localGroups) {
+                    val group = currentLocalGroup.contact
+
+                    try {
+                        val localGroup = LocalGroup(addressBook, group!!, null, null)
+                        val members = currentLocalGroup.getMembers().map { it ->
+                            oldIdToNewId[it]!!
+                        }
+
+                        localGroup.createAsDirty(members)
                         result.added++
                     } catch (e: ContactsStorageException) {
                         e.printStackTrace()

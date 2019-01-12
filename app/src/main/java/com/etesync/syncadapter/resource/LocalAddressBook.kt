@@ -22,6 +22,7 @@ import at.bitfire.vcard4android.*
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
+import java.io.FileNotFoundException
 import java.util.*
 import java.util.logging.Level
 
@@ -179,7 +180,14 @@ class LocalAddressBook(
             accountManager.removeAccount(account, null, null)
     }
 
-    override fun findAll(): List<LocalContact> = queryContacts(RawContacts.DELETED + "== 0", null)
+    override fun findAll(): List<LocalAddress> =
+            if (includeGroups)
+                findAllContacts() + findAllGroups()
+            else
+                findAllContacts()
+
+    fun findAllContacts() = queryContacts("${RawContacts.DELETED}==0", null)
+    fun findAllGroups() = queryGroups("${Groups.DELETED}==0", null)
 
     /**
      * Returns an array of local contacts/groups which have been deleted locally. (DELETED != 0).
@@ -258,6 +266,10 @@ class LocalAddressBook(
             return queryGroups("${AndroidGroup.COLUMN_UID}=?", arrayOf(uid)).firstOrNull()
         }
     }
+
+    fun findGroupById(id: Long): LocalGroup =
+            queryGroups("${Groups._ID}=?", arrayOf(id.toString())).firstOrNull()
+                    ?: throw FileNotFoundException()
 
     override fun count(): Long {
         try {
