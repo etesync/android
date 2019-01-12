@@ -17,6 +17,7 @@ import android.support.v4.app.DialogFragment
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
+import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
@@ -24,10 +25,7 @@ import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.resource.LocalAddressBook
-import com.etesync.syncadapter.resource.LocalCalendar
-import com.etesync.syncadapter.resource.LocalContact
-import com.etesync.syncadapter.resource.LocalEvent
+import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.syncadapter.ContactsSyncManager
 import com.etesync.syncadapter.ui.Refreshable
 import com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult
@@ -248,7 +246,8 @@ class ImportFragment : DialogFragment() {
                         entryProcessed()
                     }
                 } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    // FIXME: Handle groups and download icon?
+                    // FIXME: assumes groups only show after their members
+                    val oldUidToNewId = HashMap<String?, Long>()
                     val downloader = ContactsSyncManager.ResourceDownloader(context!!)
                     val contacts = Contact.fromReader(importReader, downloader)
 
@@ -267,8 +266,26 @@ class ImportFragment : DialogFragment() {
 
                     for (contact in contacts) {
                         try {
-                            val localContact = LocalContact(localAddressBook!!, contact, null, null)
-                            localContact.createAsDirty()
+                            if (contact.group) {
+                                val localGroup = LocalGroup(localAddressBook!!, contact, null, null)
+                                val memberIds = contact.members.map { memberUid ->
+                                    oldUidToNewId[memberUid]!!
+                                }
+                                localGroup.createAsDirty(memberIds)
+                            } else {
+                                val localContact = LocalContact(localAddressBook!!, contact, null, null)
+                                localContact.createAsDirty()
+                                // If uid is null, so be it. We won't be able to process the group later.
+                                oldUidToNewId[contact.uid] = localContact.id!!
+
+                                // Apply categories
+                                val batch = BatchOperation(localAddressBook.provider!!)
+                                for (category in contact.categories) {
+                                    localContact.addToGroup(batch, localAddressBook.findOrCreateGroup(category))
+                                }
+                                batch.commit()
+                            }
+
                             result.added++
                         } catch (e: ContactsStorageException) {
                             e.printStackTrace()
