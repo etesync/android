@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.0.0
+* Implement changing the encryption password
+* Add support for importing contat groups from account and file
+
 ## Version 0.25.0
 * Add support for the new associate account type
 * Handle exceptions for read only journals
