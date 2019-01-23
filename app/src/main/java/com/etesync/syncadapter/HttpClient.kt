@@ -33,8 +33,7 @@ object HttpClient {
     private val userAgent: String
 
     init {
-        val date = SimpleDateFormat("yyyy/MM/dd", Locale.US).format(Date(BuildConfig.buildTime))
-        userAgent = "${App.appName}/${BuildConfig.VERSION_NAME} (${date}; okhttp3) Android/${Build.VERSION.RELEASE}"
+        userAgent = "${App.appName}/${BuildConfig.VERSION_NAME} (okhttp3) Android/${Build.VERSION.RELEASE}"
     }
 
     fun create(context: Context?, logger: Logger, host: String?, token: String): OkHttpClient {

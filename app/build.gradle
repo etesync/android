@@ -24,7 +24,6 @@ android {
         versionCode 51
         versionName "1.0.1"
 
-        buildConfigField "long", "buildTime", System.currentTimeMillis() + "L"
         buildConfigField "boolean", "customCerts", "true"
     }
 

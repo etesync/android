@@ -141,7 +141,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                 var installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID)
                 if (TextUtils.isEmpty(installedFrom))
                     installedFrom = "APK (directly)"
-                report.append("\nSOFTWARE INFORMATION\n" + "EteSync version: ").append(BuildConfig.VERSION_NAME).append(" (").append(BuildConfig.VERSION_CODE).append(") ").append(Date(BuildConfig.buildTime)).append("\n")
+                report.append("\nSOFTWARE INFORMATION\n" + "EteSync version: ").append(BuildConfig.VERSION_NAME).append(" (").append(BuildConfig.VERSION_CODE).append(") ").append("\n")
                         .append("Installed from: ").append(installedFrom).append("\n")
             } catch (ex: Exception) {
                 App.log.log(Level.SEVERE, "Couldn't get software information", ex)

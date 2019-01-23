@@ -159,7 +159,7 @@ class AboutActivity : BaseActivity() {
 
         private val components = arrayOf(ComponentInfo(
                 App.appName, BuildConfig.VERSION_NAME, Constants.webUri.toString(),
-                DateFormatUtils.format(BuildConfig.buildTime, "yyyy") + " Tom Hacohen",
+                "Tom Hacohen",
                 R.string.about_license_info_no_warranty, "gpl-3.0-standalone.html"
         ), ComponentInfo(
                 "DAVdroid", "(forked from)", "https://syncadapter.bitfire.at",
