@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.0.1
+* Email invitations: fix rare crash for events with no end date.
+
 ## Version 1.0.0
 * Implement changing the encryption password
 * Add support for importing contat groups from account and file
