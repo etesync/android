@@ -14,6 +14,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.resource.LocalTaskList
 
 class CollectionMembersActivity : BaseActivity(), Refreshable {
 
@@ -36,10 +37,16 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
         setTitle(R.string.collection_members_title)
 
         val colorSquare = findViewById<View>(R.id.color)
-        if (info.type == CollectionInfo.Type.CALENDAR) {
-            colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
-        } else {
-            colorSquare.visibility = View.GONE
+        when (info.type) {
+            CollectionInfo.Type.CALENDAR -> {
+                colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
+            }
+            CollectionInfo.Type.TASKS -> {
+                colorSquare.setBackgroundColor(info.color ?: LocalTaskList.defaultColor)
+            }
+            CollectionInfo.Type.ADDRESS_BOOK -> {
+                colorSquare.visibility = View.GONE
+            }
         }
         findViewById<View>(R.id.progressBar).visibility = View.GONE
 
