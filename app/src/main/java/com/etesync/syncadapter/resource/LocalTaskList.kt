@@ -28,7 +28,7 @@ class LocalTaskList private constructor(
         id: Long
 ): AndroidTaskList<LocalTask>(account, provider, LocalTask.Factory, id), LocalCollection<LocalTask> {
     companion object {
-        val defaultColor = -0x3c1592     // "DAVdroid green"
+        val defaultColor = -0x743cb6     // light green 500
 
         fun tasksProviderAvailable(context: Context): Boolean {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)

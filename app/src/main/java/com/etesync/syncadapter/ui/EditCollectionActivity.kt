@@ -22,6 +22,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.resource.LocalTaskList
 
 class EditCollectionActivity : CreateCollectionActivity() {
 
@@ -30,9 +31,17 @@ class EditCollectionActivity : CreateCollectionActivity() {
 
         setTitle(R.string.edit_collection)
 
-        if (info.type == CollectionInfo.Type.CALENDAR) {
-            val colorSquare = findViewById<View>(R.id.color)
-            colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
+        when (info.type) {
+            CollectionInfo.Type.CALENDAR -> {
+                val colorSquare = findViewById<View>(R.id.color)
+                colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
+            }
+            CollectionInfo.Type.TASKS -> {
+                val colorSquare = findViewById<View>(R.id.color)
+                colorSquare.setBackgroundColor(info.color ?: LocalTaskList.defaultColor)
+            }
+            CollectionInfo.Type.ADDRESS_BOOK -> {
+            }
         }
 
         val edit = findViewById<View>(R.id.display_name) as EditText
