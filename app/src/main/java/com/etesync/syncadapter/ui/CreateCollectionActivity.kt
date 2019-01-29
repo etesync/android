@@ -22,6 +22,8 @@ import android.widget.EditText
 
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
+import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.resource.LocalTaskList
 
 import org.apache.commons.lang3.StringUtils
 
@@ -49,6 +51,7 @@ open class CreateCollectionActivity : BaseActivity() {
                 displayName.setHint(R.string.create_calendar_display_name_hint)
 
                 val colorSquare = findViewById<View>(R.id.color)
+                colorSquare.setBackgroundColor(LocalCalendar.defaultColor)
                 colorSquare.setOnClickListener {
                     AmbilWarnaDialog(this@CreateCollectionActivity, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {
                         override fun onCancel(dialog: AmbilWarnaDialog) {}
@@ -64,6 +67,7 @@ open class CreateCollectionActivity : BaseActivity() {
                 displayName.setHint(R.string.create_tasklist_display_name_hint)
 
                 val colorSquare = findViewById<View>(R.id.color)
+                colorSquare.setBackgroundColor(LocalTaskList.defaultColor)
                 colorSquare.setOnClickListener {
                     AmbilWarnaDialog(this@CreateCollectionActivity, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {
                         override fun onCancel(dialog: AmbilWarnaDialog) {}
