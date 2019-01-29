@@ -21,8 +21,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
 
-        versionCode 51
-        versionName "1.0.1"
+        versionCode 52
+        versionName "1.0.2"
 
         buildConfigField "boolean", "customCerts", "true"
     }
