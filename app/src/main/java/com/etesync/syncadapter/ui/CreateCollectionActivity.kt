@@ -113,9 +113,13 @@ open class CreateCollectionActivity : BaseActivity() {
         info.description = StringUtils.trimToNull(edit.text.toString())
 
         if (ok) {
-            if (info.type == CollectionInfo.Type.CALENDAR) {
-                val view = findViewById<View>(R.id.color)
-                info.color = (view.background as ColorDrawable).color
+            when (info.type) {
+                CollectionInfo.Type.CALENDAR, CollectionInfo.Type.TASKS -> {
+                    val view = findViewById<View>(R.id.color)
+                    info.color = (view.background as ColorDrawable).color
+                }
+                CollectionInfo.Type.ADDRESS_BOOK -> {
+                }
             }
 
             info.selected = true
