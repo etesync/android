@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.0.2
+* Fix setting the colour of task lists
+* Fix the default color shown in the create journal activity
+
 ## Version 1.0.1
 * Email invitations: fix rare crash for events with no end date.
 
