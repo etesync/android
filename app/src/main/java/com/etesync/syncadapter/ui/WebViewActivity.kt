@@ -180,7 +180,7 @@ class WebViewActivity : BaseActivity() {
         }
 
         private fun isAllowedUrl(uri: Uri): Boolean {
-            val allowedUris = arrayOf(Constants.faqUri, Constants.helpUri, Constants.registrationUrl, Constants.webUri.buildUpon().appendEncodedPath("tos/").build(), Constants.webUri.buildUpon().appendEncodedPath("about/").build())
+            val allowedUris = arrayOf(Constants.faqUri, Constants.helpUri, Constants.registrationUrl, Constants.dashboard, Constants.webUri.buildUpon().appendEncodedPath("tos/").build(), Constants.webUri.buildUpon().appendEncodedPath("about/").build())
             val accountsUri = Constants.webUri.buildUpon().appendEncodedPath("accounts/").build()
 
             return allowedUris(allowedUris, uri) || uri.host == accountsUri.host && uri.path!!.startsWith(accountsUri.path!!)

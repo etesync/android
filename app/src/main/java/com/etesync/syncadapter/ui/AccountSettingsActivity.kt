@@ -22,10 +22,8 @@ import android.support.v4.content.Loader
 import android.support.v7.preference.*
 import android.text.TextUtils
 import android.view.MenuItem
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.InvalidAccountException
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.setup.LoginCredentials
 import com.etesync.syncadapter.ui.setup.LoginCredentialsChangeFragment
@@ -84,6 +82,13 @@ class AccountSettingsActivity : BaseActivity() {
             if (settings == null) {
                 activity!!.finish()
                 return
+            }
+
+            // Category: dashboard
+            val prefManageAccount = findPreference("manage_account")
+            prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                WebViewActivity.openUrl(activity!!, Constants.dashboard.buildUpon().appendQueryParameter("email", account.name).build())
+                true
             }
 
             // category: authentication

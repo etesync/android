@@ -8,16 +8,13 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_manage_account">
 
-    <PreferenceCategory android:title="@string/settings_authentication">
-
-        <EditTextPreference
-            android:key="password"
-            android:title="@string/settings_password"
+        <Preference
+            android:key="manage_account"
+            android:title="@string/settings_manage_account"
             android:persistent="false"
-            android:inputType="textPassword"
-            android:summary="@string/settings_password_summary"
-            android:dialogTitle="@string/settings_enter_password" />
+            android:summary="@string/settings_manage_account_summary" />
 
     </PreferenceCategory>
 
@@ -33,6 +30,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_sync">
+        <EditTextPreference
+            android:key="password"
+            android:title="@string/settings_password"
+            android:persistent="false"
+            android:inputType="textPassword"
+            android:summary="@string/settings_password_summary"
+            android:dialogTitle="@string/settings_enter_password" />
 
         <ListPreference
             android:key="sync_interval_contacts"
