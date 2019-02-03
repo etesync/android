@@ -15,8 +15,7 @@ Please see the [EteSync website](https://www.etesync.com) for more information.
 
 EteSync is licensed under the [GPLv3 License](LICENSE).
 
-EteSync's source code is based on [DAVdroid](https://www.davx5.com) and adjusted to work
-with the EteSync protocol.
+EteSync's source code was originally based on [DAVdroid](https://www.davx5.com) but the codebases has since diverged quite significantly.
 
 Third Party Libraries
 =====================
