@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.0.3
+* Improve import of contact groups
+* Update event invitation signature
+* Minor UI improvements
+
 ## Version 1.0.2
 * Fix setting the colour of task lists
 * Fix the default color shown in the create journal activity
