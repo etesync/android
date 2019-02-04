@@ -246,7 +246,6 @@ class ImportFragment : DialogFragment() {
                         entryProcessed()
                     }
                 } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    // FIXME: assumes groups only show after their members
                     val oldUidToNewId = HashMap<String?, Long>()
                     val downloader = ContactsSyncManager.ResourceDownloader(context!!)
                     val contacts = Contact.fromReader(importReader, downloader)
@@ -264,27 +263,19 @@ class ImportFragment : DialogFragment() {
                     val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
                     val localAddressBook = LocalAddressBook.findByUid(context!!, provider!!, account, info.uid!!)
 
-                    for (contact in contacts) {
+                    for (contact in contacts.filter { contact -> !contact.group }) {
                         try {
-                            if (contact.group) {
-                                val localGroup = LocalGroup(localAddressBook!!, contact, null, null)
-                                val memberIds = contact.members.map { memberUid ->
-                                    oldUidToNewId[memberUid]!!
-                                }
-                                localGroup.createAsDirty(memberIds)
-                            } else {
-                                val localContact = LocalContact(localAddressBook!!, contact, null, null)
-                                localContact.createAsDirty()
-                                // If uid is null, so be it. We won't be able to process the group later.
-                                oldUidToNewId[contact.uid] = localContact.id!!
+                            val localContact = LocalContact(localAddressBook!!, contact, null, null)
+                            localContact.createAsDirty()
+                            // If uid is null, so be it. We won't be able to process the group later.
+                            oldUidToNewId[contact.uid] = localContact.id!!
 
-                                // Apply categories
-                                val batch = BatchOperation(localAddressBook.provider!!)
-                                for (category in contact.categories) {
-                                    localContact.addToGroup(batch, localAddressBook.findOrCreateGroup(category))
-                                }
-                                batch.commit()
+                            // Apply categories
+                            val batch = BatchOperation(localAddressBook.provider!!)
+                            for (category in contact.categories) {
+                                localContact.addToGroup(batch, localAddressBook.findOrCreateGroup(category))
                             }
+                            batch.commit()
 
                             result.added++
                         } catch (e: ContactsStorageException) {
@@ -293,6 +284,23 @@ class ImportFragment : DialogFragment() {
 
                         entryProcessed()
                     }
+
+                    for (contact in contacts.filter { contact -> contact.group }) {
+                        try {
+                            val localGroup = LocalGroup(localAddressBook!!, contact, null, null)
+                            val memberIds = contact.members.mapNotNull { memberUid ->
+                                oldUidToNewId[memberUid]
+                            }
+                            localGroup.createAsDirty(memberIds)
+
+                            result.added++
+                        } catch (e: ContactsStorageException) {
+                            e.printStackTrace()
+                        }
+
+                        entryProcessed()
+                    }
+
                     provider.release()
                 }
 
