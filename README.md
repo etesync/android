@@ -3,7 +3,7 @@
   <h1 align="center">EteSync - Secure Data Sync</h1>
 </p>
 
-Secure, end-to-end encrypted, and privacy respecting sync for your contacts, calendars and tasks sync client for Android.
+Secure, end-to-end encrypted, and privacy respecting sync for your contacts, calendars and tasks (Android client).
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
       alt="Get it on Google Play" 
