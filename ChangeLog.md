@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.0.4
+* Fix proguard rules that could cause crashes on some devices
+
 ## Version 1.0.3
 * Improve import of contact groups
 * Update event invitation signature
