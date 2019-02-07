@@ -43,7 +43,10 @@
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
 
 # DAVdroid + libs
--keep,includedescriptorclasses class syncadapter.** { *; }    # all DAVdroid code and deps are required
+-keep,includedescriptorclasses class com.etesync.syncadapter.** { *; }    # all DAVdroid code and deps are required
+
+# Android support
+-keep,includedescriptorclasses class android.support.v4.content.FileProvider { *; }    # all DAVdroid code and deps are required
 
 # gson
 -dontnote sun.misc.Unsafe  # not available on Android
