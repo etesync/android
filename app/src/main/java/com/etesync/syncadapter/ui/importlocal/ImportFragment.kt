@@ -260,12 +260,12 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(contacts.size)
 
-                    val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
-                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider!!, account, info.uid!!)
+                    val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!
+                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider, account, info.uid!!)!!
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
                         try {
-                            val localContact = LocalContact(localAddressBook!!, contact, null, null)
+                            val localContact = LocalContact(localAddressBook, contact, null, null)
                             localContact.createAsDirty()
                             // If uid is null, so be it. We won't be able to process the group later.
                             oldUidToNewId[contact.uid] = localContact.id!!
@@ -287,7 +287,7 @@ class ImportFragment : DialogFragment() {
 
                     for (contact in contacts.filter { contact -> contact.group }) {
                         try {
-                            val localGroup = LocalGroup(localAddressBook!!, contact, null, null)
+                            val localGroup = LocalGroup(localAddressBook, contact, null, null)
                             val memberIds = contact.members.mapNotNull { memberUid ->
                                 oldUidToNewId[memberUid]
                             }
