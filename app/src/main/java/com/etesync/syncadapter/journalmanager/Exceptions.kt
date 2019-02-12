@@ -24,7 +24,7 @@ class Exceptions {
         }
 
         constructor(response: Response, message: String) : super(response, message) {
-            this.retryAfter = java.lang.Long.valueOf(response.header("Retry-After", "0"))
+            this.retryAfter = java.lang.Long.valueOf(response.header("Retry-After", "0")!!)
         }
     }
 
