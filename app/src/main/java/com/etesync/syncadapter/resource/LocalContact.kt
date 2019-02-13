@@ -84,7 +84,7 @@ class LocalContact : AndroidContact, LocalAddress {
 
     override fun resetDeleted() {
         val values = ContentValues(1)
-        values.put(ContactsContract.Groups.DELETED, 0)
+        values.put(ContactsContract.RawContacts.DELETED, 0)
         addressBook.provider?.update(rawContactSyncURI(), values, null, null)
     }
 
