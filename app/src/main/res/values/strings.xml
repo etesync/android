@@ -341,6 +341,9 @@
     <string name="sync_successfully_tasks" formatted="false">Tasks \"%s\" modified (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s modified.</string>
     <string name="sync_successfully_modified_full" formatted="false">%s added.\n%s updated.\n%s deleted.</string>
+    <string name="sync_journal_readonly">Journal \"%s\" is read only</string>
+    <string name="sync_journal_readonly_message">The journal is read only so all of your changes (%d) have been reverted.</string>
+
 
     <!-- Calendar invites -->
     <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>

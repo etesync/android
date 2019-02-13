@@ -22,4 +22,6 @@ interface LocalResource<in TData: Any> {
     fun prepareForUpload()
 
     fun clearDirty(eTag: String)
+
+    fun resetDeleted()
 }

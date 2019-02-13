@@ -136,6 +136,12 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
             event.uid = uid
     }
 
+    override fun resetDeleted() {
+        val values = ContentValues(1)
+        values.put(CalendarContract.Events.DELETED, 0)
+        calendar.provider.update(eventSyncURI(), values, null, null)
+    }
+
     override fun clearDirty(eTag: String) {
         val values = ContentValues(2)
         values.put(CalendarContract.Events.DIRTY, 0)

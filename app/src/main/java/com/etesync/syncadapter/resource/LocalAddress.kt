@@ -11,7 +11,4 @@ package com.etesync.syncadapter.resource
 import at.bitfire.vcard4android.Contact
 
 interface LocalAddress: LocalResource<Contact> {
-
-    fun resetDeleted()
-
 }

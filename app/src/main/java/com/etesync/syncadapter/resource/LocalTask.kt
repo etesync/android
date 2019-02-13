@@ -104,6 +104,12 @@ class LocalTask : AndroidTask, LocalResource<Task> {
             task.uid = uid
     }
 
+    override fun resetDeleted() {
+        val values = ContentValues(1)
+        values.put(TaskContract.Tasks._DELETED, 0)
+        taskList.provider.client.update(taskSyncURI(), values, null, null)
+    }
+
     override fun clearDirty(eTag: String) {
         val values = ContentValues(2)
         values.put(TaskContract.Tasks._DIRTY, 0)

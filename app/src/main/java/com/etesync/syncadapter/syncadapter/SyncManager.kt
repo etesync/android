@@ -10,6 +10,7 @@ package com.etesync.syncadapter.syncadapter
 import android.accounts.Account
 import android.annotation.TargetApi
 import android.content.Context
+import android.content.Intent
 import android.content.SyncResult
 import android.os.Bundle
 import at.bitfire.ical4android.CalendarStorageException
@@ -24,6 +25,7 @@ import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
 import com.etesync.syncadapter.resource.LocalCollection
 import com.etesync.syncadapter.resource.LocalResource
+import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
 import io.requery.Persistable
@@ -45,6 +47,8 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     protected var journal: JournalEntryManager? = null
     private var _journalEntity: JournalEntity? = null
+
+    private var numDiscarded = 0
 
     private val crypto: Crypto.CryptoManager
 
@@ -168,6 +172,9 @@ constructor(protected val context: Context, protected val account: Account, prot
             App.log.info("Sync phase: " + context.getString(syncPhase))
             postProcess()
 
+            if (numDiscarded > 0) {
+                notifyDiscardedChange()
+            }
             notifyUserOnSync()
 
             App.log.info("Finished sync with CTag=$remoteCTag")
@@ -459,14 +466,22 @@ constructor(protected val context: Context, protected val account: Account, prot
         val localList = localCollection!!.findDeleted()
         val ret = ArrayList<T>(localList.size)
 
-        for (local in localList) {
-            if (Thread.interrupted())
-                return ret
+        if (journalEntity.isReadOnly) {
+            for (local in localList) {
+                App.log.info("Restoring locally deleted resource on a read only collection: ${local.uuid}")
+                local.resetDeleted()
+                numDiscarded++
+            }
+        } else {
+            for (local in localList) {
+                if (Thread.interrupted())
+                    return ret
 
-            App.log.info(local.uuid + " has been deleted locally -> deleting from server")
-            ret.add(local)
+                App.log.info(local.uuid + " has been deleted locally -> deleting from server")
+                ret.add(local)
 
-            syncResult.stats.numDeletes++
+                syncResult.stats.numDeletes++
+            }
         }
 
         return ret
@@ -474,15 +489,30 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     @Throws(CalendarStorageException::class, ContactsStorageException::class)
     protected open fun prepareDirty() {
-        // assign file names and UIDs to new entries
-        App.log.info("Looking for local entries without a uuid")
-        for (local in localDirty) {
-            if (local.uuid != null) {
-                continue
+        if (journalEntity.isReadOnly) {
+            for (local in localDirty) {
+                App.log.info("Restoring locally modified resource on a read only collection: ${local.uuid}")
+                if (local.uuid == null) {
+                    // If it was only local, delete.
+                    local.delete()
+                } else {
+                    local.clearDirty(local.uuid!!)
+                }
+                numDiscarded++
             }
 
-            App.log.fine("Found local record without file name; generating file name/UID if necessary")
-            local.prepareForUpload()
+            localDirty = LinkedList()
+        } else {
+            // assign file names and UIDs to new entries
+            App.log.info("Looking for local entries without a uuid")
+            for (local in localDirty) {
+                if (local.uuid != null) {
+                    continue
+                }
+
+                App.log.fine("Found local record without file name; generating file name/UID if necessary")
+                local.prepareForUpload()
+            }
         }
     }
 
@@ -491,6 +521,12 @@ constructor(protected val context: Context, protected val account: Account, prot
      */
     @Throws(CalendarStorageException::class, ContactsStorageException::class)
     protected open fun postProcess() {
+    }
+
+    private fun notifyDiscardedChange() {
+        val notification = NotificationHelper(context, "discarded_${info.uid}", notificationId())
+        val intent = Intent(context, AccountsActivity::class.java)
+        notification.notify(context.getString(R.string.sync_journal_readonly, info.displayName), context.getString(R.string.sync_journal_readonly_message, numDiscarded), null, intent, R.drawable.ic_error_light)
     }
 
     companion object {
