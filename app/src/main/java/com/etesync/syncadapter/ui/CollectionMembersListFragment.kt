@@ -114,6 +114,10 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
 
             val tv = v!!.findViewById<View>(R.id.title) as TextView
             tv.text = member!!.user
+
+            val readOnly = v.findViewById<View>(R.id.read_only)
+            readOnly.visibility = if (member.readOnly) View.VISIBLE else View.GONE
+
             return v
         }
     }
