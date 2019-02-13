@@ -187,6 +187,8 @@ constructor(protected val context: Context, protected val account: Account, prot
         } catch (e: InterruptedException) {
             // Restart sync if interrupted
             syncResult.fullSyncRequested = true
+        } catch (e: Exceptions.IgnorableHttpException) {
+            // Ignore
         } catch (e: Exception) {
             if (e is Exceptions.UnauthorizedException) {
                 syncResult.stats.numAuthExceptions++

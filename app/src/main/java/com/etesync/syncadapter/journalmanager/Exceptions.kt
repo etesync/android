@@ -18,7 +18,7 @@ class Exceptions {
 
     class BadGatewayException(response: Response, message: String) : HttpException(response, message)
 
-    class ServiceUnavailableException : HttpException {
+    class ServiceUnavailableException : IgnorableHttpException {
         var retryAfter: Long = 0
 
         constructor(message: String) : super(message) {
@@ -32,6 +32,10 @@ class Exceptions {
 
     class IntegrityException(message: String) : GeneralSecurityException(message)
 
+    open class IgnorableHttpException : HttpException {
+        constructor(message: String) : super(message)
+        constructor(response: Response, message: String) : super(response, message)
+    }
 
     open class GenericCryptoException(message: String) : Exception(message)
 

@@ -72,6 +72,8 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
             } catch (e: Exceptions.ServiceUnavailableException) {
                 syncResult.stats.numIoExceptions++
                 syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
+            } catch (e: Exceptions.IgnorableHttpException) {
+                // Ignore
             } catch (e: Exception) {
                 if (e is ContactsStorageException || e is SQLiteException) {
                     App.log.log(Level.SEVERE, "Couldn't prepare local address books", e)
