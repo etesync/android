@@ -129,7 +129,7 @@ class JournalManager(httpClient: OkHttpClient, remote: HttpUrl) : BaseManager() 
         val owner: String? = null
         val key: ByteArray? = null
         var version = -1
-        val isReadOnly = false
+        val readOnly = false
 
         @Transient
         private var hmac: ByteArray? = null

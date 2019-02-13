@@ -168,7 +168,7 @@ abstract class SyncAdapterService : Service() {
                     val journalEntity = JournalEntity.fetchOrCreate(data, collection)
                     journalEntity.owner = journal.owner
                     journalEntity.encryptedKey = journal.key
-                    journalEntity.isReadOnly = journal.isReadOnly
+                    journalEntity.isReadOnly = journal.readOnly
                     journalEntity.isDeleted = false
                     data.upsert(journalEntity)
 
