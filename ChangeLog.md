@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.1.0
+* Don't pop up notifications when server is under maintenance.
+* Add support for read only journals
+* Group memberships: be more defensive with potentially missing members.
+* Fastlane: update app name.
+
 ## Version 1.0.4
 * Fix proguard rules that could cause crashes on some devices
 
