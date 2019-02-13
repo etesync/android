@@ -16,7 +16,7 @@ class Exceptions {
 
     class UserInactiveException(response: Response, message: String?) : HttpException(response, message)
 
-    class BadGatewayException(response: Response, message: String) : HttpException(response, message)
+    class BadGatewayException(response: Response, message: String) : IgnorableHttpException(response, message)
 
     class ServiceUnavailableException : IgnorableHttpException {
         var retryAfter: Long = 0
