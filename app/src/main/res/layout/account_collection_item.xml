@@ -52,7 +52,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginRight="8dp"
-        android:src="@drawable/ic_remove_circle_dark" />
+        android:src="@drawable/ic_readonly_dark" />
 
     <View
         android:id="@+id/color"
