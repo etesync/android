@@ -24,7 +24,11 @@ abstract class BaseManager {
         }
 
         if (!response.isSuccessful) {
-            val apiError = GsonHelper.gson.fromJson(response.body()!!.charStream(), ApiError::class.java)
+            val apiError = if (response.header("Content-Type", "application/json")!!.startsWith("application/json"))
+                GsonHelper.gson.fromJson(response.body()!!.charStream(), ApiError::class.java)
+            else
+                ApiError(code="got_html", detail="Got HTML while expecting JSON")
+
 
             when (response.code()) {
                 HttpURLConnection.HTTP_BAD_GATEWAY -> throw Exceptions.BadGatewayException(response, "Bad gateway: most likely a server restart")
@@ -46,10 +50,10 @@ abstract class BaseManager {
         return response
     }
 
-    internal class ApiError {
-        var detail: String? = null
+    internal class ApiError(
+        var detail: String? = null,
         var code: String? = null
-    }
+    )
 
     open class Base {
         var content: ByteArray? = null
