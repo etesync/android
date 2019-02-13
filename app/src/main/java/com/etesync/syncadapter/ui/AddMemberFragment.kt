@@ -26,12 +26,14 @@ class AddMemberFragment : DialogFragment() {
     private lateinit var info: CollectionInfo
     private lateinit var memberEmail: String
     private lateinit var memberPubKey: ByteArray
+    private var readOnly: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         account = arguments?.getParcelable(Constants.KEY_ACCOUNT)!!
         info = arguments?.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
         memberEmail = arguments?.getString(KEY_MEMBER)!!.toLowerCase()
+        readOnly = arguments?.getBoolean(KEY_READ_ONLY)!!
         ctx = context
         try {
             settings = AccountSettings(ctx!!, account)
@@ -105,7 +107,7 @@ class AddMemberFragment : DialogFragment() {
                 val crypto = Crypto.CryptoManager(info.version, settings!!.password(), info.uid!!)
 
                 val encryptedKey = crypto.getEncryptedKey(settings!!.keyPair!!, memberPubKey)
-                val member = JournalManager.Member(memberEmail, encryptedKey!!)
+                val member = JournalManager.Member(memberEmail, encryptedKey!!, readOnly)
                 journalsManager.addMember(journal, member)
                 return AddResultSecond(null)
             } catch (e: Exception) {
@@ -132,13 +134,15 @@ class AddMemberFragment : DialogFragment() {
 
     companion object {
         private val KEY_MEMBER = "memberEmail"
+        private val KEY_READ_ONLY = "readOnly"
 
-        fun newInstance(account: Account, info: CollectionInfo, email: String): AddMemberFragment {
+        fun newInstance(account: Account, info: CollectionInfo, email: String, readOnly: Boolean): AddMemberFragment {
             val frag = AddMemberFragment()
             val args = Bundle(1)
             args.putParcelable(Constants.KEY_ACCOUNT, account)
             args.putSerializable(Constants.KEY_COLLECTION_INFO, info)
             args.putString(KEY_MEMBER, email)
+            args.putBoolean(KEY_READ_ONLY, readOnly)
             frag.arguments = args
             return frag
         }

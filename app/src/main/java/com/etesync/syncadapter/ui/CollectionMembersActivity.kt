@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.InputType
 import android.view.View
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import com.etesync.syncadapter.App
@@ -83,17 +84,18 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
     }
 
     fun onAddMemberClicked(v: View) {
-        val input = EditText(this)
-        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        val view = View.inflate(this, R.layout.add_member_fragment, null)
         val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.collection_members_add)
                 .setIcon(R.drawable.ic_account_add_dark)
                 .setPositiveButton(android.R.string.yes) { _, _ ->
-                    val frag = AddMemberFragment.newInstance(account, info, input.text.toString())
+                    val input = view.findViewById<EditText>(R.id.username)
+                    val readOnly = view.findViewById<CheckBox>(R.id.read_only).isChecked
+                    val frag = AddMemberFragment.newInstance(account, info, input.text.toString(), readOnly)
                     frag.show(supportFragmentManager, null)
                 }
                 .setNegativeButton(android.R.string.no) { _, _ -> }
-        dialog.setView(input)
+        dialog.setView(view)
         dialog.show()
     }
 

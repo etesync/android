@@ -190,15 +190,18 @@ class JournalManager(httpClient: OkHttpClient, remote: HttpUrl) : BaseManager() 
     class Member {
         val user: String?
         val key: ByteArray?
+        val readOnly: Boolean
 
         private constructor() {
             this.user = null
             this.key = null
+            this.readOnly = false
         }
 
-        constructor(user: String, encryptedKey: ByteArray) {
+        constructor(user: String, encryptedKey: ByteArray, readOnly: Boolean = false) {
             this.user = user
             this.key = encryptedKey
+            this.readOnly = readOnly
         }
 
         internal fun toJson(): String {
