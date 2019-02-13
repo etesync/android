@@ -27,6 +27,7 @@ abstract class BaseManager {
             val apiError = GsonHelper.gson.fromJson(response.body()!!.charStream(), ApiError::class.java)
 
             when (response.code()) {
+                HttpURLConnection.HTTP_BAD_GATEWAY -> throw Exceptions.BadGatewayException(response, "Bad gateway: most likely a server restart")
                 HttpURLConnection.HTTP_UNAVAILABLE -> throw Exceptions.ServiceUnavailableException(response, "Service unavailable")
                 HttpURLConnection.HTTP_UNAUTHORIZED -> throw Exceptions.UnauthorizedException(response, "Unauthorized auth token")
                 HttpURLConnection.HTTP_FORBIDDEN -> {
