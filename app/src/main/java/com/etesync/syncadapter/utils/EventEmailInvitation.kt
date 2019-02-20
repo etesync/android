@@ -3,6 +3,7 @@ package com.etesync.syncadapter.utils
 import android.accounts.Account
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import at.bitfire.ical4android.Event
 import com.etesync.syncadapter.App
@@ -14,6 +15,18 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+
+fun emailSupportsAttachments(context: Context): Boolean {
+    var supportsAttachments = false
+
+    try {
+        context.packageManager.getPackageInfo("ch.protonmail.android", 0)
+    } catch (e: PackageManager.NameNotFoundException) {
+        supportsAttachments = true
+    }
+
+    return supportsAttachments
+}
 
 class EventEmailInvitation constructor(val context: Context, val account: Account) {
     fun createIntent(event: Event, icsContent: String): Intent? {
