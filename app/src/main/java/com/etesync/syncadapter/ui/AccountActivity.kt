@@ -13,6 +13,7 @@ import android.accounts.AccountManager
 import android.app.LoaderManager
 import android.content.*
 import android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -38,6 +39,7 @@ import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
+import com.etesync.syncadapter.utils.packageInstalled
 import tourguide.tourguide.ToolTip
 import java.util.logging.Level
 
@@ -101,6 +103,29 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         tbTaskDAV.inflateMenu(R.menu.taskdav_actions)
         tbTaskDAV.setOnMenuItemClickListener(this)
         tbTaskDAV.setTitle(R.string.settings_taskdav)
+        val openTasksPackage = "org.dmfs.tasks"
+        if (!packageInstalled(this, openTasksPackage)) {
+            val tasksInstallButton = findViewById<LinearLayout>(R.id.taskdav_install_button)
+            tasksInstallButton.visibility = View.VISIBLE
+            tasksInstallButton.setOnClickListener {
+                val fdroidPackageName = "org.fdroid.fdroid"
+                val gplayPackageName = "com.android.vending"
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(
+                            "https://f-droid.org/en/packages/$openTasksPackage/")
+                }
+                if (packageInstalled(this, fdroidPackageName)) {
+                    intent.setPackage(fdroidPackageName)
+                } else if (packageInstalled(this, gplayPackageName)) {
+                    intent.apply {
+                        data = Uri.parse(
+                                "https://play.google.com/store/apps/details?id=$openTasksPackage")
+                        setPackage(gplayPackageName)
+                    }
+                }
+                startActivity(intent)
+            }
+        }
 
         // load CardDAV/CalDAV journals
         loaderManager.initLoader(0, intent.extras, this)
