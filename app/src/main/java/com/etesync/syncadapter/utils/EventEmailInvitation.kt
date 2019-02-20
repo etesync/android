@@ -19,15 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun emailSupportsAttachments(context: Context): Boolean {
-    var supportsAttachments = false
-
-    try {
-        context.packageManager.getPackageInfo("ch.protonmail.android", 0)
-    } catch (e: PackageManager.NameNotFoundException) {
-        supportsAttachments = true
-    }
-
-    return supportsAttachments
+    return !packageInstalled(context, "ch.protonmail.android")
 }
 
 class EventEmailInvitation constructor(val context: Context, val account: Account) {
