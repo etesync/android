@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.2.0
+* Add a button to install OpenTasks if isn't installed.
+* Warn about clients that don't support email attachments when sending event invites
+
 ## Version 1.1.0
 * Don't pop up notifications when server is under maintenance.
 * Add support for read only journals
