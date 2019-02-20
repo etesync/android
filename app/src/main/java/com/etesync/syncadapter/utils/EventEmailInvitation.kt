@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.view.Gravity
+import android.widget.Toast
 import at.bitfire.ical4android.Event
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
@@ -51,6 +53,12 @@ class EventEmailInvitation constructor(val context: Context, val account: Accoun
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
+
+        if (!emailSupportsAttachments(context)) {
+            val toast = Toast.makeText(context, context.getString(R.string.calendar_attendees_email_no_attachment), Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
 
         return intent
     }

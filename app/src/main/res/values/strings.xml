@@ -351,6 +351,7 @@
     <string name="calendar_attendees_send_email_action">Send invitations</string>
     <string name="sync_calendar_attendees_email_subject" formatted="false">Invitation: %s @ %s</string>
     <string name="sync_calendar_attendees_email_content" formatted="false">You have been invited to the following event:\n\n%s\nWhen: %s\nWhere: %s\nAttendees: %s\n\n--\nThis email was created by EteSync.\nSecure, end-to-end encrypted and privacy respecting data sync.</string>
+    <string name="calendar_attendees_email_no_attachment">Your email client does not support file attachments. Please contact its developers to fix it!</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>
