@@ -22,7 +22,6 @@ import android.provider.ContactsContract
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.CardView
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
@@ -226,7 +225,6 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     override fun onLoadFinished(loader: Loader<AccountInfo>, info: AccountInfo) {
         accountInfo = info
 
-        var card = findViewById<View>(R.id.carddav) as CardView
         if (info.carddav != null) {
             val progress = findViewById<View>(R.id.carddav_refreshing) as ProgressBar
             progress.visibility = if (info.carddav!!.refreshing) View.VISIBLE else View.GONE
@@ -239,10 +237,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             adapter.addAll(info.carddav!!.journals!!)
             listCardDAV!!.adapter = adapter
             listCardDAV!!.onItemClickListener = onItemClickListener
-        } else
-            card.visibility = View.GONE
+        }
 
-        card = findViewById<View>(R.id.caldav) as CardView
         if (info.caldav != null) {
             val progress = findViewById<View>(R.id.caldav_refreshing) as ProgressBar
             progress.visibility = if (info.caldav!!.refreshing) View.VISIBLE else View.GONE
@@ -255,10 +251,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             adapter.addAll(info.caldav!!.journals!!)
             listCalDAV!!.adapter = adapter
             listCalDAV!!.onItemClickListener = onItemClickListener
-        } else
-            card.visibility = View.GONE
+        }
 
-        card = findViewById<View>(R.id.taskdav) as CardView
         if (info.taskdav != null) {
             val progress = findViewById<View>(R.id.taskdav_refreshing) as ProgressBar
             progress.visibility = if (info.taskdav!!.refreshing) View.VISIBLE else View.GONE
@@ -271,8 +265,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             adapter.addAll(info.taskdav!!.journals!!)
             listTaskDAV!!.adapter = adapter
             listTaskDAV!!.onItemClickListener = onItemClickListener
-        } else
-            card.visibility = View.GONE
+        }
     }
 
     override fun onLoaderReset(loader: Loader<AccountInfo>) {
