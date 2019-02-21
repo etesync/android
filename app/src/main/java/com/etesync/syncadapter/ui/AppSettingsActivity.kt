@@ -19,6 +19,7 @@ import com.etesync.syncadapter.model.ServiceDB
 import com.etesync.syncadapter.model.Settings
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.LanguageUtils
+import org.jetbrains.anko.defaultSharedPreferences
 import java.net.URI
 import java.net.URISyntaxException
 
@@ -115,6 +116,9 @@ class AppSettingsActivity : BaseActivity() {
 
             prefLogToExternalStorage = findPreference("log_to_external_storage") as SwitchPreferenceCompat
             prefLogToExternalStorage.isChecked = settings.getBoolean(App.LOG_TO_EXTERNAL_STORAGE, false)
+
+            val prefChangeNotification = findPreference("show_change_notification") as SwitchPreferenceCompat
+            prefChangeNotification.isChecked = context!!.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
 
             initSelectLanguageList()
         }

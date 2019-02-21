@@ -14,11 +14,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
 public class Settings {
-    public enum ChangeNotification {
-        ALL_CHANGES,
-        NONE
-    }
-
     final SQLiteDatabase db;
 
     public Settings(SQLiteDatabase db) {
@@ -80,11 +75,6 @@ public class Settings {
         } finally {
             cursor.close();
         }
-    }
-
-    public ChangeNotification getChangeNotification(String name) {
-        int changeNotificationIndex = getInt(name, 0);
-        return ChangeNotification.values()[changeNotificationIndex];
     }
 
     public void putString(String name, @Nullable String value) {

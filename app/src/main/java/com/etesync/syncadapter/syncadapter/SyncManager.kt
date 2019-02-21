@@ -31,6 +31,7 @@ import com.etesync.syncadapter.ui.ViewCollectionActivity
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
 import okhttp3.OkHttpClient
+import org.jetbrains.anko.defaultSharedPreferences
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.*
@@ -227,9 +228,8 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     private fun notifyUserOnSync() {
-        val changeNotification = Settings(ServiceDB.OpenHelper(context).readableDatabase)
-                .getChangeNotification(App.CHANGE_NOTIFICATION)
-        if (remoteEntries!!.isEmpty() || changeNotification == Settings.ChangeNotification.NONE) {
+        val changeNotification = context.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
+        if (remoteEntries!!.isEmpty() || !changeNotification) {
             return
         }
         val notificationHelper = NotificationHelper(context,

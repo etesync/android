@@ -369,7 +369,7 @@ class App : Application() {
         val OVERRIDE_PROXY_HOST = "overrideProxyHost"
         val OVERRIDE_PROXY_PORT = "overrideProxyPort"
         val FORCE_LANGUAGE = "forceLanguage"
-        val CHANGE_NOTIFICATION = "changeNotification"
+        val CHANGE_NOTIFICATION = "show_change_notification"
 
         val OVERRIDE_PROXY_HOST_DEFAULT = "localhost"
         val OVERRIDE_PROXY_PORT_DEFAULT = 8118
