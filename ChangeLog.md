@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.2.1
+* Fix the setting controlling change notifications.
+
 ## Version 1.2.0
 * Add a button to install OpenTasks if isn't installed.
 * Warn about clients that don't support email attachments when sending event invites
