@@ -29,16 +29,16 @@ import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.syncadapter.ContactsSyncManager
 import com.etesync.syncadapter.ui.Refreshable
 import com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult
-import java.io.File
 import java.io.FileNotFoundException
-import java.io.FileReader
 import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 
 class ImportFragment : DialogFragment() {
 
     private lateinit var account: Account
     private lateinit var info: CollectionInfo
-    private var importFile: File? = null
+    private var inputStream: InputStream? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,10 +143,10 @@ class ImportFragment : DialogFragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
                         // Get the URI of the selected file
-                        val uri = data.data
-                        App.log.info("Importing uri = " + uri!!.toString())
+                        val uri = data.data!!
+                        App.log.info("Importing uri = ${uri.toString()}")
                         try {
-                            importFile = File(com.etesync.syncadapter.utils.FileUtils.getPath(context!!, uri))
+                            inputStream = activity!!.getContentResolver().openInputStream(uri)
 
                             Thread(ImportCalendarsLoader()).start()
                         } catch (e: Exception) {
@@ -210,7 +210,7 @@ class ImportFragment : DialogFragment() {
             val result = ImportResult()
 
             try {
-                val importReader = FileReader(importFile!!)
+                val importReader = InputStreamReader(inputStream)
 
                 if (info.type == CollectionInfo.Type.CALENDAR) {
                     val events = Event.fromReader(importReader, null)
