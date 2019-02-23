@@ -139,22 +139,31 @@ class ImportFragment : DialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_CODE -> if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    // Get the URI of the selected file
-                    val uri = data.data
-                    App.log.info("Importing uri = " + uri!!.toString())
-                    try {
-                        importFile = File(com.etesync.syncadapter.utils.FileUtils.getPath(context!!, uri))
+            REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        // Get the URI of the selected file
+                        val uri = data.data
+                        App.log.info("Importing uri = " + uri!!.toString())
+                        try {
+                            importFile = File(com.etesync.syncadapter.utils.FileUtils.getPath(context!!, uri))
 
-                        Thread(ImportCalendarsLoader()).start()
-                    } catch (e: Exception) {
-                        App.log.severe("File select error: " + e.localizedMessage)
+                            Thread(ImportCalendarsLoader()).start()
+                        } catch (e: Exception) {
+                            App.log.severe("File select error: ${e.message}")
+
+                            val importResult = ImportResult()
+                            importResult.e = e
+
+                            (activity as ResultFragment.OnImportCallback).onImportResult(importResult)
+
+                            dismissAllowingStateLoss()
+                        }
+
                     }
-
+                } else {
+                    dismissAllowingStateLoss()
                 }
-            } else {
-                dismissAllowingStateLoss()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
