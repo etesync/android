@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.2.2
+* Fix crash during sync for some users
+
 ## Version 1.2.1
 * Fix the setting controlling change notifications.
 
