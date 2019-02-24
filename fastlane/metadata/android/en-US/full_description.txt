@@ -1,6 +1,6 @@
 Secure and end-to-end encrypted personal information sync for Android, the desktop and the web. Currently supports calendars, contacts and tasks (using OpenTasks), with more on the way.
 
-In order to use this application you need to have an account with EteSync (paid hosting), or run your own instance (free and open source). Check out https://www.etesync.com/ for more information. All the source code is available at https://github.com/etesync/
+In order to use this application you need to have an account with EteSync (paid hosting), or run your own instance (free and open source). Check out https://www.etesync.com/ for more information.
 
 Easy to Use
 ===========
