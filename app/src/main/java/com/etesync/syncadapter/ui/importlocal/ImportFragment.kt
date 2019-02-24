@@ -144,9 +144,9 @@ class ImportFragment : DialogFragment() {
                     if (data != null) {
                         // Get the URI of the selected file
                         val uri = data.data!!
-                        App.log.info("Importing uri = ${uri.toString()}")
+                        App.log.info("Importing uri = ${uri}")
                         try {
-                            inputStream = activity!!.getContentResolver().openInputStream(uri)
+                            inputStream = activity!!.contentResolver.openInputStream(uri)
 
                             Thread(ImportCalendarsLoader()).start()
                         } catch (e: Exception) {
