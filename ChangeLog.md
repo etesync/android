@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.2.3
+* Fix import from file when choosing files from special directories rather than the filesystem.
+* Fix crash when trying to sync events with invites (for some users)
+
 ## Version 1.2.2
 * Fix crash during sync for some users
 
