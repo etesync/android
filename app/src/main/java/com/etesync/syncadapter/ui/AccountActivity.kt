@@ -51,6 +51,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     internal var listCardDAV: ListView? = null
     internal var listTaskDAV: ListView? = null
 
+    internal val openTasksPackage = "org.dmfs.tasks"
+
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
         val list = parent as ListView
         val adapter = list.adapter as ArrayAdapter<*>
@@ -102,28 +104,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         tbTaskDAV.inflateMenu(R.menu.taskdav_actions)
         tbTaskDAV.setOnMenuItemClickListener(this)
         tbTaskDAV.setTitle(R.string.settings_taskdav)
-        val openTasksPackage = "org.dmfs.tasks"
         if (!packageInstalled(this, openTasksPackage)) {
-            val tasksInstallButton = findViewById<LinearLayout>(R.id.taskdav_install_button)
-            tasksInstallButton.visibility = View.VISIBLE
-            tasksInstallButton.setOnClickListener {
-                val fdroidPackageName = "org.fdroid.fdroid"
-                val gplayPackageName = "com.android.vending"
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(
-                            "https://f-droid.org/en/packages/$openTasksPackage/")
-                }
-                if (packageInstalled(this, fdroidPackageName)) {
-                    intent.setPackage(fdroidPackageName)
-                } else if (packageInstalled(this, gplayPackageName)) {
-                    intent.apply {
-                        data = Uri.parse(
-                                "https://play.google.com/store/apps/details?id=$openTasksPackage")
-                        setPackage(gplayPackageName)
-                    }
-                }
-                startActivity(intent)
-            }
+            val tasksInstallMenuItem = tbTaskDAV.menu.findItem(R.id.install_opentasks)
+            tasksInstallMenuItem.setVisible(true)
         }
 
         // load CardDAV/CalDAV journals
@@ -194,6 +177,24 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 info = CollectionInfo()
                 info.type = CollectionInfo.Type.ADDRESS_BOOK
                 startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+            }
+            R.id.install_opentasks ->  {
+                val fdroidPackageName = "org.fdroid.fdroid"
+                val gplayPackageName = "com.android.vending"
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(
+                            "https://f-droid.org/en/packages/$openTasksPackage/")
+                }
+                if (packageInstalled(this, fdroidPackageName)) {
+                    intent.setPackage(fdroidPackageName)
+                } else if (packageInstalled(this, gplayPackageName)) {
+                    intent.apply {
+                        data = Uri.parse(
+                                "https://play.google.com/store/apps/details?id=$openTasksPackage")
+                        setPackage(gplayPackageName)
+                    }
+                }
+                startActivity(intent)
             }
         }
         return false

@@ -9,7 +9,11 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/install_opentasks"
+        android:visible="false"
+        android:title="@string/install_opentasks"/>
+
     <item android:id="@+id/create_tasklist"
-          android:title="@string/create_tasklist"/>
+        android:title="@string/create_tasklist"/>
 
 </menu>
