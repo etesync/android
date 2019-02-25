@@ -162,7 +162,7 @@ class LocalAddressBook(
             account = future.result
         }
 
-        App.log.info("Address book write permission? = ${journalEntity.isReadOnly}")
+        App.log.info("Address book write permission? = ${!journalEntity.isReadOnly}")
         readOnly = journalEntity.isReadOnly
 
         // make sure it will still be synchronized when contacts are updated
