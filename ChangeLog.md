@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 1.2.4
+* Fix issue with tasks causing a lot of syncs for some people
+* Fix sync when syncing deleted tasks that have never been synced before
+* Fix the sync indicator in the account view to also work for tasks
+* Unify the sync interval across all journal types (remove separate sync interval per type)
+* Show the number of tasks in the journal view
+* Move the OpenTasks installation link to the menu so it looks nicer.
+
 ## Version 1.2.3
 * Fix import from file when choosing files from special directories rather than the filesystem.
 * Fix crash when trying to sync events with invites (for some users)
