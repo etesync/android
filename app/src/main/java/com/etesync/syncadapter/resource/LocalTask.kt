@@ -33,7 +33,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     override val content: String
         get() {
-            App.log.log(Level.FINE, "Preparing upload of task " + fileName!!, task)
+            App.log.log(Level.FINE, "Preparing upload of task ${fileName} ${task}")
 
             val os = ByteArrayOutputStream()
             task?.write(os)
