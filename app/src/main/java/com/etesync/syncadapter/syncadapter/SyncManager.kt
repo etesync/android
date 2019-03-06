@@ -479,7 +479,13 @@ constructor(protected val context: Context, protected val account: Account, prot
                 if (Thread.interrupted())
                     return ret
 
-                App.log.info(local.uuid + " has been deleted locally -> deleting from server")
+                if (local.uuid != null) {
+                    App.log.info(local.uuid + " has been deleted locally -> deleting from server")
+                } else {
+                    App.log.fine("Entry deleted before ever syncing - genarting a UUID")
+                    local.prepareForUpload()
+                }
+
                 ret.add(local)
 
                 syncResult.stats.numDeletes++
