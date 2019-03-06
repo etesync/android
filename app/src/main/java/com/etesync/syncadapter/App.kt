@@ -12,10 +12,7 @@ import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Application
-import android.content.BroadcastReceiver
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
@@ -48,6 +45,7 @@ import io.requery.sql.EntityDataStore
 import okhttp3.internal.tls.OkHostnameVerifier
 import org.acra.ACRA
 import org.apache.commons.lang3.time.DateFormatUtils
+import org.jetbrains.anko.doAsync
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -93,6 +91,19 @@ class App : Application() {
         addressBooksAuthority = getString(R.string.address_books_authority)
 
         loadLanguage()
+
+        // don't block UI for some background checks
+        doAsync {
+            // watch installed/removed apps
+            val tasksFilter = IntentFilter()
+            tasksFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
+            tasksFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED)
+            tasksFilter.addDataScheme("package")
+            registerReceiver(PackageChangedReceiver(), tasksFilter)
+
+            // check whether a tasks app is currently installed
+            PackageChangedReceiver.updateTaskSync(this@App)
+        }
     }
 
     override fun attachBaseContext(base: Context) {

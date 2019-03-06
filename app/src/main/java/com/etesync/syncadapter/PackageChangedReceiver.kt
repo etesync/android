@@ -8,11 +8,14 @@
 
 package com.etesync.syncadapter
 
+import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-
+import android.provider.CalendarContract
+import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.resource.LocalTaskList
 
 class PackageChangedReceiver : BroadcastReceiver() {
@@ -29,8 +32,21 @@ class PackageChangedReceiver : BroadcastReceiver() {
             val tasksInstalled = LocalTaskList.tasksProviderAvailable(context)
             App.log.info("Package (un)installed; OpenTasks provider now available = $tasksInstalled")
 
-            // check all accounts and (de)activate OpenTasks if a CalDAV service is defined
-            // FIXME: Do something if we ever bring back tasks.
+            for (account in AccountManager.get(context).getAccountsByType(App.accountType)) {
+                val settings = AccountSettings(context, account)
+                val calendarSyncInterval = settings.getSyncInterval(CalendarContract.AUTHORITY)
+
+                if (tasksInstalled) {
+                    if (calendarSyncInterval == null) {
+                        // do nothing atm
+                    } else if (ContentResolver.getIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority) <= 0) {
+                        ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 1)
+                        settings.setSyncInterval(TaskProvider.ProviderName.OpenTasks.authority, calendarSyncInterval)
+                    }
+                } else {
+                    ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 0)
+                }
+            }
         }
     }
 

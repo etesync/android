@@ -16,6 +16,7 @@ import android.content.SyncResult
 import android.database.sqlite.SQLiteException
 import android.os.Build
 import android.os.Bundle
+import android.provider.CalendarContract
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
@@ -62,6 +63,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
                  */
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(accountSettings))
                     return
+
 
                 RefreshCollections(account, CollectionInfo.Type.TASKS).run()
 
