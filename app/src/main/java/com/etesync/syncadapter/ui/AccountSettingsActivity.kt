@@ -22,6 +22,7 @@ import androidx.loader.content.Loader
 import androidx.preference.*
 import android.text.TextUtils
 import android.view.MenuItem
+import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.R
@@ -107,41 +108,25 @@ class AccountSettingsActivity : BaseActivity() {
                 true
             }
 
-            // category: synchronization
-            val prefSyncContacts = findPreference("sync_interval_contacts") as ListPreference
-            val syncIntervalContacts = settings.getSyncInterval(App.addressBooksAuthority)
-            if (syncIntervalContacts != null) {
-                prefSyncContacts.value = syncIntervalContacts.toString()
-                if (syncIntervalContacts == AccountSettings.SYNC_INTERVAL_MANUALLY)
-                    prefSyncContacts.setSummary(R.string.settings_sync_summary_manually)
+            val prefSync = findPreference("sync_interval") as ListPreference
+            val syncInterval = settings.getSyncInterval(CalendarContract.AUTHORITY) // Calendar is the baseline interval
+            if (syncInterval != null) {
+                prefSync.value = syncInterval.toString()
+                if (syncInterval == AccountSettings.SYNC_INTERVAL_MANUALLY)
+                    prefSync.setSummary(R.string.settings_sync_summary_manually)
                 else
-                    prefSyncContacts.summary = getString(R.string.settings_sync_summary_periodically, prefSyncContacts.entry)
-                prefSyncContacts.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    settings.setSyncInterval(App.addressBooksAuthority, java.lang.Long.parseLong(newValue as String))
+                    prefSync.summary = getString(R.string.settings_sync_summary_periodically, prefSync.entry)
+                prefSync.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    val newInterval = java.lang.Long.parseLong(newValue as String)
+                    settings.setSyncInterval(App.addressBooksAuthority, newInterval)
+                    settings.setSyncInterval(CalendarContract.AUTHORITY, newInterval)
+                    settings.setSyncInterval(TaskProvider.ProviderName.OpenTasks.authority, newInterval)
                     loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
                     false
                 }
             } else {
-                prefSyncContacts.isEnabled = false
-                prefSyncContacts.setSummary(R.string.settings_sync_summary_not_available)
-            }
-
-            val prefSyncCalendars = findPreference("sync_interval_calendars") as ListPreference
-            val syncIntervalCalendars = settings.getSyncInterval(CalendarContract.AUTHORITY)
-            if (syncIntervalCalendars != null) {
-                prefSyncCalendars.value = syncIntervalCalendars.toString()
-                if (syncIntervalCalendars == AccountSettings.SYNC_INTERVAL_MANUALLY)
-                    prefSyncCalendars.setSummary(R.string.settings_sync_summary_manually)
-                else
-                    prefSyncCalendars.summary = getString(R.string.settings_sync_summary_periodically, prefSyncCalendars.entry)
-                prefSyncCalendars.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    settings.setSyncInterval(CalendarContract.AUTHORITY, java.lang.Long.parseLong(newValue as String))
-                    loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
-                    false
-                }
-            } else {
-                prefSyncCalendars.isEnabled = false
-                prefSyncCalendars.setSummary(R.string.settings_sync_summary_not_available)
+                prefSync.isEnabled = false
+                prefSync.setSummary(R.string.settings_sync_summary_not_available)
             }
 
             val prefWifiOnly = findPreference("sync_wifi_only") as SwitchPreferenceCompat

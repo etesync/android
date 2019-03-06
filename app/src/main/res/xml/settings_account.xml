@@ -39,16 +39,9 @@
             android:dialogTitle="@string/settings_enter_password" />
 
         <ListPreference
-            android:key="sync_interval_contacts"
+            android:key="sync_interval"
             android:persistent="false"
-            android:title="@string/settings_sync_interval_contacts"
-            android:entries="@array/settings_sync_interval_names"
-            android:entryValues="@array/settings_sync_interval_seconds" />
-
-        <ListPreference
-            android:key="sync_interval_calendars"
-            android:persistent="false"
-            android:title="@string/settings_sync_interval_calendars"
+            android:title="@string/settings_sync_interval"
             android:entries="@array/settings_sync_interval_names"
             android:entryValues="@array/settings_sync_interval_seconds" />
 
