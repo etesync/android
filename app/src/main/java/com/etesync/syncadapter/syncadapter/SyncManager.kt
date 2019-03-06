@@ -417,7 +417,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         for (local in localDeleted!!) {
             val entry = SyncEntry(local.content, SyncEntry.Actions.DELETE)
             val tmp = JournalEntryManager.Entry()
-            tmp.update(crypto, entry.toJson(), previousEntry!!)
+            tmp.update(crypto, entry.toJson(), previousEntry)
             previousEntry = tmp
             localEntries!!.add(previousEntry)
 
