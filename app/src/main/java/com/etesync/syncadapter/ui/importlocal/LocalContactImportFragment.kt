@@ -11,9 +11,9 @@ import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -253,7 +253,7 @@ class LocalContactImportFragment : Fragment() {
             a.recycle()
         }
 
-        override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+        override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
             drawVertical(c, parent)
         }
 
@@ -273,7 +273,7 @@ class LocalContactImportFragment : Fragment() {
             }
         }
 
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             outRect.set(0, 0, 0, mDivider!!.intrinsicHeight)
         }
 

@@ -22,7 +22,7 @@ import javax.net.ssl.SSLSocket;
 import at.bitfire.cert4android.CustomCertManager;
 import okhttp3.mockwebserver.MockWebServer;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 

@@ -15,11 +15,11 @@ import android.content.Intent
 import android.content.SyncStatusObserver
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.support.v4.app.LoaderManager
-import android.support.v4.app.NavUtils
-import android.support.v4.content.AsyncTaskLoader
-import android.support.v4.content.Loader
-import android.support.v7.preference.*
+import androidx.loader.app.LoaderManager
+import androidx.core.app.NavUtils
+import androidx.loader.content.AsyncTaskLoader
+import androidx.loader.content.Loader
+import androidx.preference.*
 import android.text.TextUtils
 import android.view.MenuItem
 import com.etesync.syncadapter.*

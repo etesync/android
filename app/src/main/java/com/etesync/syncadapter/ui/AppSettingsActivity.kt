@@ -11,8 +11,8 @@ package com.etesync.syncadapter.ui
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.preference.*
+import com.google.android.material.snackbar.Snackbar
+import androidx.preference.*
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.ServiceDB

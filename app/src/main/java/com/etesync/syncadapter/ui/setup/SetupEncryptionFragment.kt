@@ -18,8 +18,8 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto

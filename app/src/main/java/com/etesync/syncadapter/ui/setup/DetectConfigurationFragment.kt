@@ -13,11 +13,11 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.AsyncTaskLoader
-import android.support.v4.content.Loader
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.AsyncTaskLoader
+import androidx.loader.content.Loader
+import androidx.appcompat.app.AlertDialog
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.DebugInfoActivity

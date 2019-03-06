@@ -90,7 +90,7 @@ android {
     }
 
     defaultConfig {
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     /*
@@ -132,14 +132,14 @@ dependencies {
     def acraVersion = '5.2.1'
     implementation "ch.acra:acra-mail:$acraVersion"
     implementation "ch.acra:acra-toast:$acraVersion"
-    def supportVersion = '27.1.1'
-    implementation "com.android.support:support-core-ui:$supportVersion"
-    implementation "com.android.support:support-compat:$supportVersion"
-    implementation "com.android.support:support-fragment:$supportVersion"
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:cardview-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:preference-v14:$supportVersion"
+    def supportVersion = '1.0.0'
+    implementation "androidx.legacy:legacy-support-core-ui:$supportVersion"
+    implementation "androidx.core:core:$supportVersion"
+    implementation "androidx.fragment:fragment:$supportVersion"
+    implementation "androidx.appcompat:appcompat:$supportVersion"
+    implementation "androidx.cardview:cardview:$supportVersion"
+    implementation "com.google.android.material:material:$supportVersion"
+    implementation "androidx.legacy:legacy-preference-v14:$supportVersion"
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation ('com.github.worker8:tourguide:1.0.17-SNAPSHOT@aar') {
         transitive = true
@@ -167,10 +167,10 @@ dependencies {
     implementation project(':ical4android')
     implementation project(':vcard4android')
     // for tests
-    androidTestImplementation('com.android.support.test:runner:0.5') {
+    androidTestImplementation('androidx.test:runner:1.1.0-alpha4') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestImplementation('com.android.support.test:rules:0.5') {
+    androidTestImplementation('androidx.test:rules:1.1.0-alpha4') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     androidTestImplementation 'junit:junit:4.12'

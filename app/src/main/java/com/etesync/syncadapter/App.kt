@@ -25,9 +25,9 @@ import android.os.Process
 import android.os.StrictMode
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 import at.bitfire.cert4android.CustomCertManager
 import at.bitfire.ical4android.AndroidCalendar

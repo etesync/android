@@ -4,7 +4,7 @@ import android.accounts.Account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.text.InputType
 import android.view.View
 import android.widget.CheckBox
@@ -78,7 +78,7 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
         if (savedInstanceState == null) {
             listFragment = CollectionMembersListFragment.newInstance(account, info)
             supportFragmentManager.beginTransaction()
-                    .add(R.id.list_entries_container, listFragment)
+                    .add(R.id.list_entries_container, listFragment!!)
                     .commit()
         }
     }

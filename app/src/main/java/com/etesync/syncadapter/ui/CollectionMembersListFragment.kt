@@ -3,8 +3,8 @@ package com.etesync.syncadapter.ui
 import android.accounts.Account
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.ListFragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.ListFragment
+import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

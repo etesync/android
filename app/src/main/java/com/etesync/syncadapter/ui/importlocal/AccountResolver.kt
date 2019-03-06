@@ -3,7 +3,7 @@ package com.etesync.syncadapter.ui.importlocal
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 import java.util.*
