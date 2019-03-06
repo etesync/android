@@ -48,6 +48,10 @@ class LocalTaskList private constructor(
             return create(account, provider, values)
         }
 
+        fun findByName(account: Account, provider: TaskProvider, factory: Factory, name: String): LocalTaskList?
+                = AndroidTaskList.find(account, provider, factory, TaskLists._SYNC_ID + "==?", arrayOf(name)).firstOrNull()
+
+
         private fun valuesFromCollectionInfo(journalEntity: JournalEntity, withColor: Boolean): ContentValues {
             val info = journalEntity.info
             val values = ContentValues(3)

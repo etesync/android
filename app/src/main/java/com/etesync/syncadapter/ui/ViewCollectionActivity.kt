@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
@@ -30,6 +31,7 @@ import com.etesync.syncadapter.model.EntryEntity
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.importlocal.ImportActivity
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment
 import com.etesync.syncadapter.utils.HintManager
@@ -199,7 +201,16 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                     }
                 }
                 CollectionInfo.Type.TASKS -> {
-                    count = -1
+                    try {
+                        val providerClient = TaskProvider.acquire(this@ViewCollectionActivity, TaskProvider.ProviderName.OpenTasks)
+                        val resource = LocalTaskList.findByName(account, providerClient!!, LocalTaskList.Factory, info.uid!!)
+                        if (resource == null) {
+                            return null
+                        }
+                        count = resource.count()
+                    } catch (e: ContactsStorageException) {
+                        e.printStackTrace()
+                    }
                 }
                 CollectionInfo.Type.ADDRESS_BOOK -> {
                     try {
@@ -231,8 +242,8 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                                 result, entryCount)
                     }
                     CollectionInfo.Type.TASKS -> {
-                        stats.text = String.format(Locale.getDefault(), "Tasks: (TBD), Journal entries: %d",
-                                entryCount)
+                        stats.text = String.format(Locale.getDefault(), "Tasks: %d, Journal entries: %d",
+                                result, entryCount)
                     }
                     CollectionInfo.Type.ADDRESS_BOOK -> {
                         stats.text = String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d",
