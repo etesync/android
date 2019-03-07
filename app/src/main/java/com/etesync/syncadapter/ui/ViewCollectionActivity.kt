@@ -188,8 +188,11 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                 CollectionInfo.Type.CALENDAR -> {
                     try {
                         val providerClient = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
+                        if (providerClient == null) {
+                            return null
+                        }
                         val resource = LocalCalendar.findByName(account, providerClient, LocalCalendar.Factory, info.uid!!)
-                        providerClient!!.release()
+                        providerClient.release()
                         if (resource == null) {
                             return null
                         }
@@ -203,7 +206,10 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                 CollectionInfo.Type.TASKS -> {
                     try {
                         val providerClient = TaskProvider.acquire(this@ViewCollectionActivity, TaskProvider.ProviderName.OpenTasks)
-                        val resource = LocalTaskList.findByName(account, providerClient!!, LocalTaskList.Factory, info.uid!!)
+                        if (providerClient == null) {
+                            return null
+                        }
+                        val resource = LocalTaskList.findByName(account, providerClient, LocalTaskList.Factory, info.uid!!)
                         if (resource == null) {
                             return null
                         }
@@ -215,7 +221,10 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                 CollectionInfo.Type.ADDRESS_BOOK -> {
                     try {
                         val providerClient = contentResolver.acquireContentProviderClient(ContactsContract.Contacts.CONTENT_URI)
-                        val resource = LocalAddressBook.findByUid(this@ViewCollectionActivity, providerClient!!, account, info.uid!!)
+                        if (providerClient == null) {
+                            return null
+                        }
+                        val resource = LocalAddressBook.findByUid(this@ViewCollectionActivity, providerClient, account, info.uid!!)
                         providerClient.release()
                         if (resource == null) {
                             return null
