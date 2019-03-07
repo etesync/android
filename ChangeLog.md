@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.2.5
+* Change crash message to be a notification rather than a toast
+* View collection: don't crash when trying to view the tasks journal when OpenTasks is not installed
+
 ## Version 1.2.4
 * Fix issue with tasks causing a lot of syncs for some people
 * Fix sync when syncing deleted tasks that have never been synced before
