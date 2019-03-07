@@ -113,7 +113,7 @@ class App : Application() {
             // The following line triggers the initialization of ACRA
             ACRA.init(this, AcraConfiguration.getConfig(this))
             val pm = base.packageManager
-            var installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID)
+            val installedFrom = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID)
             ACRA.getErrorReporter().putCustomData("installedFrom", installedFrom);
         }
     }

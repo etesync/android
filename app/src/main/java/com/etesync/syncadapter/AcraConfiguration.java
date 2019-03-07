@@ -1,11 +1,10 @@
 package com.etesync.syncadapter;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import org.acra.config.CoreConfigurationBuilder;
 import org.acra.config.MailSenderConfigurationBuilder;
-import org.acra.config.ToastConfigurationBuilder;
+import org.acra.config.NotificationConfigurationBuilder;
 import org.acra.data.StringFormat;
 
 import static com.etesync.syncadapter.utils.EventEmailInvitationKt.emailSupportsAttachments;
@@ -22,9 +21,11 @@ public class AcraConfiguration {
                 .setReportFileName("ACRA-report.stacktrace.json")
                 .setReportAsFile(emailSupportsAttachments(context))
                 .setEnabled(true);
-        builder.getPluginConfigurationBuilder(ToastConfigurationBuilder.class)
+        builder.getPluginConfigurationBuilder(NotificationConfigurationBuilder.class)
+                .setResTitle(R.string.crash_title)
                 .setResText(R.string.crash_message)
-                .setLength(Toast.LENGTH_SHORT)
+                .setChannelName("crash-notification")
+                .setSendOnClick(true)
                 .setEnabled(true);
 
         return builder;

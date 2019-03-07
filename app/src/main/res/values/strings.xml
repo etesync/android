@@ -22,7 +22,8 @@
     <string name="send">Send</string>
 
     <!-- Crash -->
-    <string name="crash_message">EteSync has crashed, please send stack trace to developers.</string>
+    <string name="crash_title">EteSync has crashed!</string>
+    <string name="crash_message">Please send stack trace to developers.</string>
     <string name="crash_email_subject">EteSync Debug Info</string>
 
     <!-- tourguide -->
