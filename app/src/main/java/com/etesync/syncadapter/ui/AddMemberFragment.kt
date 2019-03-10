@@ -16,6 +16,7 @@ import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.journalmanager.UserInfoManager
 import com.etesync.syncadapter.model.CollectionInfo
+import com.etesync.syncadapter.model.JournalEntity
 import okhttp3.HttpUrl
 
 class AddMemberFragment : DialogFragment() {
@@ -100,13 +101,22 @@ class AddMemberFragment : DialogFragment() {
     private inner class MemberAddSecond : AsyncTask<Void, Void, MemberAddSecond.AddResultSecond>() {
         override fun doInBackground(vararg voids: Void): AddResultSecond {
             try {
-                val httpClient = HttpClient.create(ctx!!, settings!!)
+                val settings = settings!!
+                val httpClient = HttpClient.create(ctx!!, settings)
                 val journalsManager = JournalManager(httpClient, remote!!)
 
-                val journal = JournalManager.Journal.fakeWithUid(info.uid!!)
-                val crypto = Crypto.CryptoManager(info.version, settings!!.password(), info.uid!!)
+                val data = (ctx!!.applicationContext as App).data
+                val journalEntity = JournalEntity.fetchOrCreate(data, info)
 
-                val encryptedKey = crypto.getEncryptedKey(settings!!.keyPair!!, memberPubKey)
+                val crypto: Crypto.CryptoManager
+                if (journalEntity.encryptedKey != null) {
+                    crypto = Crypto.CryptoManager(info.version, settings.keyPair!!, journalEntity.encryptedKey)
+                } else {
+                    crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid!!)
+                }
+                val journal = JournalManager.Journal.fakeWithUid(info.uid!!)
+
+                val encryptedKey = crypto.getEncryptedKey(settings.keyPair!!, memberPubKey)
                 val member = JournalManager.Member(memberEmail, encryptedKey!!, readOnly)
                 journalsManager.addMember(journal, member)
                 return AddResultSecond(null)
