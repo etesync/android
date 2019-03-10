@@ -148,7 +148,7 @@ class ImportFragment : DialogFragment() {
                         try {
                             inputStream = activity!!.contentResolver.openInputStream(uri)
 
-                            Thread(ImportCalendarsLoader()).start()
+                            Thread(ImportEntriesLoader()).start()
                         } catch (e: Exception) {
                             App.log.severe("File select error: ${e.message}")
 
@@ -179,7 +179,7 @@ class ImportFragment : DialogFragment() {
         }
     }
 
-    private inner class ImportCalendarsLoader : Runnable {
+    private inner class ImportEntriesLoader : Runnable {
         private fun finishParsingFile(length: Int) {
             if (activity == null) {
                 return
