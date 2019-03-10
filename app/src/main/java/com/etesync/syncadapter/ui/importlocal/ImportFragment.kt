@@ -210,6 +210,7 @@ class ImportFragment : DialogFragment() {
             val result = ImportResult()
 
             try {
+                val context = context!!
                 val importReader = InputStreamReader(inputStream)
 
                 if (info.type == CollectionInfo.Type.CALENDAR) {
@@ -226,7 +227,7 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(events.size)
 
-                    val provider = context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
+                    val provider = context.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
                     val localCalendar: LocalCalendar?
                     try {
                         localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)
@@ -256,7 +257,7 @@ class ImportFragment : DialogFragment() {
                     }
                 } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
                     val oldUidToNewId = HashMap<String?, Long>()
-                    val downloader = ContactsSyncManager.ResourceDownloader(context!!)
+                    val downloader = ContactsSyncManager.ResourceDownloader(context)
                     val contacts = Contact.fromReader(importReader, downloader)
 
                     if (contacts.size == 0) {
@@ -269,8 +270,11 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(contacts.size)
 
-                    val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!
-                    val localAddressBook = LocalAddressBook.findByUid(context!!, provider, account, info.uid!!)!!
+                    val provider = context.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!
+                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, info.uid!!)
+                    if (localAddressBook == null) {
+                        throw FileNotFoundException("Failed to load local address book.")
+                    }
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
                         try {
