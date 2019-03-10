@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.2.6
+* Fix collection editing following an encryption password change.
+
 ## Version 1.2.5
 * Change crash message to be a notification rather than a toast
 * View collection: don't crash when trying to view the tasks journal when OpenTasks is not installed
