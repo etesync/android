@@ -96,29 +96,35 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 }
 
                 val serviceEntity = JournalModel.Service.fetch(data, account.name, info.type)
+                info.serviceID = serviceEntity.id
 
                 val settings = AccountSettings(context, account)
                 val principal = HttpUrl.get(settings.uri!!)
 
                 val journalManager = JournalManager(HttpClient.create(context, settings), principal!!)
                 var uid = info.uid
+
                 if (uid == null) {
                     uid = JournalManager.Journal.genUid()
                     info.uid = uid
                     val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
                     val journal = JournalManager.Journal(crypto, info.toJson(), uid)
                     journalManager.create(journal)
+
+                    val journalEntity = JournalEntity.fetchOrCreate(data, info)
+                    data.upsert(journalEntity)
                 } else {
-                    val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                    val crypto: Crypto.CryptoManager
+                    val journalEntity = JournalEntity.fetch(data, serviceEntity, uid)
+
+                    if (journalEntity.encryptedKey != null) {
+                        crypto = Crypto.CryptoManager(info.version, settings.keyPair!!, journalEntity.encryptedKey)
+                    } else {
+                        crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                    }
                     val journal = JournalManager.Journal(crypto, info.toJson(), uid)
                     journalManager.update(journal)
                 }
-
-                // 2. add collection to service
-                info.serviceID = serviceEntity.id
-                val journalEntity = JournalEntity.fetchOrCreate(data, info)
-                data.upsert(journalEntity)
-
 
                 requestSync(authority)
             } catch (e: IllegalStateException) {
