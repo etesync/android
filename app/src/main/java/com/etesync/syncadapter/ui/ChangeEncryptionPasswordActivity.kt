@@ -23,6 +23,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.syncadapter.syncadapter.requestSync
 import okhttp3.HttpUrl
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -131,6 +132,8 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
                             .setPositiveButton(android.R.string.ok) { _, _ ->
                                 this@ChangeEncryptionPasswordActivity.finish()
                             }.show()
+
+                    requestSync(account)
                 }
             } catch (e: Exception) {
                 uiThread {

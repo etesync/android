@@ -35,6 +35,7 @@ import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
@@ -440,17 +441,6 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     companion object {
         val EXTRA_ACCOUNT = "account"
         private val HINT_VIEW_COLLECTION = "ViewCollection"
-
-        protected fun requestSync(account: Account?) {
-            val authorities = arrayOf(App.addressBooksAuthority, CalendarContract.AUTHORITY, TaskProvider.ProviderName.OpenTasks.authority)
-
-            for (authority in authorities) {
-                val extras = Bundle()
-                extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)        // manual sync
-                extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)     // run immediately (don't queue)
-                ContentResolver.requestSync(account, authority, extras)
-            }
-        }
     }
 
 }
