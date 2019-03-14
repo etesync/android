@@ -67,6 +67,11 @@
             android:summaryOn="@string/app_settings_log_to_external_storage_on"
             android:summaryOff="@string/app_settings_log_to_external_storage_off"/>
 
+        <SwitchPreferenceCompat
+            android:key="log_verbose"
+            android:title="@string/app_settings_log_verbose"
+            android:summary="@string/app_settings_log_verbose_summary"/>
+
         <ListPreference
             android:key="select_language"
             android:title="@string/app_settings_force_language"/>

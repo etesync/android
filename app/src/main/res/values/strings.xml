@@ -106,6 +106,8 @@
     <string name="app_settings_log_to_external_storage">Log to external file</string>
     <string name="app_settings_log_to_external_storage_on">Logging to external storage. Disable to hide the notification.</string>
     <string name="app_settings_log_to_external_storage_off">External file logging is disabled</string>
+    <string name="app_settings_log_verbose">Verbose logging</string>
+    <string name="app_settings_log_verbose_summary">Verbose logs may contain private information</string>
     <string name="app_settings_show_debug_info">Show debug info</string>
     <string name="app_settings_show_debug_info_details">View/share software and configuration details</string>
     <string name="app_settings_force_language">Force Language</string>

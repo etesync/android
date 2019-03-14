@@ -34,6 +34,7 @@ import java.util.logging.Level
 object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
 
     private const val LOG_TO_FILE = "log_to_file"
+    private const val LOG_VERBOSE = "log_verbose"
 
     val log = java.util.logging.Logger.getLogger("etesync")!!
 
@@ -49,7 +50,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        if (key == LOG_TO_FILE) {
+        if (key == LOG_TO_FILE || key == LOG_VERBOSE) {
             log.info("Logging settings changed; re-initializing logger")
             reinitialize()
         }
@@ -57,7 +58,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
 
     private fun reinitialize() {
         val logToFile = preferences.getBoolean(LOG_TO_FILE, false)
-        val logVerbose = logToFile || Log.isLoggable(Logger.log.name, Log.DEBUG)
+        val logVerbose = preferences.getBoolean(LOG_VERBOSE, false) || Log.isLoggable(Logger.log.name, Log.DEBUG)
 
         log.info("Verbose logging: $logVerbose; to file: $logToFile")
 
