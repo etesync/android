@@ -150,7 +150,7 @@ class NotificationHelper(internal val context: Context, internal val notificatio
     }
 
     companion object {
-        private val CHANNEL_ID = "EteSync_default"
+        val CHANNEL_ID = "EteSync_default"
     }
 
 }

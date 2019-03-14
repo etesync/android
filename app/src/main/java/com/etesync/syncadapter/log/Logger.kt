@@ -21,6 +21,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.NotificationHelper
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.ServiceDB
 import com.etesync.syncadapter.model.Settings
@@ -78,7 +79,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
             builder.setSmallIcon(R.drawable.ic_sd_storage_light)
                     .setLargeIcon(App.getLauncherBitmap(context))
                     .setContentTitle(context.getString(R.string.logging_davdroid_file_logging))
-                    .setLocalOnly(true)
+                    .setChannelId(NotificationHelper.CHANNEL_ID)
 
             val logDir = debugDir(context) ?: return
             val logFile = File(logDir,
@@ -97,6 +98,8 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setSubText(context.getString(R.string.logging_to_external_storage_warning))
                         .setContentIntent(PendingIntent.getActivity(context, 0, prefIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                        .setStyle(NotificationCompat.BigTextStyle()
+                                .bigText(context.getString(R.string.logging_to_external_storage, logDir.path)))
                         .setOngoing(true)
             } catch(e: IOException) {
                 log.log(Level.SEVERE, "Couldn't create log file", e)
@@ -113,7 +116,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
     }
 
     private fun debugDir(context: Context): File? {
-        val dir = File(context.filesDir, "debug")
+        val dir = File(context.getExternalFilesDir(null), "debug")
         if (dir.exists() && dir.isDirectory)
             return dir
 
