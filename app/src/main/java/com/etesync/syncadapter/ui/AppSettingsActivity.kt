@@ -44,7 +44,6 @@ class AppSettingsActivity : BaseActivity() {
         internal lateinit var prefResetCertificates: Preference
         internal lateinit var prefOverrideProxy: SwitchPreferenceCompat
         internal lateinit var prefDistrustSystemCerts: SwitchPreferenceCompat
-        internal lateinit var prefLogToExternalStorage: SwitchPreferenceCompat
 
         internal lateinit var prefProxyHost: EditTextPreference
         internal lateinit var prefProxyPort: EditTextPreference
@@ -114,9 +113,6 @@ class AppSettingsActivity : BaseActivity() {
 
             prefResetCertificates = findPreference("reset_certificates")
 
-            prefLogToExternalStorage = findPreference("log_to_external_storage") as SwitchPreferenceCompat
-            prefLogToExternalStorage.isChecked = settings.getBoolean(App.LOG_TO_EXTERNAL_STORAGE, false)
-
             val prefChangeNotification = findPreference("show_change_notification") as SwitchPreferenceCompat
             prefChangeNotification.isChecked = context!!.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
 
@@ -135,8 +131,6 @@ class AppSettingsActivity : BaseActivity() {
                 setDistrustSystemCerts(preference.isChecked)
             else if (preference === prefResetCertificates)
                 resetCertificates()
-            else if (preference === prefLogToExternalStorage)
-                setExternalLogging(preference.isChecked)
             else
                 return false
             return true
@@ -161,17 +155,6 @@ class AppSettingsActivity : BaseActivity() {
         private fun resetCertificates() {
             (context!!.applicationContext as App).certManager?.resetCertificates()
             Snackbar.make(view!!, getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
-        }
-
-        private fun setExternalLogging(externalLogging: Boolean) {
-            settings.putBoolean(App.LOG_TO_EXTERNAL_STORAGE, externalLogging)
-
-            // reinitialize logger of default process
-            val app = context!!.applicationContext as App
-            app.reinitLogger()
-
-            // reinitialize logger of :sync process
-            context!!.sendBroadcast(Intent(App.ReinitSettingsReceiver.ACTION_REINIT_SETTINGS))
         }
 
         private inner class LanguageTask internal constructor(private val mListPreference: ListPreference) : AsyncTask<Void, Void, LanguageUtils.LocaleList>() {

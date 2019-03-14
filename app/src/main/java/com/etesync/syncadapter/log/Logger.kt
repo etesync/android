@@ -40,9 +40,12 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
     val log = java.util.logging.Logger.getLogger("etesync")!!
 
     private lateinit var context: Context
+    private lateinit var preferences: SharedPreferences
 
     fun initialize(someContext: Context) {
         context = someContext.applicationContext
+        preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        preferences.registerOnSharedPreferenceChangeListener(this)
 
         reinitialize()
     }
@@ -55,10 +58,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
     }
 
     private fun reinitialize() {
-        val dbHelper = ServiceDB.OpenHelper(context)
-        val settings = Settings(dbHelper.readableDatabase)
-
-        val logToFile = settings.getBoolean(App.LOG_TO_EXTERNAL_STORAGE, false)
+        val logToFile = preferences.getBoolean(LOG_TO_FILE, false)
         val logVerbose = logToFile || Log.isLoggable(Logger.log.name, Log.DEBUG)
 
         log.info("Verbose logging: $logVerbose; to file: $logToFile")

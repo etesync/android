@@ -62,7 +62,7 @@
     <PreferenceCategory android:title="@string/app_settings_debug">
 
         <SwitchPreferenceCompat
-            android:key="log_to_external_storage"
+            android:key="log_to_file"
             android:title="@string/app_settings_log_to_external_storage"
             android:summaryOn="@string/app_settings_log_to_external_storage_on"
             android:summaryOff="@string/app_settings_log_to_external_storage_off"/>
