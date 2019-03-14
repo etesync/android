@@ -1,10 +1,10 @@
 package com.etesync.syncadapter.journalmanager
 
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.GsonHelper
 import com.etesync.syncadapter.journalmanager.Crypto.CryptoManager.Companion.HMAC_SIZE
 import com.etesync.syncadapter.journalmanager.Crypto.sha256
 import com.etesync.syncadapter.journalmanager.Crypto.toHex
+import com.etesync.syncadapter.log.Logger
 import com.google.gson.reflect.TypeToken
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -19,7 +19,7 @@ class JournalManager(httpClient: OkHttpClient, remote: HttpUrl) : BaseManager() 
                 .addPathSegments("api/v1/journals")
                 .addPathSegment("")
                 .build()
-        App.log.info("Created for: " + this.remote!!.toString())
+        Logger.log.info("Created for: " + this.remote!!.toString())
 
         this.client = httpClient
     }

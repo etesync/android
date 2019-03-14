@@ -16,6 +16,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
 import at.bitfire.ical4android.TaskProvider
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalTaskList
 
 class PackageChangedReceiver : BroadcastReceiver() {
@@ -30,7 +31,7 @@ class PackageChangedReceiver : BroadcastReceiver() {
 
         internal fun updateTaskSync(context: Context) {
             val tasksInstalled = LocalTaskList.tasksProviderAvailable(context)
-            App.log.info("Package (un)installed; OpenTasks provider now available = $tasksInstalled")
+            Logger.log.info("Package (un)installed; OpenTasks provider now available = $tasksInstalled")
 
             for (account in AccountManager.get(context).getAccountsByType(App.accountType)) {
                 val settings = AccountSettings(context, account)

@@ -1,7 +1,7 @@
 package com.etesync.syncadapter.journalmanager
 
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.GsonHelper
+import com.etesync.syncadapter.log.Logger
 import okhttp3.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -19,7 +19,7 @@ abstract class BaseManager {
         try {
             response = client!!.newCall(request).execute()
         } catch (e: IOException) {
-            App.log.log(Level.SEVERE, "Failed while connecting to server", e)
+            Logger.log.log(Level.SEVERE, "Failed while connecting to server", e)
             throw Exceptions.ServiceUnavailableException("[" + e.javaClass.name + "] " + e.localizedMessage)
         }
 

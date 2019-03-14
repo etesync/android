@@ -18,7 +18,7 @@ import android.os.RemoteException
 import android.provider.CalendarContract
 import android.provider.CalendarContract.*
 import at.bitfire.ical4android.*
-import com.etesync.syncadapter.App
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.JournalEntity
 import org.apache.commons.lang3.StringUtils
 import java.util.*
@@ -77,7 +77,7 @@ class LocalCalendar private constructor(
                         values.put(Calendars.CALENDAR_TIME_ZONE, DateUtils.findAndroidTimezoneID(tzId.value))
                     }
                 } catch(e: IllegalArgumentException) {
-                    App.log.log(Level.WARNING, "Couldn't parse calendar default time zone", e)
+                    Logger.log.log(Level.WARNING, "Couldn't parse calendar default time zone", e)
                 }
             }
             values.put(Calendars.ALLOWED_REMINDERS, Reminders.METHOD_ALERT)
@@ -125,14 +125,14 @@ class LocalCalendar private constructor(
 
     fun processDirtyExceptions() {
         // process deleted exceptions
-        App.log.info("Processing deleted exceptions")
+        Logger.log.info("Processing deleted exceptions")
         try {
             val cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     arrayOf(Events._ID, Events.ORIGINAL_ID, LocalEvent.COLUMN_SEQUENCE),
                     Events.DELETED + "!=0 AND " + Events.ORIGINAL_ID + " IS NOT NULL", null, null)
             while (cursor != null && cursor.moveToNext()) {
-                App.log.fine("Found deleted exception, removing; then re-schuling original event")
+                Logger.log.fine("Found deleted exception, removing; then re-schuling original event")
                 val id = cursor.getLong(0)
                 // can't be null (by definition)
                 val originalID = cursor.getLong(1)     // can't be null (by query)
@@ -163,14 +163,14 @@ class LocalCalendar private constructor(
         }
 
         // process dirty exceptions
-        App.log.info("Processing dirty exceptions")
+        Logger.log.info("Processing dirty exceptions")
         try {
             val cursor = provider.query(
                     syncAdapterURI(Events.CONTENT_URI),
                     arrayOf(Events._ID, Events.ORIGINAL_ID, LocalEvent.COLUMN_SEQUENCE),
                     Events.DIRTY + "!=0 AND " + Events.ORIGINAL_ID + " IS NOT NULL", null, null)
             while (cursor != null && cursor.moveToNext()) {
-                App.log.fine("Found dirty exception, increasing SEQUENCE to re-schedule")
+                Logger.log.fine("Found dirty exception, increasing SEQUENCE to re-schedule")
                 val id = cursor.getLong(0)
                 // can't be null (by definition)
                 val originalID = cursor.getLong(1)     // can't be null (by query)
@@ -227,7 +227,7 @@ class LocalCalendar private constructor(
         try {
             val fixed = provider.update(syncAdapterURI(Events.CONTENT_URI),
                     values, where, whereArgs)
-            App.log.info("Fixed entries: " + fixed.toString())
+            Logger.log.info("Fixed entries: " + fixed.toString())
         } catch (e: RemoteException) {
             throw CalendarStorageException("Couldn't fix etags", e)
         }

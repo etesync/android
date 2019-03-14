@@ -1,7 +1,7 @@
 package com.etesync.syncadapter.journalmanager
 
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.journalmanager.util.ByteUtil
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.utils.Base64
 import org.apache.commons.lang3.ArrayUtils
 import org.spongycastle.crypto.AsymmetricBlockCipher
@@ -69,7 +69,7 @@ object Crypto {
                 e.printStackTrace()
             } catch (e: InvalidCipherTextException) {
                 e.printStackTrace()
-                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(content, Base64.NO_WRAP))
+                Logger.log.severe("Invalid ciphertext: " + Base64.encodeToString(content, Base64.NO_WRAP))
             }
 
             return null
@@ -85,7 +85,7 @@ object Crypto {
                 e.printStackTrace()
             } catch (e: InvalidCipherTextException) {
                 e.printStackTrace()
-                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(cipherText, Base64.NO_WRAP))
+                Logger.log.severe("Invalid ciphertext: " + Base64.encodeToString(cipherText, Base64.NO_WRAP))
             }
 
             return null
@@ -182,7 +182,7 @@ object Crypto {
                 len += cipher.doFinal(buf, len)
             } catch (e: InvalidCipherTextException) {
                 e.printStackTrace()
-                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(_data, Base64.NO_WRAP))
+                Logger.log.severe("Invalid ciphertext: " + Base64.encodeToString(_data, Base64.NO_WRAP))
                 return null
             }
 
@@ -205,7 +205,7 @@ object Crypto {
             try {
                 cipher.doFinal(buf, len)
             } catch (e: InvalidCipherTextException) {
-                App.log.severe("Invalid ciphertext: " + Base64.encodeToString(data, Base64.NO_WRAP))
+                Logger.log.severe("Invalid ciphertext: " + Base64.encodeToString(data, Base64.NO_WRAP))
                 e.printStackTrace()
                 return null
             }

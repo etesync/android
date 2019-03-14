@@ -17,9 +17,13 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.*
+import com.etesync.syncadapter.AccountSettings
+import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.NotificationHelper
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalCalendar
@@ -80,10 +84,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
         val events = Event.fromReader(inputReader)
         if (events.size == 0) {
-            App.log.warning("Received VCard without data, ignoring")
+            Logger.log.warning("Received VCard without data, ignoring")
             return
         } else if (events.size > 1) {
-            App.log.warning("Received multiple VCALs, using first one")
+            Logger.log.warning("Received multiple VCALs, using first one")
         }
 
         val event = events[0]
@@ -93,10 +97,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             processEvent(event, local)
         } else {
             if (local != null) {
-                App.log.info("Removing local record #" + local.id + " which has been deleted on the server")
+                Logger.log.info("Removing local record #" + local.id + " which has been deleted on the server")
                 local.delete()
             } else {
-                App.log.warning("Tried deleting a non-existent record: " + event.uid)
+                Logger.log.warning("Tried deleting a non-existent record: " + event.uid)
             }
         }
     }
@@ -140,12 +144,12 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         var localEvent = _localEvent
         // delete local event, if it exists
         if (localEvent != null) {
-            App.log.info("Updating " + newData.uid + " in local calendar")
+            Logger.log.info("Updating " + newData.uid + " in local calendar")
             localEvent.eTag = newData.uid
             localEvent.update(newData)
             syncResult.stats.numUpdates++
         } else {
-            App.log.info("Adding " + newData.uid + " to local calendar")
+            Logger.log.info("Adding " + newData.uid + " to local calendar")
             localEvent = LocalEvent(localCalendar(), newData, newData.uid, newData.uid)
             localEvent.add()
             syncResult.stats.numInserts++

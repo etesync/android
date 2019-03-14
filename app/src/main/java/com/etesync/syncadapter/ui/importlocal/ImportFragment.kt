@@ -20,10 +20,10 @@ import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.syncadapter.ContactsSyncManager
@@ -144,13 +144,13 @@ class ImportFragment : DialogFragment() {
                     if (data != null) {
                         // Get the URI of the selected file
                         val uri = data.data!!
-                        App.log.info("Importing uri = ${uri}")
+                        Logger.log.info("Importing uri = ${uri}")
                         try {
                             inputStream = activity!!.contentResolver.openInputStream(uri)
 
                             Thread(ImportEntriesLoader()).start()
                         } catch (e: Exception) {
-                            App.log.severe("File select error: ${e.message}")
+                            Logger.log.severe("File select error: ${e.message}")
 
                             val importResult = ImportResult()
                             importResult.e = e
@@ -218,7 +218,7 @@ class ImportFragment : DialogFragment() {
                     importReader.close()
 
                     if (events.size == 0) {
-                        App.log.warning("Empty/invalid file.")
+                        Logger.log.warning("Empty/invalid file.")
                         result.e = Exception("Empty/invalid file.")
                         return result
                     }
@@ -235,11 +235,11 @@ class ImportFragment : DialogFragment() {
                             throw FileNotFoundException("Failed to load local resource.")
                         }
                     } catch (e: CalendarStorageException) {
-                        App.log.info("Fail" + e.localizedMessage)
+                        Logger.log.info("Fail" + e.localizedMessage)
                         result.e = e
                         return result
                     } catch (e: FileNotFoundException) {
-                        App.log.info("Fail" + e.localizedMessage)
+                        Logger.log.info("Fail" + e.localizedMessage)
                         result.e = e
                         return result
                     }
@@ -261,7 +261,7 @@ class ImportFragment : DialogFragment() {
                     val contacts = Contact.fromReader(importReader, downloader)
 
                     if (contacts.size == 0) {
-                        App.log.warning("Empty/invalid file.")
+                        Logger.log.warning("Empty/invalid file.")
                         result.e = Exception("Empty/invalid file.")
                         return result
                     }

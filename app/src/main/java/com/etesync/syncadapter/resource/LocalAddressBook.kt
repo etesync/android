@@ -20,6 +20,7 @@ import android.provider.ContactsContract.Groups
 import android.provider.ContactsContract.RawContacts
 import at.bitfire.vcard4android.*
 import com.etesync.syncadapter.App
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import java.io.FileNotFoundException
@@ -156,13 +157,13 @@ class LocalAddressBook(
                                 arrayOf(account.name, account.type))
                     }
                 } catch (e: RemoteException) {
-                    App.log.log(Level.WARNING, "Couldn't re-assign contacts to new account name", e)
+                    Logger.log.log(Level.WARNING, "Couldn't re-assign contacts to new account name", e)
                 }
             }, null)
             account = future.result
         }
 
-        App.log.info("Address book write permission? = ${!journalEntity.isReadOnly}")
+        Logger.log.info("Address book write permission? = ${!journalEntity.isReadOnly}")
         readOnly = journalEntity.isReadOnly
 
         // make sure it will still be synchronized when contacts are updated
@@ -244,10 +245,10 @@ class LocalAddressBook(
             val currentHash = contact.dataHashCode()
             if (lastHash == currentHash) {
                 // hash is code still the same, contact is not "really dirty" (only metadata been have changed)
-                App.log.log(Level.FINE, "Contact data hash has not changed, resetting dirty flag", contact)
+                Logger.log.log(Level.FINE, "Contact data hash has not changed, resetting dirty flag", contact)
                 contact.resetDirty()
             } else {
-                App.log.log(Level.FINE, "Contact data has changed from hash $lastHash to $currentHash", contact)
+                Logger.log.log(Level.FINE, "Contact data has changed from hash $lastHash to $currentHash", contact)
                 reallyDirty++
             }
         }
@@ -338,7 +339,7 @@ class LocalAddressBook(
         // find groups without members
         /** should be done using {@link Groups.SUMMARY_COUNT}, but it's not implemented in Android yet */
         queryGroups(null, null).filter { it.getMembers().isEmpty() }.forEach { group ->
-            App.log.log(Level.FINE, "Deleting group", group)
+            Logger.log.log(Level.FINE, "Deleting group", group)
             group.delete()
         }
     }
@@ -355,7 +356,7 @@ class LocalAddressBook(
         try {
             val fixed = provider?.update(syncAdapterURI(RawContacts.CONTENT_URI),
                     values, where, null)
-            App.log.info("Fixed entries: " + fixed.toString())
+            Logger.log.info("Fixed entries: " + fixed.toString())
         } catch (e: RemoteException) {
             throw ContactsStorageException("Couldn't query contacts", e)
         }

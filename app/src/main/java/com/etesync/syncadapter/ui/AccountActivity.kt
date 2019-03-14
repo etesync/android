@@ -19,17 +19,17 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.ServiceEntity
@@ -40,6 +40,7 @@ import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.etesync.syncadapter.utils.packageInstalled
+import com.google.android.material.snackbar.Snackbar
 import tourguide.tourguide.ToolTip
 import java.util.logging.Level
 
@@ -418,7 +419,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     if (future.result.getBoolean(AccountManager.KEY_BOOLEAN_RESULT))
                         finish()
                 } catch(e: Exception) {
-                    App.log.log(Level.SEVERE, "Couldn't remove account", e)
+                    Logger.log.log(Level.SEVERE, "Couldn't remove account", e)
                 }
             }, null)
         else
@@ -427,7 +428,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     if (future.result)
                         finish()
                 } catch (e: Exception) {
-                    App.log.log(Level.SEVERE, "Couldn't remove account", e)
+                    Logger.log.log(Level.SEVERE, "Couldn't remove account", e)
                 }
             }, null)
     }

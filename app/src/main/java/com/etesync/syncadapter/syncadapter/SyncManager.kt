@@ -21,6 +21,7 @@ import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
 import com.etesync.syncadapter.resource.LocalCollection
@@ -96,7 +97,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         notificationManager = NotificationHelper(context, journalUid, notificationId())
         notificationManager.cancel()
 
-        App.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version))
+        Logger.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version))
 
         if (journalEntity.encryptedKey != null) {
             crypto = Crypto.CryptoManager(info.version, settings.keyPair!!, journalEntity.encryptedKey)
@@ -111,35 +112,35 @@ constructor(protected val context: Context, protected val account: Account, prot
     fun performSync() {
         var syncPhase = R.string.sync_phase_prepare
         try {
-            App.log.info("Sync phase: " + context.getString(syncPhase))
+            Logger.log.info("Sync phase: " + context.getString(syncPhase))
             if (!prepare()) {
-                App.log.info("No reason to synchronize, aborting")
+                Logger.log.info("No reason to synchronize, aborting")
                 return
             }
 
             if (Thread.interrupted())
                 throw InterruptedException()
             syncPhase = R.string.sync_phase_query_capabilities
-            App.log.info("Sync phase: " + context.getString(syncPhase))
+            Logger.log.info("Sync phase: " + context.getString(syncPhase))
             queryCapabilities()
 
             if (Thread.interrupted())
                 throw InterruptedException()
             syncPhase = R.string.sync_phase_prepare_local
-            App.log.info("Sync phase: " + context.getString(syncPhase))
+            Logger.log.info("Sync phase: " + context.getString(syncPhase))
             prepareLocal()
 
             do {
                 if (Thread.interrupted())
                     throw InterruptedException()
                 syncPhase = R.string.sync_phase_fetch_entries
-                App.log.info("Sync phase: " + context.getString(syncPhase))
+                Logger.log.info("Sync phase: " + context.getString(syncPhase))
                 fetchEntries()
 
                 if (Thread.interrupted())
                     throw InterruptedException()
                 syncPhase = R.string.sync_phase_apply_remote_entries
-                App.log.info("Sync phase: " + context.getString(syncPhase))
+                Logger.log.info("Sync phase: " + context.getString(syncPhase))
                 applyRemoteEntries()
             } while (remoteEntries!!.size == MAX_FETCH)
 
@@ -148,13 +149,13 @@ constructor(protected val context: Context, protected val account: Account, prot
                 if (Thread.interrupted())
                     throw InterruptedException()
                 syncPhase = R.string.sync_phase_create_local_entries
-                App.log.info("Sync phase: " + context.getString(syncPhase))
+                Logger.log.info("Sync phase: " + context.getString(syncPhase))
                 createLocalEntries()
 
                 if (Thread.interrupted())
                     throw InterruptedException()
                 syncPhase = R.string.sync_phase_apply_local_entries
-                App.log.info("Sync phase: " + context.getString(syncPhase))
+                Logger.log.info("Sync phase: " + context.getString(syncPhase))
                 /* FIXME: Skipping this now, because we already override with remote.
                 applyLocalEntries();
                 */
@@ -162,7 +163,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 if (Thread.interrupted())
                     throw InterruptedException()
                 syncPhase = R.string.sync_phase_push_entries
-                App.log.info("Sync phase: " + context.getString(syncPhase))
+                Logger.log.info("Sync phase: " + context.getString(syncPhase))
                 pushEntries()
             } while (localEntries!!.size == MAX_PUSH)
 
@@ -170,7 +171,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             if (Thread.interrupted())
                 throw InterruptedException()
             syncPhase = R.string.sync_phase_post_processing
-            App.log.info("Sync phase: " + context.getString(syncPhase))
+            Logger.log.info("Sync phase: " + context.getString(syncPhase))
             postProcess()
 
             if (numDiscarded > 0) {
@@ -178,9 +179,9 @@ constructor(protected val context: Context, protected val account: Account, prot
             }
             notifyUserOnSync()
 
-            App.log.info("Finished sync with CTag=$remoteCTag")
+            Logger.log.info("Finished sync with CTag=$remoteCTag")
         } catch (e: IOException) {
-            App.log.log(Level.WARNING, "I/O exception during sync, trying again later", e)
+            Logger.log.log(Level.WARNING, "I/O exception during sync, trying again later", e)
             syncResult.stats.numIoExceptions++
         } catch (e: Exceptions.ServiceUnavailableException) {
             syncResult.stats.numIoExceptions++
@@ -298,13 +299,13 @@ constructor(protected val context: Context, protected val account: Account, prot
                 throw InterruptedException()
             }
             i++
-            App.log.info("Processing (" + i.toString() + "/" + strTotal + ") " + entry.toString())
+            Logger.log.info("Processing (" + i.toString() + "/" + strTotal + ") " + entry.toString())
 
             val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
             if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
                 continue
             }
-            App.log.info("Processing resource for journal entry")
+            Logger.log.info("Processing resource for journal entry")
             processSyncEntry(cEntry)
         }
     }
@@ -333,7 +334,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             remoteEntries = journal!!.list(crypto, remoteCTag, MAX_FETCH)
         }
 
-        App.log.info("Fetched " + remoteEntries!!.size.toString() + " entries")
+        Logger.log.info("Fetched " + remoteEntries!!.size.toString() + " entries")
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, InvalidCalendarException::class, InterruptedException::class)
@@ -347,10 +348,10 @@ constructor(protected val context: Context, protected val account: Account, prot
                 throw InterruptedException()
             }
             i++
-            App.log.info("Processing (" + i.toString() + "/" + strTotal + ") " + entry.toString())
+            Logger.log.info("Processing (" + i.toString() + "/" + strTotal + ") " + entry.toString())
 
             val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
-            App.log.info("Processing resource for journal entry")
+            Logger.log.info("Processing resource for journal entry")
             processSyncEntry(cEntry)
 
             persistSyncEntry(entry.uid, cEntry)
@@ -394,7 +395,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 if (pushed-- <= 0) {
                     break
                 }
-                App.log.info("Added/changed resource with UUID: " + local.uuid)
+                Logger.log.info("Added/changed resource with UUID: " + local.uuid)
                 local.clearDirty(local.uuid!!)
             }
             if (left > 0) {
@@ -402,7 +403,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             }
 
             if (pushed > 0) {
-                App.log.severe("Unprocessed localentries left, this should never happen!")
+                Logger.log.severe("Unprocessed localentries left, this should never happen!")
             }
         }
     }
@@ -470,7 +471,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
         if (journalEntity.isReadOnly) {
             for (local in localList) {
-                App.log.info("Restoring locally deleted resource on a read only collection: ${local.uuid}")
+                Logger.log.info("Restoring locally deleted resource on a read only collection: ${local.uuid}")
                 local.resetDeleted()
                 numDiscarded++
             }
@@ -480,9 +481,9 @@ constructor(protected val context: Context, protected val account: Account, prot
                     return ret
 
                 if (local.uuid != null) {
-                    App.log.info(local.uuid + " has been deleted locally -> deleting from server")
+                    Logger.log.info(local.uuid + " has been deleted locally -> deleting from server")
                 } else {
-                    App.log.fine("Entry deleted before ever syncing - genarting a UUID")
+                    Logger.log.fine("Entry deleted before ever syncing - genarting a UUID")
                     local.prepareForUpload()
                 }
 
@@ -499,7 +500,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     protected open fun prepareDirty() {
         if (journalEntity.isReadOnly) {
             for (local in localDirty) {
-                App.log.info("Restoring locally modified resource on a read only collection: ${local.uuid}")
+                Logger.log.info("Restoring locally modified resource on a read only collection: ${local.uuid}")
                 if (local.uuid == null) {
                     // If it was only local, delete.
                     local.delete()
@@ -512,13 +513,13 @@ constructor(protected val context: Context, protected val account: Account, prot
             localDirty = LinkedList()
         } else {
             // assign file names and UIDs to new entries
-            App.log.info("Looking for local entries without a uuid")
+            Logger.log.info("Looking for local entries without a uuid")
             for (local in localDirty) {
                 if (local.uuid != null) {
                     continue
                 }
 
-                App.log.fine("Found local record without file name; generating file name/UID if necessary")
+                Logger.log.fine("Found local record without file name; generating file name/UID if necessary")
                 local.prepareForUpload()
             }
         }

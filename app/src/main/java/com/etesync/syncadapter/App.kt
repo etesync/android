@@ -18,20 +18,15 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
-import android.os.Process
 import android.os.StrictMode
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import android.util.Log
 import at.bitfire.cert4android.CustomCertManager
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.log.LogcatHandler
-import com.etesync.syncadapter.log.PlainTextFormatter
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
@@ -44,14 +39,8 @@ import io.requery.meta.EntityModel
 import io.requery.sql.EntityDataStore
 import okhttp3.internal.tls.OkHostnameVerifier
 import org.acra.ACRA
-import org.apache.commons.lang3.time.DateFormatUtils
 import org.jetbrains.anko.doAsync
-import java.io.File
-import java.io.IOException
 import java.util.*
-import java.util.logging.FileHandler
-import java.util.logging.Level
-import java.util.logging.Logger
 import javax.net.ssl.HostnameVerifier
 
 
@@ -145,72 +134,14 @@ class App : Application() {
     }
 
     fun reinitLogger() {
-        val dbHelper = ServiceDB.OpenHelper(this)
-        val settings = Settings(dbHelper.readableDatabase)
-
-        val logToFile = settings.getBoolean(LOG_TO_EXTERNAL_STORAGE, false)
-        val logVerbose = logToFile || Log.isLoggable(log.name, Log.DEBUG)
-
-        App.log.info("Verbose logging: $logVerbose")
-
-        // set logging level according to preferences
-        val rootLogger = Logger.getLogger("")
-        rootLogger.level = if (logVerbose) Level.ALL else Level.INFO
-
-        // remove all handlers and add our own logcat handler
-        rootLogger.useParentHandlers = false
-        for (handler in rootLogger.handlers)
-            rootLogger.removeHandler(handler)
-        rootLogger.addHandler(LogcatHandler)
-
-        val nm = NotificationManagerCompat.from(this)
-        // log to external file according to preferences
-        if (logToFile) {
-            val builder = NotificationCompat.Builder(this)
-            builder.setSmallIcon(R.drawable.ic_sd_storage_light)
-                    .setLargeIcon(getLauncherBitmap(this))
-                    .setContentTitle(getString(R.string.logging_davdroid_file_logging))
-                    .setLocalOnly(true)
-
-            val dir = getExternalFilesDir(null)
-            if (dir != null)
-                try {
-                    val fileName = File(dir, "etesync-" + Process.myPid() + "-" +
-                            DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMdd-HHmmss") + ".txt").toString()
-                    log.info("Logging to $fileName")
-
-                    val fileHandler = FileHandler(fileName)
-                    fileHandler.formatter = PlainTextFormatter.DEFAULT
-                    log.addHandler(fileHandler)
-                    builder.setContentText(dir.path)
-                            .setSubText(getString(R.string.logging_to_external_storage_warning))
-                            .setCategory(NotificationCompat.CATEGORY_STATUS)
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            .setStyle(NotificationCompat.BigTextStyle()
-                                    .bigText(getString(R.string.logging_to_external_storage, dir.path)))
-                            .setOngoing(true)
-
-                } catch (e: IOException) {
-                    log.log(Level.SEVERE, "Couldn't create external log file", e)
-
-                    builder.setContentText(getString(R.string.logging_couldnt_create_file, e.localizedMessage))
-                            .setCategory(NotificationCompat.CATEGORY_ERROR)
-                }
-            else
-                builder.setContentText(getString(R.string.logging_no_external_storage))
-
-            nm.notify(Constants.NOTIFICATION_EXTERNAL_FILE_LOGGING, builder.build())
-        } else
-            nm.cancel(Constants.NOTIFICATION_EXTERNAL_FILE_LOGGING)
-
-        dbHelper.close()
+        Logger.initialize(this)
     }
 
 
     class ReinitSettingsReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            log.info("Received broadcast: re-initializing settings (logger/cert manager)")
+            Logger.log.info("Received broadcast: re-initializing settings (logger/cert manager)")
 
             val app = context.applicationContext as App
             app.reinitLogger()
@@ -259,7 +190,7 @@ class App : Application() {
     }
 
     private fun update(fromVersion: Int) {
-        App.log.info("Updating from version " + fromVersion + " to " + BuildConfig.VERSION_CODE)
+        Logger.log.info("Updating from version " + fromVersion + " to " + BuildConfig.VERSION_CODE)
 
         if (fromVersion < 6) {
             val data = this.data
@@ -324,7 +255,7 @@ class App : Application() {
 
         @SuppressLint("UnsafeProtectedBroadcastReceiver,MissingPermission")
         override fun onReceive(context: Context, intent: Intent) {
-            App.log.info("EteSync was updated, checking for app version")
+            Logger.log.info("EteSync was updated, checking for app version")
 
             val app = context.applicationContext as App
             val prefs = app.getSharedPreferences("app", Context.MODE_PRIVATE)
@@ -396,10 +327,8 @@ class App : Application() {
         var hostnameVerifier: HostnameVerifier? = null
             private set
 
-        val log = Logger.getLogger("etesync")
-
         init {
-            at.bitfire.cert4android.Constants.log = Logger.getLogger("etesync.cert4android")
+            at.bitfire.cert4android.Constants.log = java.util.logging.Logger.getLogger("etesync.cert4android")
         }
 
         lateinit var accountType: String

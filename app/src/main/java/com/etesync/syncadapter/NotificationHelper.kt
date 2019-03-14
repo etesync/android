@@ -15,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.AccountSettingsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.WebViewActivity
@@ -36,28 +37,28 @@ class NotificationHelper(internal val context: Context, internal val notificatio
     fun setThrowable(e: Throwable) {
         throwable = e
         if (e is Exceptions.UnauthorizedException) {
-            App.log.log(Level.SEVERE, "Not authorized anymore", e)
+            Logger.log.log(Level.SEVERE, "Not authorized anymore", e)
             messageString = R.string.sync_error_unauthorized
         } else if (e is Exceptions.UserInactiveException) {
-            App.log.log(Level.SEVERE, "User inactive")
+            Logger.log.log(Level.SEVERE, "User inactive")
             messageString = R.string.sync_error_user_inactive
         } else if (e is Exceptions.ServiceUnavailableException) {
-            App.log.log(Level.SEVERE, "Service unavailable")
+            Logger.log.log(Level.SEVERE, "Service unavailable")
             messageString = R.string.sync_error_unavailable
         } else if (e is Exceptions.ReadOnlyException) {
-            App.log.log(Level.SEVERE, "Journal is read only", e)
+            Logger.log.log(Level.SEVERE, "Journal is read only", e)
             messageString = R.string.sync_error_journal_readonly
         } else if (e is Exceptions.HttpException) {
-            App.log.log(Level.SEVERE, "HTTP Exception during sync", e)
+            Logger.log.log(Level.SEVERE, "HTTP Exception during sync", e)
             messageString = R.string.sync_error_http_dav
         } else if (e is CalendarStorageException || e is ContactsStorageException || e is SQLiteException) {
-            App.log.log(Level.SEVERE, "Couldn't access local storage", e)
+            Logger.log.log(Level.SEVERE, "Couldn't access local storage", e)
             messageString = R.string.sync_error_local_storage
         } else if (e is Exceptions.IntegrityException) {
-            App.log.log(Level.SEVERE, "Integrity error", e)
+            Logger.log.log(Level.SEVERE, "Integrity error", e)
             messageString = R.string.sync_error_integrity
         } else {
-            App.log.log(Level.SEVERE, "Unknown sync error", e)
+            Logger.log.log(Level.SEVERE, "Unknown sync error", e)
             messageString = R.string.sync_error
         }
 

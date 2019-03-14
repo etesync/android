@@ -16,9 +16,13 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.*
+import com.etesync.syncadapter.AccountSettings
+import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.HttpClient
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalAddress
@@ -66,7 +70,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             val reallyDirty = localAddressBook.verifyDirty()
             val deleted = localAddressBook.findDeleted().size
             if (extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD) && reallyDirty == 0 && deleted == 0) {
-                App.log.info("This sync was called to up-sync dirty/deleted contacts, but no contacts have been changed")
+                Logger.log.info("This sync was called to up-sync dirty/deleted contacts, but no contacts have been changed")
                 return false
             }
         }
@@ -96,11 +100,11 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         val batch = BatchOperation(addressBook.provider!!)
         for (contact in addressBook.findDirtyContacts()) {
             try {
-                App.log.fine("Looking for changed group memberships of contact " + contact.fileName)
+                Logger.log.fine("Looking for changed group memberships of contact " + contact.fileName)
                 val cachedGroups = contact.getCachedGroupMemberships()
                 val currentGroups = contact.getGroupMemberships()
                 for (groupID in SetUtils.disjunction(cachedGroups, currentGroups)) {
-                    App.log.fine("Marking group as dirty: " + groupID!!)
+                    Logger.log.fine("Marking group as dirty: " + groupID!!)
                     batch.enqueue(BatchOperation.Operation(
                             ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(ContactsContract.Groups.CONTENT_URI, groupID)))
                                     .withValue(ContactsContract.Groups.DIRTY, 1)
@@ -118,7 +122,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     override fun postProcess() {
         super.postProcess()
         /* VCard4 group handling: there are group contacts and individual contacts */
-        App.log.info("Assigning memberships of downloaded contact groups")
+        Logger.log.info("Assigning memberships of downloaded contact groups")
         LocalGroup.applyPendingMemberships(localAddressBook())
     }
 
@@ -136,10 +140,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
         val contacts = Contact.fromReader(inputReader, downloader)
         if (contacts.size == 0) {
-            App.log.warning("Received VCard without data, ignoring")
+            Logger.log.warning("Received VCard without data, ignoring")
             return
         } else if (contacts.size > 1)
-            App.log.warning("Received multiple VCards, using first one")
+            Logger.log.warning("Received multiple VCards, using first one")
 
         val contact = contacts[0]
         val local = localCollection!!.findByUid(contact.uid!!)
@@ -148,10 +152,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             processContact(contact, local)
         } else {
             if (local != null) {
-                App.log.info("Removing local record which has been deleted on the server")
+                Logger.log.info("Removing local record which has been deleted on the server")
                 local.delete()
             } else {
-                App.log.warning("Tried deleting a non-existent record: " + contact.uid)
+                Logger.log.warning("Tried deleting a non-existent record: " + contact.uid)
             }
         }
     }
@@ -162,7 +166,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         val uuid = newData.uid
         // update local contact, if it exists
         if (local != null) {
-            App.log.log(Level.INFO, "Updating $uuid in local address book")
+            Logger.log.log(Level.INFO, "Updating $uuid in local address book")
 
             if (local is LocalGroup && newData.group) {
                 // update group
@@ -192,13 +196,13 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
 
         if (local == null) {
             if (newData.group) {
-                App.log.log(Level.INFO, "Creating local group", newData.uid)
+                Logger.log.log(Level.INFO, "Creating local group", newData.uid)
                 val group = LocalGroup(localAddressBook(), newData, uuid, uuid)
                 group.add()
 
                 local = group
             } else {
-                App.log.log(Level.INFO, "Creating local contact", newData.uid)
+                Logger.log.log(Level.INFO, "Creating local contact", newData.uid)
                 val contact = LocalContact(localAddressBook(), newData, uuid, uuid)
                 contact.add()
 
@@ -222,13 +226,13 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             val httpUrl = HttpUrl.parse(url)
 
             if (httpUrl == null) {
-                App.log.log(Level.SEVERE, "Invalid external resource URL", url)
+                Logger.log.log(Level.SEVERE, "Invalid external resource URL", url)
                 return null
             }
 
             val host = httpUrl.host()
             if (host == null) {
-                App.log.log(Level.SEVERE, "External resource URL doesn't specify a host name", url)
+                Logger.log.log(Level.SEVERE, "External resource URL doesn't specify a host name", url)
                 return null
             }
 
@@ -253,7 +257,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                     return body.bytes()
                 }
             } catch (e: IOException) {
-                App.log.log(Level.SEVERE, "Couldn't download external resource", e)
+                Logger.log.log(Level.SEVERE, "Couldn't download external resource", e)
             }
 
             return null

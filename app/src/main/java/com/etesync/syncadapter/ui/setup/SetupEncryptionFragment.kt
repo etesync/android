@@ -18,13 +18,14 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.CalendarContract
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.ServiceEntity
@@ -56,7 +57,7 @@ class SetupEncryptionFragment : DialogFragment() {
 
         override fun onPostExecute(result: Configuration) {
             if (config.error != null && config.error is Exceptions.IntegrityException) {
-                App.log.severe("Wrong encryption password.")
+                Logger.log.severe("Wrong encryption password.")
                 AlertDialog.Builder(activity!!)
                         .setTitle(R.string.wrong_encryption_password)
                         .setIcon(R.drawable.ic_error_dark)
@@ -71,7 +72,7 @@ class SetupEncryptionFragment : DialogFragment() {
                         activity!!.finish()
                     }
                 } catch (e: InvalidAccountException) {
-                    App.log.severe("Account creation failed!")
+                    Logger.log.severe("Account creation failed!")
                     AlertDialog.Builder(activity!!)
                             .setTitle(R.string.account_creation_failed)
                             .setIcon(R.drawable.ic_error_dark)
@@ -87,9 +88,9 @@ class SetupEncryptionFragment : DialogFragment() {
         }
 
         override fun doInBackground(vararg aVoids: Void): Configuration {
-            App.log.info("Started deriving key")
+            Logger.log.info("Started deriving key")
             config.password = Crypto.deriveKey(config.userName, config.rawPassword!!)
-            App.log.info("Finished deriving key")
+            Logger.log.info("Finished deriving key")
             config.error = null
 
             try {
@@ -99,7 +100,7 @@ class SetupEncryptionFragment : DialogFragment() {
                 val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(config.url)!!)
                 val userInfo = userInfoManager.fetch(config.userName)
                 if (userInfo != null) {
-                    App.log.info("Fetched userInfo for " + config.userName)
+                    Logger.log.info("Fetched userInfo for " + config.userName)
                     cryptoManager = Crypto.CryptoManager(userInfo.version!!.toInt(), config.password!!, "userInfo")
                     userInfo.verify(cryptoManager)
                     config.keyPair = Crypto.AsymmetricKeyPair(userInfo.getContent(cryptoManager)!!, userInfo.pubkey!!)
@@ -119,7 +120,7 @@ class SetupEncryptionFragment : DialogFragment() {
         val account = Account(accountName, App.accountType)
 
         // create Android account
-        App.log.log(Level.INFO, "Creating Android account with initial config", arrayOf(account, config.userName, config.url))
+        Logger.log.log(Level.INFO, "Creating Android account with initial config", arrayOf(account, config.userName, config.url))
 
         val accountManager = AccountManager.get(context)
         if (!accountManager.addAccountExplicitly(account, config.password, null))
@@ -128,7 +129,7 @@ class SetupEncryptionFragment : DialogFragment() {
         AccountSettings.setUserData(accountManager, account, config.url, config.userName)
 
         // add entries for account to service DB
-        App.log.log(Level.INFO, "Writing account configuration to database", config)
+        Logger.log.log(Level.INFO, "Writing account configuration to database", config)
         try {
             val settings = AccountSettings(context!!, account)
 
@@ -165,7 +166,7 @@ class SetupEncryptionFragment : DialogFragment() {
             }
 
         } catch (e: InvalidAccountException) {
-            App.log.log(Level.SEVERE, "Couldn't access account settings", e)
+            Logger.log.log(Level.SEVERE, "Couldn't access account settings", e)
             AndroidCompat.removeAccount(accountManager, account)
             throw e
         }

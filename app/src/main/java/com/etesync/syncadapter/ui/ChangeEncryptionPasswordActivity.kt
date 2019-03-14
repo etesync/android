@@ -13,17 +13,17 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.textfield.TextInputLayout
-import androidx.appcompat.app.AlertDialog
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.syncadapter.requestSync
+import com.google.android.material.textfield.TextInputLayout
 import okhttp3.HttpUrl
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -64,9 +64,9 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
         val httpClient = HttpClient.create(this, settings)
 
         doAsync {
-            App.log.info("Started deriving old key")
+            Logger.log.info("Started deriving old key")
             val old_key = Crypto.deriveKey(account.name, old_password)
-            App.log.info("Finished deriving old key")
+            Logger.log.info("Finished deriving old key")
 
             var cryptoManager: Crypto.CryptoManager
             val principal = HttpUrl.get(settings.uri!!)!!
@@ -74,19 +74,19 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
             try {
                 val userInfoManager = UserInfoManager(httpClient, principal)
                 val userInfo = userInfoManager.fetch(account.name)!!
-                App.log.info("Fetched userInfo for " + account.name)
+                Logger.log.info("Fetched userInfo for " + account.name)
                 cryptoManager = Crypto.CryptoManager(userInfo.version!!.toInt(), old_key, "userInfo")
                 userInfo.verify(cryptoManager)
 
-                App.log.info("Started deriving new key")
+                Logger.log.info("Started deriving new key")
                 val new_key = Crypto.deriveKey(account.name, new_password)
-                App.log.info("Finished deriving new key")
+                Logger.log.info("Finished deriving new key")
 
                 val userInfoContent = userInfo.getContent(cryptoManager)!!
                 cryptoManager = Crypto.CryptoManager(userInfo.version.toInt(), new_key, "userInfo")
                 userInfo.setContent(cryptoManager, userInfoContent)
 
-                App.log.info("Fetching journal list")
+                Logger.log.info("Fetching journal list")
                 val membersToAdd = LinkedList<Pair<JournalManager.Journal, ByteArray?>>()
                 val journalManager = JournalManager(httpClient, principal)
                 val journals = journalManager.list()
@@ -102,13 +102,13 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
                         cryptoManager = Crypto.CryptoManager(journal.version, old_key, journal.uid!!)
                     }
 
-                    App.log.info("Converting journal ${journal.uid}")
+                    Logger.log.info("Converting journal ${journal.uid}")
                     journal.verify(cryptoManager)
 
                     membersToAdd.add(Pair(journal, cryptoManager.getEncryptedKey(settings.keyPair!!, userInfo.pubkey!!)))
                 }
 
-                App.log.info("Finished converting account. Uploading changes")
+                Logger.log.info("Finished converting account. Uploading changes")
                 userInfoManager.update(userInfo)
 
                 for ((journal, encryptedKey) in membersToAdd) {
@@ -116,13 +116,13 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
                         continue
                     }
 
-                    App.log.info("Uploading journal ${journal.uid}")
+                    Logger.log.info("Uploading journal ${journal.uid}")
                     val member = JournalManager.Member(account.name, encryptedKey!!)
                     journalManager.addMember(journal, member)
                 }
 
                 settings.password(new_key)
-                App.log.info("Finished uploading changes. Encryption password changed successfully.")
+                Logger.log.info("Finished uploading changes. Encryption password changed successfully.")
 
                 uiThread {
                     progress.dismiss()

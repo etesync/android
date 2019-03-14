@@ -8,7 +8,7 @@ import android.provider.CalendarContract
 import android.provider.CalendarContract.Calendars
 import android.provider.CalendarContract.Events
 import android.provider.ContactsContract
-import com.etesync.syncadapter.App
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalCalendar
 import java.util.*
 
@@ -51,7 +51,7 @@ class CalendarAccount protected constructor(val account: Account) {
                         CAL_COLS, null, null,
                         ContactsContract.RawContacts.ACCOUNT_NAME + " ASC, " + ContactsContract.RawContacts.ACCOUNT_TYPE)
             } catch (except: Exception) {
-                App.log.warning("Calendar provider is missing columns, continuing anyway")
+                Logger.log.warning("Calendar provider is missing columns, continuing anyway")
                 cur = resolver.query(Calendars.CONTENT_URI, null, null, null, null)
                 except.printStackTrace()
             }

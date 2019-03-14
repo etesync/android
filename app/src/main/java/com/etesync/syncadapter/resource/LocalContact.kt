@@ -24,8 +24,8 @@ import at.bitfire.vcard4android.CachedGroupMembership
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
 import at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.UnknownProperties
 import ezvcard.Ezvcard
 import ezvcard.VCardVersion
@@ -62,7 +62,7 @@ class LocalContact : AndroidContact, LocalAddress {
             val contact: Contact
             contact = this.contact!!
 
-            App.log.log(Level.FINE, "Preparing upload of VCard $uuid", contact)
+            Logger.log.log(Level.FINE, "Preparing upload of VCard $uuid", contact)
 
             val os = ByteArrayOutputStream()
             contact.write(VCardVersion.V4_0, GROUP_VCARDS, os)
@@ -97,7 +97,7 @@ class LocalContact : AndroidContact, LocalAddress {
             // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
             val hashCode = dataHashCode()
             values.put(COLUMN_HASHCODE, hashCode)
-            App.log.finer("Clearing dirty flag with eTag = $eTag, contact hash = $hashCode")
+            Logger.log.finer("Clearing dirty flag with eTag = $eTag, contact hash = $hashCode")
         }
 
         addressBook.provider?.update(rawContactSyncURI(), values, null, null)
@@ -173,7 +173,7 @@ class LocalContact : AndroidContact, LocalAddress {
         // groupMemberships is filled by getContact()
         val dataHash = contact!!.hashCode()
         val groupHash = groupMemberships.hashCode()
-        App.log.finest("Calculated data hash = $dataHash, group memberships hash = $groupHash")
+        Logger.log.finest("Calculated data hash = $dataHash, group memberships hash = $groupHash")
         return dataHash xor groupHash
     }
 
@@ -183,7 +183,7 @@ class LocalContact : AndroidContact, LocalAddress {
 
         val values = ContentValues(1)
         val hashCode = dataHashCode()
-        App.log.fine("Storing contact hash = $hashCode")
+        Logger.log.fine("Storing contact hash = $hashCode")
         values.put(COLUMN_HASHCODE, hashCode)
 
         if (batch == null)

@@ -23,15 +23,16 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import androidx.core.content.ContextCompat
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Exceptions.HttpException
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.EntryEntity
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.ServiceDB
@@ -41,7 +42,6 @@ import org.acra.ACRA
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.commons.lang3.text.WordUtils
 import java.io.File
-import java.util.*
 import java.util.logging.Level
 
 class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> {
@@ -144,7 +144,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                 report.append("\nSOFTWARE INFORMATION\n" + "EteSync version: ").append(BuildConfig.VERSION_NAME).append(" (").append(BuildConfig.VERSION_CODE).append(") ").append("\n")
                         .append("Installed from: ").append(installedFrom).append("\n")
             } catch (ex: Exception) {
-                App.log.log(Level.SEVERE, "Couldn't get software information", ex)
+                Logger.log.log(Level.SEVERE, "Couldn't get software information", ex)
             }
 
             report.append("CONFIGURATION\n")
@@ -216,7 +216,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                         "SYSTEM INFORMATION\n" + "Android version: ").append(Build.VERSION.RELEASE).append(" (").append(Build.DISPLAY).append(")\n" + "Device: ").append(WordUtils.capitalize(Build.MANUFACTURER)).append(" ").append(Build.MODEL).append(" (").append(Build.DEVICE).append(")\n\n"
                 )
             } catch (ex: Exception) {
-                App.log.log(Level.SEVERE, "Couldn't get system details", ex)
+                Logger.log.log(Level.SEVERE, "Couldn't get system details", ex)
             }
 
             report.append("--- END DEBUG INFO ---\n")

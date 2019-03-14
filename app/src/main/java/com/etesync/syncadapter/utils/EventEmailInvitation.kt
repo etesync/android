@@ -3,11 +3,10 @@ package com.etesync.syncadapter.utils
 import android.accounts.Account
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import at.bitfire.ical4android.Event
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import net.fortuna.ical4j.model.property.Attendee
 import org.acra.attachment.AcraContentProvider
 import org.acra.util.IOUtils
@@ -38,7 +37,7 @@ class EventEmailInvitation constructor(val context: Context, val account: Accoun
                         formatAttendees(event.attendees)))
         val uri = createAttachmentFromString(context, icsContent)
         if (uri == null) {
-            App.log.severe("Unable to create attachment from calendar event")
+            Logger.log.severe("Unable to create attachment from calendar event")
             return null
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

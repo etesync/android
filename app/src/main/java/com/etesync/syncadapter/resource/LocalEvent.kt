@@ -16,8 +16,8 @@ import android.provider.CalendarContract.Events
 import android.text.TextUtils
 import at.bitfire.ical4android.*
 import at.bitfire.ical4android.Constants.ical4jVersion
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.log.Logger
 import net.fortuna.ical4j.model.property.ProdId
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -43,7 +43,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     override val content: String
         get() {
-            App.log.log(Level.FINE, "Preparing upload of event " + fileName!!, event)
+            Logger.log.log(Level.FINE, "Preparing upload of event " + fileName!!, event)
 
             val os = ByteArrayOutputStream()
             event?.write(os)

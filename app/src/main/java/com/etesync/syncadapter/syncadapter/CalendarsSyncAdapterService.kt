@@ -17,6 +17,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
@@ -53,7 +54,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
                 val principal = HttpUrl.get(settings.uri!!)!!
 
                 for (calendar in AndroidCalendar.find(account, provider, LocalCalendar.Factory, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
-                    App.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)
+                    Logger.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)
                     val syncManager = CalendarSyncManager(context, account, settings, extras, authority, syncResult, calendar, principal)
                     syncManager.performSync()
                 }
@@ -64,7 +65,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
                 // Ignore
             } catch (e: Exception) {
                 if (e is CalendarStorageException || e is SQLiteException) {
-                    App.log.log(Level.SEVERE, "Couldn't prepare local calendars", e)
+                    Logger.log.log(Level.SEVERE, "Couldn't prepare local calendars", e)
                     syncResult.databaseError = true
                 }
 
@@ -90,7 +91,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
                 notificationManager.notify(title, context.getString(syncPhase))
             }
 
-            App.log.info("Calendar sync complete")
+            Logger.log.info("Calendar sync complete")
         }
 
         @Throws(CalendarStorageException::class)
@@ -113,11 +114,11 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
                 val url = calendar.name
                 val journalEntity = remote[url]
                 if (journalEntity == null) {
-                    App.log.fine("Deleting obsolete local calendar $url")
+                    Logger.log.fine("Deleting obsolete local calendar $url")
                     calendar.delete()
                 } else {
                     // remote CollectionInfo found for this local collection, update data
-                    App.log.fine("Updating local calendar $url with $journalEntity")
+                    Logger.log.fine("Updating local calendar $url with $journalEntity")
                     calendar.update(journalEntity, updateColors)
                     // we already have a local calendar for this remote collection, don't take into consideration anymore
                     remote.remove(url)
@@ -127,7 +128,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
             // create new local calendars
             for (url in remote.keys) {
                 val journalEntity = remote[url]!!
-                App.log.info("Adding local calendar list $journalEntity")
+                Logger.log.info("Adding local calendar list $journalEntity")
                 LocalCalendar.create(account, provider, journalEntity)
             }
         }

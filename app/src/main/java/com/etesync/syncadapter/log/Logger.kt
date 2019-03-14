@@ -58,7 +58,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
         val settings = Settings(dbHelper.readableDatabase)
 
         val logToFile = settings.getBoolean(App.LOG_TO_EXTERNAL_STORAGE, false)
-        val logVerbose = logToFile || Log.isLoggable(App.log.name, Log.DEBUG)
+        val logVerbose = logToFile || Log.isLoggable(Logger.log.name, Log.DEBUG)
 
         log.info("Verbose logging: $logVerbose; to file: $logToFile")
 

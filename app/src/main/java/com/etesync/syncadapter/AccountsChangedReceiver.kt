@@ -13,6 +13,7 @@ import android.accounts.OnAccountsUpdateListener
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.etesync.syncadapter.log.Logger
 import java.util.*
 
 class AccountsChangedReceiver : BroadcastReceiver() {
@@ -24,7 +25,7 @@ class AccountsChangedReceiver : BroadcastReceiver() {
             try {
                 context.startService(serviceIntent)
             } catch (e: IllegalStateException) {
-                App.log.warning("Got an illegal state exception! Ignoring...")
+                Logger.log.warning("Got an illegal state exception! Ignoring...")
             }
 
             for (listener in listeners)

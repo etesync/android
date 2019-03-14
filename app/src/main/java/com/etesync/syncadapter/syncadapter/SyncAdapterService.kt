@@ -23,6 +23,7 @@ import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
@@ -45,14 +46,14 @@ abstract class SyncAdapterService : Service() {
     abstract class SyncAdapter(context: Context) : AbstractThreadedSyncAdapter(context, false) {
 
         override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
-            App.log.log(Level.INFO, "$authority sync of $account has been initiated.", extras.keySet().toTypedArray())
+            Logger.log.log(Level.INFO, "$authority sync of $account has been initiated.", extras.keySet().toTypedArray())
 
             // required for dav4android (ServiceLoader)
             Thread.currentThread().contextClassLoader = context.classLoader
         }
 
         override fun onSecurityException(account: Account, extras: Bundle, authority: String, syncResult: SyncResult) {
-            App.log.log(Level.WARNING, "Security exception when opening content provider for $authority")
+            Logger.log.log(Level.WARNING, "Security exception when opening content provider for $authority")
             syncResult.databaseError = true
 
             val intent = Intent(context, PermissionsActivity::class.java)
@@ -75,11 +76,11 @@ abstract class SyncAdapterService : Service() {
                 val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val network = cm.activeNetworkInfo
                 if (network == null) {
-                    App.log.info("No network available, stopping")
+                    Logger.log.info("No network available, stopping")
                     return false
                 }
                 if (network.type != ConnectivityManager.TYPE_WIFI || !network.isConnected) {
-                    App.log.info("Not on connected WiFi, stopping")
+                    Logger.log.info("Not on connected WiFi, stopping")
                     return false
                 }
 
@@ -89,7 +90,7 @@ abstract class SyncAdapterService : Service() {
                     val wifi = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
                     val info = wifi.connectionInfo
                     if (info == null || onlySSID != info.ssid) {
-                        App.log.info("Connected to wrong WiFi network (" + info!!.ssid + ", required: " + onlySSID + "), ignoring")
+                        Logger.log.info("Connected to wrong WiFi network (" + info!!.ssid + ", required: " + onlySSID + "), ignoring")
                         return false
                     }
                 }
@@ -106,7 +107,7 @@ abstract class SyncAdapterService : Service() {
 
             @Throws(Exceptions.HttpException::class, Exceptions.IntegrityException::class, InvalidAccountException::class, Exceptions.GenericCryptoException::class)
             internal fun run() {
-                App.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString())
+                Logger.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString())
 
                 val settings = AccountSettings(context, account)
                 val httpClient = HttpClient.create(context, settings)
@@ -162,7 +163,7 @@ abstract class SyncAdapterService : Service() {
                 for (pair in journals) {
                     val journal = pair.first
                     val collection = pair.second
-                    App.log.log(Level.FINE, "Saving collection", journal!!.uid)
+                    Logger.log.log(Level.FINE, "Saving collection", journal!!.uid)
 
                     collection!!.serviceID = service.id
                     val journalEntity = JournalEntity.fetchOrCreate(data, collection)
@@ -176,7 +177,7 @@ abstract class SyncAdapterService : Service() {
                 }
 
                 for (journalEntity in existing.values) {
-                    App.log.log(Level.FINE, "Deleting collection", journalEntity.uid)
+                    Logger.log.log(Level.FINE, "Deleting collection", journalEntity.uid)
 
                     journalEntity.isDeleted = true
                     data.update(journalEntity)

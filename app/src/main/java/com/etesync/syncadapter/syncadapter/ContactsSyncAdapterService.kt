@@ -14,6 +14,7 @@ import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import okhttp3.HttpUrl
@@ -39,20 +40,20 @@ class ContactsSyncAdapterService : SyncAdapterService() {
                 try {
                     settings = AccountSettings(context, addressBook.mainAccount)
                 } catch (e: InvalidAccountException) {
-                    App.log.info("Skipping sync due to invalid account.")
-                    App.log.info(e.localizedMessage)
+                    Logger.log.info("Skipping sync due to invalid account.")
+                    Logger.log.info(e.localizedMessage)
                     return
                 } catch (e: ContactsStorageException) {
-                    App.log.info("Skipping sync due to invalid account.")
-                    App.log.info(e.localizedMessage)
+                    Logger.log.info("Skipping sync due to invalid account.")
+                    Logger.log.info(e.localizedMessage)
                     return
                 }
 
                 if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
                     return
 
-                App.log.info("Synchronizing address book: " + addressBook.url)
-                App.log.info("Taking settings from: " + addressBook.mainAccount)
+                Logger.log.info("Synchronizing address book: " + addressBook.url)
+                Logger.log.info("Taking settings from: " + addressBook.mainAccount)
 
                 val principal = HttpUrl.get(settings.uri!!)!!
                 val syncManager = ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal)
@@ -79,7 +80,7 @@ class ContactsSyncAdapterService : SyncAdapterService() {
                 notificationManager.notify(title, context.getString(syncPhase))
             }
 
-            App.log.info("Contacts sync complete")
+            Logger.log.info("Contacts sync complete")
         }
     }
 

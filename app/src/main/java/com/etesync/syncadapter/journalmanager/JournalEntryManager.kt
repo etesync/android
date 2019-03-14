@@ -1,7 +1,7 @@
 package com.etesync.syncadapter.journalmanager
 
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.GsonHelper
+import com.etesync.syncadapter.log.Logger
 import com.google.gson.reflect.TypeToken
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -17,7 +17,7 @@ class JournalEntryManager(httpClient: OkHttpClient, remote: HttpUrl, val uid: St
                 .addPathSegment("entries")
                 .addPathSegment("")
                 .build()
-        App.log.info("Created for: " + this.remote!!.toString())
+        Logger.log.info("Created for: " + this.remote!!.toString())
 
         this.client = httpClient
     }

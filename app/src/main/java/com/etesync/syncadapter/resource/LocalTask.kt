@@ -15,7 +15,7 @@ import at.bitfire.ical4android.AndroidTask
 import at.bitfire.ical4android.AndroidTaskFactory
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.Task
-import com.etesync.syncadapter.App
+import com.etesync.syncadapter.log.Logger
 import org.dmfs.tasks.contract.TaskContract
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -33,7 +33,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     override val content: String
         get() {
-            App.log.log(Level.FINE, "Preparing upload of task ${fileName} ${task}")
+            Logger.log.log(Level.FINE, "Preparing upload of task ${fileName} ${task}")
 
             val os = ByteArrayOutputStream()
             task?.write(os)

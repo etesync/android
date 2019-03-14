@@ -19,6 +19,7 @@ import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
@@ -46,7 +47,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
             try {
                 val contactsProvider = context.contentResolver.acquireContentProviderClient(ContactsContract.AUTHORITY)
                 if (contactsProvider == null) {
-                    App.log.severe("Couldn't access contacts provider")
+                    Logger.log.severe("Couldn't access contacts provider")
                     syncResult.databaseError = true
                     return
                 }
@@ -63,7 +64,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
 
                 val accountManager = AccountManager.get(context)
                 for (addressBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
-                    App.log.log(Level.INFO, "Running sync for address book", addressBookAccount)
+                    Logger.log.log(Level.INFO, "Running sync for address book", addressBookAccount)
                     val syncExtras = Bundle(extras)
                     syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true)
                     syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF, true)
@@ -76,7 +77,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
                 // Ignore
             } catch (e: Exception) {
                 if (e is ContactsStorageException || e is SQLiteException) {
-                    App.log.log(Level.SEVERE, "Couldn't prepare local address books", e)
+                    Logger.log.log(Level.SEVERE, "Couldn't prepare local address books", e)
                     syncResult.databaseError = true
                 }
 
@@ -102,7 +103,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
                 notificationManager.notify(title, context.getString(syncPhase))
             }
 
-            App.log.info("Address book sync complete")
+            Logger.log.info("Address book sync complete")
         }
 
 
@@ -125,11 +126,11 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
                 val url = addressBook.url
                 val journalEntity = remote[url]
                 if (journalEntity == null) {
-                    App.log.fine("Deleting obsolete local address book $url")
+                    Logger.log.fine("Deleting obsolete local address book $url")
                     addressBook.delete()
                 } else {
                     // remote CollectionInfo found for this local collection, update data
-                    App.log.fine("Updating local address book $url with $journalEntity")
+                    Logger.log.fine("Updating local address book $url with $journalEntity")
                     addressBook.update(journalEntity)
                     // we already have a local collection for this remote collection, don't take into consideration anymore
                     remote.remove(url)
@@ -139,7 +140,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
             // create new local address books
             for (url in remote.keys) {
                 val journalEntity = remote[url]!!
-                App.log.info("Adding local address book $journalEntity")
+                Logger.log.info("Adding local address book $journalEntity")
                 LocalAddressBook.create(context, provider, account, journalEntity)
             }
         }

@@ -10,10 +10,8 @@ package com.etesync.syncadapter.ui.setup
 
 import android.os.Parcel
 import android.os.Parcelable
-
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
-
+import com.etesync.syncadapter.log.Logger
 import java.net.URI
 import java.net.URISyntaxException
 
@@ -27,7 +25,7 @@ class LoginCredentials(_uri: URI?, val userName: String, val password: String) :
             try {
                 uri = URI(Constants.serviceUrl.toString())
             } catch (e: URISyntaxException) {
-                App.log.severe("Should never happen, it's a constant")
+                Logger.log.severe("Should never happen, it's a constant")
             }
 
         }

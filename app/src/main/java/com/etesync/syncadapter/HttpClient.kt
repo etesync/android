@@ -24,7 +24,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
-import java.util.logging.Logger
+import java.util.logging.Logger as LoggerType
+import com.etesync.syncadapter.log.Logger
 
 object HttpClient {
     private val client = OkHttpClient()
@@ -36,7 +37,7 @@ object HttpClient {
         userAgent = "${App.appName}/${BuildConfig.VERSION_NAME} (okhttp3) Android/${Build.VERSION.RELEASE}"
     }
 
-    fun create(context: Context?, logger: Logger, host: String?, token: String): OkHttpClient {
+    fun create(context: Context?, logger: LoggerType, host: String?, token: String): OkHttpClient {
         var builder = defaultBuilder(context, logger)
 
         // use account settings for authentication
@@ -46,21 +47,21 @@ object HttpClient {
     }
 
     @JvmOverloads
-    fun create(context: Context?, settings: AccountSettings, logger: Logger = App.log): OkHttpClient {
+    fun create(context: Context?, settings: AccountSettings, logger: LoggerType = Logger.log): OkHttpClient {
         return create(context, logger, settings.uri!!.host, settings.authToken)
     }
 
     @JvmOverloads
-    fun create(context: Context?, logger: Logger = App.log): OkHttpClient {
+    fun create(context: Context?, logger: LoggerType = Logger.log): OkHttpClient {
         return defaultBuilder(context, logger).build()
     }
 
     fun create(context: Context?, uri: URI, authToken: String): OkHttpClient {
-        return create(context, App.log, uri.host, authToken)
+        return create(context, Logger.log, uri.host, authToken)
     }
 
 
-    private fun defaultBuilder(context: Context?, logger: Logger): OkHttpClient.Builder {
+    private fun defaultBuilder(context: Context?, logger: LoggerType): OkHttpClient.Builder {
         val builder = client.newBuilder()
 
         // use MemorizingTrustManager to manage self-signed certificates
@@ -90,12 +91,12 @@ object HttpClient {
 
                     val proxy = Proxy(Proxy.Type.HTTP, address)
                     builder.proxy(proxy)
-                    App.log.log(Level.INFO, "Using proxy", proxy)
+                    Logger.log.log(Level.INFO, "Using proxy", proxy)
                 }
             } catch (e: IllegalArgumentException) {
-                App.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
+                Logger.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
             } catch (e: NullPointerException) {
-                App.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
+                Logger.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
             } finally {
                 dbHelper.close()
             }

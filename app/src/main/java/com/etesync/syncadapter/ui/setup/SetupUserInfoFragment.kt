@@ -6,13 +6,17 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
-import com.etesync.syncadapter.*
+import androidx.fragment.app.DialogFragment
+import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
+import com.etesync.syncadapter.HttpClient
+import com.etesync.syncadapter.InvalidAccountException
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Constants
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.syncadapter.log.Logger
 import okhttp3.HttpUrl
 
 class SetupUserInfoFragment : DialogFragment() {
@@ -53,12 +57,12 @@ class SetupUserInfoFragment : DialogFragment() {
                 var userInfo: UserInfoManager.UserInfo? = userInfoManager.fetch(account.name)
 
                 if (userInfo == null) {
-                    App.log.info("Creating userInfo for " + account.name)
+                    Logger.log.info("Creating userInfo for " + account.name)
                     cryptoManager = Crypto.CryptoManager(Constants.CURRENT_VERSION, settings.password(), "userInfo")
                     userInfo = UserInfoManager.UserInfo.generate(cryptoManager, account.name)
                     userInfoManager.create(userInfo)
                 } else {
-                    App.log.info("Fetched userInfo for " + account.name)
+                    Logger.log.info("Fetched userInfo for " + account.name)
                     cryptoManager = Crypto.CryptoManager(userInfo.version!!.toInt(), settings.password(), "userInfo")
                     userInfo.verify(cryptoManager)
                 }

@@ -21,7 +21,7 @@ import android.provider.ContactsContract.RawContacts.Data
 import android.text.TextUtils
 import at.bitfire.vcard4android.*
 import at.bitfire.vcard4android.GroupMethod.GROUP_VCARDS
-import com.etesync.syncadapter.App
+import com.etesync.syncadapter.log.Logger
 import ezvcard.VCardVersion
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -86,7 +86,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
             val contact: Contact
             contact = this.contact!!
 
-            App.log.log(Level.FINE, "Preparing upload of VCard $uuid", contact)
+            Logger.log.log(Level.FINE, "Preparing upload of VCard $uuid", contact)
 
             val os = ByteArrayOutputStream()
             contact.write(VCardVersion.V4_0, GROUP_VCARDS, os)

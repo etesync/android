@@ -16,11 +16,11 @@ import android.content.SyncResult
 import android.database.sqlite.SQLiteException
 import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
@@ -72,7 +72,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
                 val principal = HttpUrl.get(accountSettings.uri!!)!!
 
                 for (taskList in AndroidTaskList.find(account, taskProvider, LocalTaskList.Factory, "${TaskContract.TaskLists.SYNC_ENABLED}!=0", null)) {
-                    App.log.info("Synchronizing task list #${taskList.id} [${taskList.syncId}]")
+                    Logger.log.info("Synchronizing task list #${taskList.id} [${taskList.syncId}]")
                     val tasksSyncManager = TasksSyncManager(context, account, accountSettings, extras, authority, syncResult, taskList, principal);
                     tasksSyncManager.performSync()
                 }
@@ -83,7 +83,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
                 // Ignore
             } catch (e: Exception) {
                 if (e is SQLiteException) {
-                    App.log.log(Level.SEVERE, "Couldn't prepare local task list", e)
+                    Logger.log.log(Level.SEVERE, "Couldn't prepare local task list", e)
                     syncResult.databaseError = true
                 }
 
@@ -109,7 +109,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
                 notificationManager.notify(title, context.getString(syncPhase))
             }
 
-            App.log.info("Task sync complete")
+            Logger.log.info("Task sync complete")
         }
 
         private fun updateLocalTaskLists(provider: TaskProvider, account: Account, settings: AccountSettings) {
@@ -131,11 +131,11 @@ class TasksSyncAdapterService: SyncAdapterService() {
                 val url = taskList.url
                 val journalEntity = remote[url]
                 if (journalEntity == null) {
-                    App.log.fine("Deleting obsolete local task list $url")
+                    Logger.log.fine("Deleting obsolete local task list $url")
                     taskList.delete()
                 } else {
                     // remote CollectionInfo found for this local collection, update data
-                    App.log.fine("Updating local task list $url with $journalEntity")
+                    Logger.log.fine("Updating local task list $url with $journalEntity")
                     taskList.update(journalEntity, updateColors)
                     // we already have a local tasks for this remote collection, don't take into consideration anymore
                     remote.remove(url)
@@ -145,7 +145,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
             // create new local taskss
             for (url in remote.keys) {
                 val journalEntity = remote[url]!!
-                App.log.info("Adding local task list $journalEntity")
+                Logger.log.info("Adding local task list $journalEntity")
                 LocalTaskList.create(account, provider, journalEntity)
             }
         }

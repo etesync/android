@@ -11,15 +11,6 @@ package com.etesync.syncadapter.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.AsyncTaskLoader
-import androidx.loader.content.Loader
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.widget.Toolbar
 import android.text.Html
 import android.text.Spanned
 import android.text.util.Linkify
@@ -27,12 +18,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.AsyncTaskLoader
+import androidx.loader.content.Loader
+import androidx.viewpager.widget.ViewPager
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.BuildConfig
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
+import com.google.android.material.tabs.TabLayout
 import ezvcard.Ezvcard
-import org.apache.commons.lang3.time.DateFormatUtils
 import java.io.IOException
 import java.util.logging.Level
 
@@ -140,7 +140,7 @@ class AboutActivity : BaseActivity() {
         }
 
         override fun loadInBackground(): Spanned? {
-            App.log.fine("Loading license file $fileName")
+            Logger.log.fine("Loading license file $fileName")
             try {
                 val inputStream = context.resources.assets.open(fileName)
                 val raw = inputStream.readBytes()
@@ -148,7 +148,7 @@ class AboutActivity : BaseActivity() {
                 content = Html.fromHtml(String(raw))
                 return content
             } catch (e: IOException) {
-                App.log.log(Level.SEVERE, "Couldn't read license file", e)
+                Logger.log.log(Level.SEVERE, "Couldn't read license file", e)
                 return null
             }
 

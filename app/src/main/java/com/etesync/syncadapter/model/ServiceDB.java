@@ -14,9 +14,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
 
-import com.etesync.syncadapter.App;
+import androidx.annotation.RequiresApi;
 
 public class ServiceDB {
 
@@ -75,8 +74,6 @@ public class ServiceDB {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            App.Companion.getLog().info("Creating database " + db.getPath());
-
             db.execSQL("CREATE TABLE " + Settings._TABLE + "(" +
                     Settings.NAME + " TEXT NOT NULL," +
                     Settings.VALUE + " TEXT NOT NULL" +

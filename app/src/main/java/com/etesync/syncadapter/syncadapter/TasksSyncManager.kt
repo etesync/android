@@ -14,10 +14,10 @@ import android.content.SyncResult
 import android.os.Bundle
 import at.bitfire.ical4android.Task
 import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalTask
@@ -73,10 +73,10 @@ class TasksSyncManager(
 
         val tasks = Task.fromReader(inputReader)
         if (tasks.size == 0) {
-            App.log.warning("Received VCard without data, ignoring")
+            Logger.log.warning("Received VCard without data, ignoring")
             return
         } else if (tasks.size > 1) {
-            App.log.warning("Received multiple VCALs, using first one")
+            Logger.log.warning("Received multiple VCALs, using first one")
         }
 
         val event = tasks[0]
@@ -86,10 +86,10 @@ class TasksSyncManager(
             processTask(event, local)
         } else {
             if (local != null) {
-                App.log.info("Removing local record #" + local.id + " which has been deleted on the server")
+                Logger.log.info("Removing local record #" + local.id + " which has been deleted on the server")
                 local.delete()
             } else {
-                App.log.warning("Tried deleting a non-existent record: " + event.uid)
+                Logger.log.warning("Tried deleting a non-existent record: " + event.uid)
             }
         }
     }
@@ -98,12 +98,12 @@ class TasksSyncManager(
         var localTask = _localTask
         // delete local Task, if it exists
         if (localTask != null) {
-            App.log.info("Updating " + newData.uid + " in local calendar")
+            Logger.log.info("Updating " + newData.uid + " in local calendar")
             localTask.eTag = newData.uid
             localTask.update(newData)
             syncResult.stats.numUpdates++
         } else {
-            App.log.info("Adding " + newData.uid + " to local calendar")
+            Logger.log.info("Adding " + newData.uid + " to local calendar")
             localTask = LocalTask(localTaskList(), newData, newData.uid, newData.uid)
             localTask.add()
             syncResult.stats.numInserts++

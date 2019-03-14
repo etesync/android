@@ -13,13 +13,13 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
-import androidx.appcompat.app.AlertDialog
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 
@@ -59,7 +59,7 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
                         .addToBackStack(null)
                         .commitAllowingStateLoss()
         } else
-            App.log.severe("Configuration detection failed")
+            Logger.log.severe("Configuration detection failed")
 
         dismissAllowingStateLoss()
     }

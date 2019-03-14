@@ -20,6 +20,7 @@ import android.os.Bundle
 import at.bitfire.vcard4android.ContactsStorageException
 import at.bitfire.vcard4android.GroupMethod
 import com.etesync.syncadapter.journalmanager.Crypto
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.utils.Base64
 import java.net.URI
 import java.net.URISyntaxException
@@ -110,7 +111,7 @@ constructor(internal val context: Context, internal val account: Account) {
             } catch (ignored: NumberFormatException) {
             }
 
-            App.log.fine("Account " + account.name + " has version " + version + ", current version: " + CURRENT_VERSION)
+            Logger.log.fine("Account " + account.name + " has version " + version + ", current version: " + CURRENT_VERSION)
 
             if (version < CURRENT_VERSION)
                 update(version)
@@ -168,12 +169,12 @@ constructor(internal val context: Context, internal val account: Account) {
 
     private fun update(fromVersion: Int) {
         val toVersion = CURRENT_VERSION
-        App.log.info("Updating account " + account.name + " from version " + fromVersion + " to " + toVersion)
+        Logger.log.info("Updating account " + account.name + " from version " + fromVersion + " to " + toVersion)
         try {
             updateInner(fromVersion)
             accountManager.setUserData(account, KEY_SETTINGS_VERSION, toVersion.toString())
         } catch (e: Exception) {
-            App.log.log(Level.SEVERE, "Couldn't update account settings", e)
+            Logger.log.log(Level.SEVERE, "Couldn't update account settings", e)
         }
 
     }
@@ -188,16 +189,16 @@ constructor(internal val context: Context, internal val account: Account) {
 
         @SuppressLint("UnsafeProtectedBroadcastReceiver,MissingPermission")
         override fun onReceive(context: Context, intent: Intent) {
-            App.log.info("EteSync was updated, checking for AccountSettings version")
+            Logger.log.info("EteSync was updated, checking for AccountSettings version")
 
             // peek into AccountSettings to initiate a possible migration
             val accountManager = AccountManager.get(context)
             for (account in accountManager.getAccountsByType(App.accountType))
                 try {
-                    App.log.info("Checking account " + account.name)
+                    Logger.log.info("Checking account " + account.name)
                     AccountSettings(context, account)
                 } catch (e: InvalidAccountException) {
-                    App.log.log(Level.SEVERE, "Couldn't check for updated account settings", e)
+                    Logger.log.log(Level.SEVERE, "Couldn't check for updated account settings", e)
                 }
 
         }

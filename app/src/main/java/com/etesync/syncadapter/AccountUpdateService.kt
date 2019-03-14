@@ -15,6 +15,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import java.lang.ref.WeakReference
@@ -83,7 +84,7 @@ class AccountUpdateService : Service() {
 
     @SuppressLint("MissingPermission")
     internal fun cleanupAccounts() {
-        App.log.info("Cleaning up orphaned accounts")
+        Logger.log.info("Cleaning up orphaned accounts")
 
         val accountNames = LinkedList<String>()
         val am = AccountManager.get(this)
@@ -100,7 +101,7 @@ class AccountUpdateService : Service() {
                 if (!accountNames.contains(addressBook.mainAccount.name))
                     addressBook.delete()
             } catch (e: ContactsStorageException) {
-                App.log.log(Level.SEVERE, "Couldn't get address book main account", e)
+                Logger.log.log(Level.SEVERE, "Couldn't get address book main account", e)
             }
 
         }

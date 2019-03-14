@@ -9,6 +9,7 @@
 package com.etesync.syncadapter
 
 import android.os.Build
+import com.etesync.syncadapter.log.Logger
 import java.io.IOException
 import java.net.InetAddress
 import java.net.Socket
@@ -105,7 +106,7 @@ class SSLSocketFactoryCompat(trustManager: X509TrustManager) : SSLSocketFactory(
                 // - all modern ciphers are activated by default
                 protocols = null
                 cipherSuites = null
-                App.log.fine("Using device default TLS protocols/ciphers")
+                Logger.log.fine("Using device default TLS protocols/ciphers")
             } else {
                 (SSLSocketFactory.getDefault().createSocket() as? SSLSocket)?.use { socket ->
                     try {
@@ -115,7 +116,7 @@ class SSLSocketFactoryCompat(trustManager: X509TrustManager) : SSLSocketFactory(
                         val whichProtocols = LinkedList<String>()
                         for (protocol in socket.supportedProtocols.filterNot { it.contains("SSL", true) })
                             whichProtocols += protocol
-                        App.log.info("Enabling (only) these TLS protocols: ${whichProtocols.joinToString(", ")}")
+                        Logger.log.info("Enabling (only) these TLS protocols: ${whichProtocols.joinToString(", ")}")
                         protocols = whichProtocols.toTypedArray()
 
                         /* set up reasonable cipher suites */
@@ -140,7 +141,7 @@ class SSLSocketFactoryCompat(trustManager: X509TrustManager) : SSLSocketFactory(
                                 "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
                         )
                         val availableCiphers = socket.supportedCipherSuites
-                        App.log.info("Available cipher suites: ${availableCiphers.joinToString(", ")}")
+                        Logger.log.info("Available cipher suites: ${availableCiphers.joinToString(", ")}")
 
                         /* For maximum security, preferredCiphers should *replace* enabled ciphers (thus
                          * disabling ciphers which are enabled by default, but have become unsecure), but for
@@ -150,16 +151,16 @@ class SSLSocketFactoryCompat(trustManager: X509TrustManager) : SSLSocketFactory(
                         // for the final set of enabled ciphers, take the ciphers enabled by default, ...
                         val whichCiphers = LinkedList<String>()
                         whichCiphers.addAll(socket.enabledCipherSuites)
-                        App.log.fine("Cipher suites enabled by default: ${whichCiphers.joinToString(", ")}")
+                        Logger.log.fine("Cipher suites enabled by default: ${whichCiphers.joinToString(", ")}")
                         // ... add explicitly allowed ciphers ...
                         whichCiphers.addAll(knownCiphers)
                         // ... and keep only those which are actually available
                         whichCiphers.retainAll(availableCiphers)
 
-                        App.log.info("Enabling (only) these TLS ciphers: " + whichCiphers.joinToString(", "))
+                        Logger.log.info("Enabling (only) these TLS ciphers: " + whichCiphers.joinToString(", "))
                         cipherSuites = whichCiphers.toTypedArray()
                     } catch (e: IOException) {
-                        App.log.severe("Couldn't determine default TLS settings")
+                        Logger.log.severe("Couldn't determine default TLS settings")
                     }
                 }
             }

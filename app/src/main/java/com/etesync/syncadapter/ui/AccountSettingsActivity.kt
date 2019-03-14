@@ -15,17 +15,18 @@ import android.content.Intent
 import android.content.SyncStatusObserver
 import android.os.Bundle
 import android.provider.CalendarContract
-import androidx.loader.app.LoaderManager
+import android.text.TextUtils
+import android.view.MenuItem
 import androidx.core.app.NavUtils
+import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import androidx.preference.*
-import android.text.TextUtils
-import android.view.MenuItem
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.setup.LoginCredentials
 import com.etesync.syncadapter.ui.setup.LoginCredentialsChangeFragment
 
@@ -185,7 +186,7 @@ class AccountSettingsActivity : BaseActivity() {
         }
 
         override fun onStatusChanged(which: Int) {
-            App.log.fine("Reloading account settings")
+            Logger.log.fine("Reloading account settings")
             forceLoad()
         }
 
