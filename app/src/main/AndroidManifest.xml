@@ -59,7 +59,7 @@
             android:exported="false"
             android:process=":sync">
             <intent-filter>
-                <action android:name="at.bitfire.davdroid.REINIT_SETTINGS"/>
+                <action android:name="com.etesync.syncadapter.REINIT_SETTINGS"/>
             </intent-filter>
         </receiver>
         <receiver
