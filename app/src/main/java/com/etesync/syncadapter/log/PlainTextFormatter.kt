@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 – 2016 Ricki Hirner (bitfire web engineering).
+ * Copyright © Ricki Hirner (bitfire web engineering).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
@@ -11,32 +11,41 @@ package com.etesync.syncadapter.log
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.commons.lang3.time.DateFormatUtils
-
 import java.util.logging.Formatter
 import java.util.logging.LogRecord
 
-class PlainTextFormatter private constructor(private val logcat: Boolean) : Formatter() {
+class PlainTextFormatter private constructor(
+        private val logcat: Boolean
+): Formatter() {
+
+    companion object {
+        val LOGCAT = PlainTextFormatter(true)
+        val DEFAULT = PlainTextFormatter(false)
+
+        const val MAX_MESSAGE_LENGTH = 20000
+    }
 
     override fun format(r: LogRecord): String {
         val builder = StringBuilder()
 
         if (!logcat)
-            builder.append(DateFormatUtils.format(r.millis, "yyyy-MM-dd HH:mm:ss"))
+            builder .append(DateFormatUtils.format(r.millis, "yyyy-MM-dd HH:mm:ss"))
                     .append(" ").append(r.threadID).append(" ")
 
-        if (r.sourceClassName.replaceFirst("\\$.*".toRegex(), "") != r.loggerName)
-            builder.append("[").append(shortClassName(r.sourceClassName)).append("] ")
+        val className = shortClassName(r.sourceClassName)
+        if (className != r.loggerName)
+            builder.append("[").append(className).append("] ")
 
-        builder.append(r.message)
+        builder.append(StringUtils.abbreviate(r.message, MAX_MESSAGE_LENGTH))
 
-        if (r.thrown != null)
-            builder.append("\nEXCEPTION ")
-                    .append(ExceptionUtils.getStackTrace(r.thrown))
+        r.thrown?.let {
+            builder .append("\nEXCEPTION ")
+                    .append(ExceptionUtils.getStackTrace(it))
+        }
 
-        if (r.parameters != null) {
-            var idx = 1
-            for (param in r.parameters)
-                builder.append("\n\tPARAMETER #").append(idx++).append(" = ").append(param)
+        r.parameters?.let {
+            for ((idx, param) in it.withIndex())
+                builder.append("\n\tPARAMETER #").append(idx).append(" = ").append(param)
         }
 
         if (!logcat)
@@ -45,14 +54,8 @@ class PlainTextFormatter private constructor(private val logcat: Boolean) : Form
         return builder.toString()
     }
 
-    private fun shortClassName(className: String): String? {
-        val s = StringUtils.replace(className, "com.etesync.syncadapter.", "")
-        return StringUtils.replace(s, "at.bitfire.", "")
-    }
-
-    companion object {
-        val LOGCAT = PlainTextFormatter(true)
-        val DEFAULT = PlainTextFormatter(false)
-    }
+    private fun shortClassName(className: String) = className
+            .replace(Regex("^at\\.bitfire\\.(dav|cert4an|dav4an|ical4an|vcard4an)droid\\."), "")
+            .replace(Regex("\\$.*$"), "")
 
 }

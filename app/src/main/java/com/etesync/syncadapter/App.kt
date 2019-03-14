@@ -161,7 +161,7 @@ class App : Application() {
         rootLogger.useParentHandlers = false
         for (handler in rootLogger.handlers)
             rootLogger.removeHandler(handler)
-        rootLogger.addHandler(LogcatHandler.INSTANCE)
+        rootLogger.addHandler(LogcatHandler)
 
         val nm = NotificationManagerCompat.from(this)
         // log to external file according to preferences

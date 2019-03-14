@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 – 2016 Ricki Hirner (bitfire web engineering).
+ * Copyright © Ricki Hirner (bitfire web engineering).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
@@ -11,9 +11,9 @@ package com.etesync.syncadapter.log
 import java.util.logging.Handler
 import java.util.logging.LogRecord
 
-class StringHandler : Handler() {
+class StringHandler: Handler() {
 
-    internal var builder = StringBuilder()
+    val builder = StringBuilder()
 
     init {
         formatter = PlainTextFormatter.DEFAULT
@@ -24,10 +24,8 @@ class StringHandler : Handler() {
     }
 
     override fun flush() {}
-
     override fun close() {}
 
-    override fun toString(): String {
-        return builder.toString()
-    }
+    override fun toString() = builder.toString()
+
 }
