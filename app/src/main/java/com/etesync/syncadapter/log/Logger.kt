@@ -21,10 +21,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.NotificationHelper
+import com.etesync.syncadapter.syncadapter.SyncNotification
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.model.ServiceDB
-import com.etesync.syncadapter.model.Settings
 import com.etesync.syncadapter.ui.AppSettingsActivity
 import org.apache.commons.lang3.time.DateFormatUtils
 import java.io.File
@@ -79,7 +77,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
             builder.setSmallIcon(R.drawable.ic_sd_storage_light)
                     .setLargeIcon(App.getLauncherBitmap(context))
                     .setContentTitle(context.getString(R.string.logging_davdroid_file_logging))
-                    .setChannelId(NotificationHelper.CHANNEL_ID)
+                    .setChannelId(SyncNotification.CHANNEL_ID)
 
             val logDir = debugDir(context) ?: return
             val logFile = File(logDir,

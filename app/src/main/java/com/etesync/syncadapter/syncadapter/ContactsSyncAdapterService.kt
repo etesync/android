@@ -30,7 +30,7 @@ class ContactsSyncAdapterService : SyncAdapterService() {
 
         override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
             super.onPerformSync(account, extras, authority, provider, syncResult)
-            val notificationManager = NotificationHelper(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
+            val notificationManager = SyncNotification(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
             notificationManager.cancel()
 
             try {

@@ -195,7 +195,7 @@
             android:parentActivityName=".ui.AccountsActivity"/>
 
         <activity
-            android:name=".NotificationHelper$NotificationHandlerActivity"
+            android:name=".syncadapter.SyncNotification$NotificationHandlerActivity"
             android:theme="@style/Theme.Transparent" />
 
         <activity

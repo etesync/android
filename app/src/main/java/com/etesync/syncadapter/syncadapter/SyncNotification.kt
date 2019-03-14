@@ -1,4 +1,4 @@
-package com.etesync.syncadapter
+package com.etesync.syncadapter.syncadapter
 
 import android.app.Activity
 import android.app.NotificationChannel
@@ -14,6 +14,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.syncadapter.AccountSettings
+import com.etesync.syncadapter.App
+import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.AccountSettingsActivity
@@ -21,7 +25,7 @@ import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.WebViewActivity
 import java.util.logging.Level
 
-class NotificationHelper(internal val context: Context, internal val notificationTag: String, internal val notificationId: Int) {
+class SyncNotification(internal val context: Context, internal val notificationTag: String, internal val notificationId: Int) {
 
     internal val notificationManager: NotificationManagerCompat
     lateinit var detailsIntent: Intent

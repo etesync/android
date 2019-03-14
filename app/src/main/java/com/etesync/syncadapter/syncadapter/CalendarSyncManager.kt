@@ -19,7 +19,6 @@ import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.NotificationHelper
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalEntryManager
@@ -129,7 +128,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     private fun createInviteAttendeesNotification(event: Event, icsContent: String) {
         val intent = EventEmailInvitation(context, account).createIntent(event, icsContent)
         if (intent != null) {
-            val notificationHelper = NotificationHelper(context, event.uid!!, event.uid!!.hashCode())
+            val notificationHelper = SyncNotification(context, event.uid!!, event.uid!!.hashCode())
             notificationHelper.notify(
                     context.getString(
                             R.string.sync_calendar_attendees_notification_title, event.summary),

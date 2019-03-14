@@ -46,7 +46,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
         override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
             super.onPerformSync(account, extras, authority, provider, syncResult)
 
-            val notificationManager = NotificationHelper(context, "journals-tasks", Constants.NOTIFICATION_TASK_SYNC)
+            val notificationManager = SyncNotification(context, "journals-tasks", Constants.NOTIFICATION_TASK_SYNC)
             notificationManager.cancel()
 
             try {

@@ -41,7 +41,7 @@ import java.util.logging.Level
 abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
 constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String) {
 
-    protected val notificationManager: NotificationHelper
+    protected val notificationManager: SyncNotification
     protected val info: CollectionInfo
     protected var localCollection: LocalCollection<T>? = null
 
@@ -94,7 +94,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         info = JournalEntity.fetch(data, serviceEntity, journalUid)!!.info
 
         // dismiss previous error notifications
-        notificationManager = NotificationHelper(context, journalUid, notificationId())
+        notificationManager = SyncNotification(context, journalUid, notificationId())
         notificationManager.cancel()
 
         Logger.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version))
@@ -233,7 +233,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         if (remoteEntries!!.isEmpty() || !changeNotification) {
             return
         }
-        val notificationHelper = NotificationHelper(context,
+        val notificationHelper = SyncNotification(context,
                 System.currentTimeMillis().toString(), notificationId())
 
         var deleted = 0
@@ -533,7 +533,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     private fun notifyDiscardedChange() {
-        val notification = NotificationHelper(context, "discarded_${info.uid}", notificationId())
+        val notification = SyncNotification(context, "discarded_${info.uid}", notificationId())
         val intent = Intent(context, AccountsActivity::class.java)
         notification.notify(context.getString(R.string.sync_journal_readonly, info.displayName), context.getString(R.string.sync_journal_readonly_message, numDiscarded), null, intent, R.drawable.ic_error_light)
     }
