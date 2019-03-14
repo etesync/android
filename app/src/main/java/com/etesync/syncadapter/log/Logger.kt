@@ -21,9 +21,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.syncadapter.SyncNotification
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.AppSettingsActivity
+import com.etesync.syncadapter.utils.NotificationUtils
 import org.apache.commons.lang3.time.DateFormatUtils
 import java.io.File
 import java.io.IOException
@@ -73,11 +73,10 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
         val nm = NotificationManagerCompat.from(context)
         // log to external file according to preferences
         if (logToFile) {
-            val builder = NotificationCompat.Builder(context)
+            val builder = NotificationUtils.newBuilder(context, NotificationUtils.CHANNEL_DEBUG)
             builder.setSmallIcon(R.drawable.ic_sd_storage_light)
                     .setLargeIcon(App.getLauncherBitmap(context))
                     .setContentTitle(context.getString(R.string.logging_davdroid_file_logging))
-                    .setChannelId(SyncNotification.CHANNEL_ID)
 
             val logDir = debugDir(context) ?: return
             val logFile = File(logDir,

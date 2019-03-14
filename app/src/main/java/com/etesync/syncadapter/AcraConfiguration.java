@@ -24,7 +24,7 @@ public class AcraConfiguration {
         builder.getPluginConfigurationBuilder(NotificationConfigurationBuilder.class)
                 .setResTitle(R.string.crash_title)
                 .setResText(R.string.crash_message)
-                .setChannelName("crash-notification")
+                .setResChannelName(R.string.notification_channel_crash_reports)
                 .setSendOnClick(true)
                 .setEnabled(true);
 

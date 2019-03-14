@@ -28,6 +28,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.ui.PermissionsActivity
+import com.etesync.syncadapter.utils.NotificationUtils
 import okhttp3.HttpUrl
 import java.util.*
 import java.util.logging.Level
@@ -59,7 +60,7 @@ abstract class SyncAdapterService : Service() {
             val intent = Intent(context, PermissionsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            val notify = NotificationCompat.Builder(context)
+            val notify = NotificationUtils.newBuilder(context, NotificationUtils.CHANNEL_SYNC_ERRORS)
                     .setSmallIcon(R.drawable.ic_error_light)
                     .setLargeIcon(App.getLauncherBitmap(context))
                     .setContentTitle(context.getString(R.string.sync_error_permissions))

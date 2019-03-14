@@ -21,6 +21,17 @@
     <string name="please_wait">Please wait …</string>
     <string name="send">Send</string>
 
+    <string name="notification_channel_crash_reports">Crash Reports</string>
+    <string name="notification_channel_debugging">Debugging</string>
+    <string name="notification_channel_general">Other important messages</string>
+    <string name="notification_channel_sync">Synchronization</string>
+    <string name="notification_channel_sync_errors">Synchronization errors</string>
+    <string name="notification_channel_sync_errors_desc">Important errors which stop synchronization like unexpected server replies</string>
+    <string name="notification_channel_sync_warnings">Synchronization warnings</string>
+    <string name="notification_channel_sync_warnings_desc">Non-fatal synchronization problems like dismissed changes of read-only collections</string>
+    <string name="notification_channel_sync_status">Status messages</string>
+    <string name="notification_channel_sync_status_desc">Informational status messages like the sync change summary</string>
+
     <!-- Crash -->
     <string name="crash_title">EteSync has crashed!</string>
     <string name="crash_message">Please send stack trace to developers.</string>

@@ -33,6 +33,7 @@ import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.LanguageUtils
+import com.etesync.syncadapter.utils.NotificationUtils
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.meta.EntityModel
@@ -73,6 +74,8 @@ class App : Application() {
         reinitLogger()
         StrictMode.enableDefaults()
         initPrefVersion()
+
+        NotificationUtils.createChannels(this)
 
         appName = getString(R.string.app_name)
         accountType = getString(R.string.account_type)

@@ -1,21 +1,17 @@
 package com.etesync.syncadapter.syncadapter
 
 import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteException
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
@@ -23,6 +19,7 @@ import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.AccountSettingsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.WebViewActivity
+import com.etesync.syncadapter.utils.NotificationUtils
 import java.util.logging.Level
 
 class SyncNotification(internal val context: Context, internal val notificationTag: String, internal val notificationId: Int) {
@@ -79,12 +76,16 @@ class SyncNotification(internal val context: Context, internal val notificationT
     @JvmOverloads
     fun notify(title: String, content: String, bigText: String?, intent: Intent, _icon: Int = -1) {
         var icon = _icon
-        createNotificationChannel()
-        val builder = NotificationCompat.Builder(context)
-        val category = if (throwable == null)
-            NotificationCompat.CATEGORY_STATUS
-        else
-            NotificationCompat.CATEGORY_ERROR
+        val category: String;
+        val channel: String;
+        if (throwable == null) {
+            category = NotificationCompat.CATEGORY_STATUS
+            channel = NotificationUtils.CHANNEL_SYNC_STATUS
+        } else {
+            category = NotificationCompat.CATEGORY_ERROR
+            channel = NotificationUtils.CHANNEL_SYNC_ERRORS
+        }
+        val builder = NotificationUtils.newBuilder(context, channel)
         if (icon == -1) {
             //Check if error was configured
             if (throwable == null) {
@@ -94,10 +95,8 @@ class SyncNotification(internal val context: Context, internal val notificationT
             }
         }
 
-        builder.setLargeIcon(App.getLauncherBitmap(context))
-                .setContentTitle(title)
+        builder .setContentTitle(title)
                 .setContentText(content)
-                .setChannelId(CHANNEL_ID)
                 .setAutoCancel(true)
                 .setCategory(category)
                 .setSmallIcon(icon)
@@ -143,18 +142,4 @@ class SyncNotification(internal val context: Context, internal val notificationT
             finish()
         }
     }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.notification_channel_name)
-            val channel = NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW)
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager!!.createNotificationChannel(channel)
-        }
-    }
-
-    companion object {
-        val CHANNEL_ID = "EteSync_default"
-    }
-
 }
