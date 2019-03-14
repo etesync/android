@@ -147,9 +147,6 @@ class AppSettingsActivity : BaseActivity() {
             // re-initialize certificate manager
             val app = context!!.applicationContext as App
             app.reinitCertManager()
-
-            // reinitialize certificate manager of :sync process
-            context!!.sendBroadcast(Intent(App.ReinitSettingsReceiver.ACTION_REINIT_SETTINGS))
         }
 
         private fun resetCertificates() {

@@ -55,14 +55,6 @@
         tools:ignore="UnusedAttribute">
 
         <receiver
-            android:name=".App$ReinitSettingsReceiver"
-            android:exported="false"
-            android:process=":sync">
-            <intent-filter>
-                <action android:name="com.etesync.syncadapter.REINIT_SETTINGS"/>
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name=".App$AppUpdatedReceiver"
             android:exported="true">
             <intent-filter>
@@ -96,7 +88,6 @@
         <service
             android:name=".syncadapter.CalendarsSyncAdapterService"
             android:exported="true"
-            android:process=":sync"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
@@ -141,7 +132,6 @@
         <service
             android:name=".syncadapter.AddressBooksSyncAdapterService"
             android:exported="true"
-            android:process=":sync"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
@@ -155,7 +145,6 @@
         <service
             android:name=".syncadapter.ContactsSyncAdapterService"
             android:exported="true"
-            android:process=":sync"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>

@@ -137,23 +137,6 @@ class App : Application() {
         Logger.initialize(this)
     }
 
-
-    class ReinitSettingsReceiver : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            Logger.log.info("Received broadcast: re-initializing settings (logger/cert manager)")
-
-            val app = context.applicationContext as App
-            app.reinitLogger()
-        }
-
-        companion object {
-
-            val ACTION_REINIT_SETTINGS = BuildConfig.APPLICATION_ID + ".REINIT_SETTINGS"
-        }
-
-    }
-
     private class MyDatabaseSource internal constructor(context: Context, entityModel: EntityModel, version: Int) : DatabaseSource(context, entityModel, version) {
 
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
