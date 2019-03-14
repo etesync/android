@@ -396,10 +396,10 @@ class App : Application() {
         var hostnameVerifier: HostnameVerifier? = null
             private set
 
-        val log = Logger.getLogger("syncadapter")
+        val log = Logger.getLogger("etesync")
 
         init {
-            at.bitfire.cert4android.Constants.log = Logger.getLogger("syncadapter.cert4android")
+            at.bitfire.cert4android.Constants.log = Logger.getLogger("etesync.cert4android")
         }
 
         lateinit var accountType: String
