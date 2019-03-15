@@ -89,7 +89,6 @@ class HttpClient private constructor(
             context?.let {
                 val dbHelper = ServiceDB.OpenHelper(context)
                 val settings = Settings(dbHelper.readableDatabase)
-                val distrustSystemCerts = settings.getBoolean(App.DISTRUST_SYSTEM_CERTIFICATES, false)
 
                 try {
                     if (settings.getBoolean(App.OVERRIDE_PROXY, false)) {
@@ -107,9 +106,6 @@ class HttpClient private constructor(
                 } finally {
                     dbHelper.close()
                 }
-
-                //if (BuildConfig.customCerts)
-                customCertManager(CustomCertManager(context, !distrustSystemCerts))
             }
 
             // use account settings for authentication
@@ -177,6 +173,16 @@ class HttpClient private constructor(
         }
 
         fun build(): HttpClient {
+            //if (BuildConfig.customCerts)
+            context?.let {
+                val dbHelper = ServiceDB.OpenHelper(context)
+                val settings = Settings(dbHelper.readableDatabase)
+
+                // Only make it interactive if app is in foreground
+                customCertManager(CustomCertManager(context, foreground, !settings.getBoolean(App.DISTRUST_SYSTEM_CERTIFICATES, false), foreground))
+                dbHelper.close()
+            }
+
             val trustManager = certManager ?: {
                 val factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
                 factory.init(null as KeyStore?)
@@ -224,8 +230,6 @@ class HttpClient private constructor(
 
             orig.sslSocketFactory(CertTlsSocketFactory(keyManager, trustManager), trustManager)
             orig.hostnameVerifier(hostnameVerifier)
-
-            certManager?.appInForeground = foreground
 
             return HttpClient(orig.build(), certManager)
         }
