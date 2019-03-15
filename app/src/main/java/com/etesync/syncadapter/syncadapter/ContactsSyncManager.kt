@@ -236,7 +236,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                 return null
             }
 
-            val resourceClient = HttpClient.Builder(context).build().okHttpClient
+            val resourceClient = HttpClient.Builder(context).setForeground(false).build().okHttpClient
 
             try {
                 val response = resourceClient.newCall(Request.Builder()

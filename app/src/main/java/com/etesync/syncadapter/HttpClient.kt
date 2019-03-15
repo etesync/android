@@ -72,6 +72,7 @@ class HttpClient private constructor(
     ) {
         private var certManager: CustomCertManager? = null
         private var certificateAlias: String? = null
+        private var foreground = true
 
         private val orig = sharedClient.newBuilder()
 
@@ -138,8 +139,9 @@ class HttpClient private constructor(
         fun customCertManager(manager: CustomCertManager) {
             certManager = manager
         }
+
         fun setForeground(foreground: Boolean): Builder {
-            certManager?.appInForeground = foreground
+            this.foreground = foreground
             return this
         }
 
@@ -222,6 +224,8 @@ class HttpClient private constructor(
 
             orig.sslSocketFactory(CertTlsSocketFactory(keyManager, trustManager), trustManager)
             orig.hostnameVerifier(hostnameVerifier)
+
+            certManager?.appInForeground = foreground
 
             return HttpClient(orig.build(), certManager)
         }
