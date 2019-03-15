@@ -10,10 +10,12 @@ package com.etesync.syncadapter.ui
 
 import android.content.Intent
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.preference.*
 import com.etesync.syncadapter.App
+import com.etesync.syncadapter.BuildConfig
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.ServiceDB
 import com.etesync.syncadapter.model.Settings
@@ -62,6 +64,18 @@ class AppSettingsActivity : BaseActivity() {
 
         override fun onCreatePreferences(bundle: Bundle?, s: String?) {
             addPreferencesFromResource(R.xml.settings_app)
+
+            findPreference("notification_settings").apply {
+                if (Build.VERSION.SDK_INT >= 26)
+                    onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        startActivity(Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                            putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+                        })
+                        false
+                    }
+                else
+                    isVisible = false
+            }
 
             prefResetHints = findPreference("reset_hints")
 

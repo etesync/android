@@ -10,6 +10,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/app_settings_user_interface">
+        <Preference
+            android:key="notification_settings"
+            android:title="@string/app_settings_notification_settings"
+            android:summary="@string/app_settings_notification_settings_summary"/>
 
         <SwitchPreferenceCompat
             android:key="show_change_notification"

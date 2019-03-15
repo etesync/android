@@ -86,6 +86,8 @@
     <!-- AppSettingsActivity -->
     <string name="app_settings">Settings</string>
     <string name="app_settings_user_interface">User interface</string>
+    <string name="app_settings_notification_settings">Notification settings</string>
+    <string name="app_settings_notification_settings_summary">Manage notification channels and their settings</string>
     <string name="app_settings_reset_hints">Reset hints</string>
     <string name="app_settings_reset_hints_summary">Re-enables hints which have been dismissed previously</string>
     <string name="app_settings_reset_hints_success">All hints will be shown again</string>
