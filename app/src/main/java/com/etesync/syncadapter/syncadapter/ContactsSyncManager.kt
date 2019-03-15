@@ -236,15 +236,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                 return null
             }
 
-            var resourceClient = HttpClient.create(context)
-
-            // authenticate only against a certain host, and only upon request
-            // resourceClient = HttpClient.addAuthentication(resourceClient, baseUrl.host(), settings.username(), settings.password());
-
-            // allow redirects
-            resourceClient = resourceClient.newBuilder()
-                    .followRedirects(true)
-                    .build()
+            val resourceClient = HttpClient.Builder(context).build().okHttpClient
 
             try {
                 val response = resourceClient.newCall(Request.Builder()

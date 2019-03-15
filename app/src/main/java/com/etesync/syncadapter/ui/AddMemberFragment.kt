@@ -60,7 +60,7 @@ class AddMemberFragment : DialogFragment() {
     private inner class MemberAdd : AsyncTask<Void, Void, MemberAdd.AddResult>() {
         override fun doInBackground(vararg voids: Void): AddResult {
             try {
-                val httpClient = HttpClient.create(ctx!!, settings!!)
+                val httpClient = HttpClient.Builder(ctx, settings).build().okHttpClient
                 val userInfoManager = UserInfoManager(httpClient, remote!!)
 
                 val userInfo = userInfoManager.fetch(memberEmail)
@@ -102,7 +102,7 @@ class AddMemberFragment : DialogFragment() {
         override fun doInBackground(vararg voids: Void): AddResultSecond {
             try {
                 val settings = settings!!
-                val httpClient = HttpClient.create(ctx!!, settings)
+                val httpClient = HttpClient.Builder(ctx!!, settings).build().okHttpClient
                 val journalsManager = JournalManager(httpClient, remote!!)
 
                 val data = (ctx!!.applicationContext as App).data

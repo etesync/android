@@ -22,7 +22,6 @@ import android.os.StrictMode
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import androidx.core.content.ContextCompat
-import at.bitfire.cert4android.CustomCertManager
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
@@ -38,18 +37,12 @@ import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.meta.EntityModel
 import io.requery.sql.EntityDataStore
-import okhttp3.internal.tls.OkHostnameVerifier
 import org.acra.ACRA
 import org.jetbrains.anko.doAsync
 import java.util.*
-import javax.net.ssl.HostnameVerifier
 
 
 class App : Application() {
-
-    var certManager: CustomCertManager? = null
-        private set
-
     /**
      * @return [EntityDataStore] single instance for the application.
      *
@@ -70,7 +63,6 @@ class App : Application() {
     @SuppressLint("HardwareIds")
     override fun onCreate() {
         super.onCreate()
-        reinitCertManager()
         reinitLogger()
         StrictMode.enableDefaults()
         initPrefVersion()
@@ -118,22 +110,6 @@ class App : Application() {
         }
 
         serviceDB.close()
-    }
-
-    fun reinitCertManager() {
-        if (BuildConfig.customCerts) {
-            if (certManager != null)
-                certManager!!.close()
-
-            val dbHelper = ServiceDB.OpenHelper(this)
-            val settings = Settings(dbHelper.readableDatabase)
-
-            certManager = CustomCertManager(this, !settings.getBoolean(DISTRUST_SYSTEM_CERTIFICATES, false))
-            sslSocketFactoryCompat = SSLSocketFactoryCompat(certManager!!)
-            hostnameVerifier = certManager!!.hostnameVerifier(OkHostnameVerifier.INSTANCE)
-
-            dbHelper.close()
-        }
     }
 
     fun reinitLogger() {
@@ -306,16 +282,6 @@ class App : Application() {
         var sDefaultLocacle = Locale.getDefault()
 
         var appName: String = "EteSync"
-
-        var sslSocketFactoryCompat: SSLSocketFactoryCompat? = null
-            private set
-
-        var hostnameVerifier: HostnameVerifier? = null
-            private set
-
-        init {
-            at.bitfire.cert4android.Constants.log = java.util.logging.Logger.getLogger("etesync.cert4android")
-        }
 
         lateinit var accountType: String
             private set

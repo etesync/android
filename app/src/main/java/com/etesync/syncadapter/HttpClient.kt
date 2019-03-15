@@ -10,141 +10,227 @@ package com.etesync.syncadapter
 
 import android.content.Context
 import android.os.Build
+import android.security.KeyChain
+import at.bitfire.cert4android.CertTlsSocketFactory
+import at.bitfire.cert4android.CustomCertManager
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.ServiceDB
 import com.etesync.syncadapter.model.Settings
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.internal.tls.OkHostnameVerifier
 import okhttp3.logging.HttpLoggingInterceptor
+import java.io.File
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.net.Socket
 import java.net.URI
-import java.text.SimpleDateFormat
+import java.security.KeyStore
+import java.security.Principal
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
+import javax.net.ssl.KeyManager
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509ExtendedKeyManager
+import javax.net.ssl.X509TrustManager
 import java.util.logging.Logger as LoggerType
-import com.etesync.syncadapter.log.Logger
 
-object HttpClient {
-    private val client = OkHttpClient()
-    private val userAgentInterceptor = UserAgentInterceptor()
+class HttpClient private constructor(
+        val okHttpClient: OkHttpClient,
+        private val certManager: CustomCertManager?
+): AutoCloseable {
 
-    private val userAgent: String
+    companion object {
+        /** [OkHttpClient] singleton to build all clients from */
+        val sharedClient = OkHttpClient.Builder()
+                // set timeouts
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
 
-    init {
-        userAgent = "${App.appName}/${BuildConfig.VERSION_NAME} (okhttp3) Android/${Build.VERSION.RELEASE}"
+                // don't allow redirects by default, because it would break PROPFIND handling
+                .followRedirects(false)
+
+                // add User-Agent to every request
+                .addNetworkInterceptor(UserAgentInterceptor)
+
+                .build()
     }
 
-    fun create(context: Context?, logger: LoggerType, host: String?, token: String): OkHttpClient {
-        var builder = defaultBuilder(context, logger)
-
-        // use account settings for authentication
-        builder = addAuthentication(builder, host, token)
-
-        return builder.build()
+    override fun close() {
+        certManager?.close()
     }
 
-    @JvmOverloads
-    fun create(context: Context?, settings: AccountSettings, logger: LoggerType = Logger.log): OkHttpClient {
-        return create(context, logger, settings.uri!!.host, settings.authToken)
-    }
+    class Builder(
+            val context: Context? = null,
+            accountSettings: AccountSettings? = null,
+            val logger: java.util.logging.Logger = Logger.log
+    ) {
+        private var certManager: CustomCertManager? = null
+        private var certificateAlias: String? = null
 
-    @JvmOverloads
-    fun create(context: Context?, logger: LoggerType = Logger.log): OkHttpClient {
-        return defaultBuilder(context, logger).build()
-    }
+        private val orig = sharedClient.newBuilder()
 
-    fun create(context: Context?, uri: URI, authToken: String): OkHttpClient {
-        return create(context, Logger.log, uri.host, authToken)
-    }
+        init {
+            // add network logging, if requested
+            if (logger.isLoggable(Level.FINEST)) {
+                val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
+                    message -> logger.finest(message)
+                })
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                orig.addInterceptor(loggingInterceptor)
+            }
 
-
-    private fun defaultBuilder(context: Context?, logger: LoggerType): OkHttpClient.Builder {
-        val builder = client.newBuilder()
-
-        // use MemorizingTrustManager to manage self-signed certificates
-        if (context != null) {
-            val app = context.applicationContext as App
-            if (App.sslSocketFactoryCompat != null && app.certManager != null)
-                builder.sslSocketFactory(App.sslSocketFactoryCompat!!, app.certManager!!)
-            if (App.hostnameVerifier != null)
-                builder.hostnameVerifier(App.hostnameVerifier!!)
-        }
-
-        // set timeouts
-        builder.connectTimeout(30, TimeUnit.SECONDS)
-        builder.writeTimeout(30, TimeUnit.SECONDS)
-        builder.readTimeout(120, TimeUnit.SECONDS)
-
-        // custom proxy support
-        if (context != null) {
-            val dbHelper = ServiceDB.OpenHelper(context)
-            try {
+            context?.let {
+                val dbHelper = ServiceDB.OpenHelper(context)
                 val settings = Settings(dbHelper.readableDatabase)
-                if (settings.getBoolean(App.OVERRIDE_PROXY, false)) {
-                    val address = InetSocketAddress(
-                            settings.getString(App.OVERRIDE_PROXY_HOST, App.OVERRIDE_PROXY_HOST_DEFAULT),
-                            settings.getInt(App.OVERRIDE_PROXY_PORT, App.OVERRIDE_PROXY_PORT_DEFAULT)
-                    )
+                val distrustSystemCerts = settings.getBoolean(App.DISTRUST_SYSTEM_CERTIFICATES, false)
 
-                    val proxy = Proxy(Proxy.Type.HTTP, address)
-                    builder.proxy(proxy)
-                    Logger.log.log(Level.INFO, "Using proxy", proxy)
+                try {
+                    if (settings.getBoolean(App.OVERRIDE_PROXY, false)) {
+                        val address = InetSocketAddress(
+                                settings.getString(App.OVERRIDE_PROXY_HOST, App.OVERRIDE_PROXY_HOST_DEFAULT),
+                                settings.getInt(App.OVERRIDE_PROXY_PORT, App.OVERRIDE_PROXY_PORT_DEFAULT)
+                        )
+
+                        val proxy = Proxy(Proxy.Type.HTTP, address)
+                        orig.proxy(proxy)
+                        Logger.log.log(Level.INFO, "Using proxy", proxy)
+                    }
+                } catch (e: Exception) {
+                    Logger.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
+                } finally {
+                    dbHelper.close()
                 }
-            } catch (e: IllegalArgumentException) {
-                Logger.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
-            } catch (e: NullPointerException) {
-                Logger.log.log(Level.SEVERE, "Can't set proxy, ignoring", e)
-            } finally {
-                dbHelper.close()
+
+                //if (BuildConfig.customCerts)
+                customCertManager(CustomCertManager(context, !distrustSystemCerts))
+            }
+
+            // use account settings for authentication
+            accountSettings?.let {
+                addAuthentication(accountSettings.uri!!.host, accountSettings.authToken)
             }
         }
 
-        // add User-Agent to every request
-        builder.addNetworkInterceptor(userAgentInterceptor)
-
-        // add network logging, if requested
-        if (logger.isLoggable(Level.FINEST)) {
-            val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message -> logger.finest(message) })
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            builder.addInterceptor(loggingInterceptor)
+        constructor(context: Context, host: String?, authToken: String): this(context) {
+            addAuthentication(host, authToken)
         }
 
-        return builder
-    }
-
-    private fun addAuthentication(builder: OkHttpClient.Builder, host: String?, token: String): OkHttpClient.Builder {
-        val authHandler = TokenAuthenticator(host, token)
-
-        return builder.addNetworkInterceptor(authHandler)
-    }
-
-    private class TokenAuthenticator internal constructor(internal val host: String?, internal val token: String?) : Interceptor {
-
-        @Throws(IOException::class)
-        override fun intercept(chain: Interceptor.Chain): Response {
-            var request = chain.request()
-
-            /* Only add to the host we want. */
-            if (host == null || request.url().host() == host) {
-                if (token != null && request.header(HEADER_AUTHORIZATION) == null) {
-                    request = request.newBuilder()
-                            .header(HEADER_AUTHORIZATION, "Token $token")
-                            .build()
+        fun withDiskCache(): Builder {
+            val context = context ?: throw IllegalArgumentException("Context is required to find the cache directory")
+            for (dir in arrayOf(context.externalCacheDir, context.cacheDir).filterNotNull()) {
+                if (dir.exists() && dir.canWrite()) {
+                    val cacheDir = File(dir, "HttpClient")
+                    cacheDir.mkdir()
+                    Logger.log.fine("Using disk cache: $cacheDir")
+                    orig.cache(Cache(cacheDir, 10*1024*1024))
+                    break
                 }
             }
-
-            return chain.proceed(request)
+            return this
         }
 
-        companion object {
-            protected val HEADER_AUTHORIZATION = "Authorization"
+        fun customCertManager(manager: CustomCertManager) {
+            certManager = manager
         }
+        fun setForeground(foreground: Boolean): Builder {
+            certManager?.appInForeground = foreground
+            return this
+        }
+
+        private fun addAuthentication(host: String?, token: String): Builder {
+            val authHandler = TokenAuthenticator(host, token)
+
+            orig.addNetworkInterceptor(authHandler)
+
+            return this
+        }
+
+        private class TokenAuthenticator internal constructor(internal val host: String?, internal val token: String?) : Interceptor {
+
+            @Throws(IOException::class)
+            override fun intercept(chain: Interceptor.Chain): Response {
+                var request = chain.request()
+
+                /* Only add to the host we want. */
+                if (host == null || request.url().host() == host) {
+                    if (token != null && request.header(HEADER_AUTHORIZATION) == null) {
+                        request = request.newBuilder()
+                                .header(HEADER_AUTHORIZATION, "Token $token")
+                                .build()
+                    }
+                }
+
+                return chain.proceed(request)
+            }
+
+            companion object {
+                protected val HEADER_AUTHORIZATION = "Authorization"
+            }
+        }
+
+        fun build(): HttpClient {
+            val trustManager = certManager ?: {
+                val factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+                factory.init(null as KeyStore?)
+                factory.trustManagers.first() as X509TrustManager
+            }()
+
+            val hostnameVerifier = certManager?.hostnameVerifier(OkHostnameVerifier.INSTANCE)
+                    ?: OkHostnameVerifier.INSTANCE
+
+            var keyManager: KeyManager? = null
+            try {
+                certificateAlias?.let { alias ->
+                    val context = requireNotNull(context)
+
+                    // get client certificate and private key
+                    val certs = KeyChain.getCertificateChain(context, alias) ?: return@let
+                    val key = KeyChain.getPrivateKey(context, alias) ?: return@let
+                    logger.fine("Using client certificate $alias for authentication (chain length: ${certs.size})")
+
+                    // create Android KeyStore (performs key operations without revealing secret data to DAVx5)
+                    val keyStore = KeyStore.getInstance("AndroidKeyStore")
+                    keyStore.load(null)
+
+                    // create KeyManager
+                    keyManager = object: X509ExtendedKeyManager() {
+                        override fun getServerAliases(p0: String?, p1: Array<out Principal>?): Array<String>? = null
+                        override fun chooseServerAlias(p0: String?, p1: Array<out Principal>?, p2: Socket?) = null
+
+                        override fun getClientAliases(p0: String?, p1: Array<out Principal>?) =
+                                arrayOf(alias)
+
+                        override fun chooseClientAlias(p0: Array<out String>?, p1: Array<out Principal>?, p2: Socket?) =
+                                alias
+
+                        override fun getCertificateChain(forAlias: String?) =
+                                certs.takeIf { forAlias == alias }
+
+                        override fun getPrivateKey(forAlias: String?) =
+                                key.takeIf { forAlias == alias }
+                    }
+                }
+            } catch (e: Exception) {
+                logger.log(Level.SEVERE, "Couldn't set up client certificate authentication", e)
+            }
+
+            orig.sslSocketFactory(CertTlsSocketFactory(keyManager, trustManager), trustManager)
+            orig.hostnameVerifier(hostnameVerifier)
+
+            return HttpClient(orig.build(), certManager)
+        }
+
     }
 
-    internal class UserAgentInterceptor : Interceptor {
+    private object UserAgentInterceptor : Interceptor {
+        private val userAgent = "${App.appName}/${BuildConfig.VERSION_NAME} (okhttp3) Android/${Build.VERSION.RELEASE}"
+
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response {
             val locale = Locale.getDefault()

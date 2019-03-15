@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.preference.*
+import at.bitfire.cert4android.CustomCertManager
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.BuildConfig
 import com.etesync.syncadapter.R
@@ -43,7 +44,6 @@ class AppSettingsActivity : BaseActivity() {
         internal lateinit var settings: Settings
 
         internal lateinit var prefResetHints: Preference
-        internal lateinit var prefResetCertificates: Preference
         internal lateinit var prefOverrideProxy: SwitchPreferenceCompat
         internal lateinit var prefDistrustSystemCerts: SwitchPreferenceCompat
 
@@ -125,7 +125,15 @@ class AppSettingsActivity : BaseActivity() {
             prefDistrustSystemCerts = findPreference("distrust_system_certs") as SwitchPreferenceCompat
             prefDistrustSystemCerts.isChecked = settings.getBoolean(App.DISTRUST_SYSTEM_CERTIFICATES, false)
 
-            prefResetCertificates = findPreference("reset_certificates")
+            findPreference("reset_certificates").apply {
+                isVisible = BuildConfig.customCerts
+                isEnabled = true
+                onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    resetCertificates()
+                    false
+                }
+            }
+
 
             val prefChangeNotification = findPreference("show_change_notification") as SwitchPreferenceCompat
             prefChangeNotification.isChecked = context!!.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
@@ -143,8 +151,6 @@ class AppSettingsActivity : BaseActivity() {
                 resetHints()
             else if (preference === prefDistrustSystemCerts)
                 setDistrustSystemCerts(preference.isChecked)
-            else if (preference === prefResetCertificates)
-                resetCertificates()
             else
                 return false
             return true
@@ -157,15 +163,11 @@ class AppSettingsActivity : BaseActivity() {
 
         private fun setDistrustSystemCerts(distrust: Boolean) {
             settings.putBoolean(App.DISTRUST_SYSTEM_CERTIFICATES, distrust)
-
-            // re-initialize certificate manager
-            val app = context!!.applicationContext as App
-            app.reinitCertManager()
         }
 
         private fun resetCertificates() {
-            (context!!.applicationContext as App).certManager?.resetCertificates()
-            Snackbar.make(view!!, getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
+            if (CustomCertManager.resetCertificates(activity!!))
+                Snackbar.make(view!!, getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
         }
 
         private inner class LanguageTask internal constructor(private val mListPreference: ListPreference) : AsyncTask<Void, Void, LanguageUtils.LocaleList>() {

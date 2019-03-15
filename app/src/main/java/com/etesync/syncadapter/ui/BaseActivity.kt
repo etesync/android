@@ -15,22 +15,4 @@ open class BaseActivity : AppCompatActivity() {
         }
         return false
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        val app = applicationContext as App
-        val certManager = app.certManager
-        if (certManager != null)
-            certManager.appInForeground = true
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        val app = applicationContext as App
-        val certManager = app.certManager
-        if (certManager != null)
-            certManager.appInForeground = false
-    }
 }

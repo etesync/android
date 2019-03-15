@@ -87,7 +87,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     init {
 
         // create HttpClient with given logger
-        httpClient = HttpClient.create(context, settings)
+        httpClient = HttpClient.Builder(context, settings).build().okHttpClient
 
         data = (context.applicationContext as App).data
         val serviceEntity = JournalModel.Service.fetch(data, accountName, serviceType)

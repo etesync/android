@@ -53,7 +53,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
         asyncTask = doAsync {
             try {
                 val settings = AccountSettings(context!!, account)
-                val httpClient = HttpClient.create(context!!, settings)
+                val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
                 val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
 
                 val journal = JournalManager.Journal.fakeWithUid(journalEntity.uid)

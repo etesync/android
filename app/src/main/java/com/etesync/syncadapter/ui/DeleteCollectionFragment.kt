@@ -88,7 +88,8 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 val settings = AccountSettings(context, account)
                 val principal = HttpUrl.get(settings.uri!!)
 
-                val journalManager = JournalManager(HttpClient.create(context, settings), principal!!)
+                val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
+                val journalManager = JournalManager(httpClient, principal!!)
                 val crypto = Crypto.CryptoManager(collectionInfo.version, settings.password(), collectionInfo.uid!!)
 
                 journalManager.delete(JournalManager.Journal(crypto, collectionInfo.toJson(), collectionInfo.uid!!))

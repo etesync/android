@@ -61,7 +61,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
 
     fun changePasswordDo(old_password: String, new_password: String) {
         val settings = AccountSettings(this, account)
-        val httpClient = HttpClient.create(this, settings)
+        val httpClient = HttpClient.Builder(this, settings).build().okHttpClient
 
         doAsync {
             Logger.log.info("Started deriving old key")

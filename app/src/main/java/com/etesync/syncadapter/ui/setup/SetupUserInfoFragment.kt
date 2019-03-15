@@ -51,7 +51,7 @@ class SetupUserInfoFragment : DialogFragment() {
         override fun doInBackground(vararg accounts: Account): SetupUserInfo.SetupUserInfoResult {
             try {
                 val cryptoManager: Crypto.CryptoManager
-                val httpClient = HttpClient.create(context, settings)
+                val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
 
                 val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings.uri!!)!!)
                 var userInfo: UserInfoManager.UserInfo? = userInfoManager.fetch(account.name)

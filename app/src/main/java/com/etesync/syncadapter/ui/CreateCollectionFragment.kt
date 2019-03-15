@@ -101,7 +101,8 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 val settings = AccountSettings(context, account)
                 val principal = HttpUrl.get(settings.uri!!)
 
-                val journalManager = JournalManager(HttpClient.create(context, settings), principal!!)
+                val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
+                val journalManager = JournalManager(httpClient, principal!!)
                 var uid = info.uid
 
                 if (uid == null) {

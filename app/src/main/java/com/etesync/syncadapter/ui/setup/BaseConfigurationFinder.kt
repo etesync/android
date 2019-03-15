@@ -12,6 +12,7 @@ import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalAuthenticator
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.log.StringHandler
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
@@ -20,22 +21,14 @@ import java.io.IOException
 import java.io.Serializable
 import java.net.URI
 import java.util.*
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class BaseConfigurationFinder(protected val context: Context, protected val credentials: LoginCredentials) {
 
-    protected val log: Logger
     protected val logBuffer = StringHandler()
     protected var httpClient: OkHttpClient
 
     init {
-
-        log = Logger.getLogger("syncadapter.BaseConfigurationFinder")
-        log.level = Level.FINEST
-        log.addHandler(logBuffer)
-
-        httpClient = HttpClient.create(context, log)
+        httpClient = HttpClient.Builder(context).build().okHttpClient
     }
 
 
@@ -50,11 +43,11 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         try {
             authtoken = authenticator.getAuthToken(credentials.userName, credentials.password)
         } catch (e: Exceptions.HttpException) {
-            log.warning(e.message)
+            Logger.log.warning(e.message)
 
             failed = true
         } catch (e: IOException) {
-            log.warning(e.message)
+            Logger.log.warning(e.message)
             failed = true
         }
 
@@ -69,7 +62,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     protected fun findInitialConfiguration(service: CollectionInfo.Type): Configuration.ServiceInfo {
         // put discovered information here
         val config = Configuration.ServiceInfo()
-        log.info("Finding initial " + service.toString() + " service configuration")
+        Logger.log.info("Finding initial " + service.toString() + " service configuration")
 
         return config
     }

@@ -27,7 +27,7 @@ class RemoveMemberFragment : DialogFragment() {
         memberEmail = arguments!!.getString(KEY_MEMBER)
         try {
             settings = AccountSettings(context!!, account!!)
-            httpClient = HttpClient.create(context!!, settings!!)
+            httpClient = HttpClient.Builder(context, settings).build().okHttpClient
         } catch (e: InvalidAccountException) {
             e.printStackTrace()
         }
