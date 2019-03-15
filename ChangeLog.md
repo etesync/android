@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 1.3.0
+* Add notification channels for granular control of app notifications
+* Only show the custom certificate popup when using EteSync interactively
+* Fix setting changes not being applied (e.g. log to file) by making the sync the same process
+* Add a separate setting for verbose logging (was previously tied to log to file) for more granular privacy control
+* Upgrade cert4android and refactor httpClient based on upsteram.
+* Refactor the logging system based on upstream.
+
 ## Version 1.2.6
 * Fix collection editing following an encryption password change.
 
