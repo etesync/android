@@ -15,8 +15,6 @@ import okhttp3.OkHttpClient
 
 class RemoveMemberFragment : DialogFragment() {
     private var settings: AccountSettings? = null
-    private var httpClient: OkHttpClient? = null
-    private var remote: HttpUrl? = null
     private var info: CollectionInfo? = null
     private var memberEmail: String? = null
 
@@ -27,12 +25,9 @@ class RemoveMemberFragment : DialogFragment() {
         memberEmail = arguments!!.getString(KEY_MEMBER)
         try {
             settings = AccountSettings(context!!, account!!)
-            httpClient = HttpClient.Builder(context, settings).build().okHttpClient
         } catch (e: InvalidAccountException) {
             e.printStackTrace()
         }
-
-        remote = HttpUrl.get(settings!!.uri!!)
 
         MemberRemove().execute()
     }
@@ -49,8 +44,12 @@ class RemoveMemberFragment : DialogFragment() {
 
     private inner class MemberRemove : AsyncTask<Void, Void, MemberRemove.RemoveResult>() {
         override fun doInBackground(vararg voids: Void): RemoveResult {
+            val httpClient = HttpClient.Builder(context, settings).build()
+
             try {
-                val journalsManager = JournalManager(httpClient!!, remote!!)
+                val remote = HttpUrl.get(settings!!.uri!!)
+
+                val journalsManager = JournalManager(httpClient.okHttpClient, remote!!)
                 val journal = JournalManager.Journal.fakeWithUid(info!!.uid!!)
 
                 val member = JournalManager.Member(memberEmail!!, "placeholder".toByteArray())
@@ -59,8 +58,9 @@ class RemoveMemberFragment : DialogFragment() {
                 return RemoveResult(null)
             } catch (e: Exception) {
                 return RemoveResult(e)
+            } finally {
+                httpClient.close()
             }
-
         }
 
         override fun onPostExecute(result: RemoveResult) {
