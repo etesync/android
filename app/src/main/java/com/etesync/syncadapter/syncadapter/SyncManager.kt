@@ -124,9 +124,9 @@ constructor(protected val context: Context, protected val account: Account, prot
 
             if (Thread.interrupted())
                 throw InterruptedException()
-            syncPhase = R.string.sync_phase_query_capabilities
+            syncPhase = R.string.sync_phase_prepare_fetch
             Logger.log.info("Sync phase: " + context.getString(syncPhase))
-            queryCapabilities()
+            prepareFetch()
 
             do {
                 if (Thread.interrupted())
@@ -315,8 +315,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     @Throws(IOException::class, CalendarStorageException::class, ContactsStorageException::class)
-    protected fun queryCapabilities() {
-        // FIXME: Needs to rename this function
+    protected fun prepareFetch() {
         remoteCTag = journalEntity.getLastUid(data)
     }
 

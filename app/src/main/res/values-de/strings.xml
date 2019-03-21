@@ -189,7 +189,7 @@
   <string name="sync_error_local_storage">Datenbankfehler beim %s</string>
   <string name="sync_phase_prepare">Synchronisation wird vorbereitet</string>
   <string name="sync_phase_journals">Synchronisiere Journale</string>
-  <string name="sync_phase_query_capabilities">Frage Ressourcen ab</string>
+  <string name="sync_phase_prepare_fetch">Frage Ressourcen ab</string>
   <string name="sync_phase_prepare_local">Bereite lokale Einträge vorbereitet</string>
   <string name="sync_phase_create_local_entries">Erstelle lokale Einträge</string>
   <string name="sync_phase_fetch_entries">Rufe ferne Einträge ab</string>
