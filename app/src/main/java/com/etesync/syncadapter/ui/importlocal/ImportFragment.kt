@@ -93,6 +93,7 @@ class ImportFragment : DialogFragment() {
     private fun setDialogAddEntries(dialog: ProgressDialog, length: Int) {
         dialog.max = length
         dialog.setMessage(getString(R.string.import_dialog_adding_entries))
+        Logger.log.info("Adding entries. Total: ${length}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -144,7 +145,7 @@ class ImportFragment : DialogFragment() {
                     if (data != null) {
                         // Get the URI of the selected file
                         val uri = data.data!!
-                        Logger.log.info("Importing uri = ${uri}")
+                        Logger.log.info("Starting import into ${info.uid} from file ${uri}")
                         try {
                             inputStream = activity!!.contentResolver.openInputStream(uri)
 
@@ -171,6 +172,8 @@ class ImportFragment : DialogFragment() {
 
     fun loadFinished(data: ImportResult) {
         (activity as ResultFragment.OnImportCallback).onImportResult(data)
+
+        Logger.log.info("Finished import")
 
         dismissAllowingStateLoss()
 

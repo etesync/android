@@ -129,6 +129,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             syncPhase = R.string.sync_phase_prepare_local
             Logger.log.info("Sync phase: " + context.getString(syncPhase))
             prepareLocal()
+            Logger.log.info("Locally changed: (dirty=${localDirty.size}  deleted=${localDeleted?.size}")
 
             do {
                 if (Thread.interrupted())
