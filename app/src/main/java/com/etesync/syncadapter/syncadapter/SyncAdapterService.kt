@@ -111,9 +111,9 @@ abstract class SyncAdapterService : Service() {
                 Logger.log.info("Refreshing " + serviceType + " collections of service #" + serviceType.toString())
 
                 val settings = AccountSettings(context, account)
-                val httpClient = HttpClient.Builder(context, settings).setForeground(false).build().okHttpClient
+                val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
-                val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
+                val journalsManager = JournalManager(httpClient.okHttpClient, HttpUrl.get(settings.uri!!)!!)
 
                 val journals = LinkedList<Pair<JournalManager.Journal, CollectionInfo>>()
 
@@ -150,6 +150,7 @@ abstract class SyncAdapterService : Service() {
                 }
 
                 saveCollections(journals)
+                httpClient.close()
             }
 
             private fun saveCollections(journals: Iterable<Pair<JournalManager.Journal, CollectionInfo>>) {

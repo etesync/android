@@ -56,8 +56,9 @@ class ContactsSyncAdapterService : SyncAdapterService() {
                 Logger.log.info("Taking settings from: " + addressBook.mainAccount)
 
                 val principal = HttpUrl.get(settings.uri!!)!!
-                val syncManager = ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal)
-                syncManager.performSync()
+                ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal).use {
+                    it.performSync()
+                }
             } catch (e: Exception) {
                 val syncPhase = R.string.sync_phase_journals
                 val title = context.getString(R.string.sync_error_contacts, account.name)

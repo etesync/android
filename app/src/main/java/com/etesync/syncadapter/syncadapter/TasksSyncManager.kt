@@ -58,7 +58,7 @@ class TasksSyncManager(
         if (!super.prepare())
             return false
 
-        journal = JournalEntryManager(httpClient, remote, localTaskList().url!!)
+        journal = JournalEntryManager(httpClient.okHttpClient, remote, localTaskList().url!!)
         return true
     }
 

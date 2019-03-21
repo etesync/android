@@ -33,19 +33,20 @@ import io.requery.Persistable
 import io.requery.sql.EntityDataStore
 import okhttp3.OkHttpClient
 import org.jetbrains.anko.defaultSharedPreferences
+import java.io.Closeable
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.*
 import java.util.logging.Level
 
 abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
-constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String) {
+constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String): Closeable {
 
     protected val notificationManager: SyncNotification
     protected val info: CollectionInfo
     protected var localCollection: LocalCollection<T>? = null
 
-    protected var httpClient: OkHttpClient
+    protected var httpClient: HttpClient
 
     protected var journal: JournalEntryManager? = null
     private var _journalEntity: JournalEntity? = null
@@ -85,9 +86,8 @@ constructor(protected val context: Context, protected val account: Account, prot
         get() = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
 
     init {
-
         // create HttpClient with given logger
-        httpClient = HttpClient.Builder(context, settings).setForeground(false).build().okHttpClient
+        httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
         data = (context.applicationContext as App).data
         val serviceEntity = JournalModel.Service.fetch(data, accountName, serviceType)
@@ -107,6 +107,10 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     protected abstract fun notificationId(): Int
+
+    override fun close() {
+        httpClient.close()
+    }
 
     @TargetApi(21)
     fun performSync() {

@@ -73,8 +73,9 @@ class TasksSyncAdapterService: SyncAdapterService() {
 
                 for (taskList in AndroidTaskList.find(account, taskProvider, LocalTaskList.Factory, "${TaskContract.TaskLists.SYNC_ENABLED}!=0", null)) {
                     Logger.log.info("Synchronizing task list #${taskList.id} [${taskList.syncId}]")
-                    val tasksSyncManager = TasksSyncManager(context, account, accountSettings, extras, authority, syncResult, taskList, principal);
-                    tasksSyncManager.performSync()
+                    TasksSyncManager(context, account, accountSettings, extras, authority, syncResult, taskList, principal).use {
+                        it.performSync()
+                    }
                 }
             } catch (e: Exceptions.ServiceUnavailableException) {
                 syncResult.stats.numIoExceptions++

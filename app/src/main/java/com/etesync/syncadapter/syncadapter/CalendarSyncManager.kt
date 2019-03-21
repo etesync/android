@@ -59,7 +59,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         if (!super.prepare())
             return false
 
-        journal = JournalEntryManager(httpClient, remote, localCalendar().name!!)
+        journal = JournalEntryManager(httpClient.okHttpClient, remote, localCalendar().name!!)
         return true
     }
 

@@ -81,7 +81,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
         localAddressBook.settings.putAll(values)
 
-        journal = JournalEntryManager(httpClient, remote, localAddressBook.url!!)
+        journal = JournalEntryManager(httpClient.okHttpClient, remote, localAddressBook.url!!)
 
         localAddressBook.includeGroups = true
 

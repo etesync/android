@@ -55,8 +55,9 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
 
                 for (calendar in AndroidCalendar.find(account, provider, LocalCalendar.Factory, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
                     Logger.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)
-                    val syncManager = CalendarSyncManager(context, account, settings, extras, authority, syncResult, calendar, principal)
-                    syncManager.performSync()
+                    CalendarSyncManager(context, account, settings, extras, authority, syncResult, calendar, principal).use {
+                        it.performSync()
+                    }
                 }
             } catch (e: Exceptions.ServiceUnavailableException) {
                 syncResult.stats.numIoExceptions++
