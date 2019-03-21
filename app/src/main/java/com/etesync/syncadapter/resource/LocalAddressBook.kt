@@ -207,14 +207,14 @@ class LocalAddressBook(
      * Returns an array of local contacts/groups which have been changed locally (DIRTY != 0).
      * @throws RemoteException on content provider errors
      */
-    override fun findDirty() =
+    override fun findDirty(limit: Int?) =
             if (includeGroups)
-                findDirtyContacts() + findDirtyGroups()
+                findDirtyContacts(limit) + findDirtyGroups(limit) // FIXME: Doesn't rspect limit correctly, but not a big deal for now
             else
-                findDirtyContacts()
+                findDirtyContacts(limit)
 
-    fun findDirtyContacts() = queryContacts("${RawContacts.DIRTY}!=0 AND ${RawContacts.DELETED}==0", null)
-    fun findDirtyGroups() = queryGroups("${Groups.DIRTY}!=0 AND ${Groups.DELETED}==0", null)
+    fun findDirtyContacts(limit: Int? = null) = queryContacts("${RawContacts.DIRTY}!=0 AND ${RawContacts.DELETED}==0", null, if (limit != null) "${RawContacts._ID} ASC LIMIT $limit" else null)
+    fun findDirtyGroups(limit: Int? = null) = queryGroups("${Groups.DIRTY}!=0 AND ${Groups.DELETED}==0", null, if (limit != null) "${Groups._ID} ASC LIMIT $limit" else null)
 
     /**
      * Returns an array of local contacts which don't have a file name yet.

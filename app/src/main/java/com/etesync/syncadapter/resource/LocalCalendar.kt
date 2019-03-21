@@ -97,11 +97,12 @@ class LocalCalendar private constructor(
     override fun findDeleted() =
             queryEvents("${Events.DELETED}!=0 AND ${Events.ORIGINAL_ID} IS NULL", null)
 
-    override fun findDirty(): List<LocalEvent> {
+    override fun findDirty(limit: Int?): List<LocalEvent> {
         val dirty = LinkedList<LocalEvent>()
+        val sortOrder = if (limit != null) "${Events._ID} ASC LIMIT $limit" else null
 
         // get dirty events which are required to have an increased SEQUENCE value
-        for (localEvent in queryEvents("${Events.DIRTY}!=0 AND ${Events.DELETED}==0 AND ${Events.ORIGINAL_ID} IS NULL", null)) {
+        for (localEvent in queryEvents("${Events.DIRTY}!=0 AND ${Events.DELETED}==0 AND ${Events.ORIGINAL_ID} IS NULL", null, sortOrder)) {
             val event = localEvent.event!!
             val sequence = event.sequence
             if (event.sequence == null)      // sequence has not been assigned yet (i.e. this event was just locally created)

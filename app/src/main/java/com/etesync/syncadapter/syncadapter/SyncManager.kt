@@ -128,13 +128,6 @@ constructor(protected val context: Context, protected val account: Account, prot
             Logger.log.info("Sync phase: " + context.getString(syncPhase))
             queryCapabilities()
 
-            if (Thread.interrupted())
-                throw InterruptedException()
-            syncPhase = R.string.sync_phase_prepare_local
-            Logger.log.info("Sync phase: " + context.getString(syncPhase))
-            prepareLocal()
-            Logger.log.info("Locally changed: (dirty=${localDirty.size}  deleted=${localDeleted?.size}")
-
             do {
                 if (Thread.interrupted())
                     throw InterruptedException()
@@ -150,6 +143,12 @@ constructor(protected val context: Context, protected val account: Account, prot
             } while (remoteEntries!!.size == MAX_FETCH)
 
             do {
+                if (Thread.interrupted())
+                    throw InterruptedException()
+                syncPhase = R.string.sync_phase_prepare_local
+                Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                prepareLocal()
+
                 /* Create journal entries out of local changes. */
                 if (Thread.interrupted())
                     throw InterruptedException()
@@ -317,6 +316,8 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     @Throws(IOException::class, CalendarStorageException::class, ContactsStorageException::class)
     protected fun queryCapabilities() {
+        // FIXME: Needs to rename this function
+        remoteCTag = journalEntity.getLastUid(data)
     }
 
     @Throws(Exceptions.HttpException::class, ContactsStorageException::class, CalendarStorageException::class, Exceptions.IntegrityException::class)
@@ -456,10 +457,8 @@ constructor(protected val context: Context, protected val account: Account, prot
      */
     @Throws(CalendarStorageException::class, ContactsStorageException::class, FileNotFoundException::class)
     protected fun prepareLocal() {
-        remoteCTag = journalEntity.getLastUid(data)
-
         localDeleted = processLocallyDeleted()
-        localDirty = localCollection!!.findDirty()
+        localDirty = localCollection!!.findDirty(MAX_PUSH)
         // This is done after fetching the local dirty so all the ones we are using will be prepared
         prepareDirty()
     }

@@ -74,8 +74,9 @@ class LocalTaskList private constructor(
 
     override fun findDeleted() = queryTasks("${Tasks._DELETED}!=0", null)
 
-    override fun findDirty(): List<LocalTask> {
-        val tasks = queryTasks("${Tasks._DIRTY}!=0 AND ${Tasks._DELETED}==0", null)
+    override fun findDirty(limit: Int?): List<LocalTask> {
+        val sortOrder = if (limit != null) "${Tasks._ID} ASC LIMIT $limit" else null
+        val tasks = queryTasks("${Tasks._DIRTY}!=0 AND ${Tasks._DELETED}==0", null, sortOrder)
         for (localTask in tasks) {
             val task = requireNotNull(localTask.task)
             val sequence = task.sequence

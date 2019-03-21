@@ -12,7 +12,7 @@ interface LocalCollection<out T: LocalResource<*>> {
     val url: String?
 
     fun findDeleted(): List<T>
-    fun findDirty(): List<T>
+    fun findDirty(limit: Int? = null): List<T>
     fun findWithoutFileName(): List<T>
     fun findAll(): List<T>
 
