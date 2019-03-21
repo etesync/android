@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.4.0
+* Change the sync to also do the initial preparation in chunks - useful for massive syncs
+* Fix crash when removing journal members
+* Fix certificate manager service leaks
+* Improve logging
+
 ## Version 1.3.0
 * Add notification channels for granular control of app notifications
 * Only show the custom certificate popup when using EteSync interactively
