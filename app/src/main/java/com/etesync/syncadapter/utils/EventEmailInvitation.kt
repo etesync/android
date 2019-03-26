@@ -16,7 +16,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun emailSupportsAttachments(context: Context): Boolean {
-    return !packageInstalled(context, "ch.protonmail.android")
+    return !arrayOf(
+            "ch.protonmail.android",
+            "de.tutao.tutanota"
+    ).any{
+        packageInstalled(context, it)
+    }
 }
 
 class EventEmailInvitation constructor(val context: Context, val account: Account) {
