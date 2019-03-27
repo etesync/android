@@ -36,6 +36,7 @@
     <string name="crash_title">EteSync has crashed!</string>
     <string name="crash_message">Please send stack trace to developers.</string>
     <string name="crash_email_subject">EteSync Debug Info</string>
+    <string name="crash_email_body">If possible, please include any other relevant information such as what you did to trigger this error.</string>
 
     <!-- tourguide -->
     <string name="tourguide_title">Did you know?</string>

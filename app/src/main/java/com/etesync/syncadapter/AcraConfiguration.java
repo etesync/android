@@ -18,6 +18,7 @@ public class AcraConfiguration {
         builder.getPluginConfigurationBuilder(MailSenderConfigurationBuilder.class)
                 .setMailTo("reports@etesync.com")
                 .setResSubject(R.string.crash_email_subject)
+                .setResBody(R.string.crash_email_body)
                 .setReportFileName("ACRA-report.stacktrace.json")
                 .setReportAsFile(emailSupportsAttachments(context))
                 .setEnabled(true);
