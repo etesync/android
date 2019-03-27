@@ -129,7 +129,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
 
-    def acraVersion = '5.2.1'
+    def acraVersion = '5.3.0'
     implementation "ch.acra:acra-mail:$acraVersion"
     implementation "ch.acra:acra-notification:$acraVersion"
     def supportVersion = '1.0.0'
