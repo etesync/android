@@ -105,7 +105,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                 logs = extras.getString(KEY_LOGS)
                 account = extras.getParcelable(KEY_ACCOUNT)
                 authority = extras.getString(KEY_AUTHORITY)
-                phase = extras.getString(KEY_PHASE, null)
+                phase = if (extras.containsKey(KEY_PHASE)) context.getString(extras.getInt(KEY_PHASE)) else null
             }
 
             val report = StringBuilder("--- BEGIN DEBUG INFO ---\n")
