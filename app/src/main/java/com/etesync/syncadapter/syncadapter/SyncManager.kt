@@ -31,13 +31,13 @@ import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
 import io.requery.Persistable
 import io.requery.sql.EntityDataStore
-import okhttp3.OkHttpClient
 import org.jetbrains.anko.defaultSharedPreferences
 import java.io.Closeable
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.*
 import java.util.logging.Level
+import javax.net.ssl.SSLHandshakeException
 
 abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
 constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String): Closeable {
@@ -184,6 +184,13 @@ constructor(protected val context: Context, protected val account: Account, prot
             notifyUserOnSync()
 
             Logger.log.info("Finished sync with CTag=$remoteCTag")
+        } catch (e: SSLHandshakeException) {
+            syncResult.stats.numIoExceptions++
+
+            notificationManager.setThrowable(e)
+            val detailsIntent = notificationManager.detailsIntent
+            detailsIntent.putExtra(KEY_ACCOUNT, account)
+            notificationManager.notify(syncErrorTitle, context.getString(syncPhase))
         } catch (e: IOException) {
             Logger.log.log(Level.WARNING, "I/O exception during sync, trying again later", e)
             syncResult.stats.numIoExceptions++
