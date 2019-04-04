@@ -85,7 +85,9 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
 
     override fun onImportResult(importResult: ResultFragment.ImportResult) {
         val fragment = ResultFragment.newInstance(importResult)
-        fragment.show(supportFragmentManager, "importResult")
+        supportFragmentManager.beginTransaction()
+                .add(fragment, "importResult")
+                .commitAllowingStateLoss()
     }
 
     override fun cancel() {
