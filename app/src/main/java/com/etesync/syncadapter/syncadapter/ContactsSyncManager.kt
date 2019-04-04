@@ -75,15 +75,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             }
         }
 
-        // set up Contacts Provider Settings
-        val values = ContentValues(2)
-        values.put(ContactsContract.Settings.SHOULD_SYNC, 1)
-        values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
-        localAddressBook.settings.putAll(values)
-
         journal = JournalEntryManager(httpClient.okHttpClient, remote, localAddressBook.url!!)
-
-        localAddressBook.includeGroups = true
 
         return true
     }
