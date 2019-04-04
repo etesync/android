@@ -43,6 +43,7 @@ import java.util.logging.Level
  */
 class ContactsSyncManager @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class, ContactsStorageException::class)
 constructor(context: Context, account: Account, settings: AccountSettings, extras: Bundle, authority: String, private val provider: ContentProviderClient, result: SyncResult, localAddressBook: LocalAddressBook, private val remote: HttpUrl) : SyncManager<LocalAddress>(context, account, settings, extras, authority, result, localAddressBook.url, CollectionInfo.Type.ADDRESS_BOOK, localAddressBook.mainAccount.name) {
+    private val resourceDownloader: ResourceDownloader
 
     protected override val syncErrorTitle: String
         get() = context.getString(R.string.sync_error_contacts, account.name)
@@ -51,8 +52,8 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         get() = context.getString(R.string.sync_successfully_contacts, account.name)
 
     init {
-
         localCollection = localAddressBook
+        resourceDownloader = ResourceDownloader(context)
     }
 
     override fun notificationId(): Int {
@@ -128,9 +129,8 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
     override fun processSyncEntry(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
-        val downloader = ResourceDownloader(context)
 
-        val contacts = Contact.fromReader(inputReader, downloader)
+        val contacts = Contact.fromReader(inputReader, resourceDownloader)
         if (contacts.size == 0) {
             Logger.log.warning("Received VCard without data, ignoring")
             return
