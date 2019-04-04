@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.4.1
+* Fix crash on import when the activity is in the background when the import finishes.
+* Show notifications for SSL handshake related errors.
+* Improve debug info and crash reporting email.
+* Add Tutanota to the list of clients that don't support attachments from other apps.
+* Fix spelling mistake in encryption password page.
+
 ## Version 1.4.0
 * Change the sync to also do the initial preparation in chunks - useful for massive syncs
 * Fix crash when removing journal members
