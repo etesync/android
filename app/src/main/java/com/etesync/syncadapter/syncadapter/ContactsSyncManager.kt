@@ -76,7 +76,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             }
         }
 
-        journal = JournalEntryManager(httpClient.okHttpClient, remote, localAddressBook.url!!)
+        journal = JournalEntryManager(httpClient.okHttpClient, remote, localAddressBook.url)
 
         return true
     }
