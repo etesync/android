@@ -28,6 +28,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     private lateinit var account: Account
     private lateinit var info: CollectionInfo
     private lateinit var journalEntity: JournalEntity
+    private var members: List<JournalManager.Member>? = null
     private var asyncTask: Future<Unit>? = null
 
     private var emptyTextView: TextView? = null
@@ -57,21 +58,35 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
                 val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
 
                 val journal = JournalManager.Journal.fakeWithUid(journalEntity.uid)
-                val members = journalsManager.listMembers(journal)
+                members = journalsManager.listMembers(journal)
 
                 uiThread {
-                    val listAdapter = MembersListAdapter(context!!)
-                    setListAdapter(listAdapter)
-
-                    listAdapter.addAll(members)
-
-                    emptyTextView!!.setText(R.string.collection_members_list_empty)
+                    setListAdapterMembers(members!!)
                 }
             } catch (e: Exception) {
                 uiThread {
                     emptyTextView!!.text = e.localizedMessage
                 }
             }
+        }
+    }
+
+    private fun setListAdapterMembers(members: List<JournalManager.Member>) {
+        val context = context
+        if (context != null) {
+            val listAdapter = MembersListAdapter(context)
+            setListAdapter(listAdapter)
+
+            listAdapter.addAll(members)
+
+            emptyTextView!!.setText(R.string.collection_members_list_empty)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (members != null) {
+            setListAdapterMembers(members!!)
         }
     }
 
