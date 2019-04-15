@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.2
+* Fix occasional crash when listing journal members
+* Fix spelling mistake in encryption password page.
+
 ## Version 1.4.1
 * Fix crash on import when the activity is in the background when the import finishes.
 * Show notifications for SSL handshake related errors.
