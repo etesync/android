@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.3
+* Fix encryption password change not to crash.
+
 ## Version 1.4.2
 * Fix occasional crash when listing journal members
 * Fix spelling mistake in encryption password page.
