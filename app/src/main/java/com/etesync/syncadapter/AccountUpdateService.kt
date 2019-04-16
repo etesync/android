@@ -8,19 +8,12 @@
 
 package com.etesync.syncadapter
 
-import android.accounts.AccountManager
-import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.log.Logger
-import com.etesync.syncadapter.model.ServiceEntity
-import com.etesync.syncadapter.resource.LocalAddressBook
 import java.lang.ref.WeakReference
 import java.util.*
-import java.util.logging.Level
 
 class AccountUpdateService : Service() {
 
