@@ -88,14 +88,14 @@ class AccountUpdateService : Service() {
 
         val accountNames = LinkedList<String>()
         val am = AccountManager.get(this)
-        for (account in am.getAccountsByType(App.accountType)) {
+        for (account in am.getAccountsByType(getString(R.string.account_type))) {
             accountNames.add(account.name)
         }
 
         val data = (application as App).data
 
         // delete orphaned address book accounts
-        for (addrBookAccount in am.getAccountsByType(App.addressBookAccountType)) {
+        for (addrBookAccount in am.getAccountsByType(getString(R.string.account_type_address_book))) {
             val addressBook = LocalAddressBook(this, addrBookAccount, null)
             try {
                 if (!accountNames.contains(addressBook.mainAccount.name))
