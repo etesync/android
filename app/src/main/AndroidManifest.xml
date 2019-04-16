@@ -164,12 +164,6 @@
             android:enabled="true">
         </service>
 
-        <receiver android:name=".AccountsChangedReceiver">
-            <intent-filter>
-                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"/>
-            </intent-filter>
-        </receiver>
-
         <receiver android:name=".PackageChangedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>

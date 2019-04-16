@@ -35,7 +35,6 @@ class AccountUpdateService : Service() {
             val action = intent.action
 
             when (action) {
-                ACTION_ACCOUNTS_UPDATED -> cleanupAccounts()
             }
         }
 
@@ -77,45 +76,4 @@ class AccountUpdateService : Service() {
         }
     }
 
-
-    /* ACTION RUNNABLES
-       which actually do the work
-     */
-
-    @SuppressLint("MissingPermission")
-    internal fun cleanupAccounts() {
-        Logger.log.info("Cleaning up orphaned accounts")
-
-        val accountNames = LinkedList<String>()
-        val am = AccountManager.get(this)
-        for (account in am.getAccountsByType(getString(R.string.account_type))) {
-            accountNames.add(account.name)
-        }
-
-        val data = (application as App).data
-
-        // delete orphaned address book accounts
-        for (addrBookAccount in am.getAccountsByType(getString(R.string.account_type_address_book))) {
-            val addressBook = LocalAddressBook(this, addrBookAccount, null)
-            try {
-                if (!accountNames.contains(addressBook.mainAccount.name))
-                    addressBook.delete()
-            } catch (e: ContactsStorageException) {
-                Logger.log.log(Level.SEVERE, "Couldn't get address book main account", e)
-            }
-
-        }
-
-
-        if (accountNames.isEmpty()) {
-            data.delete(ServiceEntity::class.java).get().value()
-        } else {
-            data.delete(ServiceEntity::class.java).where(ServiceEntity.ACCOUNT.notIn(accountNames)).get().value()
-        }
-    }
-
-    companion object {
-
-        val ACTION_ACCOUNTS_UPDATED = "accountsUpdated"
-    }
 }

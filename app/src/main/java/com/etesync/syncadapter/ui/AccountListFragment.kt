@@ -26,7 +26,6 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.etesync.syncadapter.AccountsChangedReceiver
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 
@@ -73,19 +72,13 @@ class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<
     }
 
     private class AccountLoader(context: Context) : AsyncTaskLoader<Array<Account>>(context), OnAccountsUpdateListener {
-        private val accountManager: AccountManager
+        private val accountManager = AccountManager.get(context)
 
-        init {
-            accountManager = AccountManager.get(context)
-        }
+        override fun onStartLoading() =
+                accountManager.addOnAccountsUpdatedListener(this, null, true)
 
-        override fun onStartLoading() {
-            AccountsChangedReceiver.registerListener(this, true)
-        }
-
-        override fun onStopLoading() {
-            AccountsChangedReceiver.unregisterListener(this)
-        }
+        override fun onStopLoading() =
+                accountManager.removeOnAccountsUpdatedListener(this)
 
         override fun onAccountsUpdated(accounts: Array<Account>) {
             forceLoad()
