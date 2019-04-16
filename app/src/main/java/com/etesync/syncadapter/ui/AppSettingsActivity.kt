@@ -12,7 +12,6 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.preference.*
 import at.bitfire.cert4android.CustomCertManager
 import com.etesync.syncadapter.App
@@ -22,6 +21,7 @@ import com.etesync.syncadapter.model.ServiceDB
 import com.etesync.syncadapter.model.Settings
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.LanguageUtils
+import com.google.android.material.snackbar.Snackbar
 import org.jetbrains.anko.defaultSharedPreferences
 import java.net.URI
 import java.net.URISyntaxException

@@ -18,7 +18,10 @@ import android.os.Build
 import android.os.Bundle
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.TaskProvider
-import com.etesync.syncadapter.*
+import com.etesync.syncadapter.AccountSettings
+import com.etesync.syncadapter.App
+import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo

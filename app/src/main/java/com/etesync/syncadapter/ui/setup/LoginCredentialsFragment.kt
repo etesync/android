@@ -9,8 +9,6 @@
 package com.etesync.syncadapter.ui.setup
 
 import android.os.Bundle
-import com.google.android.material.textfield.TextInputLayout
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +16,11 @@ import android.widget.Button
 import android.widget.CheckedTextView
 import android.widget.EditText
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.WebViewActivity
+import com.google.android.material.textfield.TextInputLayout
 import net.cachapa.expandablelayout.ExpandableLayout
 import okhttp3.HttpUrl
 import java.net.URI

@@ -5,13 +5,12 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
 
 class RemoveMemberFragment : DialogFragment() {
     private var settings: AccountSettings? = null

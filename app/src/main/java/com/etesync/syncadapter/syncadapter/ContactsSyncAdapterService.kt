@@ -11,8 +11,11 @@ import android.accounts.Account
 import android.content.*
 import android.os.Bundle
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.*
+import com.etesync.syncadapter.AccountSettings
+import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
+import com.etesync.syncadapter.InvalidAccountException
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalAddressBook

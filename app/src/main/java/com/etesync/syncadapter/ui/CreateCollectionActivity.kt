@@ -13,20 +13,17 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.core.app.NavUtils
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-
+import androidx.core.app.NavUtils
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalTaskList
-
 import org.apache.commons.lang3.StringUtils
-
 import yuku.ambilwarna.AmbilWarnaDialog
 
 open class CreateCollectionActivity : BaseActivity() {

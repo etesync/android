@@ -15,12 +15,12 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import androidx.appcompat.app.AlertDialog
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException

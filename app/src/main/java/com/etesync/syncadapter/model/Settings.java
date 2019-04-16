@@ -11,6 +11,7 @@ package com.etesync.syncadapter.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import androidx.annotation.Nullable;
 
 public class Settings {

@@ -17,8 +17,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.BuildConfig
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R

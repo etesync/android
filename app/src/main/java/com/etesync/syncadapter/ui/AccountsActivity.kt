@@ -13,17 +13,14 @@ import android.content.ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS
 import android.content.Intent
 import android.content.SyncStatusObserver
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.etesync.syncadapter.BuildConfig.DEBUG
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.Constants.serviceUrl
@@ -31,6 +28,9 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.setup.LoginActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import tourguide.tourguide.ToolTip
 
 class AccountsActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
