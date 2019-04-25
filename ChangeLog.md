@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.4
+* Fix crash when removing accounts on some devices
+
 ## Version 1.4.3
 * Fix encryption password change not to crash.
 
