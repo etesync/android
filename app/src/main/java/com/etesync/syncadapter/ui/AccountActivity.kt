@@ -294,7 +294,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         }
 
         override fun onStopLoading() {
-            davService!!.removeRefreshingStatusListener(this)
+            davService?.removeRefreshingStatusListener(this)
             context.unbindService(this)
 
             if (syncStatusListener != null)
