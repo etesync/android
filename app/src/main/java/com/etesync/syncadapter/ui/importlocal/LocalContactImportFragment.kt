@@ -124,7 +124,9 @@ class LocalContactImportFragment : Fragment() {
         }
 
         override fun onPostExecute(result: ResultFragment.ImportResult) {
-            progressDialog.dismiss()
+            if (progressDialog.isShowing && !activity!!.isDestroyed) {
+                progressDialog.dismiss()
+            }
             (activity as ResultFragment.OnImportCallback).onImportResult(result)
         }
 
