@@ -10,6 +10,7 @@ package com.etesync.syncadapter.resource
 
 import android.content.ContentProviderOperation
 import android.content.ContentValues
+import android.net.Uri
 import android.text.TextUtils
 import at.bitfire.ical4android.AndroidTask
 import at.bitfire.ical4android.AndroidTaskFactory
@@ -27,6 +28,8 @@ class LocalTask : AndroidTask, LocalResource<Task> {
         internal const val COLUMN_UID = TaskContract.Tasks.SYNC2
         internal const val COLUMN_SEQUENCE = TaskContract.Tasks.SYNC3
     }
+
+    private var saveAsDirty = false // When true, the resource will be saved as dirty
 
     private var fileName: String? = null
     var eTag: String? = null
@@ -77,9 +80,14 @@ class LocalTask : AndroidTask, LocalResource<Task> {
         builder.withValue(TaskContract.Tasks._SYNC_ID, fileName)
                 .withValue(COLUMN_UID, task?.uid)
                 .withValue(COLUMN_SEQUENCE, task?.sequence)
+                .withValue(TaskContract.Tasks._DIRTY, if (saveAsDirty) 1 else 0)
                 .withValue(COLUMN_ETAG, eTag)
     }
 
+    fun addAsDirty(): Uri {
+        saveAsDirty = true
+        return this.add()
+    }
 
     /* custom queries */
 
