@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.5
+* Gracefully handle Conflict errors (retry later).
+* Fix potential crash when opening and closing the app very quickly.
+
 ## Version 1.4.4
 * Fix crash when removing accounts on some devices
 
