@@ -14,9 +14,7 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import androidx.fragment.app.DialogFragment
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.ical4android.Event
-import at.bitfire.ical4android.InvalidCalendarException
+import at.bitfire.ical4android.*
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
@@ -117,10 +115,10 @@ class ImportFragment : DialogFragment() {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.action = Intent.ACTION_GET_CONTENT
 
-        if (info.type == CollectionInfo.Type.CALENDAR) {
-            intent.type = "text/calendar"
-        } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-            intent.type = "text/x-vcard"
+        when (info.type) {
+            CollectionInfo.Type.CALENDAR -> intent.type = "text/calendar"
+            CollectionInfo.Type.TASKS -> intent.type = "text/calendar"
+            CollectionInfo.Type.ADDRESS_BOOK -> intent.type = "text/x-vcard"
         }
 
         val chooser = Intent.createChooser(
@@ -251,6 +249,44 @@ class ImportFragment : DialogFragment() {
                         try {
                             val localEvent = LocalEvent(localCalendar, event, event.uid, null)
                             localEvent.addAsDirty()
+                            result.added++
+                        } catch (e: CalendarStorageException) {
+                            e.printStackTrace()
+                        }
+
+                        entryProcessed()
+                    }
+                } else if (info.type == CollectionInfo.Type.TASKS) {
+                    val tasks = Task.fromReader(importReader)
+                    importReader.close()
+
+                    if (tasks.isEmpty()) {
+                        Logger.log.warning("Empty/invalid file.")
+                        result.e = Exception("Empty/invalid file.")
+                        return result
+                    }
+
+                    result.total = tasks.size.toLong()
+
+                    finishParsingFile(tasks.size)
+
+                    val provider = TaskProvider.acquire(context, TaskProvider.ProviderName.OpenTasks)!!
+                    val localTaskList: LocalTaskList?
+                    try {
+                        localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)
+                        if (localTaskList == null) {
+                            throw FileNotFoundException("Failed to load local resource.")
+                        }
+                    } catch (e: FileNotFoundException) {
+                        Logger.log.info("Fail" + e.localizedMessage)
+                        result.e = e
+                        return result
+                    }
+
+                    for (task in tasks) {
+                        try {
+                            val localTask = LocalTask(localTaskList, task, task.uid, null)
+                            localTask.addAsDirty()
                             result.added++
                         } catch (e: CalendarStorageException) {
                             e.printStackTrace()

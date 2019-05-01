@@ -144,6 +144,10 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
             text.setText(R.string.import_button_local)
             card.setOnClickListener { mSelectImportMethod!!.importAccount() }
 
+            if ((activity as ImportActivity).info.type == CollectionInfo.Type.TASKS) {
+                card.visibility = View.GONE
+            }
+
             return v
         }
     }

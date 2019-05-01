@@ -142,14 +142,6 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
     }
 
     fun onImport(item: MenuItem) {
-        if (info.type == CollectionInfo.Type.TASKS) {
-            val dialog = AlertDialog.Builder(this)
-                    .setIcon(R.drawable.ic_info_dark)
-                    .setTitle("Not Implemented")
-                    .setMessage("Importing tasks is not yet implemented")
-            dialog.show()
-            return
-        }
         startActivity(ImportActivity.newIntent(this@ViewCollectionActivity, account, info))
     }
 
