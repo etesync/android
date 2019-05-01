@@ -12,6 +12,7 @@ import android.accounts.Account
 import android.app.PendingIntent
 import android.app.Service
 import android.content.*
+import android.database.sqlite.SQLiteException
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -19,6 +20,8 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Pair
+import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
@@ -27,6 +30,7 @@ import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
+import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.PermissionsActivity
 import com.etesync.syncadapter.utils.NotificationUtils
 import okhttp3.HttpUrl
@@ -45,12 +49,53 @@ abstract class SyncAdapterService : Service() {
 
 
     abstract class SyncAdapter(context: Context) : AbstractThreadedSyncAdapter(context, false) {
+        abstract val syncErrorTitle: Int
+        abstract val notificationManager: SyncNotification
+
+        abstract fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult)
 
         override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
             Logger.log.log(Level.INFO, "$authority sync of $account has been initiated.", extras.keySet().toTypedArray())
 
             // required for dav4android (ServiceLoader)
             Thread.currentThread().contextClassLoader = context.classLoader
+
+            notificationManager.cancel()
+
+            try {
+                onPerformSyncDo(account, extras, authority, provider, syncResult)
+            } catch (e: Exceptions.ServiceUnavailableException) {
+                syncResult.stats.numIoExceptions++
+                syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
+            } catch (e: Exceptions.IgnorableHttpException) {
+                // Ignore
+            } catch (e: Exception) {
+                if (e is ContactsStorageException || e is CalendarStorageException || e is SQLiteException) {
+                    Logger.log.log(Level.SEVERE, "Couldn't prepare local journals", e)
+                    syncResult.databaseError = true
+                }
+
+                val syncPhase = R.string.sync_phase_journals
+                val title = context.getString(syncErrorTitle, account.name)
+
+                notificationManager.setThrowable(e)
+
+                val detailsIntent = notificationManager.detailsIntent
+                detailsIntent.putExtra(Constants.KEY_ACCOUNT, account)
+                if (e !is Exceptions.UnauthorizedException) {
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
+                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
+                }
+
+                notificationManager.notify(title, context.getString(syncPhase))
+            } catch (e: OutOfMemoryError) {
+                val syncPhase = R.string.sync_phase_journals
+                val title = context.getString(syncErrorTitle, account.name)
+                notificationManager.setThrowable(e)
+                val detailsIntent = notificationManager.detailsIntent
+                detailsIntent.putExtra(Constants.KEY_ACCOUNT, account)
+                notificationManager.notify(title, context.getString(syncPhase))
+            }
         }
 
         override fun onSecurityException(account: Account, extras: Bundle, authority: String, syncResult: SyncResult) {

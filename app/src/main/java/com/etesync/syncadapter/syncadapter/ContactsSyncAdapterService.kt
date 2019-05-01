@@ -30,63 +30,34 @@ class ContactsSyncAdapterService : SyncAdapterService() {
 
 
     private class ContactsSyncAdapter(context: Context) : SyncAdapterService.SyncAdapter(context) {
+        override val syncErrorTitle = R.string.sync_error_contacts
+        override val notificationManager = SyncNotification(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
 
-        override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
-            super.onPerformSync(account, extras, authority, provider, syncResult)
-            val notificationManager = SyncNotification(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
-            notificationManager.cancel()
+        override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
+            val addressBook = LocalAddressBook(context, account, provider)
 
+            val settings: AccountSettings
             try {
-                val addressBook = LocalAddressBook(context, account, provider)
+                settings = AccountSettings(context, addressBook.mainAccount)
+            } catch (e: InvalidAccountException) {
+                Logger.log.info("Skipping sync due to invalid account.")
+                Logger.log.info(e.localizedMessage)
+                return
+            } catch (e: ContactsStorageException) {
+                Logger.log.info("Skipping sync due to invalid account.")
+                Logger.log.info(e.localizedMessage)
+                return
+            }
 
-                val settings: AccountSettings
-                try {
-                    settings = AccountSettings(context, addressBook.mainAccount)
-                } catch (e: InvalidAccountException) {
-                    Logger.log.info("Skipping sync due to invalid account.")
-                    Logger.log.info(e.localizedMessage)
-                    return
-                } catch (e: ContactsStorageException) {
-                    Logger.log.info("Skipping sync due to invalid account.")
-                    Logger.log.info(e.localizedMessage)
-                    return
-                }
+            if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
+                return
 
-                if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
-                    return
+            Logger.log.info("Synchronizing address book: " + addressBook.url)
+            Logger.log.info("Taking settings from: " + addressBook.mainAccount)
 
-                Logger.log.info("Synchronizing address book: " + addressBook.url)
-                Logger.log.info("Taking settings from: " + addressBook.mainAccount)
-
-                val principal = HttpUrl.get(settings.uri!!)!!
-                ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal).use {
-                    it.performSync()
-                }
-            } catch (e: Exceptions.ServiceUnavailableException) {
-                syncResult.stats.numIoExceptions++
-                syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
-            } catch (e: Exceptions.IgnorableHttpException) {
-                // Ignore
-            } catch (e: Exception) {
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_contacts, account.name)
-
-                notificationManager.setThrowable(e)
-
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(KEY_ACCOUNT, account)
-                if (e !is Exceptions.UnauthorizedException) {
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
-                }
-                notificationManager.notify(title, context.getString(syncPhase))
-            } catch (e: OutOfMemoryError) {
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_contacts, account.name)
-                notificationManager.setThrowable(e)
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(KEY_ACCOUNT, account)
-                notificationManager.notify(title, context.getString(syncPhase))
+            val principal = HttpUrl.get(settings.uri!!)!!
+            ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal).use {
+                it.performSync()
             }
 
             Logger.log.info("Contacts sync complete")

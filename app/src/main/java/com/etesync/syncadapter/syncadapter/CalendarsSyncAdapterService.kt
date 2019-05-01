@@ -31,68 +31,31 @@ import java.util.*
 import java.util.logging.Level
 
 class CalendarsSyncAdapterService : SyncAdapterService() {
-
     override fun syncAdapter(): AbstractThreadedSyncAdapter {
         return SyncAdapter(this)
     }
 
 
     private class SyncAdapter(context: Context) : SyncAdapterService.SyncAdapter(context) {
+        override val syncErrorTitle = R.string.sync_error_calendar
+        override val notificationManager = SyncNotification(context, "journals-calendar", Constants.NOTIFICATION_CALENDAR_SYNC)
 
-        override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
-            super.onPerformSync(account, extras, authority, provider, syncResult)
+        override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
+            val settings = AccountSettings(context, account)
+            if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
+                return
 
-            val notificationManager = SyncNotification(context, "journals-calendar", Constants.NOTIFICATION_CALENDAR_SYNC)
-            notificationManager.cancel()
+            RefreshCollections(account, CollectionInfo.Type.CALENDAR).run()
 
-            try {
-                val settings = AccountSettings(context, account)
-                if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
-                    return
+            updateLocalCalendars(provider, account, settings)
 
-                RefreshCollections(account, CollectionInfo.Type.CALENDAR).run()
+            val principal = HttpUrl.get(settings.uri!!)!!
 
-                updateLocalCalendars(provider, account, settings)
-
-                val principal = HttpUrl.get(settings.uri!!)!!
-
-                for (calendar in AndroidCalendar.find(account, provider, LocalCalendar.Factory, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
-                    Logger.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)
-                    CalendarSyncManager(context, account, settings, extras, authority, syncResult, calendar, principal).use {
-                        it.performSync()
-                    }
+            for (calendar in AndroidCalendar.find(account, provider, LocalCalendar.Factory, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
+                Logger.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)
+                CalendarSyncManager(context, account, settings, extras, authority, syncResult, calendar, principal).use {
+                    it.performSync()
                 }
-            } catch (e: Exceptions.ServiceUnavailableException) {
-                syncResult.stats.numIoExceptions++
-                syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
-            } catch (e: Exceptions.IgnorableHttpException) {
-                // Ignore
-            } catch (e: Exception) {
-                if (e is CalendarStorageException || e is SQLiteException) {
-                    Logger.log.log(Level.SEVERE, "Couldn't prepare local calendars", e)
-                    syncResult.databaseError = true
-                }
-
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_calendar, account.name)
-
-                notificationManager.setThrowable(e)
-
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(KEY_ACCOUNT, account)
-                if (e !is Exceptions.UnauthorizedException) {
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
-                }
-
-                notificationManager.notify(title, context.getString(syncPhase))
-            } catch (e: OutOfMemoryError) {
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_calendar, account.name)
-                notificationManager.setThrowable(e)
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(KEY_ACCOUNT, account)
-                notificationManager.notify(title, context.getString(syncPhase))
             }
 
             Logger.log.info("Calendar sync complete")

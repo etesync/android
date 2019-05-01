@@ -40,70 +40,34 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
 
 
     private class AddressBooksSyncAdapter(context: Context) : SyncAdapterService.SyncAdapter(context) {
+        override val syncErrorTitle = R.string.sync_error_contacts
+        override val notificationManager = SyncNotification(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
 
-        override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
-            super.onPerformSync(account, extras, authority, provider, syncResult)
+        override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
+            val contactsProvider = context.contentResolver.acquireContentProviderClient(ContactsContract.AUTHORITY)
+            if (contactsProvider == null) {
+                Logger.log.severe("Couldn't access contacts provider")
+                syncResult.databaseError = true
+                return
+            }
 
-            val notificationManager = SyncNotification(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
-            notificationManager.cancel()
+            val settings = AccountSettings(context, account)
+            if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
+                return
 
-            try {
-                val contactsProvider = context.contentResolver.acquireContentProviderClient(ContactsContract.AUTHORITY)
-                if (contactsProvider == null) {
-                    Logger.log.severe("Couldn't access contacts provider")
-                    syncResult.databaseError = true
-                    return
-                }
+            RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run()
 
-                val settings = AccountSettings(context, account)
-                if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))
-                    return
+            updateLocalAddressBooks(contactsProvider, account)
 
-                RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run()
+            contactsProvider.release()
 
-                updateLocalAddressBooks(contactsProvider, account)
-
-                contactsProvider.release()
-
-                val accountManager = AccountManager.get(context)
-                for (addressBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
-                    Logger.log.log(Level.INFO, "Running sync for address book", addressBookAccount)
-                    val syncExtras = Bundle(extras)
-                    syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true)
-                    syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF, true)
-                    ContentResolver.requestSync(addressBookAccount, ContactsContract.AUTHORITY, syncExtras)
-                }
-            } catch (e: Exceptions.ServiceUnavailableException) {
-                syncResult.stats.numIoExceptions++
-                syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
-            } catch (e: Exceptions.IgnorableHttpException) {
-                // Ignore
-            } catch (e: Exception) {
-                if (e is ContactsStorageException || e is SQLiteException) {
-                    Logger.log.log(Level.SEVERE, "Couldn't prepare local address books", e)
-                    syncResult.databaseError = true
-                }
-
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_contacts, account.name)
-
-                notificationManager.setThrowable(e)
-
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(KEY_ACCOUNT, account)
-                if (e !is Exceptions.UnauthorizedException) {
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
-                }
-
-                notificationManager.notify(title, context.getString(syncPhase))
-            } catch (e: OutOfMemoryError) {
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_contacts, account.name)
-                notificationManager.setThrowable(e)
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(KEY_ACCOUNT, account)
-                notificationManager.notify(title, context.getString(syncPhase))
+            val accountManager = AccountManager.get(context)
+            for (addressBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
+                Logger.log.log(Level.INFO, "Running sync for address book", addressBookAccount)
+                val syncExtras = Bundle(extras)
+                syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true)
+                syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF, true)
+                ContentResolver.requestSync(addressBookAccount, ContactsContract.AUTHORITY, syncExtras)
             }
 
             Logger.log.info("Address book sync complete")

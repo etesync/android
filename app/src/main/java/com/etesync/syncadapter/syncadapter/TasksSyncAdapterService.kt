@@ -45,72 +45,36 @@ class TasksSyncAdapterService: SyncAdapterService() {
 	class TasksSyncAdapter(
             context: Context
     ): SyncAdapter(context) {
+        override val syncErrorTitle = R.string.sync_error_tasks
+        override val notificationManager = SyncNotification(context, "journals-tasks", Constants.NOTIFICATION_TASK_SYNC)
 
-        override fun onPerformSync(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
-            super.onPerformSync(account, extras, authority, provider, syncResult)
+        override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
 
-            val notificationManager = SyncNotification(context, "journals-tasks", Constants.NOTIFICATION_TASK_SYNC)
-            notificationManager.cancel()
+            val taskProvider = TaskProvider.fromProviderClient(context, provider)
 
-            try {
-                val taskProvider = TaskProvider.fromProviderClient(context, provider)
+            // make sure account can be seen by OpenTasks
+            if (Build.VERSION.SDK_INT >= 26)
+                AccountManager.get(context).setAccountVisibility(account, taskProvider.name.packageName, AccountManager.VISIBILITY_VISIBLE)
 
-                // make sure account can be seen by OpenTasks
-                if (Build.VERSION.SDK_INT >= 26)
-                    AccountManager.get(context).setAccountVisibility(account, taskProvider.name.packageName, AccountManager.VISIBILITY_VISIBLE)
+            val accountSettings = AccountSettings(context, account)
+            /* don't run sync if
+               - sync conditions (e.g. "sync only in WiFi") are not met AND
+               - this is is an automatic sync (i.e. manual syncs are run regardless of sync conditions)
+             */
+            if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(accountSettings))
+                return
 
-                val accountSettings = AccountSettings(context, account)
-                /* don't run sync if
-                   - sync conditions (e.g. "sync only in WiFi") are not met AND
-                   - this is is an automatic sync (i.e. manual syncs are run regardless of sync conditions)
-                 */
-                if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(accountSettings))
-                    return
+            RefreshCollections(account, CollectionInfo.Type.TASKS).run()
 
+            updateLocalTaskLists(taskProvider, account, accountSettings)
 
-                RefreshCollections(account, CollectionInfo.Type.TASKS).run()
+            val principal = HttpUrl.get(accountSettings.uri!!)!!
 
-                updateLocalTaskLists(taskProvider, account, accountSettings)
-
-                val principal = HttpUrl.get(accountSettings.uri!!)!!
-
-                for (taskList in AndroidTaskList.find(account, taskProvider, LocalTaskList.Factory, "${TaskContract.TaskLists.SYNC_ENABLED}!=0", null)) {
-                    Logger.log.info("Synchronizing task list #${taskList.id} [${taskList.syncId}]")
-                    TasksSyncManager(context, account, accountSettings, extras, authority, syncResult, taskList, principal).use {
-                        it.performSync()
-                    }
+            for (taskList in AndroidTaskList.find(account, taskProvider, LocalTaskList.Factory, "${TaskContract.TaskLists.SYNC_ENABLED}!=0", null)) {
+                Logger.log.info("Synchronizing task list #${taskList.id} [${taskList.syncId}]")
+                TasksSyncManager(context, account, accountSettings, extras, authority, syncResult, taskList, principal).use {
+                    it.performSync()
                 }
-            } catch (e: Exceptions.ServiceUnavailableException) {
-                syncResult.stats.numIoExceptions++
-                syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
-            } catch (e: Exceptions.IgnorableHttpException) {
-                // Ignore
-            } catch (e: Exception) {
-                if (e is SQLiteException) {
-                    Logger.log.log(Level.SEVERE, "Couldn't prepare local task list", e)
-                    syncResult.databaseError = true
-                }
-
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_tasks, account.name)
-
-                notificationManager.setThrowable(e)
-
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(Constants.KEY_ACCOUNT, account)
-                if (e !is Exceptions.UnauthorizedException) {
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
-                    detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
-                }
-
-                notificationManager.notify(title, context.getString(syncPhase))
-            } catch (e: OutOfMemoryError) {
-                val syncPhase = R.string.sync_phase_journals
-                val title = context.getString(R.string.sync_error_tasks, account.name)
-                notificationManager.setThrowable(e)
-                val detailsIntent = notificationManager.detailsIntent
-                detailsIntent.putExtra(Constants.KEY_ACCOUNT, account)
-                notificationManager.notify(title, context.getString(syncPhase))
             }
 
             Logger.log.info("Task sync complete")
