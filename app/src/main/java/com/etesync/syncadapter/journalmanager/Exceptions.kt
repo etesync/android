@@ -10,6 +10,8 @@ import java.security.GeneralSecurityException
 class Exceptions {
     class AssociateNotAllowedException(response: Response, message: String?) : HttpException(response, message)
 
+    class ConflictException(response: Response, message: String?) : IgnorableHttpException(response, message ?: "Conflict exception")
+
     class ReadOnlyException(response: Response, message: String?) : HttpException(response, message)
 
     class UnauthorizedException(response: Response, message: String?) : HttpException(response, message)
