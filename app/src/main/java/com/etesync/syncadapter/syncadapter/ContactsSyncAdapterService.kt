@@ -62,6 +62,11 @@ class ContactsSyncAdapterService : SyncAdapterService() {
                 ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal).use {
                     it.performSync()
                 }
+            } catch (e: Exceptions.ServiceUnavailableException) {
+                syncResult.stats.numIoExceptions++
+                syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
+            } catch (e: Exceptions.IgnorableHttpException) {
+                // Ignore
             } catch (e: Exception) {
                 val syncPhase = R.string.sync_phase_journals
                 val title = context.getString(R.string.sync_error_contacts, account.name)
