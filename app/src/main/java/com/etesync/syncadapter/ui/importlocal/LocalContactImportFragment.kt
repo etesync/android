@@ -101,18 +101,18 @@ class LocalContactImportFragment : Fragment() {
     }
 
     protected inner class ImportContacts : AsyncTask<LocalAddressBook, Int, ResultFragment.ImportResult>() {
-        internal var progressDialog: ProgressDialog? = null
+        private lateinit var progressDialog: ProgressDialog
 
         override fun onPreExecute() {
             progressDialog = ProgressDialog(activity)
-            progressDialog!!.setTitle(R.string.import_dialog_title)
-            progressDialog!!.setMessage(getString(R.string.import_dialog_adding_entries))
-            progressDialog!!.setCanceledOnTouchOutside(false)
-            progressDialog!!.setCancelable(false)
-            progressDialog!!.isIndeterminate = false
-            progressDialog!!.setIcon(R.drawable.ic_import_export_black)
-            progressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-            progressDialog!!.show()
+            progressDialog.setTitle(R.string.import_dialog_title)
+            progressDialog.setMessage(getString(R.string.import_dialog_adding_entries))
+            progressDialog.setCanceledOnTouchOutside(false)
+            progressDialog.setCancelable(false)
+            progressDialog.isIndeterminate = false
+            progressDialog.setIcon(R.drawable.ic_import_export_black)
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+            progressDialog.show()
         }
 
         override fun doInBackground(vararg addressBooks: LocalAddressBook): ResultFragment.ImportResult {
@@ -120,12 +120,11 @@ class LocalContactImportFragment : Fragment() {
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
-            if (progressDialog != null)
-                progressDialog!!.progress = values[0]!!
+            progressDialog.progress = values[0]!!
         }
 
         override fun onPostExecute(result: ResultFragment.ImportResult) {
-            progressDialog!!.dismiss()
+            progressDialog.dismiss()
             (activity as ResultFragment.OnImportCallback).onImportResult(result)
         }
 
@@ -139,7 +138,7 @@ class LocalContactImportFragment : Fragment() {
                 val localGroups = localAddressBook.findAllGroups()
                 val oldIdToNewId = HashMap<Long, Long>()
                 val total = localContacts.size + localGroups.size
-                progressDialog!!.max = total
+                progressDialog.max = total
                 result.total = total.toLong()
                 var progress = 0
                 for (currentLocalContact in localContacts) {

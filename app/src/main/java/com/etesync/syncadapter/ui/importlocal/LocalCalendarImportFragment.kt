@@ -166,18 +166,18 @@ class LocalCalendarImportFragment : ListFragment() {
     }
 
     protected inner class ImportEvents : AsyncTask<LocalCalendar, Int, ResultFragment.ImportResult>() {
-        internal var progressDialog: ProgressDialog? = null
+        private lateinit var progressDialog: ProgressDialog
 
         override fun onPreExecute() {
             progressDialog = ProgressDialog(activity)
-            progressDialog!!.setTitle(R.string.import_dialog_title)
-            progressDialog!!.setMessage(getString(R.string.import_dialog_adding_entries))
-            progressDialog!!.setCanceledOnTouchOutside(false)
-            progressDialog!!.setCancelable(false)
-            progressDialog!!.isIndeterminate = false
-            progressDialog!!.setIcon(R.drawable.ic_import_export_black)
-            progressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-            progressDialog!!.show()
+            progressDialog.setTitle(R.string.import_dialog_title)
+            progressDialog.setMessage(getString(R.string.import_dialog_adding_entries))
+            progressDialog.setCanceledOnTouchOutside(false)
+            progressDialog.setCancelable(false)
+            progressDialog.isIndeterminate = false
+            progressDialog.setIcon(R.drawable.ic_import_export_black)
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+            progressDialog.show()
         }
 
         override fun doInBackground(vararg calendars: LocalCalendar): ResultFragment.ImportResult {
@@ -185,12 +185,11 @@ class LocalCalendarImportFragment : ListFragment() {
         }
 
         override fun onProgressUpdate(vararg progress: Int?) {
-            if (progressDialog != null)
-                progressDialog!!.progress = progress[0]!!
+            progressDialog.progress = progress[0]!!
         }
 
         override fun onPostExecute(result: ResultFragment.ImportResult) {
-            progressDialog!!.dismiss()
+            progressDialog.dismiss()
             (activity as ResultFragment.OnImportCallback).onImportResult(result)
         }
 
@@ -202,7 +201,7 @@ class LocalCalendarImportFragment : ListFragment() {
                         LocalCalendar.Factory, info!!.uid!!)
                 val localEvents = fromCalendar.findAll()
                 val total = localEvents.size
-                progressDialog!!.max = total
+                progressDialog.max = total
                 result.total = total.toLong()
                 var progress = 0
                 for (currentLocalEvent in localEvents) {
