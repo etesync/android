@@ -220,7 +220,7 @@ class ImportFragment : DialogFragment() {
                     val events = Event.fromReader(importReader, null)
                     importReader.close()
 
-                    if (events.size == 0) {
+                    if (events.isEmpty()) {
                         Logger.log.warning("Empty/invalid file.")
                         result.e = Exception("Empty/invalid file.")
                         return result
@@ -263,7 +263,7 @@ class ImportFragment : DialogFragment() {
                     val downloader = ContactsSyncManager.ResourceDownloader(context)
                     val contacts = Contact.fromReader(importReader, downloader)
 
-                    if (contacts.size == 0) {
+                    if (contacts.isEmpty()) {
                         Logger.log.warning("Empty/invalid file.")
                         result.e = Exception("Empty/invalid file.")
                         return result
