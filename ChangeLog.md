@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.6
+* Import: implement importing tasks from file
+* Fix crash when Android kills the import activity while it's still importing
+
 ## Version 1.4.5
 * Gracefully handle Conflict errors (retry later).
 * Fix potential crash when opening and closing the app very quickly.
