@@ -1,0 +1,4 @@
+* Fix crash on import when the activity is in the background when the import finishes.
+* Show notifications for SSL handshake related errors.
+* Improve debug info and crash reporting email.
+* Add Tutanota to the list of clients that don't support attachments from other apps.

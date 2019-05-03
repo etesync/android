@@ -1,0 +1,2 @@
+* Fix occasional crash when listing journal members
+* Fix spelling mistake in encryption password page.

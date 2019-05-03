@@ -1,0 +1,1 @@
+* Fix crash when removing accounts on some devices

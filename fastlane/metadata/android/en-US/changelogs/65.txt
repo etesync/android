@@ -1,0 +1,6 @@
+* Change the sync to also do the preparation in chunks
+* Fix crash when removing journal members
+* Add notification channels for granular control of app notifications
+* Only show the custom certificate popup when using EteSync interactively
+* Fix setting changes not being applied (e.g. log to file) by making the sync the same process
+* Add a separate setting for verbose logging (was previously tied to log to file) for more granular privacy control
