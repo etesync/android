@@ -77,8 +77,13 @@ class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<
         override fun onStartLoading() =
                 accountManager.addOnAccountsUpdatedListener(this, null, true)
 
-        override fun onStopLoading() =
+        override fun onStopLoading() {
+            try {
                 accountManager.removeOnAccountsUpdatedListener(this)
+            } catch (e: IllegalArgumentException) {
+                // Do nothing. Just handle the case where for some reason the listener is not registered.
+            }
+        }
 
         override fun onAccountsUpdated(accounts: Array<Account>) {
             forceLoad()
