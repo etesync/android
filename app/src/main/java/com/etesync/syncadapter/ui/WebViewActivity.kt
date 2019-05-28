@@ -133,6 +133,7 @@ class WebViewActivity : BaseActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         mWebView!!.saveState(outState)
     }
 
