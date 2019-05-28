@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.7
+* Fix rare crash when listing accounts
+* Update requery, kotlin and gradle
+
 ## Version 1.4.6
 * Import: implement importing tasks from file
 * Fix crash when Android kills the import activity while it's still importing
