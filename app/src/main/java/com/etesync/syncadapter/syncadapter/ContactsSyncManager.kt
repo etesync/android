@@ -127,7 +127,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
-    override fun processSyncEntry(cEntry: SyncEntry) {
+    override fun processSyncEntryImpl(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
 
         val contacts = Contact.fromReader(inputReader, resourceDownloader)

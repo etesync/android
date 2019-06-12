@@ -288,7 +288,16 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, InvalidCalendarException::class)
-    protected abstract fun processSyncEntry(cEntry: SyncEntry)
+    protected abstract fun processSyncEntryImpl(cEntry: SyncEntry)
+
+    protected fun processSyncEntry(cEntry: SyncEntry) {
+        try {
+            processSyncEntryImpl(cEntry)
+        } catch (e: Exception) {
+            Logger.log.warning("Failed processing entry: ${cEntry.content}")
+            throw e
+        }
+    }
 
     private fun persistSyncEntry(uid: String?, syncEntry: SyncEntry) {
         val entry = EntryEntity()

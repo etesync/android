@@ -68,7 +68,7 @@ class TasksSyncManager(
         return localCollection as LocalTaskList
     }
 
-    override fun processSyncEntry(cEntry: SyncEntry) {
+    override fun processSyncEntryImpl(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
 
         val tasks = Task.fromReader(inputReader)
