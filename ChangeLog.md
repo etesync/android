@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.8
+* Attempt to fix crash reporting on some devices
+* Log broken entries on processing failures to make debugging easier
+
 ## Version 1.4.7
 * Fix rare crash when listing accounts
 * Update requery, kotlin and gradle
