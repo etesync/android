@@ -374,6 +374,7 @@
     <string name="loading">Loading...</string>
     <string name="loading_error_title">Loading Error</string>
     <string name="loading_error_content">Refresh</string>
+    <string name="open_url_no_activity">Failed opening link: link is not supported!</string>
 
     <!-- Import Activity -->
     <string name="import_button_file">From File</string>

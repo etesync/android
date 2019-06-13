@@ -2,6 +2,7 @@ package com.etesync.syncadapter.ui
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
@@ -127,7 +129,11 @@ class WebViewActivity : BaseActivity() {
                 return true
             }
         } else {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(this, getString(R.string.open_url_no_activity), Toast.LENGTH_LONG).show()
+            }
             return true
         }
     }
@@ -163,7 +169,11 @@ class WebViewActivity : BaseActivity() {
                 intent.putExtra(WebViewActivity.KEY_URL, uri)
                 context.startActivity(intent)
             } else {
-                context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                try {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, context.getString(R.string.open_url_no_activity), Toast.LENGTH_LONG).show()
+                }
             }
         }
 
