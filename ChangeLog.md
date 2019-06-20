@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.9
+* WebView: Gracefully handle unsupported link types.
+
 ## Version 1.4.8
 * Attempt to fix crash reporting on some devices
 * Log broken entries on processing failures to make debugging easier
