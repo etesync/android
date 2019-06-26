@@ -23,8 +23,6 @@ import java.net.URI
 import java.util.*
 
 class BaseConfigurationFinder(protected val context: Context, protected val credentials: LoginCredentials) {
-
-    protected val logBuffer = StringHandler()
     protected var httpClient: OkHttpClient
 
     init {
@@ -33,7 +31,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
 
 
     fun findInitialConfiguration(): Configuration {
-        var failed = false
+        var exception: Throwable? = null
         val cardDavConfig = findInitialConfiguration(CollectionInfo.Type.ADDRESS_BOOK)
         val calDavConfig = findInitialConfiguration(CollectionInfo.Type.CALENDAR)
 
@@ -44,18 +42,17 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
             authtoken = authenticator.getAuthToken(credentials.userName, credentials.password)
         } catch (e: Exceptions.HttpException) {
             Logger.log.warning(e.message)
-
-            failed = true
+            exception = e
         } catch (e: IOException) {
             Logger.log.warning(e.message)
-            failed = true
+            exception = e
         }
 
         return Configuration(
                 credentials.uri,
                 credentials.userName, authtoken,
                 cardDavConfig, calDavConfig,
-                logBuffer.toString(), failed
+                exception
         )
     }
 
@@ -72,12 +69,13 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     class Configuration
     // We have to use URI here because HttpUrl is not serializable!
 
-    (val url: URI, val userName: String, val authtoken: String?, val cardDAV: ServiceInfo, val calDAV: ServiceInfo, val logs: String, val isFailed: Boolean) : Serializable {
+    (val url: URI, val userName: String, val authtoken: String?, val cardDAV: ServiceInfo, val calDAV: ServiceInfo, var error: Throwable?) : Serializable {
         var rawPassword: String? = null
         var password: String? = null
         var keyPair: Crypto.AsymmetricKeyPair? = null
 
-        var error: Throwable? = null
+        val isFailed: Boolean
+            get() = this.error != null
 
         class ServiceInfo : Serializable {
             val collections: Map<String, CollectionInfo> = HashMap()

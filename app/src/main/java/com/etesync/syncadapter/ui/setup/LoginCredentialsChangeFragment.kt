@@ -56,7 +56,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
             if (data.isFailed)
             // no service found: show error message
                 fragmentManager!!.beginTransaction()
-                        .add(NothingDetectedFragment.newInstance(data.logs), null)
+                        .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
             else {
                 val settings: AccountSettings

@@ -50,7 +50,7 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
             if (data.isFailed)
             // no service found: show error message
                 fragmentManager!!.beginTransaction()
-                        .add(NothingDetectedFragment.newInstance(data.logs), null)
+                        .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
             else
             // service found: continue
