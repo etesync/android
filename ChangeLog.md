@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.10
+* Fix debug information for failed login attempts
+* Improve error message for bad encryption passwords
+
 ## Version 1.4.9
 * WebView: Gracefully handle unsupported link types.
 
