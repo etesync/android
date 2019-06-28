@@ -66,10 +66,10 @@ class AppSettingsActivity : BaseActivity() {
             addPreferencesFromResource(R.xml.settings_app)
 
             findPreference("notification_settings").apply {
-                if (Build.VERSION.SDK_INT >= 26)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         startActivity(Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                            putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+                            putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
                         })
                         false
                     }
