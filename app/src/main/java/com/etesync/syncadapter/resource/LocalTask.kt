@@ -84,6 +84,11 @@ class LocalTask : AndroidTask, LocalResource<Task> {
                 .withValue(COLUMN_ETAG, eTag)
     }
 
+    fun updateAsDirty(task: Task): Uri {
+        saveAsDirty = true
+        return this.update(task)
+    }
+
     fun addAsDirty(): Uri {
         saveAsDirty = true
         return this.add()
