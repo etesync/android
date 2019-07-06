@@ -31,6 +31,8 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import com.etesync.syncadapter.resource.LocalEvent
+
 
 class ImportFragment : DialogFragment() {
 
@@ -247,9 +249,15 @@ class ImportFragment : DialogFragment() {
 
                     for (event in events) {
                         try {
-                            val localEvent = LocalEvent(localCalendar, event, event.uid, null)
-                            localEvent.addAsDirty()
-                            result.added++
+                            var localEvent = localCalendar.findByUid(event.uid!!)
+                            if (localEvent != null) {
+                                localEvent.updateAsDirty(event)
+                                result.updated++
+                            } else {
+                                localEvent = LocalEvent(localCalendar, event, event.uid, null)
+                                localEvent.addAsDirty()
+                                result.added++
+                            }
                         } catch (e: CalendarStorageException) {
                             e.printStackTrace()
                         }
@@ -285,9 +293,15 @@ class ImportFragment : DialogFragment() {
 
                     for (task in tasks) {
                         try {
-                            val localTask = LocalTask(localTaskList, task, task.uid, null)
-                            localTask.addAsDirty()
-                            result.added++
+                            var localTask = localTaskList.findByUid(task.uid!!)
+                            if (localTask != null) {
+                                localTask.updateAsDirty(task)
+                                result.updated++
+                            } else {
+                                localTask = LocalTask(localTaskList, task, task.uid, null)
+                                localTask.addAsDirty()
+                                result.added++
+                            }
                         } catch (e: CalendarStorageException) {
                             e.printStackTrace()
                         }
@@ -295,7 +309,7 @@ class ImportFragment : DialogFragment() {
                         entryProcessed()
                     }
                 } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
-                    val oldUidToNewId = HashMap<String?, Long>()
+                    val uidToLocalId = HashMap<String?, Long>()
                     val downloader = ContactsSyncManager.ResourceDownloader(context)
                     val contacts = Contact.fromReader(importReader, downloader)
 
@@ -317,10 +331,18 @@ class ImportFragment : DialogFragment() {
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
                         try {
-                            val localContact = LocalContact(localAddressBook, contact, null, null)
-                            localContact.createAsDirty()
-                            // If uid is null, so be it. We won't be able to process the group later.
-                            oldUidToNewId[contact.uid] = localContact.id!!
+                            var localContact = localAddressBook.findByUid(contact.uid!!) as LocalContact?
+
+                            if (localContact != null) {
+                                localContact.updateAsDirty(contact)
+                                result.updated++
+                            } else {
+                                localContact = LocalContact(localAddressBook, contact, contact.uid, null)
+                                localContact.createAsDirty()
+                                result.added++
+                            }
+
+                            uidToLocalId[contact.uid] = localContact.id!!
 
                             // Apply categories
                             val batch = BatchOperation(localAddressBook.provider!!)
@@ -339,13 +361,21 @@ class ImportFragment : DialogFragment() {
 
                     for (contact in contacts.filter { contact -> contact.group }) {
                         try {
-                            val localGroup = LocalGroup(localAddressBook, contact, null, null)
                             val memberIds = contact.members.mapNotNull { memberUid ->
-                                oldUidToNewId[memberUid]
+                                uidToLocalId[memberUid]
                             }
-                            localGroup.createAsDirty(memberIds)
 
-                            result.added++
+                            val group = contact
+                            var localGroup: LocalGroup? = localAddressBook.findByUid(group.uid!!) as LocalGroup?
+
+                            if (localGroup != null) {
+                                localGroup.updateAsDirty(group, memberIds)
+                                result.updated++
+                            } else {
+                                localGroup = LocalGroup(localAddressBook, group, group.uid, null)
+                                localGroup.createAsDirty(memberIds)
+                                result.added++
+                            }
                         } catch (e: ContactsStorageException) {
                             e.printStackTrace()
                         }

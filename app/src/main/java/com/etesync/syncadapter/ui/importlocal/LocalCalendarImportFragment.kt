@@ -22,6 +22,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
 
+
 class LocalCalendarImportFragment : ListFragment() {
 
     private lateinit var account: Account
@@ -209,9 +210,21 @@ class LocalCalendarImportFragment : ListFragment() {
                 for (currentLocalEvent in localEvents) {
                     val event = currentLocalEvent.event
                     try {
-                        val localEvent = LocalEvent(localCalendar!!, event!!, null, null)
-                        localEvent.addAsDirty()
-                        result.added++
+                        localCalendar!!
+
+                        var localEvent = if (event == null || event.uid == null)
+                            null
+                        else
+                            localCalendar.findByUid(event.uid!!)
+
+                        if (localEvent != null) {
+                            localEvent.updateAsDirty(event!!)
+                            result.updated++
+                        } else {
+                            localEvent = LocalEvent(localCalendar, event!!, event.uid, null)
+                            localEvent.addAsDirty()
+                            result.added++
+                        }
                     } catch (e: CalendarStorageException) {
                         e.printStackTrace()
 

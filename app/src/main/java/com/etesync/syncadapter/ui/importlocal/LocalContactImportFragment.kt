@@ -29,7 +29,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalContact
 import com.etesync.syncadapter.resource.LocalGroup
 import java.util.*
-import kotlin.collections.HashMap
+
 
 class LocalContactImportFragment : Fragment() {
 
@@ -147,10 +147,22 @@ class LocalContactImportFragment : Fragment() {
                     val contact = currentLocalContact.contact
 
                     try {
-                        val localContact = LocalContact(addressBook, contact!!, null, null)
-                        localContact.createAsDirty()
+                        contact!!
+                        var localContact: LocalContact? = if (contact.uid == null)
+                            null
+                        else
+                            addressBook.findByUid(contact.uid!!) as LocalContact
+
+                        if (localContact != null) {
+                            localContact.updateAsDirty(contact)
+                            result.updated++
+                        } else {
+                            localContact = LocalContact(addressBook, contact, contact.uid, null)
+                            localContact.createAsDirty()
+                            result.added++
+                        }
+
                         oldIdToNewId[currentLocalContact.id!!] = localContact.id!!
-                        result.added++
                     } catch (e: ContactsStorageException) {
                         e.printStackTrace()
                         result.e = e
@@ -162,13 +174,24 @@ class LocalContactImportFragment : Fragment() {
                     val group = currentLocalGroup.contact
 
                     try {
-                        val localGroup = LocalGroup(addressBook, group!!, null, null)
-                        val members = currentLocalGroup.getMembers().map { it ->
+                        val members = currentLocalGroup.getMembers().map {
                             oldIdToNewId[it]!!
                         }
+                        group!!
 
-                        localGroup.createAsDirty(members)
-                        result.added++
+                        var localGroup: LocalGroup? = if (group.uid == null)
+                            null
+                        else
+                            addressBook.findByUid(group.uid!!) as LocalGroup
+
+                        if (localGroup != null) {
+                            localGroup.updateAsDirty(group, members)
+                            result.updated++
+                        } else {
+                            localGroup = LocalGroup(addressBook, group, group.uid, null)
+                            localGroup.createAsDirty(members)
+                            result.added++
+                        }
                     } catch (e: ContactsStorageException) {
                         e.printStackTrace()
                         result.e = e
