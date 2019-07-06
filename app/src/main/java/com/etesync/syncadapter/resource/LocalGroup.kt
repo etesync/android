@@ -208,6 +208,19 @@ class LocalGroup : AndroidGroup, LocalAddress {
         ))
     }
 
+
+    fun updateAsDirty(group: Contact, members: List<Long>): Uri {
+        saveAsDirty = true
+
+        val ret = this.update(group)
+
+        val batch = BatchOperation(addressBook.provider!!)
+        setMembers(batch, members)
+        batch.commit()
+
+        return ret
+    }
+
     fun createAsDirty(members: List<Long>): Uri {
         saveAsDirty = true
 
