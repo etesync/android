@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.4.11
+* Import: use the UUID from the import source (e.g. Google account or file) rather than generating a new one.
+  * This prevents duplicates when importing multiple times.
+* Make it possible to connect to non-TLS servers on Android P and onwards
+
 ## Version 1.4.10
 * Fix debug information for failed login attempts
 * Improve error message for bad encryption passwords
