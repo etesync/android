@@ -18,6 +18,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
@@ -190,7 +191,13 @@ class LocalCalendarImportFragment : ListFragment() {
         }
 
         override fun onPostExecute(result: ResultFragment.ImportResult) {
-            if (progressDialog.isShowing && !activity!!.isDestroyed) {
+            val activity = activity
+            if (activity == null) {
+                Logger.log.warning("Activity is null on import.")
+                return
+            }
+
+            if (progressDialog.isShowing && !activity.isDestroyed) {
                 progressDialog.dismiss()
             }
             (activity as ResultFragment.OnImportCallback).onImportResult(result)
