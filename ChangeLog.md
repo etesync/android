@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.12
+* Import: fix potential crashes in the import process.
+* Email invitations: improve signature.
+
 ## Version 1.4.11
 * Import: use the UUID from the import source (e.g. Google account or file) rather than generating a new one.
   * This prevents duplicates when importing multiple times.

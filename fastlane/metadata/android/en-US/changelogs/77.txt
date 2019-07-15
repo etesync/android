@@ -1,0 +1,2 @@
+* Import: fix potential crashes in the import process.
+* Email invitations: improve signature.
