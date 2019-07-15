@@ -230,7 +230,12 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(events.size)
 
-                    val provider = context.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
+                    val provider = context.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
+                    if (provider == null) {
+                        result.e = Exception("Failed to acquire calendar content provider.")
+                        return result
+                    }
+
                     val localCalendar: LocalCalendar?
                     try {
                         localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)
@@ -278,7 +283,12 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(tasks.size)
 
-                    val provider = TaskProvider.acquire(context, TaskProvider.ProviderName.OpenTasks)!!
+                    val provider = TaskProvider.acquire(context, TaskProvider.ProviderName.OpenTasks)
+                    if (provider == null) {
+                        result.e = Exception("Failed to acquire tasks content provider.")
+                        return result
+                    }
+
                     val localTaskList: LocalTaskList?
                     try {
                         localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)
@@ -323,7 +333,12 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(contacts.size)
 
-                    val provider = context.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!
+                    val provider = context.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
+                    if (provider == null) {
+                        result.e = Exception("Failed to acquire contacts content provider.")
+                        return result
+                    }
+
                     val localAddressBook = LocalAddressBook.findByUid(context, provider, account, info.uid!!)
                     if (localAddressBook == null) {
                         throw FileNotFoundException("Failed to load local address book.")
