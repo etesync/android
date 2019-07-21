@@ -365,8 +365,6 @@ class ImportFragment : DialogFragment() {
                                 localContact.addToGroup(batch, localAddressBook.findOrCreateGroup(category))
                             }
                             batch.commit()
-
-                            result.added++
                         } catch (e: ContactsStorageException) {
                             e.printStackTrace()
                         }
