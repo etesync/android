@@ -1,0 +1,2 @@
+* Move to the new Android adaptive icons - makes it look nicer on Android 8 and up.
+* Contacts import: fix wrong summary for the amount of added imports
