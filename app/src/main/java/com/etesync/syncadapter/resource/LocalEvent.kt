@@ -18,6 +18,8 @@ import at.bitfire.ical4android.*
 import at.bitfire.ical4android.Constants.ical4jVersion
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.log.Logger
+import net.fortuna.ical4j.model.component.VAlarm
+import net.fortuna.ical4j.model.property.Action
 import net.fortuna.ical4j.model.property.ProdId
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -97,6 +99,24 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         else
             builder.withValue(Events._SYNC_ID, fileName)
                     .withValue(COLUMN_ETAG, eTag)
+    }
+
+    override fun insertReminder(batch: BatchOperation, idxEvent: Int, alarm: VAlarm) {
+        // We only support DISPLAY and AUDIO alarms so modify when inserting
+        val action = alarm.action
+        val modifiedAlarm = when (action?.value) {
+            Action.DISPLAY.value,
+            Action.AUDIO.value -> alarm
+            Action.EMAIL.value -> {
+                val tmp = VAlarm(alarm.trigger?.duration)
+                tmp.properties += Action.DISPLAY
+                tmp.properties += alarm.description
+                tmp
+            }
+            else -> alarm
+        }
+
+        super.insertReminder(batch, idxEvent, modifiedAlarm)
     }
 
     @Throws(CalendarStorageException::class)
