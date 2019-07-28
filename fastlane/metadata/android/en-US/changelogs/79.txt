@@ -1,0 +1,1 @@
+* Import: transform EMAIL event reminders to DISPLAY. Email reminedrs aren't and can't be supported in EteSync due to end-to-end-encryption.
