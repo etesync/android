@@ -176,6 +176,9 @@
     <string name="journal_item_relation">Relation</string>
     <string name="journal_item_member">Member</string>
     <string name="journal_item_member_count">Member Count</string>
+    <string name="journal_item_restore_action">Restore state</string>
+    <string name="journal_item_restore_dialog_body">Successfully restored the entry to previous state.</string>
+
 
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>

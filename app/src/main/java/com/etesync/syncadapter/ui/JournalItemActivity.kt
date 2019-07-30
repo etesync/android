@@ -4,10 +4,13 @@ import android.accounts.Account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
+import android.provider.ContactsContract
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -15,6 +18,7 @@ import androidx.viewpager.widget.ViewPager
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.ical4android.Task
+import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.Contact
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
@@ -22,6 +26,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.SyncEntry
+import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
 import com.etesync.syncadapter.utils.EventEmailInvitation
 import com.google.android.material.tabs.TabLayout
@@ -79,9 +84,8 @@ class JournalItemActivity : BaseActivity(), Refreshable {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (emailInvitationEvent != null) {
-            menuInflater.inflate(R.menu.activity_journal_item, menu)
-        }
+        menuInflater.inflate(R.menu.activity_journal_item, menu)
+        menu.setGroupVisible(R.id.journal_item_menu_event_invite, emailInvitationEvent != null)
         return true
     }
 
@@ -94,6 +98,62 @@ class JournalItemActivity : BaseActivity(), Refreshable {
     fun sendEventInvite(item: MenuItem) {
         val intent = EventEmailInvitation(this, account).createIntent(emailInvitationEvent!!, emailInvitationEventString!!)
         startActivity(intent)
+    }
+
+    fun restoreItem(item: MenuItem) {
+        // FIXME: This code makes the assumption that providers are all available. May not be true for tasks, and potentially others too.
+        when (info.type) {
+            CollectionInfo.Type.CALENDAR -> {
+                val provider = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
+                val localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)!!
+                val event = Event.fromReader(StringReader(syncEntry.content))[0]
+                var localEvent = localCalendar.findByUid(event.uid!!)
+                if (localEvent != null) {
+                    localEvent.updateAsDirty(event)
+                } else {
+                    localEvent = LocalEvent(localCalendar, event, event.uid, null)
+                    localEvent.addAsDirty()
+                }
+            }
+            CollectionInfo.Type.TASKS -> {
+                val provider = TaskProvider.acquire(this, TaskProvider.ProviderName.OpenTasks)!!
+                val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
+                val task = Task.fromReader(StringReader(syncEntry.content))[0]
+                var localTask = localTaskList.findByUid(task.uid!!)
+                if (localTask != null) {
+                    localTask.updateAsDirty(task)
+                } else {
+                    localTask = LocalTask(localTaskList, task, task.uid, null)
+                    localTask.addAsDirty()
+                }
+            }
+            CollectionInfo.Type.ADDRESS_BOOK -> {
+                val provider = contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!
+                val localAddressBook = LocalAddressBook.findByUid(this, provider, account, info.uid!!)!!
+                val contact = Contact.fromReader(StringReader(syncEntry.content), null)[0]
+                if (contact.group) {
+                    // FIXME: not currently supported
+                } else {
+                    var localContact = localAddressBook.findByUid(contact.uid!!) as LocalContact?
+                    if (localContact != null) {
+                        localContact.updateAsDirty(contact)
+                    } else {
+                        localContact = LocalContact(localAddressBook, contact, contact.uid, null)
+                        localContact.createAsDirty()
+                    }
+                }
+            }
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(R.string.journal_item_restore_action)
+            .setIcon(R.drawable.ic_restore_black)
+            .setMessage(R.string.journal_item_restore_dialog_body)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                // dismiss
+            }
+            .create()
+        dialog.show()
     }
 
     private class TabsAdapter(fm: FragmentManager, private val context: Context, private val info: CollectionInfo, private val syncEntry: SyncEntry) : FragmentPagerAdapter(fm) {

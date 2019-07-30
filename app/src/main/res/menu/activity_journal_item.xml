@@ -10,8 +10,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="@string/calendar_attendees_send_email_action"
-        android:icon="@drawable/ic_email_black"
-        android:onClick="sendEventInvite"
-        app:showAsAction="always" />
+    <group android:id="@+id/journal_item_menu_event_invite">
+        <item android:title="@string/calendar_attendees_send_email_action"
+            android:icon="@drawable/ic_email_black"
+            android:onClick="sendEventInvite"
+            app:showAsAction="always" />
+    </group>
+
+    <group android:id="@+id/journal_item_menu_restore">
+        <item android:title="@string/journal_item_restore_action"
+            android:icon="@drawable/ic_restore_black"
+            android:onClick="restoreItem"
+            app:showAsAction="never" />
+    </group>
 </menu>
