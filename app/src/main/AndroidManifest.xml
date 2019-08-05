@@ -184,25 +184,30 @@
 
         <activity
             android:name=".ui.AboutActivity"
+            android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".ui.AccountsActivity"/>
 
         <activity
             android:name=".syncadapter.SyncNotification$NotificationHandlerActivity"
+            android:exported="false"
             android:theme="@style/Theme.Transparent" />
 
         <activity
             android:name=".ui.AppSettingsActivity"
+            android:exported="false"
             android:label="@string/app_settings"
             android:parentActivityName=".ui.AccountsActivity"/>
 
         <activity android:name=".ui.PermissionsActivity"
+            android:exported="false"
                   android:label="@string/permissions_title"
                   android:parentActivityName=".ui.AccountsActivity"/>
 
         <activity
             android:name=".ui.setup.LoginActivity"
+            android:exported="false"
             android:label="@string/login_title"
             android:parentActivityName=".ui.AccountsActivity">
             <intent-filter>
@@ -212,16 +217,41 @@
 
         <activity
             android:name=".ui.AccountActivity"
+            android:exported="false"
             android:parentActivityName=".ui.AccountsActivity">
         </activity>
-        <activity android:name=".ui.ViewCollectionActivity"/>
-        <activity android:name=".ui.CollectionMembersActivity"/>
-        <activity android:name=".ui.JournalItemActivity"/>
-        <activity android:name=".ui.importlocal.ImportActivity"/>
-        <activity android:name=".ui.AccountSettingsActivity"/>
-        <activity android:name=".ui.ChangeEncryptionPasswordActivity"/>
-        <activity android:name=".ui.CreateCollectionActivity"/>
-        <activity android:name=".ui.EditCollectionActivity"/>
+        <activity
+            android:name=".ui.ViewCollectionActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.CollectionMembersActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.JournalItemActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.importlocal.ImportActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.AccountSettingsActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.ChangeEncryptionPasswordActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.CreateCollectionActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.EditCollectionActivity"
+            android:exported="false"
+            />
 
         <activity
             android:name=".ui.DebugInfoActivity"
@@ -229,7 +259,10 @@
             android:label="@string/debug_info_title">
         </activity>
 
-        <activity android:name=".ui.WebViewActivity" />
+        <activity
+            android:name=".ui.WebViewActivity"
+            android:exported="false"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"
