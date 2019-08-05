@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.6.0
+* Change journal: make it possible to revert an item to a past state ("undo change").
+
 ## Version 1.5.1
 * Import: transform EMAIL event reminders to DISPLAY. Email reminders aren't and can't be supported in EteSync due to end-to-end-encryption.
 

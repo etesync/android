@@ -1,0 +1,1 @@
+* Change journal: make it possible to revert an item to a past state ("undo change").
