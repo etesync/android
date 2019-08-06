@@ -240,6 +240,7 @@
     <!-- ImportFragment -->
     <string name="import_dialog_title">Import</string>
     <string name="import_dialog_failed_title">Import Failed</string>
+    <string name="import_dialog_failed_body">Reason: %s\nReport to developers?</string>
     <string name="import_dialog_loading_file">Loading file (may take a while)...</string>
     <string name="import_dialog_adding_entries">Adding entries...</string>
     <string name="import_dialog_success">Processed %1$d entries.\nAdded: %2$d\nChanged: %3$d\nSkipped (failed): %4$d</string>

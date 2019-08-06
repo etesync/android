@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.R
+import org.acra.ACRA
 import java.io.Serializable
 
 /**
@@ -30,26 +31,28 @@ class ResultFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val icon: Int
-        val title: Int
-        val msg: String
         if (result!!.isFailed) {
-            icon = R.drawable.ic_error_dark
-            title = R.string.import_dialog_failed_title
-            msg = result!!.e!!.localizedMessage
+            return AlertDialog.Builder(activity!!)
+                    .setTitle(R.string.import_dialog_failed_title)
+                    .setIcon(R.drawable.ic_error_dark)
+                    .setMessage(getString(R.string.import_dialog_failed_body, result!!.e!!.localizedMessage))
+                    .setNegativeButton(android.R.string.no) { dialog, which ->
+                        // dismiss
+                    }
+                    .setPositiveButton(android.R.string.yes) { dialog, which ->
+                        ACRA.getErrorReporter().handleSilentException(result!!.e)
+                    }
+                    .create()
         } else {
-            icon = R.drawable.ic_import_export_black
-            title = R.string.import_dialog_title
-            msg = getString(R.string.import_dialog_success, result!!.total, result!!.added, result!!.updated, result!!.skipped)
+            return AlertDialog.Builder(activity!!)
+                    .setTitle(R.string.import_dialog_title)
+                    .setIcon(R.drawable.ic_import_export_black)
+                    .setMessage(getString(R.string.import_dialog_success, result!!.total, result!!.added, result!!.updated, result!!.skipped))
+                    .setPositiveButton(android.R.string.ok) { dialog, which ->
+                        // dismiss
+                    }
+                    .create()
         }
-        return AlertDialog.Builder(activity!!)
-                .setTitle(title)
-                .setIcon(icon)
-                .setMessage(msg)
-                .setPositiveButton(android.R.string.ok) { dialog, which ->
-                    // dismiss
-                }
-                .create()
     }
 
     class ImportResult : Serializable {
