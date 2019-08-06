@@ -158,7 +158,7 @@ class LocalContactImportFragment : Fragment() {
                         var localContact: LocalContact? = if (contact.uid == null)
                             null
                         else
-                            addressBook.findByUid(contact.uid!!) as LocalContact
+                            addressBook.findByUid(contact.uid!!) as LocalContact?
 
                         if (localContact != null) {
                             localContact.updateAsDirty(contact)
@@ -189,7 +189,7 @@ class LocalContactImportFragment : Fragment() {
                         var localGroup: LocalGroup? = if (group.uid == null)
                             null
                         else
-                            addressBook.findByUid(group.uid!!) as LocalGroup
+                            addressBook.findByUid(group.uid!!) as LocalGroup?
 
                         if (localGroup != null) {
                             localGroup.updateAsDirty(group, members)
