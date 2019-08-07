@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.6.1
+* Fixed contacts import
+* Make it easier to report import errors
+
 ## Version 1.6.0
 * Change journal: make it possible to revert an item to a past state ("undo change").
 
