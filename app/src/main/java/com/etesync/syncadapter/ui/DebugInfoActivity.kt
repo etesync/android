@@ -13,10 +13,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.app.LoaderManager
-import android.content.AsyncTaskLoader
-import android.content.ContentResolver
-import android.content.Context
-import android.content.Loader
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -95,6 +92,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
         @SuppressLint("MissingPermission")
         override fun loadInBackground(): String {
             var throwable: Throwable? = null
+            var caller: String? = null
             var logs: String? = null
             var authority: String? = null
             var account: Account? = null
@@ -102,6 +100,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
 
             if (extras != null) {
                 throwable = extras.getSerializable(KEY_THROWABLE) as Throwable?
+                caller = extras.getString(KEY_CALLER)
                 logs = extras.getString(KEY_LOGS)
                 account = extras.getParcelable(KEY_ACCOUNT)
                 authority = extras.getString(KEY_AUTHORITY)
@@ -118,6 +117,8 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                 report.append("Account name: ").append(account.name).append("\n")
             if (authority != null)
                 report.append("Authority: ").append(authority).append("\n")
+            if (caller != null)
+                report.append("Debug activity source: ").append(caller).append("\n")
 
             if (throwable is HttpException) {
                 val http = throwable as HttpException?
@@ -233,10 +234,17 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
     }
 
     companion object {
+        val KEY_CALLER = "caller"
         val KEY_THROWABLE = "throwable"
         val KEY_LOGS = "logs"
         val KEY_AUTHORITY = "authority"
         val KEY_PHASE = "phase"
+
+        fun newIntent(context: Context?, caller: String): Intent {
+            val intent = Intent(context, DebugInfoActivity::class.java)
+            intent.putExtra(KEY_CALLER, caller)
+            return intent
+        }
     }
 
 }

@@ -131,7 +131,7 @@ class SyncNotification(internal val context: Context, internal val notificationT
                 WebViewActivity.openUrl(this, Constants.faqUri.buildUpon().encodedFragment("account-migration-error").build())
                 return
             } else {
-                detailsIntent = Intent(this, DebugInfoActivity::class.java)
+                detailsIntent = DebugInfoActivity.newIntent(this, this::class.toString())
             }
             detailsIntent.putExtras(intent.extras!!)
             startActivity(detailsIntent)

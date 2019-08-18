@@ -88,7 +88,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
                     .setIcon(R.drawable.ic_error_dark)
                     .setMessage(R.string.login_wrong_username_or_password)
                     .setNeutralButton(R.string.login_view_logs) { dialog, which ->
-                        val intent = Intent(activity, DebugInfoActivity::class.java)
+                        val intent = DebugInfoActivity.newIntent(context, this::class.toString())
                         intent.putExtra(DebugInfoActivity.KEY_LOGS, arguments!!.getString(KEY_LOGS))
                         startActivity(intent)
                     }
