@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.7.0
+* Debug info: add calling class information to reports.
+
 ## Version 1.6.1
 * Fixed contacts import
 * Make it easier to report import errors
