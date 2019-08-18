@@ -13,7 +13,6 @@ import com.etesync.syncadapter.journalmanager.Crypto
 import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.journalmanager.JournalAuthenticator
 import com.etesync.syncadapter.log.Logger
-import com.etesync.syncadapter.log.StringHandler
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient

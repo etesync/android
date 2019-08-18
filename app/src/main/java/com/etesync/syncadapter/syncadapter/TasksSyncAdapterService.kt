@@ -13,7 +13,6 @@ import android.content.ContentProviderClient
 import android.content.ContentResolver
 import android.content.Context
 import android.content.SyncResult
-import android.database.sqlite.SQLiteException
 import android.os.Build
 import android.os.Bundle
 import at.bitfire.ical4android.AndroidTaskList
@@ -22,17 +21,14 @@ import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.resource.LocalTaskList
-import com.etesync.syncadapter.ui.DebugInfoActivity
 import okhttp3.HttpUrl
 import org.dmfs.tasks.contract.TaskContract
 import java.util.*
-import java.util.logging.Level
 
 /**
  * Synchronization manager for CalDAV collections; handles tasks ({@code VTODO}).

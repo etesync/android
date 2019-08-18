@@ -9,7 +9,6 @@ package com.etesync.syncadapter.syncadapter
 
 import android.accounts.Account
 import android.content.*
-import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.provider.CalendarContract
 import at.bitfire.ical4android.AndroidCalendar
@@ -17,18 +16,14 @@ import at.bitfire.ical4android.CalendarStorageException
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.Exceptions
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.resource.LocalCalendar
-import com.etesync.syncadapter.ui.DebugInfoActivity
 import okhttp3.HttpUrl
 import java.util.*
-import java.util.logging.Level
 
 class CalendarsSyncAdapterService : SyncAdapterService() {
     override fun syncAdapter(): AbstractThreadedSyncAdapter {
