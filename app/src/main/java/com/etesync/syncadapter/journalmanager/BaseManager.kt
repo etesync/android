@@ -17,6 +17,7 @@ abstract class BaseManager {
     fun newCall(request: Request): Response {
         val response: Response
         try {
+            Logger.log.fine("Making request for ${request.url()}")
             response = client!!.newCall(request).execute()
         } catch (e: IOException) {
             Logger.log.log(Level.SEVERE, "Failed while connecting to server", e)
