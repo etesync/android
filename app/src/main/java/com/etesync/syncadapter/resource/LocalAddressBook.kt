@@ -136,7 +136,7 @@ class LocalAddressBook(
                 ?: throw IllegalStateException("Address book has no URL")
         set(url) = AccountManager.get(context).setUserData(account, USER_DATA_URL, url)
 
-    var readOnly: Boolean
+    override var readOnly: Boolean
         get() = AccountManager.get(context).getUserData(account, USER_DATA_READ_ONLY) != null
         set(readOnly) = AccountManager.get(context).setUserData(account, USER_DATA_READ_ONLY, if (readOnly) "1" else null)
 
