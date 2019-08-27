@@ -140,6 +140,9 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 return e
             } catch (e: Exceptions.AssociateNotAllowedException) {
                 return e
+            } catch (e: Exception) {
+                // Also catch all exceptions
+                return e
             }
 
             return null
