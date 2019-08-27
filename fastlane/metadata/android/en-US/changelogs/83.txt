@@ -1,0 +1,3 @@
+* Fix handling of SSL handshake exceptions
+* Upgraded vcard4android and ical4android deps to latest
+* Improve debug logs

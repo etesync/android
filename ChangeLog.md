@@ -1,6 +1,11 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.7.1
+* Fix handling of SSL handshake exceptions
+* Upgraded vcard4android and ical4android deps to latest
+* Improve debug logs
+
 ## Version 1.7.0
 * Debug info: add calling class information to reports.
 
