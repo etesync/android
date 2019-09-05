@@ -1,0 +1,1 @@
+* Make the raw entries in the change history viewer selectable (so you can copy them)
