@@ -75,7 +75,7 @@
     <string name="navigation_drawer_faq">FAQ</string>
     <string name="navigation_drawer_guide">User Guide</string>
     <string name="navigation_drawer_report_issue">Report issue</string>
-    <string name="navigation_drawer_contact">Contact developer</string>
+    <string name="navigation_drawer_contact">Contact</string>
 
     <string name="account_list_empty">Welcome to EteSync!</string>
     <string name="accounts_global_sync_disabled">System-wide automatic synchronization is disabled</string>
