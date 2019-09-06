@@ -12,7 +12,7 @@
 
         <Preference
             android:key="manage_account"
-            android:title="@string/settings_manage_account"
+            android:title="@string/settings_account_dashboard"
             android:persistent="false"
             android:summary="@string/settings_manage_account_summary" />
 

@@ -250,6 +250,7 @@
     <!-- AccountSettingsActivity -->
     <string name="settings_title">Settings: %s</string>
     <string name="settings_manage_account">Manage Account</string>
+    <string name="settings_account_dashboard">Account Dashboard</string>
     <string name="settings_manage_account_summary">Change your payment info, plan and other account settings</string>
     <string name="settings_encryption">Encryption</string>
     <string name="settings_password">Authentication Password</string>
