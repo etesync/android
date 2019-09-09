@@ -1,0 +1,1 @@
+* Make reporting of SSL issues lax again. It was catching many issues that are not real issues.
