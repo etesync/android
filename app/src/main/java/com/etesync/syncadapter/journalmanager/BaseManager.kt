@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.logging.Level
-import javax.net.ssl.SSLHandshakeException
 
 abstract class BaseManager {
 
@@ -22,10 +21,6 @@ abstract class BaseManager {
             response = client!!.newCall(request).execute()
         } catch (e: IOException) {
             Logger.log.log(Level.SEVERE, "Failed while connecting to server", e)
-            if (e is SSLHandshakeException) {
-                // We don't want to ignore SSLHandshake issues like we do normal IO exceptions
-                throw e
-            }
             throw Exceptions.ServiceUnavailableException("[" + e.javaClass.name + "] " + e.localizedMessage)
         }
 
