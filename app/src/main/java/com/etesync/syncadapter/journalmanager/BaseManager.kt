@@ -7,6 +7,8 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.logging.Level
+import javax.net.ssl.SSLHandshakeException
+import javax.net.ssl.SSLProtocolException
 
 abstract class BaseManager {
 
@@ -20,6 +22,11 @@ abstract class BaseManager {
             Logger.log.fine("Making request for ${request.url()}")
             response = client!!.newCall(request).execute()
         } catch (e: IOException) {
+            if (e is SSLProtocolException) {
+                throw e
+            } else if (e is SSLHandshakeException && e.cause is SSLProtocolException) {
+                throw e
+            }
             Logger.log.log(Level.SEVERE, "Failed while connecting to server", e)
             throw Exceptions.ServiceUnavailableException("[" + e.javaClass.name + "] " + e.localizedMessage)
         }
