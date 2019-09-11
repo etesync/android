@@ -1,0 +1,3 @@
+* Fix SSL errors for old Android clients that don't default to TLSv1.2
+* Update cert4android
+* Report SSLProtocolException issues as errors

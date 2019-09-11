@@ -1,6 +1,11 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.8.2
+* Fix SSL errors for old Android clients that don't default to TLSv1.2
+* Update cert4android
+* Report SSLProtocolException issues as errors
+
 ## Version 1.8.1
 * Make reporting of SSL issues lax again. It was catching many issues that are not real issues.
 
