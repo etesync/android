@@ -24,8 +24,7 @@ import com.etesync.syncadapter.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
-import com.etesync.syncadapter.resource.LocalCollection
-import com.etesync.syncadapter.resource.LocalResource
+import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
@@ -456,14 +455,26 @@ constructor(protected val context: Context, protected val account: Account, prot
                 action = SyncEntry.Actions.CHANGE
             }
 
-            val entry = SyncEntry(local.content, action)
-            val tmp = JournalEntryManager.Entry()
-            tmp.update(crypto, entry.toJson(), previousEntry)
-            previousEntry = tmp
-            localEntries!!.add(previousEntry)
+            try {
+                val entry = SyncEntry(local.content, action)
+                val tmp = JournalEntryManager.Entry()
+                tmp.update(crypto, entry.toJson(), previousEntry)
+                previousEntry = tmp
+                localEntries!!.add(previousEntry)
 
-            if (localEntries!!.size == MAX_PUSH) {
-                return
+                if (localEntries!!.size == MAX_PUSH) {
+                    return
+                }
+            } catch (e: Exception) {
+                Logger.log.warning("Failed creating local entry ${local.uuid}")
+                if (local is LocalContact) {
+                    Logger.log.warning("Contact with title ${local.contact?.displayName}")
+                } else if (local is LocalEvent) {
+                    Logger.log.warning("Event with title ${local.event?.summary}")
+                } else if (local is LocalTask) {
+                    Logger.log.warning("Task with title ${local.task?.summary}")
+                }
+                throw e
             }
         }
     }
