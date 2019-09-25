@@ -1,0 +1,2 @@
+* Improve debug information when failing to create local entries
+* Update ical4android

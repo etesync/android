@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.8.3
+* Improve debug information when failing to create local entries
+* Update ical4android
+
 ## Version 1.8.2
 * Fix SSL errors for old Android clients that don't default to TLSv1.2
 * Update cert4android
