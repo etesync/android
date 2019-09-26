@@ -34,10 +34,57 @@ import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.PermissionsActivity
 import com.etesync.syncadapter.utils.NotificationUtils
 import okhttp3.HttpUrl
+import java.lang.Math.abs
 import java.util.*
 import java.util.logging.Level
 
 //import com.android.vending.billing.IInAppBillingService;
+
+typealias JournalList = List<Pair<JournalManager.Journal, CollectionInfo>>
+
+class CachedJournalFetcher {
+    private val cache: HashMap<String, Pair<Long, JournalList>> = HashMap()
+
+    private fun fetchJournals(journalsManager: JournalManager, settings: AccountSettings, serviceType: CollectionInfo.Type): JournalList {
+        val journals = LinkedList<Pair<JournalManager.Journal, CollectionInfo>>()
+
+        for (journal in journalsManager.list()) {
+            val crypto: Crypto.CryptoManager
+            if (journal.key != null) {
+                crypto = Crypto.CryptoManager(journal.version, settings.keyPair!!, journal.key)
+            } else {
+                crypto = Crypto.CryptoManager(journal.version, settings.password(), journal.uid!!)
+            }
+
+            journal.verify(crypto)
+
+            val info = CollectionInfo.fromJson(journal.getContent(crypto))
+            info.updateFromJournal(journal)
+
+            journals.add(Pair(journal, info))
+        }
+
+        return journals;
+    }
+
+    fun list(journalsManager: JournalManager, settings: AccountSettings, serviceType: CollectionInfo.Type): JournalList {
+        val cacheAge = 5 * 1000 // 5 seconds - it's just a hack for burst fetching
+        val now = System.currentTimeMillis()
+
+        val journals: JournalList
+        synchronized (cache) {
+            val cached = cache.get(settings.account.name)
+            if ((cached != null) && (abs(now - cached.first!!) <= cacheAge)) {
+                journals = cached.second!!
+            } else {
+                journals = fetchJournals(journalsManager, settings, serviceType)
+                cache.set(settings.account.name, Pair(System.currentTimeMillis(), journals))
+            }
+        }
+
+        return journals.filter { it.second?.type == serviceType }
+    }
+}
 
 abstract class SyncAdapterService : Service() {
 
@@ -46,7 +93,6 @@ abstract class SyncAdapterService : Service() {
     override fun onBind(intent: Intent): IBinder? {
         return syncAdapter().syncAdapterBinder
     }
-
 
     abstract class SyncAdapter(context: Context) : AbstractThreadedSyncAdapter(context, false) {
         abstract val syncErrorTitle: Int
@@ -160,27 +206,10 @@ abstract class SyncAdapterService : Service() {
 
                 val journalsManager = JournalManager(httpClient.okHttpClient, HttpUrl.get(settings.uri!!)!!)
 
-                val journals = LinkedList<Pair<JournalManager.Journal, CollectionInfo>>()
-
-                for (journal in journalsManager.list()) {
-                    val crypto: Crypto.CryptoManager
-                    if (journal.key != null) {
-                        crypto = Crypto.CryptoManager(journal.version, settings.keyPair!!, journal.key)
-                    } else {
-                        crypto = Crypto.CryptoManager(journal.version, settings.password(), journal.uid!!)
-                    }
-
-                    journal.verify(crypto)
-
-                    val info = CollectionInfo.fromJson(journal.getContent(crypto))
-                    info.updateFromJournal(journal)
-
-                    if (info.type == serviceType) {
-                        journals.add(Pair(journal, info))
-                    }
-                }
+                var journals = journalFetcher.list(journalsManager, settings, serviceType)
 
                 if (journals.isEmpty()) {
+                    journals = LinkedList()
                     try {
                         val info = CollectionInfo.defaultForServiceType(serviceType)
                         val uid = JournalManager.Journal.genUid()
@@ -231,5 +260,9 @@ abstract class SyncAdapterService : Service() {
                 }
             }
         }
+    }
+
+    companion object {
+        val journalFetcher = CachedJournalFetcher()
     }
 }
