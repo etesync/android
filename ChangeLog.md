@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.8.4
+* Cache concurrent journal fetching (avoid multiple unneeded fetches).
+
 ## Version 1.8.3
 * Improve debug information when failing to create local entries
 * Update ical4android
