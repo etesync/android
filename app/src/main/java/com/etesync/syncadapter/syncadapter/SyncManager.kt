@@ -303,7 +303,15 @@ constructor(protected val context: Context, protected val account: Account, prot
         entry.uid = uid
         entry.content = syncEntry
         entry.journal = journalEntity
-        data.insert(entry)
+        try {
+            data.insert(entry)
+        } catch (e: io.requery.sql.StatementExecutionException) {
+            if (e.cause is java.sql.SQLIntegrityConstraintViolationException) {
+                Logger.log.warning("Tried inserting an existing entry ${uid}")
+            } else {
+                throw e
+            }
+        }
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, Exceptions.HttpException::class, InvalidCalendarException::class, InterruptedException::class)
