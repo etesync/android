@@ -304,7 +304,7 @@
     <string name="create_tasklist_display_name_hint">My Task List</string>
     <string name="install_opentasks">Install OpenTasks</string>
     <string name="edit_collection">Edit collection</string>
-    <string name="create_collection_color">Set the calendar\'s color</string>
+    <string name="create_collection_color">Set the collection\'s color</string>
     <string name="create_collection_creating">Creating collection</string>
     <string name="create_collection_display_name">Display name (title) of this collection:</string>
     <string name="create_collection_display_name_required">Title is required</string>
