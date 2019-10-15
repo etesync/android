@@ -1,0 +1,2 @@
+* Fix the wording for setting the task list's color.
+* Gracefully handle the error case of processing an item that has been processed.
