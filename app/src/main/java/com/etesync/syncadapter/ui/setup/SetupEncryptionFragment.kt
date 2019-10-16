@@ -178,10 +178,7 @@ class SetupEncryptionFragment : DialogFragment() {
         val data = (context!!.applicationContext as App).data
 
         // insert service
-        val serviceEntity = ServiceEntity()
-        serviceEntity.account = accountName
-        serviceEntity.type = serviceType
-        data.upsert(serviceEntity)
+        val serviceEntity = ServiceEntity.fetchOrCreate(data, accountName, serviceType)
 
         // insert collections
         for (collection in info.collections.values) {
