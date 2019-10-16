@@ -28,8 +28,6 @@ import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
-import io.requery.Persistable
-import io.requery.sql.EntityDataStore
 import org.jetbrains.anko.defaultSharedPreferences
 import java.io.Closeable
 import java.io.FileNotFoundException
@@ -54,7 +52,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     private val crypto: Crypto.CryptoManager
 
-    private val data: EntityDataStore<Persistable>
+    private val data: MyEntityDataStore
 
     /**
      * remote CTag (uuid of the last entry on the server). We update it when we fetch/push and save when everything works.

@@ -51,13 +51,13 @@ class App : Application() {
      * `@Provides @Singleton`.
      */
     // override onUpgrade to handle migrating to a new version
-    val data: EntityDataStore<Persistable>
+    val data: MyEntityDataStore
         get() = initDataStore()
 
-    fun initDataStore(): EntityDataStore<Persistable> {
+    fun initDataStore(): MyEntityDataStore {
         val source = MyDatabaseSource(this, Models.DEFAULT, 4)
         val configuration = source.configuration
-        return EntityDataStore(configuration)
+        return MyEntityDataStore(configuration)
     }
 
     @SuppressLint("HardwareIds")

@@ -152,6 +152,7 @@ dependencies {
     implementation "io.requery:requery-android:$requeryVersion"
     implementation "io.requery:requery-kotlin:$requeryVersion"
     kapt "io.requery:requery-processor:$requeryVersion"
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     def spongyCastleVersion = "1.54.0.0"
     implementation "com.madgag.spongycastle:core:$spongyCastleVersion"

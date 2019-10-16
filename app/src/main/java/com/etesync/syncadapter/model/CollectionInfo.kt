@@ -65,7 +65,7 @@ class CollectionInfo : Serializable {
         return service == type.toString()
     }
 
-    fun getServiceEntity(data: EntityDataStore<Persistable>): ServiceEntity {
+    fun getServiceEntity(data: MyEntityDataStore): ServiceEntity {
         return data.findByKey(ServiceEntity::class.java, serviceID)
     }
 

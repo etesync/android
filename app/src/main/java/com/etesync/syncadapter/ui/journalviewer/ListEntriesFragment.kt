@@ -24,15 +24,13 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.ui.JournalItemActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
-import io.requery.Persistable
-import io.requery.sql.EntityDataStore
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
 
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
-    private lateinit var data: EntityDataStore<Persistable>
+    private lateinit var data: MyEntityDataStore
     private lateinit var account: Account
     private lateinit var info: CollectionInfo
     private var journalEntity: JournalEntity? = null

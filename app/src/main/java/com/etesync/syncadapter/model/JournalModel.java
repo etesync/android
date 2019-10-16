@@ -60,14 +60,14 @@ public class JournalModel {
             this.deleted = false;
         }
 
-        public Journal(EntityDataStore<Persistable> data, CollectionInfo info) {
+        public Journal(MyEntityDataStore data, CollectionInfo info) {
             this();
             this.info = info;
             this.uid = info.getUid();
             this.serviceModel = info.getServiceEntity(data);
         }
 
-        public static List<JournalEntity> getJournals(EntityDataStore<Persistable> data, ServiceEntity serviceEntity) {
+        public static List<JournalEntity> getJournals(MyEntityDataStore data, ServiceEntity serviceEntity) {
             List<JournalEntity> ret = data.select(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(serviceEntity).and(JournalEntity.DELETED.eq(false))).get().toList();
             for (JournalEntity journal : ret) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
@@ -76,7 +76,7 @@ public class JournalModel {
             return ret;
         }
 
-        public static JournalEntity fetch(EntityDataStore<Persistable> data, ServiceEntity serviceEntity, String uid) {
+        public static JournalEntity fetch(MyEntityDataStore data, ServiceEntity serviceEntity, String uid) {
             JournalEntity ret = data.select(JournalEntity.class).where(JournalEntity.SERVICE_MODEL.eq(serviceEntity).and(JournalEntity.UID.eq(uid))).limit(1).get().firstOrNull();
             if (ret != null) {
                 // FIXME: For some reason this isn't always being called, manually do it here.
@@ -85,7 +85,7 @@ public class JournalModel {
             return ret;
         }
 
-        public static JournalEntity fetchOrCreate(EntityDataStore<Persistable> data, CollectionInfo collection) {
+        public static JournalEntity fetchOrCreate(MyEntityDataStore data, CollectionInfo collection) {
             JournalEntity journalEntity = fetch(data, collection.getServiceEntity(data), collection.getUid());
             if (journalEntity == null) {
                 journalEntity = new JournalEntity(data, collection);
@@ -95,7 +95,7 @@ public class JournalModel {
             return journalEntity;
         }
 
-        public String getLastUid(EntityDataStore<Persistable> data) {
+        public String getLastUid(MyEntityDataStore data) {
             EntryEntity last = data.select(EntryEntity.class).where(EntryEntity.JOURNAL.eq(this)).orderBy(EntryEntity.ID.desc()).limit(1).get().firstOrNull();
             if (last != null) {
                 return last.getUid();
@@ -144,7 +144,7 @@ public class JournalModel {
         @Index(value = "service_unique_together")
         CollectionInfo.Type type;
 
-        public static ServiceEntity fetchOrCreate(EntityDataStore<Persistable> data, String account, CollectionInfo.Type type) {
+        public static ServiceEntity fetchOrCreate(MyEntityDataStore data, String account, CollectionInfo.Type type) {
             ServiceEntity service = data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account).and(ServiceEntity.TYPE.eq(type))).limit(1).get().firstOrNull();
             if (service == null) {
                 // If our first time, create service and a journal
