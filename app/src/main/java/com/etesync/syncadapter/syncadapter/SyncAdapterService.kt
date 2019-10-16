@@ -229,7 +229,7 @@ abstract class SyncAdapterService : Service() {
 
             private fun saveCollections(journals: Iterable<Pair<JournalManager.Journal, CollectionInfo>>) {
                 val data = (context.applicationContext as App).data
-                val service = JournalModel.Service.fetch(data, account.name, serviceType)
+                val service = JournalModel.Service.fetchOrCreate(data, account.name, serviceType)
 
                 val existing = HashMap<String, JournalEntity>()
                 for (journalEntity in JournalEntity.getJournals(data, service)) {

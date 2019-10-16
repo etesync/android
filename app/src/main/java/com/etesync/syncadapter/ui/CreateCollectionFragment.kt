@@ -95,7 +95,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                     CollectionInfo.Type.TASKS -> authority = TaskProvider.ProviderName.OpenTasks.authority
                 }
 
-                val serviceEntity = JournalModel.Service.fetch(data, account.name, info.type)
+                val serviceEntity = JournalModel.Service.fetchOrCreate(data, account.name, info.type)
                 info.serviceID = serviceEntity.id
 
                 val settings = AccountSettings(context, account)

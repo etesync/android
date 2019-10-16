@@ -74,7 +74,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
         private fun updateLocalAddressBooks(provider: ContentProviderClient, account: Account) {
             val context = context
             val data = (getContext().applicationContext as App).data
-            val service = JournalModel.Service.fetch(data, account.name, CollectionInfo.Type.ADDRESS_BOOK)
+            val service = JournalModel.Service.fetchOrCreate(data, account.name, CollectionInfo.Type.ADDRESS_BOOK)
 
             val remote = HashMap<String, JournalEntity>()
             val remoteJournals = JournalEntity.getJournals(data, service)

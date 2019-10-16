@@ -59,7 +59,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
         @Throws(CalendarStorageException::class)
         private fun updateLocalCalendars(provider: ContentProviderClient, account: Account, settings: AccountSettings) {
             val data = (context.applicationContext as App).data
-            val service = JournalModel.Service.fetch(data, account.name, CollectionInfo.Type.CALENDAR)
+            val service = JournalModel.Service.fetchOrCreate(data, account.name, CollectionInfo.Type.CALENDAR)
 
             val remote = HashMap<String, JournalEntity>()
             val remoteJournals = JournalEntity.getJournals(data, service)

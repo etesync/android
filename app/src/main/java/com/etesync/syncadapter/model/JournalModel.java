@@ -144,7 +144,7 @@ public class JournalModel {
         @Index(value = "service_unique_together")
         CollectionInfo.Type type;
 
-        public static ServiceEntity fetch(EntityDataStore<Persistable> data, String account, CollectionInfo.Type type) {
+        public static ServiceEntity fetchOrCreate(EntityDataStore<Persistable> data, String account, CollectionInfo.Type type) {
             ServiceEntity service = data.select(ServiceEntity.class).where(ServiceEntity.ACCOUNT.eq(account).and(ServiceEntity.TYPE.eq(type))).limit(1).get().firstOrNull();
             if (service == null) {
                 // If our first time, create service and a journal

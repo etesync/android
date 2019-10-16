@@ -89,7 +89,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
         data = (context.applicationContext as App).data
-        val serviceEntity = JournalModel.Service.fetch(data, accountName, serviceType)
+        val serviceEntity = JournalModel.Service.fetchOrCreate(data, accountName, serviceType)
         info = JournalEntity.fetch(data, serviceEntity, journalUid)!!.info
 
         // dismiss previous error notifications

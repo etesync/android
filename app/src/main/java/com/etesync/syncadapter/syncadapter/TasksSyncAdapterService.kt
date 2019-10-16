@@ -78,7 +78,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
 
         private fun updateLocalTaskLists(provider: TaskProvider, account: Account, settings: AccountSettings) {
             val data = (context.applicationContext as App).data
-            var service = JournalModel.Service.fetch(data, account.name, CollectionInfo.Type.TASKS)
+            var service = JournalModel.Service.fetchOrCreate(data, account.name, CollectionInfo.Type.TASKS)
 
             val remote = HashMap<String, JournalEntity>()
             val remoteJournals = JournalEntity.getJournals(data, service)
