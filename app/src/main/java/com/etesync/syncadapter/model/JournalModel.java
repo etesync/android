@@ -150,7 +150,7 @@ public class JournalModel {
                 // If our first time, create service and a journal
                 ServiceEntity serviceEntity = new ServiceEntity();
                 serviceEntity.account = account;
-                serviceEntity.type = CollectionInfo.Type.TASKS;
+                serviceEntity.type = type;
                 service = data.insert(serviceEntity);
             }
             return service;
