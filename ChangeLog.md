@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.0
+* Fix database lock issues that some users were experiencing
+* Fix a rare issue with setting up database
+
 ## Version 1.8.5
 * Fix the wording for setting the task list's color.
 * Gracefully handle the error case of processing an item that has been processed.

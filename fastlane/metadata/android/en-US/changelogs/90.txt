@@ -1,0 +1,2 @@
+* Fix database lock issues that some users were experiencing
+* Fix a rare issue with setting up database
