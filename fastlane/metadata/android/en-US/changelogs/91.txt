@@ -1,0 +1,2 @@
+* Translation: add Norwegian Bokmål (Marius Lindvall)
+* Update ical4android
