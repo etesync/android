@@ -11,10 +11,7 @@
 
     <!-- common strings -->
     <string name="app_name">EteSync</string>
-    <string name="account_type" translatable="false">com.etesync.syncadapter</string>
-    <string name="account_type_address_book" translatable="false">com.etesync.syncadapter.address_book</string>
     <string name="account_title_address_book">EteSync adressebok</string>
-    <string name="address_books_authority" translatable="false">com.etesync.syncadapter.addressbooks</string>
     <string name="address_books_authority_title">Adressebøker</string>
     <string name="help">Hjelp</string>
     <string name="manage_accounts">Behandle kontoer</string>
@@ -264,16 +261,6 @@
     <string name="settings_sync_summary_manually">Kun manuelt</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s og umiddelbart ved lokale endringer</string>
     <string name="settings_sync_summary_not_available">Ikke tilgjengelig</string>
-    <string-array name="settings_sync_interval_seconds" translateable="false">
-        <item>-1</item>
-        <item>300</item>
-        <item>600</item>
-        <item>900</item>
-        <item>3600</item>
-        <item>7200</item>
-        <item>14400</item>
-        <item>86400</item>
-    </string-array>
     <string-array name="settings_sync_interval_names">
         <item>Bare manuelt</item>
         <item>Hvert 5. minutt</item>
@@ -329,7 +316,6 @@
     <string name="exception_show_details">Vis detaljer</string>
 
     <!-- sync errors and DebugInfoActivity -->
-    <string name="authority_log_provider" translatable="false">com.etesync.syncadapter.log</string>
     <string name="debug_info_title">Debuginformasjon</string>
     <string name="debug_info_more_data_shared">Når du klikker på del vil epost-appen åpne med dataene under, i tillegg til noe ekstra debuginformasjon, vedlagt. Det kan kanskje inneholde sensitiv informasjon, så vennligst se igjennom dataene før du sender.</string>
     <string name="sync_error_permissions">EteSync-tillatelser</string>
