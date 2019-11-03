@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.2
+* Fix f-droid build
+
 ## Version 1.9.1
 * Translation: add Norwegian Bokmål (Marius Lindvall)
 * Update ical4android
