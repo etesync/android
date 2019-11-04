@@ -39,9 +39,9 @@ android {
              * appDebugRemoteUrl="http://localserver:8080/"
              */
             if (project.hasProperty('appDebugRemoteUrl')) {
-                 buildConfigField 'String', 'DEBUG_REMOTE_URL', appDebugRemoteUrl
+                buildConfigField 'String', 'DEBUG_REMOTE_URL', appDebugRemoteUrl
             } else {
-                 buildConfigField 'String', 'DEBUG_REMOTE_URL', 'null'
+                buildConfigField 'String', 'DEBUG_REMOTE_URL', 'null'
             }
         }
         release {
@@ -103,20 +103,19 @@ android {
      */
     if (project.hasProperty('signingStoreLocation') &&
             project.hasProperty('signingKeyAlias')) {
-         println "Found sign properties in gradle.properties! Signing build…"
+        println "Found sign properties in gradle.properties! Signing build…"
 
-         signingConfigs {
-              release {
-                   storeFile file(signingStoreLocation)
-                   storePassword System.getenv("KSTOREPWD")
-                   keyAlias signingKeyAlias
-                   keyPassword System.getenv("KSTOREPWD")
-
-              }
-         }
-         buildTypes.release.signingConfig = signingConfigs.release
+        signingConfigs {
+            release {
+                storeFile file(signingStoreLocation)
+                storePassword System.getenv("KSTOREPWD")
+                keyAlias signingKeyAlias
+                keyPassword System.getenv("KSTOREPWD")
+            }
+        }
+        buildTypes.release.signingConfig = signingConfigs.release
     } else {
-         buildTypes.release.signingConfig = null
+        buildTypes.release.signingConfig = null
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
