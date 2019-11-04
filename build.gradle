@@ -33,7 +33,7 @@ allprojects {
         jcenter()
         mavenCentral()
         maven() {
-            url 'http://oss.sonatype.org/content/repositories/snapshots'
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
         }
         google()
     }
