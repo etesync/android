@@ -1,0 +1,3 @@
+* Fix issue with temporarily disappearing tasks/events
+* Add autofill hints in the login screen*
+* Update gradle

@@ -1,6 +1,11 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.3
+* Fix issue with temporarily disappearing tasks/events
+* Add autofill hints in the login screen*
+* Update gradle
+
 ## Version 1.9.2
 * Fix f-droid build
 
