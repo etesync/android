@@ -51,8 +51,7 @@ class App : Application() {
      * `@Provides @Singleton`.
      */
     // override onUpgrade to handle migrating to a new version
-    val data: MyEntityDataStore
-        get() = initDataStore()
+    val data = initDataStore()
 
     fun initDataStore(): MyEntityDataStore {
         val source = MyDatabaseSource(this, Models.DEFAULT, 4)
