@@ -528,9 +528,15 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 if (allDay) {
                     // For multi-day allday events or single-day all-day events that are not
                     // today or tomorrow, use framework formatter.
+
+                    // We need to remove 24hrs because full day events are from the start of a day until the start of the next
+                    var adjustedEnd = endMillis - 24 * 60 * 60 * 1000;
+                    if (adjustedEnd < startMillis) {
+                        adjustedEnd = startMillis;
+                    }
                     val f = Formatter(StringBuilder(50), Locale.getDefault())
                     datetimeString = DateUtils.formatDateRange(context, f, startMillis,
-                            endMillis, flagsDate).toString()
+                            adjustedEnd, flagsDate).toString()
                 } else {
                     // For multiday events, shorten day/month names.
                     // Example format: "Fri Apr 6, 5:00pm - Sun, Apr 8, 6:00pm"
