@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.5
+* Fix issue with journal preview showing the wrong dates.
+* Revert the fixes in 1.9.4 because they were not actually needed.
+
 ## Version 1.9.4
 * Hopefully really fix issue with temporarily disappearing tasks/events
 

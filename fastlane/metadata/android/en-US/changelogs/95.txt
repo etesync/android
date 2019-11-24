@@ -1,0 +1,2 @@
+* Fix issue with journal preview showing the wrong dates.
+* Revert the fixes in 1.9.4 because they were not actually needed.
