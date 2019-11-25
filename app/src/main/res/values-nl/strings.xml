@@ -79,20 +79,8 @@
   <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + meteen na wijziging</string>
   <string name="settings_sync_summary_not_available">Niet beschikbaar</string>
   <string name="settings_sync_interval_calendars">Agenda\'s verversen</string>
-  <string-array name="settings_sync_interval_seconds">
-    <item>-1</item>
-    <item>300</item>
-    <item>600</item>
-    <item>900</item>
-    <item>3600</item>
-    <item>7200</item>
-    <item>14400</item>
-    <item>86400</item>
-  </string-array>
   <string-array name="settings_sync_interval_names">
     <item>Alleen handmatig</item>
-    <item>Elke 5 minuten</item>
-    <item>Elke 10 minuten</item>
     <item>Elke 15 minuten</item>
     <item>Elk uur</item>
     <item>Elke 2 uur</item>

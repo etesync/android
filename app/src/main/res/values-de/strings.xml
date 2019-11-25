@@ -136,8 +136,6 @@
   <string name="settings_sync_interval_calendars">Häufigkeit der Kalender-Synchronisation</string>
   <string-array name="settings_sync_interval_names">
     <item>Nur mauell manually</item>
-    <item>Alle 5 Minuten</item>
-    <item>Alle 10 Minuten</item>
     <item>Alle 15 Minuten</item>
     <item>Jede Stunde</item>
     <item>Alle 2 Stunde</item>

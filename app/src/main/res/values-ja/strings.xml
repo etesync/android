@@ -87,8 +87,6 @@
   <string name="settings_sync_interval_calendars">カレンダー同期間隔</string>
   <string-array name="settings_sync_interval_names">
     <item>手動のみ</item>
-    <item>5 分ごと</item>
-    <item>10 分ごと</item>
     <item>15 分ごと</item>
     <item>1 時間ごと</item>
     <item>2 時間ごと</item>
