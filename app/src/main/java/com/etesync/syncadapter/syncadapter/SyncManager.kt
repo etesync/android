@@ -33,8 +33,10 @@ import java.io.Closeable
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.locks.ReentrantLock
 import java.util.logging.Level
 import javax.net.ssl.SSLHandshakeException
+import kotlin.concurrent.withLock
 
 abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
 constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String): Closeable {
@@ -393,8 +395,11 @@ constructor(protected val context: Context, protected val account: Account, prot
         // FIXME: Deal with failure (someone else uploaded before we go here)
         try {
             if (!localEntries!!.isEmpty()) {
-                val entries = localEntries
-                journal!!.create(entries!!, remoteCTag)
+                val entries = localEntries!!
+                pushLock.withLock {
+                    journal!!.create(entries, remoteCTag)
+                }
+
                 // Persist the entries after they've been pushed
                 for (entry in entries) {
                     val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
@@ -577,5 +582,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     companion object {
         private val MAX_FETCH = 50
         private val MAX_PUSH = 30
+
+        private val pushLock = ReentrantLock()
     }
 }
