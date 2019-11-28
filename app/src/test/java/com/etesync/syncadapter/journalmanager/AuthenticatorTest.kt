@@ -24,7 +24,7 @@ class AuthenticatorTest {
     @Before
     @Throws(IOException::class)
     fun setUp() {
-        httpClient = HttpClient.create(null)
+        httpClient = HttpClient.Builder().build().okHttpClient
         remote = HttpUrl.parse("http://localhost:8000") // FIXME: hardcode for now, should make configureable
     }
 

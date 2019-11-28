@@ -28,12 +28,12 @@ class ServiceTest {
     @Before
     @Throws(Exception::class)
     fun setUp() {
-        httpClient = HttpClient.create(null)
+        httpClient = HttpClient.Builder().build().okHttpClient
         remote = HttpUrl.parse("http://localhost:8000") // FIXME: hardcode for now, should make configureable
         val journalAuthenticator = JournalAuthenticator(httpClient!!, remote!!)
         authToken = journalAuthenticator.getAuthToken(Helpers.USER, Helpers.PASSWORD)
 
-        httpClient = HttpClient.create(null, App.log, null, authToken!!)
+        httpClient = HttpClient.Builder(null, null, authToken!!).build().okHttpClient
 
         /* Reset */
         val request = Request.Builder()

@@ -115,7 +115,7 @@ class HttpClient private constructor(
             }
         }
 
-        constructor(context: Context, host: String?, authToken: String): this(context) {
+        constructor(context: Context?, host: String?, authToken: String): this(context) {
             addAuthentication(host, authToken)
         }
 
