@@ -1,0 +1,2 @@
+* Removed the deprecated 5 and 10 minutes sync intervals from the sync settings (deprecated by Android)
+* Adjusted the sync code to make it more defensive against potential errors (more locking)

@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.6
+* Removed the deprecated 5 and 10 minutes sync intervals from the sync settings (deprecated by Android)
+* Adjusted the sync code to make it more defensive against potential errors (more locking)
+
 ## Version 1.9.5
 * Fix issue with journal preview showing the wrong dates.
 * Revert the fixes in 1.9.4 because they were not actually needed.
