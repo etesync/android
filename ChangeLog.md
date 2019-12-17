@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.7
+* Re-apply the changes in 1.9.4 because some people were still reporting about temporarily disappearing tasks/events.
+
 ## Version 1.9.6
 * Removed the deprecated 5 and 10 minutes sync intervals from the sync settings (deprecated by Android)
 * Adjusted the sync code to make it more defensive against potential errors (more locking)

@@ -1,0 +1,1 @@
+* Re-apply the changes in 1.9.4 because some people were still reporting about temporarily disappearing tasks/events.
