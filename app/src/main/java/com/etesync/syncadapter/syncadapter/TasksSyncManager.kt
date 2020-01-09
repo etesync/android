@@ -71,7 +71,7 @@ class TasksSyncManager(
     override fun processSyncEntryImpl(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
 
-        val tasks = Task.fromReader(inputReader)
+        val tasks = Task.tasksFromReader(inputReader)
         if (tasks.size == 0) {
             Logger.log.warning("Received VCard without data, ignoring")
             return

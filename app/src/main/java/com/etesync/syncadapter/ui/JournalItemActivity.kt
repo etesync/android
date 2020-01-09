@@ -106,7 +106,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             CollectionInfo.Type.CALENDAR -> {
                 val provider = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
                 val localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)!!
-                val event = Event.fromReader(StringReader(syncEntry.content))[0]
+                val event = Event.eventsFromReader(StringReader(syncEntry.content))[0]
                 var localEvent = localCalendar.findByUid(event.uid!!)
                 if (localEvent != null) {
                     localEvent.updateAsDirty(event)
@@ -118,7 +118,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             CollectionInfo.Type.TASKS -> {
                 val provider = TaskProvider.acquire(this, TaskProvider.ProviderName.OpenTasks)!!
                 val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
-                val task = Task.fromReader(StringReader(syncEntry.content))[0]
+                val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
                 var localTask = localTaskList.findByUid(task.uid!!)
                 if (localTask != null) {
                     localTask.updateAsDirty(task)
@@ -245,7 +245,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 val inputReader = StringReader(syncEntry.content)
 
                 try {
-                    event = Event.fromReader(inputReader, null)[0]
+                    event = Event.eventsFromReader(inputReader, null)[0]
                 } catch (e: InvalidCalendarException) {
                     e.printStackTrace()
                 } catch (e: IOException) {
@@ -316,7 +316,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 val inputReader = StringReader(syncEntry.content)
 
                 try {
-                    task = Task.fromReader(inputReader)[0]
+                    task = Task.tasksFromReader(inputReader)[0]
                 } catch (e: InvalidCalendarException) {
                     e.printStackTrace()
                 } catch (e: IOException) {

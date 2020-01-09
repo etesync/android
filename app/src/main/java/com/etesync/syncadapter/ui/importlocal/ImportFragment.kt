@@ -216,7 +216,7 @@ class ImportFragment : DialogFragment() {
                 val importReader = InputStreamReader(inputStream)
 
                 if (info.type == CollectionInfo.Type.CALENDAR) {
-                    val events = Event.fromReader(importReader, null)
+                    val events = Event.eventsFromReader(importReader, null)
                     importReader.close()
 
                     if (events.isEmpty()) {
@@ -269,7 +269,7 @@ class ImportFragment : DialogFragment() {
                         entryProcessed()
                     }
                 } else if (info.type == CollectionInfo.Type.TASKS) {
-                    val tasks = Task.fromReader(importReader)
+                    val tasks = Task.tasksFromReader(importReader)
                     importReader.close()
 
                     if (tasks.isEmpty()) {

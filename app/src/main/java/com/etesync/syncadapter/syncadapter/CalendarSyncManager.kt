@@ -81,7 +81,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     override fun processSyncEntryImpl(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
 
-        val events = Event.fromReader(inputReader)
+        val events = Event.eventsFromReader(inputReader)
         if (events.size == 0) {
             Logger.log.warning("Received VCard without data, ignoring")
             return
