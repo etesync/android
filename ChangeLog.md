@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.8
+* Upgrade ical4android dependency
+
 ## Version 1.9.7
 * Re-apply the changes in 1.9.4 because some people were still reporting about temporarily disappearing tasks/events.
 
