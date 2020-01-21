@@ -197,6 +197,12 @@
   <string name="sync_phase_post_processing">Nachbearbeitung</string>
   <string name="sync_error_unauthorized">Authentifizierung fehlgeschlagen</string>
   <string name="sync_error_user_inactive">Nutzer ist inaktiv</string>
+  
+  <!-- Calendar invites -->
+  <string name="sync_calendar_attendees_notification_content">Einladungen an Gäste versenden?</string>
+  <string name="calendar_attendees_send_email_action">Versende Einladungen</string>
+  <string name="sync_calendar_attendees_email_subject" formatted="false">Einladung: %s @ %s</string>
+  <string name="sync_calendar_attendees_email_content" formatted="false">Sie wurden zu folgender Veranstaltung eingeladen:\n\n%s\nWann: %s\nWo: %s\nTeilnehmer: %s\n\n--\nGesendet mit EteSync - sichere, Ende-zu-Ende verschlüsselte und private Datensynchronisation.\nErhältlich unter https://www.EteSync.com</string>
 
   <!-- cert4android -->
   <string name="certificate_notification_connection_security">EteSync: Verbingungs-Sicherheit</string>
