@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.9.9
+* Translation: translate calendar invitation emails to German
+
 ## Version 1.9.8
 * Upgrade ical4android dependency
 
