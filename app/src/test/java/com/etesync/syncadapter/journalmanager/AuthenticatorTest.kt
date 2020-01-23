@@ -39,6 +39,10 @@ class AuthenticatorTest {
         val journalAuthenticator = JournalAuthenticator(httpClient!!, remote!!)
         val authToken = journalAuthenticator.getAuthToken(Helpers.USER, Helpers.PASSWORD)
         assertNotEquals(authToken!!.length.toLong(), 0)
+
+        val httpClient2 = HttpClient.Builder(null, null, authToken).build().okHttpClient
+        val journalAuthenticator2 = JournalAuthenticator(httpClient2!!, remote!!)
+        journalAuthenticator2.invalidateAuthToken(authToken)
     }
 
     @Test(expected = Exceptions.UnauthorizedException::class)
