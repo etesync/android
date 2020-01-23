@@ -29,6 +29,8 @@ import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.journalmanager.Crypto
+import com.etesync.syncadapter.journalmanager.Exceptions
+import com.etesync.syncadapter.journalmanager.JournalAuthenticator
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -41,6 +43,8 @@ import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.etesync.syncadapter.utils.packageInstalled
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.HttpUrl
+import org.jetbrains.anko.doAsync
 import tourguide.tourguide.ToolTip
 import java.util.logging.Level
 
@@ -412,6 +416,20 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
     private fun deleteAccount() {
         val accountManager = AccountManager.get(this)
+        val settings = AccountSettings(this@AccountActivity, account)
+        val authToken = settings.authToken
+        val principal = HttpUrl.get(settings.uri!!)
+
+        doAsync {
+            try {
+                val httpClient = HttpClient.Builder(this@AccountActivity, null, authToken).build().okHttpClient
+                val journalAuthenticator = JournalAuthenticator(httpClient, principal!!)
+                journalAuthenticator.invalidateAuthToken(authToken)
+            } catch (e: Exceptions.HttpException) {
+                // Ignore failures for now
+                Logger.log.warning(e.toString())
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= 22)
             accountManager.removeAccount(account, this, { future ->
