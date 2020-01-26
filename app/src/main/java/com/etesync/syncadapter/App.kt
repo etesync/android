@@ -210,6 +210,8 @@ class App : Application() {
             val dbHelper = ServiceDB.OpenHelper(this)
 
             migrateServices(dbHelper)
+
+            dbHelper.close()
         }
     }
 

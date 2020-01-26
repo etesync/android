@@ -107,6 +107,8 @@ class HttpClient private constructor(
                 //if (BuildConfig.customCerts)
                     customCertManager(CustomCertManager(context, true,
                             !(settings.getBoolean(App.DISTRUST_SYSTEM_CERTIFICATES,false)), true))
+
+                dbHelper.close()
             }
 
             // use account settings for authentication
