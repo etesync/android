@@ -106,10 +106,5 @@ class CollectionInfo : Serializable {
         fun fromJson(json: String): CollectionInfo {
             return GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json, CollectionInfo::class.java)
         }
-
-        private fun getAsBooleanOrNull(values: ContentValues, field: String): Boolean? {
-            val i = values.getAsInteger(field)
-            return if (i == null) null else i != 0
-        }
     }
 }
