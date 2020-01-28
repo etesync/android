@@ -18,9 +18,9 @@ import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.Exceptions
+import com.etesync.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
 import com.etesync.syncadapter.model.SyncEntry.Actions.ADD

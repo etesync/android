@@ -23,9 +23,9 @@ import androidx.core.util.Pair
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.journalmanager.JournalManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.Exceptions
+import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -51,7 +51,7 @@ class CachedJournalFetcher {
         for (journal in journalsManager.list()) {
             val crypto: Crypto.CryptoManager
             if (journal.key != null) {
-                crypto = Crypto.CryptoManager(journal.version, settings.keyPair!!, journal.key)
+                crypto = Crypto.CryptoManager(journal.version, settings.keyPair!!, journal.key!!)
             } else {
                 crypto = Crypto.CryptoManager(journal.version, settings.password(), journal.uid!!)
             }

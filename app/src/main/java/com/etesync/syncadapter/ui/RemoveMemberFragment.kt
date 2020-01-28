@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.*
-import com.etesync.syncadapter.journalmanager.JournalManager
+import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
 

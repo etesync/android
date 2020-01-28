@@ -10,13 +10,12 @@ package com.etesync.syncadapter.ui
 
 import android.accounts.Account
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.Exceptions.HttpException
+import com.etesync.journalmanager.Exceptions.HttpException
 import java.io.IOException
 
 class ExceptionInfoFragment : DialogFragment() {

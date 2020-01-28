@@ -133,6 +133,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
+    implementation "com.etesync:journalmanager:1.0.1"
 
     def acraVersion = '5.3.0'
     implementation "ch.acra:acra-mail:$acraVersion"
@@ -156,10 +157,6 @@ dependencies {
     implementation "io.requery:requery-kotlin:$requeryVersion"
     kapt "io.requery:requery-processor:$requeryVersion"
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-
-    def spongyCastleVersion = "1.54.0.0"
-    implementation "com.madgag.spongycastle:core:$spongyCastleVersion"
-    implementation "com.madgag.spongycastle:prov:$spongyCastleVersion"
 
     def okhttp3Version = "3.12.1"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"

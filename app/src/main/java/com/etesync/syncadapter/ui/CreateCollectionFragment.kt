@@ -21,9 +21,9 @@ import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.journalmanager.JournalManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.Exceptions
+import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel

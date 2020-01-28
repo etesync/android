@@ -12,9 +12,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.*
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.JournalManager
-import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.JournalManager
+import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import okhttp3.HttpUrl

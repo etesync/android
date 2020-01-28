@@ -19,7 +19,7 @@ import android.os.Build
 import android.os.Bundle
 import at.bitfire.vcard4android.ContactsStorageException
 import at.bitfire.vcard4android.GroupMethod
-import com.etesync.syncadapter.journalmanager.Crypto
+import com.etesync.journalmanager.Crypto
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.utils.Base64
 import java.net.URI

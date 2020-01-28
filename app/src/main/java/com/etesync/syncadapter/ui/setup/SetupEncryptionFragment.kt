@@ -22,9 +22,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.Exceptions
+import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity

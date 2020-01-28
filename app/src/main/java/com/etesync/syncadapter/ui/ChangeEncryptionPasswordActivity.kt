@@ -18,9 +18,9 @@ import androidx.appcompat.app.AlertDialog
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.JournalManager
-import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.JournalManager
+import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.google.android.material.textfield.TextInputLayout
@@ -84,7 +84,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
                 Logger.log.info("Finished deriving new key")
 
                 val userInfoContent = userInfo.getContent(cryptoManager)!!
-                cryptoManager = Crypto.CryptoManager(userInfo.version.toInt(), new_key, "userInfo")
+                cryptoManager = Crypto.CryptoManager(userInfo.version!!.toInt(), new_key, "userInfo")
                 userInfo.setContent(cryptoManager, userInfoContent)
 
                 Logger.log.info("Fetching journal list")

@@ -16,7 +16,7 @@ import at.bitfire.ical4android.Task
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.SyncEntry

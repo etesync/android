@@ -1,8 +1,8 @@
 package com.etesync.syncadapter.model
 
 import com.etesync.syncadapter.GsonHelper
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.JournalEntryManager
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.JournalEntryManager
 
 import java.io.Serializable
 

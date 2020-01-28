@@ -9,9 +9,9 @@ package com.etesync.syncadapter.ui.setup
 
 import android.content.Context
 import com.etesync.syncadapter.HttpClient
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.Exceptions
-import com.etesync.syncadapter.journalmanager.JournalAuthenticator
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.Exceptions
+import com.etesync.journalmanager.JournalAuthenticator
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl

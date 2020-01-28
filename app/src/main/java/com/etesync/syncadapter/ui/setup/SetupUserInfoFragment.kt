@@ -13,9 +13,9 @@ import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.InvalidAccountException
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.journalmanager.Constants
-import com.etesync.syncadapter.journalmanager.Crypto
-import com.etesync.syncadapter.journalmanager.UserInfoManager
+import com.etesync.journalmanager.Constants
+import com.etesync.journalmanager.Crypto
+import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.log.Logger
 import okhttp3.HttpUrl
 

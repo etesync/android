@@ -28,7 +28,7 @@ import androidx.core.content.ContextCompat
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.journalmanager.Exceptions.HttpException
+import com.etesync.journalmanager.Exceptions.HttpException
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.EntryEntity
 import com.etesync.syncadapter.model.JournalEntity
