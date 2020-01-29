@@ -43,13 +43,13 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
     }
 
     override fun importAccount() {
-        if (info.type == CollectionInfo.Type.CALENDAR) {
+        if (info.enumType == CollectionInfo.Type.CALENDAR) {
             supportFragmentManager.beginTransaction()
                     .replace(android.R.id.content,
                             LocalCalendarImportFragment.newInstance(account, info))
                     .addToBackStack(LocalCalendarImportFragment::class.java.name)
                     .commit()
-        } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
+        } else if (info.enumType == CollectionInfo.Type.ADDRESS_BOOK) {
             supportFragmentManager.beginTransaction()
                     .replace(android.R.id.content,
                             LocalContactImportFragment.newInstance(account, info))
@@ -144,7 +144,7 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
             text.setText(R.string.import_button_local)
             card.setOnClickListener { mSelectImportMethod!!.importAccount() }
 
-            if ((activity as ImportActivity).info.type == CollectionInfo.Type.TASKS) {
+            if ((activity as ImportActivity).info.enumType == CollectionInfo.Type.TASKS) {
                 card.visibility = View.GONE
             }
 

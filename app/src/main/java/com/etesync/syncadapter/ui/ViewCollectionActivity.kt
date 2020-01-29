@@ -60,7 +60,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
         isOwner = journalEntity!!.isOwner(account.name)
 
         val colorSquare = findViewById<View>(R.id.color)
-        when (info.type) {
+        when (info.enumType) {
             CollectionInfo.Type.CALENDAR -> {
                 colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
             }
@@ -176,7 +176,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             entryCount = data.count(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value()
             var count: Long = -1
 
-            when (info.type) {
+            when (info.enumType) {
                 CollectionInfo.Type.CALENDAR -> {
                     try {
                         val providerClient = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)
@@ -237,7 +237,7 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             if (result == null) {
                 stats.text = "Stats loading error."
             } else {
-                when (info.type) {
+                when (info.enumType) {
                     CollectionInfo.Type.CALENDAR -> {
                         stats.text = String.format(Locale.getDefault(), "Events: %d, Journal entries: %d",
                                 result, entryCount)

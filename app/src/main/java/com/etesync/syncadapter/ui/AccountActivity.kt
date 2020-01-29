@@ -171,17 +171,17 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         when (item.itemId) {
             R.id.create_calendar -> {
                 info = CollectionInfo()
-                info.type = CollectionInfo.Type.CALENDAR
+                info.enumType = CollectionInfo.Type.CALENDAR
                 startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
             R.id.create_tasklist -> {
                 info = CollectionInfo()
-                info.type = CollectionInfo.Type.TASKS
+                info.enumType = CollectionInfo.Type.TASKS
                 startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
             R.id.create_addressbook -> {
                 info = CollectionInfo()
-                info.type = CollectionInfo.Type.ADDRESS_BOOK
+                info.enumType = CollectionInfo.Type.ADDRESS_BOOK
                 startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
             R.id.install_opentasks ->  {
@@ -395,7 +395,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             }
 
             val vColor = v.findViewById<View>(R.id.color)
-            if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
+            if (info.enumType == CollectionInfo.Type.ADDRESS_BOOK) {
                 vColor.visibility = View.GONE
             } else {
                 vColor.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)

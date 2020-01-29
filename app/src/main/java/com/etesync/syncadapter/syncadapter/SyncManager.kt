@@ -21,9 +21,10 @@ import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalEntryManager
+import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
-import com.etesync.syncadapter.model.SyncEntry.Actions.ADD
+import com.etesync.journalmanager.model.SyncEntry.Actions.ADD
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity

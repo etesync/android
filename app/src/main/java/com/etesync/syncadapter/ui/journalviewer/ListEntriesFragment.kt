@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.ListFragment
+import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.*
@@ -139,7 +140,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
             // FIXME: hacky way to make it show sensible info
             val fullContent = syncEntry.content
             var prefix = ""
-            when (info.type) {
+            when (info.enumType) {
                 CollectionInfo.Type.CALENDAR, CollectionInfo.Type.TASKS -> {
                     prefix = "SUMMARY:"
                 }

@@ -19,7 +19,7 @@ import com.etesync.syncadapter.R
 import com.etesync.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.SyncEntry
+import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalTask
 import com.etesync.syncadapter.resource.LocalTaskList
 import okhttp3.HttpUrl

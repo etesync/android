@@ -42,7 +42,7 @@ open class CreateCollectionActivity : BaseActivity() {
         setContentView(R.layout.activity_create_collection)
 
         val displayName = findViewById<View>(R.id.display_name) as EditText
-        when (info.type) {
+        when (info.enumType) {
             CollectionInfo.Type.CALENDAR -> {
                 setTitle(R.string.create_calendar)
                 displayName.setHint(R.string.create_calendar_display_name_hint)
@@ -114,7 +114,7 @@ open class CreateCollectionActivity : BaseActivity() {
         info.description = StringUtils.trimToNull(edit.text.toString())
 
         if (ok) {
-            when (info.type) {
+            when (info.enumType) {
                 CollectionInfo.Type.CALENDAR, CollectionInfo.Type.TASKS -> {
                     val view = findViewById<View>(R.id.color)
                     info.color = (view.background as ColorDrawable).color

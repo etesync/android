@@ -89,13 +89,13 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 val data = (context.applicationContext as App).data
 
                 // 1. find service ID
-                when (info.type){
+                when (info.enumType){
                     CollectionInfo.Type.ADDRESS_BOOK -> authority = App.addressBooksAuthority
                     CollectionInfo.Type.CALENDAR -> authority = CalendarContract.AUTHORITY
                     CollectionInfo.Type.TASKS -> authority = TaskProvider.ProviderName.OpenTasks.authority
                 }
 
-                val serviceEntity = JournalModel.Service.fetchOrCreate(data, account.name, info.type)
+                val serviceEntity = JournalModel.Service.fetchOrCreate(data, account.name, info.enumType)
                 info.serviceID = serviceEntity.id
 
                 val settings = AccountSettings(context, account)

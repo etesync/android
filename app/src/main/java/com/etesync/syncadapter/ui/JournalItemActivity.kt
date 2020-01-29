@@ -25,7 +25,7 @@ import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
-import com.etesync.syncadapter.model.SyncEntry
+import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
 import com.etesync.syncadapter.utils.EventEmailInvitation
@@ -102,7 +102,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
     fun restoreItem(item: MenuItem) {
         // FIXME: This code makes the assumption that providers are all available. May not be true for tasks, and potentially others too.
-        when (info.type) {
+        when (info.enumType) {
             CollectionInfo.Type.CALENDAR -> {
                 val provider = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
                 val localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)!!
@@ -159,7 +159,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
     private class TabsAdapter(fm: FragmentManager, private val context: Context, private val info: CollectionInfo, private val syncEntry: SyncEntry) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int {
-            // FIXME: Make it depend on info type (only have non-raw for known types)
+            // FIXME: Make it depend on info enumType (only have non-raw for known types)
             return 2
         }
 
@@ -215,7 +215,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
             info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
             syncEntry = arguments!!.getSerializable(KEY_SYNC_ENTRY) as SyncEntry
 
-            when (info.type) {
+            when (info.enumType) {
                 CollectionInfo.Type.ADDRESS_BOOK -> {
                     v = inflater.inflate(R.layout.contact_info, container, false)
                     asyncTask = loadContactTask(v)

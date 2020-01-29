@@ -82,7 +82,7 @@ class CachedJournalFetcher {
             }
         }
 
-        return journals.filter { it.second?.type == serviceType }
+        return journals.filter { it.second?.enumType == serviceType }
     }
 }
 

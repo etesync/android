@@ -224,7 +224,7 @@ class LocalContactImportFragment : Fragment() {
         private val accountResolver: AccountResolver
 
         /**
-         * Provide a reference to the type of views that you are using (custom ViewHolder)
+         * Provide a reference to the enumType of views that you are using (custom ViewHolder)
          */
         class ViewHolder(v: View, onAccountSelected: OnAccountSelected) : RecyclerView.ViewHolder(v) {
             internal val titleTextView: TextView

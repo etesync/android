@@ -25,7 +25,7 @@ import java.util.logging.Level
 
 
 /**
- * Account authenticator for the main DAVx5 account type.
+ * Account authenticator for the main DAVx5 account enumType.
  *
  * Gets started when a DAVx5 account is removed, too, so it also watches for account removals
  * and contains the corresponding cleanup code.

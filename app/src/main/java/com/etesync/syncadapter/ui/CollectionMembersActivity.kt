@@ -37,7 +37,7 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
         setTitle(R.string.collection_members_title)
 
         val colorSquare = findViewById<View>(R.id.color)
-        when (info.type) {
+        when (info.enumType) {
             CollectionInfo.Type.CALENDAR -> {
                 colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
             }

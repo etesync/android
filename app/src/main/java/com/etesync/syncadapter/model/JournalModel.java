@@ -1,5 +1,7 @@
 package com.etesync.syncadapter.model;
 
+import com.etesync.journalmanager.model.SyncEntry;
+
 import java.util.List;
 
 import io.requery.Column;
@@ -11,11 +13,9 @@ import io.requery.Generated;
 import io.requery.Index;
 import io.requery.Key;
 import io.requery.ManyToOne;
-import io.requery.Persistable;
 import io.requery.PostLoad;
 import io.requery.ReferentialAction;
 import io.requery.Table;
-import io.requery.sql.EntityDataStore;
 
 public class JournalModel {
     @Entity

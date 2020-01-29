@@ -9,40 +9,18 @@
 package com.etesync.syncadapter.model
 
 import android.content.ContentValues
-import com.etesync.journalmanager.Constants
-import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.ServiceDB.Collections
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.Expose
-import java.io.Serializable
 
-class CollectionInfo : Serializable {
+class CollectionInfo : com.etesync.journalmanager.model.CollectionInfo() {
     @Deprecated("")
     var id: Long = 0
 
     var serviceID: Int = 0
 
-    // FIXME: Shouldn't be exposed, as it's already saved in the journal. We just expose it for when we save for db.
-    @Expose
-    var version = -1
-
-    @Expose
-    var type: Type? = null
-
-    var uid: String? = null
-
-    @Expose
-    var displayName: String? = null
-    @Expose
-    var description: String? = null
-    @Expose
-    var color: Int? = null
-
-    @Expose
-    var timeZone: String? = null
-
-    @Expose
-    var selected: Boolean = false
+    fun getServiceEntity(data: MyEntityDataStore): ServiceEntity {
+        return data.findByKey(ServiceEntity::class.java, serviceID)
+    }
 
     enum class Type {
         ADDRESS_BOOK,
@@ -50,38 +28,18 @@ class CollectionInfo : Serializable {
         TASKS,
     }
 
-    init {
-        version = Constants.CURRENT_VERSION
-    }
-
-    fun updateFromJournal(journal: JournalManager.Journal) {
-        uid = journal.uid!!
-        version = journal.version
-    }
-
-    fun isOfTypeService(service: String): Boolean {
-        return service == type.toString()
-    }
-
-    fun getServiceEntity(data: MyEntityDataStore): ServiceEntity {
-        return data.findByKey(ServiceEntity::class.java, serviceID)
-    }
-
-    fun toJson(): String {
-        return GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this, CollectionInfo::class.java)
-    }
-
-    override fun toString(): String {
-        return "CollectionInfo(serviceID=" + this.serviceID + ", version=" + this.version + ", type=" + this.type + ", uid=" + this.uid + ", displayName=" + this.displayName + ", description=" + this.description + ", color=" + this.color + ", timeZone=" + this.timeZone + ", selected=" + this.selected + ")"
-    }
+    var enumType: Type?
+        get() = if (super.type != null) Type.valueOf(super.type!!) else null
+        set(value) {
+            super.type = value?.name
+        }
 
     companion object {
-
         fun defaultForServiceType(service: Type): CollectionInfo {
             val info = CollectionInfo()
             info.displayName = "Default"
             info.selected = true
-            info.type = service
+            info.enumType = service
 
             return info
         }

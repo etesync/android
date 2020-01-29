@@ -24,7 +24,7 @@ import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalEntryManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.SyncEntry
+import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
 import com.etesync.syncadapter.utils.EventEmailInvitation

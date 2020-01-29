@@ -116,7 +116,7 @@ class ImportFragment : DialogFragment() {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.action = Intent.ACTION_GET_CONTENT
 
-        when (info.type) {
+        when (info.enumType) {
             CollectionInfo.Type.CALENDAR -> intent.type = "text/calendar"
             CollectionInfo.Type.TASKS -> intent.type = "text/calendar"
             CollectionInfo.Type.ADDRESS_BOOK -> intent.type = "text/x-vcard"
@@ -215,7 +215,7 @@ class ImportFragment : DialogFragment() {
                 val context = context!!
                 val importReader = InputStreamReader(inputStream)
 
-                if (info.type == CollectionInfo.Type.CALENDAR) {
+                if (info.enumType == CollectionInfo.Type.CALENDAR) {
                     val events = Event.eventsFromReader(importReader, null)
                     importReader.close()
 
@@ -268,7 +268,7 @@ class ImportFragment : DialogFragment() {
 
                         entryProcessed()
                     }
-                } else if (info.type == CollectionInfo.Type.TASKS) {
+                } else if (info.enumType == CollectionInfo.Type.TASKS) {
                     val tasks = Task.tasksFromReader(importReader)
                     importReader.close()
 
@@ -317,7 +317,7 @@ class ImportFragment : DialogFragment() {
 
                         entryProcessed()
                     }
-                } else if (info.type == CollectionInfo.Type.ADDRESS_BOOK) {
+                } else if (info.enumType == CollectionInfo.Type.ADDRESS_BOOK) {
                     val uidToLocalId = HashMap<String?, Long>()
                     val downloader = ContactsSyncManager.ResourceDownloader(context)
                     val contacts = Contact.fromReader(importReader, downloader)

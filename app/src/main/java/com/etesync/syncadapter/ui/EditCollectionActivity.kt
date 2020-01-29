@@ -31,7 +31,7 @@ class EditCollectionActivity : CreateCollectionActivity() {
 
         setTitle(R.string.edit_collection)
 
-        when (info.type) {
+        when (info.enumType) {
             CollectionInfo.Type.CALENDAR -> {
                 val colorSquare = findViewById<View>(R.id.color)
                 colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
