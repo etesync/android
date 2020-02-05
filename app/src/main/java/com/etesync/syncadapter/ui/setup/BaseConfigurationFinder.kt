@@ -12,6 +12,7 @@ import com.etesync.syncadapter.HttpClient
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalAuthenticator
+import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
@@ -37,8 +38,13 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         val authenticator = JournalAuthenticator(httpClient, HttpUrl.get(credentials.uri!!)!!)
 
         var authtoken: String? = null
+        var userInfo: UserInfoManager.UserInfo? = null
         try {
             authtoken = authenticator.getAuthToken(credentials.userName, credentials.password)
+
+            val authenticatedHttpClient = HttpClient.Builder(context, credentials.uri.host, authtoken!!).build().okHttpClient
+            val userInfoManager = UserInfoManager(authenticatedHttpClient, HttpUrl.get(credentials.uri)!!)
+            userInfo = userInfoManager.fetch(credentials.userName)
         } catch (e: Exceptions.HttpException) {
             Logger.log.warning(e.message)
             exception = e
@@ -51,6 +57,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
                 credentials.uri,
                 credentials.userName, authtoken,
                 cardDavConfig, calDavConfig,
+                userInfo,
                 exception
         )
     }
@@ -68,7 +75,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     class Configuration
     // We have to use URI here because HttpUrl is not serializable!
 
-    (val url: URI, val userName: String, val authtoken: String?, val cardDAV: ServiceInfo, val calDAV: ServiceInfo, var error: Throwable?) : Serializable {
+    (val url: URI, val userName: String, val authtoken: String?, val cardDAV: ServiceInfo, val calDAV: ServiceInfo, var userInfo: UserInfoManager.UserInfo?, var error: Throwable?) : Serializable {
         var rawPassword: String? = null
         var password: String? = null
         var keyPair: Crypto.AsymmetricKeyPair? = null

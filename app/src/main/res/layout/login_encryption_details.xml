@@ -32,7 +32,7 @@
                 android:layout_marginBottom="14dp"/>
 
             <TextView
-                android:id="@+id/account_name"
+                android:id="@+id/encryption_form_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -50,15 +50,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/login_encryption_check_password"/>
-            <TextView
                 android:id="@+id/encryption_extra_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
+                android:visibility="gone"
                 android:text="@string/login_encryption_extra_info"/>
         </LinearLayout>
     </ScrollView>

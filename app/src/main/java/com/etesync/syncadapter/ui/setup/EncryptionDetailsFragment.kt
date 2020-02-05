@@ -31,8 +31,16 @@ class EncryptionDetailsFragment : Fragment() {
 
         val config = arguments!!.getSerializable(KEY_CONFIG) as BaseConfigurationFinder.Configuration
 
-        val accountName = v.findViewById<View>(R.id.account_name) as TextView
-        accountName.text = getString(R.string.login_encryption_account_label) + " " + config.userName
+        val encryptionFormInfo = v.findViewById<View>(R.id.encryption_form_info) as TextView
+        if (config.userInfo == null) {
+            encryptionFormInfo.text = getString(R.string.login_encryption_set_new_password)
+            val extra_details = v.findViewById<TextView>(R.id.encryption_extra_info)
+            extra_details.visibility = View.VISIBLE
+            extra_details.text = getString(R.string.login_encryption_extra_info, Constants.faqUri.buildUpon().appendEncodedPath("#securing-etesync").build().toString())
+
+        } else {
+            encryptionFormInfo.text = getString(R.string.login_encryption_enter_password, config.userName)
+        }
 
         editPassword = v.findViewById<View>(R.id.encryption_password) as TextInputLayout
 
@@ -44,9 +52,6 @@ class EncryptionDetailsFragment : Fragment() {
 
             SetupEncryptionFragment.newInstance(config).show(fragmentManager!!, null)
         })
-
-        val extra_details = v.findViewById<View>(R.id.encryption_extra_info) as TextView
-        extra_details.text = getString(R.string.login_encryption_extra_info, Constants.faqUri.buildUpon().appendEncodedPath("#securing-etesync").build().toString())
 
         return v
     }
