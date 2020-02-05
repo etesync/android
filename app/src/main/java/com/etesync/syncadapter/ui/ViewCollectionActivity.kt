@@ -10,6 +10,7 @@ package com.etesync.syncadapter.ui
 
 import android.accounts.Account
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
@@ -25,6 +26,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
+import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.EntryEntity
@@ -36,6 +38,7 @@ import com.etesync.syncadapter.ui.importlocal.ImportActivity
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import tourguide.tourguide.ToolTip
 import java.io.FileNotFoundException
 import java.util.*
@@ -115,6 +118,16 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             tourGuide.mOverlay.setHoleRadius(0)
             tourGuide.playOn(title)
             HintManager.setHintSeen(this, HINT_IMPORT, true)
+        }
+
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener {
+            AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_info_dark)
+                    .setTitle(R.string.use_native_apps_title)
+                    .setMessage(R.string.use_native_apps_body)
+                    .setNegativeButton(R.string.navigation_drawer_guide, { _: DialogInterface, _: Int -> WebViewActivity.openUrl(this, Constants.helpUri) })
+                    .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
         }
     }
 
