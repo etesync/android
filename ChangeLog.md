@@ -1,6 +1,12 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.10.0
+* Make it clearer that users should use their existing address book and calendar apps
+* Improve the login screen's text for returning users
+* Fix file descriptor leak which was causing crashes for some users.
+* Invalidate the authToken after logging out.
+
 ## Version 1.9.9
 * Translation: translate calendar invitation emails to German
 

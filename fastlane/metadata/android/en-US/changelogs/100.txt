@@ -1,0 +1,4 @@
+* Make it clearer that users should use their existing address book and calendar apps
+* Improve the login screen's text for returning users
+* Fix file descriptor leak which was causing crashes for some users.
+* Invalidate the authToken after logging out.
