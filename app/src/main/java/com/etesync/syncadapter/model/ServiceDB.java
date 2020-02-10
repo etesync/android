@@ -92,7 +92,7 @@ public class ServiceDB {
             db.beginTransactionNonExclusive();
 
             // iterate through all tables
-            Cursor cursorTables = db.query("sqlite_master", new String[]{"name"}, "enumType='table'", null, null, null, null);
+            Cursor cursorTables = db.query("sqlite_master", new String[]{"name"}, "type='table'", null, null, null, null);
             while (cursorTables.moveToNext()) {
                 String table = cursorTables.getString(0);
                 sb.append(table).append("\n");
