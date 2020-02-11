@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.10.2
+* Fix crash when moving the encryption password screen to background
+
 ## Version 1.10.1
 * Fix crash in DebugInfo page
 
