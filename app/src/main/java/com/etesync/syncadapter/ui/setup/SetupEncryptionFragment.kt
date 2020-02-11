@@ -95,7 +95,6 @@ class SetupEncryptionFragment : DialogFragment() {
 
             try {
                 val cryptoManager: Crypto.CryptoManager
-                val httpClient = HttpClient.Builder(context, config.url.host, config.authtoken!!).build().okHttpClient
 
                 val userInfo = config.userInfo
                 if (userInfo != null) {
