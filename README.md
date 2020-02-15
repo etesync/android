@@ -21,6 +21,19 @@ Please see the [EteSync website](https://www.etesync.com) for more information.
 
 EteSync is licensed under the [GPLv3 License](LICENSE).
 
+# Building
+
+EteSync uses `git-submodules`, so cloning the code requires slightly different commands.
+
+1. Clone the repo: `git clone --recurse-submodules https://github.com/etesync/android etesync-android`
+2. Change to the directory `cd etesync-android`
+3. Open with Android studio or build with gradle:
+  1. Android studio (easier): `android-studio .`
+  2. Gradle: `./gradlew assembleDebug`
+  
+To update the code to the latest version, run: `git pull --rebase --recurse-submodules`
+
+
 Third Party Code
 ================
 
