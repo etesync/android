@@ -31,4 +31,11 @@
             tools:text="Subtitle"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/error"
+        android:src="@drawable/ic_bug_report"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:visibility="gone" />
 </LinearLayout>

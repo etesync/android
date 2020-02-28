@@ -104,6 +104,12 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
             val info = journalEntity!!.info
             setJournalEntryView(v, info, entryEntity!!.content)
 
+            val entryError = data.select(EntryErrorEntity::class.java).where(EntryErrorEntity.ENTRY.eq(entryEntity)).limit(1).get().firstOrNull()
+            if (entryError != null) {
+                val errorIcon = v.findViewById<View>(R.id.error) as ImageView
+                errorIcon.visibility = View.VISIBLE
+            }
+
             return v
         }
     }
