@@ -1,0 +1,2 @@
+* Gracefully handle malformed journal entries (e.g. malformed calendar events)
+* Update vcard4android and ical4android dependencies
