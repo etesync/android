@@ -159,7 +159,7 @@ public class JournalModel {
     }
 
     @Entity
-    @Table(name = "EntryError", uniqueIndexes = "entry_unique_together")
+    @Table(name = "EntryError")
     public static abstract class EntryError {
         @Key
         @Generated
@@ -168,7 +168,6 @@ public class JournalModel {
         @Column(nullable = false)
         String error;
 
-        @Index("entry_unique_together")
         @ForeignKey(update = ReferentialAction.CASCADE)
         @OneToOne
         Entry entry;
