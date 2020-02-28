@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.11.1
+* Fix crash when initialising database
+
 ## Version 1.11.0
 * Gracefully handle malformed journal entries (e.g. malformed calendar events)
 * Update vcard4android and ical4android dependencies
