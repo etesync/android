@@ -13,6 +13,7 @@ import io.requery.Generated;
 import io.requery.Index;
 import io.requery.Key;
 import io.requery.ManyToOne;
+import io.requery.OneToOne;
 import io.requery.PostLoad;
 import io.requery.ReferentialAction;
 import io.requery.Table;
@@ -155,6 +156,22 @@ public class JournalModel {
             }
             return service;
         }
+    }
+
+    @Entity
+    @Table(name = "EntryError", uniqueIndexes = "entry_unique_together")
+    public static abstract class EntryError {
+        @Key
+        @Generated
+        int id;
+
+        @Column(nullable = false)
+        String error;
+
+        @Index("entry_unique_together")
+        @ForeignKey(update = ReferentialAction.CASCADE)
+        @OneToOne
+        Entry entry;
     }
 
     static class CollectionInfoConverter implements Converter<CollectionInfo, String> {

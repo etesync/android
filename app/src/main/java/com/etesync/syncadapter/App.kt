@@ -55,7 +55,7 @@ class App : Application() {
         get() = initDataStore()
 
     fun initDataStore(): MyEntityDataStore {
-        val source = MyDatabaseSource(this, Models.DEFAULT, 4)
+        val source = MyDatabaseSource(this, Models.DEFAULT, 5)
         val configuration = source.configuration
         return MyEntityDataStore(configuration)
     }

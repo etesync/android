@@ -299,13 +299,17 @@ constructor(protected val context: Context, protected val account: Account, prot
         }
     }
 
-    private fun persistSyncEntry(uid: String?, syncEntry: SyncEntry) {
+    private fun persistSyncEntry(uid: String?, syncEntry: SyncEntry, error: String?) {
         val entry = EntryEntity()
         entry.uid = uid
         entry.content = syncEntry
         entry.journal = journalEntity
         try {
             data.insert(entry)
+            val entryError = EntryErrorEntity()
+            entryError.entry = entry
+            entryError.error = error
+            data.insert(entryError)
         } catch (e: io.requery.sql.StatementExecutionException) {
             if (e.cause is java.sql.SQLIntegrityConstraintViolationException) {
                 Logger.log.warning("Tried inserting an existing entry ${uid}")
@@ -352,7 +356,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             var i = 0
             for (entry in remoteEntries!!) {
                 val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
-                persistSyncEntry(entry.uid, cEntry)
+                persistSyncEntry(entry.uid, cEntry, null)
                 i++
                 if (remoteCTag == entry.uid) {
                     remoteEntries = remoteEntries?.drop(i)
@@ -381,9 +385,15 @@ constructor(protected val context: Context, protected val account: Account, prot
 
             val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
             Logger.log.info("Processing resource for journal entry")
-            processSyncEntry(cEntry)
 
-            persistSyncEntry(entry.uid, cEntry)
+            var error: String? = null
+            try {
+                processSyncEntry(cEntry)
+            } catch (e: Exception) {
+                error = e.toString()
+            }
+
+            persistSyncEntry(entry.uid, cEntry, error)
 
             remoteCTag = entry.uid
         }
@@ -404,7 +414,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 // Persist the entries after they've been pushed
                 for (entry in entries) {
                     val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
-                    persistSyncEntry(entry.uid, cEntry)
+                    persistSyncEntry(entry.uid, cEntry, null)
                 }
                 remoteCTag = entries[entries.size - 1].uid
                 pushed += entries.size
