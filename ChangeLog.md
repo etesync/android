@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.11.2
+* Member add: change confusing string.
+
 ## Version 1.11.1
 * Fix crash when initialising database
 
