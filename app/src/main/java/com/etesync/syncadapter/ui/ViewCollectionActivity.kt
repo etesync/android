@@ -69,6 +69,8 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             }
             CollectionInfo.Type.TASKS -> {
                 colorSquare.setBackgroundColor(info.color ?: LocalCalendar.defaultColor)
+                val tasksNotShowing = findViewById<View>(R.id.tasks_not_showing)
+                tasksNotShowing.visibility = View.VISIBLE
             }
             CollectionInfo.Type.ADDRESS_BOOK -> {
                 colorSquare.visibility = View.GONE

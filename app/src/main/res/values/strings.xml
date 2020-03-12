@@ -134,6 +134,7 @@
 
     <!-- ViewCollection -->
     <string name="change_journal_title">Change Journal</string>
+    <string name="tasks_not_showing">* Log is only shown if OpenTasks is installed. We are working on a fix.</string>
     <string name="account_showcase_import">In order to import contacts and calendars into EteSync, you need to click on the menu, and choose \"Import\".</string>
     <string name="account_owner">Owner: %s</string>
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
