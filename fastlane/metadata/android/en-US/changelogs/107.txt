@@ -1,0 +1,1 @@
+* Make sync faster by only fetching entries when journals have changed.

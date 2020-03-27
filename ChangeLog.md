@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.12.0
+* Make sync faster by only fetching entries when journals have changed.
+
 ## Version 1.11.3
 * Task collection view: add a message about changelog not showing if OpenTasks isn't installed
 * Update German translation
