@@ -37,6 +37,8 @@ public class JournalModel {
 
         byte[] encryptedKey;
 
+        @Column(length = 64)
+        String remoteLastUid;
 
         @Deprecated
         long service;

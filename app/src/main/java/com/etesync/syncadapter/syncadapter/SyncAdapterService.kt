@@ -247,6 +247,7 @@ abstract class SyncAdapterService : Service() {
                     journalEntity.encryptedKey = journal.key
                     journalEntity.isReadOnly = journal.readOnly
                     journalEntity.isDeleted = false
+                    journalEntity.remoteLastUid = journal.lastUid
                     data.upsert(journalEntity)
 
                     existing.remove(collection.uid)

@@ -364,6 +364,12 @@ constructor(protected val context: Context, protected val account: Account, prot
                 }
             }
         } else {
+            if ((remoteCTag != null) && (journalEntity.remoteLastUid == remoteCTag)) {
+                Logger.log.info("Skipping fetch because local lastUid == remoteLastUid (${remoteCTag})")
+                remoteEntries = LinkedList()
+                return
+            }
+
             remoteEntries = journal!!.list(crypto, remoteCTag, MAX_FETCH)
         }
 
