@@ -81,6 +81,7 @@
     <string name="accounts_global_sync_disabled">System-wide automatic synchronization is disabled</string>
     <string name="accounts_global_sync_enable">Enable</string>
     <string name="accounts_showcase_add">You need to add an account in order to use EteSync. Click here to add one...</string>
+    <string name="accounts_missing_permissions">Missing permissions: %s</string>
 
     <!-- AccountUpdateService -->
 

@@ -12,6 +12,7 @@ import android.content.ContentResolver
 import android.content.ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS
 import android.content.Intent
 import android.content.SyncStatusObserver
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
@@ -130,6 +131,26 @@ class AccountsActivity : BaseActivity(), NavigationView.OnNavigationItemSelected
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val denied = HashMap<String, Boolean>()
+        for (permission in permissions.withIndex()) {
+            val status = grantResults[permission.index]
+            if (status != PackageManager.PERMISSION_GRANTED) {
+                val key = permission.value.substringAfterLast('_')
+                if (key != "TASKS") {
+                    // We don't want to show it for tasks
+                    denied[key] = true
+                }
+            }
+        }
+
+        if (denied.size > 0) {
+            val deniedString = denied.keys.joinToString(", ")
+            Snackbar.make(findViewById(R.id.coordinator), getString(R.string.accounts_missing_permissions, deniedString), Snackbar.LENGTH_INDEFINITE).show()
+        }
     }
 
     companion object {
