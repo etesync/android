@@ -1,0 +1,1 @@
+* Show a snack with info if EteSync is missing permissions.

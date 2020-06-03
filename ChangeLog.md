@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.13.0
+* Show a snack with info if EteSync is missing permissions.
+
 ## Version 1.12.0
 * Make sync faster by only fetching entries when journals have changed.
 
