@@ -251,6 +251,7 @@
     <string name="import_dialog_adding_entries">Adding entries...</string>
     <string name="import_dialog_success">Processed %1$d entries.\nAdded: %2$d\nChanged: %3$d\nSkipped (failed): %4$d</string>
     <string name="import_permission_required">Reading storage permission is required for import.</string>
+    <string name="import_account_top_notice">Please choose an account to import all of its entries from.</string>
     <string name="choose_file">Choose file</string>
 
     <!-- AccountSettingsActivity -->
