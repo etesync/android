@@ -37,7 +37,11 @@ class CollectionInfo : com.etesync.journalmanager.model.CollectionInfo() {
     companion object {
         fun defaultForServiceType(service: Type): CollectionInfo {
             val info = CollectionInfo()
-            info.displayName = "Default"
+            info.displayName = when (service) {
+                Type.ADDRESS_BOOK -> "My Contacts",
+                Type.CALENDAR -> "My Calendar",
+                Type.TASKS -> "My Tasks",
+            }
             info.selected = true
             info.enumType = service
 
