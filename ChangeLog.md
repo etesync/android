@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.15.0
+* Change default collection names to be more descriptive
+
 ## Version 1.14.0
 * Make it clearer that account imports import the full account (and not just part of it).
 
