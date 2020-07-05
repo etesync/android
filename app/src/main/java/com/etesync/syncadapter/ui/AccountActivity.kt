@@ -272,6 +272,11 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             adapter.addAll(info.taskdav!!.journals!!)
             listTaskDAV!!.adapter = adapter
             listTaskDAV!!.onItemClickListener = onItemClickListener
+
+            if (!packageInstalled(this, openTasksPackage)) {
+                val opentasksWarning = findViewById<View>(R.id.taskdav_opentasks_warning)
+                opentasksWarning.visibility = View.VISIBLE
+            }
         }
     }
 
