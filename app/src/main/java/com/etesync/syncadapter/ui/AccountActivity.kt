@@ -58,6 +58,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     internal var listTaskDAV: ListView? = null
 
     internal val openTasksPackage = "org.dmfs.tasks"
+    internal val tasksOrgPackage = "org.tasks"
 
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
         val list = parent as ListView
@@ -110,6 +111,10 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         tbTaskDAV.inflateMenu(R.menu.taskdav_actions)
         tbTaskDAV.setOnMenuItemClickListener(this)
         tbTaskDAV.setTitle(R.string.settings_taskdav)
+        if (!packageInstalled(this, tasksOrgPackage)) {
+            val tasksInstallMenuItem = tbTaskDAV.menu.findItem(R.id.install_tasksorg)
+            tasksInstallMenuItem.setVisible(true)
+        }
         if (!packageInstalled(this, openTasksPackage)) {
             val tasksInstallMenuItem = tbTaskDAV.menu.findItem(R.id.install_opentasks)
             tasksInstallMenuItem.setVisible(true)
@@ -166,6 +171,25 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         return true
     }
 
+    fun installPackage(packagename: String) {
+        val fdroidPackageName = "org.fdroid.fdroid"
+        val gplayPackageName = "com.android.vending"
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(
+                    "https://f-droid.org/en/packages/$packagename/")
+        }
+        if (packageInstalled(this, fdroidPackageName)) {
+            intent.setPackage(fdroidPackageName)
+        } else if (packageInstalled(this, gplayPackageName)) {
+            intent.apply {
+                data = Uri.parse(
+                        "https://play.google.com/store/apps/details?id=$packagename")
+                setPackage(gplayPackageName)
+            }
+        }
+        startActivity(intent)
+    }
+
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val info: CollectionInfo
         when (item.itemId) {
@@ -184,23 +208,11 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 info.enumType = CollectionInfo.Type.ADDRESS_BOOK
                 startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
             }
+            R.id.install_tasksorg ->  {
+                installPackage(tasksOrgPackage)
+            }
             R.id.install_opentasks ->  {
-                val fdroidPackageName = "org.fdroid.fdroid"
-                val gplayPackageName = "com.android.vending"
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(
-                            "https://f-droid.org/en/packages/$openTasksPackage/")
-                }
-                if (packageInstalled(this, fdroidPackageName)) {
-                    intent.setPackage(fdroidPackageName)
-                } else if (packageInstalled(this, gplayPackageName)) {
-                    intent.apply {
-                        data = Uri.parse(
-                                "https://play.google.com/store/apps/details?id=$openTasksPackage")
-                        setPackage(gplayPackageName)
-                    }
-                }
-                startActivity(intent)
+                installPackage(openTasksPackage)
             }
         }
         return false

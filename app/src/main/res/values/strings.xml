@@ -306,6 +306,7 @@
     <string name="create_calendar_display_name_hint">My Calendar</string>
     <string name="create_tasklist">Create task list</string>
     <string name="create_tasklist_display_name_hint">My Task List</string>
+    <string name="install_tasksorg">Install Tasks.org</string>
     <string name="install_opentasks">Install OpenTasks</string>
     <string name="edit_collection">Edit collection</string>
     <string name="create_collection_color">Set the collection\'s color</string>
