@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.15.1
+* Safely ignore temporary gateway timeouts
+
 ## Version 1.15.0
 * Change default collection names to be more descriptive
 

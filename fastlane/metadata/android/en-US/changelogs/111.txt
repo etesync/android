@@ -1,0 +1,1 @@
+* Safely ignore temporary gateway timeouts
