@@ -24,6 +24,7 @@ import android.provider.ContactsContract
 import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
@@ -85,8 +86,10 @@ class App : Application() {
             tasksFilter.addDataScheme("package")
             registerReceiver(PackageChangedReceiver(), tasksFilter)
 
-            // check whether a tasks app is currently installed
-            PackageChangedReceiver.updateTaskSync(this@App)
+            OPENTASK_PROVIDERS.forEach {
+                // check whether a tasks app is currently installed
+                PackageChangedReceiver.updateTaskSync(this@App, it)
+            }
         }
     }
 

@@ -26,6 +26,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
@@ -378,7 +379,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         info.taskdav = AccountInfo.ServiceInfo()
                         info.taskdav!!.id = id
                         info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority)
+                                OPENTASK_PROVIDERS.any {
+                                    ContentResolver.isSyncActive(account, it.authority)
+                                }
                         info.taskdav!!.journals = JournalEntity.getJournals(data, serviceEntity)
                     }
                 }

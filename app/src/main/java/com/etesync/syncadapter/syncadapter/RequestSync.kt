@@ -4,12 +4,13 @@ import android.accounts.Account
 import android.content.ContentResolver
 import android.os.Bundle
 import android.provider.CalendarContract
-import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import com.etesync.syncadapter.App
 
 
 fun requestSync(account: Account?) {
-    val authorities = arrayOf(App.addressBooksAuthority, CalendarContract.AUTHORITY, TaskProvider.ProviderName.OpenTasks.authority)
+    val authorities = arrayOf(App.addressBooksAuthority, CalendarContract.AUTHORITY) +
+            OPENTASK_PROVIDERS.map { it.authority }
 
     for (authority in authorities) {
         val extras = Bundle()

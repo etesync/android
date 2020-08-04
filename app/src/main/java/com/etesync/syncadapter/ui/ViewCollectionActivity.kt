@@ -24,6 +24,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
@@ -212,7 +213,9 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                 }
                 CollectionInfo.Type.TASKS -> {
                     try {
-                        val providerClient = TaskProvider.acquire(this@ViewCollectionActivity, TaskProvider.ProviderName.OpenTasks)
+                        val providerClient = OPENTASK_PROVIDERS.mapNotNull {
+                            TaskProvider.acquire(this@ViewCollectionActivity, it)
+                        }.firstOrNull()
                         if (providerClient == null) {
                             return null
                         }

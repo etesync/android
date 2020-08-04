@@ -20,6 +20,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -84,15 +85,14 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
 
         override fun loadInBackground(): Exception? {
             try {
-                var authority: String = ""
-
                 val data = (context.applicationContext as App).data
 
                 // 1. find service ID
-                when (info.enumType){
-                    CollectionInfo.Type.ADDRESS_BOOK -> authority = App.addressBooksAuthority
-                    CollectionInfo.Type.CALENDAR -> authority = CalendarContract.AUTHORITY
-                    CollectionInfo.Type.TASKS -> authority = TaskProvider.ProviderName.OpenTasks.authority
+                val authorities = when (info.enumType){
+                    CollectionInfo.Type.ADDRESS_BOOK -> listOf(App.addressBooksAuthority)
+                    CollectionInfo.Type.CALENDAR -> listOf(CalendarContract.AUTHORITY)
+                    CollectionInfo.Type.TASKS -> OPENTASK_PROVIDERS.map { it.authority }
+                    else -> emptyList()
                 }
 
                 val serviceEntity = JournalModel.Service.fetchOrCreate(data, account.name, info.enumType)
@@ -127,7 +127,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                     journalManager.update(journal)
                 }
 
-                requestSync(authority)
+                authorities.forEach { requestSync(it) }
             } catch (e: IllegalStateException) {
                 return e
             } catch (e: Exceptions.HttpException) {

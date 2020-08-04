@@ -18,6 +18,7 @@ import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.AndroidTaskListFactory
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.ProviderName
 import com.etesync.syncadapter.model.JournalEntity
 import org.dmfs.tasks.contract.TaskContract.TaskLists
 import org.dmfs.tasks.contract.TaskContract.Tasks
@@ -30,12 +31,12 @@ class LocalTaskList private constructor(
     companion object {
         val defaultColor = -0x743cb6     // light green 500
 
-        fun tasksProviderAvailable(context: Context): Boolean {
+        fun tasksProviderAvailable(context: Context, provider: ProviderName): Boolean {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                return context.packageManager.resolveContentProvider(TaskProvider.ProviderName.OpenTasks.authority, 0) != null
+                return context.packageManager.resolveContentProvider(provider.authority, 0) != null
             else {
                 try {
-                    TaskProvider.acquire(context, TaskProvider.ProviderName.OpenTasks)?.use {
+                    TaskProvider.acquire(context, provider)?.use {
                         return true
                     }
                 } catch (e: Exception) {

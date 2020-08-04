@@ -19,6 +19,7 @@ import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.ical4android.Task
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.Contact
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
@@ -116,15 +117,17 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 }
             }
             CollectionInfo.Type.TASKS -> {
-                val provider = TaskProvider.acquire(this, TaskProvider.ProviderName.OpenTasks)!!
-                val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
-                val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
-                var localTask = localTaskList.findByUid(task.uid!!)
-                if (localTask != null) {
-                    localTask.updateAsDirty(task)
-                } else {
-                    localTask = LocalTask(localTaskList, task, task.uid, null)
-                    localTask.addAsDirty()
+                OPENTASK_PROVIDERS.forEach {
+                    val provider = TaskProvider.acquire(this, it)!!
+                    val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
+                    val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
+                    var localTask = localTaskList.findByUid(task.uid!!)
+                    if (localTask != null) {
+                        localTask.updateAsDirty(task)
+                    } else {
+                        localTask = LocalTask(localTaskList, task, task.uid, null)
+                        localTask.addAsDirty()
+                    }
                 }
             }
             CollectionInfo.Type.ADDRESS_BOOK -> {

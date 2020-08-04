@@ -16,6 +16,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.ProviderName
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalTaskList
 
@@ -23,15 +24,18 @@ class PackageChangedReceiver : BroadcastReceiver() {
 
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
-        if (Intent.ACTION_PACKAGE_ADDED == intent.action || Intent.ACTION_PACKAGE_FULLY_REMOVED == intent.action)
-            updateTaskSync(context)
+        if (Intent.ACTION_PACKAGE_ADDED == intent.action || Intent.ACTION_PACKAGE_FULLY_REMOVED == intent.action) {
+            TaskProvider.OPENTASK_PROVIDERS.forEach {
+                updateTaskSync(context, it)
+            }
+        }
     }
 
     companion object {
 
-        internal fun updateTaskSync(context: Context) {
-            val tasksInstalled = LocalTaskList.tasksProviderAvailable(context)
-            Logger.log.info("Package (un)installed; OpenTasks provider now available = $tasksInstalled")
+        internal fun updateTaskSync(context: Context, provider: ProviderName) {
+            val tasksInstalled = LocalTaskList.tasksProviderAvailable(context, provider)
+            Logger.log.info("Package (un)installed; ${provider.name} provider now available = $tasksInstalled")
 
             for (account in AccountManager.get(context).getAccountsByType(App.accountType)) {
                 val settings = AccountSettings(context, account)
@@ -40,12 +44,12 @@ class PackageChangedReceiver : BroadcastReceiver() {
                 if (tasksInstalled) {
                     if (calendarSyncInterval == null) {
                         // do nothing atm
-                    } else if (ContentResolver.getIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority) <= 0) {
-                        ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 1)
-                        settings.setSyncInterval(TaskProvider.ProviderName.OpenTasks.authority, calendarSyncInterval)
+                    } else if (ContentResolver.getIsSyncable(account, provider.authority) <= 0) {
+                        ContentResolver.setIsSyncable(account, provider.authority, 1)
+                        settings.setSyncInterval(provider.authority, calendarSyncInterval)
                     }
                 } else {
-                    ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 0)
+                    ContentResolver.setIsSyncable(account, provider.authority, 0)
                 }
             }
         }

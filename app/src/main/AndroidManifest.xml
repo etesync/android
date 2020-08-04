@@ -110,6 +110,19 @@
                 android:resource="@xml/sync_tasks"/>
         </service>
 
+        <service
+            android:name=".syncadapter.TasksOrgSyncAdapterService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_tasks_org"/>
+        </service>
+
 
         <!-- Address book account -->
         <service
