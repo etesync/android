@@ -286,7 +286,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listTaskDAV!!.adapter = adapter
             listTaskDAV!!.onItemClickListener = onItemClickListener
 
-            if (!packageInstalled(this, openTasksPackage)) {
+            if (!packageInstalled(this, tasksOrgPackage) && !packageInstalled(this, openTasksPackage)) {
                 val opentasksWarning = findViewById<View>(R.id.taskdav_opentasks_warning)
                 opentasksWarning.visibility = View.VISIBLE
             }
