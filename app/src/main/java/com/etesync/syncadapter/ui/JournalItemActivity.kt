@@ -19,7 +19,6 @@ import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.ical4android.Task
 import at.bitfire.ical4android.TaskProvider
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.Contact
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
@@ -30,6 +29,7 @@ import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
 import com.etesync.syncadapter.utils.EventEmailInvitation
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import com.google.android.material.tabs.TabLayout
 import ezvcard.util.PartialDate
 import org.jetbrains.anko.doAsync
@@ -117,7 +117,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 }
             }
             CollectionInfo.Type.TASKS -> {
-                OPENTASK_PROVIDERS.forEach {
+                TaskProviderHandling.getWantedTaskSyncProvider(applicationContext)?.let {
                     val provider = TaskProvider.acquire(this, it)!!
                     val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
                     val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
