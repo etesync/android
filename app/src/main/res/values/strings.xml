@@ -130,13 +130,13 @@
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
     <string name="account_showcase_view_collection">You can click on an item to view the collection. From there you can view the journal, import, and much more...</string>
     <string name="account_click_install_tasks">Click here to install OpenTasks!</string>
-    <string name="account_tasks_not_showing">* Only OpenTasks lists are shown below</string>
+    <string name="account_tasks_not_showing">* Not syncing tasks (install a provider)</string>
 
     <string name="show_fingperprint_title">My Fingerprint</string>
 
     <!-- ViewCollection -->
     <string name="change_journal_title">Change Journal</string>
-    <string name="tasks_not_showing">* Log is only shown if OpenTasks is installed. We are working on a fix.</string>
+    <string name="tasks_not_showing">* Log is only shown if a task provider is installed. We are working on a fix.</string>
     <string name="account_showcase_import">In order to import contacts and calendars into EteSync, you need to click on the menu, and choose \"Import\".</string>
     <string name="account_owner">Owner: %s</string>
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
