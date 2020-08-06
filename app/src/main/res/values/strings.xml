@@ -93,6 +93,11 @@
     <string name="app_settings_reset_hints">Reset hints</string>
     <string name="app_settings_reset_hints_summary">Re-enables hints which have been dismissed previously</string>
     <string name="app_settings_reset_hints_success">All hints will be shown again</string>
+    <string name="app_settings_sync">Sync</string>
+    <string name="app_settings_prefer_tasksorg">Prefer Tasks.org tasks provider</string>
+    <string name="app_settings_prefer_tasksorg_on">Will sync tasks with Tasks.org if available</string>
+    <string name="app_settings_prefer_tasksorg_off">Will sync tasks with OpenTasks if available</string>
+    <string name="app_settings_prefer_tasksorg_snack">You may need to remove and re-add your account for these changes to take effect.</string>
     <string name="app_settings_connection">Connection</string>
     <string name="app_settings_override_proxy">Override proxy settings</string>
     <string name="app_settings_override_proxy_on">Use custom proxy settings</string>

@@ -277,6 +277,7 @@ class App : Application() {
         val OVERRIDE_PROXY = "overrideProxy"
         val OVERRIDE_PROXY_HOST = "overrideProxyHost"
         val OVERRIDE_PROXY_PORT = "overrideProxyPort"
+        val PREFER_TASKSORG = "preferTasksOrg"
         val FORCE_LANGUAGE = "forceLanguage"
         val CHANGE_NOTIFICATION = "show_change_notification"
 

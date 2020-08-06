@@ -43,6 +43,8 @@ class AppSettingsActivity : BaseActivity() {
         internal lateinit var dbHelper: ServiceDB.OpenHelper
         internal lateinit var settings: Settings
 
+        internal lateinit var prefPreferTasksOrg: SwitchPreferenceCompat
+
         internal lateinit var prefResetHints: Preference
         internal lateinit var prefOverrideProxy: SwitchPreferenceCompat
         internal lateinit var prefDistrustSystemCerts: SwitchPreferenceCompat
@@ -83,6 +85,14 @@ class AppSettingsActivity : BaseActivity() {
             prefOverrideProxy.isChecked = settings.getBoolean(App.OVERRIDE_PROXY, false)
             prefOverrideProxy.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 settings.putBoolean(App.OVERRIDE_PROXY, newValue as Boolean)
+                true
+            }
+
+            prefPreferTasksOrg = findPreference("prefer_tasksorg") as SwitchPreferenceCompat
+            prefPreferTasksOrg.isChecked = context!!.defaultSharedPreferences.getBoolean(App.PREFER_TASKSORG, false)
+            prefPreferTasksOrg.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                context!!.defaultSharedPreferences.edit().putBoolean(App.PREFER_TASKSORG, newValue as Boolean).apply()
+                Snackbar.make(view!!, getString(R.string.app_settings_prefer_tasksorg_snack), Snackbar.LENGTH_LONG).show()
                 true
             }
 
