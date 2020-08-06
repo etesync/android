@@ -473,7 +473,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
 
     private fun requestSync() {
-        requestSync(account)
+        requestSync(applicationContext, account)
         Snackbar.make(findViewById(R.id.parent), R.string.account_synchronizing_now, Snackbar.LENGTH_LONG).show()
     }
 

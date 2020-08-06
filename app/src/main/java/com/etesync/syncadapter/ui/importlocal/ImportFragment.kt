@@ -28,6 +28,7 @@ import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.syncadapter.ContactsSyncManager
 import com.etesync.syncadapter.ui.Refreshable
 import com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
@@ -283,15 +284,17 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(tasks.size)
 
-                    val providers = OPENTASK_PROVIDERS.mapNotNull {
-                        TaskProvider.acquire(context, it)
-                    }
-                    if (providers.isEmpty()) {
-                        result.e = Exception("Failed to acquire tasks content provider.")
-                        return result
-                    }
+                    val provider = TaskProviderHandling.getWantedTaskSyncProvider(requireContext())
+                            .let {
+                                if (it == null) {
+                                    result.e = Exception("Failed to acquire tasks content provider.")
+                                    null
+                                } else {
+                                    TaskProvider.acquire(context, it)
+                                }
+                            }
 
-                    providers.forEach {
+                    provider?.let {
                         val localTaskList: LocalTaskList?
                         try {
                             localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, info.uid!!)

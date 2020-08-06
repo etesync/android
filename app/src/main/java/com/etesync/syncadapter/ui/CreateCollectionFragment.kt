@@ -19,8 +19,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
-import at.bitfire.ical4android.TaskProvider
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -28,6 +26,7 @@ import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import okhttp3.HttpUrl
 
 class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Exception> {
@@ -85,14 +84,16 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
 
         override fun loadInBackground(): Exception? {
             try {
-                val data = (context.applicationContext as App).data
+                val context = context.applicationContext
+                val data = (context as App).data
 
                 // 1. find service ID
-                val authorities = when (info.enumType){
-                    CollectionInfo.Type.ADDRESS_BOOK -> listOf(App.addressBooksAuthority)
-                    CollectionInfo.Type.CALENDAR -> listOf(CalendarContract.AUTHORITY)
-                    CollectionInfo.Type.TASKS -> OPENTASK_PROVIDERS.map { it.authority }
-                    else -> emptyList()
+                val authority = when (info.enumType){
+                    CollectionInfo.Type.ADDRESS_BOOK -> App.addressBooksAuthority
+                    CollectionInfo.Type.CALENDAR -> CalendarContract.AUTHORITY
+                    CollectionInfo.Type.TASKS ->
+                        TaskProviderHandling.getWantedTaskSyncProvider(context)?.authority
+                    else -> null
                 }
 
                 val serviceEntity = JournalModel.Service.fetchOrCreate(data, account.name, info.enumType)
@@ -127,7 +128,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                     journalManager.update(journal)
                 }
 
-                authorities.forEach { requestSync(it) }
+                authority?.let { requestSync(it) }
             } catch (e: IllegalStateException) {
                 return e
             } catch (e: Exceptions.HttpException) {
