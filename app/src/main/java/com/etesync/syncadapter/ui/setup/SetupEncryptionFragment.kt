@@ -33,6 +33,7 @@ import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 import com.etesync.syncadapter.utils.AndroidCompat
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import okhttp3.HttpUrl
 import java.util.logging.Level
 
@@ -157,10 +158,7 @@ class SetupEncryptionFragment : DialogFragment() {
                 OPENTASK_PROVIDERS.forEach {
                     // enable task sync if OpenTasks is installed
                     // further changes will be handled by PackageChangedReceiver
-                    if (LocalTaskList.tasksProviderAvailable(context!!, it)) {
-                        ContentResolver.setIsSyncable(account, it.authority, 1)
-                        settings.setSyncInterval(it.authority, Constants.DEFAULT_SYNC_INTERVAL.toLong())
-                    }
+                    TaskProviderHandling.updateTaskSync(context!!, it)
                 }
             } else {
                 ContentResolver.setIsSyncable(account, CalendarContract.AUTHORITY, 0)
