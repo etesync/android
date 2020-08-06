@@ -34,6 +34,7 @@ import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.LanguageUtils
 import com.etesync.syncadapter.utils.NotificationUtils
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.meta.EntityModel
@@ -88,7 +89,7 @@ class App : Application() {
 
             OPENTASK_PROVIDERS.forEach {
                 // check whether a tasks app is currently installed
-                PackageChangedReceiver.updateTaskSync(this@App, it)
+                TaskProviderHandling.updateTaskSync(this@App, it)
             }
         }
     }

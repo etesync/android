@@ -8,17 +8,12 @@
 
 package com.etesync.syncadapter
 
-import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.provider.CalendarContract
 import at.bitfire.ical4android.TaskProvider
-import at.bitfire.ical4android.TaskProvider.ProviderName
-import com.etesync.syncadapter.log.Logger
-import com.etesync.syncadapter.resource.LocalTaskList
+import com.etesync.syncadapter.utils.TaskProviderHandling.Companion.updateTaskSync
 
 class PackageChangedReceiver : BroadcastReceiver() {
 
@@ -30,29 +25,4 @@ class PackageChangedReceiver : BroadcastReceiver() {
             }
         }
     }
-
-    companion object {
-
-        internal fun updateTaskSync(context: Context, provider: ProviderName) {
-            val tasksInstalled = LocalTaskList.tasksProviderAvailable(context, provider)
-            Logger.log.info("Package (un)installed; ${provider.name} provider now available = $tasksInstalled")
-
-            for (account in AccountManager.get(context).getAccountsByType(App.accountType)) {
-                val settings = AccountSettings(context, account)
-                val calendarSyncInterval = settings.getSyncInterval(CalendarContract.AUTHORITY)
-
-                if (tasksInstalled) {
-                    if (calendarSyncInterval == null) {
-                        // do nothing atm
-                    } else if (ContentResolver.getIsSyncable(account, provider.authority) <= 0) {
-                        ContentResolver.setIsSyncable(account, provider.authority, 1)
-                        settings.setSyncInterval(provider.authority, calendarSyncInterval)
-                    }
-                } else {
-                    ContentResolver.setIsSyncable(account, provider.authority, 0)
-                }
-            }
-        }
-    }
-
 }
