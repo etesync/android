@@ -26,6 +26,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/app_settings_sync">
+
+        <SwitchPreferenceCompat
+            android:key="prefer_tasksorg"
+            android:title="@string/app_settings_prefer_tasksorg"
+            android:summaryOn="@string/app_settings_prefer_tasksorg_on"
+            android:summaryOff="@string/app_settings_prefer_tasksorg_off"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/app_settings_connection">
 
         <SwitchPreferenceCompat
