@@ -134,7 +134,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
                                 this@ChangeEncryptionPasswordActivity.finish()
                             }.show()
 
-                    requestSync(account)
+                    requestSync(applicationContext, account)
                 }
             } catch (e: Exception) {
                 uiThread {

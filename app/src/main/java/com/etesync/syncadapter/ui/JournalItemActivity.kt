@@ -29,6 +29,7 @@ import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment.Companion.setJournalEntryView
 import com.etesync.syncadapter.utils.EventEmailInvitation
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import com.google.android.material.tabs.TabLayout
 import ezvcard.util.PartialDate
 import org.jetbrains.anko.doAsync
@@ -116,15 +117,17 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 }
             }
             CollectionInfo.Type.TASKS -> {
-                val provider = TaskProvider.acquire(this, TaskProvider.ProviderName.OpenTasks)!!
-                val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
-                val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
-                var localTask = localTaskList.findByUid(task.uid!!)
-                if (localTask != null) {
-                    localTask.updateAsDirty(task)
-                } else {
-                    localTask = LocalTask(localTaskList, task, task.uid, null)
-                    localTask.addAsDirty()
+                TaskProviderHandling.getWantedTaskSyncProvider(applicationContext)?.let {
+                    val provider = TaskProvider.acquire(this, it)!!
+                    val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
+                    val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
+                    var localTask = localTaskList.findByUid(task.uid!!)
+                    if (localTask != null) {
+                        localTask.updateAsDirty(task)
+                    } else {
+                        localTask = LocalTask(localTaskList, task, task.uid, null)
+                        localTask.addAsDirty()
+                    }
                 }
             }
             CollectionInfo.Type.ADDRESS_BOOK -> {

@@ -93,6 +93,11 @@
     <string name="app_settings_reset_hints">Reset hints</string>
     <string name="app_settings_reset_hints_summary">Re-enables hints which have been dismissed previously</string>
     <string name="app_settings_reset_hints_success">All hints will be shown again</string>
+    <string name="app_settings_sync">Sync</string>
+    <string name="app_settings_prefer_tasksorg">Prefer Tasks.org tasks provider</string>
+    <string name="app_settings_prefer_tasksorg_on">Will sync tasks with Tasks.org if available</string>
+    <string name="app_settings_prefer_tasksorg_off">Will sync tasks with OpenTasks if available</string>
+    <string name="app_settings_prefer_tasksorg_snack">You may need to remove and re-add your account for these changes to take effect.</string>
     <string name="app_settings_connection">Connection</string>
     <string name="app_settings_override_proxy">Override proxy settings</string>
     <string name="app_settings_override_proxy_on">Use custom proxy settings</string>
@@ -130,13 +135,13 @@
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
     <string name="account_showcase_view_collection">You can click on an item to view the collection. From there you can view the journal, import, and much more...</string>
     <string name="account_click_install_tasks">Click here to install OpenTasks!</string>
-    <string name="account_tasks_not_showing">* Only OpenTasks lists are shown below</string>
+    <string name="account_tasks_not_showing">* Not syncing tasks (install a provider)</string>
 
     <string name="show_fingperprint_title">My Fingerprint</string>
 
     <!-- ViewCollection -->
     <string name="change_journal_title">Change Journal</string>
-    <string name="tasks_not_showing">* Log is only shown if OpenTasks is installed. We are working on a fix.</string>
+    <string name="tasks_not_showing">* Log is only shown if a task provider is installed.</string>
     <string name="account_showcase_import">In order to import contacts and calendars into EteSync, you need to click on the menu, and choose \"Import\".</string>
     <string name="account_owner">Owner: %s</string>
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
@@ -196,6 +201,9 @@
     <string name="permissions_opentasks">OpenTasks permissions</string>
     <string name="permissions_opentasks_details">To synchronize tasks with your local task lists, EteSync needs to access OpenTasks.</string>
     <string name="permissions_opentasks_request">Request OpenTasks permissions</string>
+    <string name="permissions_tasks_org">Tasks.org permissions</string>
+    <string name="permissions_tasks_org_details">To synchronize tasks with your local task lists, EteSync needs to access Tasks.org.</string>
+    <string name="permissions_tasks_org_request">Request Tasks.org permissions</string>
 
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>

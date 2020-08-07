@@ -77,6 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginBottom="16dp"
             tools:ignore="UselessParent">
 
             <TextView
@@ -98,6 +99,31 @@
 
         </LinearLayout>
 
+        <LinearLayout
+          android:id="@+id/tasksorg_permissions"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          tools:ignore="UselessParent">
+
+            <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              style="@style/TextView.Heading"
+              android:text="@string/permissions_tasks_org"/>
+
+            <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/permissions_tasks_org_details"/>
+
+            <Button
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/permissions_tasks_org_request"
+              android:onClick="requestTasksOrgPermissions"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

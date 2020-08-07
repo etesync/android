@@ -15,6 +15,7 @@ import android.provider.CalendarContract
 import android.provider.ContactsContract
 import androidx.fragment.app.DialogFragment
 import at.bitfire.ical4android.*
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
@@ -27,6 +28,7 @@ import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.syncadapter.ContactsSyncManager
 import com.etesync.syncadapter.ui.Refreshable
 import com.etesync.syncadapter.ui.importlocal.ResultFragment.ImportResult
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
@@ -282,40 +284,46 @@ class ImportFragment : DialogFragment() {
 
                     finishParsingFile(tasks.size)
 
-                    val provider = TaskProvider.acquire(context, TaskProvider.ProviderName.OpenTasks)
-                    if (provider == null) {
-                        result.e = Exception("Failed to acquire tasks content provider.")
-                        return result
-                    }
-
-                    val localTaskList: LocalTaskList?
-                    try {
-                        localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)
-                        if (localTaskList == null) {
-                            throw FileNotFoundException("Failed to load local resource.")
-                        }
-                    } catch (e: FileNotFoundException) {
-                        Logger.log.info("Fail" + e.localizedMessage)
-                        result.e = e
-                        return result
-                    }
-
-                    for (task in tasks) {
-                        try {
-                            var localTask = localTaskList.findByUid(task.uid!!)
-                            if (localTask != null) {
-                                localTask.updateAsDirty(task)
-                                result.updated++
-                            } else {
-                                localTask = LocalTask(localTaskList, task, task.uid, null)
-                                localTask.addAsDirty()
-                                result.added++
+                    val provider = TaskProviderHandling.getWantedTaskSyncProvider(requireContext())
+                            .let {
+                                if (it == null) {
+                                    result.e = Exception("Failed to acquire tasks content provider.")
+                                    null
+                                } else {
+                                    TaskProvider.acquire(context, it)
+                                }
                             }
-                        } catch (e: CalendarStorageException) {
-                            e.printStackTrace()
+
+                    provider?.let {
+                        val localTaskList: LocalTaskList?
+                        try {
+                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, info.uid!!)
+                            if (localTaskList == null) {
+                                throw FileNotFoundException("Failed to load local resource.")
+                            }
+                        } catch (e: FileNotFoundException) {
+                            Logger.log.info("Fail" + e.localizedMessage)
+                            result.e = e
+                            return result
                         }
 
-                        entryProcessed()
+                        for (task in tasks) {
+                            try {
+                                var localTask = localTaskList.findByUid(task.uid!!)
+                                if (localTask != null) {
+                                    localTask.updateAsDirty(task)
+                                    result.updated++
+                                } else {
+                                    localTask = LocalTask(localTaskList, task, task.uid, null)
+                                    localTask.addAsDirty()
+                                    result.added++
+                                }
+                            } catch (e: CalendarStorageException) {
+                                e.printStackTrace()
+                            }
+
+                            entryProcessed()
+                        }
                     }
                 } else if (info.enumType == CollectionInfo.Type.ADDRESS_BOOK) {
                     val uidToLocalId = HashMap<String?, Long>()

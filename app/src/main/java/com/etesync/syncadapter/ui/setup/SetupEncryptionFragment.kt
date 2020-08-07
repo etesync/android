@@ -21,6 +21,7 @@ import android.provider.CalendarContract
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -32,6 +33,7 @@ import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 import com.etesync.syncadapter.utils.AndroidCompat
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import okhttp3.HttpUrl
 import java.util.logging.Level
 
@@ -153,11 +155,10 @@ class SetupEncryptionFragment : DialogFragment() {
                 // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
                 settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL.toLong())
 
-                // enable task sync if OpenTasks is installed
-                // further changes will be handled by PackageChangedReceiver
-                if (LocalTaskList.tasksProviderAvailable(context!!)) {
-                    ContentResolver.setIsSyncable(account, TaskProvider.ProviderName.OpenTasks.authority, 1)
-                    settings.setSyncInterval(TaskProvider.ProviderName.OpenTasks.authority, Constants.DEFAULT_SYNC_INTERVAL.toLong())
+                OPENTASK_PROVIDERS.forEach {
+                    // enable task sync if OpenTasks is installed
+                    // further changes will be handled by PackageChangedReceiver
+                    TaskProviderHandling.updateTaskSync(context!!, it)
                 }
             } else {
                 ContentResolver.setIsSyncable(account, CalendarContract.AUTHORITY, 0)

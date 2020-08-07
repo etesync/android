@@ -24,6 +24,7 @@ import android.provider.ContactsContract
 import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
@@ -33,6 +34,7 @@ import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.LanguageUtils
 import com.etesync.syncadapter.utils.NotificationUtils
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.meta.EntityModel
@@ -85,8 +87,10 @@ class App : Application() {
             tasksFilter.addDataScheme("package")
             registerReceiver(PackageChangedReceiver(), tasksFilter)
 
-            // check whether a tasks app is currently installed
-            PackageChangedReceiver.updateTaskSync(this@App)
+            OPENTASK_PROVIDERS.forEach {
+                // check whether a tasks app is currently installed
+                TaskProviderHandling.updateTaskSync(this@App, it)
+            }
         }
     }
 
@@ -274,6 +278,7 @@ class App : Application() {
         val OVERRIDE_PROXY = "overrideProxy"
         val OVERRIDE_PROXY_HOST = "overrideProxyHost"
         val OVERRIDE_PROXY_PORT = "overrideProxyPort"
+        val PREFER_TASKSORG = "preferTasksOrg"
         val FORCE_LANGUAGE = "forceLanguage"
         val CHANGE_NOTIFICATION = "show_change_notification"
 

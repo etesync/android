@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.ProviderName
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.Constants
@@ -35,18 +36,18 @@ import java.util.*
  */
 class TasksSyncAdapterService: SyncAdapterService() {
 
-    override fun syncAdapter() = TasksSyncAdapter(this)
-
+    override fun syncAdapter() = TasksSyncAdapter(this, ProviderName.OpenTasks)
 
 	class TasksSyncAdapter(
-            context: Context
+            context: Context,
+            private val name: ProviderName
     ): SyncAdapter(context) {
         override val syncErrorTitle = R.string.sync_error_tasks
         override val notificationManager = SyncNotification(context, "journals-tasks", Constants.NOTIFICATION_TASK_SYNC)
 
         override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
 
-            val taskProvider = TaskProvider.fromProviderClient(context, provider)
+            val taskProvider = TaskProvider.fromProviderClient(context, provider, name)
 
             // make sure account can be seen by OpenTasks
             if (Build.VERSION.SDK_INT >= 26)

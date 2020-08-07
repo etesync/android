@@ -26,6 +26,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider
+import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
@@ -285,7 +286,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listTaskDAV!!.adapter = adapter
             listTaskDAV!!.onItemClickListener = onItemClickListener
 
-            if (!packageInstalled(this, openTasksPackage)) {
+            if (!packageInstalled(this, tasksOrgPackage) && !packageInstalled(this, openTasksPackage)) {
                 val opentasksWarning = findViewById<View>(R.id.taskdav_opentasks_warning)
                 opentasksWarning.visibility = View.VISIBLE
             }
@@ -378,7 +379,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         info.taskdav = AccountInfo.ServiceInfo()
                         info.taskdav!!.id = id
                         info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                ContentResolver.isSyncActive(account, TaskProvider.ProviderName.OpenTasks.authority)
+                                OPENTASK_PROVIDERS.any {
+                                    ContentResolver.isSyncActive(account, it.authority)
+                                }
                         info.taskdav!!.journals = JournalEntity.getJournals(data, serviceEntity)
                     }
                 }
@@ -470,7 +473,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
 
     private fun requestSync() {
-        requestSync(account)
+        requestSync(applicationContext, account)
         Snackbar.make(findViewById(R.id.parent), R.string.account_synchronizing_now, Snackbar.LENGTH_LONG).show()
     }
 

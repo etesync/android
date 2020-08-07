@@ -25,6 +25,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import at.bitfire.ical4android.TaskProvider.ProviderName
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
@@ -156,7 +157,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
                         .append(if (powerManager.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) "yes" else "no")
                         .append("\n")
             // permissions
-            for (permission in arrayOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, PermissionsActivity.PERMISSION_READ_TASKS, PermissionsActivity.PERMISSION_WRITE_TASKS))
+            for (permission in arrayOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR) + ProviderName.OpenTasks.permissions + ProviderName.TasksOrg.permissions)
                 report.append(permission).append(" permission: ")
                         .append(if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) "granted" else "denied")
                         .append("\n")
@@ -169,7 +170,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
             for (acct in accountManager.getAccountsByType(context.getString(R.string.account_type)))
                 try {
                     val settings = AccountSettings(context, acct)
-                    report.append("Account: ").append(acct.name).append("\n" + "  Address book sync. interval: ").append(syncStatus(settings, App.addressBooksAuthority)).append("\n" + "  Calendar     sync. interval: ").append(syncStatus(settings, CalendarContract.AUTHORITY)).append("\n" + "  OpenTasks    sync. interval: ").append(syncStatus(settings, "org.dmfs.tasks")).append("\n" + "  WiFi only: ").append(settings.syncWifiOnly)
+                    report.append("Account: ").append(acct.name).append("\n" + "  Address book sync. interval: ").append(syncStatus(settings, App.addressBooksAuthority)).append("\n" + "  Calendar     sync. interval: ").append(syncStatus(settings, CalendarContract.AUTHORITY)).append("\n" + "  OpenTasks    sync. interval: ").append(syncStatus(settings, ProviderName.OpenTasks.authority)).append("\n" + "  Tasks.org    sync. interval: ").append(syncStatus(settings, ProviderName.TasksOrg.authority)).append("\n" + "  WiFi only: ").append(settings.syncWifiOnly)
                     if (settings.syncWifiOnlySSID != null)
                         report.append(", SSID: ").append(settings.syncWifiOnlySSID)
                     report.append("\n  [CardDAV] Contact group method: ").append(settings.groupMethod)

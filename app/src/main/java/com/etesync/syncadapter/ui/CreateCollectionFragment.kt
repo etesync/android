@@ -19,7 +19,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
-import at.bitfire.ical4android.TaskProvider
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -27,6 +26,7 @@ import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import okhttp3.HttpUrl
 
 class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Exception> {
@@ -84,15 +84,16 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
 
         override fun loadInBackground(): Exception? {
             try {
-                var authority: String = ""
-
-                val data = (context.applicationContext as App).data
+                val context = context.applicationContext
+                val data = (context as App).data
 
                 // 1. find service ID
-                when (info.enumType){
-                    CollectionInfo.Type.ADDRESS_BOOK -> authority = App.addressBooksAuthority
-                    CollectionInfo.Type.CALENDAR -> authority = CalendarContract.AUTHORITY
-                    CollectionInfo.Type.TASKS -> authority = TaskProvider.ProviderName.OpenTasks.authority
+                val authority = when (info.enumType){
+                    CollectionInfo.Type.ADDRESS_BOOK -> App.addressBooksAuthority
+                    CollectionInfo.Type.CALENDAR -> CalendarContract.AUTHORITY
+                    CollectionInfo.Type.TASKS ->
+                        TaskProviderHandling.getWantedTaskSyncProvider(context)?.authority
+                    else -> null
                 }
 
                 val serviceEntity = JournalModel.Service.fetchOrCreate(data, account.name, info.enumType)
@@ -127,7 +128,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                     journalManager.update(journal)
                 }
 
-                requestSync(authority)
+                authority?.let { requestSync(it) }
             } catch (e: IllegalStateException) {
                 return e
             } catch (e: Exceptions.HttpException) {

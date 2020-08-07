@@ -38,6 +38,7 @@ import com.etesync.syncadapter.ui.importlocal.ImportActivity
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import tourguide.tourguide.ToolTip
 import java.io.FileNotFoundException
@@ -212,7 +213,9 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                 }
                 CollectionInfo.Type.TASKS -> {
                     try {
-                        val providerClient = TaskProvider.acquire(this@ViewCollectionActivity, TaskProvider.ProviderName.OpenTasks)
+                        val providerClient = TaskProviderHandling.getWantedTaskSyncProvider(this@ViewCollectionActivity)?.let {
+                            TaskProvider.acquire(this@ViewCollectionActivity, it)
+                        }
                         if (providerClient == null) {
                             return null
                         }
