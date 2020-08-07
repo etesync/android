@@ -1,0 +1,1 @@
+* Add support for the Tasks.org task provider - you can now just use Tasks.org without needing to add an account there.

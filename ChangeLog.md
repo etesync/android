@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.16.0
+* Add support for the Tasks.org task provider - you can now just use Tasks.org without needing to add an account there.
+
 ## Version 1.15.1
 * Safely ignore temporary gateway timeouts
 
