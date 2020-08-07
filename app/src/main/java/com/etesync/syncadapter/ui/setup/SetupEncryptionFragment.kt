@@ -13,28 +13,23 @@ import android.accounts.AccountManager
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
-import android.content.ContentResolver
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.CalendarContract
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import at.bitfire.ical4android.TaskProvider
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
-import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
-import com.etesync.journalmanager.UserInfoManager
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.ServiceEntity
-import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 import com.etesync.syncadapter.utils.AndroidCompat
 import com.etesync.syncadapter.utils.TaskProviderHandling
-import okhttp3.HttpUrl
 import java.util.logging.Level
 
 class SetupEncryptionFragment : DialogFragment() {
@@ -138,30 +133,22 @@ class SetupEncryptionFragment : DialogFragment() {
                 settings.keyPair = config.keyPair!!
             }
 
-            if (config.cardDAV != null) {
-                // insert CardDAV service
-                insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV)
+            // insert CardDAV service
+            insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV)
 
-                // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
-                settings.setSyncInterval(App.addressBooksAuthority, Constants.DEFAULT_SYNC_INTERVAL.toLong())
-            } else {
-                ContentResolver.setIsSyncable(account, App.addressBooksAuthority, 0)
-            }
+            // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
+            settings.setSyncInterval(App.addressBooksAuthority, Constants.DEFAULT_SYNC_INTERVAL.toLong())
 
-            if (config.calDAV != null) {
-                // insert CalDAV service
-                insertService(accountName, CollectionInfo.Type.CALENDAR, config.calDAV)
+            // insert CalDAV service
+            insertService(accountName, CollectionInfo.Type.CALENDAR, config.calDAV)
 
-                // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
-                settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL.toLong())
+            // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
+            settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL.toLong())
 
-                OPENTASK_PROVIDERS.forEach {
-                    // enable task sync if OpenTasks is installed
-                    // further changes will be handled by PackageChangedReceiver
-                    TaskProviderHandling.updateTaskSync(context!!, it)
-                }
-            } else {
-                ContentResolver.setIsSyncable(account, CalendarContract.AUTHORITY, 0)
+            OPENTASK_PROVIDERS.forEach {
+                // enable task sync if OpenTasks is installed
+                // further changes will be handled by PackageChangedReceiver
+                TaskProviderHandling.updateTaskSync(context!!, it)
             }
 
         } catch (e: InvalidAccountException) {
