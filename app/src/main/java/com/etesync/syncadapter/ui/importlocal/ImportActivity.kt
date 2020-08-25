@@ -108,9 +108,9 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
             // This makes sure that the container activity has implemented
             // the callback interface. If not, it throws an exception
             try {
-                mSelectImportMethod = activity as SelectImportMethod?
+                mSelectImportMethod = activity as SelectImportMethod
             } catch (e: ClassCastException) {
-                throw ClassCastException(activity!!.toString() + " must implement MyInterface ")
+                throw ClassCastException(activity.toString() + " must implement MyInterface ")
             }
 
         }

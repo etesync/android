@@ -32,7 +32,7 @@ import com.etesync.syncadapter.R
 class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<Account>>, AdapterView.OnItemClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        listAdapter = AccountListAdapter(context!!)
+        listAdapter = AccountListAdapter(requireContext())
 
         return inflater.inflate(R.layout.account_list, container, false)
     }
@@ -58,7 +58,7 @@ class AccountListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<
     // loader
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Array<Account>> {
-        return AccountLoader(context!!)
+        return AccountLoader(requireContext())
     }
 
     override fun onLoadFinished(loader: Loader<Array<Account>>, accounts: Array<Account>) {

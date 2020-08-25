@@ -42,19 +42,19 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Configuration> {
-        return ServerConfigurationLoader(context!!, args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials)
+        return ServerConfigurationLoader(requireContext(), args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials)
     }
 
     override fun onLoadFinished(loader: Loader<Configuration>, data: Configuration?) {
         if (data != null) {
             if (data.isFailed)
             // no service found: show error message
-                fragmentManager!!.beginTransaction()
+                requireFragmentManager().beginTransaction()
                         .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
             else
             // service found: continue
-                fragmentManager!!.beginTransaction()
+                requireFragmentManager().beginTransaction()
                         .replace(android.R.id.content, EncryptionDetailsFragment.newInstance(data))
                         .addToBackStack(null)
                         .commitAllowingStateLoss()
@@ -76,7 +76,7 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
                     .setMessage(R.string.login_wrong_username_or_password)
                     .setNeutralButton(R.string.login_view_logs) { dialog, which ->
                         val intent = DebugInfoActivity.newIntent(context, this::class.toString())
-                        intent.putExtra(DebugInfoActivity.KEY_LOGS, arguments!!.getString(KEY_LOGS))
+                        intent.putExtra(DebugInfoActivity.KEY_LOGS, requireArguments().getString(KEY_LOGS))
                         startActivity(intent)
                     }
                     .setPositiveButton(android.R.string.ok) { dialog, which ->
