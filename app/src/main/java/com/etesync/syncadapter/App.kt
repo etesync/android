@@ -158,22 +158,6 @@ class App : Application() {
     private fun update(fromVersion: Int) {
         Logger.log.info("Updating from version " + fromVersion + " to " + BuildConfig.VERSION_CODE)
 
-        if (fromVersion < 6) {
-            val data = this.data
-
-            val dbHelper = ServiceDB.OpenHelper(this)
-
-            val collections = readCollections(dbHelper)
-            for (info in collections) {
-                val journalEntity = JournalEntity(data, info)
-                data.insert(journalEntity)
-            }
-
-            val db = dbHelper.writableDatabase
-            db.delete(ServiceDB.Collections._TABLE, null, null)
-            db.close()
-        }
-
         if (fromVersion < 7) {
             /* Fix all of the etags to be non-null */
             val am = AccountManager.get(this)
@@ -232,21 +216,6 @@ class App : Application() {
             prefs.edit().putInt(PREF_VERSION, BuildConfig.VERSION_CODE).apply()
         }
 
-    }
-
-    private fun readCollections(dbHelper: ServiceDB.OpenHelper): List<CollectionInfo> {
-        val db = dbHelper.writableDatabase
-        val collections = LinkedList<CollectionInfo>()
-        val cursor = db.query(ServiceDB.Collections._TABLE, null, null, null, null, null, null)
-        while (cursor.moveToNext()) {
-            val values = ContentValues()
-            DatabaseUtils.cursorRowToContentValues(cursor, values)
-            collections.add(CollectionInfo.fromDB(values))
-        }
-
-        db.close()
-        cursor.close()
-        return collections
     }
 
     fun migrateServices(dbHelper: ServiceDB.OpenHelper) {
