@@ -4,6 +4,7 @@ import android.content.Context
 import com.etebase.client.*
 import com.etebase.client.Collection
 import java.io.File
+import java.util.HashMap
 
 /*
 File structure:
@@ -83,8 +84,19 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     }
 
     companion object {
+        private val localCacheCache: HashMap<String, EtebaseLocalCache> = HashMap()
+
         fun getInstance(context: Context, username: String): EtebaseLocalCache {
-            return EtebaseLocalCache(context, username)
+            synchronized(localCacheCache) {
+                val cached = localCacheCache.get(username)
+                if (cached != null) {
+                    return cached
+                } else {
+                    val ret = EtebaseLocalCache(context, username)
+                    localCacheCache.set(username, ret)
+                    return ret
+                }
+            }
         }
 
         fun getEtebase(context: Context, settings: AccountSettings): Account {
