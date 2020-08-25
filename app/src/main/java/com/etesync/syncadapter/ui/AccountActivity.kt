@@ -87,6 +87,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
         account = intent.getParcelableExtra(EXTRA_ACCOUNT)
         title = account.name
+        val settings = AccountSettings(this, account)
 
         setContentView(R.layout.activity_account)
 
@@ -131,8 +132,10 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             HintManager.setHintSeen(this, HINT_VIEW_COLLECTION, true)
         }
 
-        if (!SetupUserInfoFragment.hasUserInfo(this, account)) {
-            SetupUserInfoFragment.newInstance(account).show(supportFragmentManager, null)
+        if (settings.isLegacy) {
+            if (!SetupUserInfoFragment.hasUserInfo(this, account)) {
+                SetupUserInfoFragment.newInstance(account).show(supportFragmentManager, null)
+            }
         }
     }
 

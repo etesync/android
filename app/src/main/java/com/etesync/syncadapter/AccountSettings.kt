@@ -77,6 +77,9 @@ constructor(internal val context: Context, internal val account: Account) {
         get() = accountManager.getUserData(account, KEY_ETEBASE_SESSION)
         set(value) = accountManager.setUserData(account, KEY_ETEBASE_SESSION, value)
 
+    val isLegacy: Boolean
+        get() = authToken != null
+
     // CalDAV settings
 
     var manageCalendarColors: Boolean
