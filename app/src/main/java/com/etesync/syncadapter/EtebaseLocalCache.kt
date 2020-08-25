@@ -3,13 +3,15 @@ package com.etesync.syncadapter
 import android.content.Context
 import com.etebase.client.*
 import com.etebase.client.Collection
+import okhttp3.OkHttpClient
 import java.io.File
-import java.util.HashMap
+import java.util.*
 
 /*
 File structure:
 cache_dir/
     user1/ <--- the name of the user
+        stoken
         cols/
             UID1/ - The uid of the first col
                 ...
@@ -21,11 +23,10 @@ cache_dir/
                     ...
  */
 class EtebaseLocalCache private constructor(context: Context, username: String) {
-    private val filesDir: File
+    private val filesDir: File = File(context.filesDir, username)
     private val colsDir: File
 
     init {
-        filesDir = File(context.filesDir, username)
         colsDir = File(filesDir, "cols")
         colsDir.mkdirs()
     }
@@ -40,9 +41,20 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         filesDir.deleteRecursively()
     }
 
+    fun saveStoken(stoken: String) {
+        val stokenFile = File(filesDir, "stoken")
+        stokenFile.writeText(stoken)
+    }
+
+    fun loadStoken(): String? {
+        val stokenFile = File(filesDir, "stoken")
+        return if (stokenFile.exists()) stokenFile.readText() else null
+    }
+
     fun collectionList(colMgr: CollectionManager): List<Collection> {
         return colsDir.list().map {
-            val colFile = File(it, "col")
+            val colDir = File(colsDir, it)
+            val colFile = File(colDir, "col")
             val content = colFile.readBytes()
             colMgr.cacheLoad(content)
         }
@@ -52,7 +64,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         val colDir = File(colsDir, collection.uid)
         colDir.mkdir()
         val colFile = File(colDir, "col")
-        colFile.writeBytes(colMgr.cacheSave(collection))
+        colFile.writeBytes(colMgr.cacheSaveWithContent(collection))
         val itemsDir = getCollectionItemsDir(collection.uid)
         itemsDir.mkdir()
     }
@@ -65,7 +77,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     fun itemList(itemMgr: ItemManager, colUid: String): List<Item> {
         val itemsDir = getCollectionItemsDir(colUid)
         return itemsDir.list().map {
-            val itemFile = File(it)
+            val itemFile = File(itemsDir, it)
             val content = itemFile.readBytes()
             itemMgr.cacheLoad(content)
         }
@@ -74,7 +86,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     fun itemSet(itemMgr: ItemManager, colUid: String, item: Item) {
         val itemsDir = getCollectionItemsDir(colUid)
         val itemFile = File(itemsDir, item.uid)
-        itemFile.writeBytes(itemMgr.cacheSave(item))
+        itemFile.writeBytes(itemMgr.cacheSaveWithContent(item))
     }
 
     fun itemUnset(itemMgr: ItemManager, colUid: String, itemUid: String) {
@@ -99,8 +111,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
             }
         }
 
-        fun getEtebase(context: Context, settings: AccountSettings): Account {
-            val httpClient = HttpClient.Builder(context).build().okHttpClient
+        fun getEtebase(context: Context, httpClient: OkHttpClient, settings: AccountSettings): Account {
             val client = Client.create(httpClient, settings.uri?.toString())
             return Account.restore(client, settings.etebaseSession!!, null)
         }
