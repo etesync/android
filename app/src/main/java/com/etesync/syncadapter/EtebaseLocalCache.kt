@@ -86,5 +86,11 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         fun getInstance(context: Context, username: String): EtebaseLocalCache {
             return EtebaseLocalCache(context, username)
         }
+
+        fun getEtebase(context: Context, settings: AccountSettings): Account {
+            val httpClient = HttpClient.Builder(context).build().okHttpClient
+            val client = Client.create(httpClient, settings.uri?.toString())
+            return Account.restore(client, settings.etebaseSession!!, null)
+        }
     }
 }

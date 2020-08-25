@@ -13,6 +13,7 @@ import android.accounts.AccountManager
 import android.app.LoaderManager
 import android.content.*
 import android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
+import android.graphics.Color.parseColor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,16 +26,18 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import at.bitfire.ical4android.TaskProvider
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.CollectionManager
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalAuthenticator
+import com.etesync.syncadapter.Constants.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
+import com.etesync.syncadapter.model.MyEntityDataStore
 import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
@@ -52,6 +55,7 @@ import java.util.logging.Level
 class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
 
     private lateinit var account: Account
+    private lateinit var settings: AccountSettings
     private var accountInfo: AccountInfo? = null
 
     internal var listCalDAV: ListView? = null
@@ -64,10 +68,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
         val list = parent as ListView
         val adapter = list.adapter as ArrayAdapter<*>
-        val journalEntity = adapter.getItem(position) as JournalEntity
-        val info = journalEntity.getInfo()
+        val info = adapter.getItem(position) as CollectionListItemInfo
 
-        startActivity(ViewCollectionActivity.newIntent(this@AccountActivity, account, info))
+        startActivity(ViewCollectionActivity.newIntent(this@AccountActivity, account, info.legacyInfo!!))
     }
 
     private val formattedFingerprint: String?
@@ -87,7 +90,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
         account = intent.getParcelableExtra(EXTRA_ACCOUNT)
         title = account.name
-        val settings = AccountSettings(this, account)
+        settings = AccountSettings(this, account)
 
         setContentView(R.layout.activity_account)
 
@@ -230,10 +233,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         internal var taskdav: ServiceInfo? = null
 
         class ServiceInfo {
-            internal var id: Long = 0
             internal var refreshing: Boolean = false
 
-            internal var journals: List<JournalEntity>? = null
+            internal var infos: List<CollectionListItemInfo>? = null
         }
     }
 
@@ -257,7 +259,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listCardDAV!!.setAlpha(if (info.carddav!!.refreshing) 0.5f else 1f)
 
             val adapter = CollectionListAdapter(this, account)
-            adapter.addAll(info.carddav!!.journals!!)
+            adapter.addAll(info.carddav!!.infos!!)
             listCardDAV!!.adapter = adapter
             listCardDAV!!.onItemClickListener = onItemClickListener
         }
@@ -271,7 +273,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listCalDAV!!.setAlpha(if (info.caldav!!.refreshing) 0.5f else 1f)
 
             val adapter = CollectionListAdapter(this, account)
-            adapter.addAll(info.caldav!!.journals!!)
+            adapter.addAll(info.caldav!!.infos!!)
             listCalDAV!!.adapter = adapter
             listCalDAV!!.onItemClickListener = onItemClickListener
         }
@@ -285,7 +287,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             listTaskDAV!!.setAlpha(if (info.taskdav!!.refreshing) 0.5f else 1f)
 
             val adapter = CollectionListAdapter(this, account)
-            adapter.addAll(info.taskdav!!.journals!!)
+            adapter.addAll(info.taskdav!!.infos!!)
             listTaskDAV!!.adapter = adapter
             listTaskDAV!!.onItemClickListener = onItemClickListener
 
@@ -345,50 +347,110 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             forceLoad()
         }
 
+        private fun getLegacyJournals(data: MyEntityDataStore, serviceEntity: ServiceEntity): List<CollectionListItemInfo> {
+            return JournalEntity.getJournals(data, serviceEntity).map {
+                val info = it.info
+                val isAdmin = it.isOwner(account.name)
+                CollectionListItemInfo(it.uid, info.enumType!!, info.displayName!!, info.description ?: "", info.color, it.isReadOnly, isAdmin, info)
+            }
+        }
+
+        private fun getCollections(etebaseLocalCache: EtebaseLocalCache, colMgr: CollectionManager, type: CollectionInfo.Type): List<CollectionListItemInfo> {
+            val strType = when (type) {
+                CollectionInfo.Type.ADDRESS_BOOK -> ETEBASE_TYPE_ADDRESS_BOOK
+                CollectionInfo.Type.CALENDAR -> ETEBASE_TYPE_CALENDAR
+                CollectionInfo.Type.TASKS -> ETEBASE_TYPE_TASKS
+            }
+
+            return etebaseLocalCache.collectionList(colMgr).map {
+                val meta = it.meta
+
+                if (strType != meta.collectionType) {
+                    return@map null
+                }
+
+                val accessLevel = it.accessLevel
+                val isReadOnly = accessLevel == "ro"
+                val isAdmin = accessLevel == "adm"
+
+                CollectionListItemInfo(it.uid, type, meta.name, meta.description ?: "", parseColor(meta.color), isReadOnly, isAdmin, null)
+            }.filterNotNull()
+        }
+
         override fun loadInBackground(): AccountInfo {
             val info = AccountInfo()
+            val settings = AccountSettings(context, account)
+            if (settings.isLegacy) {
+                val data = (context.applicationContext as App).data
 
-            val data = (context.applicationContext as App).data
+                for (serviceEntity in data.select(ServiceEntity::class.java).where(ServiceEntity.ACCOUNT.eq(account.name)).get()) {
+                    val id = serviceEntity.id.toLong()
+                    val service = serviceEntity.type!!
+                    when (service) {
+                        CollectionInfo.Type.ADDRESS_BOOK -> {
+                            info.carddav = AccountInfo.ServiceInfo()
+                            info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.addressBooksAuthority)
+                            info.carddav!!.infos = getLegacyJournals(data, serviceEntity)
 
-            for (serviceEntity in data.select(ServiceEntity::class.java).where(ServiceEntity.ACCOUNT.eq(account.name)).get()) {
-                val id = serviceEntity.id.toLong()
-                val service = serviceEntity.type!!
-                when (service) {
-                    CollectionInfo.Type.ADDRESS_BOOK -> {
-                        info.carddav = AccountInfo.ServiceInfo()
-                        info.carddav!!.id = id
-                        info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.addressBooksAuthority)
-                        info.carddav!!.journals = JournalEntity.getJournals(data, serviceEntity)
+                            val accountManager = AccountManager.get(context)
+                            for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
+                                val addressBook = LocalAddressBook(context, addrBookAccount, null)
+                                try {
+                                    if (account == addressBook.mainAccount)
+                                        info.carddav!!.refreshing = info.carddav!!.refreshing or ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY)
+                                } catch (e: ContactsStorageException) {
+                                }
 
-                        val accountManager = AccountManager.get(context)
-                        for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
-                            val addressBook = LocalAddressBook(context, addrBookAccount, null)
-                            try {
-                                if (account == addressBook.mainAccount)
-                                    info.carddav!!.refreshing = info.carddav!!.refreshing or ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY)
-                            } catch (e: ContactsStorageException) {
                             }
-
+                        }
+                        CollectionInfo.Type.CALENDAR -> {
+                            info.caldav = AccountInfo.ServiceInfo()
+                            info.caldav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
+                                    ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
+                            info.caldav!!.infos = getLegacyJournals(data, serviceEntity)
+                        }
+                        CollectionInfo.Type.TASKS -> {
+                            info.taskdav = AccountInfo.ServiceInfo()
+                            info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
+                                    OPENTASK_PROVIDERS.any {
+                                        ContentResolver.isSyncActive(account, it.authority)
+                                    }
+                            info.taskdav!!.infos = getLegacyJournals(data, serviceEntity)
                         }
                     }
-                    CollectionInfo.Type.CALENDAR -> {
-                        info.caldav = AccountInfo.ServiceInfo()
-                        info.caldav!!.id = id
-                        info.caldav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
-                        info.caldav!!.journals = JournalEntity.getJournals(data, serviceEntity)
-                    }
-                    CollectionInfo.Type.TASKS -> {
-                        info.taskdav = AccountInfo.ServiceInfo()
-                        info.taskdav!!.id = id
-                        info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                OPENTASK_PROVIDERS.any {
-                                    ContentResolver.isSyncActive(account, it.authority)
-                                }
-                        info.taskdav!!.journals = JournalEntity.getJournals(data, serviceEntity)
-                    }
                 }
+                return info
             }
+
+            val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
+            val etebase = EtebaseLocalCache.getEtebase(context, settings)
+            val colMgr = etebase.collectionManager
+
+            info.carddav = AccountInfo.ServiceInfo()
+            info.carddav!!.refreshing = ContentResolver.isSyncActive(account, App.addressBooksAuthority)
+            info.carddav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.TASKS)
+
+            val accountManager = AccountManager.get(context)
+            for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
+                val addressBook = LocalAddressBook(context, addrBookAccount, null)
+                try {
+                    if (account == addressBook.mainAccount)
+                        info.carddav!!.refreshing = info.carddav!!.refreshing or ContentResolver.isSyncActive(addrBookAccount, ContactsContract.AUTHORITY)
+                } catch (e: ContactsStorageException) {
+                }
+
+            }
+
+            info.caldav = AccountInfo.ServiceInfo()
+            info.caldav!!.refreshing = ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
+            info.caldav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.TASKS)
+
+            info.taskdav = AccountInfo.ServiceInfo()
+            info.taskdav!!.refreshing = OPENTASK_PROVIDERS.any {
+                ContentResolver.isSyncActive(account, it.authority)
+            }
+            info.taskdav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.TASKS)
+
             return info
         }
     }
@@ -396,15 +458,16 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
     /* LIST ADAPTERS */
 
-    class CollectionListAdapter(context: Context, private val account: Account) : ArrayAdapter<JournalEntity>(context, R.layout.account_collection_item) {
+    data class CollectionListItemInfo(val uid: String, val enumType: CollectionInfo.Type, val displayName: String, val description: String, val color: Int?, val isReadOnly: Boolean, val isAdmin: Boolean, val legacyInfo: CollectionInfo?)
+
+    class CollectionListAdapter(context: Context, private val account: Account) : ArrayAdapter<CollectionListItemInfo>(context, R.layout.account_collection_item) {
 
         override fun getView(position: Int, _v: View?, parent: ViewGroup): View {
             var v = _v
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.account_collection_item, parent, false)
 
-            val journalEntity = getItem(position)
-            val info = journalEntity!!.info
+            val info = getItem(position)!!
 
             var tv = v!!.findViewById<View>(R.id.title) as TextView
             tv.text = if (TextUtils.isEmpty(info.displayName)) info.uid else info.displayName
@@ -425,10 +488,10 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             }
 
             val readOnly = v.findViewById<View>(R.id.read_only)
-            readOnly.visibility = if (journalEntity.isReadOnly) View.VISIBLE else View.GONE
+            readOnly.visibility = if (info.isReadOnly) View.VISIBLE else View.GONE
 
             val shared = v.findViewById<View>(R.id.shared)
-            val isOwner = journalEntity.isOwner(account.name)
+            val isOwner = info.isAdmin
             shared.visibility = if (isOwner) View.GONE else View.VISIBLE
 
             return v

@@ -31,7 +31,7 @@ class LocalCalendar private constructor(
 ): AndroidCalendar<LocalEvent>(account, provider, LocalEvent.Factory, id), LocalCollection<LocalEvent> {
 
     companion object {
-        val defaultColor = -0x743cb6     // light green 500
+        val defaultColor = -0x743cb6     // light green 500 - should be "8BC349"?
 
         val COLUMN_CTAG = Calendars.CAL_SYNC1
 

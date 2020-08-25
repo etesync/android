@@ -43,4 +43,8 @@ public class Constants {
 
     public final static String KEY_ACCOUNT = "account",
             KEY_COLLECTION_INFO = "collectionInfo";
+
+    public final static String ETEBASE_TYPE_ADDRESS_BOOK = "etebase.vcard";
+    public final static String ETEBASE_TYPE_CALENDAR = "etebase.vevent";
+    public final static String ETEBASE_TYPE_TASKS = "etebase.vtodo";
 }
