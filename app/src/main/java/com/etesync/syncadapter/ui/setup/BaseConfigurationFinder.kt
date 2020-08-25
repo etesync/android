@@ -8,6 +8,9 @@
 package com.etesync.syncadapter.ui.setup
 
 import android.content.Context
+import com.etebase.client.Account
+import com.etebase.client.Client
+import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.HttpClient
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -19,6 +22,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.IOException
 import java.io.Serializable
 import java.net.URI
@@ -31,8 +35,26 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         httpClient = HttpClient.Builder(context).build().okHttpClient
     }
 
+    private fun isServerEtebase(): Boolean {
+        if (credentials.uri != null) {
+            val remote = credentials.uri.toHttpUrlOrNull()!!.newBuilder()
+                    .addPathSegments("api/v1/authentication/is_etebase/")
+                    .build()
 
-    fun findInitialConfiguration(): Configuration {
+            val request = Request.Builder()
+                    .get()
+                    .url(remote)
+                    .build()
+
+            val response = httpClient.newCall(request).execute()
+
+            return response.isSuccessful
+        } else {
+            return !credentials.userName.contains("@")
+        }
+    }
+
+    fun findInitialConfigurationLegacy(): Configuration {
         var exception: Throwable? = null
 
         val uri = credentials.uri ?: URI(Constants.serviceUrl.toString())
@@ -57,10 +79,55 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
 
         return Configuration(
                 uri,
-                credentials.userName, authtoken,
+                credentials.userName,
+                null,
+                authtoken,
                 userInfo,
                 exception
         )
+    }
+
+    fun findInitialConfigurationEtebase(): Configuration {
+        var exception: Throwable? = null
+
+        val uri = credentials.uri
+
+        var etebaseSession: String? = null
+        try {
+            val client = Client.create(httpClient, uri.toString())
+            val etebase = Account.login(client, credentials.userName, credentials.password)
+            etebaseSession = etebase.save(null)
+        } catch (e: EtebaseException) {
+            exception = e
+        }
+
+        return Configuration(
+                uri,
+                credentials.userName,
+                etebaseSession,
+                null,
+                null,
+                exception
+        )
+    }
+
+    fun findInitialConfiguration(): Configuration {
+        try {
+            if (isServerEtebase()) {
+                return findInitialConfigurationEtebase()
+            } else {
+                return findInitialConfigurationLegacy()
+            }
+        } catch (e: Exception) {
+            return Configuration(
+                    credentials.uri,
+                    credentials.userName,
+                    null,
+                    null,
+                    null,
+                    e
+            )
+        }
     }
 
     // data classes
@@ -68,13 +135,16 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     class Configuration
     // We have to use URI here because HttpUrl is not serializable!
 
-    (val url: URI, val userName: String, val authtoken: String?, var userInfo: UserInfoManager.UserInfo?, var error: Throwable?) : Serializable {
+    (val url: URI?, val userName: String, val etebaseSession: String?, val authtoken: String?, var userInfo: UserInfoManager.UserInfo?, var error: Throwable?) : Serializable {
         var rawPassword: String? = null
         var password: String? = null
         var keyPair: Crypto.AsymmetricKeyPair? = null
 
         val isFailed: Boolean
             get() = this.error != null
+
+        val isLegacy: Boolean
+            get() = this.authtoken != null
 
         class ServiceInfo : Serializable {
             val collections: Map<String, CollectionInfo> = HashMap()

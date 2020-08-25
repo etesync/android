@@ -247,10 +247,10 @@ constructor(internal val context: Context, internal val account: Account) {
         val SYNC_INTERVAL_MANUALLY: Long = -1
 
         // XXX: Workaround a bug in Android where passing a bundle to addAccountExplicitly doesn't work.
-        fun setUserData(accountManager: AccountManager, account: Account, uri: URI, userName: String) {
+        fun setUserData(accountManager: AccountManager, account: Account, uri: URI?, userName: String) {
             accountManager.setUserData(account, KEY_SETTINGS_VERSION, CURRENT_VERSION.toString())
             accountManager.setUserData(account, KEY_USERNAME, userName)
-            accountManager.setUserData(account, KEY_URI, uri.toString())
+            accountManager.setUserData(account, KEY_URI, uri?.toString())
         }
     }
 }

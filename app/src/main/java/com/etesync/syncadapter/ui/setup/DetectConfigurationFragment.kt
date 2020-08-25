@@ -13,6 +13,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.loader.app.LoaderManager
@@ -47,17 +48,23 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
 
     override fun onLoadFinished(loader: Loader<Configuration>, data: Configuration?) {
         if (data != null) {
-            if (data.isFailed)
-            // no service found: show error message
+            if (data.isFailed) {
+                // no service found: show error message
                 requireFragmentManager().beginTransaction()
                         .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
-            else
-            // service found: continue
+            } else if (data.isLegacy) {
+                // legacy service found: continue
                 requireFragmentManager().beginTransaction()
                         .replace(android.R.id.content, EncryptionDetailsFragment.newInstance(data))
                         .addToBackStack(null)
                         .commitAllowingStateLoss()
+            } else {
+                requireFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, CreateAccountFragment.newInstance(data))
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
+            }
         } else
             Logger.log.severe("Configuration detection failed")
 
