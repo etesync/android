@@ -134,13 +134,13 @@ class SetupEncryptionFragment : DialogFragment() {
             }
 
             // insert CardDAV service
-            insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK, config.cardDAV)
+            insertService(accountName, CollectionInfo.Type.ADDRESS_BOOK)
 
             // contact sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
             settings.setSyncInterval(App.addressBooksAuthority, Constants.DEFAULT_SYNC_INTERVAL.toLong())
 
             // insert CalDAV service
-            insertService(accountName, CollectionInfo.Type.CALENDAR, config.calDAV)
+            insertService(accountName, CollectionInfo.Type.CALENDAR)
 
             // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
             settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL.toLong())
@@ -160,8 +160,9 @@ class SetupEncryptionFragment : DialogFragment() {
         return true
     }
 
-    protected fun insertService(accountName: String, serviceType: CollectionInfo.Type, info: BaseConfigurationFinder.Configuration.ServiceInfo) {
-        val data = (context!!.applicationContext as App).data
+    protected fun insertService(accountName: String, serviceType: CollectionInfo.Type) {
+        val info = Configuration.ServiceInfo()
+        val data = (requireContext().applicationContext as App).data
 
         // insert service
         val serviceEntity = ServiceEntity.fetchOrCreate(data, accountName, serviceType)

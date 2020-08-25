@@ -34,8 +34,6 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
 
     fun findInitialConfiguration(): Configuration {
         var exception: Throwable? = null
-        val cardDavConfig = findInitialConfiguration(CollectionInfo.Type.ADDRESS_BOOK)
-        val calDavConfig = findInitialConfiguration(CollectionInfo.Type.CALENDAR)
 
         val uri = credentials.uri ?: URI(Constants.serviceUrl.toString())
 
@@ -60,18 +58,9 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         return Configuration(
                 uri,
                 credentials.userName, authtoken,
-                cardDavConfig, calDavConfig,
                 userInfo,
                 exception
         )
-    }
-
-    protected fun findInitialConfiguration(service: CollectionInfo.Type): Configuration.ServiceInfo {
-        // put discovered information here
-        val config = Configuration.ServiceInfo()
-        Logger.log.info("Finding initial " + service.toString() + " service configuration")
-
-        return config
     }
 
     // data classes
@@ -79,7 +68,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     class Configuration
     // We have to use URI here because HttpUrl is not serializable!
 
-    (val url: URI, val userName: String, val authtoken: String?, val cardDAV: ServiceInfo, val calDAV: ServiceInfo, var userInfo: UserInfoManager.UserInfo?, var error: Throwable?) : Serializable {
+    (val url: URI, val userName: String, val authtoken: String?, var userInfo: UserInfoManager.UserInfo?, var error: Throwable?) : Serializable {
         var rawPassword: String? = null
         var password: String? = null
         var keyPair: Crypto.AsymmetricKeyPair? = null
@@ -96,7 +85,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         }
 
         override fun toString(): String {
-            return "BaseConfigurationFinder.Configuration(url=" + this.url + ", userName=" + this.userName + ", keyPair=" + this.keyPair + ", cardDAV=" + this.cardDAV + ", calDAV=" + this.calDAV + ", error=" + this.error + ", failed=" + this.isFailed + ")"
+            return "BaseConfigurationFinder.Configuration(url=" + this.url + ", userName=" + this.userName + ", keyPair=" + this.keyPair + ", error=" + this.error + ", failed=" + this.isFailed + ")"
         }
     }
 
