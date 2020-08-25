@@ -13,6 +13,7 @@ import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalAuthenticator
 import com.etesync.journalmanager.UserInfoManager
+import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import okhttp3.HttpUrl
@@ -36,15 +37,17 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         val cardDavConfig = findInitialConfiguration(CollectionInfo.Type.ADDRESS_BOOK)
         val calDavConfig = findInitialConfiguration(CollectionInfo.Type.CALENDAR)
 
-        val authenticator = JournalAuthenticator(httpClient, credentials.uri?.toHttpUrlOrNull()!!)
+        val uri = credentials.uri ?: URI(Constants.serviceUrl.toString())
+
+        val authenticator = JournalAuthenticator(httpClient, uri.toHttpUrlOrNull()!!)
 
         var authtoken: String? = null
         var userInfo: UserInfoManager.UserInfo? = null
         try {
             authtoken = authenticator.getAuthToken(credentials.userName, credentials.password)
 
-            val authenticatedHttpClient = HttpClient.Builder(context, credentials.uri.host, authtoken!!).build().okHttpClient
-            val userInfoManager = UserInfoManager(authenticatedHttpClient, credentials.uri.toHttpUrlOrNull()!!)
+            val authenticatedHttpClient = HttpClient.Builder(context, uri.host, authtoken!!).build().okHttpClient
+            val userInfoManager = UserInfoManager(authenticatedHttpClient, uri.toHttpUrlOrNull()!!)
             userInfo = userInfoManager.fetch(credentials.userName)
         } catch (e: Exceptions.HttpException) {
             Logger.log.warning(e.message)
@@ -55,7 +58,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
         }
 
         return Configuration(
-                credentials.uri,
+                uri,
                 credentials.userName, authtoken,
                 cardDavConfig, calDavConfig,
                 userInfo,
