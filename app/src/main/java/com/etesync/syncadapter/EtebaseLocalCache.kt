@@ -51,13 +51,13 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         return if (stokenFile.exists()) stokenFile.readText() else null
     }
 
-    fun collectionList(colMgr: CollectionManager): List<Collection> {
+    fun collectionList(colMgr: CollectionManager, withDeleted: Boolean = false): List<Collection> {
         return colsDir.list().map {
             val colDir = File(colsDir, it)
             val colFile = File(colDir, "col")
             val content = colFile.readBytes()
             colMgr.cacheLoad(content)
-        }
+        }.filter { withDeleted || !it.isDeleted }
     }
 
     fun collectionSet(colMgr: CollectionManager, collection: Collection) {
@@ -74,13 +74,13 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         colDir.deleteRecursively()
     }
 
-    fun itemList(itemMgr: ItemManager, colUid: String): List<Item> {
+    fun itemList(itemMgr: ItemManager, colUid: String, withDeleted: Boolean = false): List<Item> {
         val itemsDir = getCollectionItemsDir(colUid)
         return itemsDir.list().map {
             val itemFile = File(itemsDir, it)
             val content = itemFile.readBytes()
             itemMgr.cacheLoad(content)
-        }
+        }.filter { withDeleted || !it.isDeleted }
     }
 
     fun itemSet(itemMgr: ItemManager, colUid: String, item: Item) {

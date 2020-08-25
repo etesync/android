@@ -373,7 +373,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 val isReadOnly = accessLevel == "ro"
                 val isAdmin = accessLevel == "adm"
 
-                CollectionListItemInfo(it.uid, type, meta.name, meta.description ?: "", parseColor(meta.color), isReadOnly, isAdmin, null)
+                val metaColor = meta.color
+                val color = if (metaColor != null && metaColor != "") parseColor(metaColor) else null
+                CollectionListItemInfo(it.uid, type, meta.name, meta.description ?: "", color, isReadOnly, isAdmin, null)
             }.filterNotNull()
         }
 
@@ -423,12 +425,13 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             }
 
             val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
-            val etebase = EtebaseLocalCache.getEtebase(context, settings)
+            val httpClient = HttpClient.Builder(context).build().okHttpClient
+            val etebase = EtebaseLocalCache.getEtebase(context, httpClient, settings)
             val colMgr = etebase.collectionManager
 
             info.carddav = AccountInfo.ServiceInfo()
             info.carddav!!.refreshing = ContentResolver.isSyncActive(account, App.addressBooksAuthority)
-            info.carddav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.TASKS)
+            info.carddav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.ADDRESS_BOOK)
 
             val accountManager = AccountManager.get(context)
             for (addrBookAccount in accountManager.getAccountsByType(App.addressBookAccountType)) {
@@ -443,7 +446,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
             info.caldav = AccountInfo.ServiceInfo()
             info.caldav!!.refreshing = ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
-            info.caldav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.TASKS)
+            info.caldav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.CALENDAR)
 
             info.taskdav = AccountInfo.ServiceInfo()
             info.taskdav!!.refreshing = OPENTASK_PROVIDERS.any {

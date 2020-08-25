@@ -22,6 +22,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Pair
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.FetchOptions
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -208,30 +209,59 @@ abstract class SyncAdapterService : Service() {
                 val settings = AccountSettings(context, account)
                 val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
-                val journalsManager = JournalManager(httpClient.okHttpClient, settings.uri?.toHttpUrlOrNull()!!)
+                if (settings.isLegacy) {
+                    val journalsManager = JournalManager(httpClient.okHttpClient, settings.uri?.toHttpUrlOrNull()!!)
 
-                var journals = journalFetcher.list(journalsManager, settings, serviceType)
+                    var journals = journalFetcher.list(journalsManager, settings, serviceType)
 
-                if (journals.isEmpty()) {
-                    journals = LinkedList()
-                    try {
-                        val info = CollectionInfo.defaultForServiceType(serviceType)
-                        val uid = JournalManager.Journal.genUid()
-                        info.uid = uid
-                        val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
-                        val journal = JournalManager.Journal(crypto, info.toJson(), uid)
-                        journalsManager.create(journal)
-                        journals.add(Pair(journal, info))
-                    } catch (e: Exceptions.AssociateNotAllowedException) {
-                        // Skip for now
+                    if (journals.isEmpty()) {
+                        journals = LinkedList()
+                        try {
+                            val info = CollectionInfo.defaultForServiceType(serviceType)
+                            val uid = JournalManager.Journal.genUid()
+                            info.uid = uid
+                            val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                            val journal = JournalManager.Journal(crypto, info.toJson(), uid)
+                            journalsManager.create(journal)
+                            journals.add(Pair(journal, info))
+                        } catch (e: Exceptions.AssociateNotAllowedException) {
+                            // Skip for now
+                        }
+                    }
+
+                    legacySaveCollections(journals)
+
+                    httpClient.close()
+                    return
+                }
+
+
+                val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
+                synchronized(etebaseLocalCache) {
+                    val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+                    val colMgr = etebase.collectionManager
+                    var stoken = etebaseLocalCache.loadStoken()
+                    var done = false
+                    while (!done) {
+                        val colList = colMgr.list(FetchOptions().stoken(stoken))
+                        for (col in colList.data) {
+                            etebaseLocalCache.collectionSet(colMgr, col)
+                        }
+
+                        for (col in colList.removedMemberships) {
+                            etebaseLocalCache.collectionUnset(colMgr, col.uid())
+                        }
+
+                        stoken = colList.stoken
+                        done = colList.isDone
+                        etebaseLocalCache.saveStoken(stoken!!)
                     }
                 }
 
-                saveCollections(journals)
                 httpClient.close()
             }
 
-            private fun saveCollections(journals: Iterable<Pair<JournalManager.Journal, CollectionInfo>>) {
+            private fun legacySaveCollections(journals: Iterable<Pair<JournalManager.Journal, CollectionInfo>>) {
                 val data = (context.applicationContext as App).data
                 val service = JournalModel.Service.fetchOrCreate(data, account.name, serviceType)
 
