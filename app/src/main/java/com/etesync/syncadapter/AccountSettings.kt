@@ -73,6 +73,9 @@ constructor(internal val context: Context, internal val account: Account) {
         get() = accountManager.getUserData(account, KEY_WIFI_ONLY_SSID)
         set(ssid) = accountManager.setUserData(account, KEY_WIFI_ONLY_SSID, ssid)
 
+    var etebaseSession: String?
+        get() = accountManager.getUserData(account, KEY_ETEBASE_SESSION)
+        set(value) = accountManager.setUserData(account, KEY_ETEBASE_SESSION, value)
 
     // CalDAV settings
 
@@ -216,6 +219,7 @@ constructor(internal val context: Context, internal val account: Account) {
         private val KEY_ASYMMETRIC_PRIVATE_KEY = "asymmetric_private_key"
         private val KEY_ASYMMETRIC_PUBLIC_KEY = "asymmetric_public_key"
         private val KEY_WIFI_ONLY = "wifi_only"
+        private val KEY_ETEBASE_SESSION = "etebase_session"
         // sync on WiFi only (default: false)
         private val KEY_WIFI_ONLY_SSID = "wifi_only_ssid"  // restrict sync to specific WiFi SSID
 
