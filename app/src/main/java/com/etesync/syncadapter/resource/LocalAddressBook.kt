@@ -20,6 +20,7 @@ import android.provider.ContactsContract.Groups
 import android.provider.ContactsContract.RawContacts
 import at.bitfire.vcard4android.*
 import com.etesync.syncadapter.App
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -70,6 +71,35 @@ class LocalAddressBook(
             return addressBook
         }
 
+        fun create(context: Context, provider: ContentProviderClient, mainAccount: Account, cachedCollection: CachedCollection): LocalAddressBook {
+            val col = cachedCollection.col
+            val accountManager = AccountManager.get(context)
+
+            val account = Account(accountName(mainAccount, cachedCollection), App.addressBookAccountType)
+            val userData = initialUserData(mainAccount, col.uid)
+            Logger.log.log(Level.INFO, "Creating local address book $account", userData)
+            if (!accountManager.addAccountExplicitly(account, null, userData))
+                throw IllegalStateException("Couldn't create address book account")
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                // Android < 7 seems to lose the initial user data sometimes, so set it a second time
+                // https://forums.bitfire.at/post/11644
+                userData.keySet().forEach { key ->
+                    accountManager.setUserData(account, key, userData.getString(key))
+                }
+            }
+
+
+            val addressBook = LocalAddressBook(context, account, provider)
+            ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true)
+
+            val values = ContentValues(2)
+            values.put(ContactsContract.Settings.SHOULD_SYNC, 1)
+            values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
+            addressBook.settings = values
+
+            return addressBook
+        }
 
         fun find(context: Context, provider: ContentProviderClient?, mainAccount: Account?) = AccountManager.get(context)
                 .getAccountsByType(App.addressBookAccountType)
@@ -99,6 +129,19 @@ class LocalAddressBook(
                     .append(mainAccount.name)
                     .append(" ")
                     .append(info.uid!!.substring(0, 4))
+                    .append(")")
+            return sb.toString()
+        }
+
+        fun accountName(mainAccount: Account, cachedCollection: CachedCollection): String {
+            val col = cachedCollection.col
+            val meta = cachedCollection.meta
+            val displayName = meta.name
+            val sb = StringBuilder(displayName)
+            sb.append(" (")
+                    .append(mainAccount.name)
+                    .append(" ")
+                    .append(col.uid.substring(0, 4))
                     .append(")")
             return sb.toString()
         }
@@ -176,6 +219,37 @@ class LocalAddressBook(
 
         Logger.log.info("Address book write permission? = ${!journalEntity.isReadOnly}")
         readOnly = journalEntity.isReadOnly
+
+        // make sure it will still be synchronized when contacts are updated
+        ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true)
+    }
+
+
+    fun update(cachedCollection: CachedCollection) {
+        val col = cachedCollection.col
+        val newAccountName = accountName(mainAccount, cachedCollection)
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        if (account.name != newAccountName && Build.VERSION.SDK_INT >= 21) {
+            val accountManager = AccountManager.get(context)
+            val future = accountManager.renameAccount(account, newAccountName, {
+                try {
+                    // update raw contacts to new account name
+                    if (provider != null) {
+                        val values = ContentValues(1)
+                        values.put(RawContacts.ACCOUNT_NAME, newAccountName)
+                        provider.update(syncAdapterURI(RawContacts.CONTENT_URI), values, RawContacts.ACCOUNT_NAME + "=? AND " + RawContacts.ACCOUNT_TYPE + "=?",
+                                arrayOf(account.name, account.type))
+                    }
+                } catch (e: RemoteException) {
+                    Logger.log.log(Level.WARNING, "Couldn't re-assign contacts to new account name", e)
+                }
+            }, null)
+            account = future.result
+        }
+
+        readOnly = col.accessLevel == "ro"
+        Logger.log.info("Address book write permission? = ${!readOnly}")
 
         // make sure it will still be synchronized when contacts are updated
         ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true)

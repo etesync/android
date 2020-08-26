@@ -15,10 +15,7 @@ import android.content.*
 import android.os.Bundle
 import android.provider.ContactsContract
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.R
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -53,7 +50,11 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
 
             RefreshCollections(account, CollectionInfo.Type.ADDRESS_BOOK).run()
 
-            updateLocalAddressBooks(contactsProvider, account)
+            if (settings.isLegacy) {
+                legacyUpdateLocalAddressBooks(contactsProvider, account)
+            } else {
+                updateLocalAddressBooks(contactsProvider, account, settings)
+            }
 
             contactsProvider.release()
 
@@ -69,9 +70,52 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
             Logger.log.info("Address book sync complete")
         }
 
+        private fun updateLocalAddressBooks(provider: ContentProviderClient, account: Account, settings: AccountSettings) {
+            val remote = HashMap<String, CachedCollection>()
+            val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
+            val collections: List<CachedCollection>
+            synchronized(etebaseLocalCache) {
+                val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
+                val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+                val colMgr = etebase.collectionManager
+
+                collections = etebaseLocalCache.collectionList(colMgr).filter { it.meta.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK }
+            }
+
+            for (collection in collections) {
+                remote[collection.col.uid] = collection
+            }
+
+            val local = LocalAddressBook.find(context, provider, account)
+
+            val updateColors = settings.manageCalendarColors
+
+            // delete obsolete local calendar
+            for (addressBook in local) {
+                val url = addressBook.url
+                val collection = remote[url]
+                if (collection == null) {
+                    Logger.log.fine("Deleting obsolete local addressBook $url")
+                    addressBook.delete()
+                } else {
+                    // remote CollectionInfo found for this local collection, update data
+                    Logger.log.fine("Updating local addressBook $url")
+                    addressBook.update(collection)
+                    // we already have a local addressBook for this remote collection, don't take into consideration anymore
+                    remote.remove(url)
+                }
+            }
+
+            // create new local calendars
+            for (url in remote.keys) {
+                val cachedCollection = remote[url]!!
+                Logger.log.info("Adding local calendar list $cachedCollection")
+                LocalAddressBook.create(context, provider, account, cachedCollection)
+            }
+        }
 
         @Throws(ContactsStorageException::class, AuthenticatorException::class, OperationCanceledException::class, IOException::class)
-        private fun updateLocalAddressBooks(provider: ContentProviderClient, account: Account) {
+        private fun legacyUpdateLocalAddressBooks(provider: ContentProviderClient, account: Account) {
             val context = context
             val data = (getContext().applicationContext as App).data
             val service = JournalModel.Service.fetchOrCreate(data, account.name, CollectionInfo.Type.ADDRESS_BOOK)
