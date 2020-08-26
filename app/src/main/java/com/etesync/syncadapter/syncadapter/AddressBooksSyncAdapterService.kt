@@ -88,8 +88,6 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
 
             val local = LocalAddressBook.find(context, provider, account)
 
-            val updateColors = settings.manageCalendarColors
-
             // delete obsolete local calendar
             for (addressBook in local) {
                 val url = addressBook.url

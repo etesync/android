@@ -11,12 +11,13 @@ import java.util.*
 File structure:
 cache_dir/
     user1/ <--- the name of the user
-        stoken
+        stoken <-- the stokens of the collection fetch
         cols/
             UID1/ - The uid of the first col
                 ...
             UID2/ - The uid of the second col
                 col <-- the col itself
+                stoken <-- the stoken of the items fetch
                 items/
                     item_uid1 <-- the item with uid 1
                     item_uid2
@@ -51,6 +52,19 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         return if (stokenFile.exists()) stokenFile.readText() else null
     }
 
+
+    fun collectionSaveStoken(colUid: String, stoken: String) {
+        val colDir = File(colsDir, colUid)
+        val stokenFile = File(colDir, "stoken")
+        stokenFile.writeText(stoken)
+    }
+
+    fun collectionLoadStoken(colUid: String): String? {
+        val colDir = File(colsDir, colUid)
+        val stokenFile = File(colDir, "stoken")
+        return if (stokenFile.exists()) stokenFile.readText() else null
+    }
+
     fun collectionList(colMgr: CollectionManager, withDeleted: Boolean = false): List<CachedCollection> {
         return colsDir.list().map {
             val colDir = File(colsDir, it)
@@ -58,6 +72,15 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
             val content = colFile.readBytes()
             colMgr.cacheLoad(content)
         }.filter { withDeleted || !it.isDeleted }.map{
+            CachedCollection(it, it.meta)
+        }
+    }
+
+    fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection {
+        val colDir = File(colsDir, colUid)
+        val colFile = File(colDir, "col")
+        val content = colFile.readBytes()
+        return colMgr.cacheLoad(content).let {
             CachedCollection(it, it.meta)
         }
     }

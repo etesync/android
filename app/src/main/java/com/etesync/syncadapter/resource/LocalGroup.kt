@@ -63,7 +63,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
                     // insert memberships
                     val membersIds = members.map {uid ->
                         Constants.log.fine("Assigning member: $uid")
-                        val contact = addressBook.findByUid(uid) as LocalContact?
+                        val contact = addressBook.findByFilename(uid) as LocalContact?
                         if (contact != null) contact.id else null
                     }.filterNotNull()
 

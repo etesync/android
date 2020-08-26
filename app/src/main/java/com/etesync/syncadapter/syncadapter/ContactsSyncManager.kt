@@ -13,12 +13,14 @@ import android.content.*
 import android.os.Bundle
 import android.provider.ContactsContract
 import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.ical4android.Event
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalEntryManager
 import com.etesync.journalmanager.model.SyncEntry
+import com.etebase.client.Item
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.HttpClient
@@ -77,7 +79,9 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             }
         }
 
-        journal = JournalEntryManager(httpClient.okHttpClient, remote, localAddressBook.url)
+        if (isLegacy) {
+            journal = JournalEntryManager(httpClient.okHttpClient, remote, localAddressBook.url)
+        }
 
         return true
     }
@@ -127,6 +131,34 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         return localCollection as LocalAddressBook
     }
 
+    override fun processItem(item: Item) {
+        val uid = item.meta.name!!
+
+        val local = localCollection!!.findByFilename(uid)
+
+        if (!item.isDeleted) {
+            val inputReader = StringReader(String(item.content))
+
+            val contacts = Contact.fromReader(inputReader, resourceDownloader)
+            if (contacts.size == 0) {
+                Logger.log.warning("Received VCard without data, ignoring")
+                return
+            } else if (contacts.size > 1) {
+                Logger.log.warning("Received multiple VCALs, using first one")
+            }
+
+            val contact = contacts[0]
+            processContact(item, contact, local)
+        } else {
+            if (local != null) {
+                Logger.log.info("Removing local record which has been deleted on the server")
+                local.delete()
+            } else {
+                Logger.log.warning("Tried deleting a non-existent record: " + uid)
+            }
+        }
+    }
+
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
     override fun processSyncEntryImpl(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
@@ -139,10 +171,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             Logger.log.warning("Received multiple VCards, using first one")
 
         val contact = contacts[0]
-        val local = localCollection!!.findByUid(contact.uid!!)
+        val local = localCollection!!.findByFilename(contact.uid!!)
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
-            processContact(contact, local)
+            legacyProcessContact(contact, local)
         } else {
             if (local != null) {
                 Logger.log.info("Removing local record which has been deleted on the server")
@@ -153,8 +185,65 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         }
     }
 
+    private fun processContact(item: Item, newData: Contact, _local: LocalAddress?): LocalAddress {
+        var local = _local
+        val uuid = newData.uid
+        // update local contact, if it exists
+        if (local != null) {
+            Logger.log.log(Level.INFO, "Updating $uuid in local address book")
+
+            if (local is LocalGroup && newData.group) {
+                // update group
+                val group: LocalGroup = local
+                group.eTag = item.etag
+                group.update(newData)
+                syncResult.stats.numUpdates++
+
+            } else if (local is LocalContact && !newData.group) {
+                // update contact
+                val contact: LocalContact = local
+                contact.eTag = item.etag
+                contact.update(newData)
+                syncResult.stats.numUpdates++
+
+            } else {
+                // group has become an individual contact or vice versa
+                try {
+                    local.delete()
+                    local = null
+                } catch (e: CalendarStorageException) {
+                    // CalendarStorageException is not used by LocalGroup and LocalContact
+                }
+
+            }
+        }
+
+        if (local == null) {
+            if (newData.group) {
+                Logger.log.log(Level.INFO, "Creating local group", item.uid)
+                val group = LocalGroup(localAddressBook(), newData, item.uid, item.etag)
+                group.add()
+
+                local = group
+            } else {
+                Logger.log.log(Level.INFO, "Creating local contact", item.uid)
+                val contact = LocalContact(localAddressBook(), newData, item.uid, item.etag)
+                contact.add()
+
+                local = contact
+            }
+            syncResult.stats.numInserts++
+        }
+
+        if (LocalContact.HASH_HACK && local is LocalContact)
+        // workaround for Android 7 which sets DIRTY flag when only meta-data is changed
+            local.updateHashCode(null)
+
+        return local
+    }
+
     @Throws(IOException::class, ContactsStorageException::class)
-    private fun processContact(newData: Contact, _local: LocalAddress?): LocalAddress {
+    private fun legacyProcessContact(newData: Contact, _local: LocalAddress?): LocalAddress {
         var local = _local
         val uuid = newData.uid
         // update local contact, if it exists

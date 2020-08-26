@@ -15,7 +15,6 @@ import android.provider.CalendarContract
 import android.provider.ContactsContract
 import androidx.fragment.app.DialogFragment
 import at.bitfire.ical4android.*
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
@@ -255,7 +254,7 @@ class ImportFragment : DialogFragment() {
 
                     for (event in events) {
                         try {
-                            var localEvent = localCalendar.findByUid(event.uid!!)
+                            var localEvent = localCalendar.findByFilename(event.uid!!)
                             if (localEvent != null) {
                                 localEvent.updateAsDirty(event)
                                 result.updated++
@@ -309,7 +308,7 @@ class ImportFragment : DialogFragment() {
 
                         for (task in tasks) {
                             try {
-                                var localTask = localTaskList.findByUid(task.uid!!)
+                                var localTask = localTaskList.findByFilename(task.uid!!)
                                 if (localTask != null) {
                                     localTask.updateAsDirty(task)
                                     result.updated++
@@ -353,7 +352,7 @@ class ImportFragment : DialogFragment() {
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
                         try {
-                            var localContact = localAddressBook.findByUid(contact.uid!!) as LocalContact?
+                            var localContact = localAddressBook.findByFilename(contact.uid!!) as LocalContact?
 
                             if (localContact != null) {
                                 localContact.updateAsDirty(contact)
@@ -386,7 +385,7 @@ class ImportFragment : DialogFragment() {
                             }
 
                             val group = contact
-                            var localGroup: LocalGroup? = localAddressBook.findByUid(group.uid!!) as LocalGroup?
+                            var localGroup: LocalGroup? = localAddressBook.findByFilename(group.uid!!) as LocalGroup?
 
                             if (localGroup != null) {
                                 localGroup.updateAsDirty(group, memberIds)

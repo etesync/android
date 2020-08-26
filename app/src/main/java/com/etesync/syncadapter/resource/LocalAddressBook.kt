@@ -344,7 +344,7 @@ class LocalAddressBook(
         return reallyDirty
     }
 
-    override fun findByUid(uid: String): LocalAddress? {
+    override fun findByFilename(uid: String): LocalAddress? {
         val found = findContactByUID(uid)
         if (found != null) {
             return found

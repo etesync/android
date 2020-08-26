@@ -17,6 +17,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.Item
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
@@ -59,7 +60,9 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         if (!super.prepare())
             return false
 
-        journal = JournalEntryManager(httpClient.okHttpClient, remote, localCalendar().name!!)
+        if (isLegacy) {
+            journal = JournalEntryManager(httpClient.okHttpClient, remote, localCalendar().name!!)
+        }
         return true
     }
 
@@ -77,6 +80,32 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         return localCollection as LocalCalendar
     }
 
+    override fun processItem(item: Item) {
+        val local = localCollection!!.findByFilename(item.uid)
+
+        if (!item.isDeleted) {
+            val inputReader = StringReader(String(item.content))
+
+            val events = Event.eventsFromReader(inputReader)
+            if (events.size == 0) {
+                Logger.log.warning("Received VCard without data, ignoring")
+                return
+            } else if (events.size > 1) {
+                Logger.log.warning("Received multiple VCALs, using first one")
+            }
+
+            val event = events[0]
+            processEvent(item, event, local)
+        } else {
+            if (local != null) {
+                Logger.log.info("Removing local record #" + local.id + " which has been deleted on the server")
+                local.delete()
+            } else {
+                Logger.log.warning("Tried deleting a non-existent record: " + item.uid)
+            }
+        }
+    }
+
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, InvalidCalendarException::class)
     override fun processSyncEntryImpl(cEntry: SyncEntry) {
         val inputReader = StringReader(cEntry.content)
@@ -90,10 +119,10 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         }
 
         val event = events[0]
-        val local = localCollection!!.findByUid(event.uid!!)
+        val local = localCollection!!.findByFilename(event.uid!!)
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
-            processEvent(event, local)
+            legacyProcessEvent(event, local)
         } else {
             if (local != null) {
                 Logger.log.info("Removing local record #" + local.id + " which has been deleted on the server")
@@ -138,8 +167,26 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         }
     }
 
+    private fun processEvent(item: Item, newData: Event, _localEvent: LocalEvent?): LocalEvent {
+        var localEvent = _localEvent
+        // delete local event, if it exists
+        if (localEvent != null) {
+            Logger.log.info("Updating " + newData.uid + " in local calendar")
+            localEvent.eTag = item.etag
+            localEvent.update(newData)
+            syncResult.stats.numUpdates++
+        } else {
+            Logger.log.info("Adding " + newData.uid + " to local calendar")
+            localEvent = LocalEvent(localCalendar(), newData, item.uid, item.etag)
+            localEvent.add()
+            syncResult.stats.numInserts++
+        }
+
+        return localEvent
+    }
+
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class)
-    private fun processEvent(newData: Event, _localEvent: LocalEvent?): LocalEvent {
+    private fun legacyProcessEvent(newData: Event, _localEvent: LocalEvent?): LocalEvent {
         var localEvent = _localEvent
         // delete local event, if it exists
         if (localEvent != null) {

@@ -222,7 +222,7 @@ class LocalCalendarImportFragment : ListFragment() {
                         var localEvent = if (event == null || event.uid == null)
                             null
                         else
-                            localCalendar.findByUid(event.uid!!)
+                            localCalendar.findByFilename(event.uid!!)
 
                         if (localEvent != null) {
                             localEvent.updateAsDirty(event!!)

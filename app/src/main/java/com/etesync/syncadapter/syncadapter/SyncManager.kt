@@ -16,6 +16,7 @@ import android.os.Bundle
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.*
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.journalmanager.Crypto
@@ -25,6 +26,8 @@ import com.etesync.journalmanager.model.SyncEntry
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.*
 import com.etesync.journalmanager.model.SyncEntry.Actions.ADD
+import com.etesync.syncadapter.HttpClient
+import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
@@ -41,21 +44,30 @@ import kotlin.concurrent.withLock
 
 abstract class SyncManager<T: LocalResource<*>> @Throws(Exceptions.IntegrityException::class, Exceptions.GenericCryptoException::class)
 constructor(protected val context: Context, protected val account: Account, protected val settings: AccountSettings, protected val extras: Bundle, protected val authority: String, protected val syncResult: SyncResult, journalUid: String, protected val serviceType: CollectionInfo.Type, accountName: String): Closeable {
+    // FIXME: remove all of the lateinit once we remove legacy (and make immutable)
+    // RemoteEntries and the likes are probably also just relevant for legacy
+    protected val isLegacy: Boolean = settings.isLegacy
 
     protected val notificationManager: SyncNotification
-    protected val info: CollectionInfo
+    protected lateinit var info: CollectionInfo
     protected var localCollection: LocalCollection<T>? = null
 
     protected var httpClient: HttpClient
+
+    protected lateinit var etebaseLocalCache: EtebaseLocalCache
+    protected lateinit var etebase: com.etebase.client.Account
+    protected lateinit var colMgr: CollectionManager
+    protected lateinit var itemMgr: ItemManager
+    protected lateinit var cachedCollection: CachedCollection
 
     protected var journal: JournalEntryManager? = null
     private var _journalEntity: JournalEntity? = null
 
     private var numDiscarded = 0
 
-    private val crypto: Crypto.CryptoManager
+    private lateinit var crypto: Crypto.CryptoManager
 
-    private val data: MyEntityDataStore
+    private lateinit var data: MyEntityDataStore
 
     /**
      * remote CTag (uuid of the last entry on the server). We update it when we fetch/push and save when everything works.
@@ -89,21 +101,31 @@ constructor(protected val context: Context, protected val account: Account, prot
         // create HttpClient with given logger
         httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
-        data = (context.applicationContext as App).data
-        val serviceEntity = JournalModel.Service.fetchOrCreate(data, accountName, serviceType)
-        info = JournalEntity.fetch(data, serviceEntity, journalUid)!!.info
+        if (isLegacy) {
+            data = (context.applicationContext as App).data
+            val serviceEntity = JournalModel.Service.fetchOrCreate(data, accountName, serviceType)
+            info = JournalEntity.fetch(data, serviceEntity, journalUid)!!.info
+
+            Logger.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version))
+
+            if (journalEntity.encryptedKey != null) {
+                crypto = Crypto.CryptoManager(info.version, settings.keyPair!!, journalEntity.encryptedKey)
+            } else {
+                crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid!!)
+            }
+        } else {
+            etebaseLocalCache = EtebaseLocalCache.getInstance(context, accountName)
+            etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+            colMgr = etebase.collectionManager
+            synchronized(etebaseLocalCache) {
+                cachedCollection = etebaseLocalCache.collectionGet(colMgr, journalUid)
+            }
+            itemMgr = colMgr.getItemManager(cachedCollection.col)
+        }
 
         // dismiss previous error notifications
         notificationManager = SyncNotification(context, journalUid, notificationId())
         notificationManager.cancel()
-
-        Logger.log.info(String.format(Locale.getDefault(), "Syncing collection %s (version: %d)", journalUid, info.version))
-
-        if (journalEntity.encryptedKey != null) {
-            crypto = Crypto.CryptoManager(info.version, settings.keyPair!!, journalEntity.encryptedKey)
-        } else {
-            crypto = Crypto.CryptoManager(info.version, settings.password(), info.uid!!)
-        }
     }
 
     protected abstract fun notificationId(): Int
@@ -128,48 +150,78 @@ constructor(protected val context: Context, protected val account: Account, prot
             Logger.log.info("Sync phase: " + context.getString(syncPhase))
             prepareFetch()
 
-            do {
-                if (Thread.interrupted())
-                    throw InterruptedException()
-                syncPhase = R.string.sync_phase_fetch_entries
-                Logger.log.info("Sync phase: " + context.getString(syncPhase))
-                fetchEntries()
+            if (isLegacy) {
+                do {
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_fetch_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    fetchEntries()
 
-                if (Thread.interrupted())
-                    throw InterruptedException()
-                syncPhase = R.string.sync_phase_apply_remote_entries
-                Logger.log.info("Sync phase: " + context.getString(syncPhase))
-                applyRemoteEntries()
-            } while (remoteEntries!!.size == MAX_FETCH)
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_apply_remote_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    applyRemoteEntries()
+                } while (remoteEntries!!.size == MAX_FETCH)
 
-            do {
-                if (Thread.interrupted())
-                    throw InterruptedException()
-                syncPhase = R.string.sync_phase_prepare_local
-                Logger.log.info("Sync phase: " + context.getString(syncPhase))
-                prepareLocal()
+                do {
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_prepare_local
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    prepareLocal()
 
-                /* Create journal entries out of local changes. */
-                if (Thread.interrupted())
-                    throw InterruptedException()
-                syncPhase = R.string.sync_phase_create_local_entries
-                Logger.log.info("Sync phase: " + context.getString(syncPhase))
-                createLocalEntries()
+                    /* Create journal entries out of local changes. */
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_create_local_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    createLocalEntries()
 
-                if (Thread.interrupted())
-                    throw InterruptedException()
-                syncPhase = R.string.sync_phase_apply_local_entries
-                Logger.log.info("Sync phase: " + context.getString(syncPhase))
-                /* FIXME: Skipping this now, because we already override with remote.
-                applyLocalEntries();
-                */
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_apply_local_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    /* FIXME: Skipping this now, because we already override with remote.
+                    applyLocalEntries();
+                    */
 
-                if (Thread.interrupted())
-                    throw InterruptedException()
-                syncPhase = R.string.sync_phase_push_entries
-                Logger.log.info("Sync phase: " + context.getString(syncPhase))
-                pushEntries()
-            } while (localEntries!!.size == MAX_PUSH)
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_push_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    pushEntries()
+                } while (localEntries!!.size == MAX_PUSH)
+            } else {
+                var itemList: ItemListResponse?
+                var stoken = synchronized(etebaseLocalCache) {
+                    etebaseLocalCache.collectionLoadStoken(cachedCollection.col.uid)
+                }
+                // Push local changes
+
+                do {
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_fetch_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    itemList = fetchItems(stoken)
+                    if (itemList == null) {
+                        break
+                    }
+
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_apply_remote_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    applyRemoteItems(itemList)
+
+                    stoken = itemList.stoken
+                    synchronized(etebaseLocalCache) {
+                        etebaseLocalCache.collectionSaveStoken(cachedCollection.col.uid, stoken!!)
+                    }
+                } while (!itemList!!.isDone)
+            }
 
             /* Cleanup and finalize changes */
             if (Thread.interrupted())
@@ -241,7 +293,8 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     private fun notifyUserOnSync() {
         val changeNotification = context.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
-        if (remoteEntries!!.isEmpty() || !changeNotification) {
+        val remoteEntries = remoteEntries
+        if ((remoteEntries == null) || remoteEntries.isEmpty() || !changeNotification) {
             return
         }
         val notificationHelper = SyncNotification(context,
@@ -250,7 +303,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         var deleted = 0
         var added = 0
         var changed = 0
-        for (entry in remoteEntries!!) {
+        for (entry in remoteEntries) {
             val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
             val action = cEntry.action
             when (action) {
@@ -287,6 +340,14 @@ constructor(protected val context: Context, protected val account: Account, prot
         return true
     }
 
+    protected abstract fun processItem(item: Item)
+
+    private fun persistItem(item: Item) {
+        synchronized(etebaseLocalCache) {
+            etebaseLocalCache.itemSet(itemMgr, cachedCollection.col.uid, item)
+        }
+    }
+
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, InvalidCalendarException::class)
     protected abstract fun processSyncEntryImpl(cEntry: SyncEntry)
 
@@ -319,36 +380,46 @@ constructor(protected val context: Context, protected val account: Account, prot
         }
     }
 
-    @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, Exceptions.HttpException::class, InvalidCalendarException::class, InterruptedException::class)
-    protected fun applyLocalEntries() {
-        // FIXME: Need a better strategy
-        // We re-apply local entries so our changes override whatever was written in the remote.
-        val strTotal = localEntries!!.size.toString()
+    @Throws(IOException::class, CalendarStorageException::class, ContactsStorageException::class)
+    protected fun prepareFetch() {
+        if (isLegacy) {
+            remoteCTag = journalEntity.getLastUid(data)
+        } else {
+            remoteCTag = cachedCollection.col.stoken
+        }
+    }
+
+    private fun fetchItems(stoken: String?): ItemListResponse? {
+        if (remoteCTag != stoken) {
+            val ret = itemMgr.list(FetchOptions().stoken(stoken))
+            Logger.log.info("Fetched items. Done=${ret.isDone}")
+            return ret
+        } else {
+            Logger.log.info("Skipping fetch because local lastUid == remoteLastUid (${remoteCTag})")
+            return null
+        }
+    }
+
+    private fun applyRemoteItems(itemList: ItemListResponse) {
+        val items = itemList.data
+        // Process new vcards from server
+        val size = items.size
         var i = 0
 
-        for (entry in localEntries!!) {
+        for (item in items) {
             if (Thread.interrupted()) {
                 throw InterruptedException()
             }
             i++
-            Logger.log.info("Processing (" + i.toString() + "/" + strTotal + ") " + entry.toString())
+            Logger.log.info("Processing (${i}/${size}) UID=${item.uid} Etag=${item.etag}")
 
-            val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
-            if (cEntry.isAction(SyncEntry.Actions.DELETE)) {
-                continue
-            }
-            Logger.log.info("Processing resource for journal entry")
-            processSyncEntry(cEntry)
+            processItem(item)
+            persistItem(item)
         }
     }
 
-    @Throws(IOException::class, CalendarStorageException::class, ContactsStorageException::class)
-    protected fun prepareFetch() {
-        remoteCTag = journalEntity.getLastUid(data)
-    }
-
     @Throws(Exceptions.HttpException::class, ContactsStorageException::class, CalendarStorageException::class, Exceptions.IntegrityException::class)
-    protected fun fetchEntries() {
+    private fun fetchEntries() {
         val count = data.count(EntryEntity::class.java).where(EntryEntity.JOURNAL.eq(journalEntity)).get().value()
         if (remoteCTag != null && count == 0) {
             // If we are updating an existing installation with no saved journal, we need to add
@@ -377,7 +448,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     @Throws(IOException::class, ContactsStorageException::class, CalendarStorageException::class, InvalidCalendarException::class, InterruptedException::class)
-    protected fun applyRemoteEntries() {
+    private fun applyRemoteEntries() {
         // Process new vcards from server
         val strTotal = remoteEntries!!.size.toString()
         var i = 0
@@ -406,7 +477,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     }
 
     @Throws(Exceptions.HttpException::class, IOException::class, ContactsStorageException::class, CalendarStorageException::class)
-    protected fun pushEntries() {
+    private fun pushEntries() {
         // upload dirty contacts
         var pushed = 0
         // FIXME: Deal with failure (someone else uploaded before we go here)
@@ -510,7 +581,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     /**
      */
     @Throws(CalendarStorageException::class, ContactsStorageException::class, FileNotFoundException::class)
-    protected fun prepareLocal() {
+    private fun prepareLocal() {
         localDeleted = processLocallyDeleted()
         localDirty = localCollection!!.findDirty(MAX_PUSH)
         // This is done after fetching the local dirty so all the ones we are using will be prepared

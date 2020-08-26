@@ -165,7 +165,7 @@ class LocalCalendar private constructor(
     override fun findAll(): List<LocalEvent>
             = queryEvents(null, null)
 
-    override fun findByUid(uid: String): LocalEvent?
+    override fun findByFilename(uid: String): LocalEvent?
         = queryEvents(Events._SYNC_ID + " =? ", arrayOf(uid)).firstOrNull()
 
     fun processDirtyExceptions() {
