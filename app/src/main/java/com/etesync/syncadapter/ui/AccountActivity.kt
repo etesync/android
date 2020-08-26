@@ -362,21 +362,24 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                 CollectionInfo.Type.TASKS -> ETEBASE_TYPE_TASKS
             }
 
-            return etebaseLocalCache.collectionList(colMgr).map {
-                val meta = it.meta
+            synchronized(etebaseLocalCache) {
+                return etebaseLocalCache.collectionList(colMgr).map {
+                    val meta = it.meta
 
-                if (strType != meta.collectionType) {
-                    return@map null
-                }
+                    if (strType != meta.collectionType) {
+                        return@map null
+                    }
 
-                val accessLevel = it.col.accessLevel
-                val isReadOnly = accessLevel == "ro"
-                val isAdmin = accessLevel == "adm"
+                    val accessLevel = it.col.accessLevel
+                    val isReadOnly = accessLevel == "ro"
+                    val isAdmin = accessLevel == "adm"
 
-                val metaColor = meta.color
-                val color = if (metaColor != null && metaColor != "") parseColor(metaColor) else null
-                CollectionListItemInfo(it.col.uid, type, meta.name, meta.description ?: "", color, isReadOnly, isAdmin, null)
-            }.filterNotNull()
+                    val metaColor = meta.color
+                    val color = if (!metaColor.isNullOrBlank()) parseColor(metaColor) else null
+                    CollectionListItemInfo(it.col.uid, type, meta.name, meta.description
+                            ?: "", color, isReadOnly, isAdmin, null)
+                }.filterNotNull()
+            }
         }
 
         override fun loadInBackground(): AccountInfo {
