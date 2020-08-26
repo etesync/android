@@ -134,8 +134,8 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     @Throws(CalendarStorageException::class, ContactsStorageException::class, IOException::class)
-    override fun createLocalEntries() {
-        super.createLocalEntries()
+    override fun prepareLocal() {
+        super.prepareLocal()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             createInviteAttendeesNotification()

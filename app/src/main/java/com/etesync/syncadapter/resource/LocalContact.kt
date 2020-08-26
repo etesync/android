@@ -52,7 +52,7 @@ class LocalContact : AndroidContact, LocalAddress {
 
     override// The same now
     val uuid: String?
-        get() = fileName
+        get() = contact?.uid
 
     override val isLocalOnly: Boolean
         get() = TextUtils.isEmpty(eTag)
@@ -88,9 +88,11 @@ class LocalContact : AndroidContact, LocalAddress {
         addressBook.provider?.update(rawContactSyncURI(), values, null, null)
     }
 
-    override fun clearDirty(eTag: String) {
+    override fun clearDirty(eTag: String?) {
         val values = ContentValues(3)
-        values.put(AndroidContact.COLUMN_ETAG, eTag)
+        if (eTag != null) {
+            values.put(AndroidContact.COLUMN_ETAG, eTag)
+        }
         values.put(ContactsContract.RawContacts.DIRTY, 0)
 
         if (LocalContact.HASH_HACK) {
@@ -105,15 +107,16 @@ class LocalContact : AndroidContact, LocalAddress {
         this.eTag = eTag
     }
 
-    override fun prepareForUpload() {
+    override fun prepareForUpload(fileName_: String?) {
         val uid = UUID.randomUUID().toString()
 
         val values = ContentValues(2)
-        values.put(AndroidContact.COLUMN_FILENAME, uid)
+        val fileName = fileName_ ?: uid
+        values.put(AndroidContact.COLUMN_FILENAME, fileName)
         values.put(AndroidContact.COLUMN_UID, uid)
         addressBook.provider?.update(rawContactSyncURI(), values, null, null)
 
-        fileName = uid
+        this.fileName = fileName
     }
 
     override fun populateData(mimeType: String, row: ContentValues) {

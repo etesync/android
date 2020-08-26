@@ -31,7 +31,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     private var saveAsDirty = false // When true, the resource will be saved as dirty
 
-    private var fileName: String? = null
+    override var fileName: String? = null
     var eTag: String? = null
 
     override val content: String
@@ -49,7 +49,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     override// Now the same
     val uuid: String?
-        get() = fileName
+        get() = task?.uid
 
     constructor(taskList: AndroidTaskList<*>, task: Task, fileName: String?, eTag: String?)
             : super(taskList, task) {
@@ -96,7 +96,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     /* custom queries */
 
-    override fun prepareForUpload() {
+    override fun prepareForUpload(fileName_: String?) {
         var uid: String? = null
         val c = taskList.provider.client.query(taskSyncURI(), arrayOf(COLUMN_UID), null, null, null)
         if (c.moveToNext())
@@ -106,12 +106,13 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
         c.close()
 
+        val fileName = fileName_ ?: uid
         val values = ContentValues(2)
-        values.put(TaskContract.Tasks._SYNC_ID, uid)
+        values.put(TaskContract.Tasks._SYNC_ID, fileName)
         values.put(COLUMN_UID, uid)
         taskList.provider.client.update(taskSyncURI(), values, null, null)
 
-        fileName = uid
+        this.fileName = fileName
         val task = this.task
         if (task != null)
             task.uid = uid
@@ -123,10 +124,12 @@ class LocalTask : AndroidTask, LocalResource<Task> {
         taskList.provider.client.update(taskSyncURI(), values, null, null)
     }
 
-    override fun clearDirty(eTag: String) {
+    override fun clearDirty(eTag: String?) {
         val values = ContentValues(2)
         values.put(TaskContract.Tasks._DIRTY, 0)
-        values.put(COLUMN_ETAG, eTag)
+        if (eTag != null) {
+            values.put(COLUMN_ETAG, eTag)
+        }
         if (task != null)
             values.put(COLUMN_SEQUENCE, task?.sequence)
         taskList.provider.client.update(taskSyncURI(), values, null, null)

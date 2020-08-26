@@ -38,7 +38,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     private var saveAsDirty = false // When true, the resource will be saved as dirty
 
-    private var fileName: String? = null
+    override var fileName: String? = null
     var eTag: String? = null
 
     var weAreOrganizer = true
@@ -58,7 +58,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     override// Now the same
     val uuid: String?
-        get() = fileName
+        get() = event?.uid
 
     constructor(calendar: AndroidCalendar<*>, event: Event, fileName: String?, eTag: String?) : super(calendar, event) {
         this.fileName = fileName
@@ -133,7 +133,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     /* custom queries */
 
-    override fun prepareForUpload() {
+    override fun prepareForUpload(fileName_: String?) {
         var uid: String? = null
         val c = calendar.provider.query(eventSyncURI(), arrayOf(COLUMN_UID), null, null, null)
         if (c.moveToNext())
@@ -142,14 +142,14 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
             uid = UUID.randomUUID().toString()
 
         c.close()
-        val newFileName = uid
 
+        val fileName = fileName_ ?: uid
         val values = ContentValues(2)
-        values.put(Events._SYNC_ID, newFileName)
+        values.put(Events._SYNC_ID, fileName)
         values.put(COLUMN_UID, uid)
         calendar.provider.update(eventSyncURI(), values, null, null)
 
-        fileName = newFileName
+        this.fileName = fileName
 
         val event = this.event
         if (event != null)
@@ -162,10 +162,12 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         calendar.provider.update(eventSyncURI(), values, null, null)
     }
 
-    override fun clearDirty(eTag: String) {
+    override fun clearDirty(eTag: String?) {
         val values = ContentValues(2)
         values.put(CalendarContract.Events.DIRTY, 0)
-        values.put(COLUMN_ETAG, eTag)
+        if (eTag != null) {
+            values.put(COLUMN_ETAG, eTag)
+        }
         if (event != null)
             values.put(COLUMN_SEQUENCE, event?.sequence)
         calendar.provider.update(eventSyncURI(), values, null, null)

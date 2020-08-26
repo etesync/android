@@ -120,13 +120,15 @@ class LocalGroup : AndroidGroup, LocalAddress {
         return values
     }
 
-    override fun clearDirty(eTag: String) {
+    override fun clearDirty(eTag: String?) {
         val id = requireNotNull(id)
 
         val values = ContentValues(2)
         values.put(Groups.DIRTY, 0)
         this.eTag = eTag
-        values.put(AndroidGroup.COLUMN_ETAG, eTag)
+        if (eTag != null) {
+            values.put(AndroidGroup.COLUMN_ETAG, eTag)
+        }
         update(values)
 
         // update cached group memberships
@@ -154,15 +156,16 @@ class LocalGroup : AndroidGroup, LocalAddress {
         batch.commit()
     }
 
-    override fun prepareForUpload() {
+    override fun prepareForUpload(fileName_: String?) {
         val uid = UUID.randomUUID().toString()
 
         val values = ContentValues(2)
-        values.put(AndroidGroup.COLUMN_FILENAME, uid)
+        val fileName = fileName_ ?: uid
+        values.put(AndroidGroup.COLUMN_FILENAME, fileName)
         values.put(AndroidGroup.COLUMN_UID, uid)
         update(values)
 
-        fileName = uid
+        this.fileName = fileName
     }
 
     override fun resetDeleted() {

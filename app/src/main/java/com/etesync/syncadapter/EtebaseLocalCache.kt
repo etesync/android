@@ -76,9 +76,12 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         }
     }
 
-    fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection {
+    fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection? {
         val colDir = File(colsDir, colUid)
         val colFile = File(colDir, "col")
+        if (!colFile.exists()) {
+            return null
+        }
         val content = colFile.readBytes()
         return colMgr.cacheLoad(content).let {
             CachedCollection(it, it.meta)
@@ -106,6 +109,18 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
             val content = itemFile.readBytes()
             itemMgr.cacheLoad(content)
         }.filter { withDeleted || !it.isDeleted }.map {
+            CachedItem(it, it.meta)
+        }
+    }
+
+    fun itemGet(itemMgr: ItemManager, colUid: String, itemUid: String): CachedItem? {
+        val itemsDir = getCollectionItemsDir(colUid)
+        val itemFile = File(itemsDir, itemUid)
+        if (!itemFile.exists()) {
+            return null
+        }
+        val content = itemFile.readBytes()
+        return itemMgr.cacheLoad(content).let {
             CachedItem(it, it.meta)
         }
     }

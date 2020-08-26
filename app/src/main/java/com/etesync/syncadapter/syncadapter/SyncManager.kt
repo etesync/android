@@ -118,7 +118,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
             colMgr = etebase.collectionManager
             synchronized(etebaseLocalCache) {
-                cachedCollection = etebaseLocalCache.collectionGet(colMgr, journalUid)
+                cachedCollection = etebaseLocalCache.collectionGet(colMgr, journalUid)!!
             }
             itemMgr = colMgr.getItemManager(cachedCollection.col)
         }
@@ -199,6 +199,27 @@ constructor(protected val context: Context, protected val account: Account, prot
                     etebaseLocalCache.collectionLoadStoken(cachedCollection.col.uid)
                 }
                 // Push local changes
+                var chunkPushItems: List<Item>
+                do {
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_prepare_local
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    prepareLocal()
+
+                    /* Create push items out of local changes. */
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_create_local_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    chunkPushItems = createPushItems()
+
+                    if (Thread.interrupted())
+                        throw InterruptedException()
+                    syncPhase = R.string.sync_phase_push_entries
+                    Logger.log.info("Sync phase: " + context.getString(syncPhase))
+                    pushItems(chunkPushItems)
+                } while (chunkPushItems.size == MAX_PUSH)
 
                 do {
                     if (Thread.interrupted())
@@ -239,6 +260,11 @@ constructor(protected val context: Context, protected val account: Account, prot
         } catch (e: SSLHandshakeException) {
             syncResult.stats.numIoExceptions++
 
+            notificationManager.setThrowable(e)
+            val detailsIntent = notificationManager.detailsIntent
+            detailsIntent.putExtra(KEY_ACCOUNT, account)
+            notificationManager.notify(syncErrorTitle, context.getString(syncPhase))
+        } catch (e: FileNotFoundException) {
             notificationManager.setThrowable(e)
             val detailsIntent = notificationManager.detailsIntent
             detailsIntent.putExtra(KEY_ACCOUNT, account)
@@ -395,7 +421,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             Logger.log.info("Fetched items. Done=${ret.isDone}")
             return ret
         } else {
-            Logger.log.info("Skipping fetch because local lastUid == remoteLastUid (${remoteCTag})")
+            Logger.log.info("Skipping fetch because local stoken == lastStoken (${remoteCTag})")
             return null
         }
     }
@@ -527,8 +553,127 @@ constructor(protected val context: Context, protected val account: Account, prot
         }
     }
 
+    private fun pushItems(chunkPushItems_: List<Item>) {
+        var chunkPushItems = chunkPushItems_
+        // upload dirty contacts
+        var pushed = 0
+        try {
+            if (!chunkPushItems.isEmpty()) {
+                val items = chunkPushItems
+                itemMgr.batch(items.toTypedArray())
+
+                // Persist the items
+                synchronized(etebaseLocalCache) {
+                    val colUid = cachedCollection.col.uid
+
+                    for (item in items) {
+                        etebaseLocalCache.itemSet(itemMgr, colUid, item)
+                    }
+                }
+
+                pushed += items.size
+            }
+        } finally {
+            // FIXME: A bit fragile, we assume the order in createPushItems
+            var left = pushed
+            for (local in localDeleted!!) {
+                if (pushed-- <= 0) {
+                    break
+                }
+                local.delete()
+            }
+            if (left > 0) {
+                localDeleted = localDeleted?.drop(left)
+                chunkPushItems = chunkPushItems.drop(left - pushed)
+            }
+
+            left = pushed
+            var i = 0
+            for (local in localDirty) {
+                if (pushed-- <= 0) {
+                    break
+                }
+                Logger.log.info("Added/changed resource with filename: " + local.fileName)
+                local.clearDirty(chunkPushItems[i].etag)
+                i++
+            }
+            if (left > 0) {
+                localDirty = localDirty.drop(left)
+                chunkPushItems.drop(left)
+            }
+
+            if (pushed > 0) {
+                Logger.log.severe("Unprocessed localentries left, this should never happen!")
+            }
+        }
+    }
+
+    private fun itemUpdateMtime(item: Item) {
+        val meta = item.meta
+        meta.setMtime(System.currentTimeMillis())
+        item.meta = meta
+    }
+
+    private fun createPushItems(): List<Item> {
+        val ret = LinkedList<Item>()
+        val colUid = cachedCollection.col.uid
+
+        synchronized(etebaseLocalCache) {
+            for (local in localDeleted!!) {
+                val item = etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!)!!.item
+                itemUpdateMtime(item)
+                item.delete()
+                ret.add(item)
+
+                if (ret.size == MAX_PUSH) {
+                    return ret
+                }
+            }
+        }
+
+        synchronized(etebaseLocalCache) {
+            for (local in localDirty) {
+                val cacheItem = if (local.fileName != null) etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!)!! else null
+                val item: Item
+                if (cacheItem != null) {
+                    item = cacheItem.item
+                    itemUpdateMtime(item)
+                } else {
+                    val meta = ItemMetadata()
+                    meta.name = local.uuid
+                    meta.setMtime(System.currentTimeMillis())
+                    item = itemMgr.create(meta, "")
+
+                    local.prepareForUpload(item.uid)
+                }
+
+                try {
+                    item.setContent(local.content)
+                } catch (e: Exception) {
+                    Logger.log.warning("Failed creating local entry ${local.uuid}")
+                    if (local is LocalContact) {
+                        Logger.log.warning("Contact with title ${local.contact?.displayName}")
+                    } else if (local is LocalEvent) {
+                        Logger.log.warning("Event with title ${local.event?.summary}")
+                    } else if (local is LocalTask) {
+                        Logger.log.warning("Task with title ${local.task?.summary}")
+                    }
+                    throw e
+                }
+
+                ret.add(item)
+
+                if (ret.size == MAX_PUSH) {
+                    return ret
+                }
+            }
+        }
+
+        return ret
+    }
+
     @Throws(CalendarStorageException::class, ContactsStorageException::class, IOException::class)
-    protected open fun createLocalEntries() {
+    private fun createLocalEntries() {
         localEntries = LinkedList()
 
         // Not saving, just creating a fake one until we load it from a local db
@@ -581,7 +726,7 @@ constructor(protected val context: Context, protected val account: Account, prot
     /**
      */
     @Throws(CalendarStorageException::class, ContactsStorageException::class, FileNotFoundException::class)
-    private fun prepareLocal() {
+    protected open fun prepareLocal() {
         localDeleted = processLocallyDeleted()
         localDirty = localCollection!!.findDirty(MAX_PUSH)
         // This is done after fetching the local dirty so all the ones we are using will be prepared
@@ -598,7 +743,8 @@ constructor(protected val context: Context, protected val account: Account, prot
         val localList = localCollection!!.findDeleted()
         val ret = ArrayList<T>(localList.size)
 
-        if (journalEntity.isReadOnly) {
+        val readOnly = (isLegacy && journalEntity.isReadOnly) || (!isLegacy && (cachedCollection.col.accessLevel == "ro"))
+        if (readOnly) {
             for (local in localList) {
                 Logger.log.info("Restoring locally deleted resource on a read only collection: ${local.uuid}")
                 local.resetDeleted()
@@ -612,8 +758,11 @@ constructor(protected val context: Context, protected val account: Account, prot
                 if (local.uuid != null) {
                     Logger.log.info(local.uuid + " has been deleted locally -> deleting from server")
                 } else {
-                    Logger.log.fine("Entry deleted before ever syncing - genarting a UUID")
-                    local.prepareForUpload()
+                    if (isLegacy) {
+                        // It's done later for non-legacy
+                        Logger.log.fine("Entry deleted before ever syncing - genarting a UUID")
+                        local.prepareForUpload(null)
+                    }
                 }
 
                 ret.add(local)
@@ -627,20 +776,22 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     @Throws(CalendarStorageException::class, ContactsStorageException::class)
     protected open fun prepareDirty() {
-        if (journalEntity.isReadOnly) {
+        val readOnly = (isLegacy && journalEntity.isReadOnly) || (!isLegacy && (cachedCollection.col.accessLevel == "ro"))
+        if (readOnly) {
             for (local in localDirty) {
                 Logger.log.info("Restoring locally modified resource on a read only collection: ${local.uuid}")
                 if (local.uuid == null) {
                     // If it was only local, delete.
                     local.delete()
                 } else {
-                    local.clearDirty(local.uuid!!)
+                    local.clearDirty(null)
                 }
                 numDiscarded++
             }
 
             localDirty = LinkedList()
-        } else {
+        } else if (isLegacy) {
+            // It's done later for non-legacy
             // assign file names and UIDs to new entries
             Logger.log.info("Looking for local entries without a uuid")
             for (local in localDirty) {
@@ -649,7 +800,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 }
 
                 Logger.log.fine("Found local record without file name; generating file name/UID if necessary")
-                local.prepareForUpload()
+                local.prepareForUpload(null)
             }
         }
     }
