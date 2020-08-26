@@ -36,8 +36,12 @@ constructor(internal val context: Context, internal val account: Account) {
 
     var uri: URI?
         get() {
+            val uri = accountManager.getUserData(account, KEY_URI)
+            if (uri == null) {
+                return null
+            }
             try {
-                return URI(accountManager.getUserData(account, KEY_URI))
+                return URI(uri)
             } catch (e: URISyntaxException) {
                 return null
             }
