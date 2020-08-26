@@ -18,10 +18,7 @@ import android.os.Bundle
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.TaskProvider
 import at.bitfire.ical4android.TaskProvider.ProviderName
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.R
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -63,8 +60,11 @@ class TasksSyncAdapterService: SyncAdapterService() {
 
             RefreshCollections(account, CollectionInfo.Type.TASKS).run()
 
-            updateLocalTaskLists(taskProvider, account, accountSettings)
-
+            if (accountSettings.isLegacy) {
+                legacyUpdateLocalTaskLists(taskProvider, account, accountSettings)
+            } else {
+                updateLocalTaskLists(taskProvider, account, accountSettings)
+            }
             val principal = accountSettings.uri?.toHttpUrlOrNull()!!
 
             for (taskList in AndroidTaskList.find(account, taskProvider, LocalTaskList.Factory, "${TaskContract.TaskLists.SYNC_ENABLED}!=0", null)) {
@@ -78,6 +78,50 @@ class TasksSyncAdapterService: SyncAdapterService() {
         }
 
         private fun updateLocalTaskLists(provider: TaskProvider, account: Account, settings: AccountSettings) {
+            val remote = HashMap<String, CachedCollection>()
+            val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
+            val collections: List<CachedCollection>
+            synchronized(etebaseLocalCache) {
+                val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
+                val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+                val colMgr = etebase.collectionManager
+
+                collections = etebaseLocalCache.collectionList(colMgr).filter { it.meta.collectionType == Constants.ETEBASE_TYPE_TASKS }
+            }
+
+            for (collection in collections) {
+                remote[collection.col.uid] = collection
+            }
+
+            val local = AndroidTaskList.find(account, provider, LocalTaskList.Factory, null, null)
+
+            val updateColors = settings.manageCalendarColors
+
+            // delete obsolete local calendar
+            for (taskList in local) {
+                val url = taskList.name
+                val collection = remote[url]
+                if (collection == null) {
+                    Logger.log.fine("Deleting obsolete local taskList $url")
+                    taskList.delete()
+                } else {
+                    // remote CollectionInfo found for this local collection, update data
+                    Logger.log.fine("Updating local taskList $url")
+                    taskList.update(collection, updateColors)
+                    // we already have a local taskList for this remote collection, don't take into consideration anymore
+                    remote.remove(url)
+                }
+            }
+
+            // create new local calendars
+            for (url in remote.keys) {
+                val cachedCollection = remote[url]!!
+                Logger.log.info("Adding local calendar list $cachedCollection")
+                LocalTaskList.create(account, provider, cachedCollection)
+            }
+        }
+
+        private fun legacyUpdateLocalTaskLists(provider: TaskProvider, account: Account, settings: AccountSettings) {
             val data = (context.applicationContext as App).data
             var service = JournalModel.Service.fetchOrCreate(data, account.name, CollectionInfo.Type.TASKS)
 

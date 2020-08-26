@@ -11,14 +11,17 @@ package com.etesync.syncadapter.resource
 import android.accounts.Account
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.RemoteException
+import android.provider.CalendarContract
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.AndroidTaskListFactory
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
 import at.bitfire.ical4android.TaskProvider.ProviderName
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.model.JournalEntity
 import org.dmfs.tasks.contract.TaskContract.TaskLists
 import org.dmfs.tasks.contract.TaskContract.Tasks
@@ -54,6 +57,14 @@ class LocalTaskList private constructor(
             return create(account, provider, values)
         }
 
+        fun create(account: Account, provider: TaskProvider, cachedCollection: CachedCollection): Uri {
+            val values = valuesFromCachedCollection(cachedCollection, true)
+            values.put(TaskLists.OWNER, account.name)
+            values.put(TaskLists.SYNC_ENABLED, 1)
+            values.put(TaskLists.VISIBLE, 1)
+            return create(account, provider, values)
+        }
+
         fun findByName(account: Account, provider: TaskProvider, factory: Factory, name: String): LocalTaskList?
                 = AndroidTaskList.find(account, provider, factory, TaskLists._SYNC_ID + "==?", arrayOf(name)).firstOrNull()
 
@@ -70,6 +81,18 @@ class LocalTaskList private constructor(
             return values
         }
 
+        private fun valuesFromCachedCollection(cachedCollection: CachedCollection, withColor: Boolean): ContentValues {
+            val col = cachedCollection.col
+            val meta = cachedCollection.meta
+            val values = ContentValues(3)
+            values.put(TaskLists._SYNC_ID, col.uid)
+            values.put(TaskLists.LIST_NAME, meta.name)
+
+            if (withColor)
+                values.put(TaskLists.LIST_COLOR, if (!meta.color.isNullOrBlank()) Color.parseColor(meta.color) else defaultColor)
+
+            return values
+        }
     }
 
     override val url: String?
@@ -77,6 +100,9 @@ class LocalTaskList private constructor(
 
     fun update(journalEntity: JournalEntity, updateColor: Boolean) =
             update(valuesFromCollectionInfo(journalEntity, updateColor))
+
+    fun update(cachedCollection: CachedCollection, updateColor: Boolean) =
+            update(valuesFromCachedCollection(cachedCollection, updateColor))
 
     override fun findDeleted() = queryTasks("${Tasks._DELETED}!=0", null)
 
