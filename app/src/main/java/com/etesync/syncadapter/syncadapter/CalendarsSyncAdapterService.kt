@@ -13,10 +13,7 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
-import com.etesync.syncadapter.AccountSettings
-import com.etesync.syncadapter.App
-import com.etesync.syncadapter.Constants
-import com.etesync.syncadapter.R
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -42,7 +39,11 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
 
             RefreshCollections(account, CollectionInfo.Type.CALENDAR).run()
 
-            updateLocalCalendars(provider, account, settings)
+            if (settings.isLegacy) {
+                legacyUpdateLocalCalendars(provider, account, settings)
+            } else {
+                updateLocalCalendars(provider, account, settings)
+            }
 
             val principal = settings.uri?.toHttpUrlOrNull()!!
 
@@ -56,8 +57,52 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
             Logger.log.info("Calendar sync complete")
         }
 
-        @Throws(CalendarStorageException::class)
         private fun updateLocalCalendars(provider: ContentProviderClient, account: Account, settings: AccountSettings) {
+            val remote = HashMap<String, CachedCollection>()
+            val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
+            val collections: List<CachedCollection>
+            synchronized(etebaseLocalCache) {
+                val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
+                val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+                val colMgr = etebase.collectionManager
+
+                collections = etebaseLocalCache.collectionList(colMgr).filter { it.meta.collectionType == Constants.ETEBASE_TYPE_CALENDAR }
+            }
+
+            for (collection in collections) {
+                remote[collection.col.uid] = collection
+            }
+
+            val local = AndroidCalendar.find(account, provider, LocalCalendar.Factory, null, null)
+
+            val updateColors = settings.manageCalendarColors
+
+            // delete obsolete local calendar
+            for (calendar in local) {
+                val url = calendar.name
+                val collection = remote[url]
+                if (collection == null) {
+                    Logger.log.fine("Deleting obsolete local calendar $url")
+                    calendar.delete()
+                } else {
+                    // remote CollectionInfo found for this local collection, update data
+                    Logger.log.fine("Updating local calendar $url")
+                    calendar.update(collection, updateColors)
+                    // we already have a local calendar for this remote collection, don't take into consideration anymore
+                    remote.remove(url)
+                }
+            }
+
+            // create new local calendars
+            for (url in remote.keys) {
+                val cachedCollection = remote[url]!!
+                Logger.log.info("Adding local calendar list $cachedCollection")
+                LocalCalendar.create(account, provider, cachedCollection)
+            }
+        }
+
+        @Throws(CalendarStorageException::class)
+        private fun legacyUpdateLocalCalendars(provider: ContentProviderClient, account: Account, settings: AccountSettings) {
             val data = (context.applicationContext as App).data
             val service = JournalModel.Service.fetchOrCreate(data, account.name, CollectionInfo.Type.CALENDAR)
 

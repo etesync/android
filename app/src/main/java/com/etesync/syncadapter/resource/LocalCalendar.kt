@@ -13,11 +13,13 @@ import android.content.ContentProviderClient
 import android.content.ContentProviderOperation
 import android.content.ContentUris
 import android.content.ContentValues
+import android.graphics.Color.parseColor
 import android.net.Uri
 import android.os.RemoteException
 import android.provider.CalendarContract
 import android.provider.CalendarContract.*
 import at.bitfire.ical4android.*
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.JournalEntity
 import org.apache.commons.lang3.StringUtils
@@ -37,6 +39,21 @@ class LocalCalendar private constructor(
 
         fun create(account: Account, provider: ContentProviderClient, journalEntity: JournalEntity): Uri {
             val values = valuesFromCollectionInfo(journalEntity, true)
+
+            // ACCOUNT_NAME and ACCOUNT_TYPE are required (see docs)! If it's missing, other apps will crash.
+            values.put(Calendars.ACCOUNT_NAME, account.name)
+            values.put(Calendars.ACCOUNT_TYPE, account.type)
+            values.put(Calendars.OWNER_ACCOUNT, account.name)
+
+            // flag as visible & synchronizable at creation, might be changed by user at any time
+            values.put(Calendars.VISIBLE, 1)
+            values.put(Calendars.SYNC_EVENTS, 1)
+
+            return AndroidCalendar.create(account, provider, values)
+        }
+
+        fun create(account: Account, provider: ContentProviderClient, cachedCollection: CachedCollection): Uri {
+            val values = valuesFromCachedCollection(cachedCollection, true)
 
             // ACCOUNT_NAME and ACCOUNT_TYPE are required (see docs)! If it's missing, other apps will crash.
             values.put(Calendars.ACCOUNT_NAME, account.name)
@@ -85,6 +102,30 @@ class LocalCalendar private constructor(
             values.put(Calendars.ALLOWED_ATTENDEE_TYPES, StringUtils.join(intArrayOf(CalendarContract.Attendees.TYPE_OPTIONAL, CalendarContract.Attendees.TYPE_REQUIRED, CalendarContract.Attendees.TYPE_RESOURCE), ", "))
             return values
         }
+
+        private fun valuesFromCachedCollection(cachedCollection: CachedCollection, withColor: Boolean): ContentValues {
+            val values = ContentValues()
+            val col = cachedCollection.col
+            val meta = cachedCollection.meta
+            values.put(Calendars.NAME, col.uid)
+            values.put(Calendars.CALENDAR_DISPLAY_NAME, meta.name)
+
+            if (withColor)
+                values.put(Calendars.CALENDAR_COLOR, if (!meta.color.isNullOrBlank()) parseColor(meta.color) else defaultColor)
+
+            if (col.accessLevel == "ro")
+                values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_READ)
+            else {
+                values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_OWNER)
+                values.put(Calendars.CAN_MODIFY_TIME_ZONE, 1)
+                values.put(Calendars.CAN_ORGANIZER_RESPOND, 1)
+            }
+
+            values.put(Calendars.ALLOWED_REMINDERS, Reminders.METHOD_ALERT)
+            values.put(Calendars.ALLOWED_AVAILABILITY, StringUtils.join(intArrayOf(Reminders.AVAILABILITY_TENTATIVE, Reminders.AVAILABILITY_FREE, Reminders.AVAILABILITY_BUSY), ","))
+            values.put(Calendars.ALLOWED_ATTENDEE_TYPES, StringUtils.join(intArrayOf(CalendarContract.Attendees.TYPE_OPTIONAL, CalendarContract.Attendees.TYPE_REQUIRED, CalendarContract.Attendees.TYPE_RESOURCE), ", "))
+            return values
+        }
     }
 
     override val url: String?
@@ -92,6 +133,9 @@ class LocalCalendar private constructor(
 
     fun update(journalEntity: JournalEntity, updateColor: Boolean) =
             update(valuesFromCollectionInfo(journalEntity, updateColor))
+
+    fun update(cachedCollection: CachedCollection, updateColor: Boolean) =
+            update(valuesFromCachedCollection(cachedCollection, updateColor))
 
 
     override fun findDeleted() =
