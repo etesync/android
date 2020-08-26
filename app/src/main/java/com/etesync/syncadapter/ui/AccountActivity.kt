@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.CollectionManager
+import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -509,17 +510,32 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     private fun deleteAccount() {
         val accountManager = AccountManager.get(this)
         val settings = AccountSettings(this@AccountActivity, account)
-        val authToken = settings.authToken
-        val principal = settings.uri?.toHttpUrlOrNull()
 
         doAsync {
-            try {
-                val httpClient = HttpClient.Builder(this@AccountActivity, null, authToken).build().okHttpClient
-                val journalAuthenticator = JournalAuthenticator(httpClient, principal!!)
-                journalAuthenticator.invalidateAuthToken(authToken)
-            } catch (e: Exceptions.HttpException) {
-                // Ignore failures for now
-                Logger.log.warning(e.toString())
+            if (settings.isLegacy) {
+                val authToken = settings.authToken
+                val principal = settings.uri?.toHttpUrlOrNull()
+
+                try {
+                    val httpClient = HttpClient.Builder(this@AccountActivity, null, authToken).build().okHttpClient
+                    val journalAuthenticator = JournalAuthenticator(httpClient, principal!!)
+                    journalAuthenticator.invalidateAuthToken(authToken)
+                } catch (e: Exceptions.HttpException) {
+                    // Ignore failures for now
+                    Logger.log.warning(e.toString())
+                }
+            } else {
+                val etebaseLocalCache = EtebaseLocalCache.getInstance(this@AccountActivity, account.name)
+                etebaseLocalCache.clearUserCache()
+
+                try {
+                    val httpClient = HttpClient.Builder(this@AccountActivity).build()
+                    val etebase = EtebaseLocalCache.getEtebase(this@AccountActivity, httpClient.okHttpClient, settings)
+                    etebase.logout()
+                } catch(e: EtebaseException) {
+                    // Ignore failures for now
+                    Logger.log.warning(e.toString())
+                }
             }
         }
 
