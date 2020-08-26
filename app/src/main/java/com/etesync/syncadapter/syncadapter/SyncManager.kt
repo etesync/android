@@ -17,6 +17,10 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.*
+import com.etebase.client.exceptions.ConnectionException
+import com.etebase.client.exceptions.HttpException
+import com.etebase.client.exceptions.TemporaryServerErrorException
+import com.etebase.client.exceptions.UnauthorizedException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.journalmanager.Crypto
@@ -275,15 +279,21 @@ constructor(protected val context: Context, protected val account: Account, prot
         } catch (e: Exceptions.ServiceUnavailableException) {
             syncResult.stats.numIoExceptions++
             syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
+        } catch (e: TemporaryServerErrorException) {
+            syncResult.stats.numIoExceptions++
+            syncResult.delayUntil = Constants.DEFAULT_RETRY_DELAY
+        } catch (e: ConnectionException) {
+            syncResult.stats.numIoExceptions++
+            syncResult.delayUntil = Constants.DEFAULT_RETRY_DELAY
         } catch (e: InterruptedException) {
             // Restart sync if interrupted
             syncResult.fullSyncRequested = true
         } catch (e: Exceptions.IgnorableHttpException) {
             // Ignore
         } catch (e: Exception) {
-            if (e is Exceptions.UnauthorizedException) {
+            if (e is Exceptions.UnauthorizedException || e is UnauthorizedException) {
                 syncResult.stats.numAuthExceptions++
-            } else if (e is Exceptions.HttpException) {
+            } else if (e is Exceptions.HttpException || e is HttpException) {
                 syncResult.stats.numParseExceptions++
             } else if (e is CalendarStorageException || e is ContactsStorageException) {
                 syncResult.databaseError = true

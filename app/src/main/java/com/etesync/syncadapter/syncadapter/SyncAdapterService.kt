@@ -23,6 +23,9 @@ import androidx.core.util.Pair
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.FetchOptions
+import com.etebase.client.exceptions.ConnectionException
+import com.etebase.client.exceptions.TemporaryServerErrorException
+import com.etebase.client.exceptions.UnauthorizedException
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
@@ -118,6 +121,12 @@ abstract class SyncAdapterService : Service() {
             } catch (e: Exceptions.ServiceUnavailableException) {
                 syncResult.stats.numIoExceptions++
                 syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
+            } catch (e: TemporaryServerErrorException) {
+                syncResult.stats.numIoExceptions++
+                syncResult.delayUntil = Constants.DEFAULT_RETRY_DELAY
+            } catch (e: ConnectionException) {
+                syncResult.stats.numIoExceptions++
+                syncResult.delayUntil = Constants.DEFAULT_RETRY_DELAY
             } catch (e: Exceptions.IgnorableHttpException) {
                 // Ignore
             } catch (e: Exception) {
@@ -133,7 +142,7 @@ abstract class SyncAdapterService : Service() {
 
                 val detailsIntent = notificationManager.detailsIntent
                 detailsIntent.putExtra(Constants.KEY_ACCOUNT, account)
-                if (e !is Exceptions.UnauthorizedException) {
+                if (e !is Exceptions.UnauthorizedException && e !is UnauthorizedException) {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
                 }
