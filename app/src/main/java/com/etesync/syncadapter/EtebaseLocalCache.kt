@@ -51,13 +51,15 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         return if (stokenFile.exists()) stokenFile.readText() else null
     }
 
-    fun collectionList(colMgr: CollectionManager, withDeleted: Boolean = false): List<Collection> {
+    fun collectionList(colMgr: CollectionManager, withDeleted: Boolean = false): List<CachedCollection> {
         return colsDir.list().map {
             val colDir = File(colsDir, it)
             val colFile = File(colDir, "col")
             val content = colFile.readBytes()
             colMgr.cacheLoad(content)
-        }.filter { withDeleted || !it.isDeleted }
+        }.filter { withDeleted || !it.isDeleted }.map{
+            CachedCollection(it, it.meta)
+        }
     }
 
     fun collectionSet(colMgr: CollectionManager, collection: Collection) {
@@ -74,13 +76,15 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         colDir.deleteRecursively()
     }
 
-    fun itemList(itemMgr: ItemManager, colUid: String, withDeleted: Boolean = false): List<Item> {
+    fun itemList(itemMgr: ItemManager, colUid: String, withDeleted: Boolean = false): List<CachedItem> {
         val itemsDir = getCollectionItemsDir(colUid)
         return itemsDir.list().map {
             val itemFile = File(itemsDir, it)
             val content = itemFile.readBytes()
             itemMgr.cacheLoad(content)
-        }.filter { withDeleted || !it.isDeleted }
+        }.filter { withDeleted || !it.isDeleted }.map {
+            CachedItem(it, it.meta)
+        }
     }
 
     fun itemSet(itemMgr: ItemManager, colUid: String, item: Item) {
@@ -117,3 +121,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         }
     }
 }
+
+data class CachedCollection(val col: Collection, val meta: CollectionMetadata)
+
+data class CachedItem(val item: Item, val meta: ItemMetadata)

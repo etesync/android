@@ -369,13 +369,13 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     return@map null
                 }
 
-                val accessLevel = it.accessLevel
+                val accessLevel = it.col.accessLevel
                 val isReadOnly = accessLevel == "ro"
                 val isAdmin = accessLevel == "adm"
 
                 val metaColor = meta.color
                 val color = if (metaColor != null && metaColor != "") parseColor(metaColor) else null
-                CollectionListItemInfo(it.uid, type, meta.name, meta.description ?: "", color, isReadOnly, isAdmin, null)
+                CollectionListItemInfo(it.col.uid, type, meta.name, meta.description ?: "", color, isReadOnly, isAdmin, null)
             }.filterNotNull()
         }
 
