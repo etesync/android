@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.observe
 import com.etebase.client.CollectionManager
+import com.etebase.client.CollectionMetadata
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.ui.BaseActivity
 import org.jetbrains.anko.doAsync
@@ -44,8 +45,16 @@ class CollectionActivity() : BaseActivity() {
                     replace(R.id.fragment_container, ViewCollectionFragment())
                 }
             } else if (colType != null) {
-                supportFragmentManager.commit {
-                    // replace(R.id.fragment_container, CreateCollectionFragment(colType))
+                model.observe(this) {
+                    doAsync {
+                        val meta = CollectionMetadata(colType, "")
+                        val cachedCollection = CachedCollection(it.colMgr.create(meta, ""), meta)
+                        uiThread {
+                            supportFragmentManager.commit {
+                                replace(R.id.fragment_container, EditCollectionFragment(cachedCollection, true))
+                            }
+                        }
+                    }
                 }
             }
         }

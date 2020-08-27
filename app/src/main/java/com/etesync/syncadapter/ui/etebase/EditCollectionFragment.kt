@@ -9,6 +9,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.etebase.client.Collection
 import com.etebase.client.exceptions.EtebaseException
@@ -22,7 +23,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import yuku.ambilwarna.AmbilWarnaDialog
 
-class EditCollectionFragment(private val cachedCollection: CachedCollection) : Fragment() {
+class EditCollectionFragment(private val cachedCollection: CachedCollection, private val isCreating: Boolean = false) : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
     private val loadingModel: LoadingViewModel by viewModels()
@@ -42,7 +43,25 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection) : F
     }
 
     fun updateTitle() {
-        (activity as? BaseActivity?)?.supportActionBar?.setTitle(R.string.edit_collection)
+        cachedCollection.let {
+            var titleId: Int = R.string.create_calendar
+            if (isCreating) {
+                when (cachedCollection.meta.collectionType) {
+                    Constants.ETEBASE_TYPE_CALENDAR -> {
+                        titleId = R.string.create_calendar
+                    }
+                    Constants.ETEBASE_TYPE_TASKS -> {
+                        titleId = R.string.create_tasklist
+                    }
+                    Constants.ETEBASE_TYPE_ADDRESS_BOOK -> {
+                        titleId = R.string.create_addressbook
+                    }
+                }
+            } else {
+                titleId = R.string.edit_collection
+            }
+            (activity as? BaseActivity?)?.supportActionBar?.setTitle(titleId)
+        }
     }
 
     private fun initUi(inflater: LayoutInflater, v: View) {
@@ -98,6 +117,9 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection) : F
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_edit_collection, menu)
+        if (isCreating) {
+            menu.findItem(R.id.on_delete).setVisible(false)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -184,7 +206,13 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection) : F
                     val col = cachedCollection.col
                     col.meta = meta
                     uploadCollection(col)
-                    parentFragmentManager.popBackStack()
+                    if (isCreating) {
+                        parentFragmentManager.commit {
+                            replace(R.id.fragment_container, ViewCollectionFragment())
+                        }
+                    } else {
+                        parentFragmentManager.popBackStack()
+                    }
                 } catch (e: EtebaseException) {
                     uiThread {
                         AlertDialog.Builder(requireContext())

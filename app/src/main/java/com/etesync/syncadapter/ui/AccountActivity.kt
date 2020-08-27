@@ -207,19 +207,31 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         val info: CollectionInfo
         when (item.itemId) {
             R.id.create_calendar -> {
-                info = CollectionInfo()
-                info.enumType = CollectionInfo.Type.CALENDAR
-                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+                if (settings.isLegacy) {
+                    info = CollectionInfo()
+                    info.enumType = CollectionInfo.Type.CALENDAR
+                    startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+                } else {
+                    startActivity(CollectionActivity.newCreateCollectionIntent(this@AccountActivity, account, ETEBASE_TYPE_CALENDAR))
+                }
             }
             R.id.create_tasklist -> {
-                info = CollectionInfo()
-                info.enumType = CollectionInfo.Type.TASKS
-                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+                if (settings.isLegacy) {
+                    info = CollectionInfo()
+                    info.enumType = CollectionInfo.Type.TASKS
+                    startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+                } else {
+                    startActivity(CollectionActivity.newCreateCollectionIntent(this@AccountActivity, account, ETEBASE_TYPE_TASKS))
+                }
             }
             R.id.create_addressbook -> {
-                info = CollectionInfo()
-                info.enumType = CollectionInfo.Type.ADDRESS_BOOK
-                startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+                if (settings.isLegacy) {
+                    info = CollectionInfo()
+                    info.enumType = CollectionInfo.Type.ADDRESS_BOOK
+                    startActivity(CreateCollectionActivity.newIntent(this@AccountActivity, account, info))
+                } else {
+                    startActivity(CollectionActivity.newCreateCollectionIntent(this@AccountActivity, account, ETEBASE_TYPE_ADDRESS_BOOK))
+                }
             }
             R.id.install_tasksorg ->  {
                 installPackage(tasksOrgPackage)
