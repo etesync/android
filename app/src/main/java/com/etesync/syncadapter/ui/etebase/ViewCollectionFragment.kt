@@ -129,8 +129,19 @@ class ViewCollectionFragment : Fragment() {
                 }
             }
             R.id.on_manage_members -> {
-                Toast.makeText(context, "Manage", Toast.LENGTH_LONG).show()
-            }
+                if (cachedCollection.col.accessLevel == "adm") {
+                    parentFragmentManager.commit {
+                        replace(R.id.fragment_container, CollectionMembersFragment())
+                        addToBackStack(null)
+                    }
+                } else {
+                    val dialog = AlertDialog.Builder(requireContext())
+                            .setIcon(R.drawable.ic_info_dark)
+                            .setTitle(R.string.not_allowed_title)
+                            .setMessage(R.string.edit_owner_only_anon)
+                            .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
+                    dialog.show()
+                }            }
             R.id.on_import -> {
                 Toast.makeText(context, "Import", Toast.LENGTH_LONG).show()
             }
