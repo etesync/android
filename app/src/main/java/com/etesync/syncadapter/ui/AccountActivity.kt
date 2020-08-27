@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.CollectionManager
+import com.etebase.client.Utils
 import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
@@ -82,13 +83,18 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     private val formattedFingerprint: String?
         get() {
             try {
-                val settings = AccountSettings(this, account)
-                return Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(settings.keyPair!!.publicKey)
+                if (settings.isLegacy) {
+                    val settings = AccountSettings(this, account)
+                    return Crypto.AsymmetricCryptoManager.getPrettyKeyFingerprint(settings.keyPair!!.publicKey)
+                } else {
+                    val etebase = EtebaseLocalCache.getEtebase(this, HttpClient.sharedClient, settings)
+                    val invitationManager = etebase.invitationManager
+                    return Utils.prettyFingerprint(invitationManager.pubkey)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-                return null
+                return e.localizedMessage
             }
-
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
