@@ -15,6 +15,7 @@ import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.ui.BaseActivity
+import com.etesync.syncadapter.ui.EditCollectionActivity
 import com.etesync.syncadapter.ui.WebViewActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
@@ -109,11 +110,22 @@ class ViewCollectionFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val cachedCollection = collectionModel.value!!
+
         when (item.itemId) {
             R.id.on_edit -> {
-                parentFragmentManager.commit {
-                    replace(R.id.fragment_container, EditCollectionFragment(collectionModel.value!!))
-                    addToBackStack(EditCollectionFragment::class.java.name)
+                if (cachedCollection.col.accessLevel == "adm") {
+                    parentFragmentManager.commit {
+                        replace(R.id.fragment_container, EditCollectionFragment(cachedCollection))
+                        addToBackStack(EditCollectionFragment::class.java.name)
+                    }
+                } else {
+                    val dialog = AlertDialog.Builder(requireContext())
+                            .setIcon(R.drawable.ic_info_dark)
+                            .setTitle(R.string.not_allowed_title)
+                            .setMessage(R.string.edit_owner_only_anon)
+                            .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
+                    dialog.show()
                 }
             }
             R.id.on_manage_members -> {
