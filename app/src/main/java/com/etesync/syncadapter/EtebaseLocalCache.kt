@@ -90,11 +90,11 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
 
     fun collectionSet(colMgr: CollectionManager, collection: Collection) {
         val colDir = File(colsDir, collection.uid)
-        colDir.mkdir()
+        colDir.mkdirs()
         val colFile = File(colDir, "col")
         colFile.writeBytes(colMgr.cacheSaveWithContent(collection))
         val itemsDir = getCollectionItemsDir(collection.uid)
-        itemsDir.mkdir()
+        itemsDir.mkdirs()
     }
 
     fun collectionUnset(colMgr: CollectionManager, colUid: String) {
