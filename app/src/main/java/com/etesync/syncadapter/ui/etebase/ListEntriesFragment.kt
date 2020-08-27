@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.ListFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.CachedItem
 import com.etesync.syncadapter.Constants
@@ -60,8 +61,10 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val item = listAdapter?.getItem(position) as CachedItem
-        Toast.makeText(context, "Clicked ${item.item.uid}", Toast.LENGTH_LONG).show()
-        // startActivity(JournalItemActivity.newIntent(requireContext(), account, info, entry.content))
+        activity?.supportFragmentManager?.commit {
+            replace(R.id.fragment_container, CollectionItemFragment(item))
+            addToBackStack(EditCollectionFragment::class.java.name)
+        }
     }
 
     internal inner class EntriesListAdapter(context: Context, val cachedCollection: CachedCollection) : ArrayAdapter<CachedItem>(context, R.layout.journal_viewer_list_item) {
