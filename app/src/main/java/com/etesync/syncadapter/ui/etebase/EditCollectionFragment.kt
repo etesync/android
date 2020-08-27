@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.etebase.client.Collection
 import com.etebase.client.exceptions.EtebaseException
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
@@ -20,10 +21,10 @@ import org.apache.commons.lang3.StringUtils
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import yuku.ambilwarna.AmbilWarnaDialog
-import java.lang.String
 
-class EditCollectionFragment() : Fragment() {
-    private val model: AccountCollectionViewModel by activityViewModels()
+class EditCollectionFragment(private val cachedCollection: CachedCollection) : Fragment() {
+    private val model: AccountViewModel by activityViewModels()
+    private val collectionModel: CollectionViewModel by activityViewModels()
     private val loadingModel: LoadingViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,51 +32,30 @@ class EditCollectionFragment() : Fragment() {
         setHasOptionsMenu(true)
 
         if (savedInstanceState == null) {
-            model.observe(this) {
-                updateTitle(it)
-                if (container != null) {
-                    initUi(inflater, ret, it)
-                }
+            updateTitle()
+            if (container != null) {
+                initUi(inflater, ret)
             }
         }
 
         return ret
     }
 
-    fun updateTitle(accountCollectionHolder: AccountCollectionHolder) {
-        accountCollectionHolder.let {
-            val new = false
-            var titleId: Int = R.string.create_calendar
-            if (new) {
-                when (it.cachedCollection.meta.collectionType) {
-                    Constants.ETEBASE_TYPE_CALENDAR -> {
-                        titleId = R.string.create_calendar
-                    }
-                    Constants.ETEBASE_TYPE_TASKS -> {
-                        titleId = R.string.create_tasklist
-                    }
-                    Constants.ETEBASE_TYPE_ADDRESS_BOOK -> {
-                        titleId = R.string.create_addressbook
-                    }
-                }
-            } else {
-                titleId = R.string.edit_collection
-            }
-            (activity as? BaseActivity?)?.supportActionBar?.setTitle(titleId)
-        }
+    fun updateTitle() {
+        (activity as? BaseActivity?)?.supportActionBar?.setTitle(R.string.edit_collection)
     }
 
-    private fun initUi(inflater: LayoutInflater, v: View, collectionHolder: AccountCollectionHolder) {
+    private fun initUi(inflater: LayoutInflater, v: View) {
         val title = v.findViewById<EditText>(R.id.display_name)
         val desc = v.findViewById<EditText>(R.id.description)
 
-        val meta = collectionHolder.cachedCollection.meta
+        val meta = cachedCollection.meta
 
         title.setText(meta.name)
         desc.setText(meta.description)
 
         val colorSquare = v.findViewById<View>(R.id.color)
-        when (collectionHolder.cachedCollection.meta.collectionType) {
+        when (cachedCollection.meta.collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 title.setHint(R.string.create_calendar_display_name_hint)
 
@@ -133,7 +113,7 @@ class EditCollectionFragment() : Fragment() {
     }
 
     private fun deleteColection() {
-        val meta = model.value!!.cachedCollection.meta
+        val meta = cachedCollection.meta
         val name = meta.name
 
         AlertDialog.Builder(requireContext())
@@ -151,7 +131,7 @@ class EditCollectionFragment() : Fragment() {
         loadingModel.setLoading(true)
         doAsync {
             try {
-                val col = model.value!!.cachedCollection.col
+                val col = cachedCollection.col
                 col.delete()
                 uploadCollection(col)
                 activity?.finish()
@@ -174,7 +154,7 @@ class EditCollectionFragment() : Fragment() {
     private fun saveCollection() {
         var ok = true
 
-        val meta = model.value!!.cachedCollection.meta
+        val meta = cachedCollection.meta
         val v = requireView()
 
         var edit = v.findViewById<EditText>(R.id.display_name)
@@ -201,7 +181,7 @@ class EditCollectionFragment() : Fragment() {
             loadingModel.setLoading(true)
             doAsync {
                 try {
-                    val col = model.value!!.cachedCollection.col
+                    val col = cachedCollection.col
                     col.meta = meta
                     uploadCollection(col)
                     parentFragmentManager.popBackStack()
@@ -230,6 +210,6 @@ class EditCollectionFragment() : Fragment() {
         synchronized(etebaseLocalCache) {
             etebaseLocalCache.collectionSet(colMgr, col)
         }
-        model.loadCollection(requireContext(), accountHolder.account, col.uid)
+        collectionModel.loadCollection(model.value!!, col.uid)
     }
 }

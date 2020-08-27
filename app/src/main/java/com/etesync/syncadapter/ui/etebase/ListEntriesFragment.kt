@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.concurrent.Future
 
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
-    private val model: AccountCollectionViewModel by activityViewModels()
+    private val collectionModel: CollectionViewModel by activityViewModels()
     private val itemsModel: ItemsViewModel by activityViewModels()
     private var asyncTask: Future<Unit>? = null
 
@@ -35,12 +35,12 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.observe(this) { col ->
+        collectionModel.observe(this) { col ->
             itemsModel.observe(this) {
                 val entries = it.sortedByDescending { item ->
                     item.meta.mtime ?: 0
                 }
-                val listAdapter = EntriesListAdapter(requireContext(), col.cachedCollection)
+                val listAdapter = EntriesListAdapter(requireContext(), col)
                 setListAdapter(listAdapter)
 
                 listAdapter.addAll(entries)

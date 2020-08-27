@@ -18,25 +18,35 @@ import org.jetbrains.anko.uiThread
 
 class CollectionActivity() : BaseActivity() {
     private lateinit var account: Account
-    private lateinit var colUid: String
-    private val model: AccountCollectionViewModel by viewModels()
+    private val model: AccountViewModel by viewModels()
+    private val collectionModel: CollectionViewModel by viewModels()
     private val itemsModel: ItemsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)!!
-        colUid = intent.extras!!.getString(EXTRA_COLLECTION_UID)!!
+        val colUid = intent.extras!!.getString(EXTRA_COLLECTION_UID)
+        val colType = intent.extras!!.getString(EXTRA_COLLECTION_TYPE)
 
         setContentView(R.layout.etebase_collection_activity)
 
         if (savedInstanceState == null) {
-            model.loadCollection(this, account, colUid)
-            model.observe(this) {
-                itemsModel.loadItems(it)
-            }
-            supportFragmentManager.commit {
-                replace(R.id.fragment_container, ViewCollectionFragment())
+            model.loadAccount(this, account)
+            if (colUid != null) {
+                model.observe(this) {
+                    collectionModel.loadCollection(it, colUid)
+                    collectionModel.observe(this) { cachedCollection ->
+                        itemsModel.loadItems(it, cachedCollection)
+                    }
+                }
+                supportFragmentManager.commit {
+                    replace(R.id.fragment_container, ViewCollectionFragment())
+                }
+            } else if (colType != null) {
+                supportFragmentManager.commit {
+                    // replace(R.id.fragment_container, CreateCollectionFragment(colType))
+                }
             }
         }
 
@@ -46,6 +56,7 @@ class CollectionActivity() : BaseActivity() {
     companion object {
         private val EXTRA_ACCOUNT = "account"
         private val EXTRA_COLLECTION_UID = "collectionUid"
+        private val EXTRA_COLLECTION_TYPE = "collectionType"
 
         fun newIntent(context: Context, account: Account, colUid: String): Intent {
             val intent = Intent(context, CollectionActivity::class.java)
@@ -53,48 +64,74 @@ class CollectionActivity() : BaseActivity() {
             intent.putExtra(EXTRA_COLLECTION_UID, colUid)
             return intent
         }
+
+        fun newCreateCollectionIntent(context: Context, account: Account, colType: String): Intent {
+            val intent = Intent(context, CollectionActivity::class.java)
+            intent.putExtra(EXTRA_ACCOUNT, account)
+            intent.putExtra(EXTRA_COLLECTION_TYPE, colType)
+            return intent
+        }
     }
 }
 
-class AccountCollectionViewModel : ViewModel() {
-    private val collection = MutableLiveData<AccountCollectionHolder>()
+class AccountViewModel : ViewModel() {
+    private val holder = MutableLiveData<AccountHolder>()
 
-    fun loadCollection(context: Context, account: Account, colUid: String) {
+    fun loadAccount(context: Context, account: Account) {
         doAsync {
             val settings = AccountSettings(context, account)
             val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
             val etebase = EtebaseLocalCache.getEtebase(context, HttpClient.sharedClient, settings)
             val colMgr = etebase.collectionManager
-            val cachedCollection = synchronized(etebaseLocalCache) {
-                etebaseLocalCache.collectionGet(colMgr, colUid)!!
-            }
             uiThread {
-                collection.value = AccountCollectionHolder(
+                holder.value = AccountHolder(
                         account,
                         etebaseLocalCache,
                         etebase,
-                        colMgr,
-                        cachedCollection
+                        colMgr
                 )
             }
         }
     }
 
-    fun observe(owner: LifecycleOwner, observer: (AccountCollectionHolder) -> Unit) =
-            collection.observe(owner, observer)
+    fun observe(owner: LifecycleOwner, observer: (AccountHolder) -> Unit) =
+            holder.observe(owner, observer)
 
-    val value: AccountCollectionHolder?
-        get() = collection.value
+    val value: AccountHolder?
+        get() = holder.value
 }
 
-data class AccountCollectionHolder(val account: Account, val etebaseLocalCache: EtebaseLocalCache, val etebase: com.etebase.client.Account, val colMgr: CollectionManager, val cachedCollection: CachedCollection)
+data class AccountHolder(val account: Account, val etebaseLocalCache: EtebaseLocalCache, val etebase: com.etebase.client.Account, val colMgr: CollectionManager)
+
+class CollectionViewModel : ViewModel() {
+    private val collection = MutableLiveData<CachedCollection>()
+
+    fun loadCollection(accountHolder: AccountHolder, colUid: String) {
+        doAsync {
+            val etebaseLocalCache = accountHolder.etebaseLocalCache
+            val colMgr = accountHolder.colMgr
+            val cachedCollection = synchronized(etebaseLocalCache) {
+                etebaseLocalCache.collectionGet(colMgr, colUid)!!
+            }
+            uiThread {
+                collection.value = cachedCollection
+            }
+        }
+    }
+
+    fun observe(owner: LifecycleOwner, observer: (CachedCollection) -> Unit) =
+            collection.observe(owner, observer)
+
+    val value: CachedCollection?
+        get() = collection.value
+}
 
 class ItemsViewModel : ViewModel() {
     private val cachedItems = MutableLiveData<List<CachedItem>>()
 
-    fun loadItems(accountCollectionHolder: AccountCollectionHolder) {
+    fun loadItems(accountCollectionHolder: AccountHolder, cachedCollection: CachedCollection) {
         doAsync {
-            val col = accountCollectionHolder.cachedCollection.col
+            val col = cachedCollection.col
             val itemMgr = accountCollectionHolder.colMgr.getItemManager(col)
             val items = accountCollectionHolder.etebaseLocalCache.itemList(itemMgr, col.uid, withDeleted = true)
             uiThread {

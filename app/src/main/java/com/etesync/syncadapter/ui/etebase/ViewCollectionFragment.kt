@@ -1,6 +1,5 @@
 package com.etesync.syncadapter.ui.etebase
 
-import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color.parseColor
 import android.os.Bundle
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
@@ -23,7 +23,7 @@ import tourguide.tourguide.ToolTip
 import java.util.*
 
 class ViewCollectionFragment : Fragment() {
-    private val model: AccountCollectionViewModel by activityViewModels()
+    private val collectionModel: CollectionViewModel by activityViewModels()
     private val itemsModel: ItemsViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,8 +31,8 @@ class ViewCollectionFragment : Fragment() {
         setHasOptionsMenu(true)
 
         if (savedInstanceState == null) {
-            model.observe(this) {
-                (activity as? BaseActivity?)?.supportActionBar?.title = it.cachedCollection.meta.name
+            collectionModel.observe(this) {
+                (activity as? BaseActivity?)?.supportActionBar?.title = it.meta.name
                 if (container != null) {
                     initUi(inflater, ret, it)
                 }
@@ -42,7 +42,7 @@ class ViewCollectionFragment : Fragment() {
         return ret
     }
 
-    private fun initUi(inflater: LayoutInflater, container: View, collectionHolder: AccountCollectionHolder) {
+    private fun initUi(inflater: LayoutInflater, container: View, cachedCollection: CachedCollection) {
         val title = container.findViewById<TextView>(R.id.display_name)
         if (!HintManager.getHintSeen(requireContext(), HINT_IMPORT)) {
             val tourGuide = ShowcaseBuilder.getBuilder(requireActivity())
@@ -63,8 +63,8 @@ class ViewCollectionFragment : Fragment() {
                     .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
         }
 
-        val col = collectionHolder.cachedCollection.col
-        val meta = collectionHolder.cachedCollection.meta
+        val col = cachedCollection.col
+        val meta = cachedCollection.meta
         val isAdmin = col.accessLevel == "adm"
 
         val colorSquare = container.findViewById<View>(R.id.color)
@@ -112,7 +112,7 @@ class ViewCollectionFragment : Fragment() {
         when (item.itemId) {
             R.id.on_edit -> {
                 parentFragmentManager.commit {
-                    replace(R.id.fragment_container, EditCollectionFragment())
+                    replace(R.id.fragment_container, EditCollectionFragment(collectionModel.value!!))
                     addToBackStack(EditCollectionFragment::class.java.name)
                 }
             }
