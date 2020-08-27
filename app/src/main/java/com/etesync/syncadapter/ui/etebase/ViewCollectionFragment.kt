@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
@@ -26,15 +27,14 @@ class ViewCollectionFragment : Fragment() {
     private val itemsModel: ItemsViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val ret = super.onCreateView(inflater, container, savedInstanceState)
-
-        inflater.inflate(R.layout.view_collection_fragment, container)
+        val ret = inflater.inflate(R.layout.view_collection_fragment, container, false)
         setHasOptionsMenu(true)
 
         if (savedInstanceState == null) {
             model.observe(this) {
+                (activity as? BaseActivity?)?.supportActionBar?.title = it.cachedCollection.meta.name
                 if (container != null) {
-                    initUi(inflater, container, it)
+                    initUi(inflater, ret, it)
                 }
             }
         }
@@ -42,15 +42,7 @@ class ViewCollectionFragment : Fragment() {
         return ret
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        model.observe(this) {
-            (activity as? BaseActivity?)?.supportActionBar?.title = it.cachedCollection.meta.name
-        }
-    }
-
-    private fun initUi(inflater: LayoutInflater, container: ViewGroup, collectionHolder: AccountCollectionHolder) {
+    private fun initUi(inflater: LayoutInflater, container: View, collectionHolder: AccountCollectionHolder) {
         val title = container.findViewById<TextView>(R.id.display_name)
         if (!HintManager.getHintSeen(requireContext(), HINT_IMPORT)) {
             val tourGuide = ShowcaseBuilder.getBuilder(requireActivity())
@@ -119,7 +111,10 @@ class ViewCollectionFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.on_edit -> {
-                Toast.makeText(context, "Edit", Toast.LENGTH_LONG).show()
+                parentFragmentManager.commit {
+                    replace(R.id.fragment_container, EditCollectionFragment())
+                    addToBackStack(EditCollectionFragment::class.java.name)
+                }
             }
             R.id.on_manage_members -> {
                 Toast.makeText(context, "Manage", Toast.LENGTH_LONG).show()

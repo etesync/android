@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,9 +35,9 @@ class CollectionActivity() : BaseActivity() {
             model.observe(this) {
                 itemsModel.loadItems(it)
             }
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, ViewCollectionFragment())
-                    .commit()
+            supportFragmentManager.commit {
+                replace(R.id.fragment_container, ViewCollectionFragment())
+            }
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -69,6 +70,7 @@ class AccountCollectionViewModel : ViewModel() {
             }
             uiThread {
                 collection.value = AccountCollectionHolder(
+                        account,
                         etebaseLocalCache,
                         etebase,
                         colMgr,
@@ -80,9 +82,12 @@ class AccountCollectionViewModel : ViewModel() {
 
     fun observe(owner: LifecycleOwner, observer: (AccountCollectionHolder) -> Unit) =
             collection.observe(owner, observer)
+
+    val value: AccountCollectionHolder?
+        get() = collection.value
 }
 
-data class AccountCollectionHolder(val etebaseLocalCache: EtebaseLocalCache, val etebase: com.etebase.client.Account, val colMgr: CollectionManager, val cachedCollection: CachedCollection)
+data class AccountCollectionHolder(val account: Account, val etebaseLocalCache: EtebaseLocalCache, val etebase: com.etebase.client.Account, val colMgr: CollectionManager, val cachedCollection: CachedCollection)
 
 class ItemsViewModel : ViewModel() {
     private val cachedItems = MutableLiveData<List<CachedItem>>()
@@ -100,4 +105,19 @@ class ItemsViewModel : ViewModel() {
 
     fun observe(owner: LifecycleOwner, observer: (List<CachedItem>) -> Unit) =
             cachedItems.observe(owner, observer)
+
+    val value: List<CachedItem>?
+        get() = cachedItems.value
+}
+
+
+class LoadingViewModel : ViewModel() {
+    private val loading = MutableLiveData<Boolean>()
+
+    fun setLoading(value: Boolean) {
+        loading.value = value
+    }
+
+    fun observe(owner: LifecycleOwner, observer: (Boolean) -> Unit) =
+            loading.observe(owner, observer)
 }
