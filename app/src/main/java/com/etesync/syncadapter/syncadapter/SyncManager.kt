@@ -242,8 +242,10 @@ constructor(protected val context: Context, protected val account: Account, prot
                     applyRemoteItems(itemList)
 
                     stoken = itemList.stoken
-                    synchronized(etebaseLocalCache) {
-                        etebaseLocalCache.collectionSaveStoken(cachedCollection.col.uid, stoken!!)
+                    if (stoken != null) {
+                        synchronized(etebaseLocalCache) {
+                            etebaseLocalCache.collectionSaveStoken(cachedCollection.col.uid, stoken)
+                        }
                     }
                 } while (!itemList!!.isDone)
             }
