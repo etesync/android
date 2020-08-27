@@ -109,7 +109,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
             val content = itemFile.readBytes()
             itemMgr.cacheLoad(content)
         }.filter { withDeleted || !it.isDeleted }.map {
-            CachedItem(it, it.meta)
+            CachedItem(it, it.meta, it.contentString)
         }
     }
 
@@ -121,7 +121,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         }
         val content = itemFile.readBytes()
         return itemMgr.cacheLoad(content).let {
-            CachedItem(it, it.meta)
+            CachedItem(it, it.meta, it.contentString)
         }
     }
 
@@ -162,4 +162,4 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
 
 data class CachedCollection(val col: Collection, val meta: CollectionMetadata)
 
-data class CachedItem(val item: Item, val meta: ItemMetadata)
+data class CachedItem(val item: Item, val meta: ItemMetadata, val content: String)

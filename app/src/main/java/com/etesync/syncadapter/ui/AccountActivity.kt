@@ -43,6 +43,7 @@ import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.syncadapter.requestSync
+import com.etesync.syncadapter.ui.etebase.CollectionActivity
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
@@ -71,7 +72,11 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         val adapter = list.adapter as ArrayAdapter<*>
         val info = adapter.getItem(position) as CollectionListItemInfo
 
-        startActivity(ViewCollectionActivity.newIntent(this@AccountActivity, account, info.legacyInfo!!))
+        if (settings.isLegacy) {
+            startActivity(ViewCollectionActivity.newIntent(this@AccountActivity, account, info.legacyInfo!!))
+        } else {
+            startActivity(CollectionActivity.newIntent(this@AccountActivity, account, info.uid))
+        }
     }
 
     private val formattedFingerprint: String?
