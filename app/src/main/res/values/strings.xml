@@ -161,7 +161,7 @@
     <string name="collection_members_adding">Adding member</string>
     <string name="trust_fingerprint_title">Verify security fingerprint</string>
     <string name="trust_fingerprint_body">Verify %s\'s security fingerprint to ensure the encryption is secure.</string>
-    <string name="collection_members_error_user_not_found">User (%s) not found. Have they setup their encryption password from one of the apps?</string>
+    <string name="collection_members_error_user_not_found">User (%s) not found</string>
     <string name="collection_members_removing">Removing member</string>
     <string name="collection_members_remove_error">Error removing member</string>
     <string name="collection_members_remove_title">Remove member</string>
