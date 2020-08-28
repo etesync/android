@@ -645,7 +645,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
         synchronized(etebaseLocalCache) {
             for (local in localDirty) {
-                val cacheItem = if (local.fileName != null) etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!)!! else null
+                val cacheItem = if (local.fileName != null) etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!) else null
                 val item: Item
                 if (cacheItem != null) {
                     item = cacheItem.item
