@@ -14,7 +14,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.ui.BaseActivity
 
-class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
+class ImportActivity : BaseActivity(), SelectImportMethod, DialogInterface {
 
     private lateinit var account: Account
     protected lateinit var info: CollectionInfo
@@ -81,13 +81,6 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
             return true
         }
         return super.onKeyDown(keyCode, event)
-    }
-
-    override fun onImportResult(importResult: ResultFragment.ImportResult) {
-        val fragment = ResultFragment.newInstance(importResult)
-        supportFragmentManager.beginTransaction()
-                .add(fragment, "importResult")
-                .commitAllowingStateLoss()
     }
 
     override fun cancel() {

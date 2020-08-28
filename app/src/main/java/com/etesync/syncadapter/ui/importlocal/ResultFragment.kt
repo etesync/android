@@ -72,10 +72,6 @@ class ResultFragment : DialogFragment() {
         }
     }
 
-    interface OnImportCallback {
-        fun onImportResult(importResult: ImportResult)
-    }
-
     companion object {
         private val KEY_RESULT = "result"
 

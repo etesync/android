@@ -5,7 +5,6 @@ import android.graphics.Color.parseColor
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,7 +14,6 @@ import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.ui.BaseActivity
-import com.etesync.syncadapter.ui.EditCollectionActivity
 import com.etesync.syncadapter.ui.WebViewActivity
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
@@ -143,7 +141,19 @@ class ViewCollectionFragment : Fragment() {
                     dialog.show()
                 }            }
             R.id.on_import -> {
-                Toast.makeText(context, "Import", Toast.LENGTH_LONG).show()
+                if (cachedCollection.col.accessLevel != "ro") {
+                    parentFragmentManager.commit {
+                        replace(R.id.fragment_container, ImportCollectionFragment())
+                        addToBackStack(null)
+                    }
+                } else {
+                    val dialog = AlertDialog.Builder(requireContext())
+                            .setIcon(R.drawable.ic_info_dark)
+                            .setTitle(R.string.not_allowed_title)
+                            .setMessage(R.string.edit_owner_only_anon)
+                            .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
+                    dialog.show()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
