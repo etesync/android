@@ -17,6 +17,7 @@ import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.BaseActivity
 import org.apache.commons.lang3.StringUtils
 import org.jetbrains.anko.doAsync
@@ -156,6 +157,10 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
                 val col = cachedCollection.col
                 col.delete()
                 uploadCollection(col)
+                val applicationContext = activity?.applicationContext
+                if (applicationContext != null) {
+                    requestSync(applicationContext, model.value!!.account)
+                }
                 activity?.finish()
             } catch (e: EtebaseException) {
                 uiThread {
@@ -206,6 +211,10 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
                     val col = cachedCollection.col
                     col.meta = meta
                     uploadCollection(col)
+                    val applicationContext = activity?.applicationContext
+                    if (applicationContext != null) {
+                        requestSync(applicationContext, model.value!!.account)
+                    }
                     if (isCreating) {
                         parentFragmentManager.commit {
                             replace(R.id.fragment_container, ViewCollectionFragment())
