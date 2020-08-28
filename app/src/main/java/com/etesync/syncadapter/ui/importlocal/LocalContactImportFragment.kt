@@ -22,8 +22,6 @@ import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
@@ -135,9 +133,10 @@ class LocalContactImportFragment(private val account: Account, private val uid: 
         private fun importContacts(localAddressBook: LocalAddressBook): ResultFragment.ImportResult {
             val result = ResultFragment.ImportResult()
             try {
-                val addressBook = LocalAddressBook.findByUid(context!!,
-                        context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
-                        account, uid)!!
+                val addressBook = LocalAddressBook.findByUid(requireContext(),
+                        requireContext().contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
+                        account, uid)
+                        ?: throw Exception("Could not find address book")
                 val localContacts = localAddressBook.findAllContacts()
                 val localGroups = localAddressBook.findAllGroups()
                 val oldIdToNewId = HashMap<Long, Long>()
