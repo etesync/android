@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.ListFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -27,7 +28,7 @@ import java.util.concurrent.Future
 class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickListener {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
-    private val membersModel: LoadMembersViewModel by viewModels()
+    private val membersModel: CollectionMembersViewModel by viewModels()
 
     private var emptyTextView: TextView? = null
 
@@ -77,17 +78,23 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val member = listAdapter?.getItem(position) as CollectionMember
 
-        /*
+        if (member.accessLevel == "adm") {
+            AlertDialog.Builder(requireActivity())
+                    .setIcon(R.drawable.ic_error_dark)
+                    .setTitle(R.string.collection_members_remove_title)
+                    .setMessage(R.string.collection_members_remove_admin)
+                    .setNegativeButton(android.R.string.ok) { _, _ -> }.show()
+            return
+        }
+
         AlertDialog.Builder(requireActivity())
                 .setIcon(R.drawable.ic_info_dark)
                 .setTitle(R.string.collection_members_remove_title)
-                .setMessage(getString(R.string.collection_members_remove, member.user))
+                .setMessage(getString(R.string.collection_members_remove, member.username))
                 .setPositiveButton(android.R.string.yes) { dialog, which ->
-                    val frag = RemoveMemberFragment.newInstance(account, info, member.user!!)
-                    frag.show(requireFragmentManager(), null)
+                    membersModel.removeMember(model.value!!, collectionModel.value!!, member.username)
                 }
                 .setNegativeButton(android.R.string.no) { dialog, which -> }.show()
-         */
     }
 
     internal inner class MembersListAdapter(context: Context) : ArrayAdapter<CollectionMember>(context, R.layout.collection_members_list_item) {
@@ -111,7 +118,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     }
 }
 
-class LoadMembersViewModel : ViewModel() {
+class CollectionMembersViewModel : ViewModel() {
     private val members = MutableLiveData<List<CollectionMember>>()
     private var asyncTask: Future<Unit>? = null
 
@@ -129,6 +136,19 @@ class LoadMembersViewModel : ViewModel() {
 
                 ret.addAll(chunk.data)
             }
+
+            uiThread {
+                members.value = ret
+            }
+        }
+    }
+
+    fun removeMember(accountCollectionHolder: AccountHolder, cachedCollection: CachedCollection, username: String) {
+        doAsync {
+            val col = cachedCollection.col
+            val memberManager = accountCollectionHolder.colMgr.getMemberManager(col)
+            memberManager.remove(username)
+            val ret = members.value!!.filter { it.username != username }
 
             uiThread {
                 members.value = ret

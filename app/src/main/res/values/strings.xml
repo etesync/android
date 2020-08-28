@@ -166,6 +166,7 @@
     <string name="collection_members_remove_error">Error removing member</string>
     <string name="collection_members_remove_title">Remove member</string>
     <string name="collection_members_remove">Would you like to revoke %s\'s access?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
+    <string name="collection_members_remove_admin">Removing access to admins is currently not supported.</string>
 
     <!-- JournalItemActivity -->
     <string name="about">About</string>
