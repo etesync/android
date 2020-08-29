@@ -18,12 +18,25 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_sync">
+    <PreferenceCategory android:title="@string/settings_encryption">
+
         <Preference
-            android:key="password"
             android:title="@string/settings_encryption_password"
+            android:key="encryption_password"
             android:summary="@string/settings_encryption_password_summary"
-            />
+            android:persistent="false"
+        />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_sync">
+        <EditTextPreference
+            android:key="password"
+            android:title="@string/settings_password"
+            android:persistent="false"
+            android:inputType="textPassword"
+            android:summary="@string/settings_password_summary"
+            android:dialogTitle="@string/settings_enter_password" />
 
         <ListPreference
             android:key="sync_interval"

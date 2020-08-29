@@ -15,6 +15,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.etebase.client.Client
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.R
@@ -53,7 +54,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.wrong_encryption_password)
                 .setIcon(R.drawable.ic_error_dark)
-                .setMessage(getString(R.string.wrong_encryption_password_content, e.localizedMessage))
+                .setMessage(e.localizedMessage)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     // dismiss
                 }.show()
@@ -62,6 +63,45 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
     fun changePasswordDo(old_password: String, new_password: String) {
         val settings = AccountSettings(this, account)
 
+        if (settings.isLegacy) {
+            legacyChangePasswordDo(settings, old_password, new_password)
+            return
+        }
+
+        doAsync {
+            val httpClient = HttpClient.sharedClient
+
+            try {
+                Logger.log.info("Loging in with old password")
+                val client = Client.create(httpClient, settings.uri?.toString())
+                val etebase = com.etebase.client.Account.login(client, account.name, old_password)
+                Logger.log.info("Login successful")
+
+                etebase.changePassword(new_password)
+
+                settings.etebaseSession = etebase.save(null)
+
+                uiThread {
+                    progress.dismiss()
+                    AlertDialog.Builder(this@ChangeEncryptionPasswordActivity)
+                            .setTitle(R.string.change_encryption_password_success_title)
+                            .setMessage(R.string.change_encryption_password_success_body)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                this@ChangeEncryptionPasswordActivity.finish()
+                            }.show()
+
+                    requestSync(applicationContext, account)
+                }
+            } catch (e: Exception) {
+                uiThread {
+                    changePasswordError(e)
+                }
+                return@doAsync
+            }
+        }
+    }
+
+    fun legacyChangePasswordDo(settings: AccountSettings, old_password: String, new_password: String) {
         doAsync {
             val httpClient = HttpClient.Builder(this@ChangeEncryptionPasswordActivity, settings).setForeground(false).build().okHttpClient
 
