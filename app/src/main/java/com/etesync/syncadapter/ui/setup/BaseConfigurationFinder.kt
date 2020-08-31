@@ -90,7 +90,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     fun findInitialConfigurationEtebase(): Configuration {
         var exception: Throwable? = null
 
-        val uri = credentials.uri
+        val uri = credentials.uri ?: URI(Constants.etebaseServiceUrl)
 
         var etebaseSession: String? = null
         try {
