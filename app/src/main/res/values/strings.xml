@@ -171,6 +171,7 @@
     <!-- JournalItemActivity -->
     <string name="about">About</string>
     <string name="journal_item_tab_main">Main</string>
+    <string name="journal_item_tab_revisions">Revisions</string>
     <string name="journal_item_tab_raw">Raw</string>
     <string name="journal_item_attendees">Attendees</string>
     <string name="journal_item_reminders">Reminders</string>

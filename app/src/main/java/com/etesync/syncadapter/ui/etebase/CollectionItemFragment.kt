@@ -56,7 +56,7 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
         val tabLayout = v.findViewById<TabLayout>(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
 
-        ListEntriesFragment.setItemView(v.findViewById(R.id.journal_list_item), cachedCollection.meta.collectionType, cachedItem)
+        v.findViewById<View>(R.id.journal_list_item).visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -69,22 +69,26 @@ private class TabsAdapter(fm: FragmentManager, private val context: Context, pri
 
     override fun getCount(): Int {
         // FIXME: Make it depend on info enumType (only have non-raw for known types)
-        return 2
+        return 3
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
         return if (position == 0) {
             context.getString(R.string.journal_item_tab_main)
-        } else {
+        } else if (position == 1) {
             context.getString(R.string.journal_item_tab_raw)
+        } else {
+            context.getString(R.string.journal_item_tab_revisions)
         }
     }
 
     override fun getItem(position: Int): Fragment {
         return if (position == 0) {
             PrettyFragment(cachedCollection, cachedItem.content)
-        } else {
+        } else if (position == 1) {
             TextFragment(cachedItem.content)
+        } else {
+            ItemRevisionsListFragment(cachedCollection, cachedItem)
         }
     }
 }
