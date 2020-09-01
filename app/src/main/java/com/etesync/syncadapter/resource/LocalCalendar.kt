@@ -13,7 +13,6 @@ import android.content.ContentProviderClient
 import android.content.ContentProviderOperation
 import android.content.ContentUris
 import android.content.ContentValues
-import android.graphics.Color.parseColor
 import android.net.Uri
 import android.os.RemoteException
 import android.provider.CalendarContract
@@ -34,6 +33,20 @@ class LocalCalendar private constructor(
 
     companion object {
         val defaultColor = -0x743cb6     // light green 500 - should be "8BC349"?
+
+        fun parseColor(color_: String?): Int {
+            if (color_.isNullOrBlank()) {
+                return defaultColor
+            }
+            val color = color_.replaceFirst("^#".toRegex(), "")
+            if (color.length == 8) {
+                return (color.substring(0, 6).toLong(16) or (color.substring(6, 8).toLong(16) shl 24)).toInt()
+            } else if (color.length == 6) {
+                return (color.toLong(16) or (0xFF000000)).toInt()
+            } else {
+                return defaultColor
+            }
+        }
 
         val COLUMN_CTAG = Calendars.CAL_SYNC1
 
@@ -111,7 +124,7 @@ class LocalCalendar private constructor(
             values.put(Calendars.CALENDAR_DISPLAY_NAME, meta.name)
 
             if (withColor)
-                values.put(Calendars.CALENDAR_COLOR, if (!meta.color.isNullOrBlank()) parseColor(meta.color) else defaultColor)
+                values.put(Calendars.CALENDAR_COLOR, parseColor(meta.color))
 
             if (col.accessLevel == "ro")
                 values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_READ)

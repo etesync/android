@@ -1,6 +1,5 @@
 package com.etesync.syncadapter.ui.etebase
 
-import android.graphics.Color.parseColor
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
@@ -79,7 +78,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 title.setHint(R.string.create_calendar_display_name_hint)
 
-                val color = if (!meta.color.isNullOrBlank()) parseColor(meta.color) else LocalCalendar.defaultColor
+                val color = LocalCalendar.parseColor(meta.color)
                 colorSquare.setBackgroundColor(color)
                 colorSquare.setOnClickListener {
                     AmbilWarnaDialog(context, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {
@@ -94,7 +93,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
             Constants.ETEBASE_TYPE_TASKS -> {
                 title.setHint(R.string.create_tasklist_display_name_hint)
 
-                val color = if (!meta.color.isNullOrBlank()) parseColor(meta.color) else LocalCalendar.defaultColor
+                val color = LocalCalendar.parseColor(meta.color)
                 colorSquare.setBackgroundColor(color)
                 colorSquare.setOnClickListener {
                     AmbilWarnaDialog(context, (colorSquare.background as ColorDrawable).color, true, object : AmbilWarnaDialog.OnAmbilWarnaListener {

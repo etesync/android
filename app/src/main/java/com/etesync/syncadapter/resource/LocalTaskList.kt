@@ -11,11 +11,9 @@ package com.etesync.syncadapter.resource
 import android.accounts.Account
 import android.content.ContentValues
 import android.content.Context
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.RemoteException
-import android.provider.CalendarContract
 import at.bitfire.ical4android.AndroidTaskList
 import at.bitfire.ical4android.AndroidTaskListFactory
 import at.bitfire.ical4android.CalendarStorageException
@@ -89,7 +87,7 @@ class LocalTaskList private constructor(
             values.put(TaskLists.LIST_NAME, meta.name)
 
             if (withColor)
-                values.put(TaskLists.LIST_COLOR, if (!meta.color.isNullOrBlank()) Color.parseColor(meta.color) else defaultColor)
+                values.put(TaskLists.LIST_COLOR, LocalCalendar.parseColor(meta.color))
 
             return values
         }

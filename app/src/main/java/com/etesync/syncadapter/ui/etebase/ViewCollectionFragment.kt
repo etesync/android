@@ -1,7 +1,6 @@
 package com.etesync.syncadapter.ui.etebase
 
 import android.content.DialogInterface
-import android.graphics.Color.parseColor
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -67,7 +66,7 @@ class ViewCollectionFragment : Fragment() {
         val isAdmin = col.accessLevel == "adm"
 
         val colorSquare = container.findViewById<View>(R.id.color)
-        val color = if (!meta.color.isNullOrBlank()) parseColor(meta.color) else LocalCalendar.defaultColor
+        val color = LocalCalendar.parseColor(meta.color)
         when (meta.collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 colorSquare.setBackgroundColor(color)

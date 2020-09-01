@@ -13,7 +13,6 @@ import android.accounts.AccountManager
 import android.app.LoaderManager
 import android.content.*
 import android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
-import android.graphics.Color.parseColor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -31,10 +30,10 @@ import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.CollectionManager
 import com.etebase.client.Utils
 import com.etebase.client.exceptions.EtebaseException
-import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalAuthenticator
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
@@ -399,7 +398,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     val isAdmin = accessLevel == "adm"
 
                     val metaColor = meta.color
-                    val color = if (!metaColor.isNullOrBlank()) parseColor(metaColor) else null
+                    val color = if (!metaColor.isNullOrBlank()) LocalCalendar.parseColor(metaColor) else null
                     CollectionListItemInfo(it.col.uid, type, meta.name, meta.description
                             ?: "", color, isReadOnly, isAdmin, null)
                 }.filterNotNull()
