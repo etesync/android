@@ -2,10 +2,14 @@ package com.etesync.syncadapter.ui.etebase
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.ListFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
@@ -16,10 +20,12 @@ import com.etesync.syncadapter.R
 import java.text.SimpleDateFormat
 import java.util.concurrent.Future
 
+
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     private val collectionModel: CollectionViewModel by activityViewModels()
     private val itemsModel: ItemsViewModel by activityViewModels()
     private var asyncTask: Future<Unit>? = null
+    private var state: Parcelable? = null
 
     private var emptyTextView: TextView? = null
 
@@ -36,6 +42,8 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var restored = false
+
         collectionModel.observe(this) { col ->
             itemsModel.observe(this) {
                 val entries = it.sortedByDescending { item ->
@@ -46,11 +54,20 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
                 listAdapter.addAll(entries)
 
+                if(!restored && (state != null)) {
+                    listView.onRestoreInstanceState(state)
+                    restored = true
+                }
+
                 emptyTextView!!.text = getString(R.string.journal_entries_list_empty)
             }
         }
 
         listView.onItemClickListener = this
+    }
+    override fun onPause() {
+        state = listView.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onDestroyView() {
