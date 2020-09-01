@@ -18,13 +18,11 @@ import com.etesync.syncadapter.CachedItem
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import java.text.SimpleDateFormat
-import java.util.concurrent.Future
 
 
 class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     private val collectionModel: CollectionViewModel by activityViewModels()
     private val itemsModel: ItemsViewModel by activityViewModels()
-    private var asyncTask: Future<Unit>? = null
     private var state: Parcelable? = null
 
     private var emptyTextView: TextView? = null
@@ -68,12 +66,6 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onPause() {
         state = listView.onSaveInstanceState()
         super.onPause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (asyncTask != null)
-            asyncTask!!.cancel(true)
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
