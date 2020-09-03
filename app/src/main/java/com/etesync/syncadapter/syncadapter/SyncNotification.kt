@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.exceptions.*
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
@@ -27,7 +28,8 @@ class SyncNotification(internal val context: Context, internal val notificationT
     internal val notificationManager: NotificationManagerCompat
     lateinit var detailsIntent: Intent
         internal set
-    internal var messageString: Int = 0
+    internal var messageInt: Int = 0
+    internal var messageString: String? = null
 
     private var throwable: Throwable? = null
 
@@ -37,30 +39,33 @@ class SyncNotification(internal val context: Context, internal val notificationT
 
     fun setThrowable(e: Throwable) {
         throwable = e
-        if (e is Exceptions.UnauthorizedException) {
+        if (e is Exceptions.UnauthorizedException || e is UnauthorizedException) {
             Logger.log.log(Level.SEVERE, "Not authorized anymore", e)
-            messageString = R.string.sync_error_unauthorized
+            messageInt = R.string.sync_error_unauthorized
         } else if (e is Exceptions.UserInactiveException) {
             Logger.log.log(Level.SEVERE, "User inactive")
-            messageString = R.string.sync_error_user_inactive
-        } else if (e is Exceptions.ServiceUnavailableException) {
+            messageInt = R.string.sync_error_user_inactive
+        } else if (e is Exceptions.ServiceUnavailableException || e is TemporaryServerErrorException) {
             Logger.log.log(Level.SEVERE, "Service unavailable")
-            messageString = R.string.sync_error_unavailable
+            messageInt = R.string.sync_error_unavailable
         } else if (e is Exceptions.ReadOnlyException) {
             Logger.log.log(Level.SEVERE, "Journal is read only", e)
-            messageString = R.string.sync_error_journal_readonly
-        } else if (e is Exceptions.HttpException) {
+            messageInt = R.string.sync_error_journal_readonly
+        } else if (e is PermissionDeniedException) {
+            Logger.log.log(Level.SEVERE, "Permission denied", e)
+            messageString = context.getString(R.string.sync_error_permission_denied, e.localizedMessage)
+        } else if (e is Exceptions.HttpException || e is ServerErrorException) {
             Logger.log.log(Level.SEVERE, "HTTP Exception during sync", e)
-            messageString = R.string.sync_error_http_dav
+            messageInt = R.string.sync_error_http_dav
         } else if (e is CalendarStorageException || e is ContactsStorageException || e is SQLiteException) {
             Logger.log.log(Level.SEVERE, "Couldn't access local storage", e)
-            messageString = R.string.sync_error_local_storage
+            messageInt = R.string.sync_error_local_storage
         } else if (e is Exceptions.IntegrityException) {
             Logger.log.log(Level.SEVERE, "Integrity error", e)
-            messageString = R.string.sync_error_integrity
+            messageInt = R.string.sync_error_integrity
         } else {
             Logger.log.log(Level.SEVERE, "Unknown sync error", e)
-            messageString = R.string.sync_error
+            messageInt = R.string.sync_error
         }
 
         detailsIntent = Intent(context, NotificationHandlerActivity::class.java)
@@ -69,7 +74,7 @@ class SyncNotification(internal val context: Context, internal val notificationT
     }
 
     fun notify(title: String, state: String) {
-        val message = context.getString(messageString, state)
+        val message = messageString ?: context.getString(messageInt, state)
         notify(title, message, null, detailsIntent)
     }
 
