@@ -407,7 +407,12 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
         override fun loadInBackground(): AccountInfo {
             val info = AccountInfo()
-            val settings = AccountSettings(context, account)
+            val settings: AccountSettings
+            try {
+                settings = AccountSettings(context, account)
+            } catch (e: InvalidAccountException) {
+                return info
+            }
             if (settings.isLegacy) {
                 val data = (context.applicationContext as App).data
 
