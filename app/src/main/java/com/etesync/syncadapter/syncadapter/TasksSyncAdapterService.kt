@@ -99,7 +99,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
 
             // delete obsolete local calendar
             for (taskList in local) {
-                val url = taskList.name
+                val url = taskList.syncId
                 val collection = remote[url]
                 if (collection == null) {
                     Logger.log.fine("Deleting obsolete local taskList $url")
