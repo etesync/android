@@ -29,7 +29,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import javax.net.ssl.*
-import java.util.logging.Logger as LoggerType
 
 class HttpClient private constructor(
         val okHttpClient: OkHttpClient,
@@ -58,7 +57,7 @@ class HttpClient private constructor(
 
 
     override fun close() {
-        okHttpClient.cache()?.close()
+        okHttpClient.cache?.close()
         certManager?.close()
     }
 
@@ -76,8 +75,10 @@ class HttpClient private constructor(
         init {
             // add network logging, if requested
             if (logger.isLoggable(Level.FINEST)) {
-                val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-                    message -> logger.finest(message)
+                val loggingInterceptor = HttpLoggingInterceptor(object: HttpLoggingInterceptor.Logger {
+                    override fun log(message: String) {
+                        logger.finest(message)
+                    }
                 })
                 loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
                 orig.addInterceptor(loggingInterceptor)
@@ -163,7 +164,7 @@ class HttpClient private constructor(
                 var request = chain.request()
 
                 /* Only add to the host we want. */
-                if (host == null || request.url().host() == host) {
+                if (host == null || request.url.host == host) {
                     if (token != null && request.header(HEADER_AUTHORIZATION) == null) {
                         request = request.newBuilder()
                                 .header(HEADER_AUTHORIZATION, "Token $token")
@@ -186,8 +187,8 @@ class HttpClient private constructor(
                 factory.trustManagers.first() as X509TrustManager
             }()
 
-            val hostnameVerifier = certManager?.hostnameVerifier(OkHostnameVerifier.INSTANCE)
-                    ?: OkHostnameVerifier.INSTANCE
+            val hostnameVerifier = certManager?.hostnameVerifier(OkHostnameVerifier)
+                    ?: OkHostnameVerifier
 
             var keyManager: KeyManager? = null
             certificateAlias?.let { alias ->

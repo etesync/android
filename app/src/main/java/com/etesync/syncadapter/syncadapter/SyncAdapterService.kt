@@ -26,6 +26,7 @@ import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalManager
+import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -33,7 +34,7 @@ import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.PermissionsActivity
 import com.etesync.syncadapter.utils.NotificationUtils
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.lang.Math.abs
 import java.util.*
 import java.util.logging.Level
@@ -207,7 +208,7 @@ abstract class SyncAdapterService : Service() {
                 val settings = AccountSettings(context, account)
                 val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
-                val journalsManager = JournalManager(httpClient.okHttpClient, HttpUrl.get(settings.uri!!)!!)
+                val journalsManager = JournalManager(httpClient.okHttpClient, settings.uri?.toHttpUrlOrNull()!!)
 
                 var journals = journalFetcher.list(journalsManager, settings, serviceType)
 

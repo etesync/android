@@ -17,7 +17,7 @@ import com.etesync.syncadapter.InvalidAccountException
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalAddressBook
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class ContactsSyncAdapterService : SyncAdapterService() {
 
@@ -52,7 +52,7 @@ class ContactsSyncAdapterService : SyncAdapterService() {
             Logger.log.info("Synchronizing address book: " + addressBook.url)
             Logger.log.info("Taking settings from: " + addressBook.mainAccount)
 
-            val principal = HttpUrl.get(settings.uri!!)!!
+            val principal = settings.uri?.toHttpUrlOrNull()!!
             ContactsSyncManager(context, account, settings, extras, authority, provider, syncResult, addressBook, principal).use {
                 it.performSync()
             }

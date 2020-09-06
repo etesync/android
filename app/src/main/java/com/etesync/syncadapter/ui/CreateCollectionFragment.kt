@@ -27,7 +27,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.utils.TaskProviderHandling
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Exception> {
 
@@ -100,7 +100,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 info.serviceID = serviceEntity.id
 
                 val settings = AccountSettings(context, account)
-                val principal = HttpUrl.get(settings.uri!!)
+                val principal = settings.uri?.toHttpUrlOrNull()
 
                 val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
                 val journalManager = JournalManager(httpClient, principal!!)

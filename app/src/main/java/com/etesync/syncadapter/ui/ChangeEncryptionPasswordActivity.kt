@@ -24,7 +24,7 @@ import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.google.android.material.textfield.TextInputLayout
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -70,7 +70,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
             Logger.log.info("Finished deriving old key")
 
             var cryptoManager: Crypto.CryptoManager
-            val principal = HttpUrl.get(settings.uri!!)!!
+            val principal = settings.uri?.toHttpUrlOrNull()!!
 
             try {
                 val userInfoManager = UserInfoManager(httpClient, principal)

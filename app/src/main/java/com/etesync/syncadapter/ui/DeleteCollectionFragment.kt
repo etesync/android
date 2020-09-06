@@ -25,7 +25,7 @@ import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Exception> {
 
@@ -86,7 +86,7 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                 val data = (context.applicationContext as App).data
 
                 val settings = AccountSettings(context, account)
-                val principal = HttpUrl.get(settings.uri!!)
+                val principal = settings.uri?.toHttpUrlOrNull()
 
                 val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
                 val journalManager = JournalManager(httpClient, principal!!)

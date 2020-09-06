@@ -22,7 +22,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.resource.LocalCalendar
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.util.*
 
 class CalendarsSyncAdapterService : SyncAdapterService() {
@@ -44,7 +44,7 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
 
             updateLocalCalendars(provider, account, settings)
 
-            val principal = HttpUrl.get(settings.uri!!)!!
+            val principal = settings.uri?.toHttpUrlOrNull()!!
 
             for (calendar in AndroidCalendar.find(account, provider, LocalCalendar.Factory, CalendarContract.Calendars.SYNC_EVENTS + "!=0", null)) {
                 Logger.log.info("Synchronizing calendar #" + calendar.id + ", URL: " + calendar.name)

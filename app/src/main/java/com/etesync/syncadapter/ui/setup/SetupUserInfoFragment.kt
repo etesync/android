@@ -17,7 +17,7 @@ import com.etesync.journalmanager.Constants
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.log.Logger
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class SetupUserInfoFragment : DialogFragment() {
     private lateinit var account: Account
@@ -53,7 +53,7 @@ class SetupUserInfoFragment : DialogFragment() {
                 val cryptoManager: Crypto.CryptoManager
                 val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
 
-                val userInfoManager = UserInfoManager(httpClient, HttpUrl.get(settings.uri!!)!!)
+                val userInfoManager = UserInfoManager(httpClient, settings.uri?.toHttpUrlOrNull()!!)
                 var userInfo: UserInfoManager.UserInfo? = userInfoManager.fetch(account.name)
 
                 if (userInfo == null) {

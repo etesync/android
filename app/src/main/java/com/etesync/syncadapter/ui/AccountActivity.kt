@@ -44,7 +44,7 @@ import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.etesync.syncadapter.utils.packageInstalled
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.jetbrains.anko.doAsync
 import tourguide.tourguide.ToolTip
 import java.util.logging.Level
@@ -438,7 +438,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         val accountManager = AccountManager.get(this)
         val settings = AccountSettings(this@AccountActivity, account)
         val authToken = settings.authToken
-        val principal = HttpUrl.get(settings.uri!!)
+        val principal = settings.uri?.toHttpUrlOrNull()
 
         doAsync {
             try {

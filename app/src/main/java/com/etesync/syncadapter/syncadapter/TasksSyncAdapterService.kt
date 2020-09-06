@@ -27,7 +27,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.resource.LocalTaskList
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.dmfs.tasks.contract.TaskContract
 import java.util.*
 
@@ -65,7 +65,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
 
             updateLocalTaskLists(taskProvider, account, accountSettings)
 
-            val principal = HttpUrl.get(accountSettings.uri!!)!!
+            val principal = accountSettings.uri?.toHttpUrlOrNull()!!
 
             for (taskList in AndroidTaskList.find(account, taskProvider, LocalTaskList.Factory, "${TaskContract.TaskLists.SYNC_ENABLED}!=0", null)) {
                 Logger.log.info("Synchronizing task list #${taskList.id} [${taskList.syncId}]")

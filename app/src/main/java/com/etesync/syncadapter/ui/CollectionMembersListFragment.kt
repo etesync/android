@@ -17,7 +17,7 @@ import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.model.JournalModel
 import com.etesync.syncadapter.model.MyEntityDataStore
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
@@ -54,7 +54,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
             try {
                 val settings = AccountSettings(context!!, account)
                 val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
-                val journalsManager = JournalManager(httpClient, HttpUrl.get(settings.uri!!)!!)
+                val journalsManager = JournalManager(httpClient, settings.uri?.toHttpUrlOrNull()!!)
 
                 val journal = JournalManager.Journal.fakeWithUid(journalEntity.uid)
                 members = journalsManager.listMembers(journal)

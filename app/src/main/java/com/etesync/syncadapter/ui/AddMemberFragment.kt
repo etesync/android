@@ -18,6 +18,7 @@ import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class AddMemberFragment : DialogFragment() {
     private lateinit var account: Account
@@ -42,7 +43,7 @@ class AddMemberFragment : DialogFragment() {
             e.printStackTrace()
         }
 
-        remote = HttpUrl.get(settings!!.uri!!)
+        remote = settings?.uri?.toHttpUrlOrNull()!!
 
         MemberAdd().execute()
     }

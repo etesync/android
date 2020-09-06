@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.JournalManager
 import com.etesync.syncadapter.model.CollectionInfo
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 class RemoveMemberFragment : DialogFragment() {
     private var settings: AccountSettings? = null
@@ -46,7 +46,7 @@ class RemoveMemberFragment : DialogFragment() {
             val httpClient = HttpClient.Builder(context, settings).build()
 
             try {
-                val remote = HttpUrl.get(settings!!.uri!!)
+                val remote = settings?.uri?.toHttpUrlOrNull()
 
                 val journalsManager = JournalManager(httpClient.okHttpClient, remote!!)
                 val journal = JournalManager.Journal.fakeWithUid(info!!.uid!!)

@@ -158,7 +158,8 @@ dependencies {
     kapt "io.requery:requery-processor:$requeryVersion"
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
-    def okhttp3Version = "3.12.1"
+    def okhttp3Version = "4.8.1"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
 
     implementation 'com.google.code.gson:gson:1.7.2'

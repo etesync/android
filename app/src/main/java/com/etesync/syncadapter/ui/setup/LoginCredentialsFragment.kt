@@ -22,7 +22,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.WebViewActivity
 import com.google.android.material.textfield.TextInputLayout
 import net.cachapa.expandablelayout.ExpandableLayout
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.net.URI
 
 class LoginCredentialsFragment : Fragment() {
@@ -105,9 +105,9 @@ class LoginCredentialsFragment : Fragment() {
             val server = customServer.text.toString()
             // If this field is null, just use the default
             if (!server.isEmpty()) {
-                val url = HttpUrl.parse(server)
+                val url = server.toHttpUrlOrNull()
                 if (url != null) {
-                    uri = url.uri()
+                    uri = url.toUri()
                 } else {
                     customServer.error = getString(R.string.login_custom_server_error)
                     valid = false
