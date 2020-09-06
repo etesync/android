@@ -91,12 +91,14 @@ class LocalAddressBook(
 
 
             val addressBook = LocalAddressBook(context, account, provider)
+            ContentResolver.setIsSyncable(account, ContactsContract.AUTHORITY, 1)
             ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true)
 
             val values = ContentValues(2)
             values.put(ContactsContract.Settings.SHOULD_SYNC, 1)
             values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
             addressBook.settings = values
+            addressBook.readOnly = col.accessLevel == "ro"
 
             return addressBook
         }
