@@ -652,7 +652,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                     itemUpdateMtime(item)
                 } else {
                     val meta = ItemMetadata()
-                    meta.name = local.uuid
+                    meta.name = local.uuid!!
                     meta.setMtime(System.currentTimeMillis())
                     item = itemMgr.create(meta, "")
 
