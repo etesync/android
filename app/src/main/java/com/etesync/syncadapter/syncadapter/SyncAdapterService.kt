@@ -110,6 +110,9 @@ abstract class SyncAdapterService : Service() {
 
             try {
                 onPerformSyncDo(account, extras, authority, provider, syncResult)
+            } catch (e: SecurityException) {
+                // Shouldn't be needed - not sure why it doesn't fail
+                onSecurityException(account, extras, authority, syncResult)
             } catch (e: Exceptions.ServiceUnavailableException) {
                 syncResult.stats.numIoExceptions++
                 syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
