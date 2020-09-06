@@ -142,9 +142,9 @@ dependencies {
     implementation "androidx.legacy:legacy-support-core-ui:$supportVersion"
     implementation "androidx.core:core:$supportVersion"
     implementation "androidx.fragment:fragment:$supportVersion"
-    implementation "androidx.appcompat:appcompat:$supportVersion"
-    implementation "androidx.cardview:cardview:$supportVersion"
-    implementation "com.google.android.material:material:$supportVersion"
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.google.android.material:material:1.2.0-beta01'
     implementation "androidx.legacy:legacy-preference-v14:$supportVersion"
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation ('com.github.worker8:tourguide:1.0.17-SNAPSHOT@aar') {
