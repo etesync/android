@@ -1,6 +1,11 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 1.16.1
+* Fix contacts sync on Android 11
+* Fix issue with tasks.org crashing because of permissions
+* Update cert4android
+
 ## Version 1.16.0
 * Add support for the Tasks.org task provider - you can now just use Tasks.org without needing to add an account there.
 
