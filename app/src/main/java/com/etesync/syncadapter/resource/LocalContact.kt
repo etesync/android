@@ -107,7 +107,7 @@ class LocalContact : AndroidContact, LocalAddress {
         this.eTag = eTag
     }
 
-    override fun prepareForUpload(fileName_: String?) {
+    override fun legacyPrepareForUpload(fileName_: String?) {
         val uid = UUID.randomUUID().toString()
 
         val values = ContentValues(2)
@@ -116,6 +116,16 @@ class LocalContact : AndroidContact, LocalAddress {
         values.put(AndroidContact.COLUMN_UID, uid)
         addressBook.provider?.update(rawContactSyncURI(), values, null, null)
 
+        this.fileName = fileName
+    }
+
+    override fun prepareForUpload(fileName: String, uid: String) {
+        val values = ContentValues(2)
+        values.put(AndroidContact.COLUMN_FILENAME, fileName)
+        values.put(AndroidContact.COLUMN_UID, uid)
+        addressBook.provider?.update(rawContactSyncURI(), values, null, null)
+
+        contact?.uid = uid
         this.fileName = fileName
     }
 

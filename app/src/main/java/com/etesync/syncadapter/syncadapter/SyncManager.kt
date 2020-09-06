@@ -651,12 +651,13 @@ constructor(protected val context: Context, protected val account: Account, prot
                     item = cacheItem.item
                     itemUpdateMtime(item)
                 } else {
+                    val uid = UUID.randomUUID().toString()
                     val meta = ItemMetadata()
-                    meta.name = local.uuid!!
-                    meta.setMtime(System.currentTimeMillis())
+                    meta.name = uid
+                    meta.mtime = System.currentTimeMillis()
                     item = itemMgr.create(meta, "")
 
-                    local.prepareForUpload(item.uid)
+                    local.prepareForUpload(item.uid, uid)
                 }
 
                 try {
@@ -773,7 +774,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                     if (isLegacy) {
                         // It's done later for non-legacy
                         Logger.log.fine("Entry deleted before ever syncing - genarting a UUID")
-                        local.prepareForUpload(null)
+                        local.legacyPrepareForUpload(null)
                     }
                 }
 
@@ -812,7 +813,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                 }
 
                 Logger.log.fine("Found local record without file name; generating file name/UID if necessary")
-                local.prepareForUpload(null)
+                local.legacyPrepareForUpload(null)
             }
         }
     }

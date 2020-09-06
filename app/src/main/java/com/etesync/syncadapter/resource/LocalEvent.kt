@@ -133,7 +133,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     /* custom queries */
 
-    override fun prepareForUpload(fileName_: String?) {
+    override fun legacyPrepareForUpload(fileName_: String?) {
         var uid: String? = null
         val c = calendar.provider.query(eventSyncURI(), arrayOf(COLUMN_UID), null, null, null)
         if (c.moveToNext())
@@ -154,6 +154,16 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         val event = this.event
         if (event != null)
             event.uid = uid
+    }
+
+    override fun prepareForUpload(fileName: String, uid: String) {
+        val values = ContentValues(2)
+        values.put(Events._SYNC_ID, fileName)
+        values.put(COLUMN_UID, uid)
+        calendar.provider.update(eventSyncURI(), values, null, null)
+
+        event?.uid = uid
+        this.fileName = fileName
     }
 
     override fun resetDeleted() {

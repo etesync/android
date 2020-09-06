@@ -20,8 +20,9 @@ interface LocalResource<in TData: Any> {
 
     fun delete(): Int
 
-    // FIXME: The null is for legacy
-    fun prepareForUpload(fileName: String?)
+    fun legacyPrepareForUpload(fileName: String?)
+
+    fun prepareForUpload(fileName: String, uid: String)
 
     fun clearDirty(eTag: String?)
 

@@ -156,7 +156,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
         batch.commit()
     }
 
-    override fun prepareForUpload(fileName_: String?) {
+    override fun legacyPrepareForUpload(fileName_: String?) {
         val uid = UUID.randomUUID().toString()
 
         val values = ContentValues(2)
@@ -165,6 +165,16 @@ class LocalGroup : AndroidGroup, LocalAddress {
         values.put(AndroidGroup.COLUMN_UID, uid)
         update(values)
 
+        this.fileName = fileName
+    }
+
+    override fun prepareForUpload(fileName: String, uid: String) {
+        val values = ContentValues(2)
+        values.put(AndroidGroup.COLUMN_FILENAME, fileName)
+        values.put(AndroidGroup.COLUMN_UID, uid)
+        addressBook.provider?.update(groupSyncUri(), values, null, null)
+
+        contact?.uid = uid
         this.fileName = fileName
     }
 
