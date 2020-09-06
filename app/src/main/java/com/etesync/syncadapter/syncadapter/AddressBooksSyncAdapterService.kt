@@ -64,6 +64,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
                 val syncExtras = Bundle(extras)
                 syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS, true)
                 syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF, true)
+                syncExtras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)     // run immediately (don't queue)
                 ContentResolver.requestSync(addressBookAccount, ContactsContract.AUTHORITY, syncExtras)
             }
 
