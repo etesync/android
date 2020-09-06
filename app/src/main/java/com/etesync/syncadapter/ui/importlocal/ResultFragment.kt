@@ -22,7 +22,7 @@ class ResultFragment : DialogFragment() {
         result = arguments!!.getSerializable(KEY_RESULT) as ImportResult
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         val activity = activity
         if (activity is DialogInterface) {

@@ -103,7 +103,7 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
 
         private var mSelectImportMethod: SelectImportMethod? = null
 
-        override fun onAttach(context: Context?) {
+        override fun onAttach(context: Context) {
             super.onAttach(context)
             // This makes sure that the container activity has implemented
             // the callback interface. If not, it throws an exception
@@ -115,14 +115,14 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
 
         }
 
-        override fun onAttach(activity: Activity?) {
+        override fun onAttach(activity: Activity) {
             super.onAttach(activity)
             // This makes sure that the container activity has implemented
             // the callback interface. If not, it throws an exception
             try {
                 mSelectImportMethod = activity as SelectImportMethod?
             } catch (e: ClassCastException) {
-                throw ClassCastException(activity!!.toString() + " must implement MyInterface ")
+                throw ClassCastException(activity.toString() + " must implement MyInterface ")
             }
 
         }

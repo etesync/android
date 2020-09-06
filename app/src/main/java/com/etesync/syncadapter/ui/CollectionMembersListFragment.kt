@@ -104,7 +104,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val member = listAdapter.getItem(position) as JournalManager.Member
+        val member = listAdapter?.getItem(position) as JournalManager.Member
 
         AlertDialog.Builder(activity!!)
                 .setIcon(R.drawable.ic_info_dark)
