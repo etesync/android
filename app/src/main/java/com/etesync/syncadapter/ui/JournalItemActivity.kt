@@ -108,7 +108,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 val provider = contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
                 val localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)!!
                 val event = Event.eventsFromReader(StringReader(syncEntry.content))[0]
-                var localEvent = localCalendar.findByFilename(event.uid!!)
+                var localEvent = localCalendar.findByUid(event.uid!!)
                 if (localEvent != null) {
                     localEvent.updateAsDirty(event)
                 } else {
@@ -121,7 +121,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                     val provider = TaskProvider.acquire(this, it)!!
                     val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, info.uid!!)!!
                     val task = Task.tasksFromReader(StringReader(syncEntry.content))[0]
-                    var localTask = localTaskList.findByFilename(task.uid!!)
+                    var localTask = localTaskList.findByUid(task.uid!!)
                     if (localTask != null) {
                         localTask.updateAsDirty(task)
                     } else {
@@ -137,7 +137,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 if (contact.group) {
                     // FIXME: not currently supported
                 } else {
-                    var localContact = localAddressBook.findByFilename(contact.uid!!) as LocalContact?
+                    var localContact = localAddressBook.findByUid(contact.uid!!) as LocalContact?
                     if (localContact != null) {
                         localContact.updateAsDirty(contact)
                     } else {

@@ -21,7 +21,9 @@ import at.bitfire.ical4android.*
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.JournalEntity
+import com.etesync.syncadapter.resource.LocalEvent.Companion.COLUMN_UID
 import org.apache.commons.lang3.StringUtils
+import org.dmfs.tasks.contract.TaskContract
 import java.util.*
 import java.util.logging.Level
 
@@ -178,8 +180,11 @@ class LocalCalendar private constructor(
     override fun findAll(): List<LocalEvent>
             = queryEvents(null, null)
 
-    override fun findByFilename(uid: String): LocalEvent?
-        = queryEvents(Events._SYNC_ID + " =? ", arrayOf(uid)).firstOrNull()
+    override fun findByUid(uid: String): LocalEvent?
+        = queryEvents(COLUMN_UID + " =? ", arrayOf(uid)).firstOrNull()
+
+    override fun findByFilename(filename: String): LocalEvent?
+        = queryEvents(Events._SYNC_ID + " =? ", arrayOf(filename)).firstOrNull()
 
     fun processDirtyExceptions() {
         // process deleted exceptions

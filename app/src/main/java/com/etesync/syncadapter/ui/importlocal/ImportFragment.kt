@@ -250,7 +250,7 @@ class ImportFragment(private val account: Account, private val uid: String, priv
 
                     for (event in events) {
                         try {
-                            var localEvent = localCalendar.findByFilename(event.uid!!)
+                            var localEvent = localCalendar.findByUid(event.uid!!)
                             if (localEvent != null) {
                                 localEvent.updateAsDirty(event)
                                 result.updated++
@@ -304,7 +304,7 @@ class ImportFragment(private val account: Account, private val uid: String, priv
 
                         for (task in tasks) {
                             try {
-                                var localTask = localTaskList.findByFilename(task.uid!!)
+                                var localTask = localTaskList.findByUid(task.uid!!)
                                 if (localTask != null) {
                                     localTask.updateAsDirty(task)
                                     result.updated++
@@ -348,7 +348,7 @@ class ImportFragment(private val account: Account, private val uid: String, priv
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
                         try {
-                            var localContact = localAddressBook.findByFilename(contact.uid!!) as LocalContact?
+                            var localContact = localAddressBook.findByUid(contact.uid!!) as LocalContact?
 
                             if (localContact != null) {
                                 localContact.updateAsDirty(contact)
@@ -381,7 +381,7 @@ class ImportFragment(private val account: Account, private val uid: String, priv
                             }
 
                             val group = contact
-                            var localGroup: LocalGroup? = localAddressBook.findByFilename(group.uid!!) as LocalGroup?
+                            var localGroup: LocalGroup? = localAddressBook.findByUid(group.uid!!) as LocalGroup?
 
                             if (localGroup != null) {
                                 localGroup.updateAsDirty(group, memberIds)

@@ -124,8 +124,11 @@ class LocalTaskList private constructor(
     override fun findWithoutFileName(): List<LocalTask>
         = queryTasks(Tasks._SYNC_ID + " IS NULL", null)
 
-    override fun findByFilename(uid: String): LocalTask?
-        = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(uid)).firstOrNull()
+    override fun findByUid(uid: String): LocalTask?
+        = queryTasks(LocalTask.COLUMN_UID + " =? ", arrayOf(uid)).firstOrNull()
+
+    override fun findByFilename(filename: String): LocalTask?
+            = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(filename)).firstOrNull()
 
     override fun count(): Long {
         try {

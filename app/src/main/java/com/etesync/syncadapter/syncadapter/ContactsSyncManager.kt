@@ -13,7 +13,6 @@ import android.content.*
 import android.os.Bundle
 import android.provider.ContactsContract
 import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.ical4android.Event
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
@@ -132,9 +131,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     }
 
     override fun processItem(item: Item) {
-        val uid = item.meta.name!!
-
-        val local = localCollection!!.findByFilename(uid)
+        val local = localCollection!!.findByFilename(item.uid)
 
         if (!item.isDeleted) {
             val inputReader = StringReader(String(item.content))
@@ -154,7 +151,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                 Logger.log.info("Removing local record which has been deleted on the server")
                 local.delete()
             } else {
-                Logger.log.warning("Tried deleting a non-existent record: " + uid)
+                Logger.log.warning("Tried deleting a non-existent record: " + item.uid)
             }
         }
     }
@@ -171,7 +168,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
             Logger.log.warning("Received multiple VCards, using first one")
 
         val contact = contacts[0]
-        val local = localCollection!!.findByFilename(contact.uid!!)
+        val local = localCollection!!.findByUid(contact.uid!!)
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
             legacyProcessContact(contact, local)

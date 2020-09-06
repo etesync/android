@@ -152,7 +152,7 @@ class LocalContactImportFragment(private val account: Account, private val uid: 
                         var localContact: LocalContact? = if (contact.uid == null)
                             null
                         else
-                            addressBook.findByFilename(contact.uid!!) as LocalContact?
+                            addressBook.findByUid(contact.uid!!) as LocalContact?
 
                         if (localContact != null) {
                             localContact.updateAsDirty(contact)
@@ -183,7 +183,7 @@ class LocalContactImportFragment(private val account: Account, private val uid: 
                         var localGroup: LocalGroup? = if (group.uid == null)
                             null
                         else
-                            addressBook.findByFilename(group.uid!!) as LocalGroup?
+                            addressBook.findByUid(group.uid!!) as LocalGroup?
 
                         if (localGroup != null) {
                             localGroup.updateAsDirty(group, members)

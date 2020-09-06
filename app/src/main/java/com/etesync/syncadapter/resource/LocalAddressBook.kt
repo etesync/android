@@ -346,12 +346,22 @@ class LocalAddressBook(
         return reallyDirty
     }
 
-    override fun findByFilename(uid: String): LocalAddress? {
+    override fun findByUid(uid: String): LocalAddress? {
         val found = findContactByUID(uid)
         if (found != null) {
             return found
         } else {
             return queryGroups("${AndroidGroup.COLUMN_UID}=?", arrayOf(uid)).firstOrNull()
+        }
+    }
+
+    override fun findByFilename(filename: String): LocalAddress? {
+        val found = queryContacts("${AndroidContact.COLUMN_FILENAME}=?", arrayOf(filename)).firstOrNull()
+
+        if (found != null) {
+            return found
+        } else {
+            return queryGroups("${AndroidGroup.COLUMN_FILENAME}=?", arrayOf(filename)).firstOrNull()
         }
     }
 

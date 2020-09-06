@@ -214,7 +214,7 @@ class LocalCalendarImportFragment(private val account: Account, private val uid:
                         var localEvent = if (event == null || event.uid == null)
                             null
                         else
-                            localCalendar.findByFilename(event.uid!!)
+                            localCalendar.findByUid(event.uid!!)
 
                         if (localEvent != null) {
                             localEvent.updateAsDirty(event!!)
