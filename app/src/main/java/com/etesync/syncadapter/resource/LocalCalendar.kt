@@ -18,6 +18,7 @@ import android.os.RemoteException
 import android.provider.CalendarContract
 import android.provider.CalendarContract.*
 import at.bitfire.ical4android.*
+import com.etebase.client.CollectionAccessLevel
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.JournalEntity
@@ -128,7 +129,7 @@ class LocalCalendar private constructor(
             if (withColor)
                 values.put(Calendars.CALENDAR_COLOR, parseColor(meta.color))
 
-            if (col.accessLevel == "ro")
+            if (col.accessLevel == CollectionAccessLevel.ReadOnly)
                 values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_READ)
             else {
                 values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_OWNER)

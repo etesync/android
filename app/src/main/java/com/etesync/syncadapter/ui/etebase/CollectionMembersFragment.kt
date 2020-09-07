@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.etebase.client.CollectionAccessLevel
 import com.etebase.client.Utils
 import com.etebase.client.exceptions.EtebaseException
 import com.etebase.client.exceptions.NotFoundException
@@ -81,7 +82,7 @@ class CollectionMembersFragment : Fragment() {
                     val username = view.findViewById<EditText>(R.id.username).text.toString()
                     val readOnly = view.findViewById<CheckBox>(R.id.read_only).isChecked
 
-                    val frag = AddMemberFragment(model.value!!, collectionModel.value!!, username, if (readOnly) "ro" else "rw")
+                    val frag = AddMemberFragment(model.value!!, collectionModel.value!!, username, if (readOnly) CollectionAccessLevel.ReadOnly else CollectionAccessLevel.ReadWrite)
                     frag.show(childFragmentManager, null)
                 }
                 .setNegativeButton(android.R.string.no) { _, _ -> }
@@ -90,7 +91,7 @@ class CollectionMembersFragment : Fragment() {
     }
 }
 
-class AddMemberFragment(private val accountHolder: AccountHolder, private val cachedCollection: CachedCollection, private val username: String, private val accessLevel: String) : DialogFragment() {
+class AddMemberFragment(private val accountHolder: AccountHolder, private val cachedCollection: CachedCollection, private val username: String, private val accessLevel: CollectionAccessLevel) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(context)
         progress.setTitle(R.string.collection_members_adding)

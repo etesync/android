@@ -19,6 +19,7 @@ import android.provider.ContactsContract.CommonDataKinds.GroupMembership
 import android.provider.ContactsContract.Groups
 import android.provider.ContactsContract.RawContacts
 import at.bitfire.vcard4android.*
+import com.etebase.client.CollectionAccessLevel
 import com.etesync.syncadapter.App
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.log.Logger
@@ -98,7 +99,7 @@ class LocalAddressBook(
             values.put(ContactsContract.Settings.SHOULD_SYNC, 1)
             values.put(ContactsContract.Settings.UNGROUPED_VISIBLE, 1)
             addressBook.settings = values
-            addressBook.readOnly = col.accessLevel == "ro"
+            addressBook.readOnly = col.accessLevel == CollectionAccessLevel.ReadOnly
 
             return addressBook
         }
@@ -250,7 +251,7 @@ class LocalAddressBook(
             account = future.result
         }
 
-        readOnly = col.accessLevel == "ro"
+        readOnly = col.accessLevel == CollectionAccessLevel.ReadOnly
         Logger.log.info("Address book write permission? = ${!readOnly}")
 
         // make sure it will still be synchronized when contacts are updated

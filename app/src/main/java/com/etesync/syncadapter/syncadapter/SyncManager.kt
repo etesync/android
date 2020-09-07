@@ -756,7 +756,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         val localList = localCollection!!.findDeleted()
         val ret = ArrayList<T>(localList.size)
 
-        val readOnly = (isLegacy && journalEntity.isReadOnly) || (!isLegacy && (cachedCollection.col.accessLevel == "ro"))
+        val readOnly = (isLegacy && journalEntity.isReadOnly) || (!isLegacy && (cachedCollection.col.accessLevel == CollectionAccessLevel.ReadOnly))
         if (readOnly) {
             for (local in localList) {
                 Logger.log.info("Restoring locally deleted resource on a read only collection: ${local.uuid}")
@@ -789,7 +789,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     @Throws(CalendarStorageException::class, ContactsStorageException::class)
     protected open fun prepareDirty() {
-        val readOnly = (isLegacy && journalEntity.isReadOnly) || (!isLegacy && (cachedCollection.col.accessLevel == "ro"))
+        val readOnly = (isLegacy && journalEntity.isReadOnly) || (!isLegacy && (cachedCollection.col.accessLevel == CollectionAccessLevel.ReadOnly))
         if (readOnly) {
             for (local in localDirty) {
                 Logger.log.info("Restoring locally modified resource on a read only collection: ${local.uuid}")

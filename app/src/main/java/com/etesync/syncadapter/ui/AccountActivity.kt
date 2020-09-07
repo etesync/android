@@ -27,6 +27,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.CollectionAccessLevel
 import com.etebase.client.CollectionManager
 import com.etebase.client.Utils
 import com.etebase.client.exceptions.EtebaseException
@@ -394,8 +395,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     }
 
                     val accessLevel = it.col.accessLevel
-                    val isReadOnly = accessLevel == "ro"
-                    val isAdmin = accessLevel == "adm"
+                    val isReadOnly = accessLevel == CollectionAccessLevel.ReadOnly
+                    val isAdmin = accessLevel == CollectionAccessLevel.Admin
 
                     val metaColor = meta.color
                     val color = if (!metaColor.isNullOrBlank()) LocalCalendar.parseColor(metaColor) else null

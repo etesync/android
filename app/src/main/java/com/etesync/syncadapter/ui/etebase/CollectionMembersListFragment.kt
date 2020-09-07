@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.observe
+import com.etebase.client.CollectionAccessLevel
 import com.etebase.client.CollectionMember
 import com.etebase.client.FetchOptions
 import com.etesync.syncadapter.CachedCollection
@@ -78,7 +79,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val member = listAdapter?.getItem(position) as CollectionMember
 
-        if (member.accessLevel == "adm") {
+        if (member.accessLevel == CollectionAccessLevel.Admin) {
             AlertDialog.Builder(requireActivity())
                     .setIcon(R.drawable.ic_error_dark)
                     .setTitle(R.string.collection_members_remove_title)
@@ -111,7 +112,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
 
             // FIXME: Also mark admins
             val readOnly = v.findViewById<View>(R.id.read_only)
-            readOnly.visibility = if (member.accessLevel == "ro") View.VISIBLE else View.GONE
+            readOnly.visibility = if (member.accessLevel == CollectionAccessLevel.ReadOnly) View.VISIBLE else View.GONE
 
             return v
         }

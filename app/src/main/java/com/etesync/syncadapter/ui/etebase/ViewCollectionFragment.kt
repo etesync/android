@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import com.etebase.client.CollectionAccessLevel
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
@@ -63,7 +64,7 @@ class ViewCollectionFragment : Fragment() {
 
         val col = cachedCollection.col
         val meta = cachedCollection.meta
-        val isAdmin = col.accessLevel == "adm"
+        val isAdmin = col.accessLevel == CollectionAccessLevel.Admin
 
         val colorSquare = container.findViewById<View>(R.id.color)
         val color = LocalCalendar.parseColor(meta.color)
@@ -111,7 +112,7 @@ class ViewCollectionFragment : Fragment() {
 
         when (item.itemId) {
             R.id.on_edit -> {
-                if (cachedCollection.col.accessLevel == "adm") {
+                if (cachedCollection.col.accessLevel == CollectionAccessLevel.Admin) {
                     parentFragmentManager.commit {
                         replace(R.id.fragment_container, EditCollectionFragment(cachedCollection))
                         addToBackStack(EditCollectionFragment::class.java.name)
@@ -126,7 +127,7 @@ class ViewCollectionFragment : Fragment() {
                 }
             }
             R.id.on_manage_members -> {
-                if (cachedCollection.col.accessLevel == "adm") {
+                if (cachedCollection.col.accessLevel == CollectionAccessLevel.Admin) {
                     parentFragmentManager.commit {
                         replace(R.id.fragment_container, CollectionMembersFragment())
                         addToBackStack(null)
@@ -140,7 +141,7 @@ class ViewCollectionFragment : Fragment() {
                     dialog.show()
                 }            }
             R.id.on_import -> {
-                if (cachedCollection.col.accessLevel != "ro") {
+                if (cachedCollection.col.accessLevel != CollectionAccessLevel.ReadOnly) {
                     parentFragmentManager.commit {
                         replace(R.id.fragment_container, ImportCollectionFragment())
                         addToBackStack(null)
