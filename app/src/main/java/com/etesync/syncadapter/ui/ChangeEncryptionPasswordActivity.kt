@@ -69,7 +69,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
         }
 
         doAsync {
-            val httpClient = HttpClient.sharedClient
+            val httpClient = HttpClient.Builder(this@ChangeEncryptionPasswordActivity).setForeground(true).build().okHttpClient
 
             try {
                 Logger.log.info("Loging in with old password")

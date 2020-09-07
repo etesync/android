@@ -90,7 +90,8 @@ class AccountViewModel : ViewModel() {
         doAsync {
             val settings = AccountSettings(context, account)
             val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
-            val etebase = EtebaseLocalCache.getEtebase(context, HttpClient.sharedClient, settings)
+            val httpClient = HttpClient.Builder(context).setForeground(true).build().okHttpClient
+            val etebase = EtebaseLocalCache.getEtebase(context, httpClient, settings)
             val colMgr = etebase.collectionManager
             uiThread {
                 holder.value = AccountHolder(
