@@ -30,7 +30,6 @@ import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalManager
-import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -247,6 +246,14 @@ abstract class SyncAdapterService : Service() {
 
                 val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
                 synchronized(etebaseLocalCache) {
+                    val cacheAge = 5 * 1000 // 5 seconds - it's just a hack for burst fetching
+                    val now = System.currentTimeMillis()
+                    val lastCollectionsFetch = collectionLastFetchMap[account.name] ?: 0
+
+                    if (abs(now - lastCollectionsFetch) <= cacheAge) {
+                        return@synchronized
+                    }
+
                     val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
                     val colMgr = etebase.collectionManager
                     var stoken = etebaseLocalCache.loadStoken()
@@ -265,6 +272,7 @@ abstract class SyncAdapterService : Service() {
                         done = colList.isDone
                         etebaseLocalCache.saveStoken(stoken!!)
                     }
+                    collectionLastFetchMap[account.name] = now
                 }
 
                 httpClient.close()
@@ -308,5 +316,6 @@ abstract class SyncAdapterService : Service() {
 
     companion object {
         val journalFetcher = CachedJournalFetcher()
+        var collectionLastFetchMap = HashMap<String, Long>()
     }
 }
