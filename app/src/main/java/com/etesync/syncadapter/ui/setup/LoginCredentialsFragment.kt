@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.WebViewActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import net.cachapa.expandablelayout.ExpandableLayout
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -36,10 +37,10 @@ class LoginCredentialsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.login_credentials_fragment, container, false)
 
-        editUserName = v.findViewById<View>(R.id.user_name) as EditText
-        editUrlPassword = v.findViewById<View>(R.id.url_password) as TextInputLayout
-        showAdvanced = v.findViewById<View>(R.id.show_advanced) as CheckedTextView
-        customServer = v.findViewById<View>(R.id.custom_server) as EditText
+        editUserName = v.findViewById<TextInputEditText>(R.id.user_name)
+        editUrlPassword = v.findViewById<TextInputLayout>(R.id.url_password)
+        showAdvanced = v.findViewById<CheckedTextView>(R.id.show_advanced)
+        customServer = v.findViewById<TextInputEditText>(R.id.custom_server)
 
         if (savedInstanceState == null) {
             val activity = activity
