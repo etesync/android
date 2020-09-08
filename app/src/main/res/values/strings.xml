@@ -348,8 +348,8 @@
     <string name="delete_collection_deleting_collection">Deleting collection</string>
 
     <!-- JournalViewer -->
-    <string name="journal_entries_list_empty">Journal is empty.\n(Maybe it\'s still syncing?)</string>
-    <string name="journal_entries_loading">Loading journal entries...</string>
+    <string name="journal_entries_list_empty">Collection is empty.\nMaybe it\'s still syncing?</string>
+    <string name="journal_entries_loading">Loading change log entries...</string>
 
     <!-- ExceptionInfoFragment -->
     <string name="exception">An error has occurred.</string>
