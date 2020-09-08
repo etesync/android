@@ -211,6 +211,7 @@
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
     <string name="login_username">Username</string>
+    <string name="login_username_error">Valid username required</string>
     <string name="login_email_address">Email</string>
     <string name="login_email_address_error">Valid email required</string>
     <string name="login_password">Password</string>
@@ -220,7 +221,7 @@
     <string name="login_encryption_password">Encryption Password</string>
     <string name="login_encryption_set_new_password">Please set your encryption password below, and make sure you got it right, as it *can\'t* be recovered if lost!</string>
     <string name="login_encryption_enter_password">You are logged in as \"%s\". Please enter your encryption password to continue, or log out from the side menu.</string>
-    <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be recovered if wrong!</string>
+    <string name="login_encryption_check_password">* Please make sure you remember your password, as it can\'t be recovered if lost!</string>
     <string name="login_encryption_extra_info">* This password is used to encrypt your data, unlike the previous one, which is used to log into the service.\nYou are asked to choose a separate encryption password for security reasons. For more information, please refer to the FAQ at: %s</string>
     <string name="login_password_required">Password required</string>
     <string name="login_login">Log In</string>
@@ -244,6 +245,9 @@
     <string name="account_creation_failed">Account creation failed</string>
     <string name="wrong_encryption_password">Wrong encryption password</string>
     <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\nPlease note that the username is case sensitive, so please also try different capitalizations, for example make the first character uppercase.\n\nError: %s</string>
+
+    <string name="signup_title">Enter Signup Details</string>
+    <string name="signup_password_restrictions">Password should be at least 8 characters long</string>
 
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Change Encryption Password</string>

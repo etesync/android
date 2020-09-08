@@ -17,16 +17,19 @@ import android.widget.CheckedTextView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.WebViewActivity
+import com.etesync.syncadapter.ui.etebase.SignupFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import net.cachapa.expandablelayout.ExpandableLayout
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.net.URI
 
-class LoginCredentialsFragment : Fragment() {
+class LoginCredentialsFragment(private val initialUsername: String?, private val initialPassword: String?) : Fragment() {
     internal lateinit var editUserName: EditText
     internal lateinit var editUrlPassword: TextInputLayout
 
@@ -43,22 +46,15 @@ class LoginCredentialsFragment : Fragment() {
         customServer = v.findViewById<TextInputEditText>(R.id.custom_server)
 
         if (savedInstanceState == null) {
-            val activity = activity
-            val intent = activity?.intent
-            if (intent != null) {
-                // we've got initial login data
-                val username = intent.getStringExtra(LoginActivity.EXTRA_USERNAME)
-                val password = intent.getStringExtra(LoginActivity.EXTRA_PASSWORD)
-
-                editUserName.setText(username)
-                editUrlPassword.editText?.setText(password)
-            }
+            editUserName.setText(initialUsername ?: "")
+            editUrlPassword.editText?.setText(initialPassword ?: "")
         }
 
         val createAccount = v.findViewById<View>(R.id.create_account) as Button
         createAccount.setOnClickListener {
-            val createUri = Constants.registrationUrl.buildUpon().appendQueryParameter("email", editUserName.text.toString()).build()
-            WebViewActivity.openUrl(context!!, createUri)
+            parentFragmentManager.commit {
+                replace(android.R.id.content, SignupFragment(editUserName.text.toString(), editUrlPassword.editText?.text.toString()))
+            }
         }
 
         val login = v.findViewById<View>(R.id.login) as Button
