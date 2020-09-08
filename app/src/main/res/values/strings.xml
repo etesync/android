@@ -244,8 +244,6 @@
     <string name="login_service_details_description">This is your login password, *not* your encryption password!</string>
     <string name="login_forgot_password">Forgot password?</string>
 
-    <string name="login_configuration_detection">Configuration detection</string>
-    <string name="login_querying_server">Please wait, querying server…</string>
     <string name="login_wrong_username_or_password">Couldn\'t authenticate (probably wrong username or password).\nHave you registered?</string>
     <string name="login_view_logs">View logs</string>
 

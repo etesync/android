@@ -152,8 +152,8 @@ class SignupDoFragment(private val signupCredentials: SignupCredentials) : Dialo
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
-        progress.setTitle(R.string.login_configuration_detection)
-        progress.setMessage(getString(R.string.login_querying_server))
+        progress.setTitle(R.string.setting_up_encryption)
+        progress.setMessage(getString(R.string.setting_up_encryption_content))
         progress.isIndeterminate = true
         progress.setCanceledOnTouchOutside(false)
         isCancelable = false

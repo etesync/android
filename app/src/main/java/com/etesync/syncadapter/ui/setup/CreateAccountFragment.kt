@@ -13,20 +13,12 @@ import android.accounts.AccountManager
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
-import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.CalendarContract
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
-import com.etesync.journalmanager.Crypto
-import com.etesync.journalmanager.Exceptions
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
-import com.etesync.syncadapter.model.CollectionInfo
-import com.etesync.syncadapter.model.JournalEntity
-import com.etesync.syncadapter.model.ServiceEntity
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 import com.etesync.syncadapter.utils.AndroidCompat
 import com.etesync.syncadapter.utils.TaskProviderHandling
@@ -36,8 +28,8 @@ class CreateAccountFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
-        progress.setTitle(R.string.login_encryption_setup_title)
-        progress.setMessage(getString(R.string.login_encryption_setup))
+        progress.setTitle(R.string.setting_up_encryption)
+        progress.setMessage(getString(R.string.setting_up_encryption_content))
         progress.isIndeterminate = true
         progress.setCanceledOnTouchOutside(false)
         isCancelable = false
