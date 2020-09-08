@@ -45,6 +45,7 @@ import com.etesync.syncadapter.resource.LocalAddressBook
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.etebase.CollectionActivity
+import com.etesync.syncadapter.ui.etebase.InvitationsActivity
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
 import com.etesync.syncadapter.utils.ShowcaseBuilder
@@ -156,6 +157,10 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_account, menu)
+        if (settings.isLegacy) {
+            val invitations = menu.findItem(R.id.invitations)
+            invitations.setVisible(false)
+        }
         return true
     }
 
@@ -184,6 +189,10 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         .setView(view)
                         .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
                 dialog.show()
+            }
+            R.id.invitations -> {
+                val intent = InvitationsActivity.newIntent(this, account)
+                startActivity(intent)
             }
             else -> return super.onOptionsItemSelected(item)
         }
