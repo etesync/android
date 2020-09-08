@@ -167,6 +167,8 @@
     <string name="collection_members_remove_title">Remove member</string>
     <string name="collection_members_remove">Would you like to revoke %s\'s access?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
     <string name="collection_members_remove_admin">Removing access to admins is currently not supported.</string>
+    <string name="collection_members_no_access">Only admins are allowed to manage collection memberships. Would you like to leave the collection?</string>
+    <string name="collection_members_leave">Leave</string>
 
     <!-- Invitations -->
     <string name="invitations_title">Invitations</string>

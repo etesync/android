@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
@@ -21,6 +22,7 @@ import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.LocalCalendar
+import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.BaseActivity
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -28,9 +30,15 @@ import org.jetbrains.anko.uiThread
 class CollectionMembersFragment : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
+    private var isAdmin: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val ret = inflater.inflate(R.layout.etebase_view_collection_members, container, false)
+        val ret = if (collectionModel.value!!.col.accessLevel == CollectionAccessLevel.Admin) {
+            isAdmin = true
+            inflater.inflate(R.layout.etebase_view_collection_members, container, false)
+        } else {
+            inflater.inflate(R.layout.etebase_view_collection_members_no_access, container, false)
+        }
 
         if (savedInstanceState == null) {
             collectionModel.observe(this) {
@@ -45,10 +53,6 @@ class CollectionMembersFragment : Fragment() {
     }
 
     private fun initUi(inflater: LayoutInflater, v: View, cachedCollection: CachedCollection) {
-        v.findViewById<View>(R.id.add_member).setOnClickListener {
-            addMemberClicked()
-        }
-
         val meta = cachedCollection.meta
         val colorSquare = v.findViewById<View>(R.id.color)
         val color = LocalCalendar.parseColor(meta.color)
@@ -69,6 +73,24 @@ class CollectionMembersFragment : Fragment() {
 
         val desc = v.findViewById<View>(R.id.description) as TextView
         desc.text = meta.description
+
+        if (isAdmin) {
+            v.findViewById<View>(R.id.add_member).setOnClickListener {
+                addMemberClicked()
+            }
+        } else {
+            v.findViewById<Button>(R.id.leave).setOnClickListener {
+                doAsync {
+                    val membersManager = model.value!!.colMgr.getMemberManager(cachedCollection.col)
+                    membersManager.leave()
+                    val applicationContext = activity?.applicationContext
+                    if (applicationContext != null) {
+                        requestSync(applicationContext, model.value!!.account)
+                    }
+                    activity?.finish()
+                }
+            }
+        }
 
         v.findViewById<View>(R.id.progressBar).visibility = View.GONE
     }

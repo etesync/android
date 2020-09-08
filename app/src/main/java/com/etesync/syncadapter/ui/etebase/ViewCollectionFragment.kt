@@ -127,19 +127,11 @@ class ViewCollectionFragment : Fragment() {
                 }
             }
             R.id.on_manage_members -> {
-                if (cachedCollection.col.accessLevel == CollectionAccessLevel.Admin) {
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container, CollectionMembersFragment())
-                        addToBackStack(null)
-                    }
-                } else {
-                    val dialog = AlertDialog.Builder(requireContext())
-                            .setIcon(R.drawable.ic_info_dark)
-                            .setTitle(R.string.not_allowed_title)
-                            .setMessage(R.string.edit_owner_only_anon)
-                            .setPositiveButton(android.R.string.yes) { _, _ -> }.create()
-                    dialog.show()
-                }            }
+                parentFragmentManager.commit {
+                    replace(R.id.fragment_container, CollectionMembersFragment())
+                    addToBackStack(null)
+                }
+            }
             R.id.on_import -> {
                 if (cachedCollection.col.accessLevel != CollectionAccessLevel.ReadOnly) {
                     parentFragmentManager.commit {
