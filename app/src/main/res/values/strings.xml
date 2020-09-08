@@ -210,8 +210,9 @@
 
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
-    <string name="login_email_address">Username</string>
-    <string name="login_email_address_error">Valid username required</string>
+    <string name="login_username">Username</string>
+    <string name="login_email_address">Email</string>
+    <string name="login_email_address_error">Valid email required</string>
     <string name="login_password">Password</string>
     <string name="login_custom_server">EteSync Server URL</string>
     <string name="login_custom_server_error">Invalid URL found, did you forget to include https://?</string>
