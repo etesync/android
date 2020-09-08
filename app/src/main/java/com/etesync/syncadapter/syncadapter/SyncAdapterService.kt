@@ -270,7 +270,9 @@ abstract class SyncAdapterService : Service() {
 
                         stoken = colList.stoken
                         done = colList.isDone
-                        etebaseLocalCache.saveStoken(stoken!!)
+                        if (stoken != null) {
+                            etebaseLocalCache.saveStoken(stoken)
+                        }
                     }
                     collectionLastFetchMap[account.name] = now
                 }
