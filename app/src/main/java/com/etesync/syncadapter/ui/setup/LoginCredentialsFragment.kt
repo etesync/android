@@ -93,12 +93,16 @@ class LoginCredentialsFragment : Fragment() {
         if (userName.isEmpty()) {
             editUserName.error = getString(R.string.login_email_address_error)
             valid = false
+        } else {
+            editUserName.error = null
         }
 
         val password = editUrlPassword.editText?.text.toString()
         if (password.isEmpty()) {
             editUrlPassword.error = getString(R.string.login_password_required)
             valid = false
+        } else {
+            editUrlPassword.error = null
         }
 
         var uri: URI? = null
@@ -109,6 +113,7 @@ class LoginCredentialsFragment : Fragment() {
                 val url = server.toHttpUrlOrNull()
                 if (url != null) {
                     uri = url.toUri()
+                    customServer.error = null
                 } else {
                     customServer.error = getString(R.string.login_custom_server_error)
                     valid = false
