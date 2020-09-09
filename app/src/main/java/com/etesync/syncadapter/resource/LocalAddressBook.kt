@@ -140,13 +140,7 @@ class LocalAddressBook(
             val col = cachedCollection.col
             val meta = cachedCollection.meta
             val displayName = meta.name
-            val sb = StringBuilder(displayName)
-            sb.append(" (")
-                    .append(mainAccount.name)
-                    .append(" ")
-                    .append(col.uid.substring(0, 4))
-                    .append(")")
-            return sb.toString()
+            return "${displayName} (${mainAccount.name} ${col.uid.substring(0, 2)})"
         }
 
         fun initialUserData(mainAccount: Account, url: String): Bundle {
