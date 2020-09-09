@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.TextUtils
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
@@ -91,7 +92,7 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
         // Category: dashboard
         val prefManageAccount = findPreference("manage_account")
         prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            WebViewActivity.openUrl(activity!!, Constants.dashboard.buildUpon().appendQueryParameter("email", account.name).build())
+            Toast.makeText(requireContext(), "Not yet supported", Toast.LENGTH_LONG).show()
             true
         }
 
