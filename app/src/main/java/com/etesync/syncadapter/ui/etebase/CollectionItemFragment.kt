@@ -2,10 +2,13 @@ package com.etesync.syncadapter.ui.etebase
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.CalendarContract
+import android.provider.ContactsContract
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -14,12 +17,15 @@ import androidx.viewpager.widget.ViewPager
 import at.bitfire.ical4android.Event
 import at.bitfire.ical4android.InvalidCalendarException
 import at.bitfire.ical4android.Task
+import at.bitfire.ical4android.TaskProvider
 import at.bitfire.vcard4android.Contact
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.CachedItem
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.BaseActivity
+import com.etesync.syncadapter.utils.TaskProviderHandling
 import com.google.android.material.tabs.TabLayout
 import ezvcard.util.PartialDate
 import org.jetbrains.anko.doAsync
@@ -31,6 +37,7 @@ import java.util.*
 import java.util.concurrent.Future
 
 class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
+    private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,7 +68,81 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.collection_item_fragment, menu)
-        // menu.setGroupVisible(R.id.journal_item_menu_event_invite, emailInvitationEvent != null)
+        // FIXME menu.setGroupVisible(R.id.journal_item_menu_event_invite, emailInvitationEvent != null)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.on_send_event_invite -> {
+                // FIXME
+            }
+            R.id.on_restore_item -> {
+                restoreItem()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun restoreItem() {
+        // FIXME: This code makes the assumption that providers are all available. May not be true for tasks, and potentially others too.
+        val context = requireContext()
+        val accountHolder = model.value!!
+        val account = accountHolder.account
+        val cachedCol = collectionModel.value!!
+        when (cachedCol.meta.collectionType) {
+            Constants.ETEBASE_TYPE_CALENDAR -> {
+                val provider = context.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
+                val localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, cachedCol.col.uid)!!
+                val event = Event.eventsFromReader(StringReader(cachedItem.content))[0]
+                var localEvent = localCalendar.findByUid(event.uid!!)
+                if (localEvent != null) {
+                    localEvent.updateAsDirty(event)
+                } else {
+                    localEvent = LocalEvent(localCalendar, event, event.uid, null)
+                    localEvent.addAsDirty()
+                }
+            }
+            Constants.ETEBASE_TYPE_TASKS -> {
+                TaskProviderHandling.getWantedTaskSyncProvider(context)?.let {
+                    val provider = TaskProvider.acquire(context, it)!!
+                    val localTaskList = LocalTaskList.findByName(account, provider, LocalTaskList.Factory, cachedCol.col.uid)!!
+                    val task = Task.tasksFromReader(StringReader(cachedItem.content))[0]
+                    var localTask = localTaskList.findByUid(task.uid!!)
+                    if (localTask != null) {
+                        localTask.updateAsDirty(task)
+                    } else {
+                        localTask = LocalTask(localTaskList, task, task.uid, null)
+                        localTask.addAsDirty()
+                    }
+                }
+            }
+            Constants.ETEBASE_TYPE_ADDRESS_BOOK -> {
+                val provider = context.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!
+                val localAddressBook = LocalAddressBook.findByUid(context, provider, account, cachedCol.col.uid)!!
+                val contact = Contact.fromReader(StringReader(cachedItem.content), null)[0]
+                if (contact.group) {
+                    // FIXME: not currently supported
+                } else {
+                    var localContact = localAddressBook.findByUid(contact.uid!!) as LocalContact?
+                    if (localContact != null) {
+                        localContact.updateAsDirty(contact)
+                    } else {
+                        localContact = LocalContact(localAddressBook, contact, contact.uid, null)
+                        localContact.createAsDirty()
+                    }
+                }
+            }
+        }
+
+        val dialog = AlertDialog.Builder(context)
+                .setTitle(R.string.journal_item_restore_action)
+                .setIcon(R.drawable.ic_restore_black)
+                .setMessage(R.string.journal_item_restore_dialog_body)
+                .setPositiveButton(android.R.string.ok) { dialog, which ->
+                    // dismiss
+                }
+                .create()
+        dialog.show()
     }
 }
 
