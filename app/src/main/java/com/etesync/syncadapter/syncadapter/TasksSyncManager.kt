@@ -44,7 +44,7 @@ class TasksSyncManager(
         get() = context.getString(R.string.sync_error_tasks, account.name)
 
     override val syncSuccessfullyTitle: String
-        get() = context.getString(R.string.sync_successfully_tasks, info.displayName,
+        get() = context.getString(R.string.sync_successfully_tasks, localTaskList().name!!,
                 account.name)
 
     init {

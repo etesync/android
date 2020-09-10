@@ -36,6 +36,7 @@ import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.AccountsActivity
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.ViewCollectionActivity
+import com.etesync.syncadapter.ui.etebase.CollectionActivity
 import org.jetbrains.anko.defaultSharedPreferences
 import java.io.Closeable
 import java.io.FileNotFoundException
@@ -63,6 +64,11 @@ constructor(protected val context: Context, protected val account: Account, prot
     protected lateinit var colMgr: CollectionManager
     protected lateinit var itemMgr: ItemManager
     protected lateinit var cachedCollection: CachedCollection
+
+    // Sync counters
+    private var syncItemsTotal = 0
+    private var syncItemsDeleted = 0
+    private var syncItemsChanged = 0
 
     protected var journal: JournalEntryManager? = null
     private var _journalEntity: JournalEntity? = null
@@ -140,6 +146,10 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     @TargetApi(21)
     fun performSync() {
+        syncItemsTotal = 0
+        syncItemsDeleted = 0
+        syncItemsChanged = 0
+
         var syncPhase = R.string.sync_phase_prepare
         try {
             Logger.log.info("Sync phase: " + context.getString(syncPhase))
@@ -331,39 +341,28 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     private fun notifyUserOnSync() {
         val changeNotification = context.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
-        val remoteEntries = remoteEntries
-        if ((remoteEntries == null) || remoteEntries.isEmpty() || !changeNotification) {
+
+        if (!changeNotification || (syncItemsTotal == 0)) {
             return
         }
+
         val notificationHelper = SyncNotification(context,
                 System.currentTimeMillis().toString(), notificationId())
-
-        var deleted = 0
-        var added = 0
-        var changed = 0
-        for (entry in remoteEntries) {
-            val cEntry = SyncEntry.fromJournalEntry(crypto, entry)
-            val action = cEntry.action
-            when (action) {
-                ADD -> added++
-                SyncEntry.Actions.DELETE -> deleted++
-                SyncEntry.Actions.CHANGE -> changed++
-            }
-        }
-
         val resources = context.resources
-        val intent = ViewCollectionActivity.newIntent(context, account, info)
+        val intent = if (isLegacy) {
+            ViewCollectionActivity.newIntent(context, account, info)
+        } else {
+            CollectionActivity.newIntent(context, account, cachedCollection.col.uid)
+        }
         notificationHelper.notify(syncSuccessfullyTitle,
                 String.format(context.getString(R.string.sync_successfully_modified),
                         resources.getQuantityString(R.plurals.sync_successfully,
-                                remoteEntries!!.size, remoteEntries!!.size)),
+                                syncItemsTotal, syncItemsTotal)),
                 String.format(context.getString(R.string.sync_successfully_modified_full),
                         resources.getQuantityString(R.plurals.sync_successfully,
-                                added, added),
+                                syncItemsChanged, syncItemsChanged),
                         resources.getQuantityString(R.plurals.sync_successfully,
-                                changed, changed),
-                        resources.getQuantityString(R.plurals.sync_successfully,
-                                deleted, deleted)),
+                                syncItemsDeleted, syncItemsDeleted)),
                 intent)
     }
 
@@ -443,6 +442,7 @@ constructor(protected val context: Context, protected val account: Account, prot
         // Process new vcards from server
         val size = items.size
         var i = 0
+        syncItemsTotal += size
 
         for (item in items) {
             if (Thread.interrupted()) {
@@ -450,6 +450,12 @@ constructor(protected val context: Context, protected val account: Account, prot
             }
             i++
             Logger.log.info("Processing (${i}/${size}) UID=${item.uid} Etag=${item.etag}")
+
+            if (item.isDeleted) {
+                syncItemsDeleted++
+            } else {
+                syncItemsChanged++
+            }
 
             processItem(item)
             persistItem(item)
@@ -491,6 +497,8 @@ constructor(protected val context: Context, protected val account: Account, prot
         val strTotal = remoteEntries!!.size.toString()
         var i = 0
 
+        syncItemsTotal += remoteEntries!!.size
+
         for (entry in remoteEntries!!) {
             if (Thread.interrupted()) {
                 throw InterruptedException()
@@ -506,6 +514,13 @@ constructor(protected val context: Context, protected val account: Account, prot
                 processSyncEntry(cEntry)
             } catch (e: Exception) {
                 error = e.toString()
+            }
+
+            val action = cEntry.action
+            when (action) {
+                ADD -> syncItemsChanged++
+                SyncEntry.Actions.DELETE -> syncItemsDeleted++
+                SyncEntry.Actions.CHANGE -> syncItemsChanged++
             }
 
             persistSyncEntry(entry.uid, cEntry, error)

@@ -44,7 +44,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
         get() = context.getString(R.string.sync_error_calendar, account.name)
 
     override val syncSuccessfullyTitle: String
-        get() = context.getString(R.string.sync_successfully_calendar, info.displayName,
+        get() = context.getString(R.string.sync_successfully_calendar, localCalendar().displayName,
                 account.name)
 
     init {

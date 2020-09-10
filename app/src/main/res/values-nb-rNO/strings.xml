@@ -317,7 +317,7 @@
     <string name="sync_successfully_contacts" formatted="false">Kontakter endret (%s)</string>
     <string name="sync_successfully_tasks" formatted="false">Gjøremålene «%s» er endret (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s endret.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s lagt til.\n%s oppdatert.\n%s slettet.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s oppdatert.\n%s slettet.</string>
     <string name="sync_journal_readonly">Journalen \"%s\" er skrivebeskyttet</string>
     <string name="sync_journal_readonly_message">Journalen er skrivebeskyttet, så alle endringene dine (%d) har blitt omgjort.</string>
     <!-- Calendar invites -->
