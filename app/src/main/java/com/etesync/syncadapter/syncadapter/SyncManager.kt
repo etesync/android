@@ -381,7 +381,18 @@ constructor(protected val context: Context, protected val account: Account, prot
 
     private fun persistItem(item: Item) {
         synchronized(etebaseLocalCache) {
-            etebaseLocalCache.itemSet(itemMgr, cachedCollection.col.uid, item)
+            // FIXME: it's terrible that we are fetching and decrypting the item here - we really don't have to
+            val cached = etebaseLocalCache.itemGet(itemMgr, cachedCollection.col.uid, item.uid)
+            if (cached?.item?.etag != item.etag) {
+                syncItemsTotal++
+
+                if (item.isDeleted) {
+                    syncItemsDeleted++
+                } else {
+                    syncItemsChanged++
+                }
+                etebaseLocalCache.itemSet(itemMgr, cachedCollection.col.uid, item)
+            }
         }
     }
 
@@ -415,6 +426,12 @@ constructor(protected val context: Context, protected val account: Account, prot
                 throw e
             }
         }
+
+        when (syncEntry.action) {
+            ADD -> syncItemsChanged++
+            SyncEntry.Actions.DELETE -> syncItemsDeleted++
+            SyncEntry.Actions.CHANGE -> syncItemsChanged++
+        }
     }
 
     @Throws(IOException::class, CalendarStorageException::class, ContactsStorageException::class)
@@ -442,7 +459,6 @@ constructor(protected val context: Context, protected val account: Account, prot
         // Process new vcards from server
         val size = items.size
         var i = 0
-        syncItemsTotal += size
 
         for (item in items) {
             if (Thread.interrupted()) {
@@ -450,12 +466,6 @@ constructor(protected val context: Context, protected val account: Account, prot
             }
             i++
             Logger.log.info("Processing (${i}/${size}) UID=${item.uid} Etag=${item.etag}")
-
-            if (item.isDeleted) {
-                syncItemsDeleted++
-            } else {
-                syncItemsChanged++
-            }
 
             processItem(item)
             persistItem(item)
@@ -514,13 +524,6 @@ constructor(protected val context: Context, protected val account: Account, prot
                 processSyncEntry(cEntry)
             } catch (e: Exception) {
                 error = e.toString()
-            }
-
-            val action = cEntry.action
-            when (action) {
-                ADD -> syncItemsChanged++
-                SyncEntry.Actions.DELETE -> syncItemsDeleted++
-                SyncEntry.Actions.CHANGE -> syncItemsChanged++
             }
 
             persistSyncEntry(entry.uid, cEntry, error)
