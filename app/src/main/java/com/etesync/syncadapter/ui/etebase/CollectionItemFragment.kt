@@ -25,6 +25,7 @@ import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.resource.*
 import com.etesync.syncadapter.ui.BaseActivity
+import com.etesync.syncadapter.utils.EventEmailInvitation
 import com.etesync.syncadapter.utils.TaskProviderHandling
 import com.google.android.material.tabs.TabLayout
 import ezvcard.util.PartialDate
@@ -39,6 +40,9 @@ import java.util.concurrent.Future
 class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
+
+    private var emailInvitationEvent: Event? = null
+    private var emailInvitationEventString: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ret = inflater.inflate(R.layout.journal_item_activity, container, false)
@@ -58,7 +62,7 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
 
     private fun initUi(inflater: LayoutInflater, v: View, cachedCollection: CachedCollection) {
         val viewPager = v.findViewById<ViewPager>(R.id.viewpager)
-        viewPager.adapter = TabsAdapter(childFragmentManager, requireContext(), cachedCollection, cachedItem)
+        viewPager.adapter = TabsAdapter(childFragmentManager, this, requireContext(), cachedCollection, cachedItem)
 
         val tabLayout = v.findViewById<TabLayout>(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
@@ -66,27 +70,35 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
         v.findViewById<View>(R.id.journal_list_item).visibility = View.GONE
     }
 
+    fun allowSendEmail(event: Event?, icsContent: String) {
+        emailInvitationEvent = event
+        emailInvitationEventString = icsContent
+        activity?.invalidateOptionsMenu()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.collection_item_fragment, menu)
-        // FIXME menu.setGroupVisible(R.id.journal_item_menu_event_invite, emailInvitationEvent != null)
+        menu.setGroupVisible(R.id.journal_item_menu_event_invite, emailInvitationEvent != null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val accountHolder = model.value!!
         when (item.itemId) {
             R.id.on_send_event_invite -> {
-                // FIXME
+                val account = accountHolder.account
+                val intent = EventEmailInvitation(requireContext(), account).createIntent(emailInvitationEvent!!, emailInvitationEventString!!)
+                startActivity(intent)
             }
             R.id.on_restore_item -> {
-                restoreItem()
+                restoreItem(accountHolder)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun restoreItem() {
+    fun restoreItem(accountHolder: AccountHolder) {
         // FIXME: This code makes the assumption that providers are all available. May not be true for tasks, and potentially others too.
         val context = requireContext()
-        val accountHolder = model.value!!
         val account = accountHolder.account
         val cachedCol = collectionModel.value!!
         when (cachedCol.meta.collectionType) {
@@ -146,7 +158,7 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
     }
 }
 
-private class TabsAdapter(fm: FragmentManager, private val context: Context, private val cachedCollection: CachedCollection, private val cachedItem: CachedItem) : FragmentPagerAdapter(fm) {
+private class TabsAdapter(fm: FragmentManager, private val mainFragment: CollectionItemFragment, private val context: Context, private val cachedCollection: CachedCollection, private val cachedItem: CachedItem) : FragmentPagerAdapter(fm) {
 
     override fun getCount(): Int {
         // FIXME: Make it depend on info enumType (only have non-raw for known types)
@@ -165,7 +177,7 @@ private class TabsAdapter(fm: FragmentManager, private val context: Context, pri
 
     override fun getItem(position: Int): Fragment {
         return if (position == 0) {
-            PrettyFragment(cachedCollection, cachedItem.content)
+            PrettyFragment(mainFragment, cachedCollection, cachedItem.content)
         } else if (position == 1) {
             TextFragment(cachedItem.content)
         } else {
@@ -187,7 +199,7 @@ class TextFragment(private val content: String) : Fragment() {
     }
 }
 
-class PrettyFragment(private val cachedCollection: CachedCollection, private val content: String) : Fragment() {
+class PrettyFragment(private val mainFragment: CollectionItemFragment, private val cachedCollection: CachedCollection, private val content: String) : Fragment() {
     private var asyncTask: Future<Unit>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -280,11 +292,10 @@ class PrettyFragment(private val cachedCollection: CachedCollection, private val
                     }
                     setTextViewText(view, R.id.reminders, sb.toString())
 
-                    /* FIXME:
-                    if (event.attendees.isNotEmpty() && activity != null) {
-                        (activity as JournalItemActivity).allowSendEmail(event, syncEntry.content)
+                    if (event.attendees.isNotEmpty()) {
+                        mainFragment.allowSendEmail(event, content)
                     }
-                     */
+
                 }
             }
         }

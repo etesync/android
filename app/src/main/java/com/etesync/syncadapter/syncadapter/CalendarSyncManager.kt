@@ -157,7 +157,7 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
     private fun createInviteAttendeesNotification(event: Event, icsContent: String) {
         val intent = EventEmailInvitation(context, account).createIntent(event, icsContent)
         if (intent != null) {
-            val notificationHelper = SyncNotification(context, event.uid!!, event.uid!!.hashCode())
+            val notificationHelper = SyncNotification(context, icsContent, event.hashCode())
             notificationHelper.notify(
                     context.getString(
                             R.string.sync_calendar_attendees_notification_title, event.summary),
