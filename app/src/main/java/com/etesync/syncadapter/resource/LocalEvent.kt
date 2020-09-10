@@ -45,7 +45,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     override val content: String
         get() {
-            Logger.log.log(Level.FINE, "Preparing upload of event " + fileName!!, event)
+            Logger.log.log(Level.FINE, "Preparing upload of event $fileName} ${event}")
 
             val os = ByteArrayOutputStream()
             event?.write(os)
