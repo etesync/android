@@ -363,6 +363,7 @@
     <string name="debug_info_more_data_shared">Clicking share will open the email app with the data below, as well as some additional debug information, attached. It may contain some sensitive information, so please review it before sending.</string>
     <string name="sync_error_permissions">EteSync permissions</string>
     <string name="sync_error_permissions_text">Additional permissions required</string>
+    <string name="sync_error_generic">Sync failed (%s)</string>
     <string name="sync_error_calendar">Calendar sync failed (%s)</string>
     <string name="sync_error_contacts">Contacts sync failed (%s)</string>
     <string name="sync_error_tasks">Tasks sync failed (%s)</string>

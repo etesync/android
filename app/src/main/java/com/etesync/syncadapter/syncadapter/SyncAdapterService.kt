@@ -99,8 +99,8 @@ abstract class SyncAdapterService : Service() {
     }
 
     abstract class SyncAdapter(context: Context) : AbstractThreadedSyncAdapter(context, false) {
-        abstract val syncErrorTitle: Int
-        abstract val notificationManager: SyncNotification
+        private val syncErrorTitle: Int = R.string.sync_error_generic
+        private val notificationManager = SyncNotification(context, "refresh-collections", Constants.NOTIFICATION_REFRESH_COLLECTIONS)
 
         abstract fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult)
 

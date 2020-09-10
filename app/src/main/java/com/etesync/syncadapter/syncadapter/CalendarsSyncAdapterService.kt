@@ -29,9 +29,6 @@ class CalendarsSyncAdapterService : SyncAdapterService() {
 
 
     private class SyncAdapter(context: Context) : SyncAdapterService.SyncAdapter(context) {
-        override val syncErrorTitle = R.string.sync_error_calendar
-        override val notificationManager = SyncNotification(context, "journals-calendar", Constants.NOTIFICATION_CALENDAR_SYNC)
-
         override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
             val settings = AccountSettings(context, account)
             if (!extras.containsKey(ContentResolver.SYNC_EXTRAS_MANUAL) && !checkSyncConditions(settings))

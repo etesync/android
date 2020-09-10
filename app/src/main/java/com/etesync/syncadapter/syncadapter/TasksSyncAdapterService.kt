@@ -39,9 +39,6 @@ class TasksSyncAdapterService: SyncAdapterService() {
             context: Context,
             private val name: ProviderName
     ): SyncAdapter(context) {
-        override val syncErrorTitle = R.string.sync_error_tasks
-        override val notificationManager = SyncNotification(context, "journals-tasks", Constants.NOTIFICATION_TASK_SYNC)
-
         override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
 
             val taskProvider = TaskProvider.fromProviderClient(context, provider, name)

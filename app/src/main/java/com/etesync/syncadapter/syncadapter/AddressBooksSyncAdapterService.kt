@@ -33,9 +33,6 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
 
 
     private class AddressBooksSyncAdapter(context: Context) : SyncAdapterService.SyncAdapter(context) {
-        override val syncErrorTitle = R.string.sync_error_contacts
-        override val notificationManager = SyncNotification(context, "journals-contacts", Constants.NOTIFICATION_CONTACTS_SYNC)
-
         override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
             val contactsProvider = context.contentResolver.acquireContentProviderClient(ContactsContract.AUTHORITY)
             if (contactsProvider == null) {
