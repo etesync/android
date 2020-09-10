@@ -26,6 +26,7 @@ import yuku.ambilwarna.AmbilWarnaDialog
 class EditCollectionFragment(private val cachedCollection: CachedCollection, private val isCreating: Boolean = false) : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
+    private val itemsModel: ItemsViewModel by activityViewModels()
     private val loadingModel: LoadingViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -215,6 +216,8 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
                         requestSync(applicationContext, model.value!!.account)
                     }
                     if (isCreating) {
+                        // Load the items since we just created it
+                        itemsModel.loadItems(model.value!!, cachedCollection)
                         parentFragmentManager.commit {
                             replace(R.id.fragment_container, ViewCollectionFragment())
                         }
