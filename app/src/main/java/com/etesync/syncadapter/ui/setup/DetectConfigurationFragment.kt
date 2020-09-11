@@ -39,6 +39,7 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Logger.log.fine("DetectConfigurationFragment: loading")
         loaderManager.initLoader(0, arguments, this)
     }
 
@@ -49,17 +50,20 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
     override fun onLoadFinished(loader: Loader<Configuration>, data: Configuration?) {
         if (data != null) {
             if (data.isFailed) {
+                Logger.log.warning("Failed login configuration ${data.error?.localizedMessage}")
                 // no service found: show error message
                 requireFragmentManager().beginTransaction()
                         .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
             } else if (data.isLegacy) {
                 // legacy service found: continue
+                Logger.log.info("Found legacy account - asking for encryption details")
                 requireFragmentManager().beginTransaction()
                         .replace(android.R.id.content, EncryptionDetailsFragment.newInstance(data))
                         .addToBackStack(null)
                         .commitAllowingStateLoss()
             } else {
+                Logger.log.info("Found Etebase account account")
                 requireFragmentManager().beginTransaction()
                         .replace(android.R.id.content, CreateAccountFragment.newInstance(data))
                         .addToBackStack(null)

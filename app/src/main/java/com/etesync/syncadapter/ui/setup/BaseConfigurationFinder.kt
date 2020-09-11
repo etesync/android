@@ -70,10 +70,10 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
             val userInfoManager = UserInfoManager(authenticatedHttpClient, uri.toHttpUrlOrNull()!!)
             userInfo = userInfoManager.fetch(credentials.userName)
         } catch (e: Exceptions.HttpException) {
-            Logger.log.warning(e.message)
+            Logger.log.warning(e.localizedMessage)
             exception = e
         } catch (e: IOException) {
-            Logger.log.warning(e.message)
+            Logger.log.warning(e.localizedMessage)
             exception = e
         }
 
@@ -98,6 +98,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
             val etebase = Account.login(client, credentials.userName, credentials.password)
             etebaseSession = etebase.save(null)
         } catch (e: EtebaseException) {
+            Logger.log.warning(e.localizedMessage)
             exception = e
         }
 
@@ -114,8 +115,10 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
     fun findInitialConfiguration(): Configuration {
         try {
             if (isServerEtebase()) {
+                Logger.log.fine("Attempting to login to etebase")
                 return findInitialConfigurationEtebase()
             } else {
+                Logger.log.fine("Attempting to login to EteSync legacy")
                 return findInitialConfigurationLegacy()
             }
         } catch (e: Exception) {
