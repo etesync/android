@@ -97,7 +97,7 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
             val client = Client.create(httpClient, uri.toString())
             val etebase = Account.login(client, credentials.userName, credentials.password)
             etebaseSession = etebase.save(null)
-        } catch (e: EtebaseException) {
+        } catch (e: java.lang.Exception) {
             Logger.log.warning(e.localizedMessage)
             exception = e
         }
