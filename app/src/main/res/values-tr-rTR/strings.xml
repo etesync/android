@@ -1,114 +1,122 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Yardım</string>
-  <string name="manage_accounts">Hesapları yönet</string>
-  <string name="please_wait">Lütfen bekle ...</string>
-  <string name="send">Gönder</string>
-  <!--startup dialogs-->
-  <string name="startup_dont_show_again">Bir daha gösterme</string>
-  <!--AboutActivity-->
-  <string name="about_license_terms">Lisans şartları</string>
-  <string name="about_license_info_no_warranty">Bu uygulama HİÇ BİR GARANTİ ile gelmemektedir. Bedava bir yazılımdır ve belli koşullar altında dağıtabilirsiniz.</string>
-  <!--global settings-->
-  <string name="logging_to_external_storage">Harici depolamaya jurnalleniyor: %s</string>
-  <string name="logging_to_external_storage_warning">Jurnalleri bir an önce silin!</string>
-  <string name="logging_couldnt_create_file">Harici jurnal dosyası yaratılamadı: %s </string>
-  <string name="logging_no_external_storage">Harici depolama alanı bulunamadı</string>
-  <!--AccountsActivity-->
-  <string name="navigation_drawer_open">Navigasyon çekmecesini aç</string>
-  <string name="navigation_drawer_close">Navigasyon çekmecesini kapat</string>
-  <string name="navigation_drawer_about">Hakkında / Lisans</string>
-  <string name="navigation_drawer_settings">Ayarlar</string>
-  <string name="navigation_drawer_external_links">Harici bağlantılar</string>
-  <string name="navigation_drawer_website">Web sitesi</string>
-  <string name="navigation_drawer_faq">SSS</string>
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <string name="app_settings">Ayarlar</string>
-  <string name="app_settings_user_interface">Kullanıcı arayüzü</string>
-  <string name="app_settings_reset_hints">İpuçlarını sıfırla</string>
-  <string name="app_settings_reset_hints_summary">Daha önceden azat edilen ipuçlarını yeniden etkinleştirir</string>
-  <string name="app_settings_reset_hints_success">Tüm ipuçları artık gösterilecek</string>
-  <string name="app_settings_security">Güvenlik</string>
-  <string name="app_settings_debug">Hata ayıklama</string>
-  <string name="app_settings_log_to_external_storage">Harici dosyaya jurnalle</string>
-  <string name="app_settings_log_to_external_storage_on">Harici depolamaya jurnalleniyor (eğer uygunsa)</string>
-  <string name="app_settings_log_to_external_storage_off">Harici depolama mevcut değil</string>
-  <string name="app_settings_show_debug_info">Hata ayıklama bilgilerini göster</string>
-  <string name="app_settings_show_debug_info_details">Yazılım ve konfigürasyon detaylarına bak/paylaş</string>
-  <!--AccountActivity-->
-  <string name="account_synchronize_now">Şimdi senkronize et</string>
-  <string name="account_synchronizing_now">Senkronize ediyor</string>
-  <string name="account_settings">Hesap ayarları</string>
-  <string name="account_delete">Hesabı sil</string>
-  <string name="account_delete_confirmation_title">Hesap gerçekten silinsin mi?</string>
-  <string name="account_delete_confirmation_text">Rehber, takvim ve iş listelerinin tüm yerel kopyaları silinecektir.</string>
-  <!--PermissionsActivity-->
-  <string name="permissions_calendar">Takvim izinleri</string>
-  <string name="permissions_calendar_request">Takvim izinleri iste</string>
-  <string name="permissions_contacts">Kişiler izinleri</string>
-  <string name="permissions_contacts_request">Kişiler izinleri iste</string>
-  <string name="permissions_opentasks">OpenTasks izinleri</string>
-  <string name="permissions_opentasks_request">OpenTasks izinleri iste</string>
-  <!--AddAccountActivity-->
-  <string name="login_title">Hesap ekle</string>
-  <string name="login_email_address">Eposta adresi</string>
-  <string name="login_email_address_error">Geçerli eposta adresi zorunludur</string>
-  <string name="login_password">Parola</string>
-  <string name="login_password_required">Parola zorunludur</string>
-  <string name="login_back">Geri</string>
-  <string name="login_configuration_detection">Konfigürasyon keşfi</string>
-  <string name="login_querying_server">Lütfen bekle, sunucu sorgulanıyor...</string>
-  <string name="login_view_logs">Jurnallere bak</string>
-  <!--AccountSettingsActivity-->
-  <string name="settings_title">Ayarlar: %s</string>
-  <string name="settings_authentication">Doğrulama</string>
-  <string name="settings_password">Parola</string>
-  <string name="settings_enter_password">Parola girin:</string>
-  <string name="settings_sync">Senkronizasyon</string>
-  <string name="settings_sync_interval_contacts">Kişiler senk. aralığı</string>
-  <string name="settings_sync_summary_manually">Sadece elle</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
-  <string name="settings_sync_summary_not_available">Mevcut değil</string>
-  <string name="settings_sync_interval_calendars">Takvimler senk. aralığı</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Sadece elle</item>
-    <item>Her 15 dakikada bir</item>
-    <item>Her saatte bir</item>
-    <item>Her 2 saatte bir</item>
-    <item>Her 4 saatte bir</item>
-    <item>Günde bir</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">Sadece WiFi üzerinden senkronize et</string>
-  <string name="settings_sync_wifi_only_on">Senkronizasyon WiFi bağlantıları ile kısıtlıdır</string>
-  <string name="settings_sync_wifi_only_off">Bağlantı tipi göz önünde bulundurulmaz</string>
-  <string name="settings_sync_wifi_only_ssid">WiFi SSID kısıtlaması</string>
-  <string name="settings_sync_wifi_only_ssid_on">Sadece %s üzerinden senkronize olur</string>
-  <string name="settings_sync_wifi_only_ssid_off">Tüm WiFi bağlantıları kullanılabilir</string>
-  <string name="settings_sync_wifi_only_ssid_message">Senkronizasyonu sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) gir, veya tüm WiFi bağlantıları için boş bırak.</string>
-  <!--collection management-->
-  <string name="create_addressbook">Rehber yarat</string>
-  <string name="create_addressbook_display_name_hint">Benim Rehberim</string>
-  <string name="create_collection_creating">Koleksiyon yaratılıyor</string>
-  <string name="create_collection_display_name">Bu koleksiyonun gösterilen adı (başlığı):</string>
-  <string name="create_collection_display_name_required">Başlık zorunlu</string>
-  <string name="create_collection_description">Açıklama (isteğe bağlı):</string>
-  <string name="create_collection_create">Yarat</string>
-  <string name="delete_collection">Koleksiyonu sil</string>
-  <string name="delete_collection_confirm_title">Emin misin?</string>
-  <string name="delete_collection_confirm_warning">Bu koleksiyon (%s) ve tüm verisi sunucudan silinecek.</string>
-  <string name="delete_collection_deleting_collection">Koleksiyon siliniyor</string>
-  <!--ExceptionInfoFragment-->
-  <string name="exception">Bir hata oluştu.</string>
-  <string name="exception_httpexception">Bir HTTP hatası oluştu.</string>
-  <string name="exception_ioexception">Bir I/O hatası oluştu.</string>
-  <string name="exception_show_details">Detayları göster</string>
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">Hata ayıklama bilgisi</string>
-  <string name="sync_error_calendar">Takvim senkronizasyonu başarısız (%s)</string>
-  <string name="sync_error">%s yaparken hata</string>
-  <string name="sync_error_http_dav">%s yaparken sunucu hatası</string>
-  <string name="sync_error_local_storage">%s yaparken veritabanı hatası</string>
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">Yardım</string>
+    <string name="manage_accounts">Hesapları yönet</string>
+    <string name="please_wait">Lütfen bekleyin…</string>
+    <string name="send">Gönder</string>
+    <!--startup dialogs-->
+    <string name="startup_dont_show_again">Bir daha gösterme</string>
+    <!--AboutActivity-->
+    <string name="about_license_terms">Lisans şartları</string>
+    <string name="about_license_info_no_warranty">Bu uygulama HİÇ BİR GARANTİ ile gelmemektedir. Bedava bir yazılımdır ve belli koşullar altında dağıtabilirsiniz.</string>
+    <!--global settings-->
+    <string name="logging_to_external_storage">Harici depolamaya jurnalleniyor: %s</string>
+    <string name="logging_to_external_storage_warning">Devre dışı bırakmak günlük kayıtlarını silecektir</string>
+    <string name="logging_couldnt_create_file">Harici jurnal dosyası yaratılamadı: %s </string>
+    <string name="logging_no_external_storage">Harici depolama alanı bulunamadı</string>
+    <!--AccountsActivity-->
+    <string name="navigation_drawer_open">Navigasyon çekmecesini aç</string>
+    <string name="navigation_drawer_close">Navigasyon çekmecesini kapat</string>
+    <string name="navigation_drawer_about">Hakkında / Lisans</string>
+    <string name="navigation_drawer_settings">Ayarlar</string>
+    <string name="navigation_drawer_external_links">Harici bağlantılar</string>
+    <string name="navigation_drawer_website">Web sitesi</string>
+    <string name="navigation_drawer_faq">SSS</string>
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <string name="app_settings">Ayarlar</string>
+    <string name="app_settings_user_interface">Kullanıcı arayüzü</string>
+    <string name="app_settings_reset_hints">İpuçlarını sıfırla</string>
+    <string name="app_settings_reset_hints_summary">Daha önceden azat edilen ipuçlarını yeniden etkinleştirir</string>
+    <string name="app_settings_reset_hints_success">Tüm ipuçları artık gösterilecek</string>
+    <string name="app_settings_security">Güvenlik</string>
+    <string name="app_settings_debug">Hata ayıklama</string>
+    <string name="app_settings_log_to_external_storage">Harici dosyaya jurnalle</string>
+    <string name="app_settings_log_to_external_storage_on">Harici depolamaya jurnalleniyor (eğer uygunsa)</string>
+    <string name="app_settings_log_to_external_storage_off">Harici depolama mevcut değil</string>
+    <string name="app_settings_show_debug_info">Hata ayıklama bilgilerini göster</string>
+    <string name="app_settings_show_debug_info_details">Yazılım ve konfigürasyon detaylarına bak/paylaş</string>
+    <!--AccountActivity-->
+    <string name="account_synchronize_now">Şimdi senkronize et</string>
+    <string name="account_synchronizing_now">Senkronize ediyor</string>
+    <string name="account_settings">Hesap ayarları</string>
+    <string name="account_delete">Hesabı sil</string>
+    <string name="account_delete_confirmation_title">Hesap gerçekten silinsin mi?</string>
+    <string name="account_delete_confirmation_text">Rehber, takvim ve iş listelerinin tüm yerel kopyaları silinecektir.</string>
+    <!--PermissionsActivity-->
+    <string name="permissions_calendar">Takvim izinleri</string>
+    <string name="permissions_calendar_request">Takvim izinleri iste</string>
+    <string name="permissions_contacts">Kişiler izinleri</string>
+    <string name="permissions_contacts_request">Kişiler izinleri iste</string>
+    <string name="permissions_opentasks">OpenTasks izinleri</string>
+    <string name="permissions_opentasks_request">OpenTasks izinleri iste</string>
+    <!--AddAccountActivity-->
+    <string name="login_title">Hesap ekle</string>
+    <string name="login_email_address">Eposta adresi</string>
+    <string name="login_email_address_error">Geçerli eposta adresi zorunludur</string>
+    <string name="login_password">Parola</string>
+    <string name="login_password_required">Parola zorunludur</string>
+    <string name="login_back">Geri</string>
+    <string name="login_configuration_detection">Konfigürasyon keşfi</string>
+    <string name="login_querying_server">Lütfen bekleyin, sunucu sorgulanıyor…</string>
+    <string name="login_view_logs">Jurnallere bak</string>
+    <!--AccountSettingsActivity-->
+    <string name="settings_title">Ayarlar: %s</string>
+    <string name="settings_authentication">Doğrulama</string>
+    <string name="settings_password">Parola</string>
+    <string name="settings_enter_password">Parola girin:</string>
+    <string name="settings_sync">Senkronizasyon</string>
+    <string name="settings_sync_interval_contacts">Kişiler senk. aralığı</string>
+    <string name="settings_sync_summary_manually">Sadece elle</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
+    <string name="settings_sync_summary_not_available">Mevcut değil</string>
+    <string name="settings_sync_interval_calendars">Takvimler senk. aralığı</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Sadece elle</item>
+        <item>Her 15 dakikada bir</item>
+        <item>Her saatte bir</item>
+        <item>Her 2 saatte bir</item>
+        <item>Her 4 saatte bir</item>
+        <item>Günde bir</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">Sadece WiFi üzerinden senkronize et</string>
+    <string name="settings_sync_wifi_only_on">Senkronizasyon WiFi bağlantıları ile kısıtlıdır</string>
+    <string name="settings_sync_wifi_only_off">Bağlantı tipi göz önünde bulundurulmaz</string>
+    <string name="settings_sync_wifi_only_ssid">WiFi SSID kısıtlaması</string>
+    <string name="settings_sync_wifi_only_ssid_on">Sadece %s üzerinden senkronize olur</string>
+    <string name="settings_sync_wifi_only_ssid_off">Tüm WiFi bağlantıları kullanılabilir</string>
+    <string name="settings_sync_wifi_only_ssid_message">Senkronizasyonu sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) gir, veya tüm WiFi bağlantıları için boş bırak.</string>
+    <!--collection management-->
+    <string name="create_addressbook">Rehber yarat</string>
+    <string name="create_addressbook_display_name_hint">Benim Rehberim</string>
+    <string name="create_collection_creating">Koleksiyon yaratılıyor</string>
+    <string name="create_collection_display_name">Bu koleksiyonun gösterilen adı (başlığı):</string>
+    <string name="create_collection_display_name_required">Başlık zorunlu</string>
+    <string name="create_collection_description">Açıklama (isteğe bağlı):</string>
+    <string name="create_collection_create">Yarat</string>
+    <string name="delete_collection">Koleksiyonu sil</string>
+    <string name="delete_collection_confirm_title">Emin misin?</string>
+    <string name="delete_collection_confirm_warning">Bu koleksiyon (%s) ve tüm verisi sunucudan silinecek.</string>
+    <string name="delete_collection_deleting_collection">Koleksiyon siliniyor</string>
+    <!--ExceptionInfoFragment-->
+    <string name="exception">Bir hata oluştu.</string>
+    <string name="exception_httpexception">Bir HTTP hatası oluştu.</string>
+    <string name="exception_ioexception">Bir I/O hatası oluştu.</string>
+    <string name="exception_show_details">Detayları göster</string>
+    <!--sync errors and DebugInfoActivity-->
+    <string name="debug_info_title">Hata ayıklama bilgisi</string>
+    <string name="sync_error_calendar">Takvim senkronizasyonu başarısız (%s)</string>
+    <string name="sync_error">%s yaparken hata</string>
+    <string name="sync_error_http_dav">%s yaparken sunucu hatası</string>
+    <string name="sync_error_local_storage">%s yaparken veritabanı hatası</string>
+    <!--cert4android-->
+    <string name="notification_channel_sync_errors">Eşzamanlama hataları</string>
+    <string name="notification_channel_sync">Eşzamanlama</string>
+    <string name="notification_channel_general">Diğer önemli mesajlar</string>
+    <string name="notification_channel_debugging">Hata Ayıklama</string>
+    <string name="notification_channel_crash_reports">Çökme Raporları</string>
+    <string name="address_books_authority_title">Adres defterleri</string>
+    <string name="account_title_address_book">EteSync Adres Defteri</string>
+    <string name="app_name">EteSync</string>
 </resources>
