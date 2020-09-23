@@ -38,8 +38,8 @@
     <string name="app_settings_show_debug_info">Hata ayıklama bilgilerini göster</string>
     <string name="app_settings_show_debug_info_details">Yazılım ve konfigürasyon detaylarına bak/paylaş</string>
     <!--AccountActivity-->
-    <string name="account_synchronize_now">Şimdi senkronize et</string>
-    <string name="account_synchronizing_now">Senkronize ediyor</string>
+    <string name="account_synchronize_now">Şimdi eşzamanla</string>
+    <string name="account_synchronizing_now">Şimdi eşzamanlanıyor</string>
     <string name="account_settings">Hesap ayarları</string>
     <string name="account_delete">Hesabı sil</string>
     <string name="account_delete_confirmation_title">Hesap gerçekten silinsin mi?</string>
@@ -66,7 +66,7 @@
     <string name="settings_authentication">Doğrulama</string>
     <string name="settings_password">Parola</string>
     <string name="settings_enter_password">Parola girin:</string>
-    <string name="settings_sync">Senkronizasyon</string>
+    <string name="settings_sync">Eşzamanlama</string>
     <string name="settings_sync_interval_contacts">Kişiler senk. aralığı</string>
     <string name="settings_sync_summary_manually">Sadece elle</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
@@ -80,13 +80,13 @@
         <item>Her 4 saatte bir</item>
         <item>Günde bir</item>
     </string-array>
-    <string name="settings_sync_wifi_only">Sadece WiFi üzerinden senkronize et</string>
-    <string name="settings_sync_wifi_only_on">Senkronizasyon WiFi bağlantıları ile kısıtlıdır</string>
+    <string name="settings_sync_wifi_only">Sadece WiFi üzerinden eşzamanla</string>
+    <string name="settings_sync_wifi_only_on">Eşzamanlama WiFi bağlantıları ile sınırlı</string>
     <string name="settings_sync_wifi_only_off">Bağlantı tipi göz önünde bulundurulmaz</string>
     <string name="settings_sync_wifi_only_ssid">WiFi SSID kısıtlaması</string>
-    <string name="settings_sync_wifi_only_ssid_on">Sadece %s üzerinden senkronize olur</string>
+    <string name="settings_sync_wifi_only_ssid_on">Sadece %s üzerinden eşzamanlanacak</string>
     <string name="settings_sync_wifi_only_ssid_off">Tüm WiFi bağlantıları kullanılabilir</string>
-    <string name="settings_sync_wifi_only_ssid_message">Senkronizasyonu sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) gir, veya tüm WiFi bağlantıları için boş bırak.</string>
+    <string name="settings_sync_wifi_only_ssid_message">Eşzamanlamayı sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) girin, veya tüm WiFi bağlantıları için boş bırakın.</string>
     <!--collection management-->
     <string name="create_addressbook">Rehber yarat</string>
     <string name="create_addressbook_display_name_hint">Benim Rehberim</string>
@@ -106,7 +106,7 @@
     <string name="exception_show_details">Detayları göster</string>
     <!--sync errors and DebugInfoActivity-->
     <string name="debug_info_title">Hata ayıklama bilgisi</string>
-    <string name="sync_error_calendar">Takvim senkronizasyonu başarısız (%s)</string>
+    <string name="sync_error_calendar">Takvim eşzamanlama başarısız oldu (%s)</string>
     <string name="sync_error">%s yaparken hata</string>
     <string name="sync_error_http_dav">%s yaparken sunucu hatası</string>
     <string name="sync_error_local_storage">%s yaparken veritabanı hatası</string>
@@ -120,4 +120,246 @@
     <string name="account_title_address_book">EteSync Adres Defteri</string>
     <string name="app_name">EteSync</string>
     <string name="notification_channel_sync_errors_desc">Beklenmeyen sunucu yanıtları gibi eşzamanlamayı durduran önemli hatalar</string>
+    <string name="login_wrong_username_or_password">Kimlik doğrulanamadı (muhtemelen yanlış kullanıcı adı veya parola).
+\nKaydoldunuz mu\?</string>
+    <string name="login_signup">Kaydol</string>
+    <string name="notification_channel_description">EteSync bildirimleri</string>
+    <string name="notification_channel_name">EteSync</string>
+    <string name="event_info_organizer">Düzenleyen:</string>
+    <string name="import_select_account">Hesap Seç</string>
+    <string name="import_button_local">Hesaptan</string>
+    <string name="import_button_file">Dosyadan</string>
+    <string name="open_url_no_activity">Bağlantı açılamadı: bağlantı desteklenmiyor!</string>
+    <string name="loading_error_content">Yenile</string>
+    <string name="loading_error_title">Yükleme Hatası</string>
+    <string name="loading">Yükleniyor...</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync bilinmeyen bir sertifikayla karşılaştı. Güvenmek ister misiniz\?</string>
+    <string name="certificate_notification_connection_security">EteSync: Bağlantı güvenliği</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">Aşağıdaki etkinliğe davet edildiniz:
+\n
+\n%s
+\nNe zaman: %s
+\nNerede: %s
+\nKatılanlar: %s
+\n
+\n--
+\nEteSync ile gönderildi - güvenli, uçtan uca şifreli ve özel veri eşzamanlama.
+\nhttps://www.EteSync.com adresinden edinin</string>
+    <string name="sync_calendar_attendees_email_subject" formatted="false">Davet: %s @ %s</string>
+    <string name="calendar_attendees_send_email_action">Davet gönder</string>
+    <string name="sync_calendar_attendees_notification_content">Misafirlere davet gönderilsin mi\?</string>
+    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_journal_readonly_message">Günlük salt okunur olduğundan tüm değişiklikleriniz (%d) geri alındı.</string>
+    <string name="sync_journal_readonly">Günlük \"%s\" salt okunur</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s eklendi.
+\n%s güncellendi.
+\n%s silindi.</string>
+    <string name="sync_successfully_modified" formatted="false">%s değiştirildi.</string>
+    <string name="sync_successfully_tasks" formatted="false">Görevler \"%s\" değiştirildi (%s)</string>
+    <string name="sync_successfully_contacts" formatted="false">Kişiler değiştirildi (%s)</string>
+    <string name="sync_successfully_calendar" formatted="false">Takvim \"%s\" değiştirildi (%s)</string>
+    <string name="sync_error_user_inactive">Kullanıcı etkin değil</string>
+    <string name="sync_error_unauthorized">Kimlik doğrulama başarısız oldu</string>
+    <string name="sync_phase_post_processing">son işlemler uygulanıyor</string>
+    <string name="sync_phase_push_entries">girdiler gönderiliyor</string>
+    <string name="sync_phase_apply_local_entries">yerel girdiler yeniden uygulanıyor</string>
+    <string name="sync_phase_apply_remote_entries">uzak girdiler uygulanıyor</string>
+    <string name="sync_phase_fetch_entries">uzak girdiler getiriliyor</string>
+    <string name="sync_phase_create_local_entries">yerel girdiler oluşturuluyor</string>
+    <string name="sync_phase_prepare_local">yerel girdiler hazırlanıyor</string>
+    <string name="sync_phase_prepare_fetch">getirmek için hazırlanıyor</string>
+    <string name="sync_phase_journals">günlükler eşzamanlanıyor</string>
+    <string name="sync_phase_prepare">eşzamanlama hazırlanıyor</string>
+    <string name="sync_error_journal_readonly">Günlük salt okunur</string>
+    <string name="sync_error_unavailable">%s sırasında sunucuya bağlanılamadı</string>
+    <string name="sync_error_integrity">%s sırasında bütünlük hatası</string>
+    <string name="sync_error_tasks">Görevleri eşzamanlama başarısız oldu (%s)</string>
+    <string name="sync_error_contacts">Kişileri eşzamanlama başarısız oldu (%s)</string>
+    <string name="sync_error_permissions_text">Ek izinler gerekli</string>
+    <string name="sync_error_permissions">EteSync izinleri</string>
+    <string name="debug_info_more_data_shared">Paylaş düğmesine tıklamak, aşağıdaki verilerin yanı sıra bazı ek hata ayıklama bilgilerinin ekli olduğu e-posta uygulamasını açacaktır. Bazı hassas bilgiler içerebilir, bu nedenle lütfen göndermeden önce inceleyin.</string>
+    <string name="journal_entries_loading">Günlük girdileri yükleniyor...</string>
+    <string name="journal_entries_list_empty">Günlük boş.
+\n(Belki hala eşzamanlanıyordur\?)</string>
+    <string name="view_collection_members">Üyeleri Yönet</string>
+    <string name="view_collection_import">İçe aktar</string>
+    <string name="view_collection_edit">Düzenle</string>
+    <string name="create_collection_color">Koleksiyonun rengini ayarla</string>
+    <string name="edit_collection">Koleksiyonu düzenle</string>
+    <string name="install_opentasks">OpenTasks kur</string>
+    <string name="install_tasksorg">Tasks.org kur</string>
+    <string name="create_tasklist_display_name_hint">Görev Listem</string>
+    <string name="create_tasklist">Görev listesi oluştur</string>
+    <string name="create_calendar_display_name_hint">Takvimim</string>
+    <string name="create_calendar">Takvim oluştur</string>
+    <string name="settings_taskdav">Görevler</string>
+    <string name="settings_caldav">Takvim</string>
+    <string name="settings_carddav">Kişiler</string>
+    <string name="settings_sync_interval">Eşzamanlama aralığı</string>
+    <string name="settings_enter_encryption_password">Şifreleme parolanızı girin:</string>
+    <string name="settings_encryption_password_summary">Şifreleme parolanızı değiştirin</string>
+    <string name="settings_encryption_password">Şifreleme Parolası</string>
+    <string name="settings_password_summary">Farklı bir kimlik doğrulama parolası kullanın</string>
+    <string name="settings_encryption">Şifreleme</string>
+    <string name="settings_manage_account_summary">Ödeme bilgilerinizi, planınızı ve diğer hesap ayarlarınızı değiştirin</string>
+    <string name="settings_account_dashboard">Hesap Gösterge Tablosu</string>
+    <string name="settings_manage_account">Hesabı Yönet</string>
+    <string name="choose_file">Dosya seç</string>
+    <string name="import_account_top_notice">Lütfen tüm girdilerini içe aktaracağınız bir hesap seçin.</string>
+    <string name="import_permission_required">İçe aktarma için depolamayı okuma izni gereklidir.</string>
+    <string name="import_dialog_success">%1$d girdi işlendi.
+\nEklendi: %2$d
+\nDeğiştirildi: %3$d
+\nAtlandı (başarısız oldu): %4$d</string>
+    <string name="import_dialog_adding_entries">Girdiler ekleniyor...</string>
+    <string name="import_dialog_loading_file">Dosya yükleniyor (biraz zaman alabilir)...</string>
+    <string name="import_dialog_failed_body">Nedeni: %s
+\nGeliştiricilere bildirilsin mi\?</string>
+    <string name="import_dialog_failed_title">İçe Aktarma Başarısız</string>
+    <string name="import_dialog_title">İçe Aktar</string>
+    <string name="login_user_info_error_title">Kullanıcı Bilgilerini Ayarlama Hatası</string>
+    <string name="change_encryption_password_success_body">Şifreleme parolası başarıyla değiştirildi!</string>
+    <string name="change_encryption_password_success_title">Şifreleme Parolası Değişikliği</string>
+    <string name="change_encryption_password_are_you_sure">Devam etmek istediğinizden emin misiniz\? İşlem yarı yolda durdurulamaz veya geri alınamaz ve tamamlanması biraz zaman alabilir.</string>
+    <string name="change_encryption_password_new_password">Yeni şifreleme parolası</string>
+    <string name="change_encryption_password_extra_info">Şifreleme parolanızın ele geçirildiğine inanıyorsanız, lütfen bu aracı kullanmayın. Bunun yerine desteğe başvurun.</string>
+    <string name="change_encryption_password_title">Şifreleme Parolasını Değiştir</string>
+    <string name="wrong_encryption_password_content">Hesabınıza erişirken bir bütünlük hatası alındı, bu büyük olasılıkla yanlış şifreleme parolası girdiğiniz anlamına gelir.
+\nLütfen kullanıcı adının büyük/küçük harfe duyarlı olduğunu unutmayın, bu nedenle lütfen farklı durumları deneyin, örneğin ilk karakteri büyük harf yapın.
+\n
+\nHata: %s</string>
+    <string name="wrong_encryption_password">Yanlış şifreleme parolası</string>
+    <string name="account_creation_failed">Hesap oluşturma başarısız oldu</string>
+    <string name="login_encryption_setup">Lütfen bekleyin, şifreleme ayarlanıyor…</string>
+    <string name="login_encryption_setup_title">Şifrelemeyi ayarlama</string>
+    <string name="login_forgot_password">Parolanızı mı unuttunuz\?</string>
+    <string name="login_service_details_description">Bu sizin oturum açma parolanızdır, şifreleme parolanız *değil*!</string>
+    <string name="login_encryption_account_label">Hesap:</string>
+    <string name="login_enter_encryption_details">Gizli Şifreleme Parolası</string>
+    <string name="login_enter_service_details">Oturum Açma Bilgilerini Girin</string>
+    <string name="login_finish">Bitir</string>
+    <string name="login_login">Oturum Aç</string>
+    <string name="login_encryption_extra_info">* Bu parola, hizmet üzerinde oturum açmak için kullanılan öncekinden farklı olarak verilerinizi şifrelemek için kullanılır.
+\nGüvenlik nedeniyle ayrı bir şifreleme parolası seçmeniz istenir. Daha fazla bilgi için lütfen SSS bölümüne bakın: %s</string>
+    <string name="login_encryption_check_password">* Yanlış olursa kurtarılamayacağı için lütfen parolayı iki kez gözden geçirin!</string>
+    <string name="login_encryption_enter_password">\"%s\" olarak oturum açtınız. Devam etmek için lütfen şifreleme parolanızı girin veya yan menüden oturumu kapatın.</string>
+    <string name="login_encryption_set_new_password">Lütfen aşağıda şifreleme parolanızı belirleyin ve doğru parolayı girdiğinizden emin olun, çünkü kaybolursa kurtarılamaz!</string>
+    <string name="login_encryption_password">Şifreleme Parolası</string>
+    <string name="login_toggle_advanced">Gelişmiş ayarları göster</string>
+    <string name="login_custom_server_error">Geçersiz URL bulundu, https:// eklemeyi mi unuttunuz\?</string>
+    <string name="login_custom_server">EteSync Sunucu URL\'si</string>
+    <string name="permissions_tasks_org_request">Tasks.org izinlerini iste</string>
+    <string name="permissions_tasks_org_details">Görevleri yerel görev listelerinizle eşzamanlamak için EteSync\'in Tasks.org\'a erişmesi gerekiyor.</string>
+    <string name="permissions_tasks_org">Tasks.org izinleri</string>
+    <string name="permissions_opentasks_details">Görevleri yerel görev listelerinizle eşzamanlamak için EteSync\'in OpenTasks\'a erişmesi gerekiyor.</string>
+    <string name="permissions_contacts_details">Adres defterlerini yerel kişilerinizle eşzamanlamak için EteSync\'in kişilerinize erişmesi gerekiyor.</string>
+    <string name="permissions_calendar_details">Takvim etkinliklerini yerel takvimlerinizle eşzamanlamak için EteSync\'in takvimlerinize erişmesi gerekiyor.</string>
+    <string name="permissions_title">EteSync izinleri</string>
+    <string name="journal_item_restore_dialog_body">Girdi önceki durumuna başarıyla geri yüklendi.</string>
+    <string name="journal_item_restore_action">Durumu geri yükle</string>
+    <string name="journal_item_member_count">Üye Sayısı</string>
+    <string name="journal_item_member">Üye</string>
+    <string name="journal_item_relation">İlişki</string>
+    <string name="journal_item_birthday">Doğum günü</string>
+    <string name="journal_item_anniversary">Yıl dönümü</string>
+    <string name="journal_item_website">Web sitesi</string>
+    <string name="journal_item_note">Not</string>
+    <string name="journal_item_address">Adres</string>
+    <string name="journal_item_nickname">Takma ad</string>
+    <string name="journal_item_impp">Anlık Mesajlaşma</string>
+    <string name="journal_item_job_description">İş Tanımı</string>
+    <string name="journal_item_organization">Organizasyon</string>
+    <string name="journal_item_email">E-posta</string>
+    <string name="journal_item_phone">Telefon</string>
+    <string name="journal_item_reminders">Hatırlatmalar</string>
+    <string name="journal_item_attendees">Katılımcılar</string>
+    <string name="journal_item_tab_raw">Ham</string>
+    <string name="journal_item_tab_main">Ana</string>
+    <string name="about">Hakkında</string>
+    <string name="collection_members_remove">%s\'in erişimini iptal etmek ister misiniz\?
+\nKötü niyetli bir kullanıcının, muhtemelen şifreleme anahtarlarına erişimi koruyabileceğini lütfen unutmayın. Daha fazla bilgi için lütfen SSS bölümüne bakın.</string>
+    <string name="collection_members_remove_title">Üyeyi kaldır</string>
+    <string name="collection_members_remove_error">Üye kaldırılırken hata oluştu</string>
+    <string name="collection_members_removing">Üye kaldırma</string>
+    <string name="collection_members_adding">Üye ekleme</string>
+    <string name="collection_members_error_user_not_found">Kullanıcı (%s) bulunamadı. Uygulamalardan birinden şifreleme parolalarını oluşturdular mı\?</string>
+    <string name="trust_fingerprint_body">Şifrelemenin güvenli olduğundan emin olmak için %s\'in güvenlik parmak izini doğrulayın.</string>
+    <string name="trust_fingerprint_title">Güvenlik parmak izini doğrula</string>
+    <string name="collection_members_add_error">Üye eklenirken hata oluştu</string>
+    <string name="collection_members_add">Üye ekle</string>
+    <string name="collection_members_list_empty">Üye yok</string>
+    <string name="collection_members_list_loading">Üyeler yükleniyor...</string>
+    <string name="collection_members_title">Üyeler</string>
+    <string name="use_native_apps_body">EteSync, Android ile sorunsuz bir şekilde bütünleşir, bu nedenle onu kullanmak için mevcut adres defteri ve takvim uygulamalarınızı kullanmanız yeterlidir!
+\n
+\nDaha fazla bilgi için lütfen kullanıcı rehberine bakın.</string>
+    <string name="use_native_apps_title">Biliyor musunuz\?</string>
+    <string name="members_old_journals_not_allowed">Eski tarz günlüklerin paylaşılmasına izin verilmiyor. Bu günlüğü paylaşmak için yeni bir tane oluşturun ve \"içe aktar\" iletişim kutusunu kullanarak içeriğini kopyalayın. Herhangi bir sorun yaşıyorsanız, lütfen desteğe başvurun.</string>
+    <string name="edit_owner_only">Sadece bu koleksiyonun sahibinin (%s) onu düzenlemesine izin verilir.</string>
+    <string name="not_allowed_title">İzin Yok</string>
+    <string name="members_owner_only">Sadece bu koleksiyonun sahibi (%s) üyelerini görüntüleyebilir.</string>
+    <string name="account_owner">Sahibi: %s</string>
+    <string name="account_showcase_import">Kişileri ve takvimleri EteSync\'e aktarmak için menüye tıklamanız ve \"İçe aktar\"ı seçmeniz gerekmektedir.</string>
+    <string name="tasks_not_showing">* Günlük kaydı sadece bir görev sağlayıcı kuruluysa gösterilir.</string>
+    <string name="change_journal_title">Günlüğü Değiştir</string>
+    <string name="show_fingperprint_title">Parmak İzim</string>
+    <string name="account_tasks_not_showing">* Görevler eşzamanlanmıyor (bir sağlayıcı kurun)</string>
+    <string name="account_click_install_tasks">OpenTasks kurmak için buraya tıklayın!</string>
+    <string name="account_showcase_view_collection">Koleksiyonu görüntülemek için bir ögeye tıklayabilirsiniz. Oradan günlüğü görüntüleyebilir, içe aktarabilir ve çok daha fazlasını yapabilirsiniz...</string>
+    <string name="account_delete_collection_last_text">Son koleksiyonun silinmesine izin verilmiyor, lütfen bunu silmek istiyorsanız yeni bir tane oluşturun.</string>
+    <string name="account_delete_collection_last_title">Son koleksiyon silinemiyor</string>
+    <string name="account_show_fingerprint">Parmak İzini Göster</string>
+    <string name="app_settings_change_notification">Değişiklik bildirimlerini göster</string>
+    <string name="app_settings_force_language_default">Otomatik</string>
+    <string name="app_settings_force_language">Dili Zorla</string>
+    <string name="app_settings_log_verbose_summary">Ayrıntılı günlük kayıtları özel bilgiler içerebilir</string>
+    <string name="app_settings_log_verbose">Ayrıntılı günlük kaydı</string>
+    <string name="app_settings_reset_certificates_success">Tüm özel sertifikalar temizlendi</string>
+    <string name="app_settings_reset_certificates_summary">Tüm özel sertifikaların güvenilirliğini sıfırlar</string>
+    <string name="app_settings_reset_certificates">Güvenil(mey)en sertifikaları sıfırla</string>
+    <string name="app_settings_distrust_system_certs_off">Sistem ve kullanıcı tarafından eklenen CA\'lara güvenilecek (tavsiye edilen)</string>
+    <string name="app_settings_distrust_system_certs_on">Sistem ve kullanıcı tarafından eklenen CA\'lara güvenilmeyecek</string>
+    <string name="app_settings_distrust_system_certs">Sistem sertifikalarına güvenme</string>
+    <string name="app_settings_override_proxy_port">HTTP vekil bağlantı noktası</string>
+    <string name="app_settings_override_proxy_host">HTTP vekil sunucu adı</string>
+    <string name="app_settings_override_proxy_off">Öntanımlı sistem vekil ayarlarını kullan</string>
+    <string name="app_settings_override_proxy_on">Özelleştirilmiş vekil ayarlarını kullan</string>
+    <string name="app_settings_override_proxy">Vekil ayarlarını geçersiz kıl</string>
+    <string name="app_settings_connection">Bağlantı</string>
+    <string name="app_settings_prefer_tasksorg_snack">Bu değişikliklerin geçerli olması için hesabınızı kaldırmanız ve yeniden eklemeniz gerekebilir.</string>
+    <string name="app_settings_prefer_tasksorg_off">Varsa görevleri OpenTasks ile eşzamanlayacak</string>
+    <string name="app_settings_prefer_tasksorg_on">Varsa görevleri Tasks.org ile eşzamanlayacak</string>
+    <string name="app_settings_prefer_tasksorg">Tasks.org görev sağlayıcısını tercih et</string>
+    <string name="app_settings_sync">Eşzamanla</string>
+    <string name="app_settings_notification_settings_summary">Bildirim kanallarını ve ayarlarını yönetin</string>
+    <string name="app_settings_notification_settings">Bildirim ayarları</string>
+    <string name="accounts_missing_permissions">Eksik izinler: %s</string>
+    <string name="accounts_showcase_add">EteSync\'i kullanmak için bir hesap eklemeniz gerekmektedir. Eklemek için buraya tıklayın...</string>
+    <string name="accounts_global_sync_enable">Etkinleştir</string>
+    <string name="accounts_global_sync_disabled">Sistem genelinde otomatik eşzamanlama devre dışı bırakıldı</string>
+    <string name="account_list_empty">EteSync\'e hoş geldiniz!</string>
+    <string name="navigation_drawer_contact">İletişim</string>
+    <string name="navigation_drawer_report_issue">Sorun bildir</string>
+    <string name="navigation_drawer_guide">Kullanıcı Rehberi</string>
+    <string name="navigation_drawer_subtitle">Secure Sync Adapter</string>
+    <string name="logging_davdroid_file_logging">EteSync dosya günlük kaydı AÇIK</string>
+    <string name="startup_vendor_specific_bugs_open_faq">SSS\'yi aç</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync, sağlayıcıya özel hatalar içerebilecek bir Android sürümü kullandığınızı tespit etti.
+\nDaha fazla bilgi için lütfen SSS bölümüne bakın.</string>
+    <string name="startup_vendor_specific_bugs">Muhtemel Sağlayıcı Hataları</string>
+    <string name="startup_development_version_give_feedback">Geri bildirimde bulun</string>
+    <string name="startup_development_version_message">Bu, EteSync\'in bir geliştirme sürümüdür. İşlerin beklendiği gibi çalışmayabileceğini unutmayın. EteSync\'i iyileştirmek için lütfen bize yapıcı geri bildirimde bulunun.</string>
+    <string name="startup_development_version">EteSync Ön İzleme Sürümü</string>
+    <string name="startup_battery_optimization_disable">EteSync için kapat</string>
+    <string name="startup_battery_optimization_message">Android, birkaç gün sonra EteSync eşzamanlamasını devre dışı bırakabilir/azaltabilir. Bunu önlemek için pil iyileştirmesini kapatın.</string>
+    <string name="startup_battery_optimization">Pil İyileştirmesi</string>
+    <string name="tourguide_title">Biliyor musunuz\?</string>
+    <string name="crash_email_body">Mümkünse, lütfen bu hatayı tetiklemek için yaptıklarınız gibi diğer ilişkili bilgileri ekleyin.</string>
+    <string name="crash_email_subject">EteSync Hata Ayıklama Bilgileri</string>
+    <string name="crash_message">Lütfen yığın izlemesini geliştiricilere gönderin.</string>
+    <string name="crash_title">EteSync çöktü!</string>
+    <string name="notification_channel_sync_status_desc">Eşzamanlama değişiklik özeti gibi bilgilendirici durum mesajları</string>
+    <string name="notification_channel_sync_status">Durum mesajları</string>
+    <string name="notification_channel_sync_warnings_desc">Salt-okunur koleksiyonların reddedilen değişiklikleri gibi önemli olmayan eşzamanlama sorunları</string>
+    <string name="notification_channel_sync_warnings">Eşzamanlama uyarıları</string>
 </resources>
