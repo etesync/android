@@ -1,42 +1,59 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Помощь</string>
-  <string name="send">Отправить</string>
-  <!--startup dialogs-->
-  <!--AboutActivity-->
-  <!--global settings-->
-  <!--AccountsActivity-->
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <!--AccountActivity-->
-  <!--PermissionsActivity-->
-  <!--AddAccountActivity-->
-  <!--AccountSettingsActivity-->
-  <string name="settings_authentication">Идентификация</string>
-  <string name="settings_password">Пароль</string>
-  <string name="settings_enter_password">Введите свой пароль:</string>
-  <string name="settings_sync">Синхронизация</string>
-  <string name="settings_sync_interval_contacts">Интервал синхронизации контактов</string>
-  <string name="settings_sync_summary_manually">Вручную</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s и немедленно при локальных изменениях</string>
-  <string name="settings_sync_summary_not_available">Недоступно</string>
-  <string name="settings_sync_interval_calendars">Период синхронизации календарей</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Вручную</item>
-    <item>Каждые 15 минут</item>
-    <item>Каждый час</item>
-    <item>Каждые 2 часа</item>
-    <item>Каждые 4 часа</item>
-    <item>Раз в сутки</item>
-  </string-array>
-  <!--collection management-->
-  <!--ExceptionInfoFragment-->
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">Отладочная информация</string>
-  <string name="sync_error_calendar">Синхронизация календаря завершена с ошибкой (%s)</string>
-  <string name="sync_error">Ошибка %s</string>
-  <string name="sync_error_http_dav">Ошибка сервера %s</string>
-  <string name="sync_error_local_storage">Ошибка базы данных в процессе %s</string>
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">Помощь</string>
+    <string name="send">Отправить</string>
+    <!--startup dialogs-->
+    <!--AboutActivity-->
+    <!--global settings-->
+    <!--AccountsActivity-->
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <!--AccountActivity-->
+    <!--PermissionsActivity-->
+    <!--AddAccountActivity-->
+    <!--AccountSettingsActivity-->
+    <string name="settings_authentication">Идентификация</string>
+    <string name="settings_password">Пароль</string>
+    <string name="settings_enter_password">Введите свой пароль:</string>
+    <string name="settings_sync">Синхронизация</string>
+    <string name="settings_sync_interval_contacts">Интервал синхронизации контактов</string>
+    <string name="settings_sync_summary_manually">Вручную</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s и немедленно при локальных изменениях</string>
+    <string name="settings_sync_summary_not_available">Недоступно</string>
+    <string name="settings_sync_interval_calendars">Период синхронизации календарей</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Вручную</item>
+        <item>Каждые 15 минут</item>
+        <item>Каждый час</item>
+        <item>Каждые 2 часа</item>
+        <item>Каждые 4 часа</item>
+        <item>Раз в сутки</item>
+    </string-array>
+    <!--collection management-->
+    <!--ExceptionInfoFragment-->
+    <!--sync errors and DebugInfoActivity-->
+    <string name="debug_info_title">Отладочная информация</string>
+    <string name="sync_error_calendar">Синхронизация календаря завершена с ошибкой (%s)</string>
+    <string name="sync_error">Ошибка %s</string>
+    <string name="sync_error_http_dav">Ошибка сервера %s</string>
+    <string name="sync_error_local_storage">Ошибка базы данных в процессе %s</string>
+    <!--cert4android-->
+    <string name="navigation_drawer_open">Открыть панель навигации</string>
+    <string name="logging_no_external_storage">Внешний накопитель не обнаружен</string>
+    <string name="about_license_terms">Пользовательское соглашение</string>
+    <string name="startup_vendor_specific_bugs_open_faq">Открыть FAQ</string>
+    <string name="startup_development_version_give_feedback">Оставить отзыв</string>
+    <string name="startup_development_version">Предварительная версия EteSync</string>
+    <string name="startup_dont_show_again">Больше не показывать</string>
+    <string name="startup_battery_optimization">Оптимизация батареи</string>
+    <string name="tourguide_title">Знаете ли вы\?</string>
+    <string name="notification_channel_sync_errors">Ошибки синхронизации</string>
+    <string name="notification_channel_sync">Синхронизация</string>
+    <string name="notification_channel_general">Другие важные сообщения</string>
+    <string name="notification_channel_debugging">Отладка</string>
+    <string name="please_wait">Пожалуйста, подождите …</string>
+    <string name="manage_accounts">Управление аккаунтами</string>
+    <string name="address_books_authority_title">Адресные книги</string>
+    <string name="app_name">EteSync</string>
 </resources>
