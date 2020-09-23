@@ -119,4 +119,5 @@
     <string name="address_books_authority_title">Adres defterleri</string>
     <string name="account_title_address_book">EteSync Adres Defteri</string>
     <string name="app_name">EteSync</string>
+    <string name="notification_channel_sync_errors_desc">Beklenmeyen sunucu yanıtları gibi eşzamanlamayı durduran önemli hatalar</string>
 </resources>
