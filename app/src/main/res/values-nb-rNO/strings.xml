@@ -5,62 +5,53 @@
   ~ are made available under the terms of the GNU Public License v3.0
   ~ which accompanies this distribution, and is available at
   ~ http://www.gnu.org/licenses/gpl.html
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
+  --><resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- common strings -->
     <string name="app_name">EteSync</string>
-    <string name="account_title_address_book">EteSync adressebok</string>
+    <string name="account_title_address_book">EteSync-adressebok</string>
     <string name="address_books_authority_title">Adressebøker</string>
     <string name="help">Hjelp</string>
     <string name="manage_accounts">Behandle kontoer</string>
-    <string name="please_wait">Vennligst vent …</string>
+    <string name="please_wait">Vent …</string>
     <string name="send">Send</string>
-
     <string name="notification_channel_crash_reports">Kræsjrapporter</string>
-    <string name="notification_channel_debugging">Debugging</string>
+    <string name="notification_channel_debugging">Avlusing</string>
     <string name="notification_channel_general">Andre viktige meldinger</string>
     <string name="notification_channel_sync">Synkronisering</string>
     <string name="notification_channel_sync_errors">Synkroniseringsfeil</string>
-    <string name="notification_channel_sync_errors_desc">Viktige feil som stopper synkronisering, som uventede serversvar</string>
+    <string name="notification_channel_sync_errors_desc">Viktige feil som stopper synkronisering, som uventede tjenersvar</string>
     <string name="notification_channel_sync_warnings">Synkroniseringsadvarsler</string>
     <string name="notification_channel_sync_warnings_desc">Ikke-fatale synkroniseringsfeil, som avviste endringer i skrivebeskyttede samlinger</string>
     <string name="notification_channel_sync_status">Statusmeldinger</string>
     <string name="notification_channel_sync_status_desc">Informative statusmeldinger, som sammendrag av synkroniseringsendringer</string>
-
     <!-- Crash -->
     <string name="crash_title">EteSync har kræsjet!</string>
-    <string name="crash_message">Vennligst send feilmeldingen til utvikleren.</string>
-    <string name="crash_email_subject">EteSync debuginformasjon</string>
-    <string name="crash_email_body">Hvis mulig, ta med annen relevant informasjon, som f.eks. hva du gjorde for å utløse feilen.</string>
-
+    <string name="crash_message">Send feilmeldingen til utvikleren.</string>
+    <string name="crash_email_subject">EteSync-feilsporingsinfo</string>
+    <string name="crash_email_body">Hvis mulig, ta med annen relevant info, som f.eks. hva du gjorde for å utløse feilen.</string>
     <!-- tourguide -->
     <string name="tourguide_title">Visste du at?</string>
-
     <!-- startup dialogs -->
     <string name="startup_battery_optimization">Batterioptimalisering</string>
-    <string name="startup_battery_optimization_message">Android kan deaktivere/redusere EteSync-synkronisering etter noen dager. For å hindre dette, skru av batterioptimalisering.</string>
+    <string name="startup_battery_optimization_message">Android kan skru av/redusere EteSync-synkronisering etter noen dager. For å hindre dette, skru av batterioptimalisering.</string>
     <string name="startup_battery_optimization_disable">Skru av for EteSync</string>
     <string name="startup_dont_show_again">Ikke vis igjen</string>
-    <string name="startup_development_version">EteSync testversjon</string>
-    <string name="startup_development_version_message">Dette er en utviklerversjon av EteSync. Det kan hende at ting ikke virker som de skal. Send gjerne inn konstruktiv tilbakemelding for å forbedre EteSync.</string>
+    <string name="startup_development_version">EteSync-testversjon</string>
+    <string name="startup_development_version_message">Dette er en utviklerversjon av EteSync. Det kan hende at ting ikke virker som de skal. Send gjerne konstruktive tilbakemeldinger for å forbedre EteSync.</string>
     <string name="startup_development_version_give_feedback">Gi tilbakemelding</string>
     <string name="startup_vendor_specific_bugs">Potensielle leverandørfeil</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync har oppdaget at du bruker en Android-versjon som kan inneholde leverandørspesifikke feil.\nSe ofte stilte spørsmål (FAQ) for mer informasjon.</string>
-    <string name="startup_vendor_specific_bugs_open_faq">Åpne FAQ</string>
-
+    <string name="startup_vendor_specific_bugs_message">EteSync har oppdaget at du bruker en Android-versjon som kan inneholde leverandørspesifikke feil.
+\nSe ofte stilte spørsmål (O-S-S) for mer info.</string>
+    <string name="startup_vendor_specific_bugs_open_faq">Åpne O-S-S</string>
     <!-- AboutActivity -->
     <string name="about_license_terms">Lisensbetingelser</string>
     <string name="about_license_info_no_warranty">Dette programmet kommer UTEN NOEN GARANTIER. Det et fri programvare, og du må gjerne distribuere det videre under visse betingelser.</string>
-
     <!-- global settings -->
     <string name="logging_davdroid_file_logging">EteSync-fillogging er PÅ</string>
     <string name="logging_to_external_storage">Loggfører til ekstern lagring: %s</string>
     <string name="logging_to_external_storage_warning">Deaktivering vil slette loggene</string>
     <string name="logging_couldnt_create_file">Kunne ikke opprette ekstern loggfil: %s</string>
     <string name="logging_no_external_storage">Ekstern lagring ikke funnet</string>
-
     <!-- AccountsActivity -->
     <string name="navigation_drawer_open">Åpne navigasjonsmeny</string>
     <string name="navigation_drawer_close">Lukk navigasjonsmeny</string>
@@ -70,50 +61,46 @@
     <string name="navigation_drawer_external_links">Nyttige lenker</string>
     <string name="navigation_drawer_website">Nettside</string>
     <string name="navigation_drawer_faq">Ofte stilte spørsmål</string>
-    <string name="navigation_drawer_guide">Brukerguide</string>
+    <string name="navigation_drawer_guide">Brukerveiledning</string>
     <string name="navigation_drawer_report_issue">Rapporter feil</string>
     <string name="navigation_drawer_contact">Kontakt</string>
-
-    <string name="account_list_empty">Velkommen til EteSync!</string>
-    <string name="accounts_global_sync_disabled">Full automatisk synkronisering av systemet er deaktivert</string>
-    <string name="accounts_global_sync_enable">Aktiver</string>
-    <string name="accounts_showcase_add">Du må legge til en bruker for å kunne bruke EteSync. Klikk her for å legge til en...</string>
-
+    <string name="account_list_empty">Velkommen til EteSync.</string>
+    <string name="accounts_global_sync_disabled">Full automatisk synkronisering av systemet er avskrudd</string>
+    <string name="accounts_global_sync_enable">Skru på</string>
+    <string name="accounts_showcase_add">Du må legge til en bruker for å kunne bruke EteSync. Klikk her for å legge til en …</string>
     <!-- AccountUpdateService -->
-
     <!-- AppSettingsActivity -->
     <string name="app_settings">Innstillinger</string>
     <string name="app_settings_user_interface">Brukergrensesnitt</string>
     <string name="app_settings_notification_settings">Varslingsinnstillinger</string>
     <string name="app_settings_notification_settings_summary">Behandle varslingskanaler og deres innstillinger</string>
     <string name="app_settings_reset_hints">Tilbakestill hint</string>
-    <string name="app_settings_reset_hints_summary">Gjenaktiverer hint som har blitt avvist tidligere</string>
+    <string name="app_settings_reset_hints_summary">Aktiverer tidligere avviste hint</string>
     <string name="app_settings_reset_hints_success">Alle hint vil vises igjen</string>
     <string name="app_settings_connection">Tilkobling</string>
-    <string name="app_settings_override_proxy">Overskriv proxyinnstillinger</string>
-    <string name="app_settings_override_proxy_on">Bruk egne proxyinnstillinger</string>
-    <string name="app_settings_override_proxy_off">Bruk systemets standard proxyinnstillinger</string>
-    <string name="app_settings_override_proxy_host">HTTP proxy-vertsnavn</string>
-    <string name="app_settings_override_proxy_port">HTTP proxy-port</string>
+    <string name="app_settings_override_proxy">Overskriv mellomtjenerinnstillinger</string>
+    <string name="app_settings_override_proxy_on">Bruk egne mellomtjenerinnstillinger</string>
+    <string name="app_settings_override_proxy_off">Bruk systemets forvalgte mellomtjenerinnstillinger</string>
+    <string name="app_settings_override_proxy_host">HTTP-mellomtjenervertsnavn</string>
+    <string name="app_settings_override_proxy_port">HTTP-mellomtjenerport</string>
     <string name="app_settings_security">Sikkerhet</string>
     <string name="app_settings_distrust_system_certs">Ikke klarer systemsertifikater</string>
     <string name="app_settings_distrust_system_certs_on">Ikke klarer system- og brukersertifikater</string>
     <string name="app_settings_distrust_system_certs_off">Klarer system- og brukersertifikater (anbefalt)</string>
-    <string name="app_settings_reset_certificates">Tilbakestill (ikke) klarerte sertifikater</string>
+    <string name="app_settings_reset_certificates">Tilbakestill (u-) klarerte sertifikater</string>
     <string name="app_settings_reset_certificates_summary">Tilbakestiller klareringen av alle egne sertifikater</string>
     <string name="app_settings_reset_certificates_success">Klareringen av alle egne sertifikater har blitt tilbakestilt</string>
-    <string name="app_settings_debug">Debugging</string>
+    <string name="app_settings_debug">Avlusing</string>
     <string name="app_settings_log_to_external_storage">Loggfør til fil</string>
-    <string name="app_settings_log_to_external_storage_on">Deaktiver for å skjule varselet og slette loggene</string>
-    <string name="app_settings_log_to_external_storage_off">Aktiver for å loggføre meldinger i en fil</string>
+    <string name="app_settings_log_to_external_storage_on">Skru av for å skjule varselet og slette loggene</string>
+    <string name="app_settings_log_to_external_storage_off">Skru på for å loggføre meldinger til fil</string>
     <string name="app_settings_log_verbose">Detaljert loggføring</string>
-    <string name="app_settings_log_verbose_summary">Detaljerte logger kan inneholde personlig informasjon</string>
-    <string name="app_settings_show_debug_info">Vis debuginformasjon</string>
-    <string name="app_settings_show_debug_info_details">Vis/del programvare- og konfigurasjonsdetaljer</string>
+    <string name="app_settings_log_verbose_summary">Detaljerte logger kan inneholde personlig info</string>
+    <string name="app_settings_show_debug_info">Vis feilsporingsinfo</string>
+    <string name="app_settings_show_debug_info_details">Vis/del programvare- og oppsettsdetaljer</string>
     <string name="app_settings_force_language">Tving språk</string>
     <string name="app_settings_force_language_default">Auto</string>
     <string name="app_settings_change_notification">Vis endringsvarsler</string>
-
     <!-- AccountActivity -->
     <string name="account_synchronize_now">Synkroniser nå</string>
     <string name="account_synchronizing_now">Synkroniserer nå</string>
@@ -121,14 +108,12 @@
     <string name="account_delete">Fjern konto</string>
     <string name="account_show_fingerprint">Vis fingeravtrykk</string>
     <string name="account_delete_confirmation_title">Vil du virkelig fjerne kontoen?</string>
-    <string name="account_delete_confirmation_text">Alle lokale kopier av adressebøker, kalendre og oppgavelister vil bli slettet.</string>
+    <string name="account_delete_confirmation_text">Alle lokale kopier av adressebøker, kalendre og gjøremålslister vil bli slettet.</string>
     <string name="account_delete_collection_last_title">Kunne ikke slette siste samling</string>
-    <string name="account_delete_collection_last_text">Sletting av den siste samlingen tillates ikke, vennligst lag en ny samling hvis du vil slette denne.</string>
-    <string name="account_showcase_view_collection">Du kan klikke på et element for å vise samlingen. Derfra kan du se journalen, importere, og mye mer...</string>
-    <string name="account_click_install_tasks">Klikk her for å installere OpenTasks!</string>
-
+    <string name="account_delete_collection_last_text">Sletting av den siste samlingen tillates ikke, lag en ny samling hvis du vil slette denne.</string>
+    <string name="account_showcase_view_collection">Du kan klikke på et element for å vise samlingen. Derfra kan du vise journalen, importere, og mye mer...</string>
+    <string name="account_click_install_tasks">Klikk her for å installere OpenTasks.</string>
     <string name="show_fingperprint_title">Mitt fingeravtrykk</string>
-
     <!-- ViewCollection -->
     <string name="change_journal_title">Endre journal</string>
     <string name="account_showcase_import">For å importere kontakter og kalendre til Etesync, må du klikke på menyen og velge \"Importer\".</string>
@@ -136,23 +121,22 @@
     <string name="members_owner_only">Bare eieren av denne samlingen (%s) har lov til å se dens medlemmer.</string>
     <string name="not_allowed_title">Ikke tillatt</string>
     <string name="edit_owner_only">Bare eieren av denne samlingen (%s) har lov til å redigere den.</string>
-    <string name="members_old_journals_not_allowed">Deling av journaler av gammel stil er ikke tillatt. For å dele denne journalen, lag en ny journal og kopier innholder i den over ved hjelp av \"importer\"-dialogen. Hvis du opplever problemer, kontakt kundeservice.</string>
-
+    <string name="members_old_journals_not_allowed">Deling av journaler i gammel stil tillates ikke. For å dele denne journalen, lag en ny og kopier innholdet i den over ved hjelp av \"importer\"-dialogen. Hvis du opplever problemer, kontakt brukerstøtte.</string>
     <!-- CollectionMembers -->
     <string name="collection_members_title">Medlemmer</string>
-    <string name="collection_members_list_loading">Laster inn medlemmer...</string>
+    <string name="collection_members_list_loading">Laster inn medlemmer …</string>
     <string name="collection_members_list_empty">Ingen medlemmer</string>
     <string name="collection_members_add">Legg til medlem</string>
     <string name="collection_members_add_error">Feil oppstod under tillegging av medlem</string>
     <string name="collection_members_adding">Legger til medlem</string>
     <string name="trust_fingerprint_title">Kontroller sikkerhetsfingeravtrykk</string>
-    <string name="trust_fingerprint_body">Kontroller %ss fingeravtrykk for å bekrefte at krypteringen er sikker.</string>
-    <string name="collection_members_error_user_not_found">Bruker (%s) finnes ikke, eller har skrudd av journaldeling.</string>
+    <string name="trust_fingerprint_body">Kontroller %s sitt fingeravtrykk for å bekrefte at krypteringen er sikker.</string>
+    <string name="collection_members_error_user_not_found">Brukeren (%s) finnes ikke, eller har skrudd av journaldeling.</string>
     <string name="collection_members_removing">Fjerner medlem</string>
-    <string name="collection_members_remove_error">Feil opppstod under fjerning av medlem</string>
+    <string name="collection_members_remove_error">Kunne ikke fjerne medlem</string>
     <string name="collection_members_remove_title">Fjern medlem</string>
-    <string name="collection_members_remove">Vil du fjerne %ss tilgang?\nVær klar over at en ondsinnet bruker potentsielt kan beholde tilgang til krypteringsnøkler. Se ofte stilte spørsmål for mer informasjon.</string>
-
+    <string name="collection_members_remove">Vil du fjerne %s sin tilgang\?
+\nVær klar over at en ondsinnet bruker potensielt kan beholde tilgang til krypteringsnøkler. Se ofte stilte spørsmål for mer info.</string>
     <!-- JournalItemActivity -->
     <string name="about">Om</string>
     <string name="journal_item_tab_main">Forside</string>
@@ -160,7 +144,7 @@
     <string name="journal_item_attendees">Deltakere</string>
     <string name="journal_item_reminders">Påminnelser</string>
     <string name="journal_item_phone">Telefon</string>
-    <string name="journal_item_email">Epost</string>
+    <string name="journal_item_email">E-post</string>
     <string name="journal_item_organization">Organisasjon</string>
     <string name="journal_item_job_description">Jobbeskrivelse</string>
     <string name="journal_item_impp">Nettprat</string>
@@ -175,8 +159,6 @@
     <string name="journal_item_member_count">Antall medlemmer</string>
     <string name="journal_item_restore_action">Gjenopprett tilstand</string>
     <string name="journal_item_restore_dialog_body">Gjenopprettet elementet til forrige tilstand.</string>
-
-
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync-tilganger</string>
     <string name="permissions_calendar">Kalendertilgang</string>
@@ -186,20 +168,20 @@
     <string name="permissions_contacts_details">For å synkronisere adressebøker med de lokale kontaktlistene dine, trenger EteSync tilgang til kontaktene dine.</string>
     <string name="permissions_contacts_request">Be om kontakttilgang</string>
     <string name="permissions_opentasks">OpenTasks-tilgang</string>
-    <string name="permissions_opentasks_details">For å synkronisere oppgaver med de lokale oppgavelistene dine, trenger EteSync tilgang til OpenTasks.</string>
+    <string name="permissions_opentasks_details">For å synkronisere gjøremål med de lokale gjøremålslistene dine, trenger EteSync tilgang til OpenTasks.</string>
     <string name="permissions_opentasks_request">Be om OpenTasks-tilgang</string>
-
     <!-- AddAccountActivity -->
     <string name="login_title">Legg til konto</string>
-    <string name="login_email_address">Epost</string>
-    <string name="login_email_address_error">Gyldig epostadresse kreves</string>
+    <string name="login_email_address">E-post</string>
+    <string name="login_email_address_error">Gyldig e-postadresse kreves</string>
     <string name="login_password">Passord</string>
-    <string name="login_custom_server">EteSync-server-URL</string>
-    <string name="login_custom_server_error">Ugyldig URL finnet, glemte du å ta med https://?</string>
+    <string name="login_custom_server">EteSync-tjenernettadresse</string>
+    <string name="login_custom_server_error">Ugyldig nettadresse finnet, glemte du å ta med https://\?</string>
     <string name="login_toggle_advanced">Vis avanserte innstillinger</string>
     <string name="login_encryption_password">Krypteringspassord</string>
-    <string name="login_encryption_check_password">* Vennligst dobbeltsjekk passordet, da det ikke kan gjenopprettes hvis det er feil!</string>
-    <string name="login_encryption_extra_info">Dette passordet bruker til å kryptere dataen din, i motsetning til det forrige, som brukes til å logge inn på tjenesten.\nDu bes om å sette et separat krypteringspassord av sikkerhetsårsaker. For mer informasjon, se ofte stilte spørsmål her: %s</string>
+    <string name="login_encryption_check_password">* Dobbeltsjekk passordet, siden det ikke kan gjenopprettes hvis det er feil!</string>
+    <string name="login_encryption_extra_info">Dette passordet bruker til å kryptere dataen din, i motsetning til det forrige, som brukes til å logge inn på tjenesten.
+\nDu bes om å sette et eget krypteringspassord av sikkerhetsgrunner. For mer info, sjekk ofte stilte spørsmål her: %s</string>
     <string name="login_password_required">Passord kreves</string>
     <string name="login_login">Logg inn</string>
     <string name="login_signup">Registrer deg</string>
@@ -210,44 +192,39 @@
     <string name="login_encryption_account_label">Konto:</string>
     <string name="login_service_details_description">Dette er innloggingspassordet ditt, *ikke* krypteringspassordet!</string>
     <string name="login_forgot_password">Glemt passord?</string>
-
-    <string name="login_configuration_detection">Oppdag konfigurasjon</string>
-    <string name="login_querying_server">Vennligst vent, kontakter serveren…</string>
+    <string name="login_configuration_detection">Oppdag oppsett</string>
+    <string name="login_querying_server">Vent, kontakter tjeneren …</string>
     <string name="login_wrong_username_or_password">Kunne ikke logge inn (sannsynligvis feil brukernavn eller passord).\nHar du registrert deg?</string>
     <string name="login_view_logs">Vis logger</string>
-
     <string name="login_encryption_setup_title">Setter opp kryptering</string>
-    <string name="login_encryption_setup">Vennligst vent, setter opp kryptering…</string>
-
+    <string name="login_encryption_setup">Vent, setter opp kryptering …</string>
     <string name="account_creation_failed">Kunne ikke opprette konto</string>
     <string name="wrong_encryption_password">Feil krypteringspassord</string>
-    <string name="wrong_encryption_password_content">Mottok en integritetsfeil ved tilgang til kontoen din, noe som mest sannsynlig skyldes at du skrev inn feil krypteringspassord.\nVennligst merk at brukernavnet skiller store og små bokstaver, så prøv gjerne andre kombinasjoner, skriv for eksempel første bokstav som stor bokstav.\n\Feil: %s</string>
-
+    <string name="wrong_encryption_password_content">Mottok en integritetsfeil ved tilgang til kontoen din, noe som mest sannsynlig skyldes at du skrev inn feil krypteringspassord.
+\nMerk at brukernavnet skiller mellom store og små bokstaver, så prøv gjerne andre kombinasjoner, skriv for eksempel første bokstav som stor bokstav.
+\neil: %s</string>
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Endre krypteringspassord</string>
-    <string name="change_encryption_password_extra_info">Vennligst ikke bruk dette verktøyet dersom du mistenker at krypteringspassordet ditt har blitt kompromittert. Kontakt kundeservice i stedet.</string>
+    <string name="change_encryption_password_extra_info">Ikke bruk dette verktøyet dersom du mistenker at krypteringspassordet ditt har blitt kompromittert. Kontakt brukerstøtte i stedet.</string>
     <string name="change_encryption_password_new_password">Nytt krypteringspassord</string>
     <string name="change_encryption_password_are_you_sure">Er du sikker på at du vil fortsette? Denne prosessen kan ikke stoppes halvveis eller angres, og kan ta en stund å fullføre.</string>
     <string name="change_encryption_password_success_title">Endring av krypteringspassord</string>
     <string name="change_encryption_password_success_body">Krypteringspassordet ble endret!</string>
-
     <!-- SetupUserInfoFragment -->
     <string name="login_user_info_error_title">Feil ved setting av brukerinfo</string>
-
     <!-- ImportFragment -->
     <string name="import_dialog_title">Import</string>
     <string name="import_dialog_failed_title">Import mislyktes</string>
     <string name="import_dialog_failed_body">Grunn: %s\nRapporter til utviklerne?</string>
-    <string name="import_dialog_loading_file">Laster fil (kan ta en stund)...</string>
-    <string name="import_dialog_adding_entries">Legger til elementer...</string>
+    <string name="import_dialog_loading_file">Laster fil (kan ta en stund) …</string>
+    <string name="import_dialog_adding_entries">Legger til elementer …</string>
     <string name="import_dialog_success">Behandlet %1$d elementer.\nLagt til: %2$d\nEndret: %3$d\nHoppet over (mislyktes): %4$d</string>
     <string name="import_permission_required">Tilgang til enhetslagring kreves for import.</string>
     <string name="choose_file">Velg fil</string>
-
     <!-- AccountSettingsActivity -->
     <string name="settings_title">Innstillinger: %s</string>
     <string name="settings_manage_account">Behandle konto</string>
-    <string name="settings_account_dashboard">Kontodashbord</string>
+    <string name="settings_account_dashboard">Konto-oversikt</string>
     <string name="settings_manage_account_summary">Endre betalingsinfo, plan og andre kontoinnstillinger</string>
     <string name="settings_encryption">Kryptering</string>
     <string name="settings_password">Innloggingspassord</string>
@@ -269,30 +246,29 @@
         <item>Hver 4. time</item>
         <item>Daglig</item>
     </string-array>
-    <string name="settings_sync_wifi_only">Bare synkroniser over WiFi</string>
-    <string name="settings_sync_wifi_only_on">Synkronisering er begrenset til WiFi-forbindelser</string>
+    <string name="settings_sync_wifi_only">Kun synkroniser over Wi-Fi</string>
+    <string name="settings_sync_wifi_only_on">Synkronisering er begrenset til Wi-Fi-forbindelser</string>
     <string name="settings_sync_wifi_only_off">Tilkoblingstype tas ikke hensyn til</string>
-    <string name="settings_sync_wifi_only_ssid">WiFi-SSID-begrensninv</string>
-    <string name="settings_sync_wifi_only_ssid_on">Vil bare synkronisere på %s</string>
-    <string name="settings_sync_wifi_only_ssid_off">Alle WiFi-tilkoblinger kan brukes</string>
-    <string name="settings_sync_wifi_only_ssid_message">Skriv inn navnet på et WiFi-nettverk (SSID) for å begrense synkronisering til dette nettverket, eller la stå blankt for å tillate alle WiFi-forbindelser.</string>
+    <string name="settings_sync_wifi_only_ssid">Wi-Fi-SSID-begrensning</string>
+    <string name="settings_sync_wifi_only_ssid_on">Vil kun synkronisere på %s</string>
+    <string name="settings_sync_wifi_only_ssid_off">Alle Wi-Fi-tilkoblinger kan brukes</string>
+    <string name="settings_sync_wifi_only_ssid_message">Skriv inn navnet på et Wi-Fi-nettverk (SSID) for å begrense synkronisering til dette nettverket, eller la stå blankt for å tillate alle Wi-Fi-forbindelser.</string>
     <string name="settings_carddav">Kontakter</string>
     <string name="settings_caldav">Kalender</string>
-    <string name="settings_taskdav">Oppgaver</string>
-
+    <string name="settings_taskdav">Gjøremål</string>
     <!-- collection management -->
     <string name="create_addressbook">Opprett adressebok</string>
     <string name="create_addressbook_display_name_hint">Min adressebok</string>
     <string name="create_calendar">Opprett kalender</string>
     <string name="create_calendar_display_name_hint">Min kalender</string>
-    <string name="create_tasklist">Opprett oppgaveliste</string>
-    <string name="create_tasklist_display_name_hint">Min oppgaveliste</string>
+    <string name="create_tasklist">Opprett gjøremålsliste</string>
+    <string name="create_tasklist_display_name_hint">Min gjøremålsliste</string>
     <string name="install_opentasks">Installer OpenTasks</string>
     <string name="edit_collection">Endre samling</string>
     <string name="create_collection_color">Sett samlingens farge</string>
     <string name="create_collection_creating">Oppretter samling</string>
     <string name="create_collection_display_name">Visningsnavn (tittel) på denne samlingen:</string>
-    <string name="create_collection_display_name_required">Tittel er påkrevd</string>
+    <string name="create_collection_display_name_required">Tittel kreves</string>
     <string name="create_collection_description">Beskrivelse (valgfritt):</string>
     <string name="view_collection_edit">Endre</string>
     <string name="view_collection_import">Importer</string>
@@ -300,31 +276,28 @@
     <string name="create_collection_create">Lagre</string>
     <string name="delete_collection">Slett</string>
     <string name="delete_collection_confirm_title">Er du sikker?</string>
-    <string name="delete_collection_confirm_warning">Denne samlingen (%s) og alle dens data vil slettes fra serveren.</string>
+    <string name="delete_collection_confirm_warning">Denne samlingen (%s) og alle dens data vil slettes fra tjeneren.</string>
     <string name="delete_collection_deleting_collection">Sletter samling</string>
-
     <!-- JournalViewer -->
     <string name="journal_entries_list_empty">Journalen er tom.\n(Kanskje den fortsatt synkroniserer?)</string>
-    <string name="journal_entries_loading">Laster journalelementer...</string>
-
+    <string name="journal_entries_loading">Laster inn journalelementer …</string>
     <!-- ExceptionInfoFragment -->
     <string name="exception">En feil har oppstått.</string>
     <string name="exception_httpexception">En HTTP-feil har oppstått.</string>
     <string name="exception_ioexception">En I/O-feil har oppstått.</string>
     <string name="exception_show_details">Vis detaljer</string>
-
     <!-- sync errors and DebugInfoActivity -->
-    <string name="debug_info_title">Debuginformasjon</string>
-    <string name="debug_info_more_data_shared">Når du klikker på del vil epost-appen åpne med dataene under, i tillegg til noe ekstra debuginformasjon, vedlagt. Det kan kanskje inneholde sensitiv informasjon, så vennligst se igjennom dataene før du sender.</string>
+    <string name="debug_info_title">Feilsporingsinfo</string>
+    <string name="debug_info_more_data_shared">Når du klikker på del vil e-postprogrammet åpnes med dataene under, i tillegg til noe ekstra feilsporingsinfo, vedlagt. Det kan kanskje inneholde sensitiv info, så sjekk alt før du sender.</string>
     <string name="sync_error_permissions">EteSync-tillatelser</string>
     <string name="sync_error_permissions_text">Ekstra tillatelser kreves</string>
     <string name="sync_error_calendar">Kalendersynkronisering mislyktes (%s)</string>
     <string name="sync_error_contacts">Kontaktsynkronisering mislyktes (%s)</string>
-    <string name="sync_error_tasks">Oppgavesynkronisering mislyktes (%s)</string>
+    <string name="sync_error_tasks">Gjøremålssynkronisering mislyktes (%s)</string>
     <string name="sync_error">Feil ved %s</string>
     <string name="sync_error_integrity">Integritetsfeil ved %s</string>
-    <string name="sync_error_http_dav">Serverfeil ved %s</string>
-    <string name="sync_error_unavailable">Kunne ikke koble til serveren ved %s</string>
+    <string name="sync_error_http_dav">Tjenerfeil ved %s</string>
+    <string name="sync_error_unavailable">Kunne ikke koble til tjenern ved %s</string>
     <string name="sync_error_local_storage">Databasefeil ved %s</string>
     <string name="sync_error_journal_readonly">Journalen er skrivebeskyttet</string>
     <string name="sync_phase_prepare">forberedelse av synkronisering</string>
@@ -337,43 +310,55 @@
     <string name="sync_phase_apply_local_entries">gjentillegging av lokale elementer</string>
     <string name="sync_phase_push_entries">sending av elementer</string>
     <string name="sync_phase_post_processing">etterbehandling</string>
-    <string name="sync_error_unauthorized">Autentisering mislyktes</string>
+    <string name="sync_error_unauthorized">Innlogging mislyktes</string>
     <string name="sync_error_user_inactive">Brukeren er inaktiv</string>
-    <string name="sync_successfully_calendar" formatted="false">Kalender \"%s\" endret (%s)</string>
+    <string name="sync_successfully_calendar" formatted="false">Kalender «%s» endret (%s)</string>
     <string name="sync_successfully_contacts" formatted="false">Kontakter endret (%s)</string>
-    <string name="sync_successfully_tasks" formatted="false">Oppgavene \"%s\" endret (%s)</string>
+    <string name="sync_successfully_tasks" formatted="false">Gjøremålene «%s» er endret (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s endret.</string>
     <string name="sync_successfully_modified_full" formatted="false">%s lagt til.\n%s oppdatert.\n%s slettet.</string>
     <string name="sync_journal_readonly">Journalen \"%s\" er skrivebeskyttet</string>
     <string name="sync_journal_readonly_message">Journalen er skrivebeskyttet, så alle endringene dine (%d) har blitt omgjort.</string>
-
-
     <!-- Calendar invites -->
     <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
     <string name="sync_calendar_attendees_notification_content">Send invitasjoner til gjester?</string>
     <string name="calendar_attendees_send_email_action">Send invitasjoner</string>
     <string name="sync_calendar_attendees_email_subject" formatted="false">Invitasjon: %s @ %s</string>
     <string name="sync_calendar_attendees_email_content" formatted="false">Du har blitt invitert til følgende hendelse:\n\n%s\nNår: %s\nHvor: %s\nDeltakere: %s\n\n--\nSendt med EteSync - sikker, ende-til-ende-kryptert og privat synkronisering.\nFå det på https://www.EteSync.com</string>
-
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Tilkoblingssikkerhet</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync har mottatt et ukjent sertifikat. Ønsker du å klarere det?</string>
-
     <!-- WebView activity-->
-    <string name="loading">Laster...</string>
+    <string name="loading">Laster …</string>
     <string name="loading_error_title">Innlastingsfeil</string>
     <string name="loading_error_content">Oppdater</string>
-    <string name="open_url_no_activity">Kunne ikke åpne link: linken støttes ikke!</string>
-
+    <string name="open_url_no_activity">Kunne ikke åpne lenke: Lenken støttes ikke!</string>
     <!-- Import Activity -->
     <string name="import_button_file">Fra fil</string>
     <string name="import_button_local">Fra konto</string>
     <string name="import_select_account">Velg konto</string>
-
     <!-- Event (from Etar) -->
     <string name="event_info_organizer">Arrangør:</string>
-
     <!-- Notifications -->
     <string name="notification_channel_name">EteSync</string>
     <string name="notification_channel_description">EteSync-varsler</string>
+    <string name="install_tasksorg">Installer Tasks.org</string>
+    <string name="import_account_top_notice">Velg en konto å importere alle dens oppføringer fra.</string>
+    <string name="login_encryption_enter_password">Du er innlogget som «%s». Skriv inn ditt krypteringspassord for å fortsette, eller logg ut fra sidemenyen.</string>
+    <string name="login_encryption_set_new_password">Sett ditt krypteringspassord nedenfor, og forsikre deg om at det er riktig, siden det *ikke* kan gjenopprettes!</string>
+    <string name="permissions_tasks_org_request">Forespør tilgang til Tasks.org</string>
+    <string name="permissions_tasks_org_details">For å synkronisere gjøremål med din lokale gjøremålsliste, trenger EteSync tilgang til Tasks.org.</string>
+    <string name="permissions_tasks_org">Tasks.org-tilganger</string>
+    <string name="use_native_apps_body">EteSync integrerer seg sømløst med Android, slik at du kan bruke eksisterende kontaktliste og kalenderprogrammer.
+\n
+\nFor mer info, sjekk ut brukerveiledningen.</string>
+    <string name="use_native_apps_title">Visste du at\?</string>
+    <string name="tasks_not_showing">* Loggføring vises kun hvis en gjøremålstilbyder er installert.</string>
+    <string name="account_tasks_not_showing">* Synkroniserer ikke gjøremål (installer en tilbyder)</string>
+    <string name="app_settings_prefer_tasksorg_snack">Det kan hende du må fjerne og legge til kontoen din igjen før endringene trer i effekt.</string>
+    <string name="app_settings_prefer_tasksorg_off">Synkroniserer gjøremål med OpenTasks hvis tilgjengelig</string>
+    <string name="app_settings_prefer_tasksorg_on">Synkroniserer gjøremål med Tasks.org hvis tilgjengelig</string>
+    <string name="app_settings_prefer_tasksorg">Foretrekk Tasks.org-gjøremålstilbyder</string>
+    <string name="app_settings_sync">Synkroniser</string>
+    <string name="accounts_missing_permissions">Manglende tilganger: %s</string>
 </resources>
