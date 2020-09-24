@@ -18,49 +18,49 @@
     <string name="address_books_authority_title">Address books</string>
     <string name="help">Help</string>
     <string name="manage_accounts">Manage accounts</string>
-    <string name="please_wait">Please wait …</string>
+    <string name="please_wait">Please wait…</string>
     <string name="send">Send</string>
 
     <string name="notification_channel_crash_reports">Crash Reports</string>
     <string name="notification_channel_debugging">Debugging</string>
     <string name="notification_channel_general">Other important messages</string>
-    <string name="notification_channel_sync">Synchronization</string>
-    <string name="notification_channel_sync_errors">Synchronization errors</string>
-    <string name="notification_channel_sync_errors_desc">Important errors which stop synchronization like unexpected server replies</string>
+    <string name="notification_channel_sync">Syncing</string>
+    <string name="notification_channel_sync_errors">Could not sync</string>
+    <string name="notification_channel_sync_errors_desc">Syncing stopped. This could be caused by unexpected server replies.</string>
     <string name="notification_channel_sync_warnings">Synchronization warnings</string>
-    <string name="notification_channel_sync_warnings_desc">Non-fatal synchronization problems like dismissed changes of read-only collections</string>
+    <string name="notification_channel_sync_warnings_desc">Small syncing problems like dismissed changes of read-only collections</string>
     <string name="notification_channel_sync_status">Status messages</string>
     <string name="notification_channel_sync_status_desc">Informational status messages like the sync change summary</string>
 
     <!-- Crash -->
-    <string name="crash_title">EteSync has crashed!</string>
+    <string name="crash_title">EteSync crashed!</string>
     <string name="crash_message">Please send stack trace to developers.</string>
     <string name="crash_email_subject">EteSync Debug Info</string>
-    <string name="crash_email_body">If possible, please include any other relevant information such as what you did to trigger this error.</string>
+    <string name="crash_email_body">If possible, please include any other relevant info, such as what you did before this happened.</string>
 
     <!-- tourguide -->
     <string name="tourguide_title">Did you know?</string>
 
     <!-- startup dialogs -->
     <string name="startup_battery_optimization">Battery Optimization</string>
-    <string name="startup_battery_optimization_message">Android may disable/reduce EteSync synchronization after a few days. To prevent this, turn off battery optimization.</string>
+    <string name="startup_battery_optimization_message">Turn off battery optimization to prevent Android turning off/reducing EteSync syncing after a few days.</string>
     <string name="startup_battery_optimization_disable">Turn off for EteSync</string>
     <string name="startup_dont_show_again">Don\'t show again</string>
     <string name="startup_development_version">EteSync Preview Release</string>
-    <string name="startup_development_version_message">This is a development version of EteSync. Be aware that things may not work as expected. Please give us constructive feedback to improve EteSync.</string>
-    <string name="startup_development_version_give_feedback">Give feedback</string>
+    <string name="startup_development_version_message">This is a development version of EteSync. Be aware that things may not work as expected. Please give us constructive feedback to improve it.</string>
+    <string name="startup_development_version_give_feedback">Provide feedback</string>
     <string name="startup_vendor_specific_bugs">Potential Vendor Bugs</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync has detected you are using an Android version that may contain vendor specific bugs.\nPlease take a look at the FAQ for more information.</string>
+    <string name="startup_vendor_specific_bugs_message">You are using an Android version that may contain vendor specific bugs.\nPlease take a look at the FAQ for more info.</string>
     <string name="startup_vendor_specific_bugs_open_faq">Open FAQ</string>
 
     <!-- AboutActivity -->
-    <string name="about_license_terms">License terms</string>
-    <string name="about_license_info_no_warranty">This program comes with ABSOLUTELY NO WARRANTY. It is free software, and you are welcome to redistribute it under certain conditions.</string>
+    <string name="about_license_terms">License info</string>
+    <string name="about_license_info_no_warranty">This copylefted libre software licensed GPLv3+ comes with ABSOLUTELY NO WARRANTY. Use, see, change and share at will, with all.</string>
 
     <!-- global settings -->
-    <string name="logging_davdroid_file_logging">EteSync file logging is ON</string>
+    <string name="logging_davdroid_file_logging">EteSync file logging ON</string>
     <string name="logging_to_external_storage">Logging to external storage: %s</string>
-    <string name="logging_to_external_storage_warning">Disabling will delete logs</string>
+    <string name="logging_to_external_storage_warning">Turning this off deletes all logs</string>
     <string name="logging_couldnt_create_file">Couldn\'t create external log file: %s</string>
     <string name="logging_no_external_storage">External storage not found</string>
 
@@ -78,9 +78,9 @@
     <string name="navigation_drawer_contact">Contact</string>
 
     <string name="account_list_empty">Welcome to EteSync!</string>
-    <string name="accounts_global_sync_disabled">System-wide automatic synchronization is disabled</string>
-    <string name="accounts_global_sync_enable">Enable</string>
-    <string name="accounts_showcase_add">You need to add an account in order to use EteSync. Click here to add one...</string>
+    <string name="accounts_global_sync_disabled">System-wide automatic syncing is off</string>
+    <string name="accounts_global_sync_enable">Turn on</string>
+    <string name="accounts_showcase_add">You need to add an account in order to use EteSync. Click here to add one…</string>
     <string name="accounts_missing_permissions">Missing permissions: %s</string>
 
     <!-- AccountUpdateService -->
@@ -91,19 +91,19 @@
     <string name="app_settings_notification_settings">Notification settings</string>
     <string name="app_settings_notification_settings_summary">Manage notification channels and their settings</string>
     <string name="app_settings_reset_hints">Reset hints</string>
-    <string name="app_settings_reset_hints_summary">Re-enables hints which have been dismissed previously</string>
+    <string name="app_settings_reset_hints_summary">Reactivates dismissed hints</string>
     <string name="app_settings_reset_hints_success">All hints will be shown again</string>
     <string name="app_settings_sync">Sync</string>
     <string name="app_settings_prefer_tasksorg">Prefer Tasks.org tasks provider</string>
     <string name="app_settings_prefer_tasksorg_on">Will sync tasks with Tasks.org if available</string>
     <string name="app_settings_prefer_tasksorg_off">Will sync tasks with OpenTasks if available</string>
-    <string name="app_settings_prefer_tasksorg_snack">You may need to remove and re-add your account for these changes to take effect.</string>
+    <string name="app_settings_prefer_tasksorg_snack">Remove and re-add your account if you don't see the changes right away.</string>
     <string name="app_settings_connection">Connection</string>
     <string name="app_settings_override_proxy">Override proxy settings</string>
     <string name="app_settings_override_proxy_on">Use custom proxy settings</string>
     <string name="app_settings_override_proxy_off">Use system default proxy settings</string>
-    <string name="app_settings_override_proxy_host">HTTP proxy host name</string>
-    <string name="app_settings_override_proxy_port">HTTP proxy port</string>
+    <string name="app_settings_override_proxy_host">HTTPS proxy host name</string>
+    <string name="app_settings_override_proxy_port">HTTPS proxy port</string>
     <string name="app_settings_security">Security</string>
     <string name="app_settings_distrust_system_certs">Distrust system certificates</string>
     <string name="app_settings_distrust_system_certs_on">System and user-added CAs won\'t be trusted</string>
@@ -113,19 +113,19 @@
     <string name="app_settings_reset_certificates_success">All custom certificates have been cleared</string>
     <string name="app_settings_debug">Debugging</string>
     <string name="app_settings_log_to_external_storage">Log to file</string>
-    <string name="app_settings_log_to_external_storage_on">Disable to hide the notification and delete the logs</string>
-    <string name="app_settings_log_to_external_storage_off">Enable to save log messages to file</string>
+    <string name="app_settings_log_to_external_storage_on">Turn off to hide the notification and delete the logs</string>
+    <string name="app_settings_log_to_external_storage_off">Turn on to save log messages to file</string>
     <string name="app_settings_log_verbose">Verbose logging</string>
-    <string name="app_settings_log_verbose_summary">Verbose logs may contain private information</string>
+    <string name="app_settings_log_verbose_summary">Verbose logs may contain private info</string>
     <string name="app_settings_show_debug_info">Show debug info</string>
-    <string name="app_settings_show_debug_info_details">View/share software and configuration details</string>
+    <string name="app_settings_show_debug_info_details">View/share software and setup details</string>
     <string name="app_settings_force_language">Force Language</string>
     <string name="app_settings_force_language_default">Auto</string>
     <string name="app_settings_change_notification">Show change notifications</string>
 
     <!-- AccountActivity -->
-    <string name="account_synchronize_now">Synchronize now</string>
-    <string name="account_synchronizing_now">Synchronizing now</string>
+    <string name="account_synchronize_now">Sync now</string>
+    <string name="account_synchronizing_now">Syncing…</string>
     <string name="account_settings">Account settings</string>
     <string name="account_delete">Remove account</string>
     <string name="account_show_fingerprint">Show Fingerprint</string>
@@ -133,7 +133,7 @@
     <string name="account_delete_confirmation_text">All local copies of address books, calendars and task lists will be deleted.</string>
     <string name="account_delete_collection_last_title">Can\'t delete last collection</string>
     <string name="account_delete_collection_last_text">Deleting the last collection is not allowed, please create a new one if you\'d like to delete this one.</string>
-    <string name="account_showcase_view_collection">You can click on an item to view the collection. From there you can view the journal, import, and much more...</string>
+    <string name="account_showcase_view_collection">You can click on an item to view the collection. From there you can view the journal, import, and much more…</string>
     <string name="account_click_install_tasks">Click here to install OpenTasks!</string>
     <string name="account_tasks_not_showing">* Not syncing tasks (install a provider)</string>
 
@@ -149,22 +149,22 @@
     <string name="edit_owner_only">Only the owner of this collection (%s) is allowed to edit it.</string>
     <string name="members_old_journals_not_allowed">Sharing of old-style journals is not allowed. In order to share this journal, create a new one, and copy its contents over using the \"import\" dialog. If you are experiencing any issues, please contact support.</string>
     <string name="use_native_apps_title">Did you know?</string>
-    <string name="use_native_apps_body">EteSync seamlessly integrates with Android, so to use it, just use your existing address book and calendar apps!\n\nFor more information, please check out the user guide.</string>
+    <string name="use_native_apps_body">EteSync integrates with your existing address book and calendar apps.\n\nPlease check out the user guide for more info.</string>
 
     <!-- CollectionMembers -->
     <string name="collection_members_title">Members</string>
-    <string name="collection_members_list_loading">Loading members...</string>
+    <string name="collection_members_list_loading">Loading members…</string>
     <string name="collection_members_list_empty">No members</string>
     <string name="collection_members_add">Add member</string>
     <string name="collection_members_add_error">Error adding member</string>
     <string name="collection_members_adding">Adding member</string>
     <string name="trust_fingerprint_title">Verify security fingerprint</string>
     <string name="trust_fingerprint_body">Verify %s\'s security fingerprint to ensure the encryption is secure.</string>
-    <string name="collection_members_error_user_not_found">User (%s) not found. Have they setup their encryption password from one of the apps?</string>
+    <string name="collection_members_error_user_not_found">Could not find the user \"%s\". Has the user set up an encryption password from one of the apps?</string>
     <string name="collection_members_removing">Removing member</string>
-    <string name="collection_members_remove_error">Error removing member</string>
+    <string name="collection_members_remove_error">Could not remove member</string>
     <string name="collection_members_remove_title">Remove member</string>
-    <string name="collection_members_remove">Would you like to revoke %s\'s access?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
+    <string name="collection_members_remove">Would you like to revoke %s\'s access?\nA malicious user could retain access to their encryption keys. Please refer to the FAQ for more info.</string>
 
     <!-- JournalItemActivity -->
     <string name="about">About</string>
@@ -173,7 +173,7 @@
     <string name="journal_item_attendees">Attendees</string>
     <string name="journal_item_reminders">Reminders</string>
     <string name="journal_item_phone">Phone</string>
-    <string name="journal_item_email">Email</string>
+    <string name="journal_item_email">E-mail</string>
     <string name="journal_item_organization">Organization</string>
     <string name="journal_item_job_description">Job Description</string>
     <string name="journal_item_impp">Instant Messaging</string>
@@ -187,28 +187,28 @@
     <string name="journal_item_member">Member</string>
     <string name="journal_item_member_count">Member Count</string>
     <string name="journal_item_restore_action">Restore state</string>
-    <string name="journal_item_restore_dialog_body">Successfully restored the entry to previous state.</string>
+    <string name="journal_item_restore_dialog_body">Entry restored to previous state.</string>
 
 
     <!-- PermissionsActivity -->
     <string name="permissions_title">EteSync permissions</string>
-    <string name="permissions_calendar">Calendar permissions</string>
-    <string name="permissions_calendar_details">To synchronize calendar events with your local calendars, EteSync needs to access your calendars.</string>
+    <string name="permissions_calendar">Calendar permission</string>
+    <string name="permissions_calendar_details">Grant calendar access to sync calendar events with your local calendars.</string>
     <string name="permissions_calendar_request">Request calendar permissions</string>
-    <string name="permissions_contacts">Contacts permissions</string>
-    <string name="permissions_contacts_details">To synchronize address books with your local contacts, EteSync needs to access your contacts.</string>
-    <string name="permissions_contacts_request">Request contacts permissions</string>
-    <string name="permissions_opentasks">OpenTasks permissions</string>
-    <string name="permissions_opentasks_details">To synchronize tasks with your local task lists, EteSync needs to access OpenTasks.</string>
-    <string name="permissions_opentasks_request">Request OpenTasks permissions</string>
-    <string name="permissions_tasks_org">Tasks.org permissions</string>
-    <string name="permissions_tasks_org_details">To synchronize tasks with your local task lists, EteSync needs to access Tasks.org.</string>
-    <string name="permissions_tasks_org_request">Request Tasks.org permissions</string>
+    <string name="permissions_contacts">Contact permission</string>
+    <string name="permissions_contacts_details">Grant contact access to sync address books with your local contacts.</string>
+    <string name="permissions_contacts_request">Request contact permission</string>
+    <string name="permissions_opentasks">OpenTasks permission</string>
+    <string name="permissions_opentasks_details">Grant access to OpenTasks to sync tasks with your local task lists.</string>
+    <string name="permissions_opentasks_request">Request OpenTasks permission</string>
+    <string name="permissions_tasks_org">Tasks.org permission</string>
+    <string name="permissions_tasks_org_details">Grant access to Tasks.org to sync tasks with your local task lists.</string>
+    <string name="permissions_tasks_org_request">Request Tasks.org permission</string>
 
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
-    <string name="login_email_address">Email</string>
-    <string name="login_email_address_error">Valid email address required</string>
+    <string name="login_email_address">E-mail</string>
+    <string name="login_email_address_error">Enter a valid e-mail address</string>
     <string name="login_password">Password</string>
     <string name="login_custom_server">EteSync Server URL</string>
     <string name="login_custom_server_error">Invalid URL found, did you forget to include https://?</string>
@@ -217,7 +217,7 @@
     <string name="login_encryption_set_new_password">Please set your encryption password below, and make sure you got it right, as it *can\'t* be recovered if lost!</string>
     <string name="login_encryption_enter_password">You are logged in as \"%s\". Please enter your encryption password to continue, or log out from the side menu.</string>
     <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be recovered if wrong!</string>
-    <string name="login_encryption_extra_info">* This password is used to encrypt your data, unlike the previous one, which is used to log into the service.\nYou are asked to choose a separate encryption password for security reasons. For more information, please refer to the FAQ at: %s</string>
+    <string name="login_encryption_extra_info">* This password is used to encrypt your data, unlike the previous one, which is used to log into the service.\nYou are asked to choose a separate encryption password for security reasons. For more info, please refer to the FAQ at: %s</string>
     <string name="login_password_required">Password required</string>
     <string name="login_login">Log In</string>
     <string name="login_signup">Sign Up</string>
@@ -227,40 +227,40 @@
     <string name="login_enter_encryption_details">Secret Encryption Password</string>
     <string name="login_encryption_account_label">Account:</string>
     <string name="login_service_details_description">This is your login password, *not* your encryption password!</string>
-    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_forgot_password">Forgot your password?</string>
 
-    <string name="login_configuration_detection">Configuration detection</string>
+    <string name="login_configuration_detection">Setup detection</string>
     <string name="login_querying_server">Please wait, querying server…</string>
-    <string name="login_wrong_username_or_password">Couldn\'t authenticate (probably wrong username or password).\nHave you registered?</string>
+    <string name="login_wrong_username_or_password">Could not log in (probably wrong username or password).\nHave you registered?</string>
     <string name="login_view_logs">View logs</string>
 
     <string name="login_encryption_setup_title">Setting up encryption</string>
     <string name="login_encryption_setup">Please wait, setting up encryption…</string>
 
-    <string name="account_creation_failed">Account creation failed</string>
+    <string name="account_creation_failed">Could not create account</string>
     <string name="wrong_encryption_password">Wrong encryption password</string>
-    <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\nPlease note that the username is case sensitive, so please also try different capitalizations, for example make the first character uppercase.\n\nError: %s</string>
+    <string name="wrong_encryption_password_content">Could not access your account. Most likely you entered the wrong encryption password.\nPlease note that the username is case sensitive, so please also try different capitalizations, for example make the first character uppercase.\n\nError: %s</string>
 
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Change Encryption Password</string>
-    <string name="change_encryption_password_extra_info">Please don\'t use this tool if you believe your encryption password has been compromised. Contact support instead.</string>
+    <string name="change_encryption_password_extra_info">Please don\'t use this tool if you believe your encryption password is in the wrong hands. Contact support instead.</string>
     <string name="change_encryption_password_new_password">New encryption Password</string>
     <string name="change_encryption_password_are_you_sure">Are you sure you would like to continue? The process can not be stopped half way or be undone, and may take a while to complete.</string>
     <string name="change_encryption_password_success_title">Encryption Password Change</string>
-    <string name="change_encryption_password_success_body">Encryption password has been successfully changed!</string>
+    <string name="change_encryption_password_success_body">Use the new encryption password to unlock your tasks next time</string>
 
     <!-- SetupUserInfoFragment -->
-    <string name="login_user_info_error_title">Error Setting User Info</string>
+    <string name="login_user_info_error_title">Could Not Set User Info</string>
 
     <!-- ImportFragment -->
     <string name="import_dialog_title">Import</string>
-    <string name="import_dialog_failed_title">Import Failed</string>
+    <string name="import_dialog_failed_title">Could not import data</string>
     <string name="import_dialog_failed_body">Reason: %s\nReport to developers?</string>
-    <string name="import_dialog_loading_file">Loading file (may take a while)...</string>
-    <string name="import_dialog_adding_entries">Adding entries...</string>
+    <string name="import_dialog_loading_file">Loading file (may take a while)…</string>
+    <string name="import_dialog_adding_entries">Adding entries…</string>
     <string name="import_dialog_success">Processed %1$d entries.\nAdded: %2$d\nChanged: %3$d\nSkipped (failed): %4$d</string>
-    <string name="import_permission_required">Reading storage permission is required for import.</string>
-    <string name="import_account_top_notice">Please choose an account to import all of its entries from.</string>
+    <string name="import_permission_required">Grant access to storage before importing.</string>
+    <string name="import_account_top_notice">Please choose an account to import all its entries from.</string>
     <string name="choose_file">Choose file</string>
 
     <!-- AccountSettingsActivity -->
@@ -269,13 +269,13 @@
     <string name="settings_account_dashboard">Account Dashboard</string>
     <string name="settings_manage_account_summary">Change your payment info, plan and other account settings</string>
     <string name="settings_encryption">Encryption</string>
-    <string name="settings_password">Authentication Password</string>
-    <string name="settings_password_summary">Use a different authentication password</string>
+    <string name="settings_password">Login Password</string>
+    <string name="settings_password_summary">Use a different login password</string>
     <string name="settings_enter_password">Enter your password:</string>
     <string name="settings_encryption_password">Encryption Password</string>
     <string name="settings_encryption_password_summary">Change your encryption password</string>
     <string name="settings_enter_encryption_password">Enter your encryption password:</string>
-    <string name="settings_sync">Synchronization</string>
+    <string name="settings_sync">Syncing</string>
     <string name="settings_sync_interval">Sync interval</string>
     <string name="settings_sync_summary_manually">Only manually</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s and immediately on local changes</string>
@@ -296,13 +296,13 @@
         <item>Every 4 hours</item>
         <item>Once a day</item>
     </string-array>
-    <string name="settings_sync_wifi_only">Sync over WiFi only</string>
-    <string name="settings_sync_wifi_only_on">Synchronization is restricted to WiFi connections</string>
+    <string name="settings_sync_wifi_only">Only sync over Wi-Fi</string>
+    <string name="settings_sync_wifi_only_on">Syncing is restricted to Wi-Fi connections</string>
     <string name="settings_sync_wifi_only_off">Connection type is not taken into consideration</string>
-    <string name="settings_sync_wifi_only_ssid">WiFi SSID restriction</string>
-    <string name="settings_sync_wifi_only_ssid_on">Will only synchronize over %s</string>
-    <string name="settings_sync_wifi_only_ssid_off">All WiFi connections may be used</string>
-    <string name="settings_sync_wifi_only_ssid_message">Enter the name of a WiFi network (SSID) to restrict synchronization to this network, or leave blank for all WiFi connections.</string>
+    <string name="settings_sync_wifi_only_ssid">Wi-Fi SSID restriction</string>
+    <string name="settings_sync_wifi_only_ssid_on">Will only sync over %s</string>
+    <string name="settings_sync_wifi_only_ssid_off">All Wi-Fi connections may be used</string>
+    <string name="settings_sync_wifi_only_ssid_message">Enter the name of a Wi-Fi network (SSID) if you want to restrict syncing to a network.</string>
     <string name="settings_carddav">Contacts</string>
     <string name="settings_caldav">Calendar</string>
     <string name="settings_taskdav">Tasks</string>
@@ -320,7 +320,7 @@
     <string name="create_collection_color">Set the collection\'s color</string>
     <string name="create_collection_creating">Creating collection</string>
     <string name="create_collection_display_name">Display name (title) of this collection:</string>
-    <string name="create_collection_display_name_required">Title is required</string>
+    <string name="create_collection_display_name_required">Add a title</string>
     <string name="create_collection_description">Description (optional):</string>
     <string name="view_collection_edit">Edit</string>
     <string name="view_collection_import">Import</string>
@@ -333,30 +333,30 @@
 
     <!-- JournalViewer -->
     <string name="journal_entries_list_empty">Journal is empty.\n(Maybe it\'s still syncing?)</string>
-    <string name="journal_entries_loading">Loading journal entries...</string>
+    <string name="journal_entries_loading">Loading journal entries…</string>
 
     <!-- ExceptionInfoFragment -->
-    <string name="exception">An error has occurred.</string>
-    <string name="exception_httpexception">An HTTP error has occurred.</string>
-    <string name="exception_ioexception">An I/O error has occurred.</string>
+    <string name="exception">An error occurred.</string>
+    <string name="exception_httpexception">An HTTP error occurred.</string>
+    <string name="exception_ioexception">An I/O error occurred.</string>
     <string name="exception_show_details">Show details</string>
 
     <!-- sync errors and DebugInfoActivity -->
     <string name="authority_log_provider" translatable="false">com.etesync.syncadapter.log</string>
     <string name="debug_info_title">Debug info</string>
-    <string name="debug_info_more_data_shared">Clicking share will open the email app with the data below, as well as some additional debug information, attached. It may contain some sensitive information, so please review it before sending.</string>
+    <string name="debug_info_more_data_shared">Clicking \"Share\" will open the e-mail app with the data below, as well as some additional debug info, attached. It may contain some sensitive info, so please review it before sending.</string>
     <string name="sync_error_permissions">EteSync permissions</string>
     <string name="sync_error_permissions_text">Additional permissions required</string>
-    <string name="sync_error_calendar">Calendar sync failed (%s)</string>
-    <string name="sync_error_contacts">Contacts sync failed (%s)</string>
-    <string name="sync_error_tasks">Tasks sync failed (%s)</string>
+    <string name="sync_error_calendar">Could not sync calendar (%s)</string>
+    <string name="sync_error_contacts">Could not sync contacts (%s)</string>
+    <string name="sync_error_tasks">Fould not sync tasks (%s)</string>
     <string name="sync_error">Error while %s</string>
     <string name="sync_error_integrity">Integrity error while %s</string>
     <string name="sync_error_http_dav">Server error while %s</string>
     <string name="sync_error_unavailable">Could not connect to server while %s</string>
     <string name="sync_error_local_storage">Database error while %s</string>
-    <string name="sync_error_journal_readonly">Journal is read only</string>
-    <string name="sync_phase_prepare">preparing synchronization</string>
+    <string name="sync_error_journal_readonly">The journal is read-only</string>
+    <string name="sync_phase_prepare">preparing syncing</string>
     <string name="sync_phase_journals">syncronizing journals</string>
     <string name="sync_phase_prepare_fetch">preparing for fetch</string>
     <string name="sync_phase_prepare_local">preparing local entries</string>
@@ -366,15 +366,15 @@
     <string name="sync_phase_apply_local_entries">reapplying local entries</string>
     <string name="sync_phase_push_entries">pushing entries</string>
     <string name="sync_phase_post_processing">post processing</string>
-    <string name="sync_error_unauthorized">Authentication failed</string>
-    <string name="sync_error_user_inactive">User is inactive</string>
+    <string name="sync_error_unauthorized">Could not log in</string>
+    <string name="sync_error_user_inactive">Inactive user</string>
     <string name="sync_successfully_calendar" formatted="false">Calendar \"%s\" modified (%s)</string>
     <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
     <string name="sync_successfully_tasks" formatted="false">Tasks \"%s\" modified (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s modified.</string>
     <string name="sync_successfully_modified_full" formatted="false">%s added.\n%s updated.\n%s deleted.</string>
-    <string name="sync_journal_readonly">Journal \"%s\" is read only</string>
-    <string name="sync_journal_readonly_message">The journal is read only so all of your changes (%d) have been reverted.</string>
+    <string name="sync_journal_readonly">Journal \"%s\" is read-only</string>
+    <string name="sync_journal_readonly_message">The journal is read-only, so all of your changes (%d) have been reverted.</string>
 
 
     <!-- Calendar invites -->
@@ -386,13 +386,13 @@
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>
-    <string name="trust_certificate_unknown_certificate_found">EteSync has encountered an unknown certificate. Do you want to trust it?</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync has encountered an unknown certificate. Do you want to entrust it?</string>
 
     <!-- WebView activity-->
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="loading_error_title">Loading Error</string>
     <string name="loading_error_content">Refresh</string>
-    <string name="open_url_no_activity">Failed opening link: link is not supported!</string>
+    <string name="open_url_no_activity">Could not open link, as it is not supported.</string>
 
     <!-- Import Activity -->
     <string name="import_button_file">From File</string>
