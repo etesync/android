@@ -103,7 +103,7 @@
     <string name="app_settings_override_proxy_on">Use custom proxy settings</string>
     <string name="app_settings_override_proxy_off">Use system default proxy settings</string>
     <string name="app_settings_override_proxy_host">HTTPS proxy host name</string>
-    <string name="app_settings_override_proxy_port">HTTPS proxy port</string>
+    <string name="app_settings_override_proxy_port">HTTP(S) proxy port</string>
     <string name="app_settings_security">Security</string>
     <string name="app_settings_distrust_system_certs">Distrust system certificates</string>
     <string name="app_settings_distrust_system_certs_on">System and user-added CAs won\'t be trusted</string>
