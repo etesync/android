@@ -386,7 +386,7 @@
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>
-    <string name="trust_certificate_unknown_certificate_found">EteSync has encountered an unknown certificate. Do you want to entrust it?</string>
+    <string name="trust_certificate_unknown_certificate_found">An unknown certificate was received. Is it a certificate you have confirmed your trust of?</string>
 
     <!-- WebView activity-->
     <string name="loading">Loading…</string>
