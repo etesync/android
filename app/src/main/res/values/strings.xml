@@ -366,7 +366,7 @@
     <string name="sync_phase_apply_local_entries">reapplying local entries</string>
     <string name="sync_phase_push_entries">pushing entries</string>
     <string name="sync_phase_post_processing">post processing</string>
-    <string name="sync_error_unauthorized">Could not log in</string>
+    <string name="sync_error_unauthorized">The session expired</string>
     <string name="sync_error_user_inactive">Inactive user</string>
     <string name="sync_successfully_calendar" formatted="false">Calendar \"%s\" modified (%s)</string>
     <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
