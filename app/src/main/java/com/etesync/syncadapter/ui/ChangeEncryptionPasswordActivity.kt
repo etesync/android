@@ -175,8 +175,8 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
                 .setPositiveButton(android.R.string.yes) { _, _ ->
                     changePasswordDo(old_password, new_password)
                     progress = ProgressDialog(this)
-                    progress.setTitle(R.string.login_encryption_setup_title)
-                    progress.setMessage(getString(R.string.login_encryption_setup))
+                    progress.setTitle(R.string.setting_up_encryption)
+                    progress.setMessage(getString(R.string.setting_up_encryption_content))
                     progress.isIndeterminate = true
                     progress.setCanceledOnTouchOutside(false)
                     progress.setCancelable(false)

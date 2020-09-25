@@ -234,8 +234,8 @@
     <string name="login_wrong_username_or_password">Couldn\'t authenticate (probably wrong username or password).\nHave you registered?</string>
     <string name="login_view_logs">View logs</string>
 
-    <string name="login_encryption_setup_title">Setting up encryption</string>
-    <string name="login_encryption_setup">Please wait, setting up encryption…</string>
+    <string name="setting_up_encryption">Setting up encryption</string>
+    <string name="setting_up_encryption_content">Please wait, setting up encryption…</string>
 
     <string name="account_creation_failed">Account creation failed</string>
     <string name="wrong_encryption_password">Wrong encryption password</string>

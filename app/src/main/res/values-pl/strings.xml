@@ -179,8 +179,8 @@
     <string name="login_wrong_username_or_password">Nie można zweryfikować (prawdopodobnie zła nazwa użytkownika lub hasło).</string>
     <string name="login_view_logs">Zobacz logi</string>
 
-    <string name="login_encryption_setup_title">Ustawianie Szyfrowania</string>
-    <string name="login_encryption_setup">Proszę czekać, ustawianie szyfrowania…</string>
+    <string name="setting_up_encryption">Ustawianie Szyfrowania</string>
+    <string name="setting_up_encryption_content">Proszę czekać, ustawianie szyfrowania…</string>
 
     <string name="account_creation_failed">Tworzenie konta nie powiodło się</string>
 

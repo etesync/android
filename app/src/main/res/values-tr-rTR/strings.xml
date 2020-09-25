@@ -230,8 +230,8 @@
 \nHata: %s</string>
     <string name="wrong_encryption_password">Yanlış şifreleme parolası</string>
     <string name="account_creation_failed">Hesap oluşturma başarısız oldu</string>
-    <string name="login_encryption_setup">Lütfen bekleyin, şifreleme ayarlanıyor…</string>
-    <string name="login_encryption_setup_title">Şifrelemeyi ayarlama</string>
+    <string name="setting_up_encryption_content">Lütfen bekleyin, şifreleme ayarlanıyor…</string>
+    <string name="setting_up_encryption">Şifrelemeyi ayarlama</string>
     <string name="login_forgot_password">Parolanızı mı unuttunuz\?</string>
     <string name="login_service_details_description">Bu sizin oturum açma parolanızdır, şifreleme parolanız *değil*!</string>
     <string name="login_encryption_account_label">Hesap:</string>

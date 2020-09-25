@@ -101,8 +101,8 @@
     <string name="login_querying_server">Serverinformationen werden abgerufen. Bitte warten …</string>
     <string name="login_wrong_username_or_password">Authentifizierung fehlgeschlagen (vermutlich aufgrund eines falschen Nutzernamens oder Passworts).</string>
     <string name="login_view_logs">Logs anzeigen</string>
-    <string name="login_encryption_setup_title">Verschlüsselung einstellen</string>
-    <string name="login_encryption_setup">Bitte warten, Verschlüsselung wird eingestellt…</string>
+    <string name="setting_up_encryption">Verschlüsselung einstellen</string>
+    <string name="setting_up_encryption_content">Bitte warten, Verschlüsselung wird eingestellt…</string>
     <!-- AccountSettingsActivity -->
     <string name="settings_title">Einstellungen: %s</string>
     <string name="settings_authentication">Anmeldeinformationen</string>
