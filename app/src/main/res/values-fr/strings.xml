@@ -1,127 +1,195 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Aide</string>
-  <string name="manage_accounts">Gestion des comptes</string>
-  <string name="please_wait">SVP attendez ...</string>
-  <string name="send">Envoyer</string>
-  <!--startup dialogs-->
-  <string name="startup_battery_optimization">Optimisation de la batterie</string>
-  <string name="startup_dont_show_again">Ne plus afficher</string>
-  <!--AboutActivity-->
-  <string name="about_license_terms">Conditions d\'utilisation</string>
-  <string name="about_license_info_no_warranty">Ce programme est fourni sans AUCUNE GARANTIE. C\'est un logiciel libre, et vous êtes en droit de le redistribuer sous certaines conditions.</string>
-  <!--global settings-->
-  <string name="logging_to_external_storage">Se connecter au stockage externe: %s</string>
-  <string name="logging_to_external_storage_warning">Supprimer les journaux dès que possible!</string>
-  <string name="logging_couldnt_create_file">Impossible de créer le fichier journal externe: %s</string>
-  <string name="logging_no_external_storage">Stockage externe introuvable</string>
-  <!--AccountsActivity-->
-  <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
-  <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
-  <string name="navigation_drawer_about">A propos / Licence</string>
-  <string name="navigation_drawer_settings">Paramètres</string>
-  <string name="navigation_drawer_external_links">Liens externes</string>
-  <string name="navigation_drawer_website">Site Web</string>
-  <string name="navigation_drawer_faq">FAQ</string>
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <string name="app_settings">Paramètres</string>
-  <string name="app_settings_user_interface">Interface utilisateur</string>
-  <string name="app_settings_reset_hints">Réinitialiser les astuces</string>
-  <string name="app_settings_reset_hints_summary">Réactiver les astuces qui ont été vu précédemment</string>
-  <string name="app_settings_reset_hints_success">Toutes les astuces seront affichés à nouveau</string>
-  <string name="app_settings_connection">Connexion</string>
-  <string name="app_settings_override_proxy">Ignorer les paramètres proxy</string>
-  <string name="app_settings_override_proxy_on">Utiliser des paramètres proxy personnalisés</string>
-  <string name="app_settings_override_proxy_off">Utiliser les paramètres proxy du système</string>
-  <string name="app_settings_override_proxy_host">Nom de l\'hôte du proxy HTTP</string>
-  <string name="app_settings_override_proxy_port">Port du proxy HTTP</string>
-  <string name="app_settings_security">Sécurité</string>
-  <string name="app_settings_distrust_system_certs">Révoquer les certificats du système</string>
-  <string name="app_settings_distrust_system_certs_on">Les certificats du système et ceux ajoutés par l\'utilisateur ne seront pas  dignes de confiance</string>
-  <string name="app_settings_distrust_system_certs_off">Les certificats du système et ceux ajoutés par l\'utilisateur seront dignes de confiance (recommandé)</string>
-  <string name="app_settings_reset_certificates">Réinitialiser les certificats de (non)confiance</string>
-  <string name="app_settings_reset_certificates_summary">Réinitialiser la confiance de tous les certificats personnalisés</string>
-  <string name="app_settings_reset_certificates_success">Tous les certificats personnalisés ont été effacés</string>
-  <string name="app_settings_debug">Débogage</string>
-  <string name="app_settings_log_to_external_storage">Journaliser dans un fichier externe</string>
-  <string name="app_settings_log_to_external_storage_on">Journaliser sur le stockage externe (si disponible)</string>
-  <string name="app_settings_log_to_external_storage_off">Le fichier externe n\'est pas disponible.</string>
-  <string name="app_settings_show_debug_info">Afficher les infos de débogage</string>
-  <string name="app_settings_show_debug_info_details">Voir/partager l\'application et les détails de configuration</string>
-  <!--AccountActivity-->
-  <string name="account_synchronize_now">Synchroniser maintenant</string>
-  <string name="account_synchronizing_now">Synchronisation en cours</string>
-  <string name="account_settings">Paramètres du compte</string>
-  <string name="account_delete">Supprimer le compte</string>
-  <string name="account_delete_confirmation_title">Voulez-vous vraiment supprimer le compte?</string>
-  <string name="account_delete_confirmation_text">Toutes les copies locales des carnets d\'adresses, des calendriers et des listes de tâches seront supprimées.</string>
-  <!--PermissionsActivity-->
-  <string name="permissions_calendar">Autorisations calendrier</string>
-  <string name="permissions_calendar_request">Demande d\'autorisations d\'accéder au calendrier</string>
-  <string name="permissions_contacts">Autorisations contacts</string>
-  <string name="permissions_contacts_request">Demande d\'autorisations d\'accéder aux contacts</string>
-  <string name="permissions_opentasks">Autorisations OpenTasks</string>
-  <string name="permissions_opentasks_request">Demande d\'autorisations d\'accéder à OpenTasks</string>
-  <!--AddAccountActivity-->
-  <string name="login_title">Ajouter un compte</string>
-  <string name="login_email_address">Adresse mail</string>
-  <string name="login_email_address_error">Une adresse e-mail valide est requis</string>
-  <string name="login_password">Mot de passe</string>
-  <string name="login_password_required">Mot de passe requis</string>
-  <string name="login_back">Retour</string>
-  <string name="login_configuration_detection">Détection de la configuration</string>
-  <string name="login_querying_server">S\'il vous plaît patienter, nous interrogeons le serveur ...</string>
-  <string name="login_view_logs">Voir infos de débogage</string>
-  <!--AccountSettingsActivity-->
-  <string name="settings_title">Paramètres: %s</string>
-  <string name="settings_authentication">Authentification</string>
-  <string name="settings_password">Mot de passe</string>
-  <string name="settings_enter_password">Saisissez votre mot de passe :</string>
-  <string name="settings_sync">Synchronisation</string>
-  <string name="settings_sync_interval_contacts">Interval de synchronisation des carnets d\'adresses</string>
-  <string name="settings_sync_summary_manually">Manuellement</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s et immédiatement après un changement local</string>
-  <string name="settings_sync_summary_not_available">Indisponible</string>
-  <string name="settings_sync_interval_calendars">Interval de synchronisation des agendas</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Manuellement</item>
-    <item>Toutes les 15 minutes</item>
-    <item>Toutes les heures</item>
-    <item>Toutes les 2 heures</item>
-    <item>Toutes les 4 heures</item>
-    <item>Une fois par jour</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">Synchronisation en Wifi seulement</string>
-  <string name="settings_sync_wifi_only_on">La synchronisation est limitée aux connexions WiFi</string>
-  <string name="settings_sync_wifi_only_off">Le type de connexion n\'est pas pris en charge</string>
-  <string name="settings_sync_wifi_only_ssid">Restriction WiFi SSID</string>
-  <string name="settings_sync_wifi_only_ssid_on">Sera seulement synchroniser avec %s</string>
-  <string name="settings_sync_wifi_only_ssid_off">Toutes les connexions WiFi peuvent être utilisées</string>
-  <string name="settings_sync_wifi_only_ssid_message">Entrez le nom d\'un réseau WiFi (SSID) pour restreindre la synchronisation à ce réseau, ou laisser vide pour autoriser toutes les connexions WiFi.</string>
-  <!--collection management-->
-  <string name="create_addressbook">Créer un carnet d\'adresses</string>
-  <string name="create_addressbook_display_name_hint">Mon carnet d\'adresses</string>
-  <string name="create_collection_creating">Création collection</string>
-  <string name="create_collection_display_name">Le nom affiché (titre) pour cette collection:</string>
-  <string name="create_collection_display_name_required">Titre requis</string>
-  <string name="create_collection_description">Description (facultatif)</string>
-  <string name="create_collection_create">Créer</string>
-  <string name="delete_collection">Supprimer la collection</string>
-  <string name="delete_collection_confirm_title">Êtes-vous sur?</string>
-  <string name="delete_collection_confirm_warning">Cette collection (%s) et toutes ses données seront supprimées du serveur.</string>
-  <string name="delete_collection_deleting_collection">Suppression de la collection</string>
-  <!--ExceptionInfoFragment-->
-  <string name="exception">Une erreur est survenue.</string>
-  <string name="exception_httpexception">Une erreur HTTP est survenue.</string>
-  <string name="exception_ioexception">Une erreur I/O est survenue.</string>
-  <string name="exception_show_details">Voir détails</string>
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">Infos de débogage</string>
-  <string name="sync_error_calendar">Échec de la synchronisation du calendrier (%s)</string>
-  <string name="sync_error">Erreur durant %s</string>
-  <string name="sync_error_http_dav">Erreur de serveur durant %s</string>
-  <string name="sync_error_local_storage">Erreur de base de donnée durant %s</string>
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">Aide</string>
+    <string name="manage_accounts">Gestion des comptes</string>
+    <string name="please_wait">Veuillez patienter…</string>
+    <string name="send">Envoyer</string>
+    <!--startup dialogs-->
+    <string name="startup_battery_optimization">Optimisation de la batterie</string>
+    <string name="startup_dont_show_again">Ne plus afficher</string>
+    <!--AboutActivity-->
+    <string name="about_license_terms">Conditions d\'utilisation</string>
+    <string name="about_license_info_no_warranty">Ce programme est fourni sans AUCUNE GARANTIE. C\'est un logiciel libre, et vous êtes en droit de le redistribuer sous certaines conditions.</string>
+    <!--global settings-->
+    <string name="logging_to_external_storage">Journalisation sur le stockage externe : %s</string>
+    <string name="logging_to_external_storage_warning">Supprimer les journaux dès que possible</string>
+    <string name="logging_couldnt_create_file">Impossible de créer le fichier journal externe : %s</string>
+    <string name="logging_no_external_storage">Stockage externe introuvable</string>
+    <!--AccountsActivity-->
+    <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
+    <string name="navigation_drawer_about">A propos / Licence</string>
+    <string name="navigation_drawer_settings">Paramètres</string>
+    <string name="navigation_drawer_external_links">Liens externes</string>
+    <string name="navigation_drawer_website">Site Web</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <string name="app_settings">Paramètres</string>
+    <string name="app_settings_user_interface">Interface utilisateur</string>
+    <string name="app_settings_reset_hints">Réinitialiser les astuces</string>
+    <string name="app_settings_reset_hints_summary">Réactiver les astuces qui ont été vu précédemment</string>
+    <string name="app_settings_reset_hints_success">Toutes les astuces seront affichés à nouveau</string>
+    <string name="app_settings_connection">Connexion</string>
+    <string name="app_settings_override_proxy">Ignorer les paramètres proxy</string>
+    <string name="app_settings_override_proxy_on">Utiliser des paramètres proxy personnalisés</string>
+    <string name="app_settings_override_proxy_off">Utiliser les paramètres proxy du système</string>
+    <string name="app_settings_override_proxy_host">Nom de l\'hôte du proxy HTTP</string>
+    <string name="app_settings_override_proxy_port">Port du proxy HTTP</string>
+    <string name="app_settings_security">Sécurité</string>
+    <string name="app_settings_distrust_system_certs">Révoquer les certificats du système</string>
+    <string name="app_settings_distrust_system_certs_on">Les certificats du système et ceux ajoutés par l\'utilisateur ne seront pas  dignes de confiance</string>
+    <string name="app_settings_distrust_system_certs_off">Les certificats du système et ceux ajoutés par l\'utilisateur seront dignes de confiance (recommandé)</string>
+    <string name="app_settings_reset_certificates">Réinitialiser les certificats de (non)confiance</string>
+    <string name="app_settings_reset_certificates_summary">Réinitialiser la confiance de tous les certificats personnalisés</string>
+    <string name="app_settings_reset_certificates_success">Tous les certificats personnalisés ont été effacés</string>
+    <string name="app_settings_debug">Débogage</string>
+    <string name="app_settings_log_to_external_storage">Journaliser dans un fichier externe</string>
+    <string name="app_settings_log_to_external_storage_on">Journaliser sur le stockage externe (si disponible)</string>
+    <string name="app_settings_log_to_external_storage_off">Activer pour enregistrer les messages de journalisation sur le fichier</string>
+    <string name="app_settings_show_debug_info">Afficher les infos de débogage</string>
+    <string name="app_settings_show_debug_info_details">Voir/partager l\'application et les détails de configuration</string>
+    <!--AccountActivity-->
+    <string name="account_synchronize_now">Synchroniser maintenant</string>
+    <string name="account_synchronizing_now">Synchronisation en cours</string>
+    <string name="account_settings">Paramètres du compte</string>
+    <string name="account_delete">Supprimer le compte</string>
+    <string name="account_delete_confirmation_title">Voulez-vous vraiment supprimer le compte \?</string>
+    <string name="account_delete_confirmation_text">Toutes les copies locales des carnets d\'adresses, des calendriers et des listes de tâches seront supprimées.</string>
+    <!--PermissionsActivity-->
+    <string name="permissions_calendar">Autorisations calendrier</string>
+    <string name="permissions_calendar_request">Demande d\'autorisations d\'accéder au calendrier</string>
+    <string name="permissions_contacts">Autorisations contacts</string>
+    <string name="permissions_contacts_request">Demande d\'autorisations d\'accéder aux contacts</string>
+    <string name="permissions_opentasks">Autorisations OpenTasks</string>
+    <string name="permissions_opentasks_request">Demande d\'autorisations d\'accéder à OpenTasks</string>
+    <!--AddAccountActivity-->
+    <string name="login_title">Ajouter un compte</string>
+    <string name="login_email_address">Adresse courriel</string>
+    <string name="login_email_address_error">Une adresse courriel valide est requise</string>
+    <string name="login_password">Mot de passe</string>
+    <string name="login_password_required">Mot de passe requis</string>
+    <string name="login_back">Retour</string>
+    <string name="login_configuration_detection">Détection de la configuration</string>
+    <string name="login_querying_server">Veuillez patienter, nous interrogeons le serveur…</string>
+    <string name="login_view_logs">Voir infos de débogage</string>
+    <!--AccountSettingsActivity-->
+    <string name="settings_title">Paramètres : %s</string>
+    <string name="settings_authentication">Authentification</string>
+    <string name="settings_password">Mot de passe</string>
+    <string name="settings_enter_password">Saisissez votre mot de passe :</string>
+    <string name="settings_sync">Synchronisation</string>
+    <string name="settings_sync_interval_contacts">Interval de synchronisation des carnets d\'adresses</string>
+    <string name="settings_sync_summary_manually">Manuellement</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s et immédiatement après un changement local</string>
+    <string name="settings_sync_summary_not_available">Indisponible</string>
+    <string name="settings_sync_interval_calendars">Interval de synchronisation des agendas</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Manuellement</item>
+        <item>Toutes les 15 minutes</item>
+        <item>Toutes les heures</item>
+        <item>Toutes les 2 heures</item>
+        <item>Toutes les 4 heures</item>
+        <item>Une fois par jour</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">Synchronisation en Wifi seulement</string>
+    <string name="settings_sync_wifi_only_on">La synchronisation est limitée aux connexions WiFi</string>
+    <string name="settings_sync_wifi_only_off">Le type de connexion n\'est pas pris en charge</string>
+    <string name="settings_sync_wifi_only_ssid">Restriction WiFi SSID</string>
+    <string name="settings_sync_wifi_only_ssid_on">Sera seulement synchroniser avec %s</string>
+    <string name="settings_sync_wifi_only_ssid_off">Toutes les connexions WiFi peuvent être utilisées</string>
+    <string name="settings_sync_wifi_only_ssid_message">Entrez le nom d\'un réseau WiFi (SSID) pour restreindre la synchronisation à ce réseau, ou laisser vide pour autoriser toutes les connexions WiFi.</string>
+    <!--collection management-->
+    <string name="create_addressbook">Créer un carnet d\'adresses</string>
+    <string name="create_addressbook_display_name_hint">Mon carnet d\'adresses</string>
+    <string name="create_collection_creating">Création collection</string>
+    <string name="create_collection_display_name">Le nom affiché (titre) pour cette collection :</string>
+    <string name="create_collection_display_name_required">Titre requis</string>
+    <string name="create_collection_description">Description (facultatif) :</string>
+    <string name="create_collection_create">Créer</string>
+    <string name="delete_collection">Supprimer</string>
+    <string name="delete_collection_confirm_title">Êtes-vous sûr·e \?</string>
+    <string name="delete_collection_confirm_warning">Cette collection (%s) et toutes ses données seront supprimées du serveur.</string>
+    <string name="delete_collection_deleting_collection">Suppression de la collection</string>
+    <!--ExceptionInfoFragment-->
+    <string name="exception">Une erreur est survenue.</string>
+    <string name="exception_httpexception">Une erreur HTTP est survenue.</string>
+    <string name="exception_ioexception">Une erreur I/O est survenue.</string>
+    <string name="exception_show_details">Voir détails</string>
+    <!--sync errors and DebugInfoActivity-->
+    <string name="debug_info_title">Infos de débogage</string>
+    <string name="sync_error_calendar">Échec de la synchronisation du calendrier (%s)</string>
+    <string name="sync_error">Erreur durant %s</string>
+    <string name="sync_error_http_dav">Erreur de serveur durant %s</string>
+    <string name="sync_error_local_storage">Erreur de base de donnée durant %s</string>
+    <!--cert4android-->
+    <string name="trust_fingerprint_title">Vérifier l’empreinte de sécurité</string>
+    <string name="collection_members_adding">Ajout d’un membre</string>
+    <string name="collection_members_add_error">Erreur lors de l’ajout du membre</string>
+    <string name="collection_members_add">Ajouter un membre</string>
+    <string name="collection_members_list_empty">Aucun membre</string>
+    <string name="collection_members_list_loading">Chargement des membres…</string>
+    <string name="collection_members_title">Membres</string>
+    <string name="not_allowed_title">Non autorisé</string>
+    <string name="show_fingperprint_title">Mon empreinte</string>
+    <string name="account_click_install_tasks">Cliquez ici pour installer OpenTasks !</string>
+    <string name="account_delete_collection_last_title">Impossible de supprimer la dernière collection</string>
+    <string name="account_show_fingerprint">Afficher l’empreinte</string>
+    <string name="app_settings_prefer_tasksorg_snack">Vous devrez peut-être supprimer et rajouter votre compte pour que ces modifications prennent effet.</string>
+    <string name="app_settings_prefer_tasksorg_off">Se synchronisera avec OpenTasks si disponible</string>
+    <string name="app_settings_prefer_tasksorg_on">Se synchronisera avec Tasks.org si disponible</string>
+    <string name="app_settings_prefer_tasksorg">Préférer le fournisseur Tasks.org</string>
+    <string name="app_settings_sync">Synchroniser</string>
+    <string name="app_settings_notification_settings_summary">Gérer les canaux de notification et leurs paramètres</string>
+    <string name="app_settings_notification_settings">Paramètres de notification</string>
+    <string name="accounts_missing_permissions">Permissions manquantes : %s</string>
+    <string name="accounts_showcase_add">Vous devez ajouter un compte pour utiliser EteSync. Cliquez ici pour en ajouter un…</string>
+    <string name="accounts_global_sync_enable">Activer</string>
+    <string name="account_list_empty">Bienvenue sur EteSync !</string>
+    <string name="navigation_drawer_contact">Contact</string>
+    <string name="navigation_drawer_report_issue">Signaler un problème</string>
+    <string name="navigation_drawer_guide">Guide d’utilisation</string>
+    <string name="navigation_drawer_subtitle">Adaptateur de synchro sécurisé</string>
+    <string name="startup_vendor_specific_bugs_open_faq">Ouvrir la FAQ</string>
+    <string name="logging_davdroid_file_logging">La journalisation de fichiers EteSync est activée</string>
+    <string name="startup_development_version_give_feedback">Envoyer des remarques</string>
+    <string name="startup_battery_optimization_disable">Éteindre pour EteSync</string>
+    <string name="tourguide_title">Le saviez-vous \?</string>
+    <string name="address_books_authority_title">Carnet d’adresses</string>
+    <string name="account_title_address_book">Carnet d’adresses EteSync</string>
+    <string name="view_collection_edit">Modifier</string>
+    <string name="edit_collection">Modifier la collection</string>
+    <string name="edit_owner_only">Seul le propriétaire de cette collection (%s) est autorisé à la modifier.</string>
+    <string name="app_settings_change_notification">Afficher les notifications de changement</string>
+    <string name="app_settings_force_language_default">Auto</string>
+    <string name="app_settings_force_language">Forcer la langue</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">Vous avez été invité·e à l\'évènement suivant :
+\n
+\n% s
+\nQuand : %s
+\nOù : %s
+\nParticipants : %s
+\n
+\n-
+\nEnvoyé par EteSync – synchronisation sécurisée, chiffrée de bout en bout et privée des données.
+\nObtenez-le sur https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_subject" formatted="false">Invitation : %s @ %s</string>
+    <string name="calendar_attendees_send_email_action">Envoyer des invitations</string>
+    <string name="debug_info_more_data_shared">Cliquez sur Partager pour ouvrir l\'application de messagerie avec les données ci-dessous, ainsi que des informations de débogage supplémentaires, jointes. Il peut contenir des informations sensibles, veuillez donc l\'examiner avant de l\'envoyer.</string>
+    <string name="journal_item_email">Courriel</string>
+    <string name="crash_email_body">Si possible, veuillez inclure toute autre information pertinente telle que ce que vous avez fait pour déclencher cette erreur.</string>
+    <string name="crash_email_subject">Informations sur le débogage EteSync</string>
+    <string name="crash_title">EteSync a planté !</string>
+    <string name="notification_channel_sync_status_desc">Messages d’état informatifs comme le résumé des modifications de synchronisation</string>
+    <string name="notification_channel_sync_status">Messages d’état</string>
+    <string name="notification_channel_sync_warnings_desc">Problèmes de synchronisation non fatals tels que les modifications ignorées des collections en lecture seule</string>
+    <string name="notification_channel_sync_warnings">Alertes de synchronisation</string>
+    <string name="notification_channel_sync_errors_desc">Erreurs importantes qui arrêtent la synchronisation, telles que des réponses inattendues du serveur</string>
+    <string name="notification_channel_sync_errors">Erreurs de synchronisation</string>
+    <string name="notification_channel_sync">Synchronisation</string>
+    <string name="notification_channel_general">Autres messages importants</string>
+    <string name="notification_channel_debugging">Débogage</string>
+    <string name="notification_channel_crash_reports">Rapports de plantage</string>
+    <string name="app_name">EteSync</string>
 </resources>
