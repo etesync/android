@@ -18,11 +18,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
@@ -32,18 +31,12 @@ import com.etesync.syncadapter.resource.LocalGroup
 import java.util.*
 
 
-class LocalContactImportFragment : Fragment() {
-
-    private lateinit var account: Account
-    private lateinit var info: CollectionInfo
+class LocalContactImportFragment(private val account: Account, private val uid: String) : Fragment() {
     private var recyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
-        account = arguments!!.getParcelable(KEY_ACCOUNT)
-        info = arguments!!.getSerializable(KEY_COLLECTION_INFO) as CollectionInfo
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -134,15 +127,16 @@ class LocalContactImportFragment : Fragment() {
             if (progressDialog.isShowing && !activity.isDestroyed) {
                 progressDialog.dismiss()
             }
-            (activity as ResultFragment.OnImportCallback).onImportResult(result)
+            onImportResult(result)
         }
 
         private fun importContacts(localAddressBook: LocalAddressBook): ResultFragment.ImportResult {
             val result = ResultFragment.ImportResult()
             try {
-                val addressBook = LocalAddressBook.findByUid(context!!,
-                        context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
-                        account, info.uid!!)!!
+                val addressBook = LocalAddressBook.findByUid(requireContext(),
+                        requireContext().contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)!!,
+                        account, uid)
+                        ?: throw Exception("Could not find address book")
                 val localContacts = localAddressBook.findAllContacts()
                 val localGroups = localAddressBook.findAllGroups()
                 val oldIdToNewId = HashMap<Long, Long>()
@@ -211,6 +205,13 @@ class LocalContactImportFragment : Fragment() {
             }
 
             return result
+        }
+    }
+
+    fun onImportResult(importResult: ResultFragment.ImportResult) {
+        val fragment = ResultFragment.newInstance(importResult)
+        parentFragmentManager.commit(true) {
+            add(fragment, "importResult")
         }
     }
 
@@ -316,13 +317,7 @@ class LocalContactImportFragment : Fragment() {
     companion object {
 
         fun newInstance(account: Account, info: CollectionInfo): LocalContactImportFragment {
-            val frag = LocalContactImportFragment()
-            val args = Bundle(1)
-            args.putParcelable(KEY_ACCOUNT, account)
-            args.putSerializable(KEY_COLLECTION_INFO, info)
-            frag.arguments = args
-
-            return frag
+            return LocalContactImportFragment(account, info.uid!!)
         }
     }
 }

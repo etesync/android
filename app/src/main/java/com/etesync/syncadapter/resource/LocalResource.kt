@@ -10,6 +10,7 @@ package com.etesync.syncadapter.resource
 
 interface LocalResource<in TData: Any> {
     val uuid: String?
+    val fileName: String?
 
     /** True if doesn't exist on server yet, false otherwise.  */
     val isLocalOnly: Boolean
@@ -19,9 +20,11 @@ interface LocalResource<in TData: Any> {
 
     fun delete(): Int
 
-    fun prepareForUpload()
+    fun legacyPrepareForUpload(fileName: String?)
 
-    fun clearDirty(eTag: String)
+    fun prepareForUpload(fileName: String, uid: String)
+
+    fun clearDirty(eTag: String?)
 
     fun resetDeleted()
 }

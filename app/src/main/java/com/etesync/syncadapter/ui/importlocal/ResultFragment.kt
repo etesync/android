@@ -19,7 +19,7 @@ class ResultFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        result = arguments!!.getSerializable(KEY_RESULT) as ImportResult
+        result = requireArguments().getSerializable(KEY_RESULT) as ImportResult
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -32,7 +32,7 @@ class ResultFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         if (result!!.isFailed) {
-            return AlertDialog.Builder(activity!!)
+            return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.import_dialog_failed_title)
                     .setIcon(R.drawable.ic_error_dark)
                     .setMessage(getString(R.string.import_dialog_failed_body, result!!.e!!.localizedMessage))
@@ -70,10 +70,6 @@ class ResultFragment : DialogFragment() {
         override fun toString(): String {
             return "ResultFragment.ImportResult(total=" + this.total + ", added=" + this.added + ", updated=" + this.updated + ", e=" + this.e + ")"
         }
-    }
-
-    interface OnImportCallback {
-        fun onImportResult(importResult: ImportResult)
     }
 
     companion object {

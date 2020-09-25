@@ -147,6 +147,7 @@
     <string name="members_owner_only">Only the owner of this collection (%s) is allowed to view its members.</string>
     <string name="not_allowed_title">Not Allowed</string>
     <string name="edit_owner_only">Only the owner of this collection (%s) is allowed to edit it.</string>
+    <string name="edit_owner_only_anon">Only the owner of this collection is allowed to edit it.</string>
     <string name="members_old_journals_not_allowed">Sharing of old-style journals is not allowed. In order to share this journal, create a new one, and copy its contents over using the \"import\" dialog. If you are experiencing any issues, please contact support.</string>
     <string name="use_native_apps_title">Did you know?</string>
     <string name="use_native_apps_body">EteSync seamlessly integrates with Android, so to use it, just use your existing address book and calendar apps!\n\nFor more information, please check out the user guide.</string>
@@ -160,15 +161,27 @@
     <string name="collection_members_adding">Adding member</string>
     <string name="trust_fingerprint_title">Verify security fingerprint</string>
     <string name="trust_fingerprint_body">Verify %s\'s security fingerprint to ensure the encryption is secure.</string>
-    <string name="collection_members_error_user_not_found">User (%s) not found. Have they setup their encryption password from one of the apps?</string>
+    <string name="collection_members_error_user_not_found">User (%s) not found</string>
     <string name="collection_members_removing">Removing member</string>
     <string name="collection_members_remove_error">Error removing member</string>
     <string name="collection_members_remove_title">Remove member</string>
     <string name="collection_members_remove">Would you like to revoke %s\'s access?\nPlease be advised that a malicious user would potentially be able to retain access to encryption keys. Please refer to the FAQ for more information.</string>
+    <string name="collection_members_remove_admin">Removing access to admins is currently not supported.</string>
+    <string name="collection_members_no_access">Only admins are allowed to manage collection memberships. Would you like to leave the collection?</string>
+    <string name="collection_members_leave">Leave</string>
+
+    <!-- Invitations -->
+    <string name="invitations_title">Invitations</string>
+    <string name="invitations_loading">Loading invitations...</string>
+    <string name="invitations_list_empty">No invitations</string>
+    <string name="invitations_accept_reject_dialog">Would you like to accept or reject the invitation?</string>
+    <string name="invitations_accept">Accept</string>
+    <string name="invitations_reject">Reject</string>
 
     <!-- JournalItemActivity -->
     <string name="about">About</string>
     <string name="journal_item_tab_main">Main</string>
+    <string name="journal_item_tab_revisions">Revisions</string>
     <string name="journal_item_tab_raw">Raw</string>
     <string name="journal_item_attendees">Attendees</string>
     <string name="journal_item_reminders">Reminders</string>
@@ -207,8 +220,10 @@
 
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
+    <string name="login_username">Username</string>
+    <string name="login_username_error">Valid username required</string>
     <string name="login_email_address">Email</string>
-    <string name="login_email_address_error">Valid email address required</string>
+    <string name="login_email_address_error">Valid email required</string>
     <string name="login_password">Password</string>
     <string name="login_custom_server">EteSync Server URL</string>
     <string name="login_custom_server_error">Invalid URL found, did you forget to include https://?</string>
@@ -216,7 +231,7 @@
     <string name="login_encryption_password">Encryption Password</string>
     <string name="login_encryption_set_new_password">Please set your encryption password below, and make sure you got it right, as it *can\'t* be recovered if lost!</string>
     <string name="login_encryption_enter_password">You are logged in as \"%s\". Please enter your encryption password to continue, or log out from the side menu.</string>
-    <string name="login_encryption_check_password">* Please double-check the password, as it can\'t be recovered if wrong!</string>
+    <string name="login_encryption_check_password">* Please make sure you remember your password, as it can\'t be recovered if lost!</string>
     <string name="login_encryption_extra_info">* This password is used to encrypt your data, unlike the previous one, which is used to log into the service.\nYou are asked to choose a separate encryption password for security reasons. For more information, please refer to the FAQ at: %s</string>
     <string name="login_password_required">Password required</string>
     <string name="login_login">Log In</string>
@@ -229,8 +244,6 @@
     <string name="login_service_details_description">This is your login password, *not* your encryption password!</string>
     <string name="login_forgot_password">Forgot password?</string>
 
-    <string name="login_configuration_detection">Configuration detection</string>
-    <string name="login_querying_server">Please wait, querying server…</string>
     <string name="login_wrong_username_or_password">Couldn\'t authenticate (probably wrong username or password).\nHave you registered?</string>
     <string name="login_view_logs">View logs</string>
 
@@ -240,6 +253,9 @@
     <string name="account_creation_failed">Account creation failed</string>
     <string name="wrong_encryption_password">Wrong encryption password</string>
     <string name="wrong_encryption_password_content">Got an integrity error while accessing your account, which most likely means you put in the wrong encryption password.\nPlease note that the username is case sensitive, so please also try different capitalizations, for example make the first character uppercase.\n\nError: %s</string>
+
+    <string name="signup_title">Enter Signup Details</string>
+    <string name="signup_password_restrictions">Password should be at least 8 characters long</string>
 
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Change Encryption Password</string>
@@ -332,8 +348,8 @@
     <string name="delete_collection_deleting_collection">Deleting collection</string>
 
     <!-- JournalViewer -->
-    <string name="journal_entries_list_empty">Journal is empty.\n(Maybe it\'s still syncing?)</string>
-    <string name="journal_entries_loading">Loading journal entries...</string>
+    <string name="journal_entries_list_empty">Collection is empty.\nMaybe it\'s still syncing?</string>
+    <string name="journal_entries_loading">Loading change log entries...</string>
 
     <!-- ExceptionInfoFragment -->
     <string name="exception">An error has occurred.</string>
@@ -347,6 +363,7 @@
     <string name="debug_info_more_data_shared">Clicking share will open the email app with the data below, as well as some additional debug information, attached. It may contain some sensitive information, so please review it before sending.</string>
     <string name="sync_error_permissions">EteSync permissions</string>
     <string name="sync_error_permissions_text">Additional permissions required</string>
+    <string name="sync_error_generic">Sync failed (%s)</string>
     <string name="sync_error_calendar">Calendar sync failed (%s)</string>
     <string name="sync_error_contacts">Contacts sync failed (%s)</string>
     <string name="sync_error_tasks">Tasks sync failed (%s)</string>
@@ -356,6 +373,7 @@
     <string name="sync_error_unavailable">Could not connect to server while %s</string>
     <string name="sync_error_local_storage">Database error while %s</string>
     <string name="sync_error_journal_readonly">Journal is read only</string>
+    <string name="sync_error_permission_denied">Permission denied: %s</string>
     <string name="sync_phase_prepare">preparing synchronization</string>
     <string name="sync_phase_journals">syncronizing journals</string>
     <string name="sync_phase_prepare_fetch">preparing for fetch</string>
@@ -372,7 +390,7 @@
     <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
     <string name="sync_successfully_tasks" formatted="false">Tasks \"%s\" modified (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s modified.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s added.\n%s updated.\n%s deleted.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s updated.\n%s deleted.</string>
     <string name="sync_journal_readonly">Journal \"%s\" is read only</string>
     <string name="sync_journal_readonly_message">The journal is read only so all of your changes (%d) have been reverted.</string>
 

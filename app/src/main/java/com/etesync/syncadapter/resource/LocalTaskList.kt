@@ -19,6 +19,7 @@ import at.bitfire.ical4android.AndroidTaskListFactory
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.TaskProvider
 import at.bitfire.ical4android.TaskProvider.ProviderName
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.model.JournalEntity
 import org.dmfs.tasks.contract.TaskContract.TaskLists
 import org.dmfs.tasks.contract.TaskContract.Tasks
@@ -54,6 +55,14 @@ class LocalTaskList private constructor(
             return create(account, provider, values)
         }
 
+        fun create(account: Account, provider: TaskProvider, cachedCollection: CachedCollection): Uri {
+            val values = valuesFromCachedCollection(cachedCollection, true)
+            values.put(TaskLists.OWNER, account.name)
+            values.put(TaskLists.SYNC_ENABLED, 1)
+            values.put(TaskLists.VISIBLE, 1)
+            return create(account, provider, values)
+        }
+
         fun findByName(account: Account, provider: TaskProvider, factory: Factory, name: String): LocalTaskList?
                 = AndroidTaskList.find(account, provider, factory, TaskLists._SYNC_ID + "==?", arrayOf(name)).firstOrNull()
 
@@ -70,6 +79,18 @@ class LocalTaskList private constructor(
             return values
         }
 
+        private fun valuesFromCachedCollection(cachedCollection: CachedCollection, withColor: Boolean): ContentValues {
+            val col = cachedCollection.col
+            val meta = cachedCollection.meta
+            val values = ContentValues(3)
+            values.put(TaskLists._SYNC_ID, col.uid)
+            values.put(TaskLists.LIST_NAME, meta.name)
+
+            if (withColor)
+                values.put(TaskLists.LIST_COLOR, LocalCalendar.parseColor(meta.color))
+
+            return values
+        }
     }
 
     override val url: String?
@@ -77,6 +98,9 @@ class LocalTaskList private constructor(
 
     fun update(journalEntity: JournalEntity, updateColor: Boolean) =
             update(valuesFromCollectionInfo(journalEntity, updateColor))
+
+    fun update(cachedCollection: CachedCollection, updateColor: Boolean) =
+            update(valuesFromCachedCollection(cachedCollection, updateColor))
 
     override fun findDeleted() = queryTasks("${Tasks._DELETED}!=0", null)
 
@@ -101,7 +125,10 @@ class LocalTaskList private constructor(
         = queryTasks(Tasks._SYNC_ID + " IS NULL", null)
 
     override fun findByUid(uid: String): LocalTask?
-        = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(uid)).firstOrNull()
+        = queryTasks(LocalTask.COLUMN_UID + " =? ", arrayOf(uid)).firstOrNull()
+
+    override fun findByFilename(filename: String): LocalTask?
+            = queryTasks(Tasks._SYNC_ID + " =? ", arrayOf(filename)).firstOrNull()
 
     override fun count(): Long {
         try {

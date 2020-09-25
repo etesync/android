@@ -287,7 +287,7 @@
     <string name="sync_successfully_calendar" formatted="false">Kalendarz \"%s\" został zmodyfikowany (%s)</string>
     <string name="sync_successfully_contacts" formatted="false">Kontakty zostały zmodyfikowane (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s został zmodyfikowany.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s został dodany. \n%s został zaktualizowany.\n%s został usunięty.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s został zaktualizowany.\n%s został usunięty.</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Bezpieczeństwo połączenia</string>

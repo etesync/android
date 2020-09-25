@@ -197,7 +197,8 @@
     <string name="login_wrong_username_or_password">Kunne ikke logge inn (sannsynligvis feil brukernavn eller passord).\nHar du registrert deg?</string>
     <string name="login_view_logs">Vis logger</string>
     <string name="setting_up_encryption">Setter opp kryptering</string>
-    <string name="setting_up_encryption_content">Vent, setter opp kryptering …</string>
+    <string name="setting_up_encryption_content">Vennligst vent, setter opp kryptering…</string>
+
     <string name="account_creation_failed">Kunne ikke opprette konto</string>
     <string name="wrong_encryption_password">Feil krypteringspassord</string>
     <string name="wrong_encryption_password_content">Mottok en integritetsfeil ved tilgang til kontoen din, noe som mest sannsynlig skyldes at du skrev inn feil krypteringspassord.
@@ -316,7 +317,7 @@
     <string name="sync_successfully_contacts" formatted="false">Kontakter endret (%s)</string>
     <string name="sync_successfully_tasks" formatted="false">Gjøremålene «%s» er endret (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s endret.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s lagt til.\n%s oppdatert.\n%s slettet.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s oppdatert.\n%s slettet.</string>
     <string name="sync_journal_readonly">Journalen \"%s\" er skrivebeskyttet</string>
     <string name="sync_journal_readonly_message">Journalen er skrivebeskyttet, så alle endringene dine (%d) har blitt omgjort.</string>
     <!-- Calendar invites -->

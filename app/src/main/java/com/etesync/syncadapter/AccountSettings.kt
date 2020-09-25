@@ -36,8 +36,12 @@ constructor(internal val context: Context, internal val account: Account) {
 
     var uri: URI?
         get() {
+            val uri = accountManager.getUserData(account, KEY_URI)
+            if (uri == null) {
+                return null
+            }
             try {
-                return URI(accountManager.getUserData(account, KEY_URI))
+                return URI(uri)
             } catch (e: URISyntaxException) {
                 return null
             }
@@ -73,6 +77,12 @@ constructor(internal val context: Context, internal val account: Account) {
         get() = accountManager.getUserData(account, KEY_WIFI_ONLY_SSID)
         set(ssid) = accountManager.setUserData(account, KEY_WIFI_ONLY_SSID, ssid)
 
+    var etebaseSession: String?
+        get() = accountManager.getUserData(account, KEY_ETEBASE_SESSION)
+        set(value) = accountManager.setUserData(account, KEY_ETEBASE_SESSION, value)
+
+    val isLegacy: Boolean
+        get() = authToken != null
 
     // CalDAV settings
 
@@ -216,6 +226,7 @@ constructor(internal val context: Context, internal val account: Account) {
         private val KEY_ASYMMETRIC_PRIVATE_KEY = "asymmetric_private_key"
         private val KEY_ASYMMETRIC_PUBLIC_KEY = "asymmetric_public_key"
         private val KEY_WIFI_ONLY = "wifi_only"
+        private val KEY_ETEBASE_SESSION = "etebase_session"
         // sync on WiFi only (default: false)
         private val KEY_WIFI_ONLY_SSID = "wifi_only_ssid"  // restrict sync to specific WiFi SSID
 
@@ -243,10 +254,10 @@ constructor(internal val context: Context, internal val account: Account) {
         val SYNC_INTERVAL_MANUALLY: Long = -1
 
         // XXX: Workaround a bug in Android where passing a bundle to addAccountExplicitly doesn't work.
-        fun setUserData(accountManager: AccountManager, account: Account, uri: URI, userName: String) {
+        fun setUserData(accountManager: AccountManager, account: Account, uri: URI?, userName: String) {
             accountManager.setUserData(account, KEY_SETTINGS_VERSION, CURRENT_VERSION.toString())
             accountManager.setUserData(account, KEY_USERNAME, userName)
-            accountManager.setUserData(account, KEY_URI, uri.toString())
+            accountManager.setUserData(account, KEY_URI, uri?.toString())
         }
     }
 }

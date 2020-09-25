@@ -48,23 +48,6 @@ class CollectionInfo : com.etesync.journalmanager.model.CollectionInfo() {
             return info
         }
 
-        fun fromDB(values: ContentValues): CollectionInfo {
-            val info = CollectionInfo()
-            info.id = values.getAsLong(Collections.ID)!!
-            info.serviceID = values.getAsInteger(Collections.SERVICE_ID)!!
-
-            info.uid = values.getAsString(Collections.URL)
-            info.displayName = values.getAsString(Collections.DISPLAY_NAME)
-            info.description = values.getAsString(Collections.DESCRIPTION)
-
-            info.color = values.getAsInteger(Collections.COLOR)
-
-            info.timeZone = values.getAsString(Collections.TIME_ZONE)
-
-            info.selected = values.getAsInteger(Collections.SYNC) != 0
-            return info
-        }
-
         fun fromJson(json: String): CollectionInfo {
             return GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json, CollectionInfo::class.java)
         }

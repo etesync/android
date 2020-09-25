@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/please_wait"
+            android:textIsSelectable="true"
             android:typeface="monospace" />
 
     </LinearLayout>

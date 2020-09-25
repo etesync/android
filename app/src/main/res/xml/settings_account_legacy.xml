@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2013 – 2015 Ricki Hirner (bitfire web engineering).
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the GNU Public License v3.0
+  ~ which accompanies this distribution, and is available at
+  ~ http://www.gnu.org/licenses/gpl.html
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_manage_account">
+
+        <Preference
+            android:key="manage_account"
+            android:title="@string/settings_account_dashboard"
+            android:persistent="false"
+            android:summary="@string/settings_manage_account_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_encryption">
+
+        <Preference
+            android:title="@string/settings_encryption_password"
+            android:key="encryption_password"
+            android:summary="@string/settings_encryption_password_summary"
+            android:persistent="false"
+        />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_sync">
+        <EditTextPreference
+            android:key="password"
+            android:title="@string/settings_password"
+            android:persistent="false"
+            android:inputType="textPassword"
+            android:summary="@string/settings_password_summary"
+            android:dialogTitle="@string/settings_enter_password" />
+
+        <ListPreference
+            android:key="sync_interval"
+            android:persistent="false"
+            android:title="@string/settings_sync_interval"
+            android:entries="@array/settings_sync_interval_names"
+            android:entryValues="@array/settings_sync_interval_seconds" />
+
+        <SwitchPreferenceCompat
+            android:key="sync_wifi_only"
+            android:persistent="false"
+            android:title="@string/settings_sync_wifi_only"
+            android:summaryOn="@string/settings_sync_wifi_only_on"
+            android:summaryOff="@string/settings_sync_wifi_only_off"
+            />
+
+        <EditTextPreference
+            android:key="sync_wifi_only_ssid"
+            android:dependency="sync_wifi_only"
+            android:persistent="false"
+            android:title="@string/settings_sync_wifi_only_ssid"
+            android:dialogMessage="@string/settings_sync_wifi_only_ssid_message"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

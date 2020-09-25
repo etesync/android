@@ -22,11 +22,14 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Pair
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etebase.client.FetchOptions
+import com.etebase.client.exceptions.ConnectionException
+import com.etebase.client.exceptions.TemporaryServerErrorException
+import com.etebase.client.exceptions.UnauthorizedException
 import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalManager
-import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -96,8 +99,8 @@ abstract class SyncAdapterService : Service() {
     }
 
     abstract class SyncAdapter(context: Context) : AbstractThreadedSyncAdapter(context, false) {
-        abstract val syncErrorTitle: Int
-        abstract val notificationManager: SyncNotification
+        private val syncErrorTitle: Int = R.string.sync_error_generic
+        private val notificationManager = SyncNotification(context, "refresh-collections", Constants.NOTIFICATION_REFRESH_COLLECTIONS)
 
         abstract fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult)
 
@@ -117,6 +120,12 @@ abstract class SyncAdapterService : Service() {
             } catch (e: Exceptions.ServiceUnavailableException) {
                 syncResult.stats.numIoExceptions++
                 syncResult.delayUntil = if (e.retryAfter > 0) e.retryAfter else Constants.DEFAULT_RETRY_DELAY
+            } catch (e: TemporaryServerErrorException) {
+                syncResult.stats.numIoExceptions++
+                syncResult.delayUntil = Constants.DEFAULT_RETRY_DELAY
+            } catch (e: ConnectionException) {
+                syncResult.stats.numIoExceptions++
+                syncResult.delayUntil = Constants.DEFAULT_RETRY_DELAY
             } catch (e: Exceptions.IgnorableHttpException) {
                 // Ignore
             } catch (e: Exception) {
@@ -132,7 +141,7 @@ abstract class SyncAdapterService : Service() {
 
                 val detailsIntent = notificationManager.detailsIntent
                 detailsIntent.putExtra(Constants.KEY_ACCOUNT, account)
-                if (e !is Exceptions.UnauthorizedException) {
+                if (e !is Exceptions.UnauthorizedException && e !is UnauthorizedException) {
                     detailsIntent.putExtra(DebugInfoActivity.KEY_AUTHORITY, authority)
                     detailsIntent.putExtra(DebugInfoActivity.KEY_PHASE, syncPhase)
                 }
@@ -208,30 +217,70 @@ abstract class SyncAdapterService : Service() {
                 val settings = AccountSettings(context, account)
                 val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
 
-                val journalsManager = JournalManager(httpClient.okHttpClient, settings.uri?.toHttpUrlOrNull()!!)
+                if (settings.isLegacy) {
+                    val journalsManager = JournalManager(httpClient.okHttpClient, settings.uri?.toHttpUrlOrNull()!!)
 
-                var journals = journalFetcher.list(journalsManager, settings, serviceType)
+                    var journals = journalFetcher.list(journalsManager, settings, serviceType)
 
-                if (journals.isEmpty()) {
-                    journals = LinkedList()
-                    try {
-                        val info = CollectionInfo.defaultForServiceType(serviceType)
-                        val uid = JournalManager.Journal.genUid()
-                        info.uid = uid
-                        val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
-                        val journal = JournalManager.Journal(crypto, info.toJson(), uid)
-                        journalsManager.create(journal)
-                        journals.add(Pair(journal, info))
-                    } catch (e: Exceptions.AssociateNotAllowedException) {
-                        // Skip for now
+                    if (journals.isEmpty()) {
+                        journals = LinkedList()
+                        try {
+                            val info = CollectionInfo.defaultForServiceType(serviceType)
+                            val uid = JournalManager.Journal.genUid()
+                            info.uid = uid
+                            val crypto = Crypto.CryptoManager(info.version, settings.password(), uid)
+                            val journal = JournalManager.Journal(crypto, info.toJson(), uid)
+                            journalsManager.create(journal)
+                            journals.add(Pair(journal, info))
+                        } catch (e: Exceptions.AssociateNotAllowedException) {
+                            // Skip for now
+                        }
                     }
+
+                    legacySaveCollections(journals)
+
+                    httpClient.close()
+                    return
                 }
 
-                saveCollections(journals)
+
+                val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
+                synchronized(etebaseLocalCache) {
+                    val cacheAge = 5 * 1000 // 5 seconds - it's just a hack for burst fetching
+                    val now = System.currentTimeMillis()
+                    val lastCollectionsFetch = collectionLastFetchMap[account.name] ?: 0
+
+                    if (abs(now - lastCollectionsFetch) <= cacheAge) {
+                        return@synchronized
+                    }
+
+                    val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+                    val colMgr = etebase.collectionManager
+                    var stoken = etebaseLocalCache.loadStoken()
+                    var done = false
+                    while (!done) {
+                        val colList = colMgr.list(FetchOptions().stoken(stoken))
+                        for (col in colList.data) {
+                            etebaseLocalCache.collectionSet(colMgr, col)
+                        }
+
+                        for (col in colList.removedMemberships) {
+                            etebaseLocalCache.collectionUnset(colMgr, col.uid())
+                        }
+
+                        stoken = colList.stoken
+                        done = colList.isDone
+                        if (stoken != null) {
+                            etebaseLocalCache.saveStoken(stoken)
+                        }
+                    }
+                    collectionLastFetchMap[account.name] = now
+                }
+
                 httpClient.close()
             }
 
-            private fun saveCollections(journals: Iterable<Pair<JournalManager.Journal, CollectionInfo>>) {
+            private fun legacySaveCollections(journals: Iterable<Pair<JournalManager.Journal, CollectionInfo>>) {
                 val data = (context.applicationContext as App).data
                 val service = JournalModel.Service.fetchOrCreate(data, account.name, serviceType)
 
@@ -269,5 +318,6 @@ abstract class SyncAdapterService : Service() {
 
     companion object {
         val journalFetcher = CachedJournalFetcher()
+        var collectionLastFetchMap = HashMap<String, Long>()
     }
 }

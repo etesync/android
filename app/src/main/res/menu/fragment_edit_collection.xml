@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2013 – 2016 Ricki Hirner (bitfire web engineering).
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the GNU Public License v3.0
+  ~ which accompanies this distribution, and is available at
+  ~ http://www.gnu.org/licenses/gpl.html
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/on_delete"
+        android:icon="@drawable/ic_delete_dark"
+        android:title="@string/delete_collection"
+        app:showAsAction="always" />
+
+
+    <item
+        android:id="@+id/on_save"
+        android:icon="@drawable/ic_save_dark"
+        android:title="@string/create_collection_create"
+        app:showAsAction="always" />
+
+</menu>

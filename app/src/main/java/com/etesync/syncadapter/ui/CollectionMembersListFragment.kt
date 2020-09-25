@@ -106,13 +106,13 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val member = listAdapter?.getItem(position) as JournalManager.Member
 
-        AlertDialog.Builder(activity!!)
+        AlertDialog.Builder(requireActivity())
                 .setIcon(R.drawable.ic_info_dark)
                 .setTitle(R.string.collection_members_remove_title)
                 .setMessage(getString(R.string.collection_members_remove, member.user))
                 .setPositiveButton(android.R.string.yes) { dialog, which ->
                     val frag = RemoveMemberFragment.newInstance(account, info, member.user!!)
-                    frag.show(fragmentManager!!, null)
+                    frag.show(requireFragmentManager(), null)
                 }
                 .setNegativeButton(android.R.string.no) { dialog, which -> }.show()
     }
