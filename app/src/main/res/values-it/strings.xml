@@ -1,119 +1,125 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Aiuto</string>
-  <string name="manage_accounts">Gestione account</string>
-  <string name="please_wait">Attendere prego …</string>
-  <string name="send">Invia</string>
-  <!--startup dialogs-->
-  <string name="startup_battery_optimization">Ottimizazione della batteria</string>
-  <string name="startup_dont_show_again">Non mostrare più</string>
-  <!--AboutActivity-->
-  <string name="about_license_terms">Termini di licenza</string>
-  <string name="about_license_info_no_warranty">Il programma è distribuito SENZA ALCUNA GARANZIA. È software libero e può essere redistribuito sotto alcune condizioni.</string>
-  <!--global settings-->
-  <string name="logging_to_external_storage">Log su dispositivo esterno: %s</string>
-  <string name="logging_to_external_storage_warning">Cancellare prima possibile i file di log!</string>
-  <string name="logging_couldnt_create_file">Non riesco a creare il file di log esterno: %s</string>
-  <string name="logging_no_external_storage">Dispositivo esterno non disponibile</string>
-  <!--AccountsActivity-->
-  <string name="navigation_drawer_about">Informazioni / Licenza</string>
-  <string name="navigation_drawer_settings">Impostazioni</string>
-  <string name="navigation_drawer_external_links">Link esterni</string>
-  <string name="navigation_drawer_website">Sito web</string>
-  <string name="navigation_drawer_faq">Domande Frequenti</string>
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <string name="app_settings">Impostazioni</string>
-  <string name="app_settings_user_interface">Interfaccia utente</string>
-  <string name="app_settings_reset_hints">Reimposta i suggerimenti</string>
-  <string name="app_settings_reset_hints_summary">Riabilita i suggerimenti precedentemente disabilitati</string>
-  <string name="app_settings_reset_hints_success">I suggerimenti verranno mostrati</string>
-  <string name="app_settings_connection">Connessione</string>
-  <string name="app_settings_override_proxy">Non rispettare la impostazioni del proxy</string>
-  <string name="app_settings_override_proxy_on">Impostazioni personalizzate del proxy</string>
-  <string name="app_settings_override_proxy_off">Usa le impostazioni di sistema del proxy</string>
-  <string name="app_settings_override_proxy_host">Nome host del proxy HTTP</string>
-  <string name="app_settings_override_proxy_port">Porta del proxy HTTP</string>
-  <string name="app_settings_security">Sicurezza</string>
-  <string name="app_settings_distrust_system_certs">Non ti fidare dei certificati di sistema</string>
-  <string name="app_settings_distrust_system_certs_on">Le CA di sistema e quelle aggiunte dall\'utente non sono affidabili</string>
-  <string name="app_settings_distrust_system_certs_off">Le CA di sistema e quelle aggiunte dall\'utente sono affidabili (raccomandato)</string>
-  <string name="app_settings_reset_certificates">Reimposta la fiducia in tutti i certificati</string>
-  <string name="app_settings_reset_certificates_summary">Reimposta la fiducia nei certificati aggiunti</string>
-  <string name="app_settings_reset_certificates_success">Sono stati cancellati tutti i certificati aggiunti</string>
-  <string name="app_settings_debug">Debug</string>
-  <string name="app_settings_log_to_external_storage">Log su file esterno</string>
-  <string name="app_settings_log_to_external_storage_on">Log su dispositivo esterno (se disponibile)</string>
-  <string name="app_settings_log_to_external_storage_off">Log su file esterno disabilitato</string>
-  <string name="app_settings_show_debug_info">Mostra informazioni di debug</string>
-  <string name="app_settings_show_debug_info_details">Mostra e condividi i dettagli del programma e della configurazione</string>
-  <!--AccountActivity-->
-  <string name="account_synchronize_now">Sincronizza adesso</string>
-  <string name="account_synchronizing_now">Sincronizzazione in corso</string>
-  <string name="account_settings">Impostazioni account</string>
-  <string name="account_delete">Elimina account</string>
-  <string name="account_delete_confirmation_title">Cancellare l\'account?</string>
-  <string name="account_delete_confirmation_text">Tutte le copie locali delle rubriche, dei calendari e degli elenchi attività verranno eliminate.</string>
-  <!--PermissionsActivity-->
-  <string name="permissions_calendar">Permessi calendario</string>
-  <string name="permissions_calendar_request">Richiesta autorizzazione al calendario</string>
-  <string name="permissions_contacts">Permessi Contatti</string>
-  <string name="permissions_contacts_request">Richiesta autorizzazione ai contatti</string>
-  <string name="permissions_opentasks">Permessi OpenTasks</string>
-  <string name="permissions_opentasks_request">Richiesta autorizzazione ad OpenTasks</string>
-  <!--AddAccountActivity-->
-  <string name="login_title">Aggiungi account</string>
-  <string name="login_email_address">Indirizzo email</string>
-  <string name="login_email_address_error">È necessario un indirizzo email valido</string>
-  <string name="login_password">Password</string>
-  <string name="login_password_required">Password richiesta</string>
-  <string name="login_back">Indietro</string>
-  <string name="login_configuration_detection">Rilevazione configurazione</string>
-  <string name="login_querying_server">Attendere, invio richiesta al server...</string>
-  <string name="login_view_logs">Vedi i log</string>
-  <!--AccountSettingsActivity-->
-  <string name="settings_title">Impostazioni: %s</string>
-  <string name="settings_authentication">Autenticazione</string>
-  <string name="settings_password">Password</string>
-  <string name="settings_enter_password">Inserisci la tua password:</string>
-  <string name="settings_sync">Sincronizzazione</string>
-  <string name="settings_sync_interval_contacts">Intervallo sincr. Contatti</string>
-  <string name="settings_sync_summary_manually">Solo manualmente</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s e a seguito di ogni cambiamento locale</string>
-  <string name="settings_sync_summary_not_available">Non disponile</string>
-  <string name="settings_sync_interval_calendars">Intervallo sincr. calendari</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Solo manualmente</item>
-    <item>Ogni 15 minuti</item>
-    <item>Ogni ora</item>
-    <item>Ogni 2 ore</item>
-    <item>Ogni 4 ore</item>
-    <item>Una volta al giorno</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">Sincr. solo tramite WiFi</string>
-  <string name="settings_sync_wifi_only_on">La sincronizzazione è limitata alle connessioni WiFi</string>
-  <string name="settings_sync_wifi_only_ssid">Restrizione sul SSID del WiFi</string>
-  <string name="settings_sync_wifi_only_ssid_on">La sincronizzazione avverrà solo con %s</string>
-  <string name="settings_sync_wifi_only_ssid_off">Verranno usate tutte le connessioni WiFi</string>
-  <string name="settings_sync_wifi_only_ssid_message">Inserisci il nome di una rete WiFi (SSID) per limitare la sincronizzazione solo con questa rete o lasciare in bianco per usare tutte le connessioni WiFi.</string>
-  <!--collection management-->
-  <string name="create_addressbook">Crea indirizzario</string>
-  <string name="create_addressbook_display_name_hint">Il mio indirizzario</string>
-  <string name="create_collection_display_name_required">Il titolo è richiesto</string>
-  <string name="create_collection_description">Descrizione (opzionale):</string>
-  <string name="create_collection_create">Crea</string>
-  <string name="delete_collection_confirm_title">Sei sicuro?</string>
-  <!--ExceptionInfoFragment-->
-  <string name="exception">Si è verificato un errore.</string>
-  <string name="exception_httpexception">Si è verificato un errore HTTP.</string>
-  <string name="exception_ioexception">Si è verificato un errore di I/O.</string>
-  <string name="exception_show_details">Mostra dettagli</string>
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">Informazioni di debug</string>
-  <string name="sync_error_calendar">Sincronizzazione del calendario fallita (%s)</string>
-  <string name="sync_error">Errore nel %s</string>
-  <string name="sync_error_http_dav">Errore del server nel %s</string>
-  <string name="sync_error_local_storage">Errore del database nel %s</string>
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">Aiuto</string>
+    <string name="manage_accounts">Gestione account</string>
+    <string name="please_wait">Si prega di attendere…</string>
+    <string name="send">Invia</string>
+    <!--startup dialogs-->
+    <string name="startup_battery_optimization">Ottimizazione della batteria</string>
+    <string name="startup_dont_show_again">Non mostrare più</string>
+    <!--AboutActivity-->
+    <string name="about_license_terms">Termini di licenza</string>
+    <string name="about_license_info_no_warranty">Il programma è distribuito SENZA ALCUNA GARANZIA. È software libero e può essere redistribuito sotto alcune condizioni.</string>
+    <!--global settings-->
+    <string name="logging_to_external_storage">Log su dispositivo esterno: %s</string>
+    <string name="logging_to_external_storage_warning">Cancellare prima possibile i file di log!</string>
+    <string name="logging_couldnt_create_file">Non riesco a creare il file di log esterno: %s</string>
+    <string name="logging_no_external_storage">Dispositivo esterno non disponibile</string>
+    <!--AccountsActivity-->
+    <string name="navigation_drawer_about">Informazioni / Licenza</string>
+    <string name="navigation_drawer_settings">Impostazioni</string>
+    <string name="navigation_drawer_external_links">Link esterni</string>
+    <string name="navigation_drawer_website">Sito web</string>
+    <string name="navigation_drawer_faq">Domande Frequenti</string>
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <string name="app_settings">Impostazioni</string>
+    <string name="app_settings_user_interface">Interfaccia utente</string>
+    <string name="app_settings_reset_hints">Reimposta i suggerimenti</string>
+    <string name="app_settings_reset_hints_summary">Riabilita i suggerimenti precedentemente disabilitati</string>
+    <string name="app_settings_reset_hints_success">I suggerimenti verranno mostrati</string>
+    <string name="app_settings_connection">Connessione</string>
+    <string name="app_settings_override_proxy">Non rispettare la impostazioni del proxy</string>
+    <string name="app_settings_override_proxy_on">Impostazioni personalizzate del proxy</string>
+    <string name="app_settings_override_proxy_off">Usa le impostazioni di sistema del proxy</string>
+    <string name="app_settings_override_proxy_host">Nome host del proxy HTTP</string>
+    <string name="app_settings_override_proxy_port">Porta del proxy HTTP</string>
+    <string name="app_settings_security">Sicurezza</string>
+    <string name="app_settings_distrust_system_certs">Non ti fidare dei certificati di sistema</string>
+    <string name="app_settings_distrust_system_certs_on">Le CA di sistema e quelle aggiunte dall\'utente non sono affidabili</string>
+    <string name="app_settings_distrust_system_certs_off">Le CA di sistema e quelle aggiunte dall\'utente sono affidabili (raccomandato)</string>
+    <string name="app_settings_reset_certificates">Reimposta la fiducia in tutti i certificati</string>
+    <string name="app_settings_reset_certificates_summary">Reimposta la fiducia nei certificati aggiunti</string>
+    <string name="app_settings_reset_certificates_success">Sono stati cancellati tutti i certificati aggiunti</string>
+    <string name="app_settings_debug">Debug</string>
+    <string name="app_settings_log_to_external_storage">Log su file esterno</string>
+    <string name="app_settings_log_to_external_storage_on">Log su dispositivo esterno (se disponibile)</string>
+    <string name="app_settings_log_to_external_storage_off">Log su file esterno disabilitato</string>
+    <string name="app_settings_show_debug_info">Mostra informazioni di debug</string>
+    <string name="app_settings_show_debug_info_details">Mostra e condividi i dettagli del programma e della configurazione</string>
+    <!--AccountActivity-->
+    <string name="account_synchronize_now">Sincronizza adesso</string>
+    <string name="account_synchronizing_now">Sincronizzazione in corso</string>
+    <string name="account_settings">Impostazioni account</string>
+    <string name="account_delete">Elimina account</string>
+    <string name="account_delete_confirmation_title">Cancellare l\'account?</string>
+    <string name="account_delete_confirmation_text">Tutte le copie locali delle rubriche, dei calendari e degli elenchi attività verranno eliminate.</string>
+    <!--PermissionsActivity-->
+    <string name="permissions_calendar">Permessi calendario</string>
+    <string name="permissions_calendar_request">Richiesta autorizzazione al calendario</string>
+    <string name="permissions_contacts">Permessi Contatti</string>
+    <string name="permissions_contacts_request">Richiesta autorizzazione ai contatti</string>
+    <string name="permissions_opentasks">Permessi OpenTasks</string>
+    <string name="permissions_opentasks_request">Richiesta autorizzazione ad OpenTasks</string>
+    <!--AddAccountActivity-->
+    <string name="login_title">Aggiungi account</string>
+    <string name="login_email_address">Indirizzo email</string>
+    <string name="login_email_address_error">È necessario un indirizzo email valido</string>
+    <string name="login_password">Password</string>
+    <string name="login_password_required">Password richiesta</string>
+    <string name="login_back">Indietro</string>
+    <string name="login_configuration_detection">Rilevazione configurazione</string>
+    <string name="login_querying_server">Attendere, invio richiesta al server...</string>
+    <string name="login_view_logs">Vedi i log</string>
+    <!--AccountSettingsActivity-->
+    <string name="settings_title">Impostazioni: %s</string>
+    <string name="settings_authentication">Autenticazione</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_enter_password">Inserisci la tua password:</string>
+    <string name="settings_sync">Sincronizzazione</string>
+    <string name="settings_sync_interval_contacts">Intervallo sincr. Contatti</string>
+    <string name="settings_sync_summary_manually">Solo manualmente</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s e a seguito di ogni cambiamento locale</string>
+    <string name="settings_sync_summary_not_available">Non disponile</string>
+    <string name="settings_sync_interval_calendars">Intervallo sincr. calendari</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Solo manualmente</item>
+        <item>Ogni 15 minuti</item>
+        <item>Ogni ora</item>
+        <item>Ogni 2 ore</item>
+        <item>Ogni 4 ore</item>
+        <item>Una volta al giorno</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">Sincr. solo tramite WiFi</string>
+    <string name="settings_sync_wifi_only_on">La sincronizzazione è limitata alle connessioni WiFi</string>
+    <string name="settings_sync_wifi_only_ssid">Restrizione sul SSID del WiFi</string>
+    <string name="settings_sync_wifi_only_ssid_on">La sincronizzazione avverrà solo con %s</string>
+    <string name="settings_sync_wifi_only_ssid_off">Verranno usate tutte le connessioni WiFi</string>
+    <string name="settings_sync_wifi_only_ssid_message">Inserisci il nome di una rete WiFi (SSID) per limitare la sincronizzazione solo con questa rete o lasciare in bianco per usare tutte le connessioni WiFi.</string>
+    <!--collection management-->
+    <string name="create_addressbook">Crea indirizzario</string>
+    <string name="create_addressbook_display_name_hint">Il mio indirizzario</string>
+    <string name="create_collection_display_name_required">Il titolo è richiesto</string>
+    <string name="create_collection_description">Descrizione (opzionale):</string>
+    <string name="create_collection_create">Crea</string>
+    <string name="delete_collection_confirm_title">Sei sicuro/a\?</string>
+    <!--ExceptionInfoFragment-->
+    <string name="exception">Si è verificato un errore.</string>
+    <string name="exception_httpexception">Si è verificato un errore HTTP.</string>
+    <string name="exception_ioexception">Si è verificato un errore di I/O.</string>
+    <string name="exception_show_details">Mostra dettagli</string>
+    <!--sync errors and DebugInfoActivity-->
+    <string name="debug_info_title">Informazioni di debug</string>
+    <string name="sync_error_calendar">Sincronizzazione del calendario fallita (%s)</string>
+    <string name="sync_error">Errore nel %s</string>
+    <string name="sync_error_http_dav">Errore del server nel %s</string>
+    <string name="sync_error_local_storage">Errore del database nel %s</string>
+    <!--cert4android-->
+    <string name="delete_collection_deleting_collection">Eliminazione della raccolta</string>
+    <string name="delete_collection">Elimina</string>
+    <string name="view_collection_import">Importa</string>
+    <string name="view_collection_edit">Modifica</string>
+    <string name="view_collection_members">Gestisci membri</string>
+    <string name="delete_collection_confirm_warning">Questa raccolta (%s) e tutti i suoi dati verranno rimossi dal server.</string>
 </resources>
