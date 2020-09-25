@@ -54,7 +54,7 @@
     <!--AddAccountActivity-->
     <string name="login_title">Hesap ekle</string>
     <string name="login_email_address">Eposta adresi</string>
-    <string name="login_email_address_error">Geçerli eposta adresi zorunludur</string>
+    <string name="login_email_address_error">Geçerli bir e-posta adresi gerekli</string>
     <string name="login_password">Parola</string>
     <string name="login_password_required">Parola zorunludur</string>
     <string name="login_back">Geri</string>
@@ -151,8 +151,7 @@
     <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
     <string name="sync_journal_readonly_message">Günlük salt okunur olduğundan tüm değişiklikleriniz (%d) geri alındı.</string>
     <string name="sync_journal_readonly">Günlük \"%s\" salt okunur</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s eklendi.
-\n%s güncellendi.
+    <string name="sync_successfully_modified_full" formatted="false">%s güncellendi.
 \n%s silindi.</string>
     <string name="sync_successfully_modified" formatted="false">%s değiştirildi.</string>
     <string name="sync_successfully_tasks" formatted="false">Görevler \"%s\" değiştirildi (%s)</string>
@@ -178,9 +177,9 @@
     <string name="sync_error_permissions_text">Ek izinler gerekli</string>
     <string name="sync_error_permissions">EteSync izinleri</string>
     <string name="debug_info_more_data_shared">Paylaş düğmesine tıklamak, aşağıdaki verilerin yanı sıra bazı ek hata ayıklama bilgilerinin ekli olduğu e-posta uygulamasını açacaktır. Bazı hassas bilgiler içerebilir, bu nedenle lütfen göndermeden önce inceleyin.</string>
-    <string name="journal_entries_loading">Günlük girdileri yükleniyor...</string>
-    <string name="journal_entries_list_empty">Günlük boş.
-\n(Belki hala eşzamanlanıyordur\?)</string>
+    <string name="journal_entries_loading">Değişiklik günlüğü girdileri yükleniyor...</string>
+    <string name="journal_entries_list_empty">Koleksiyon boş.
+\nBelki hala eşzamanlanıyordur\?</string>
     <string name="view_collection_members">Üyeleri Yönet</string>
     <string name="view_collection_import">İçe aktar</string>
     <string name="view_collection_edit">Düzenle</string>
@@ -241,7 +240,7 @@
     <string name="login_login">Oturum Aç</string>
     <string name="login_encryption_extra_info">* Bu parola, hizmet üzerinde oturum açmak için kullanılan öncekinden farklı olarak verilerinizi şifrelemek için kullanılır.
 \nGüvenlik nedeniyle ayrı bir şifreleme parolası seçmeniz istenir. Daha fazla bilgi için lütfen SSS bölümüne bakın: %s</string>
-    <string name="login_encryption_check_password">* Yanlış olursa kurtarılamayacağı için lütfen parolayı iki kez gözden geçirin!</string>
+    <string name="login_encryption_check_password">* Kaybolursa kurtarılamayacağı için lütfen parolanızı hatırladığınızdan emin olun!</string>
     <string name="login_encryption_enter_password">\"%s\" olarak oturum açtınız. Devam etmek için lütfen şifreleme parolanızı girin veya yan menüden oturumu kapatın.</string>
     <string name="login_encryption_set_new_password">Lütfen aşağıda şifreleme parolanızı belirleyin ve doğru parolayı girdiğinizden emin olun, çünkü kaybolursa kurtarılamaz!</string>
     <string name="login_encryption_password">Şifreleme Parolası</string>
@@ -282,7 +281,7 @@
     <string name="collection_members_remove_error">Üye kaldırılırken hata oluştu</string>
     <string name="collection_members_removing">Üye kaldırma</string>
     <string name="collection_members_adding">Üye ekleme</string>
-    <string name="collection_members_error_user_not_found">Kullanıcı (%s) bulunamadı. Uygulamalardan birinden şifreleme parolalarını oluşturdular mı\?</string>
+    <string name="collection_members_error_user_not_found">Kullanıcı (%s) bulunamadı</string>
     <string name="trust_fingerprint_body">Şifrelemenin güvenli olduğundan emin olmak için %s\'in güvenlik parmak izini doğrulayın.</string>
     <string name="trust_fingerprint_title">Güvenlik parmak izini doğrula</string>
     <string name="collection_members_add_error">Üye eklenirken hata oluştu</string>
@@ -362,4 +361,21 @@
     <string name="notification_channel_sync_status">Durum mesajları</string>
     <string name="notification_channel_sync_warnings_desc">Salt-okunur koleksiyonların reddedilen değişiklikleri gibi önemli olmayan eşzamanlama sorunları</string>
     <string name="notification_channel_sync_warnings">Eşzamanlama uyarıları</string>
+    <string name="sync_error_permission_denied">İzin reddedildi: %s</string>
+    <string name="sync_error_generic">Eşzamanlama başarısız oldu (%s)</string>
+    <string name="signup_password_restrictions">Parola en az 8 karakter uzunluğunda olmalıdır</string>
+    <string name="signup_title">Kayıt Ayrıntılarını Girin</string>
+    <string name="login_username_error">Geçerli bir kullanıcı adı gerekli</string>
+    <string name="login_username">Kullanıcı adı</string>
+    <string name="journal_item_tab_revisions">Düzeltmeler</string>
+    <string name="invitations_reject">Reddet</string>
+    <string name="invitations_accept">Kabul et</string>
+    <string name="invitations_accept_reject_dialog">Daveti kabul etmek mi yoksa reddetmek mi istiyorsunuz\?</string>
+    <string name="invitations_list_empty">Davet yok</string>
+    <string name="invitations_loading">Davetler yükleniyor...</string>
+    <string name="invitations_title">Davetler</string>
+    <string name="collection_members_leave">Ayrıl</string>
+    <string name="collection_members_no_access">Sadece yöneticilerin koleksiyon üyeliklerini yönetmesine izin verilir. Koleksiyondan ayrılmak ister misiniz\?</string>
+    <string name="collection_members_remove_admin">Yöneticilere erişimin kaldırılması şu anda desteklenmiyor.</string>
+    <string name="edit_owner_only_anon">Sadece bu koleksiyonun sahibinin onu düzenlemesine izin verilir.</string>
 </resources>
