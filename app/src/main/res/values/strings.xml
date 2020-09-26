@@ -25,8 +25,8 @@
     <string name="notification_channel_debugging">Debugging</string>
     <string name="notification_channel_general">Other important messages</string>
     <string name="notification_channel_sync">Syncing</string>
-    <string name="notification_channel_sync_errors">Could not sync</string>
-    <string name="notification_channel_sync_errors_desc">Syncing stopped. This could be caused by unexpected server replies.</string>
+    <string name="notification_channel_sync_errors">Synchronization errors</string>
+    <string name="notification_channel_sync_errors_desc">Errors stopping synchronization, like unexpected server replies.</string>
     <string name="notification_channel_sync_warnings">Synchronization warnings</string>
     <string name="notification_channel_sync_warnings_desc">Small syncing problems like dismissed changes of read-only collections</string>
     <string name="notification_channel_sync_status">Status messages</string>
