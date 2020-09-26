@@ -54,7 +54,7 @@
     <string name="startup_vendor_specific_bugs_open_faq">Open FAQ</string>
 
     <!-- AboutActivity -->
-    <string name="about_license_terms">License info</string>
+    <string name="about_license_terms">License terms</string>
     <string name="about_license_info_no_warranty">This copylefted libre software licensed GPLv3+ comes with ABSOLUTELY NO WARRANTY. Use, browse, change and share at will; with all. https://simple.wikipedia.org/wiki/GNU_General_Public_License</string>
 
     <!-- global settings -->
