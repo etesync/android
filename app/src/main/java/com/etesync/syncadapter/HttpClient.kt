@@ -68,7 +68,6 @@ class HttpClient private constructor(
     ) {
         private var certManager: CustomCertManager? = null
         private var certificateAlias: String? = null
-        private var cache: Cache? = null
 
         private val orig = sharedClient.newBuilder()
 

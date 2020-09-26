@@ -14,9 +14,8 @@ import android.widget.ExpandableListView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.ListFragment
+import androidx.fragment.app.commit
 import at.bitfire.ical4android.CalendarStorageException
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
@@ -24,17 +23,10 @@ import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
 
 
-class LocalCalendarImportFragment : ListFragment() {
-
-    private lateinit var account: Account
-    private lateinit var info: CollectionInfo
-
+class LocalCalendarImportFragment(private val account: Account, private val uid: String) : ListFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
-        account = arguments!!.getParcelable(KEY_ACCOUNT)!!
-        info = arguments!!.getSerializable(KEY_COLLECTION_INFO) as CollectionInfo
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -200,7 +192,7 @@ class LocalCalendarImportFragment : ListFragment() {
             if (progressDialog.isShowing && !activity.isDestroyed) {
                 progressDialog.dismiss()
             }
-            (activity as ResultFragment.OnImportCallback).onImportResult(result)
+            onImportResult(result)
         }
 
         private fun importEvents(fromCalendar: LocalCalendar): ResultFragment.ImportResult {
@@ -208,7 +200,7 @@ class LocalCalendarImportFragment : ListFragment() {
             try {
                 val localCalendar = LocalCalendar.findByName(account,
                         context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!,
-                        LocalCalendar.Factory, info!!.uid!!)
+                        LocalCalendar.Factory, uid)
                 val localEvents = fromCalendar.findAll()
                 val total = localEvents.size
                 progressDialog.max = total
@@ -248,15 +240,17 @@ class LocalCalendarImportFragment : ListFragment() {
         }
     }
 
+    fun onImportResult(importResult: ResultFragment.ImportResult) {
+        val fragment = ResultFragment.newInstance(importResult)
+        parentFragmentManager.commit(true) {
+            add(fragment, "importResult")
+        }
+    }
+
     companion object {
 
         fun newInstance(account: Account, info: CollectionInfo): LocalCalendarImportFragment {
-            val frag = LocalCalendarImportFragment()
-            val args = Bundle(1)
-            args.putParcelable(KEY_ACCOUNT, account)
-            args.putSerializable(KEY_COLLECTION_INFO, info)
-            frag.arguments = args
-            return frag
+            return LocalCalendarImportFragment(account, info.uid!!)
         }
     }
 }

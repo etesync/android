@@ -30,7 +30,7 @@ class LoginActivity : BaseActivity() {
         if (savedInstanceState == null)
         // first call, add fragment
             supportFragmentManager.beginTransaction()
-                    .replace(android.R.id.content, LoginCredentialsFragment())
+                    .replace(android.R.id.content, LoginCredentialsFragment(null, null))
                     .commit()
 
     }
@@ -42,17 +42,5 @@ class LoginActivity : BaseActivity() {
 
     fun showHelp(item: MenuItem) {
         WebViewActivity.openUrl(this, Constants.helpUri)
-    }
-
-    companion object {
-        /**
-         * When set, and [.EXTRA_PASSWORD] is set too, the user name field will be set to this value.
-         */
-        val EXTRA_USERNAME = "username"
-
-        /**
-         * When set, the password field will be set to this value.
-         */
-        val EXTRA_PASSWORD = "password"
     }
 }

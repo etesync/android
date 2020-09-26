@@ -17,12 +17,13 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.TextUtils
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.app.NavUtils
+import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import androidx.preference.*
-import at.bitfire.ical4android.TaskProvider
 import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
@@ -43,7 +44,8 @@ class AccountSettingsActivity : BaseActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            val frag = AccountSettingsFragment()
+            val settings = AccountSettings(this, account)
+            val frag: Fragment = if (settings.isLegacy) LegacyAccountSettingsFragment() else AccountSettingsFragment()
             frag.arguments = intent.extras
             supportFragmentManager.beginTransaction()
                     .replace(android.R.id.content, frag)
@@ -60,139 +62,226 @@ class AccountSettingsActivity : BaseActivity() {
         } else
             return false
     }
+}
 
 
-    class AccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.LoaderCallbacks<AccountSettings> {
-        internal lateinit var account: Account
+class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.LoaderCallbacks<AccountSettings> {
+    internal lateinit var account: Account
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-            account = arguments?.getParcelable(KEY_ACCOUNT)!!
+        account = arguments?.getParcelable(KEY_ACCOUNT)!!
 
-            loaderManager.initLoader(0, arguments, this)
-        }
-
-        override fun onCreatePreferences(bundle: Bundle, s: String) {
-            addPreferencesFromResource(R.xml.settings_account)
-        }
-
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
-            return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
-        }
-
-        override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
-            if (settings == null) {
-                activity!!.finish()
-                return
-            }
-
-            // Category: dashboard
-            val prefManageAccount = findPreference("manage_account")
-            prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-                WebViewActivity.openUrl(activity!!, Constants.dashboard.buildUpon().appendQueryParameter("email", account.name).build())
-                true
-            }
-
-            // category: authentication
-            val prefPassword = findPreference("password") as EditTextPreference
-            prefPassword.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                val credentials = if (newValue != null) LoginCredentials(settings.uri, account.name, newValue as String) else null
-                LoginCredentialsChangeFragment.newInstance(account, credentials!!).show(fragmentManager!!, null)
-                loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
-                false
-            }
-
-            // Category: encryption
-            val prefEncryptionPassword = findPreference("encryption_password")
-            prefEncryptionPassword.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-                startActivity(ChangeEncryptionPasswordActivity.newIntent(activity!!, account))
-                true
-            }
-
-            val prefSync = findPreference("sync_interval") as ListPreference
-            val syncInterval = settings.getSyncInterval(CalendarContract.AUTHORITY) // Calendar is the baseline interval
-            if (syncInterval != null) {
-                prefSync.value = syncInterval.toString()
-                if (syncInterval == AccountSettings.SYNC_INTERVAL_MANUALLY)
-                    prefSync.setSummary(R.string.settings_sync_summary_manually)
-                else
-                    prefSync.summary = getString(R.string.settings_sync_summary_periodically, prefSync.entry)
-                prefSync.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    val newInterval = java.lang.Long.parseLong(newValue as String)
-                    settings.setSyncInterval(App.addressBooksAuthority, newInterval)
-                    settings.setSyncInterval(CalendarContract.AUTHORITY, newInterval)
-                    OPENTASK_PROVIDERS.forEach {
-                        settings.setSyncInterval(it.authority, newInterval)
-                    }
-                    loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
-                    false
-                }
-            } else {
-                prefSync.isEnabled = false
-                prefSync.setSummary(R.string.settings_sync_summary_not_available)
-            }
-
-            val prefWifiOnly = findPreference("sync_wifi_only") as SwitchPreferenceCompat
-            prefWifiOnly.isChecked = settings.syncWifiOnly
-            prefWifiOnly.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, wifiOnly ->
-                settings.setSyncWiFiOnly(wifiOnly as Boolean)
-                loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
-                false
-            }
-
-            val prefWifiOnlySSID = findPreference("sync_wifi_only_ssid") as EditTextPreference
-            val onlySSID = settings.syncWifiOnlySSID
-            prefWifiOnlySSID.text = onlySSID
-            if (onlySSID != null)
-                prefWifiOnlySSID.summary = getString(R.string.settings_sync_wifi_only_ssid_on, onlySSID)
-            else
-                prefWifiOnlySSID.setSummary(R.string.settings_sync_wifi_only_ssid_off)
-            prefWifiOnlySSID.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                val ssid = newValue as String
-                settings.syncWifiOnlySSID = if (!TextUtils.isEmpty(ssid)) ssid else null
-                loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
-                false
-            }
-        }
-
-        override fun onLoaderReset(loader: Loader<AccountSettings>) {}
-
+        loaderManager.initLoader(0, arguments, this)
     }
 
+    override fun onCreatePreferences(bundle: Bundle, s: String) {
+        addPreferencesFromResource(R.xml.settings_account)
+    }
 
-    private class AccountSettingsLoader(context: Context, internal val account: Account) : AsyncTaskLoader<AccountSettings>(context), SyncStatusObserver {
-        internal lateinit var listenerHandle: Any
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
+        return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
+    }
 
-        override fun onStartLoading() {
-            forceLoad()
-            listenerHandle = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, this)
+    override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
+        if (settings == null) {
+            activity!!.finish()
+            return
+        }
+        // Category: dashboard
+        val prefManageAccount = findPreference("manage_account")
+        prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            Toast.makeText(requireContext(), "Not yet supported", Toast.LENGTH_LONG).show()
+            true
         }
 
-        override fun onStopLoading() {
-            ContentResolver.removeStatusChangeListener(listenerHandle)
+        // Category: encryption
+        val prefEncryptionPassword = findPreference("password")
+        prefEncryptionPassword.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            startActivity(ChangeEncryptionPasswordActivity.newIntent(activity!!, account))
+            true
         }
 
-        override fun abandon() {
-            onStopLoading()
-        }
-
-        override fun loadInBackground(): AccountSettings? {
-            val settings: AccountSettings
-            try {
-                settings = AccountSettings(context, account)
-            } catch (e: InvalidAccountException) {
-                return null
+        val prefSync = findPreference("sync_interval") as ListPreference
+        val syncInterval = settings.getSyncInterval(CalendarContract.AUTHORITY) // Calendar is the baseline interval
+        if (syncInterval != null) {
+            prefSync.value = syncInterval.toString()
+            if (syncInterval == AccountSettings.SYNC_INTERVAL_MANUALLY)
+                prefSync.setSummary(R.string.settings_sync_summary_manually)
+            else
+                prefSync.summary = getString(R.string.settings_sync_summary_periodically, prefSync.entry)
+            prefSync.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                val newInterval = java.lang.Long.parseLong(newValue as String)
+                settings.setSyncInterval(App.addressBooksAuthority, newInterval)
+                settings.setSyncInterval(CalendarContract.AUTHORITY, newInterval)
+                OPENTASK_PROVIDERS.forEach {
+                    settings.setSyncInterval(it.authority, newInterval)
+                }
+                loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
+                false
             }
-
-            return settings
+        } else {
+            prefSync.isEnabled = false
+            prefSync.setSummary(R.string.settings_sync_summary_not_available)
         }
 
-        override fun onStatusChanged(which: Int) {
-            Logger.log.fine("Reloading account settings")
-            forceLoad()
+        val prefWifiOnly = findPreference("sync_wifi_only") as SwitchPreferenceCompat
+        prefWifiOnly.isChecked = settings.syncWifiOnly
+        prefWifiOnly.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, wifiOnly ->
+            settings.setSyncWiFiOnly(wifiOnly as Boolean)
+            loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
+            false
         }
 
+        val prefWifiOnlySSID = findPreference("sync_wifi_only_ssid") as EditTextPreference
+        val onlySSID = settings.syncWifiOnlySSID
+        prefWifiOnlySSID.text = onlySSID
+        if (onlySSID != null)
+            prefWifiOnlySSID.summary = getString(R.string.settings_sync_wifi_only_ssid_on, onlySSID)
+        else
+            prefWifiOnlySSID.setSummary(R.string.settings_sync_wifi_only_ssid_off)
+        prefWifiOnlySSID.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val ssid = newValue as String
+            settings.syncWifiOnlySSID = if (!TextUtils.isEmpty(ssid)) ssid else null
+            loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
+            false
+        }
+    }
+
+    override fun onLoaderReset(loader: Loader<AccountSettings>) {}
+
+}
+
+
+
+class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.LoaderCallbacks<AccountSettings> {
+    internal lateinit var account: Account
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        account = arguments?.getParcelable(KEY_ACCOUNT)!!
+
+        loaderManager.initLoader(0, arguments, this)
+    }
+
+    override fun onCreatePreferences(bundle: Bundle, s: String) {
+        addPreferencesFromResource(R.xml.settings_account_legacy)
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
+        return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
+    }
+
+    override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
+        if (settings == null) {
+            activity!!.finish()
+            return
+        }
+
+        // Category: dashboard
+        val prefManageAccount = findPreference("manage_account")
+        prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            WebViewActivity.openUrl(activity!!, Constants.dashboard.buildUpon().appendQueryParameter("email", account.name).build())
+            true
+        }
+
+        // category: authentication
+        val prefPassword = findPreference("password") as EditTextPreference
+        prefPassword.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val credentials = if (newValue != null) LoginCredentials(settings.uri, account.name, newValue as String) else null
+            LoginCredentialsChangeFragment.newInstance(account, credentials!!).show(fragmentManager!!, null)
+            loaderManager.restartLoader(0, arguments, this@LegacyAccountSettingsFragment)
+            false
+        }
+
+        // Category: encryption
+        val prefEncryptionPassword = findPreference("encryption_password")
+        prefEncryptionPassword.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            startActivity(ChangeEncryptionPasswordActivity.newIntent(activity!!, account))
+            true
+        }
+
+        val prefSync = findPreference("sync_interval") as ListPreference
+        val syncInterval = settings.getSyncInterval(CalendarContract.AUTHORITY) // Calendar is the baseline interval
+        if (syncInterval != null) {
+            prefSync.value = syncInterval.toString()
+            if (syncInterval == AccountSettings.SYNC_INTERVAL_MANUALLY)
+                prefSync.setSummary(R.string.settings_sync_summary_manually)
+            else
+                prefSync.summary = getString(R.string.settings_sync_summary_periodically, prefSync.entry)
+            prefSync.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                val newInterval = java.lang.Long.parseLong(newValue as String)
+                settings.setSyncInterval(App.addressBooksAuthority, newInterval)
+                settings.setSyncInterval(CalendarContract.AUTHORITY, newInterval)
+                OPENTASK_PROVIDERS.forEach {
+                    settings.setSyncInterval(it.authority, newInterval)
+                }
+                loaderManager.restartLoader(0, arguments, this@LegacyAccountSettingsFragment)
+                false
+            }
+        } else {
+            prefSync.isEnabled = false
+            prefSync.setSummary(R.string.settings_sync_summary_not_available)
+        }
+
+        val prefWifiOnly = findPreference("sync_wifi_only") as SwitchPreferenceCompat
+        prefWifiOnly.isChecked = settings.syncWifiOnly
+        prefWifiOnly.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, wifiOnly ->
+            settings.setSyncWiFiOnly(wifiOnly as Boolean)
+            loaderManager.restartLoader(0, arguments, this@LegacyAccountSettingsFragment)
+            false
+        }
+
+        val prefWifiOnlySSID = findPreference("sync_wifi_only_ssid") as EditTextPreference
+        val onlySSID = settings.syncWifiOnlySSID
+        prefWifiOnlySSID.text = onlySSID
+        if (onlySSID != null)
+            prefWifiOnlySSID.summary = getString(R.string.settings_sync_wifi_only_ssid_on, onlySSID)
+        else
+            prefWifiOnlySSID.setSummary(R.string.settings_sync_wifi_only_ssid_off)
+        prefWifiOnlySSID.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val ssid = newValue as String
+            settings.syncWifiOnlySSID = if (!TextUtils.isEmpty(ssid)) ssid else null
+            loaderManager.restartLoader(0, arguments, this@LegacyAccountSettingsFragment)
+            false
+        }
+    }
+
+    override fun onLoaderReset(loader: Loader<AccountSettings>) {}
+}
+
+private class AccountSettingsLoader(context: Context, internal val account: Account) : AsyncTaskLoader<AccountSettings>(context), SyncStatusObserver {
+    internal lateinit var listenerHandle: Any
+
+    override fun onStartLoading() {
+        forceLoad()
+        listenerHandle = ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS, this)
+    }
+
+    override fun onStopLoading() {
+        ContentResolver.removeStatusChangeListener(listenerHandle)
+    }
+
+    override fun abandon() {
+        onStopLoading()
+    }
+
+    override fun loadInBackground(): AccountSettings? {
+        val settings: AccountSettings
+        try {
+            settings = AccountSettings(context, account)
+        } catch (e: InvalidAccountException) {
+            return null
+        }
+
+        return settings
+    }
+
+    override fun onStatusChanged(which: Int) {
+        Logger.log.fine("Reloading account settings")
+        forceLoad()
     }
 
 }

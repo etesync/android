@@ -234,6 +234,14 @@
             android:parentActivityName=".ui.AccountsActivity">
         </activity>
         <activity
+            android:name=".ui.etebase.CollectionActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".ui.etebase.InvitationsActivity"
+            android:exported="false"
+            />
+        <activity
             android:name=".ui.ViewCollectionActivity"
             android:exported="false"
             />

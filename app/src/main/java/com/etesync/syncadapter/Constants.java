@@ -32,9 +32,10 @@ public class Constants {
     public static final Uri dashboard = webUri.buildUpon().appendEncodedPath("dashboard/").build();
     public static final Uri faqUri = webUri.buildUpon().appendEncodedPath("faq/").build();
     public static final Uri helpUri = webUri.buildUpon().appendEncodedPath("user-guide/android/").build();
-    public static final Uri forgotPassword = webUri.buildUpon().appendEncodedPath("accounts/password/reset/").build();
+    public static final Uri forgotPassword = faqUri.buildUpon().fragment("forgot-password").build();
 
     public static final Uri serviceUrl = Uri.parse((DEBUG_REMOTE_URL == null) ? "https://api.etesync.com/" : DEBUG_REMOTE_URL);
+    public static final String etebaseServiceUrl = (DEBUG_REMOTE_URL == null) ? "https://api.etebase.com/partner/etesync/" : DEBUG_REMOTE_URL;
 
     public static final String PRODID_BASE = "-//EteSync//" + BuildConfig.APPLICATION_ID + "/" + BuildConfig.VERSION_NAME;
 
@@ -43,4 +44,8 @@ public class Constants {
 
     public final static String KEY_ACCOUNT = "account",
             KEY_COLLECTION_INFO = "collectionInfo";
+
+    public final static String ETEBASE_TYPE_ADDRESS_BOOK = "etebase.vcard";
+    public final static String ETEBASE_TYPE_CALENDAR = "etebase.vevent";
+    public final static String ETEBASE_TYPE_TASKS = "etebase.vtodo";
 }

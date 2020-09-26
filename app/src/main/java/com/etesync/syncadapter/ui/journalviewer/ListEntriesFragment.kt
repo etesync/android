@@ -88,7 +88,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val entry = listAdapter?.getItem(position) as EntryEntity
-        startActivity(JournalItemActivity.newIntent(context!!, account, info, entry.content))
+        startActivity(JournalItemActivity.newIntent(requireContext(), account, info, entry.content))
     }
 
     internal inner class EntriesListAdapter(context: Context) : ArrayAdapter<EntryEntity>(context, R.layout.journal_viewer_list_item) {

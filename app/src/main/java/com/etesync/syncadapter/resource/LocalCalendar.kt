@@ -18,9 +18,13 @@ import android.os.RemoteException
 import android.provider.CalendarContract
 import android.provider.CalendarContract.*
 import at.bitfire.ical4android.*
+import com.etebase.client.CollectionAccessLevel
+import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.JournalEntity
+import com.etesync.syncadapter.resource.LocalEvent.Companion.COLUMN_UID
 import org.apache.commons.lang3.StringUtils
+import org.dmfs.tasks.contract.TaskContract
 import java.util.*
 import java.util.logging.Level
 
@@ -31,12 +35,41 @@ class LocalCalendar private constructor(
 ): AndroidCalendar<LocalEvent>(account, provider, LocalEvent.Factory, id), LocalCollection<LocalEvent> {
 
     companion object {
-        val defaultColor = -0x743cb6     // light green 500
+        val defaultColor = -0x743cb6     // light green 500 - should be "8BC349"?
+
+        fun parseColor(color_: String?): Int {
+            if (color_.isNullOrBlank()) {
+                return defaultColor
+            }
+            val color = color_.replaceFirst("^#".toRegex(), "")
+            if (color.length == 8) {
+                return (color.substring(0, 6).toLong(16) or (color.substring(6, 8).toLong(16) shl 24)).toInt()
+            } else if (color.length == 6) {
+                return (color.toLong(16) or (0xFF000000)).toInt()
+            } else {
+                return defaultColor
+            }
+        }
 
         val COLUMN_CTAG = Calendars.CAL_SYNC1
 
         fun create(account: Account, provider: ContentProviderClient, journalEntity: JournalEntity): Uri {
             val values = valuesFromCollectionInfo(journalEntity, true)
+
+            // ACCOUNT_NAME and ACCOUNT_TYPE are required (see docs)! If it's missing, other apps will crash.
+            values.put(Calendars.ACCOUNT_NAME, account.name)
+            values.put(Calendars.ACCOUNT_TYPE, account.type)
+            values.put(Calendars.OWNER_ACCOUNT, account.name)
+
+            // flag as visible & synchronizable at creation, might be changed by user at any time
+            values.put(Calendars.VISIBLE, 1)
+            values.put(Calendars.SYNC_EVENTS, 1)
+
+            return AndroidCalendar.create(account, provider, values)
+        }
+
+        fun create(account: Account, provider: ContentProviderClient, cachedCollection: CachedCollection): Uri {
+            val values = valuesFromCachedCollection(cachedCollection, true)
 
             // ACCOUNT_NAME and ACCOUNT_TYPE are required (see docs)! If it's missing, other apps will crash.
             values.put(Calendars.ACCOUNT_NAME, account.name)
@@ -85,6 +118,30 @@ class LocalCalendar private constructor(
             values.put(Calendars.ALLOWED_ATTENDEE_TYPES, StringUtils.join(intArrayOf(CalendarContract.Attendees.TYPE_OPTIONAL, CalendarContract.Attendees.TYPE_REQUIRED, CalendarContract.Attendees.TYPE_RESOURCE), ", "))
             return values
         }
+
+        private fun valuesFromCachedCollection(cachedCollection: CachedCollection, withColor: Boolean): ContentValues {
+            val values = ContentValues()
+            val col = cachedCollection.col
+            val meta = cachedCollection.meta
+            values.put(Calendars.NAME, col.uid)
+            values.put(Calendars.CALENDAR_DISPLAY_NAME, meta.name)
+
+            if (withColor)
+                values.put(Calendars.CALENDAR_COLOR, parseColor(meta.color))
+
+            if (col.accessLevel == CollectionAccessLevel.ReadOnly)
+                values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_READ)
+            else {
+                values.put(Calendars.CALENDAR_ACCESS_LEVEL, Calendars.CAL_ACCESS_OWNER)
+                values.put(Calendars.CAN_MODIFY_TIME_ZONE, 1)
+                values.put(Calendars.CAN_ORGANIZER_RESPOND, 1)
+            }
+
+            values.put(Calendars.ALLOWED_REMINDERS, Reminders.METHOD_ALERT)
+            values.put(Calendars.ALLOWED_AVAILABILITY, StringUtils.join(intArrayOf(Reminders.AVAILABILITY_TENTATIVE, Reminders.AVAILABILITY_FREE, Reminders.AVAILABILITY_BUSY), ","))
+            values.put(Calendars.ALLOWED_ATTENDEE_TYPES, StringUtils.join(intArrayOf(CalendarContract.Attendees.TYPE_OPTIONAL, CalendarContract.Attendees.TYPE_REQUIRED, CalendarContract.Attendees.TYPE_RESOURCE), ", "))
+            return values
+        }
     }
 
     override val url: String?
@@ -92,6 +149,9 @@ class LocalCalendar private constructor(
 
     fun update(journalEntity: JournalEntity, updateColor: Boolean) =
             update(valuesFromCollectionInfo(journalEntity, updateColor))
+
+    fun update(cachedCollection: CachedCollection, updateColor: Boolean) =
+            update(valuesFromCachedCollection(cachedCollection, updateColor))
 
 
     override fun findDeleted() =
@@ -122,7 +182,10 @@ class LocalCalendar private constructor(
             = queryEvents(null, null)
 
     override fun findByUid(uid: String): LocalEvent?
-        = queryEvents(Events._SYNC_ID + " =? ", arrayOf(uid)).firstOrNull()
+        = queryEvents(COLUMN_UID + " =? ", arrayOf(uid)).firstOrNull()
+
+    override fun findByFilename(filename: String): LocalEvent?
+        = queryEvents(Events._SYNC_ID + " =? ", arrayOf(filename)).firstOrNull()
 
     fun processDirtyExceptions() {
         // process deleted exceptions

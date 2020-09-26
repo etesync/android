@@ -179,8 +179,8 @@
     <string name="login_wrong_username_or_password">Nie można zweryfikować (prawdopodobnie zła nazwa użytkownika lub hasło).</string>
     <string name="login_view_logs">Zobacz logi</string>
 
-    <string name="login_encryption_setup_title">Ustawianie Szyfrowania</string>
-    <string name="login_encryption_setup">Proszę czekać, ustawianie szyfrowania…</string>
+    <string name="setting_up_encryption">Ustawianie Szyfrowania</string>
+    <string name="setting_up_encryption_content">Proszę czekać, ustawianie szyfrowania…</string>
 
     <string name="account_creation_failed">Tworzenie konta nie powiodło się</string>
 
@@ -287,7 +287,7 @@
     <string name="sync_successfully_calendar" formatted="false">Kalendarz \"%s\" został zmodyfikowany (%s)</string>
     <string name="sync_successfully_contacts" formatted="false">Kontakty zostały zmodyfikowane (%s)</string>
     <string name="sync_successfully_modified" formatted="false">%s został zmodyfikowany.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s został dodany. \n%s został zaktualizowany.\n%s został usunięty.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s został zaktualizowany.\n%s został usunięty.</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Bezpieczeństwo połączenia</string>

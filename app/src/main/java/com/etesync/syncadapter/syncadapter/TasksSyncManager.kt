@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.SyncResult
 import android.os.Bundle
 import at.bitfire.ical4android.Task
+import com.etebase.client.Item
 import com.etesync.syncadapter.AccountSettings
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
@@ -43,7 +44,7 @@ class TasksSyncManager(
         get() = context.getString(R.string.sync_error_tasks, account.name)
 
     override val syncSuccessfullyTitle: String
-        get() = context.getString(R.string.sync_successfully_tasks, info.displayName,
+        get() = context.getString(R.string.sync_successfully_tasks, localTaskList().name!!,
                 account.name)
 
     init {
@@ -58,7 +59,9 @@ class TasksSyncManager(
         if (!super.prepare())
             return false
 
-        journal = JournalEntryManager(httpClient.okHttpClient, remote, localTaskList().url!!)
+        if (isLegacy) {
+            journal = JournalEntryManager(httpClient.okHttpClient, remote, localTaskList().url!!)
+        }
         return true
     }
 
@@ -66,6 +69,32 @@ class TasksSyncManager(
 
     private fun localTaskList(): LocalTaskList {
         return localCollection as LocalTaskList
+    }
+
+    override fun processItem(item: Item) {
+        val local = localCollection!!.findByFilename(item.uid)
+
+        if (!item.isDeleted) {
+            val inputReader = StringReader(String(item.content))
+
+            val tasks = Task.tasksFromReader(inputReader)
+            if (tasks.size == 0) {
+                Logger.log.warning("Received VCard without data, ignoring")
+                return
+            } else if (tasks.size > 1) {
+                Logger.log.warning("Received multiple VCALs, using first one")
+            }
+
+            val task = tasks[0]
+            processTask(item, task, local)
+        } else {
+            if (local != null) {
+                Logger.log.info("Removing local record #" + local.id + " which has been deleted on the server")
+                local.delete()
+            } else {
+                Logger.log.warning("Tried deleting a non-existent record: " + item.uid)
+            }
+        }
     }
 
     override fun processSyncEntryImpl(cEntry: SyncEntry) {
@@ -83,7 +112,7 @@ class TasksSyncManager(
         val local = localCollection!!.findByUid(event.uid!!)
 
         if (cEntry.isAction(SyncEntry.Actions.ADD) || cEntry.isAction(SyncEntry.Actions.CHANGE)) {
-            processTask(event, local)
+            legacyProcessTask(event, local)
         } else {
             if (local != null) {
                 Logger.log.info("Removing local record #" + local.id + " which has been deleted on the server")
@@ -94,7 +123,25 @@ class TasksSyncManager(
         }
     }
 
-    private fun processTask(newData: Task, _localTask: LocalTask?): LocalTask {
+    private fun processTask(item: Item, newData: Task, _localTask: LocalTask?): LocalTask {
+        var localTask = _localTask
+        // delete local Task, if it exists
+        if (localTask != null) {
+            Logger.log.info("Updating " + item.uid + " in local calendar")
+            localTask.eTag = item.etag
+            localTask.update(newData)
+            syncResult.stats.numUpdates++
+        } else {
+            Logger.log.info("Adding " + item.uid + " to local calendar")
+            localTask = LocalTask(localTaskList(), newData, item.uid, item.etag)
+            localTask.add()
+            syncResult.stats.numInserts++
+        }
+
+        return localTask
+    }
+
+    private fun legacyProcessTask(newData: Task, _localTask: LocalTask?): LocalTask {
         var localTask = _localTask
         // delete local Task, if it exists
         if (localTask != null) {

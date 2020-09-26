@@ -13,6 +13,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.loader.app.LoaderManager
@@ -27,8 +28,8 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
-        progress.setTitle(R.string.login_configuration_detection)
-        progress.setMessage(getString(R.string.login_querying_server))
+        progress.setTitle(R.string.setting_up_encryption)
+        progress.setMessage(getString(R.string.setting_up_encryption_content))
         progress.isIndeterminate = true
         progress.setCanceledOnTouchOutside(false)
         isCancelable = false
@@ -38,26 +39,36 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Logger.log.fine("DetectConfigurationFragment: loading")
         loaderManager.initLoader(0, arguments, this)
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Configuration> {
-        return ServerConfigurationLoader(context!!, args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials)
+        return ServerConfigurationLoader(requireContext(), args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials)
     }
 
     override fun onLoadFinished(loader: Loader<Configuration>, data: Configuration?) {
         if (data != null) {
-            if (data.isFailed)
-            // no service found: show error message
-                fragmentManager!!.beginTransaction()
+            if (data.isFailed) {
+                Logger.log.warning("Failed login configuration ${data.error?.localizedMessage}")
+                // no service found: show error message
+                requireFragmentManager().beginTransaction()
                         .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
-            else
-            // service found: continue
-                fragmentManager!!.beginTransaction()
+            } else if (data.isLegacy) {
+                // legacy service found: continue
+                Logger.log.info("Found legacy account - asking for encryption details")
+                requireFragmentManager().beginTransaction()
                         .replace(android.R.id.content, EncryptionDetailsFragment.newInstance(data))
                         .addToBackStack(null)
                         .commitAllowingStateLoss()
+            } else {
+                Logger.log.info("Found Etebase account account")
+                requireFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, CreateAccountFragment.newInstance(data))
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss()
+            }
         } else
             Logger.log.severe("Configuration detection failed")
 
@@ -71,14 +82,9 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return AlertDialog.Builder(activity!!)
-                    .setTitle(R.string.login_configuration_detection)
+                    .setTitle(R.string.setting_up_encryption)
                     .setIcon(R.drawable.ic_error_dark)
-                    .setMessage(R.string.login_wrong_username_or_password)
-                    .setNeutralButton(R.string.login_view_logs) { dialog, which ->
-                        val intent = DebugInfoActivity.newIntent(context, this::class.toString())
-                        intent.putExtra(DebugInfoActivity.KEY_LOGS, arguments!!.getString(KEY_LOGS))
-                        startActivity(intent)
-                    }
+                    .setMessage(requireArguments().getString(KEY_LOGS))
                     .setPositiveButton(android.R.string.ok) { dialog, which ->
                         // dismiss
                     }

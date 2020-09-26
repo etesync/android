@@ -14,13 +14,13 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.commit
 import at.bitfire.ical4android.*
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
 import at.bitfire.vcard4android.BatchOperation
 import at.bitfire.vcard4android.Contact
 import at.bitfire.vcard4android.ContactsStorageException
-import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.syncadapter.Constants.KEY_COLLECTION_INFO
+import com.etesync.syncadapter.CachedCollection
+import com.etesync.syncadapter.Constants.*
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
@@ -35,19 +35,14 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 
-class ImportFragment : DialogFragment() {
+class ImportFragment(private val account: Account, private val uid: String, private val enumType: CollectionInfo.Type) : DialogFragment() {
 
-    private lateinit var account: Account
-    private lateinit var info: CollectionInfo
     private var inputStream: InputStream? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = false
         retainInstance = true
-
-        account = arguments!!.getParcelable(KEY_ACCOUNT)!!
-        info = arguments!!.getSerializable(KEY_COLLECTION_INFO) as CollectionInfo
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -57,7 +52,7 @@ class ImportFragment : DialogFragment() {
         } else {
             val data = ImportResult()
             data.e = Exception(getString(R.string.import_permission_required))
-            (activity as ResultFragment.OnImportCallback).onImportResult(data)
+            onImportResult(data)
 
             dismissAllowingStateLoss()
         }
@@ -118,7 +113,7 @@ class ImportFragment : DialogFragment() {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.action = Intent.ACTION_GET_CONTENT
 
-        when (info.enumType) {
+        when (enumType) {
             CollectionInfo.Type.CALENDAR -> intent.type = "text/calendar"
             CollectionInfo.Type.TASKS -> intent.type = "text/calendar"
             CollectionInfo.Type.ADDRESS_BOOK -> intent.type = "text/x-vcard"
@@ -132,7 +127,7 @@ class ImportFragment : DialogFragment() {
             val data = ImportResult()
             data.e = Exception("Failed to open file chooser.\nPlease install one.")
 
-            (activity as ResultFragment.OnImportCallback).onImportResult(data)
+            onImportResult(data)
 
             dismissAllowingStateLoss()
         }
@@ -146,7 +141,7 @@ class ImportFragment : DialogFragment() {
                     if (data != null) {
                         // Get the URI of the selected file
                         val uri = data.data!!
-                        Logger.log.info("Starting import into ${info.uid} from file ${uri}")
+                        Logger.log.info("Starting import into ${uid} from file ${uri}")
                         try {
                             inputStream = activity!!.contentResolver.openInputStream(uri)
 
@@ -157,7 +152,7 @@ class ImportFragment : DialogFragment() {
                             val importResult = ImportResult()
                             importResult.e = e
 
-                            (activity as ResultFragment.OnImportCallback).onImportResult(importResult)
+                            onImportResult(importResult)
 
                             dismissAllowingStateLoss()
                         }
@@ -172,7 +167,7 @@ class ImportFragment : DialogFragment() {
     }
 
     fun loadFinished(data: ImportResult) {
-        (activity as ResultFragment.OnImportCallback).onImportResult(data)
+        onImportResult(data)
 
         Logger.log.info("Finished import")
 
@@ -217,7 +212,7 @@ class ImportFragment : DialogFragment() {
                 val context = context!!
                 val importReader = InputStreamReader(inputStream)
 
-                if (info.enumType == CollectionInfo.Type.CALENDAR) {
+                if (enumType == CollectionInfo.Type.CALENDAR) {
                     val events = Event.eventsFromReader(importReader, null)
                     importReader.close()
 
@@ -239,7 +234,7 @@ class ImportFragment : DialogFragment() {
 
                     val localCalendar: LocalCalendar?
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, info.uid!!)
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, uid!!)
                         if (localCalendar == null) {
                             throw FileNotFoundException("Failed to load local resource.")
                         }
@@ -270,7 +265,7 @@ class ImportFragment : DialogFragment() {
 
                         entryProcessed()
                     }
-                } else if (info.enumType == CollectionInfo.Type.TASKS) {
+                } else if (enumType == CollectionInfo.Type.TASKS) {
                     val tasks = Task.tasksFromReader(importReader)
                     importReader.close()
 
@@ -297,7 +292,7 @@ class ImportFragment : DialogFragment() {
                     provider?.let {
                         val localTaskList: LocalTaskList?
                         try {
-                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, info.uid!!)
+                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, uid!!)
                             if (localTaskList == null) {
                                 throw FileNotFoundException("Failed to load local resource.")
                             }
@@ -325,7 +320,7 @@ class ImportFragment : DialogFragment() {
                             entryProcessed()
                         }
                     }
-                } else if (info.enumType == CollectionInfo.Type.ADDRESS_BOOK) {
+                } else if (enumType == CollectionInfo.Type.ADDRESS_BOOK) {
                     val uidToLocalId = HashMap<String?, Long>()
                     val downloader = ContactsSyncManager.ResourceDownloader(context)
                     val contacts = Contact.fromReader(importReader, downloader)
@@ -346,7 +341,7 @@ class ImportFragment : DialogFragment() {
                         return result
                     }
 
-                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, info.uid!!)
+                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, uid!!)
                     if (localAddressBook == null) {
                         throw FileNotFoundException("Failed to load local address book.")
                     }
@@ -424,18 +419,30 @@ class ImportFragment : DialogFragment() {
         }
     }
 
+    fun onImportResult(importResult: ImportResult) {
+        val fragment = ResultFragment.newInstance(importResult)
+        parentFragmentManager.commit(true) {
+            add(fragment, "importResult")
+        }
+    }
+
     companion object {
         private val REQUEST_CODE = 6384 // onActivityResult request
 
         private val TAG_PROGRESS_MAX = "progressMax"
 
         fun newInstance(account: Account, info: CollectionInfo): ImportFragment {
-            val frag = ImportFragment()
-            val args = Bundle(1)
-            args.putParcelable(KEY_ACCOUNT, account)
-            args.putSerializable(KEY_COLLECTION_INFO, info)
-            frag.arguments = args
-            return frag
+            return ImportFragment(account, info.uid!!, info.enumType!!)
+        }
+
+        fun newInstance(account: Account, cachedCollection: CachedCollection): ImportFragment {
+            val enumType = when (cachedCollection.meta.collectionType) {
+                ETEBASE_TYPE_CALENDAR -> CollectionInfo.Type.CALENDAR
+                ETEBASE_TYPE_TASKS -> CollectionInfo.Type.TASKS
+                ETEBASE_TYPE_ADDRESS_BOOK -> CollectionInfo.Type.ADDRESS_BOOK
+                else -> throw Exception("Got unsupported collection type")
+            }
+            return ImportFragment(account, cachedCollection.col.uid, enumType)
         }
     }
 }

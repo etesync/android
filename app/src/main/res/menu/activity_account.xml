@@ -25,6 +25,10 @@
         android:title="@string/account_show_fingerprint"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/invitations"
+        android:title="@string/invitations_title"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/delete_account"
           android:title="@string/account_delete"
           app:showAsAction="never"/>

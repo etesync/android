@@ -17,6 +17,7 @@ interface LocalCollection<out T: LocalResource<*>> {
     fun findAll(): List<T>
 
     fun findByUid(uid: String): T?
+    fun findByFilename(filename: String): T?
 
 
     fun count(): Long

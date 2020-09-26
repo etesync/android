@@ -12,7 +12,6 @@ import android.accounts.Account
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -32,8 +31,8 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
-        progress.setTitle(R.string.login_configuration_detection)
-        progress.setMessage(getString(R.string.login_querying_server))
+        progress.setTitle(R.string.setting_up_encryption)
+        progress.setMessage(getString(R.string.setting_up_encryption_content))
         progress.isIndeterminate = true
         progress.setCanceledOnTouchOutside(false)
         isCancelable = false
@@ -84,7 +83,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return AlertDialog.Builder(activity!!)
-                    .setTitle(R.string.login_configuration_detection)
+                    .setTitle(R.string.setting_up_encryption)
                     .setIcon(R.drawable.ic_error_dark)
                     .setMessage(R.string.login_wrong_username_or_password)
                     .setNeutralButton(R.string.login_view_logs) { dialog, which ->

@@ -15,22 +15,7 @@ import com.etesync.syncadapter.log.Logger
 import java.net.URI
 import java.net.URISyntaxException
 
-class LoginCredentials(_uri: URI?, val userName: String, val password: String) : Parcelable {
-    val uri: URI?
-
-    init {
-        var uri = _uri
-
-        if (uri == null) {
-            try {
-                uri = URI(Constants.serviceUrl.toString())
-            } catch (e: URISyntaxException) {
-                Logger.log.severe("Should never happen, it's a constant")
-            }
-
-        }
-        this.uri = uri
-    }
+class LoginCredentials(val uri: URI?, val userName: String, val password: String) : Parcelable {
 
     override fun describeContents(): Int {
         return 0

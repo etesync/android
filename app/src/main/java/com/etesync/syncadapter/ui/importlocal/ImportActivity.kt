@@ -14,7 +14,7 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.ui.BaseActivity
 
-class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImportCallback, DialogInterface {
+class ImportActivity : BaseActivity(), SelectImportMethod, DialogInterface {
 
     private lateinit var account: Account
     protected lateinit var info: CollectionInfo
@@ -83,13 +83,6 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
         return super.onKeyDown(keyCode, event)
     }
 
-    override fun onImportResult(importResult: ResultFragment.ImportResult) {
-        val fragment = ResultFragment.newInstance(importResult)
-        supportFragmentManager.beginTransaction()
-                .add(fragment, "importResult")
-                .commitAllowingStateLoss()
-    }
-
     override fun cancel() {
         finish()
     }
@@ -108,9 +101,9 @@ class ImportActivity : BaseActivity(), SelectImportMethod, ResultFragment.OnImpo
             // This makes sure that the container activity has implemented
             // the callback interface. If not, it throws an exception
             try {
-                mSelectImportMethod = activity as SelectImportMethod?
+                mSelectImportMethod = activity as SelectImportMethod
             } catch (e: ClassCastException) {
-                throw ClassCastException(activity!!.toString() + " must implement MyInterface ")
+                throw ClassCastException(activity.toString() + " must implement MyInterface ")
             }
 
         }
