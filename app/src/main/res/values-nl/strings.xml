@@ -1,121 +1,225 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Help</string>
-  <string name="manage_accounts">Beheer accounts</string>
-  <string name="please_wait">Een moment geduld...</string>
-  <string name="send">Verzenden</string>
-  <!--startup dialogs-->
-  <string name="startup_battery_optimization">Batterij optimalisatie</string>
-  <string name="startup_dont_show_again">Niet opnieuw weergeven</string>
-  <!--AboutActivity-->
-  <string name="about_license_terms">Licentie voorwaarden</string>
-  <string name="about_license_info_no_warranty">Dit programma kom met ABSOLUUT GEEN GARANTIE. Het is gratis software, en je bent welkom dit te herdistribueren onder bepaalde voorwaarden.</string>
-  <!--global settings-->
-  <string name="logging_to_external_storage">Loggen naar externe opslag: %s</string>
-  <string name="logging_to_external_storage_warning">Verwijder logs zo snel mogelijk</string>
-  <string name="logging_couldnt_create_file">Kon extern log bestand niet verwijderen: %s</string>
-  <string name="logging_no_external_storage">Externe opslag niet gevonden</string>
-  <!--AccountsActivity-->
-  <string name="navigation_drawer_open">Open navigatie drawer</string>
-  <string name="navigation_drawer_close">Sluit navigatie drawer</string>
-  <string name="navigation_drawer_about">Over / Licentie</string>
-  <string name="navigation_drawer_settings">Instellingen</string>
-  <string name="navigation_drawer_external_links">Externe links</string>
-  <string name="navigation_drawer_website">Website</string>
-  <string name="navigation_drawer_faq">FAQ</string>
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <string name="app_settings">Instellingen</string>
-  <string name="app_settings_user_interface">Gebruikers interface</string>
-  <string name="app_settings_reset_hints">Hints resetten </string>
-  <string name="app_settings_reset_hints_summary">Hints die al gezien zijn opnieuw weergeven</string>
-  <string name="app_settings_reset_hints_success">Alle hints worden opnieuw weergegeven</string>
-  <string name="app_settings_security">Beveiliging</string>
-  <string name="app_settings_distrust_system_certs">Systeem certificaten niet vertrouwen</string>
-  <string name="app_settings_distrust_system_certs_on">Systeem en CAs van toegevoegde gebruiker wordt niet vertrouwd</string>
-  <string name="app_settings_distrust_system_certs_off">Systeem en CAs van toegevoegde gebruiker wordt vertrouwd (aanbevolen)</string>
-  <string name="app_settings_reset_certificates">Resetten (niet) vertrouwde certificaten</string>
-  <string name="app_settings_reset_certificates_summary">Resetten alle bewerkte certificaten</string>
-  <string name="app_settings_reset_certificates_success">Alle bewerkte certificaten zijn vrijgemaakt</string>
-  <string name="app_settings_debug">Debuggen</string>
-  <string name="app_settings_log_to_external_storage">Log naar extern bestand</string>
-  <string name="app_settings_log_to_external_storage_on">Loggen naar externe opslag (wanneer beschikbaar)</string>
-  <string name="app_settings_log_to_external_storage_off">Extern bestands loggen uitgeschakeld</string>
-  <string name="app_settings_show_debug_info">Debug info tonen</string>
-  <string name="app_settings_show_debug_info_details">Bekijk/deel software configuratie details</string>
-  <!--AccountActivity-->
-  <string name="account_synchronize_now">Synchroniseer nu</string>
-  <string name="account_synchronizing_now">Aan het synchronizeren...</string>
-  <string name="account_settings">Account instellingen</string>
-  <string name="account_delete">Account verwijderen</string>
-  <string name="account_delete_confirmation_title">Account echt verwijderen?</string>
-  <string name="account_delete_confirmation_text">Alle lokale kopieën van adresboeken, agenda\'s en taken worden verwijderd.</string>
-  <!--PermissionsActivity-->
-  <string name="permissions_calendar">Agenda rechten</string>
-  <string name="permissions_calendar_request">Agenda rechten verkrijgen</string>
-  <string name="permissions_contacts">Contact rechten</string>
-  <string name="permissions_contacts_request">Contacten rechten verkrijgen</string>
-  <string name="permissions_opentasks">OpenTasks rechten</string>
-  <string name="permissions_opentasks_request">OpenTasks rechten verkrijgen</string>
-  <!--AddAccountActivity-->
-  <string name="login_title">Account toevoegen</string>
-  <string name="login_email_address">Email adres</string>
-  <string name="login_email_address_error">Geldig email adres vereist</string>
-  <string name="login_password">Wachtwoord</string>
-  <string name="login_password_required">Wachtwoord vereist</string>
-  <string name="login_back">Terug</string>
-  <string name="login_configuration_detection">Configuratie detectie</string>
-  <string name="login_querying_server">Even geduld, verzoek naar server...</string>
-  <string name="login_view_logs">Bekijk logs</string>
-  <!--AccountSettingsActivity-->
-  <string name="settings_title">Instellingen: %s</string>
-  <string name="settings_authentication">Authenticatie</string>
-  <string name="settings_password">Wachtwoord</string>
-  <string name="settings_enter_password">Wachtwoord invoeren:</string>
-  <string name="settings_sync">Synchronisatie</string>
-  <string name="settings_sync_interval_contacts">Contacten verversen</string>
-  <string name="settings_sync_summary_manually">Alleen handmatig</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + meteen na wijziging</string>
-  <string name="settings_sync_summary_not_available">Niet beschikbaar</string>
-  <string name="settings_sync_interval_calendars">Agenda\'s verversen</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Alleen handmatig</item>
-    <item>Elke 15 minuten</item>
-    <item>Elk uur</item>
-    <item>Elke 2 uur</item>
-    <item>Elke 4 uur</item>
-    <item>Dagelijks</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">Sync alleen tijdens WiFi</string>
-  <string name="settings_sync_wifi_only_on">Synchronisatie is voorbehouden tijdens WiFi verbindingen</string>
-  <string name="settings_sync_wifi_only_off">Verbinding type is niet overwogen</string>
-  <string name="settings_sync_wifi_only_ssid">WiFi SSID beperking</string>
-  <string name="settings_sync_wifi_only_ssid_on">Zal alleen synchroniseren over %s</string>
-  <string name="settings_sync_wifi_only_ssid_off">Alle WiFI verbindingen mogen worden gebruikt</string>
-  <string name="settings_sync_wifi_only_ssid_message">Type de naam van het WiFi netwerk (SSID) om synchronisatie tot dit netwerk te beperken. Leeg laten voor sync over alle netwerken.</string>
-  <!--collection management-->
-  <string name="create_addressbook">Maak adresboek</string>
-  <string name="create_addressbook_display_name_hint">Mijn adresboek</string>
-  <string name="create_collection_creating">Collectie aan het maken</string>
-  <string name="create_collection_display_name">Weergave naam (titel) van deze collectie:</string>
-  <string name="create_collection_display_name_required">Titel is vereist</string>
-  <string name="create_collection_description">Beschrijving (optioneel):</string>
-  <string name="create_collection_create">Maak</string>
-  <string name="delete_collection">Verwijder collectie</string>
-  <string name="delete_collection_confirm_title">Weet je het zeker?</string>
-  <string name="delete_collection_confirm_warning">Deze collectie (%s) en alle data zal verwijderd worden van de server.</string>
-  <string name="delete_collection_deleting_collection">Collectie aan het verwijderen</string>
-  <!--ExceptionInfoFragment-->
-  <string name="exception">Er is een fout opgetreden.</string>
-  <string name="exception_httpexception">Er is een HTTP fout opgetreden.</string>
-  <string name="exception_ioexception">Er is een I/O fout opgetreden.</string>
-  <string name="exception_show_details">Toon details</string>
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">Debug informatie</string>
-  <string name="sync_error_calendar">Agenda synchronisatie is mislukt (%s)</string>
-  <string name="sync_error">Fout tijdens %s</string>
-  <string name="sync_error_http_dav">Serverfout tijdens %s</string>
-  <string name="sync_error_local_storage">Database fout tijdens %s</string>
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">Help</string>
+    <string name="manage_accounts">Beheer accounts</string>
+    <string name="please_wait">Een moment geduld …</string>
+    <string name="send">Verzenden</string>
+    <!--startup dialogs-->
+    <string name="startup_battery_optimization">Batterij optimalisatie</string>
+    <string name="startup_dont_show_again">Niet opnieuw weergeven</string>
+    <!--AboutActivity-->
+    <string name="about_license_terms">Licentie voorwaarden</string>
+    <string name="about_license_info_no_warranty">Dit programma kom met ABSOLUUT GEEN GARANTIE. Het is gratis software, en je bent welkom dit te herdistribueren onder bepaalde voorwaarden.</string>
+    <!--global settings-->
+    <string name="logging_to_external_storage">Loggen naar externe opslag: %s</string>
+    <string name="logging_to_external_storage_warning">Verwijder logs zo snel mogelijk</string>
+    <string name="logging_couldnt_create_file">Kon extern log bestand niet verwijderen: %s</string>
+    <string name="logging_no_external_storage">Externe opslag niet gevonden</string>
+    <!--AccountsActivity-->
+    <string name="navigation_drawer_open">Open navigatie drawer</string>
+    <string name="navigation_drawer_close">Sluit navigatie drawer</string>
+    <string name="navigation_drawer_about">Over / Licentie</string>
+    <string name="navigation_drawer_settings">Instellingen</string>
+    <string name="navigation_drawer_external_links">Externe links</string>
+    <string name="navigation_drawer_website">Website</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <string name="app_settings">Instellingen</string>
+    <string name="app_settings_user_interface">Gebruikers interface</string>
+    <string name="app_settings_reset_hints">Hints resetten </string>
+    <string name="app_settings_reset_hints_summary">Hints die al gezien zijn opnieuw weergeven</string>
+    <string name="app_settings_reset_hints_success">Alle hints worden opnieuw weergegeven</string>
+    <string name="app_settings_security">Beveiliging</string>
+    <string name="app_settings_distrust_system_certs">Systeem certificaten niet vertrouwen</string>
+    <string name="app_settings_distrust_system_certs_on">Systeem en CAs van toegevoegde gebruiker wordt niet vertrouwd</string>
+    <string name="app_settings_distrust_system_certs_off">Systeem en CAs van toegevoegde gebruiker wordt vertrouwd (aanbevolen)</string>
+    <string name="app_settings_reset_certificates">Resetten (niet) vertrouwde certificaten</string>
+    <string name="app_settings_reset_certificates_summary">Resetten alle bewerkte certificaten</string>
+    <string name="app_settings_reset_certificates_success">Alle bewerkte certificaten zijn vrijgemaakt</string>
+    <string name="app_settings_debug">Debuggen</string>
+    <string name="app_settings_log_to_external_storage">Log naar extern bestand</string>
+    <string name="app_settings_log_to_external_storage_on">Loggen naar externe opslag (wanneer beschikbaar)</string>
+    <string name="app_settings_log_to_external_storage_off">Extern bestands loggen uitgeschakeld</string>
+    <string name="app_settings_show_debug_info">Debug info tonen</string>
+    <string name="app_settings_show_debug_info_details">Bekijk/deel software configuratie details</string>
+    <!--AccountActivity-->
+    <string name="account_synchronize_now">Synchroniseer nu</string>
+    <string name="account_synchronizing_now">Aan het synchronizeren</string>
+    <string name="account_settings">Account instellingen</string>
+    <string name="account_delete">Account verwijderen</string>
+    <string name="account_delete_confirmation_title">Account echt verwijderen?</string>
+    <string name="account_delete_confirmation_text">Alle lokale kopieën van adresboeken, agenda\'s en taken worden verwijderd.</string>
+    <!--PermissionsActivity-->
+    <string name="permissions_calendar">Agenda rechten</string>
+    <string name="permissions_calendar_request">Agenda rechten verkrijgen</string>
+    <string name="permissions_contacts">Contact rechten</string>
+    <string name="permissions_contacts_request">Contacten rechten verkrijgen</string>
+    <string name="permissions_opentasks">OpenTasks rechten</string>
+    <string name="permissions_opentasks_request">OpenTasks rechten verkrijgen</string>
+    <!--AddAccountActivity-->
+    <string name="login_title">Account toevoegen</string>
+    <string name="login_email_address">Email adres</string>
+    <string name="login_email_address_error">Geldig email adres vereist</string>
+    <string name="login_password">Wachtwoord</string>
+    <string name="login_password_required">Wachtwoord vereist</string>
+    <string name="login_back">Terug</string>
+    <string name="login_configuration_detection">Configuratie detectie</string>
+    <string name="login_querying_server">Even geduld, verzoek naar server...</string>
+    <string name="login_view_logs">Bekijk logs</string>
+    <!--AccountSettingsActivity-->
+    <string name="settings_title">Instellingen: %s</string>
+    <string name="settings_authentication">Authenticatie</string>
+    <string name="settings_password">Wachtwoord</string>
+    <string name="settings_enter_password">Wachtwoord invoeren:</string>
+    <string name="settings_sync">Synchronisatie</string>
+    <string name="settings_sync_interval_contacts">Contacten verversen</string>
+    <string name="settings_sync_summary_manually">Alleen handmatig</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + meteen na wijziging</string>
+    <string name="settings_sync_summary_not_available">Niet beschikbaar</string>
+    <string name="settings_sync_interval_calendars">Agenda\'s verversen</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Alleen handmatig</item>
+        <item>Elke 15 minuten</item>
+        <item>Elk uur</item>
+        <item>Elke 2 uur</item>
+        <item>Elke 4 uur</item>
+        <item>Dagelijks</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">Sync alleen tijdens WiFi</string>
+    <string name="settings_sync_wifi_only_on">Synchronisatie is voorbehouden tijdens WiFi verbindingen</string>
+    <string name="settings_sync_wifi_only_off">Verbinding type is niet overwogen</string>
+    <string name="settings_sync_wifi_only_ssid">WiFi SSID beperking</string>
+    <string name="settings_sync_wifi_only_ssid_on">Zal alleen synchroniseren over %s</string>
+    <string name="settings_sync_wifi_only_ssid_off">Alle WiFI verbindingen mogen worden gebruikt</string>
+    <string name="settings_sync_wifi_only_ssid_message">Type de naam van het WiFi netwerk (SSID) om synchronisatie tot dit netwerk te beperken. Leeg laten voor sync over alle netwerken.</string>
+    <!--collection management-->
+    <string name="create_addressbook">Maak adresboek</string>
+    <string name="create_addressbook_display_name_hint">Mijn adresboek</string>
+    <string name="create_collection_creating">Collectie aan het maken</string>
+    <string name="create_collection_display_name">Weergave naam (titel) van deze collectie:</string>
+    <string name="create_collection_display_name_required">Titel is vereist</string>
+    <string name="create_collection_description">Beschrijving (optioneel):</string>
+    <string name="create_collection_create">Maak</string>
+    <string name="delete_collection">Verwijder collectie</string>
+    <string name="delete_collection_confirm_title">Weet je het zeker?</string>
+    <string name="delete_collection_confirm_warning">Deze collectie (%s) en alle data zal verwijderd worden van de server.</string>
+    <string name="delete_collection_deleting_collection">Collectie aan het verwijderen</string>
+    <!--ExceptionInfoFragment-->
+    <string name="exception">Er is een fout opgetreden.</string>
+    <string name="exception_httpexception">Er is een HTTP fout opgetreden.</string>
+    <string name="exception_ioexception">Er is een I/O fout opgetreden.</string>
+    <string name="exception_show_details">Toon details</string>
+    <!--sync errors and DebugInfoActivity-->
+    <string name="debug_info_title">Debug informatie</string>
+    <string name="sync_error_calendar">Agenda synchronisatie is mislukt (%s)</string>
+    <string name="sync_error">Fout tijdens %s</string>
+    <string name="sync_error_http_dav">Serverfout tijdens %s</string>
+    <string name="sync_error_local_storage">Database fout tijdens %s</string>
+    <!--cert4android-->
+    <string name="journal_item_reminders">Herinneringen</string>
+    <string name="journal_item_attendees">Aanwezigen</string>
+    <string name="journal_item_tab_raw">Raw</string>
+    <string name="journal_item_tab_revisions">Revisies</string>
+    <string name="journal_item_tab_main">Primaire</string>
+    <string name="about">Over</string>
+    <string name="invitations_reject">Verwerp</string>
+    <string name="invitations_accept">Accepteer</string>
+    <string name="invitations_accept_reject_dialog">Wilt u de uitnodiging accepteren of verwerpen\?</string>
+    <string name="invitations_list_empty">Geen uitnodigingen</string>
+    <string name="invitations_loading">Bezig met laden van uitnodigingen...</string>
+    <string name="invitations_title">Uitnodigingen</string>
+    <string name="collection_members_leave">Verlaat</string>
+    <string name="collection_members_no_access">Enkel admins mogen lidmaatschap van verzamelingen beheren. Zou u graag de verzameling verlaten\?</string>
+    <string name="collection_members_remove_admin">Het verwijderen van toegang van admins is momenteel niet ondersteund.</string>
+    <string name="collection_members_remove">Zou u %s\'s toegang willen intrekken\?
+\nWeet dat een kwaadaardige gebruiken potentieel toegang zou kunnen behouden tot encryptiesleutels. Kijk in de veelgestelde vragen voor meer informatie.</string>
+    <string name="collection_members_remove_title">Verwijder lid</string>
+    <string name="collection_members_remove_error">Fout bij het verwijderen van lid</string>
+    <string name="collection_members_removing">Lid aan het verwijderen</string>
+    <string name="collection_members_error_user_not_found">Gebruiker (%s) niet gevonden</string>
+    <string name="trust_fingerprint_body">Verifieer %s\'s beveiligingsvingerafdruk om te verzekeren dat de encryptie veilig is.</string>
+    <string name="trust_fingerprint_title">Verifieer beveiligheidsvingerafdruk</string>
+    <string name="collection_members_adding">Lid aan het toevoegen</string>
+    <string name="collection_members_add_error">Fout bij het toevoegen van lid</string>
+    <string name="collection_members_add">Voeg lid toe</string>
+    <string name="collection_members_list_empty">Geen leden</string>
+    <string name="collection_members_list_loading">Laden van members...</string>
+    <string name="collection_members_title">Leden</string>
+    <string name="use_native_apps_body">EteSync integreert naadloos met Android, dus gebruik gewoon je bestaande adresboek en kalenderapplicaties!
+\n
+\nVoor meer informatie, bekijk onze gebruikersgids.</string>
+    <string name="use_native_apps_title">Wist je dat\?</string>
+    <string name="members_old_journals_not_allowed">Het delen van klassieke journalen is niet toegestaan. Om dit journaal te delen, maak een nieuwe aan en kopieer de inhoud via de \"importeer\" dialoog. Indien u hierbij problemen ondervind, contacteer a.u.b. de ondersteuning.</string>
+    <string name="edit_owner_only_anon">Enkel de eigenaar van deze verzameling mag aanpassingen maken.</string>
+    <string name="edit_owner_only">Enkel de eigenaar van deze verzameling (%s) mag aanpassingen maken.</string>
+    <string name="not_allowed_title">Niet Toegestaan</string>
+    <string name="members_owner_only">Enkel de eigenaar van deze verzameling (%s) mag de leden zien.</string>
+    <string name="account_owner">Eigenaar: %s</string>
+    <string name="account_showcase_import">Om contacten en kalenders te importeren in EteSync moet u op het menu klikken en \"Importeer\" kiezen.</string>
+    <string name="tasks_not_showing">* Log wordt enkel getoond indien een taak provider is geïnstalleerd.</string>
+    <string name="change_journal_title">Verander Journaal</string>
+    <string name="show_fingperprint_title">Mijn Vingerafdruk</string>
+    <string name="account_tasks_not_showing">* Taken worden niet gesynct (installeer een provider)</string>
+    <string name="account_click_install_tasks">Klik hier om OpenTasks te installeren!</string>
+    <string name="account_showcase_view_collection">U kan op een item klikken om de verzameling te zien. Van daar uit kan u het journaal, importeren en veel meer bekijken...</string>
+    <string name="account_delete_collection_last_text">Het verwijderen van de laatste verzameling is niet toegestaan, maak a.u.b. een nieuwe indien u deze wil verwijderen.</string>
+    <string name="account_delete_collection_last_title">Kan de laatste verzameling niet verwijderen</string>
+    <string name="account_show_fingerprint">Toon Vingerafdruk</string>
+    <string name="app_settings_change_notification">Toon verander notificaties</string>
+    <string name="app_settings_force_language_default">Auto</string>
+    <string name="app_settings_force_language">Forceer Taal</string>
+    <string name="app_settings_log_verbose_summary">Verbose logs kunnen privé informatie bevatten</string>
+    <string name="app_settings_log_verbose">Verbose logging</string>
+    <string name="app_settings_override_proxy_port">HTTP proxy poort</string>
+    <string name="app_settings_override_proxy_host">HTTP proxy host naam</string>
+    <string name="app_settings_override_proxy_off">Gebruik systeem standaard proxy instellingen</string>
+    <string name="app_settings_override_proxy_on">Gebruik eigen proxy instellingen</string>
+    <string name="app_settings_override_proxy">Overschrijf proxy instellingen</string>
+    <string name="app_settings_connection">Connectie</string>
+    <string name="app_settings_prefer_tasksorg_snack">U zal misschien uw account moeten verwijderen en hertoevoegen om deze veranderingen door te voeren.</string>
+    <string name="app_settings_prefer_tasksorg_off">Zal taken syncen met OpenTasks indien beschikbaar</string>
+    <string name="app_settings_prefer_tasksorg_on">Zal taken syncen met Tasks.org indien beschikbaar</string>
+    <string name="app_settings_prefer_tasksorg">Verkies Tasks.org taak provider</string>
+    <string name="app_settings_sync">Sync</string>
+    <string name="app_settings_notification_settings_summary">Beheer notificatiekanalen en hun instellingen</string>
+    <string name="app_settings_notification_settings">Notificatie-instellingen</string>
+    <string name="accounts_missing_permissions">Ontbrekende toestemmingen: %s</string>
+    <string name="accounts_showcase_add">U moet een account toevoegen om EteSync te gebruiken. Click hier om een toe te voegen...</string>
+    <string name="accounts_global_sync_enable">Schakel in</string>
+    <string name="accounts_global_sync_disabled">Systeem-wijde automatische synchronisatie is uitgeschakeld</string>
+    <string name="account_list_empty">Welkom bij EteSync!</string>
+    <string name="navigation_drawer_contact">Contact</string>
+    <string name="navigation_drawer_report_issue">Rapporteer probleem</string>
+    <string name="navigation_drawer_guide">Gebruikershandleiding</string>
+    <string name="navigation_drawer_subtitle">Beveiligde Sync Adapter</string>
+    <string name="logging_davdroid_file_logging">EteSync file logging staat AAN</string>
+    <string name="startup_vendor_specific_bugs_open_faq">Open Veelgestelde Vragen (FAQ)</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync heeft gedecteerd dat u een Android versie gebruikt dat mogelijk verkoper-specifieke bugs bevat.
+\nKijk a.u.b. naar de veelgestelde vragen voor meer informatie.</string>
+    <string name="startup_vendor_specific_bugs">Potentiele Verkoper Bugs</string>
+    <string name="startup_development_version_give_feedback">Geef feedback</string>
+    <string name="startup_development_version_message">Dit is een development versie van EteSync. Wees u ervan bewust dat sommige zaken niet zullen werken zoals verwacht. Geef ons a.u.b. constructieve feedback om EteSync te verbeteren.</string>
+    <string name="startup_development_version">EteSync Voorbeeld Release</string>
+    <string name="startup_battery_optimization_disable">Schakel uit voor EteSync</string>
+    <string name="startup_battery_optimization_message">Android kan mogelijk de EteSync synchronisatie uitschakelen/verminderen na een aantal dagen. Om dit te voorkomen, schakel batterij-optimalisatie uit.</string>
+    <string name="tourguide_title">Wist je dat\?</string>
+    <string name="crash_email_body">Indien mogelijk, vermeld a.u.b. elke mogelijks relevante informatie zoals wat u deed dat de error veroorzaakte.</string>
+    <string name="crash_email_subject">EteSync Debug Informatie</string>
+    <string name="crash_message">Zend a.u.b. de stack trace naar de ontwikkelaars.</string>
+    <string name="crash_title">EteSync is gecrasht!</string>
+    <string name="notification_channel_sync_status_desc">Informatie statusberichten zoals de samenvatting van de sync veranderingen</string>
+    <string name="notification_channel_sync_status">Statusberichten</string>
+    <string name="notification_channel_sync_warnings_desc">Niet-fotale synchronisatieproblemen zoals afgewezen veranderingen van read-only verzamelingen</string>
+    <string name="notification_channel_sync_warnings">Synchronisatiewaarschuwingen</string>
+    <string name="notification_channel_sync_errors_desc">Belangrijke fouten die synchronisatie stoppen zoals onverwachte server antwoorden</string>
+    <string name="notification_channel_sync_errors">Synchronisatiefouten</string>
+    <string name="notification_channel_sync">Synchronisatie</string>
+    <string name="notification_channel_general">Andere belangrijke berichten</string>
+    <string name="notification_channel_debugging">Debuggen</string>
+    <string name="notification_channel_crash_reports">Crash Rapporten</string>
+    <string name="address_books_authority_title">Adresboeken</string>
+    <string name="account_title_address_book">EteSync Adresboek</string>
+    <string name="app_name">EteSync</string>
 </resources>
