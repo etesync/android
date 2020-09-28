@@ -50,7 +50,7 @@
     <string name="startup_development_version_message">This is a development version of EteSync. Be aware that things may not work as expected. Please give us constructive feedback to improve it.</string>
     <string name="startup_development_version_give_feedback">Provide feedback</string>
     <string name="startup_vendor_specific_bugs">Potential Vendor Bugs</string>
-    <string name="startup_vendor_specific_bugs_message">You are using an Android version that may contain vendor specific bugs.\nPlease take a look at the FAQ for more info.</string>
+    <string name="startup_vendor_specific_bugs_message">Your Android device may have vendor specific bugs.\nPlease refer to the FAQ for more info..</string>
     <string name="startup_vendor_specific_bugs_open_faq">Open FAQ</string>
 
     <!-- AboutActivity -->
