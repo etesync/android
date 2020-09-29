@@ -33,6 +33,11 @@ EteSync uses `git-submodules`, so cloning the code requires slightly different c
   
 To update the code to the latest version, run: `git pull --rebase --recurse-submodules`
 
+# Translating
+
+Translators are highly welcome! 
+To help with translation please go to [our Weblate page](https://hosted.weblate.org/projects/etesync/) and translate it from there.
+
 
 Third Party Code
 ================
