@@ -104,7 +104,7 @@ class InvitationsListFragment : ListFragment(), AdapterView.OnItemClickListener 
 
             val tv = v!!.findViewById<View>(R.id.title) as TextView
             // FIXME: Should have a sensible string here
-            tv.text = "Invitation ${position}"
+            tv.text = "Invitation from ${invitation.fromUsername}"
 
             // FIXME: Also mark admins
             val readOnly = v.findViewById<View>(R.id.read_only)
