@@ -24,7 +24,7 @@
     <string name="notification_channel_crash_reports">Crash Reports</string>
     <string name="notification_channel_debugging">Debugging</string>
     <string name="notification_channel_general">Other important messages</string>
-    <string name="notification_channel_sync">Syncing</string>
+    <string name="notification_channel_sync">Synchronization</string>
     <string name="notification_channel_sync_errors">Synchronization errors</string>
     <string name="notification_channel_sync_errors_desc">Errors stopping synchronization, like unexpected server replies.</string>
     <string name="notification_channel_sync_warnings">Synchronization warnings</string>
