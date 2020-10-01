@@ -160,7 +160,7 @@ dependencies {
         transitive = true
     }
 
-    def requeryVersion = '1.6.0'
+    def requeryVersion = '1.6.1'
     implementation "io.requery:requery:$requeryVersion"
     implementation "io.requery:requery-android:$requeryVersion"
     implementation "io.requery:requery-kotlin:$requeryVersion"
