@@ -155,6 +155,9 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         doAsync {
             try {
                 val col = cachedCollection.col
+                val meta = col.meta
+                meta.mtime = System.currentTimeMillis()
+                col.meta = meta
                 col.delete()
                 uploadCollection(col)
                 val applicationContext = activity?.applicationContext
@@ -193,6 +196,8 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
 
         edit = v.findViewById<EditText>(R.id.description)
         meta.description = StringUtils.trimToNull(edit.text.toString())
+
+        meta.mtime = System.currentTimeMillis()
 
         if (ok) {
             when (meta.collectionType) {
