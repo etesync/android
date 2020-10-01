@@ -156,9 +156,9 @@
     <string name="collection_members_title">Members</string>
     <string name="collection_members_list_loading">Loading members...</string>
     <string name="collection_members_list_empty">No members</string>
-    <string name="collection_members_add">Add member</string>
+    <string name="collection_members_add">Invite user</string>
     <string name="collection_members_add_error">Error adding member</string>
-    <string name="collection_members_adding">Adding member</string>
+    <string name="collection_members_adding">Inviting user</string>
     <string name="trust_fingerprint_title">Verify security fingerprint</string>
     <string name="trust_fingerprint_body">Verify %s\'s security fingerprint to ensure the encryption is secure.</string>
     <string name="collection_members_error_user_not_found">User (%s) not found</string>
