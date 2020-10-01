@@ -139,7 +139,15 @@ class AddMemberFragment(private val accountHolder: AccountHolder, private val ca
                                 doAsync {
                                     try {
                                         invitationManager.invite(cachedCollection.col, username, profile.pubkey, accessLevel)
-                                        uiThread { dismiss() }
+                                        uiThread {
+                                            AlertDialog.Builder(requireContext())
+                                                .setTitle(R.string.collection_members_add)
+                                                .setIcon(R.drawable.ic_account_add_dark)
+                                                .setMessage(R.string.collection_members_add_success)
+                                                .setPositiveButton(android.R.string.yes) { _, _ -> }
+                                                .show()
+                                            dismiss()
+                                        }
                                     } catch (e: EtebaseException) {
                                         uiThread { handleError(e.localizedMessage) }
                                     }

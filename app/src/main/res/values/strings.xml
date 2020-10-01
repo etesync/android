@@ -159,6 +159,7 @@
     <string name="collection_members_add">Invite user</string>
     <string name="collection_members_add_error">Error adding member</string>
     <string name="collection_members_adding">Inviting user</string>
+    <string name="collection_members_add_success">Invitation sent. User will be added once the invitation has been accepted.</string>
     <string name="trust_fingerprint_title">Verify security fingerprint</string>
     <string name="trust_fingerprint_body">Verify %s\'s security fingerprint to ensure the encryption is secure.</string>
     <string name="collection_members_error_user_not_found">User (%s) not found</string>
