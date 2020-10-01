@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.etesync.syncadapter"
 
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
 
         versionCode 200
@@ -124,6 +124,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     dataBinding.enabled = true

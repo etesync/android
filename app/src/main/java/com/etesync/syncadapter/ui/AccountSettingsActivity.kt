@@ -24,7 +24,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import androidx.preference.*
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
+import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.R
@@ -115,7 +115,7 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
                 val newInterval = java.lang.Long.parseLong(newValue as String)
                 settings.setSyncInterval(App.addressBooksAuthority, newInterval)
                 settings.setSyncInterval(CalendarContract.AUTHORITY, newInterval)
-                OPENTASK_PROVIDERS.forEach {
+                TASK_PROVIDERS.forEach {
                     settings.setSyncInterval(it.authority, newInterval)
                 }
                 loaderManager.restartLoader(0, arguments, this@AccountSettingsFragment)
@@ -215,7 +215,7 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
                 val newInterval = java.lang.Long.parseLong(newValue as String)
                 settings.setSyncInterval(App.addressBooksAuthority, newInterval)
                 settings.setSyncInterval(CalendarContract.AUTHORITY, newInterval)
-                OPENTASK_PROVIDERS.forEach {
+                TASK_PROVIDERS.forEach {
                     settings.setSyncInterval(it.authority, newInterval)
                 }
                 loaderManager.restartLoader(0, arguments, this@LegacyAccountSettingsFragment)

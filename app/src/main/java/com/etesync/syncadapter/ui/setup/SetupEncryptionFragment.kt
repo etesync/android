@@ -19,7 +19,7 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
+import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.syncadapter.*
@@ -145,7 +145,7 @@ class SetupEncryptionFragment : DialogFragment() {
             // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
             settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL.toLong())
 
-            OPENTASK_PROVIDERS.forEach {
+            TASK_PROVIDERS.forEach {
                 // enable task sync if OpenTasks is installed
                 // further changes will be handled by PackageChangedReceiver
                 TaskProviderHandling.updateTaskSync(context!!, it)

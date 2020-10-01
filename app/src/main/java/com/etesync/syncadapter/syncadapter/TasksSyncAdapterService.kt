@@ -41,7 +41,7 @@ class TasksSyncAdapterService: SyncAdapterService() {
     ): SyncAdapter(context) {
         override fun onPerformSyncDo(account: Account, extras: Bundle, authority: String, provider: ContentProviderClient, syncResult: SyncResult) {
 
-            val taskProvider = TaskProvider.fromProviderClient(context, provider, name)
+            val taskProvider = TaskProvider.fromProviderClient(context, name, provider)
 
             // make sure account can be seen by OpenTasks
             if (Build.VERSION.SDK_INT >= 26)
