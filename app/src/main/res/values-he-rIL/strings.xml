@@ -302,4 +302,26 @@
     <string name="app_settings_log_to_external_storage_off">אפשר לשמור הודעות תיעוד שגיאות לקובץ</string>
     <string name="app_settings_log_to_external_storage_on">הפוך ללא זמין כדי להסתיר את ההתראות ולמחוק את תיעוד השגיאות</string>
     <string name="app_settings_log_to_external_storage">תעד שגיאות לקובץ</string>
+    <string name="notification_channel_description">התראות EteSync</string>
+    <string name="notification_channel_name">EteSync</string>
+    <string name="event_info_organizer">מארגן האירוע:</string>
+    <string name="import_select_account">בחר חשבון</string>
+    <string name="import_button_local">מחשבון</string>
+    <string name="import_button_file">מקובץ</string>
+    <string name="open_url_no_activity">נכשל בפתיחת קישור: הקישור אינו נתמך!</string>
+    <string name="loading_error_content">רענן</string>
+    <string name="loading_error_title">שגיאה בטעינה</string>
+    <string name="loading">טוען…</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync נתקלה באישור לא ידוע. האם אתה רוצה לתת אמון\?</string>
+    <string name="certificate_notification_connection_security">EteSync: אבטחת חיבור</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">הוזמנת לאירוע הבא:
+\n
+\n‪%s‬
+\nמתי: ‪%s‬
+\nאיפה: ‪‬%s‬
+\nמשתתפים: ‪‬%s‬‪
+\n
+\n--
+\nנשלח על-ידי EteSync - סינכרון נתונים מאובטח ופרטי מקצה לקצה. 
+\nhttps://www.EteSync.com</string>
 </resources>
