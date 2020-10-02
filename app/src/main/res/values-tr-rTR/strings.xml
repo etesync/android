@@ -280,12 +280,12 @@
     <string name="collection_members_remove_title">Üyeyi kaldır</string>
     <string name="collection_members_remove_error">Üye kaldırılırken hata oluştu</string>
     <string name="collection_members_removing">Üye kaldırma</string>
-    <string name="collection_members_adding">Üye ekleme</string>
+    <string name="collection_members_adding">Kullanıcı davet ediliyor</string>
     <string name="collection_members_error_user_not_found">Kullanıcı (%s) bulunamadı</string>
     <string name="trust_fingerprint_body">Şifrelemenin güvenli olduğundan emin olmak için %s\'in güvenlik parmak izini doğrulayın.</string>
     <string name="trust_fingerprint_title">Güvenlik parmak izini doğrula</string>
     <string name="collection_members_add_error">Üye eklenirken hata oluştu</string>
-    <string name="collection_members_add">Üye ekle</string>
+    <string name="collection_members_add">Kullanıcı davet et</string>
     <string name="collection_members_list_empty">Üye yok</string>
     <string name="collection_members_list_loading">Üyeler yükleniyor...</string>
     <string name="collection_members_title">Üyeler</string>
@@ -378,4 +378,10 @@
     <string name="collection_members_no_access">Sadece yöneticilerin koleksiyon üyeliklerini yönetmesine izin verilir. Koleksiyondan ayrılmak ister misiniz\?</string>
     <string name="collection_members_remove_admin">Yöneticilere erişimin kaldırılması şu anda desteklenmiyor.</string>
     <string name="edit_owner_only_anon">Sadece bu koleksiyonun sahibinin onu düzenlemesine izin verilir.</string>
+    <string name="collection_members_add_success">Davet gönderildi. Davet kabul edildikten sonra kullanıcı eklenecek.</string>
+    <string name="account_wizard_collections_body">EteSync\'i kullanmaya başlamak için verilerinizi depolamak üzere koleksiyonlar oluşturmanız gerekmektedir. Sizin için öntanımlı bir takvim, adres defteri ve bir görev listesi oluşturmak için Oluştur düğmesine tıklayın.</string>
+    <string name="account_wizard_collections_title">EteSync\'e hoş geldiniz!</string>
+    <string name="retry">Yeniden dene</string>
+    <string name="skip">Atla</string>
+    <string name="create">Oluştur</string>
 </resources>
