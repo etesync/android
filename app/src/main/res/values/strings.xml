@@ -349,7 +349,7 @@
 
     <!-- JournalViewer -->
     <string name="journal_entries_list_empty">The collection is empty.\n(Maybe it\'s still syncing?)</string>
-    <string name="journal_entries_loading">Loading journal entries…</string>
+    <string name="journal_entries_loading">Loading changelog entries…</string>
 
     <!-- ExceptionInfoFragment -->
     <string name="exception">An error occurred.</string>
