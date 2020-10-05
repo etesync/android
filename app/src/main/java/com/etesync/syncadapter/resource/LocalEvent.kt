@@ -15,7 +15,7 @@ import android.provider.CalendarContract
 import android.provider.CalendarContract.Events
 import android.text.TextUtils
 import at.bitfire.ical4android.*
-import at.bitfire.ical4android.Constants.ical4jVersion
+import at.bitfire.ical4android.Ical4Android.ical4jVersion
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.log.Logger
 import net.fortuna.ical4j.model.component.VAlarm
@@ -72,8 +72,8 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     /* process LocalEvent-specific fields */
 
-    override fun populateEvent(row: ContentValues) {
-        super.populateEvent(row)
+    override fun populateEvent(row: ContentValues, groupScheduled: Boolean) {
+        super.populateEvent(row, groupScheduled)
         fileName = row.getAsString(Events._SYNC_ID)
         eTag = row.getAsString(COLUMN_ETAG)
         event?.uid = row.getAsString(COLUMN_UID)
@@ -119,13 +119,11 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         super.insertReminder(batch, idxEvent, modifiedAlarm)
     }
 
-    @Throws(CalendarStorageException::class)
     fun addAsDirty(): Uri {
         saveAsDirty = true
         return this.add()
     }
 
-    @Throws(CalendarStorageException::class)
     fun updateAsDirty(event: Event): Uri {
         saveAsDirty = true
         return this.update(event)

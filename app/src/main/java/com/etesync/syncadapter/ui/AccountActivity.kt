@@ -25,7 +25,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
+import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.CollectionAccessLevel
 import com.etebase.client.CollectionManager
@@ -455,7 +455,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         CollectionInfo.Type.TASKS -> {
                             info.taskdav = AccountInfo.ServiceInfo()
                             info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                    OPENTASK_PROVIDERS.any {
+                                    TASK_PROVIDERS.any {
                                         ContentResolver.isSyncActive(account, it.authority)
                                     }
                             info.taskdav!!.infos = getLegacyJournals(data, serviceEntity)
@@ -490,7 +490,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             info.caldav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.CALENDAR)
 
             info.taskdav = AccountInfo.ServiceInfo()
-            info.taskdav!!.refreshing = OPENTASK_PROVIDERS.any {
+            info.taskdav!!.refreshing = TASK_PROVIDERS.any {
                 ContentResolver.isSyncActive(account, it.authority)
             }
             info.taskdav!!.infos = getCollections(etebaseLocalCache, colMgr, CollectionInfo.Type.TASKS)

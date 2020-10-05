@@ -20,6 +20,9 @@
     <string name="manage_accounts">Manage accounts</string>
     <string name="please_wait">Please wait…</string>
     <string name="send">Send</string>
+    <string name="create">Create</string>
+    <string name="skip">Skip</string>
+    <string name="retry">Retry</string>
 
     <string name="notification_channel_crash_reports">Crash Reports</string>
     <string name="notification_channel_debugging">Debugging</string>
@@ -82,6 +85,10 @@
     <string name="accounts_global_sync_enable">Turn on</string>
     <string name="accounts_showcase_add">You need to add an account in order to use EteSync. Click here to add one…</string>
     <string name="accounts_missing_permissions">Missing permissions: %s</string>
+
+    <!-- Account Wizard -->
+    <string name="account_wizard_collections_title">Welcome to EteSync!</string>
+    <string name="account_wizard_collections_body">In order to start using EteSync you need to create collections to store your data. Click "Create" to create a default calendar, address book and a task list for you.</string>
 
     <!-- AccountUpdateService -->
 
@@ -156,9 +163,10 @@
     <string name="collection_members_title">Members</string>
     <string name="collection_members_list_loading">Loading members…</string>
     <string name="collection_members_list_empty">No members</string>
-    <string name="collection_members_add">Add member</string>
+    <string name="collection_members_add">Invite user</string>
     <string name="collection_members_add_error">Error adding member</string>
-    <string name="collection_members_adding">Adding member</string>
+    <string name="collection_members_adding">Inviting user</string>
+    <string name="collection_members_add_success">Invitation sent. User will be added once the invitation has been accepted.</string>
     <string name="trust_fingerprint_title">Verify security fingerprint</string>
     <string name="trust_fingerprint_body">Verify %s\'s security fingerprint to ensure the encryption is secure.</string>
     <string name="collection_members_error_user_not_found">Could not find the user \"%s\". Has the user set up an encryption password from one of the apps?</string>
@@ -260,7 +268,7 @@
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Change Encryption Password</string>
     <string name="change_encryption_password_extra_info">Please don\'t use this tool if you believe someone else could have gained knowledge of your password. Contact support instead.</string>
-    <string name="change_encryption_password_new_password">New encryption Password</string>
+    <string name="change_encryption_password_new_password">New Encryption Password</string>
     <string name="change_encryption_password_are_you_sure">Are you sure you would like to continue? The process can not be stopped half way or be undone, and may take a while to complete.</string>
     <string name="change_encryption_password_success_title">Encryption Password Change</string>
     <string name="change_encryption_password_success_body">The password has been changed.</string>

@@ -20,7 +20,7 @@ class PackageChangedReceiver : BroadcastReceiver() {
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         if (Intent.ACTION_PACKAGE_ADDED == intent.action || Intent.ACTION_PACKAGE_FULLY_REMOVED == intent.action) {
-            TaskProvider.OPENTASK_PROVIDERS.forEach {
+            TaskProvider.TASK_PROVIDERS.forEach {
                 updateTaskSync(context, it)
             }
         }

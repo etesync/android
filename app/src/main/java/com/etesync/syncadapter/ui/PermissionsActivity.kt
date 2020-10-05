@@ -16,7 +16,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
+import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
 import at.bitfire.ical4android.TaskProvider.ProviderName
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
@@ -86,7 +86,7 @@ class PermissionsActivity : BaseActivity() {
         private val REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124
 
         fun requestAllPermissions(activity: Activity) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) + OPENTASK_PROVIDERS.flatMap { it.permissions.toList() }, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS)
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) + TASK_PROVIDERS.flatMap { it.permissions.toList() }, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS)
         }
     }
 }

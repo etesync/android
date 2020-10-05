@@ -16,9 +16,10 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.provider.CalendarContract
 import androidx.fragment.app.DialogFragment
-import at.bitfire.ical4android.TaskProvider.Companion.OPENTASK_PROVIDERS
+import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.log.Logger
+import com.etesync.syncadapter.ui.etebase.NewAccountWizardActivity
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
 import com.etesync.syncadapter.utils.AndroidCompat
 import com.etesync.syncadapter.utils.TaskProviderHandling
@@ -42,14 +43,16 @@ class CreateAccountFragment : DialogFragment() {
         val config = requireArguments().getSerializable(KEY_CONFIG) as Configuration
 
         val activity = requireActivity()
-        if (createAccount(config.userName, config)) {
+        val account = createAccount(config.userName, config)
+        if (account != null) {
             activity.setResult(Activity.RESULT_OK)
+            startActivity(NewAccountWizardActivity.newIntent(requireContext(), account))
             activity.finish()
         }
     }
 
     @Throws(InvalidAccountException::class)
-    protected fun createAccount(accountName: String, config: Configuration): Boolean {
+    protected fun createAccount(accountName: String, config: Configuration): Account? {
         val account = Account(accountName, App.accountType)
 
         // create Android account
@@ -57,7 +60,7 @@ class CreateAccountFragment : DialogFragment() {
 
         val accountManager = AccountManager.get(context)
         if (!accountManager.addAccountExplicitly(account, config.password, null))
-            return false
+            return null
 
         AccountSettings.setUserData(accountManager, account, config.url, config.userName)
 
@@ -74,7 +77,7 @@ class CreateAccountFragment : DialogFragment() {
             // calendar sync is automatically enabled by isAlwaysSyncable="true" in res/xml/sync_contacts.xml
             settings.setSyncInterval(CalendarContract.AUTHORITY, Constants.DEFAULT_SYNC_INTERVAL.toLong())
 
-            OPENTASK_PROVIDERS.forEach {
+            TASK_PROVIDERS.forEach {
                 // enable task sync if OpenTasks is installed
                 // further changes will be handled by PackageChangedReceiver
                 TaskProviderHandling.updateTaskSync(requireContext(), it)
@@ -86,7 +89,7 @@ class CreateAccountFragment : DialogFragment() {
             throw e
         }
 
-        return true
+        return account
     }
 
     companion object {

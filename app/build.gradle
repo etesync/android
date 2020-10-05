@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.etesync.syncadapter"
 
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
 
         versionCode 200
@@ -126,6 +126,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     dataBinding.enabled = true
 }
 
@@ -134,7 +138,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
     implementation "com.etesync:journalmanager:1.1.1"
-    def etebaseVersion = '0.2.0'
+    def etebaseVersion = '0.2.1'
     implementation "com.etebase:client:$etebaseVersion"
 
     def acraVersion = '5.3.0'
@@ -160,7 +164,7 @@ dependencies {
         transitive = true
     }
 
-    def requeryVersion = '1.6.0'
+    def requeryVersion = '1.6.1'
     implementation "io.requery:requery:$requeryVersion"
     implementation "io.requery:requery-android:$requeryVersion"
     implementation "io.requery:requery-kotlin:$requeryVersion"

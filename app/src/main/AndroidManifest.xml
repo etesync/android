@@ -238,6 +238,10 @@
             android:exported="false"
             />
         <activity
+            android:name=".ui.etebase.NewAccountWizardActivity"
+            android:exported="false"
+            />
+        <activity
             android:name=".ui.etebase.InvitationsActivity"
             android:exported="false"
             />
