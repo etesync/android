@@ -9,11 +9,11 @@
     <string name="startup_dont_show_again">Bir daha gösterme</string>
     <!--AboutActivity-->
     <string name="about_license_terms">Lisans şartları</string>
-    <string name="about_license_info_no_warranty">Bu uygulama HİÇ BİR GARANTİ ile gelmemektedir. Bedava bir yazılımdır ve belli koşullar altında dağıtabilirsiniz.</string>
+    <string name="about_license_info_no_warranty">Bu program KESİNLİKLE HİÇBİR GARANTİ OLMADAN gelir. Özgür bir yazılımdır ve belirli koşullar altında yeniden dağıtabilirsiniz.</string>
     <!--global settings-->
-    <string name="logging_to_external_storage">Harici depolamaya jurnalleniyor: %s</string>
+    <string name="logging_to_external_storage">Günlükler harici depolamaya kaydediliyor: %s</string>
     <string name="logging_to_external_storage_warning">Devre dışı bırakmak günlük kayıtlarını silecektir</string>
-    <string name="logging_couldnt_create_file">Harici jurnal dosyası yaratılamadı: %s </string>
+    <string name="logging_couldnt_create_file">Harici günlük dosyası oluşturulamadı: %s</string>
     <string name="logging_no_external_storage">Harici depolama alanı bulunamadı</string>
     <!--AccountsActivity-->
     <string name="navigation_drawer_open">Navigasyon çekmecesini aç</string>
@@ -32,9 +32,9 @@
     <string name="app_settings_reset_hints_success">Tüm ipuçları artık gösterilecek</string>
     <string name="app_settings_security">Güvenlik</string>
     <string name="app_settings_debug">Hata ayıklama</string>
-    <string name="app_settings_log_to_external_storage">Harici dosyaya jurnalle</string>
-    <string name="app_settings_log_to_external_storage_on">Harici depolamaya jurnalleniyor (eğer uygunsa)</string>
-    <string name="app_settings_log_to_external_storage_off">Harici depolama mevcut değil</string>
+    <string name="app_settings_log_to_external_storage">Günlükleri dosyaya kaydet</string>
+    <string name="app_settings_log_to_external_storage_on">Bildirimi gizlemek ve günlükleri silmek için devre dışı bırakın</string>
+    <string name="app_settings_log_to_external_storage_off">Günlük mesajlarını dosyaya kaydetmek için etkinleştirin</string>
     <string name="app_settings_show_debug_info">Hata ayıklama bilgilerini göster</string>
     <string name="app_settings_show_debug_info_details">Yazılım ve konfigürasyon detaylarına bak/paylaş</string>
     <!--AccountActivity-->
@@ -60,7 +60,7 @@
     <string name="login_back">Geri</string>
     <string name="login_configuration_detection">Konfigürasyon keşfi</string>
     <string name="login_querying_server">Lütfen bekleyin, sunucu sorgulanıyor…</string>
-    <string name="login_view_logs">Jurnallere bak</string>
+    <string name="login_view_logs">Günlükleri görüntüle</string>
     <!--AccountSettingsActivity-->
     <string name="settings_title">Ayarlar: %s</string>
     <string name="settings_authentication">Doğrulama</string>
@@ -88,13 +88,13 @@
     <string name="settings_sync_wifi_only_ssid_off">Tüm WiFi bağlantıları kullanılabilir</string>
     <string name="settings_sync_wifi_only_ssid_message">Eşzamanlamayı sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) girin, veya tüm WiFi bağlantıları için boş bırakın.</string>
     <!--collection management-->
-    <string name="create_addressbook">Rehber yarat</string>
+    <string name="create_addressbook">Adres defteri oluştur</string>
     <string name="create_addressbook_display_name_hint">Benim Rehberim</string>
-    <string name="create_collection_creating">Koleksiyon yaratılıyor</string>
+    <string name="create_collection_creating">Koleksiyon oluşturuluyor</string>
     <string name="create_collection_display_name">Bu koleksiyonun gösterilen adı (başlığı):</string>
     <string name="create_collection_display_name_required">Başlık zorunlu</string>
     <string name="create_collection_description">Açıklama (isteğe bağlı):</string>
-    <string name="create_collection_create">Yarat</string>
+    <string name="create_collection_create">Kaydet</string>
     <string name="delete_collection">Koleksiyonu sil</string>
     <string name="delete_collection_confirm_title">Emin misin?</string>
     <string name="delete_collection_confirm_warning">Bu koleksiyon (%s) ve tüm verisi sunucudan silinecek.</string>
@@ -220,7 +220,7 @@
     <string name="change_encryption_password_success_body">Şifreleme parolası başarıyla değiştirildi!</string>
     <string name="change_encryption_password_success_title">Şifreleme Parolası Değişikliği</string>
     <string name="change_encryption_password_are_you_sure">Devam etmek istediğinizden emin misiniz\? İşlem yarı yolda durdurulamaz veya geri alınamaz ve tamamlanması biraz zaman alabilir.</string>
-    <string name="change_encryption_password_new_password">Yeni şifreleme parolası</string>
+    <string name="change_encryption_password_new_password">Yeni Şifreleme Parolası</string>
     <string name="change_encryption_password_extra_info">Şifreleme parolanızın ele geçirildiğine inanıyorsanız, lütfen bu aracı kullanmayın. Bunun yerine desteğe başvurun.</string>
     <string name="change_encryption_password_title">Şifreleme Parolasını Değiştir</string>
     <string name="wrong_encryption_password_content">Hesabınıza erişirken bir bütünlük hatası alındı, bu büyük olasılıkla yanlış şifreleme parolası girdiğiniz anlamına gelir.
