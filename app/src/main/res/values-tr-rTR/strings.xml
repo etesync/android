@@ -383,4 +383,5 @@
     <string name="retry">Yeniden dene</string>
     <string name="skip">Atla</string>
     <string name="create">Oluştur</string>
+    <string name="collection_members_add_read_only">Salt okunur</string>
 </resources>
