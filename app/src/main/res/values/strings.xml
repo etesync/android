@@ -164,6 +164,7 @@
     <string name="collection_members_list_loading">Loading members...</string>
     <string name="collection_members_list_empty">No members</string>
     <string name="collection_members_add">Invite user</string>
+    <string name="collection_members_add_read_only">Read only</string>
     <string name="collection_members_add_error">Error adding member</string>
     <string name="collection_members_adding">Inviting user</string>
     <string name="collection_members_add_success">Invitation sent. User will be added once the invitation has been accepted.</string>
