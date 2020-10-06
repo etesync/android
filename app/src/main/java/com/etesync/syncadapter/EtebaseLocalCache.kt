@@ -3,34 +3,15 @@ package com.etesync.syncadapter
 import android.content.Context
 import com.etebase.client.*
 import com.etebase.client.Collection
+import com.etebase.client.exceptions.EtebaseException
 import okhttp3.OkHttpClient
 import java.io.File
 import java.util.*
 
-/*
-File structure:
-cache_dir/
-    user1/ <--- the name of the user
-        stoken <-- the stokens of the collection fetch
-        cols/
-            UID1/ - The uid of the first col
-                ...
-            UID2/ - The uid of the second col
-                col <-- the col itself
-                stoken <-- the stoken of the items fetch
-                items/
-                    item_uid1 <-- the item with uid 1
-                    item_uid2
-                    ...
- */
 class EtebaseLocalCache private constructor(context: Context, username: String) {
+    private val fsCache: FileSystemCache = FileSystemCache.create(context.filesDir.absolutePath, username)
     private val filesDir: File = File(context.filesDir, username)
-    private val colsDir: File
-
-    init {
-        colsDir = File(filesDir, "cols")
-        colsDir.mkdirs()
-    }
+    private val colsDir: File = File(filesDir, "cols")
 
     private fun getCollectionItemsDir(colUid: String): File {
         val colsDir = File(filesDir, "cols")
@@ -39,102 +20,73 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     }
 
     private fun clearUserCache() {
-        filesDir.deleteRecursively()
+        fsCache.clearUserCache()
     }
 
     fun saveStoken(stoken: String) {
-        val stokenFile = File(filesDir, "stoken")
-        stokenFile.writeText(stoken)
+        fsCache.saveStoken(stoken)
     }
 
     fun loadStoken(): String? {
-        val stokenFile = File(filesDir, "stoken")
-        return if (stokenFile.exists()) stokenFile.readText() else null
+        return fsCache.loadStoken()
     }
 
-
     fun collectionSaveStoken(colUid: String, stoken: String) {
-        val colDir = File(colsDir, colUid)
-        val stokenFile = File(colDir, "stoken")
-        stokenFile.writeText(stoken)
+        fsCache.collectionSaveStoken(colUid, stoken)
     }
 
     fun collectionLoadStoken(colUid: String): String? {
-        val colDir = File(colsDir, colUid)
-        val stokenFile = File(colDir, "stoken")
-        return if (stokenFile.exists()) stokenFile.readText() else null
+        return fsCache.collectionLoadStoken(colUid)
     }
 
     fun collectionList(colMgr: CollectionManager, withDeleted: Boolean = false): List<CachedCollection> {
-        return colsDir.list().map {
-            val colDir = File(colsDir, it)
-            val colFile = File(colDir, "col")
-            val content = colFile.readBytes()
-            colMgr.cacheLoad(content)
-        }.filter { withDeleted || !it.isDeleted }.map{
+        return fsCache._unstable_collectionList(colMgr).filter {
+            withDeleted || !it.isDeleted
+        }.map{
             CachedCollection(it, it.meta)
         }
     }
 
-    fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection? {
-        val colDir = File(colsDir, colUid)
-        val colFile = File(colDir, "col")
-        if (!colFile.exists()) {
-            return null
-        }
-        val content = colFile.readBytes()
-        return colMgr.cacheLoad(content).let {
+    fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection {
+        return fsCache.collectionGet(colMgr, colUid).let {
             CachedCollection(it, it.meta)
         }
     }
 
     fun collectionSet(colMgr: CollectionManager, collection: Collection) {
-        val colDir = File(colsDir, collection.uid)
-        colDir.mkdirs()
-        val colFile = File(colDir, "col")
-        colFile.writeBytes(colMgr.cacheSaveWithContent(collection))
-        val itemsDir = getCollectionItemsDir(collection.uid)
-        itemsDir.mkdirs()
+        fsCache.collectionSet(colMgr, collection)
     }
 
     fun collectionUnset(colMgr: CollectionManager, colUid: String) {
-        val colDir = File(colsDir, colUid)
-        colDir.deleteRecursively()
+        fsCache.collectionUnset(colMgr, colUid)
     }
 
     fun itemList(itemMgr: ItemManager, colUid: String, withDeleted: Boolean = false): List<CachedItem> {
-        val itemsDir = getCollectionItemsDir(colUid)
-        return itemsDir.list().map {
-            val itemFile = File(itemsDir, it)
-            val content = itemFile.readBytes()
-            itemMgr.cacheLoad(content)
-        }.filter { withDeleted || !it.isDeleted }.map {
+        return fsCache._unstable_itemList(itemMgr, colUid).filter {
+            withDeleted || !it.isDeleted
+        }.map {
             CachedItem(it, it.meta, it.contentString)
         }
     }
 
     fun itemGet(itemMgr: ItemManager, colUid: String, itemUid: String): CachedItem? {
-        val itemsDir = getCollectionItemsDir(colUid)
-        val itemFile = File(itemsDir, itemUid)
-        if (!itemFile.exists()) {
+        // Need the try because the inner call doesn't return null on missing, but an error
+        val ret = try {
+            fsCache.itemGet(itemMgr, colUid, itemUid)
+        } catch (e: EtebaseException) {
             return null
         }
-        val content = itemFile.readBytes()
-        return itemMgr.cacheLoad(content).let {
+        return ret.let {
             CachedItem(it, it.meta, it.contentString)
         }
     }
 
     fun itemSet(itemMgr: ItemManager, colUid: String, item: Item) {
-        val itemsDir = getCollectionItemsDir(colUid)
-        val itemFile = File(itemsDir, item.uid)
-        itemFile.writeBytes(itemMgr.cacheSaveWithContent(item))
+        fsCache.itemSet(itemMgr, colUid, item)
     }
 
     fun itemUnset(itemMgr: ItemManager, colUid: String, itemUid: String) {
-        val itemsDir = getCollectionItemsDir(colUid)
-        val itemFile = File(itemsDir, itemUid)
-        itemFile.delete()
+        fsCache.itemUnset(itemMgr, colUid, itemUid)
     }
 
     companion object {
