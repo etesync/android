@@ -562,8 +562,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     Logger.log.warning(e.toString())
                 }
             } else {
-                val etebaseLocalCache = EtebaseLocalCache.getInstance(this@AccountActivity, account.name)
-                etebaseLocalCache.clearUserCache()
+                EtebaseLocalCache.clearUserCache(this@AccountActivity, account.name)
 
                 try {
                     val httpClient = HttpClient.Builder(this@AccountActivity).build()

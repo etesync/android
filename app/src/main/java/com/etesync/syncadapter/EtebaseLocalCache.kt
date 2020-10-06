@@ -38,7 +38,7 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         return File(colDir, "items")
     }
 
-    fun clearUserCache() {
+    private fun clearUserCache() {
         filesDir.deleteRecursively()
     }
 
@@ -151,6 +151,12 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
                     return ret
                 }
             }
+        }
+
+        fun clearUserCache(context: Context, username: String) {
+            val localCache = getInstance(context, username)
+            localCache.clearUserCache()
+            localCacheCache.remove(username)
         }
 
         // FIXME: If we ever cache this we need to cache bust on changePassword
