@@ -230,7 +230,7 @@
     <!-- AddAccountActivity -->
     <string name="login_title">Add account</string>
     <string name="login_username">Username</string>
-    <string name="login_username_error">Valid username required</string>
+    <string name="login_username_error">Username should be at least 6 characters long and consist of only letters, digits and ./-/_.</string>
     <string name="login_email_address">Email</string>
     <string name="login_email_address_error">Valid email required</string>
     <string name="login_password">Password</string>
