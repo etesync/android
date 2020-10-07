@@ -268,7 +268,6 @@
 
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Change Encryption Password</string>
-    <string name="change_encryption_password_extra_info">Please don\'t use this tool if you believe your encryption password has been compromised. Contact support instead.</string>
     <string name="change_encryption_password_new_password">New Encryption Password</string>
     <string name="change_encryption_password_are_you_sure">Are you sure you would like to continue? The process can not be stopped half way or be undone, and may take a while to complete.</string>
     <string name="change_encryption_password_success_title">Encryption Password Change</string>

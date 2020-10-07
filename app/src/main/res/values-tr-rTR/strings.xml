@@ -221,7 +221,6 @@
     <string name="change_encryption_password_success_title">Şifreleme Parolası Değişikliği</string>
     <string name="change_encryption_password_are_you_sure">Devam etmek istediğinizden emin misiniz\? İşlem yarı yolda durdurulamaz veya geri alınamaz ve tamamlanması biraz zaman alabilir.</string>
     <string name="change_encryption_password_new_password">Yeni şifreleme parolası</string>
-    <string name="change_encryption_password_extra_info">Şifreleme parolanızın ele geçirildiğine inanıyorsanız, lütfen bu aracı kullanmayın. Bunun yerine desteğe başvurun.</string>
     <string name="change_encryption_password_title">Şifreleme Parolasını Değiştir</string>
     <string name="wrong_encryption_password_content">Hesabınıza erişirken bir bütünlük hatası alındı, bu büyük olasılıkla yanlış şifreleme parolası girdiğiniz anlamına gelir.
 \nLütfen kullanıcı adının büyük/küçük harfe duyarlı olduğunu unutmayın, bu nedenle lütfen farklı durumları deneyin, örneğin ilk karakteri büyük harf yapın.

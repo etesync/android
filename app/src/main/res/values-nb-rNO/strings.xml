@@ -205,7 +205,6 @@
 \neil: %s</string>
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Endre krypteringspassord</string>
-    <string name="change_encryption_password_extra_info">Ikke bruk dette verktøyet dersom du mistenker at krypteringspassordet ditt har blitt kompromittert. Kontakt brukerstøtte i stedet.</string>
     <string name="change_encryption_password_new_password">Nytt krypteringspassord</string>
     <string name="change_encryption_password_are_you_sure">Er du sikker på at du vil fortsette? Denne prosessen kan ikke stoppes halvveis eller angres, og kan ta en stund å fullføre.</string>
     <string name="change_encryption_password_success_title">Endring av krypteringspassord</string>
