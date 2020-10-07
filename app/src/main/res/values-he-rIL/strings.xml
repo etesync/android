@@ -174,7 +174,6 @@
     <string name="change_encryption_password_success_title">שינוי סיסמת הצפנה</string>
     <string name="change_encryption_password_are_you_sure">האם אתה בטוח שברצונך להמשיך\? לא ניתן לעצור את התהליך או לבטלו, וייתכן שהשלמתו תימשך זמן מה.</string>
     <string name="change_encryption_password_new_password">סיסמת הצפנה חדשה</string>
-    <string name="change_encryption_password_extra_info">בבקשה אל תשתמש בכלי זה אם אתה מאמין שסיסמת ההצפנה שלך נחשפה. צור קשר עם התמיכה.</string>
     <string name="change_encryption_password_title">שנה סיסמת הצפנה</string>
     <string name="signup_password_restrictions">הסיסמה צריכה להיות באורך של 8 תווים לפחות</string>
     <string name="signup_title">הזן פרטי התחברות</string>

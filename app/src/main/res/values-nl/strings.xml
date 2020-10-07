@@ -322,7 +322,6 @@
     <string name="change_encryption_password_success_title">Encryptiewachtwoord Verandering</string>
     <string name="change_encryption_password_are_you_sure">Bent u zeker dat u wilt verdergaan\? Het proces kan niet halfweg worden onderbroken of kan niet ongedaan gemaakt worden, en kan even duren.</string>
     <string name="change_encryption_password_new_password">Nieuw Encryptiewachtwoord</string>
-    <string name="change_encryption_password_extra_info">Gebruik deze tool a.u.b. niet indien u vermoedt dat uw encryptiewachtwoord werd gecompromitteerd. Contacteer in plaats daarvan de ondersteuning.</string>
     <string name="change_encryption_password_title">Wijzig Encryptiewachtwoord</string>
     <string name="signup_password_restrictions">Wachtwoord moet minstens 8 karakters lang zijn</string>
     <string name="signup_title">Geef Aanmeldgegevens In</string>
