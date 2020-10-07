@@ -11,18 +11,16 @@ import android.content.Context
 import com.etebase.client.Account
 import com.etebase.client.Client
 import com.etebase.client.exceptions.EtebaseException
-import com.etesync.syncadapter.HttpClient
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalAuthenticator
 import com.etesync.journalmanager.UserInfoManager
 import com.etesync.syncadapter.Constants
+import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
-import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import java.io.IOException
 import java.io.Serializable
 import java.net.URI
@@ -37,18 +35,13 @@ class BaseConfigurationFinder(protected val context: Context, protected val cred
 
     private fun isServerEtebase(): Boolean {
         if (credentials.uri != null) {
-            val remote = credentials.uri.toHttpUrlOrNull()!!.newBuilder()
-                    .addPathSegments("api/v1/authentication/is_etebase/")
-                    .build()
-
-            val request = Request.Builder()
-                    .get()
-                    .url(remote)
-                    .build()
-
-            val response = httpClient.newCall(request).execute()
-
-            return response.isSuccessful
+            val client = Client.create(httpClient, credentials.uri.toString())
+            return try {
+                Account.isEtebaseServer(client)
+                true
+            } catch (e: EtebaseException) {
+                false
+            }
         } else {
             return !credentials.userName.contains("@")
         }
