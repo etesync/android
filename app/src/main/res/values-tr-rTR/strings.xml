@@ -68,7 +68,7 @@
     <string name="settings_enter_password">Parola girin:</string>
     <string name="settings_sync">Eşzamanlama</string>
     <string name="settings_sync_interval_contacts">Kişiler senk. aralığı</string>
-    <string name="settings_sync_summary_manually">Sadece elle</string>
+    <string name="settings_sync_summary_manually">Yalnızca elle</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
     <string name="settings_sync_summary_not_available">Mevcut değil</string>
     <string name="settings_sync_interval_calendars">Takvimler senk. aralığı</string>
@@ -80,13 +80,13 @@
         <item>Her 4 saatte bir</item>
         <item>Günde bir</item>
     </string-array>
-    <string name="settings_sync_wifi_only">Sadece WiFi üzerinden eşzamanla</string>
+    <string name="settings_sync_wifi_only">Yalnızca WiFi üzerinden eşzamanla</string>
     <string name="settings_sync_wifi_only_on">Eşzamanlama WiFi bağlantıları ile sınırlı</string>
     <string name="settings_sync_wifi_only_off">Bağlantı tipi göz önünde bulundurulmaz</string>
     <string name="settings_sync_wifi_only_ssid">WiFi SSID kısıtlaması</string>
-    <string name="settings_sync_wifi_only_ssid_on">Sadece %s üzerinden eşzamanlanacak</string>
+    <string name="settings_sync_wifi_only_ssid_on">Yalnızca %s üzerinden eşzamanlanacak</string>
     <string name="settings_sync_wifi_only_ssid_off">Tüm WiFi bağlantıları kullanılabilir</string>
-    <string name="settings_sync_wifi_only_ssid_message">Eşzamanlamayı sadece bir WiFi ağına kısıtlamak için bu ağın adını (SSID) girin, veya tüm WiFi bağlantıları için boş bırakın.</string>
+    <string name="settings_sync_wifi_only_ssid_message">Eşzamanlamayı yalnızca bir WiFi ağıyla kısıtlamak için bu ağın adını (SSID) girin, veya tüm WiFi bağlantıları için boş bırakın.</string>
     <!--collection management-->
     <string name="create_addressbook">Adres defteri oluştur</string>
     <string name="create_addressbook_display_name_hint">Benim Rehberim</string>
@@ -293,12 +293,12 @@
 \nDaha fazla bilgi için lütfen kullanıcı rehberine bakın.</string>
     <string name="use_native_apps_title">Biliyor musunuz\?</string>
     <string name="members_old_journals_not_allowed">Eski tarz günlüklerin paylaşılmasına izin verilmiyor. Bu günlüğü paylaşmak için yeni bir tane oluşturun ve \"içe aktar\" iletişim kutusunu kullanarak içeriğini kopyalayın. Herhangi bir sorun yaşıyorsanız, lütfen desteğe başvurun.</string>
-    <string name="edit_owner_only">Sadece bu koleksiyonun sahibinin (%s) onu düzenlemesine izin verilir.</string>
+    <string name="edit_owner_only">Yalnızca bu koleksiyonun sahibinin (%s) onu düzenlemesine izin verilir.</string>
     <string name="not_allowed_title">İzin Yok</string>
-    <string name="members_owner_only">Sadece bu koleksiyonun sahibi (%s) üyelerini görüntüleyebilir.</string>
+    <string name="members_owner_only">Yalnızca bu koleksiyonun sahibi (%s) üyelerini görüntüleyebilir.</string>
     <string name="account_owner">Sahibi: %s</string>
     <string name="account_showcase_import">Kişileri ve takvimleri EteSync\'e aktarmak için menüye tıklamanız ve \"İçe aktar\"ı seçmeniz gerekmektedir.</string>
-    <string name="tasks_not_showing">* Günlük kaydı sadece bir görev sağlayıcı kuruluysa gösterilir.</string>
+    <string name="tasks_not_showing">* Günlük kaydı yalnızca bir görev sağlayıcı kuruluysa gösterilir.</string>
     <string name="change_journal_title">Günlüğü Değiştir</string>
     <string name="show_fingperprint_title">Parmak İzim</string>
     <string name="account_tasks_not_showing">* Görevler eşzamanlanmıyor (bir sağlayıcı kurun)</string>
@@ -364,7 +364,7 @@
     <string name="sync_error_generic">Eşzamanlama başarısız oldu (%s)</string>
     <string name="signup_password_restrictions">Parola en az 8 karakter uzunluğunda olmalıdır</string>
     <string name="signup_title">Kayıt Ayrıntılarını Girin</string>
-    <string name="login_username_error">Geçerli bir kullanıcı adı gerekli</string>
+    <string name="login_username_error">Kullanıcı adı en az 6 karakter uzunluğunda olmalı ve yalnızca harf, rakam ve ./-/_ içermelidir.</string>
     <string name="login_username">Kullanıcı adı</string>
     <string name="journal_item_tab_revisions">Düzeltmeler</string>
     <string name="invitations_reject">Reddet</string>
@@ -374,9 +374,9 @@
     <string name="invitations_loading">Davetler yükleniyor...</string>
     <string name="invitations_title">Davetler</string>
     <string name="collection_members_leave">Ayrıl</string>
-    <string name="collection_members_no_access">Sadece yöneticilerin koleksiyon üyeliklerini yönetmesine izin verilir. Koleksiyondan ayrılmak ister misiniz\?</string>
+    <string name="collection_members_no_access">Yalnızca yöneticilerin koleksiyon üyeliklerini yönetmesine izin verilir. Koleksiyondan ayrılmak ister misiniz\?</string>
     <string name="collection_members_remove_admin">Yöneticilere erişimin kaldırılması şu anda desteklenmiyor.</string>
-    <string name="edit_owner_only_anon">Sadece bu koleksiyonun sahibinin onu düzenlemesine izin verilir.</string>
+    <string name="edit_owner_only_anon">Yalnızca bu koleksiyonun sahibinin onu düzenlemesine izin verilir.</string>
     <string name="collection_members_add_success">Davet gönderildi. Davet kabul edildikten sonra kullanıcı eklenecek.</string>
     <string name="account_wizard_collections_body">EteSync\'i kullanmaya başlamak için verilerinizi depolamak üzere koleksiyonlar oluşturmanız gerekmektedir. Sizin için öntanımlı bir takvim, adres defteri ve bir görev listesi oluşturmak için Oluştur düğmesine tıklayın.</string>
     <string name="account_wizard_collections_title">EteSync\'e hoş geldiniz!</string>
