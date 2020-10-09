@@ -10,12 +10,12 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/login_email_address"
+        android:hint="@string/login_username"
         android:inputType="textEmailAddress" />
 
     <CheckBox
         android:id="@+id/read_only"
-        android:text="Read only?"
+        android:text="@string/collection_members_add_read_only"
         style="?android:attr/textAppearanceMedium"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

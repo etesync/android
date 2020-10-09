@@ -79,7 +79,7 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         createAccount.setOnClickListener {
             val credentials = validateData()
             if (credentials != null) {
-                SignupDoFragment(credentials).show(fragmentManager!!, null)
+                SignupDoFragment(credentials).show(requireFragmentManager(), null)
             }
         }
 
@@ -102,7 +102,8 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         var valid = true
 
         val userName = editUserName.editText?.text.toString()
-        if (userName.isEmpty()) {
+        // FIXME: this validation should only be done in the server, we are doing it here until the Java library supports field errors
+        if ((userName.length < 6) || (!userName.matches(Regex("""^[\w.-]+$""")))) {
             editUserName.error = getString(R.string.login_username_error)
             valid = false
         } else {
@@ -118,7 +119,7 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         }
 
         val password = editPassword.editText?.text.toString()
-        if (password.isEmpty()) {
+        if (password.length < 8) {
             editPassword.error = getString(R.string.signup_password_restrictions)
             valid = false
         } else {

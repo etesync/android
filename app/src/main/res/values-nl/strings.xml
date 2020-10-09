@@ -3,7 +3,7 @@
     <!--common strings-->
     <string name="help">Help</string>
     <string name="manage_accounts">Beheer accounts</string>
-    <string name="please_wait">Een moment geduld …</string>
+    <string name="please_wait">Een ogenblik geduld …</string>
     <string name="send">Verzenden</string>
     <!--startup dialogs-->
     <string name="startup_battery_optimization">Batterij optimalisatie</string>
@@ -61,7 +61,7 @@
     <!--AddAccountActivity-->
     <string name="login_title">Account toevoegen</string>
     <string name="login_email_address">Email adres</string>
-    <string name="login_email_address_error">Geldig email adres vereist</string>
+    <string name="login_email_address_error">Geldige email vereist</string>
     <string name="login_password">Wachtwoord</string>
     <string name="login_password_required">Wachtwoord vereist</string>
     <string name="login_back">Terug</string>
@@ -141,9 +141,9 @@
     <string name="collection_members_error_user_not_found">Gebruiker (%s) niet gevonden</string>
     <string name="trust_fingerprint_body">Verifieer %s\'s beveiligingsvingerafdruk om te verzekeren dat de encryptie veilig is.</string>
     <string name="trust_fingerprint_title">Verifieer beveiligheidsvingerafdruk</string>
-    <string name="collection_members_adding">Lid aan het toevoegen</string>
+    <string name="collection_members_adding">Gebruiker aan het uitnodigen</string>
     <string name="collection_members_add_error">Fout bij het toevoegen van lid</string>
-    <string name="collection_members_add">Voeg lid toe</string>
+    <string name="collection_members_add">Nodig gebruiker uit</string>
     <string name="collection_members_list_empty">Geen leden</string>
     <string name="collection_members_list_loading">Laden van members...</string>
     <string name="collection_members_title">Leden</string>
@@ -209,7 +209,7 @@
     <string name="crash_email_subject">EteSync Debug Informatie</string>
     <string name="crash_message">Zend a.u.b. de stack trace naar de ontwikkelaars.</string>
     <string name="crash_title">EteSync is gecrasht!</string>
-    <string name="notification_channel_sync_status_desc">Informatie statusberichten zoals de samenvatting van de sync veranderingen</string>
+    <string name="notification_channel_sync_status_desc">Informatieve statusberichten zoals de samenvatting van de sync veranderingen</string>
     <string name="notification_channel_sync_status">Statusberichten</string>
     <string name="notification_channel_sync_warnings_desc">Niet-fotale synchronisatieproblemen zoals afgewezen veranderingen van read-only verzamelingen</string>
     <string name="notification_channel_sync_warnings">Synchronisatiewaarschuwingen</string>
@@ -222,4 +222,165 @@
     <string name="address_books_authority_title">Adresboeken</string>
     <string name="account_title_address_book">EteSync Adresboek</string>
     <string name="app_name">EteSync</string>
+    <string name="notification_channel_description">EteSync notificaties</string>
+    <string name="notification_channel_name">EteSync</string>
+    <string name="event_info_organizer">Organisator:</string>
+    <string name="import_select_account">Selecteer Account</string>
+    <string name="import_button_local">Van Account</string>
+    <string name="import_button_file">Van Bestand</string>
+    <string name="open_url_no_activity">Openen link niet gelukt: link is niet ondersteund!</string>
+    <string name="loading_error_content">Vernieuw</string>
+    <string name="loading_error_title">Fout Bij Laden</string>
+    <string name="loading">Aan het laden...</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync heeft een onbekend certificaat tegengekomen. Wilt u het vertrouwen\?</string>
+    <string name="certificate_notification_connection_security">EteSync: Verbindingsveiligheid</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">U bent uitgenodigd op het volgende evenement:
+\n
+\n%s
+\nWanneer: %s
+\nWaar: %s
+\nAanwezigen: %s
+\n
+\n--
+\nVerstuurd door EteSync - veilige, end-to-end encrypted en private data sync.
+\nVerkrijg het via https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_subject" formatted="false">Uitnodiging: %s @ %s</string>
+    <string name="calendar_attendees_send_email_action">Verzend uitnodigingen</string>
+    <string name="sync_calendar_attendees_notification_content">Uitnodigingen naar gasten versturen\?</string>
+    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_journal_readonly_message">Het logboek is enkel-lezen dus al uw aanpassingen (%d) zijn ongedaan gemaakt.</string>
+    <string name="sync_journal_readonly">Logboek \"%s\" is enkel-lezen</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s geupdate.
+\n%s verwijderd.</string>
+    <string name="sync_successfully_modified" formatted="false">%s gewijzigd.</string>
+    <string name="sync_successfully_tasks" formatted="false">Takes \"%s\" gewijzigd (%s)</string>
+    <string name="sync_successfully_contacts" formatted="false">Contacten gewijzigd (%s)</string>
+    <string name="sync_successfully_calendar" formatted="false">Kalender \"%s\" werd gewijzigd (%s)</string>
+    <string name="sync_error_user_inactive">Gebruiker is non-actief</string>
+    <string name="sync_error_unauthorized">Authenticatie mislukt</string>
+    <string name="sync_phase_post_processing">aan het naverwerken</string>
+    <string name="sync_phase_push_entries">boekingen aan het pushen</string>
+    <string name="sync_phase_apply_local_entries">lokale boekingen opnieuw aan het toepassen</string>
+    <string name="sync_phase_apply_remote_entries">externe boekingen aan het toepassen</string>
+    <string name="sync_phase_fetch_entries">externe gegevens aan het ophalen</string>
+    <string name="sync_phase_create_local_entries">lokale boekingen aan het aanmaken</string>
+    <string name="sync_phase_prepare_local">lokale boekingen aan het voorbereiden</string>
+    <string name="sync_phase_prepare_fetch">aan het voorbereiden om op te halen</string>
+    <string name="sync_phase_journals">logboeken aan het synchroniseren</string>
+    <string name="sync_phase_prepare">synchronisatie aan het voorbereiden</string>
+    <string name="sync_error_permission_denied">Permissie geweigerd: %s</string>
+    <string name="sync_error_journal_readonly">Journaal is enkel-lezen</string>
+    <string name="sync_error_unavailable">Kan niet verbinden met de server tijdens %s</string>
+    <string name="sync_error_integrity">Integriteitsfout tijdens %s</string>
+    <string name="sync_error_tasks">Sync van taken mislukt (%s)</string>
+    <string name="sync_error_contacts">Sync van contacten mislukt (%s)</string>
+    <string name="sync_error_generic">Syc mislukt (%s)</string>
+    <string name="sync_error_permissions_text">Bijkomende permissies vereist</string>
+    <string name="sync_error_permissions">EteSync permissies</string>
+    <string name="debug_info_more_data_shared">Op delen klikken zal de email app openen met onderstaande data, samen met bijkomstige debug informatie in bijlage. Het bevat mogelijk gevoelige informatie, dus bekijk het eerst alvorens te versturen.</string>
+    <string name="journal_entries_loading">Laden van de change log boekingen...</string>
+    <string name="journal_entries_list_empty">Verzameling is leeg.
+\nMisschien is het nog aan het synchroniseren\?</string>
+    <string name="view_collection_members">Beheer Leden</string>
+    <string name="view_collection_import">Importeer</string>
+    <string name="view_collection_edit">Wijzig</string>
+    <string name="create_collection_color">Stel de kleur van de verzameling in</string>
+    <string name="edit_collection">Wijzig verzameling</string>
+    <string name="install_opentasks">Installeer OpenTasks</string>
+    <string name="install_tasksorg">Installeer Tasks.org</string>
+    <string name="create_tasklist_display_name_hint">Mijn Takenlijst</string>
+    <string name="create_tasklist">Maak takenlijst</string>
+    <string name="create_calendar_display_name_hint">Mijn Kalender</string>
+    <string name="create_calendar">Maak kalender</string>
+    <string name="settings_taskdav">Taken</string>
+    <string name="settings_caldav">Kalender</string>
+    <string name="settings_carddav">Contacten</string>
+    <string name="settings_sync_interval">Sync interval</string>
+    <string name="settings_enter_encryption_password">Geef uw encryptiewachtwoord in:</string>
+    <string name="settings_encryption_password_summary">Wijzig uw encryptiewachtwoord</string>
+    <string name="settings_encryption_password">Encryptiewachtwoord</string>
+    <string name="settings_password_summary">Gebruik een ander authentificatiewachtwoord</string>
+    <string name="settings_encryption">Encryptie</string>
+    <string name="settings_manage_account_summary">Verander uw betalingsinformatie, -plan en ander accountsinstellingen</string>
+    <string name="settings_account_dashboard">Account Gebruikspaneel</string>
+    <string name="settings_manage_account">Beheer Account</string>
+    <string name="choose_file">Kies bestand</string>
+    <string name="import_account_top_notice">Kies een ander account om alle boekingen van te importeren.</string>
+    <string name="import_permission_required">Toegang om opslag te lezen is vereist om te importeren.</string>
+    <string name="import_dialog_success">Verwerkt: %1$d boekingen.
+\nToegevoegd: %2$d
+\nGewijzigd: %3$d
+\nOvergeslagen (mislukt): %4$d</string>
+    <string name="import_dialog_adding_entries">Boekingen aan het toevoegen...</string>
+    <string name="import_dialog_loading_file">File aan het laden (dit kan even duren)...</string>
+    <string name="import_dialog_failed_body">Reden: %s
+\nRapporteer aan ontwikkelaars\?</string>
+    <string name="import_dialog_failed_title">Importeren Mislukt</string>
+    <string name="import_dialog_title">Importeer</string>
+    <string name="login_user_info_error_title">Fout Bij Opzetten Gebruikersinformatie</string>
+    <string name="change_encryption_password_success_body">Encryptiewachtwoord werd succesvol veranderd!</string>
+    <string name="change_encryption_password_success_title">Encryptiewachtwoord Verandering</string>
+    <string name="change_encryption_password_are_you_sure">Bent u zeker dat u wilt verdergaan\? Het proces kan niet halfweg worden onderbroken of kan niet ongedaan gemaakt worden, en kan even duren.</string>
+    <string name="change_encryption_password_new_password">Nieuw Encryptiewachtwoord</string>
+    <string name="change_encryption_password_title">Wijzig Encryptiewachtwoord</string>
+    <string name="signup_password_restrictions">Wachtwoord moet minstens 8 karakters lang zijn</string>
+    <string name="signup_title">Geef Aanmeldgegevens In</string>
+    <string name="wrong_encryption_password_content">Verkreeg een integriteitsfout tijdens het ophalen van uw account, wat hoogstwaarschijnlijk betekent dat u het verkeerde encryptiewachtwoord hebt opgegeven.
+\nBemerk dat de gebruikersnaam hoofdlettergevoelig is, dus probeer ook verschillende versies zoals het schrijven van de eerste letter als hoofdletter.
+\n
+\nError: %s</string>
+    <string name="wrong_encryption_password">Verkeerd ecryptiewachtwoord</string>
+    <string name="account_creation_failed">Accountcreatie mislukt</string>
+    <string name="setting_up_encryption_content">Even geduld, encryptie aan het instellen…</string>
+    <string name="setting_up_encryption">Encryptie instellen</string>
+    <string name="login_wrong_username_or_password">Kan niet authenticeren (waarschijnlijk verkeerde gebruikersnaam of wachtwoord).
+\nBent u al geregistreerd\?</string>
+    <string name="login_forgot_password">Wachtwoord vergeten\?</string>
+    <string name="login_service_details_description">Dit is uw login wachtwoord, *niet* uw encryptiewachtwoord!</string>
+    <string name="login_encryption_account_label">Account:</string>
+    <string name="login_enter_encryption_details">Geheim Encryptiewachtwoord</string>
+    <string name="login_enter_service_details">Logingegegevens Ingeven</string>
+    <string name="login_finish">Beëindigen</string>
+    <string name="login_signup">Aanmelden</string>
+    <string name="login_login">Inloggen</string>
+    <string name="login_encryption_extra_info">* Dit wachtwoord wordt gebruikt om je data te encrypteren, in tegenstelling tot de vorige, welke gebruikt wordt om in te loggen op de dients.
+\nU wordt gevraagd om een apart encryptiewachtwoord te kiezen voor veiligheidsredenen. Voor meer informatie, bekijk de FAQ: %s</string>
+    <string name="login_encryption_check_password">* Zorg er a.u.b. voor dat u uw wachtwoord onthoudt, aangezien het niet kan hersteld worden indien verloren!</string>
+    <string name="login_encryption_enter_password">U bent ingelogd als \"%s\". Gelieve uw encryptiewachtwoord in te geven om verder te gaan, of meld u af via het zijmenu.</string>
+    <string name="login_encryption_set_new_password">Stel a.u.b. uw encryptiewachtwoord hieronder in, en wees er zeker van dat het correct is aangezien het *niet* hersteld kan worden indien verloren!</string>
+    <string name="login_encryption_password">Encryptiewachtwoord</string>
+    <string name="login_toggle_advanced">Toon geavanceerde instellingen</string>
+    <string name="login_custom_server_error">Ongeldige URL gevonden, bent u vergeten om https:// toe te voegen\?</string>
+    <string name="login_custom_server">EteSync Server URL</string>
+    <string name="login_username_error">Geldige gebruikersnaam vereist</string>
+    <string name="login_username">Gebruikersnaam</string>
+    <string name="permissions_tasks_org_request">Vraag Tasks.org permissies aan</string>
+    <string name="permissions_tasks_org_details">Om taken met uw lokale takenlijst te synchroniseren moet EteSync toegang hebben tot Tasks.org.</string>
+    <string name="permissions_tasks_org">Tasks.org permissies</string>
+    <string name="permissions_opentasks_details">Om taken te synchroniseren met uw lokale takenlijst moet EteSync toegang hebben tot OpenTasks.</string>
+    <string name="permissions_contacts_details">Om adresboeken met uw lokale contacten te synchroniseren moet EteSync toegang hebben tot uw contacten.</string>
+    <string name="permissions_calendar_details">Om kalenderevenementen met uw lokale kalenders te synchroniseren moet EteSync toegang hebben tot uw kalenders.</string>
+    <string name="permissions_title">EteSync permissies</string>
+    <string name="journal_item_restore_dialog_body">De aanmelding is succesvol hersteld naar vorige staat.</string>
+    <string name="journal_item_restore_action">Herstel status</string>
+    <string name="journal_item_member_count">Ledenaantal</string>
+    <string name="journal_item_member">Lid</string>
+    <string name="journal_item_relation">Relatie</string>
+    <string name="journal_item_birthday">Verjaardag</string>
+    <string name="journal_item_anniversary">Verjaardag</string>
+    <string name="journal_item_website">Website</string>
+    <string name="journal_item_note">Notitie</string>
+    <string name="journal_item_address">Adres</string>
+    <string name="journal_item_nickname">Gebruikersnaam</string>
+    <string name="journal_item_impp">Instant Messaging</string>
+    <string name="journal_item_job_description">Jobbeschrijving</string>
+    <string name="journal_item_organization">Organisatie</string>
+    <string name="journal_item_email">Email</string>
+    <string name="journal_item_phone">Telefoon</string>
+    <string name="collection_members_add_success">Uitnodiging verstuurd. De gebruiker zal worden toegevoegd zodra de uitnodiging is geaccepteerd.</string>
+    <string name="account_wizard_collections_body">Om EteSync te gebruiken moet u eerst verzamelingen aanmaken om data in op te slaan. Klik op Maken om voor u een standaardkalender, -adresboek en -takenlijst aan te maken.</string>
+    <string name="account_wizard_collections_title">Welkom bij EteSync!</string>
+    <string name="retry">Opnieuw proberen</string>
+    <string name="skip">Sla over</string>
+    <string name="create">Maak</string>
 </resources>

@@ -55,7 +55,7 @@
     <!-- AccountsActivity -->
     <string name="navigation_drawer_open">Åpne navigasjonsmeny</string>
     <string name="navigation_drawer_close">Lukk navigasjonsmeny</string>
-    <string name="navigation_drawer_subtitle">Secure Sync Adapter</string>
+    <string name="navigation_drawer_subtitle">Secure Sync-adapter</string>
     <string name="navigation_drawer_about">Om / Lisens</string>
     <string name="navigation_drawer_settings">Innstillinger</string>
     <string name="navigation_drawer_external_links">Nyttige lenker</string>
@@ -131,7 +131,7 @@
     <string name="collection_members_adding">Legger til medlem</string>
     <string name="trust_fingerprint_title">Kontroller sikkerhetsfingeravtrykk</string>
     <string name="trust_fingerprint_body">Kontroller %s sitt fingeravtrykk for å bekrefte at krypteringen er sikker.</string>
-    <string name="collection_members_error_user_not_found">Brukeren (%s) finnes ikke, eller har skrudd av journaldeling.</string>
+    <string name="collection_members_error_user_not_found">Brukeren (%s) finnes ikke</string>
     <string name="collection_members_removing">Fjerner medlem</string>
     <string name="collection_members_remove_error">Kunne ikke fjerne medlem</string>
     <string name="collection_members_remove_title">Fjern medlem</string>
@@ -205,7 +205,6 @@
 \neil: %s</string>
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Endre krypteringspassord</string>
-    <string name="change_encryption_password_extra_info">Ikke bruk dette verktøyet dersom du mistenker at krypteringspassordet ditt har blitt kompromittert. Kontakt brukerstøtte i stedet.</string>
     <string name="change_encryption_password_new_password">Nytt krypteringspassord</string>
     <string name="change_encryption_password_are_you_sure">Er du sikker på at du vil fortsette? Denne prosessen kan ikke stoppes halvveis eller angres, og kan ta en stund å fullføre.</string>
     <string name="change_encryption_password_success_title">Endring av krypteringspassord</string>
@@ -279,8 +278,9 @@
     <string name="delete_collection_confirm_warning">Denne samlingen (%s) og alle dens data vil slettes fra tjeneren.</string>
     <string name="delete_collection_deleting_collection">Sletter samling</string>
     <!-- JournalViewer -->
-    <string name="journal_entries_list_empty">Journalen er tom.\n(Kanskje den fortsatt synkroniserer?)</string>
-    <string name="journal_entries_loading">Laster inn journalelementer …</string>
+    <string name="journal_entries_list_empty">Samlingen er tom.
+\n(Kanskje den fortsatt synkroniserer\?)</string>
+    <string name="journal_entries_loading">Laster endringsloggsoppføringer …</string>
     <!-- ExceptionInfoFragment -->
     <string name="exception">En feil har oppstått.</string>
     <string name="exception_httpexception">En HTTP-feil har oppstått.</string>
