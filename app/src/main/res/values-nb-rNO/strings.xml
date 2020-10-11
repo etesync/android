@@ -378,4 +378,11 @@
     <string name="collection_members_no_access">Kun administratorer kan håndtere samlingsmedlemskap. Ønsker du å forlate denne samlingen\?</string>
     <string name="collection_members_remove_admin">Fjerning av tilganger for administratorer støttes ikke.</string>
     <string name="edit_owner_only_anon">Kun eiere av denne samlingen kan redigere den.</string>
+    <string name="collection_members_add_success">Invitasjon sendt. Brukeren vil bli lagt til når invitasjonen har blitt godkjent.</string>
+    <string name="collection_members_add_read_only">Skrivebeskyttet</string>
+    <string name="account_wizard_collections_body">For å kunne bruke EteSync må du opprette samlinger å lagre dataen din i. Klikk «Opprett» for å opprette en forvalgt kalender, adressebok og gjøremålsliste.</string>
+    <string name="account_wizard_collections_title">Velkommen til EteSync.</string>
+    <string name="retry">Prøv igjen</string>
+    <string name="skip">Hopp over</string>
+    <string name="create">Opprett</string>
 </resources>
