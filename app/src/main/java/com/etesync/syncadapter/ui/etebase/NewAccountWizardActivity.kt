@@ -19,6 +19,7 @@ import com.etebase.client.Collection
 import com.etebase.client.CollectionMetadata
 import com.etebase.client.FetchOptions
 import com.etebase.client.exceptions.EtebaseException
+import com.etesync.syncadapter.Constants.*
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.BaseActivity
@@ -175,9 +176,9 @@ class WizardFragment : Fragment() {
         doAsync {
             try {
                 val baseMeta = listOf(
-                    Pair("etebase.vcard", "My Contacts"),
-                    Pair("etebase.vevent", "My Calendar"),
-                    Pair("etebase.vtodo", "My Tasks"),
+                    Pair(ETEBASE_TYPE_ADDRESS_BOOK, "My Contacts"),
+                    Pair(ETEBASE_TYPE_CALENDAR, "My Calendar"),
+                    Pair(ETEBASE_TYPE_TASKS, "My Tasks"),
                 )
 
                 baseMeta.forEach {
