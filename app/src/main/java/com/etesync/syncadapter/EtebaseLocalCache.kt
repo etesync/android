@@ -4,6 +4,7 @@ import android.content.Context
 import com.etebase.client.*
 import com.etebase.client.Collection
 import com.etebase.client.exceptions.EtebaseException
+import com.etebase.client.exceptions.UrlParseException
 import okhttp3.OkHttpClient
 import java.io.File
 import java.util.*
@@ -58,7 +59,11 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     }
 
     fun collectionUnset(colMgr: CollectionManager, colUid: String) {
-        fsCache.collectionUnset(colMgr, colUid)
+        try {
+            fsCache.collectionUnset(colMgr, colUid)
+        } catch (e: UrlParseException) {
+            // Ignore, as it just means the file doesn't exist
+        }
     }
 
     fun itemList(itemMgr: ItemManager, colUid: String, withDeleted: Boolean = false): List<CachedItem> {
