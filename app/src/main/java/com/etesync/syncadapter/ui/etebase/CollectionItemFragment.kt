@@ -101,7 +101,7 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
         val context = requireContext()
         val account = accountHolder.account
         val cachedCol = collectionModel.value!!
-        when (cachedCol.meta.collectionType) {
+        when (cachedCol.collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 val provider = context.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!
                 val localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, cachedCol.col.uid)!!
@@ -205,7 +205,7 @@ class PrettyFragment(private val mainFragment: CollectionItemFragment, private v
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v: View? = null
 
-        when (cachedCollection.meta.collectionType) {
+        when (cachedCollection.collectionType) {
             Constants.ETEBASE_TYPE_ADDRESS_BOOK -> {
                 v = inflater.inflate(R.layout.contact_info, container, false)
                 asyncTask = loadContactTask(v)

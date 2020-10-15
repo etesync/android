@@ -436,7 +436,7 @@ class ImportFragment(private val account: Account, private val uid: String, priv
         }
 
         fun newInstance(account: Account, cachedCollection: CachedCollection): ImportFragment {
-            val enumType = when (cachedCollection.meta.collectionType) {
+            val enumType = when (cachedCollection.collectionType) {
                 ETEBASE_TYPE_CALENDAR -> CollectionInfo.Type.CALENDAR
                 ETEBASE_TYPE_TASKS -> CollectionInfo.Type.TASKS
                 ETEBASE_TYPE_ADDRESS_BOOK -> CollectionInfo.Type.ADDRESS_BOOK

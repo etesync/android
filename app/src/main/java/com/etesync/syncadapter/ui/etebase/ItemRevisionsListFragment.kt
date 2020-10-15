@@ -97,7 +97,7 @@ class ItemRevisionsListFragment(private val cachedCollection: CachedCollection, 
 
             val item = getItem(position)
 
-            setItemView(v, cachedCollection.meta.collectionType, item)
+            setItemView(v, cachedCollection.collectionType, item)
 
             /* FIXME: handle entry error:
             val entryError = data.select(EntryErrorEntity::class.java).where(EntryErrorEntity.ENTRY.eq(entryEntity)).limit(1).get().firstOrNull()

@@ -54,9 +54,10 @@ class CollectionMembersFragment : Fragment() {
 
     private fun initUi(inflater: LayoutInflater, v: View, cachedCollection: CachedCollection) {
         val meta = cachedCollection.meta
+        val collectionType = cachedCollection.collectionType
         val colorSquare = v.findViewById<View>(R.id.color)
         val color = LocalCalendar.parseColor(meta.color)
-        when (meta.collectionType) {
+        when (collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 colorSquare.setBackgroundColor(color)
             }

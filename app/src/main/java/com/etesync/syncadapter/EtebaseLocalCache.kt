@@ -44,13 +44,13 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         return fsCache._unstable_collectionList(colMgr).filter {
             withDeleted || !it.isDeleted
         }.map{
-            CachedCollection(it, it.meta)
+            CachedCollection(it, it.meta, it.collectionType)
         }
     }
 
     fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection {
         return fsCache.collectionGet(colMgr, colUid).let {
-            CachedCollection(it, it.meta)
+            CachedCollection(it, it.meta, it.collectionType)
         }
     }
 
@@ -124,6 +124,6 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     }
 }
 
-data class CachedCollection(val col: Collection, val meta: CollectionMetadata)
+data class CachedCollection(val col: Collection, val meta: ItemMetadata, val collectionType: String)
 
 data class CachedItem(val item: Item, val meta: ItemMetadata, val content: String)

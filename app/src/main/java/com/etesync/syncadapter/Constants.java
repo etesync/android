@@ -48,4 +48,9 @@ public class Constants {
     public final static String ETEBASE_TYPE_ADDRESS_BOOK = "etebase.vcard";
     public final static String ETEBASE_TYPE_CALENDAR = "etebase.vevent";
     public final static String ETEBASE_TYPE_TASKS = "etebase.vtodo";
+    public final static String[] COLLECTION_TYPES = new String[] {
+      ETEBASE_TYPE_ADDRESS_BOOK,
+      ETEBASE_TYPE_CALENDAR,
+      ETEBASE_TYPE_TASKS
+    };
 }

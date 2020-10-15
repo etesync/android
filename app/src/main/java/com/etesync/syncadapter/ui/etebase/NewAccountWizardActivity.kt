@@ -16,8 +16,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.etebase.client.Collection
-import com.etebase.client.CollectionMetadata
 import com.etebase.client.FetchOptions
+import com.etebase.client.ItemMetadata
 import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.Constants.*
 import com.etesync.syncadapter.R
@@ -107,7 +107,7 @@ class WizardCheckFragment : Fragment() {
         loadingModel.setLoading(true)
         doAsync {
             try {
-                val collections = colMgr.list(FetchOptions().limit(1))
+                val collections = colMgr.list(COLLECTION_TYPES, FetchOptions().limit(1))
                 uiThread {
                     if (collections.data.size > 0) {
                         activity?.finish()
@@ -182,10 +182,11 @@ class WizardFragment : Fragment() {
                 )
 
                 baseMeta.forEach {
-                    val meta = CollectionMetadata(it.first, it.second)
+                    val meta = ItemMetadata()
+                    meta.name = it.second
                     meta.mtime = System.currentTimeMillis()
 
-                    val col = colMgr.create(meta, "")
+                    val col = colMgr.create(it.first, meta, "")
                     uploadCollection(accountHolder, col)
                 }
                 requestSync(requireContext(), accountHolder.account)

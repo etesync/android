@@ -398,8 +398,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             synchronized(etebaseLocalCache) {
                 return etebaseLocalCache.collectionList(colMgr).map {
                     val meta = it.meta
+                    val collectionType = it.collectionType
 
-                    if (strType != meta.collectionType) {
+                    if (strType != collectionType) {
                         return@map null
                     }
 
@@ -409,7 +410,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
                     val metaColor = meta.color
                     val color = if (!metaColor.isNullOrBlank()) LocalCalendar.parseColor(metaColor) else null
-                    CollectionListItemInfo(it.col.uid, type, meta.name, meta.description
+                    CollectionListItemInfo(it.col.uid, type, meta.name!!, meta.description
                             ?: "", color, isReadOnly, isAdmin, null)
                 }.filterNotNull()
             }

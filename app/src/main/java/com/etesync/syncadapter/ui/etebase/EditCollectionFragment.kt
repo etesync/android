@@ -47,7 +47,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         cachedCollection.let {
             var titleId: Int = R.string.create_calendar
             if (isCreating) {
-                when (cachedCollection.meta.collectionType) {
+                when (cachedCollection.collectionType) {
                     Constants.ETEBASE_TYPE_CALENDAR -> {
                         titleId = R.string.create_calendar
                     }
@@ -75,7 +75,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         desc.setText(meta.description)
 
         val colorSquare = v.findViewById<View>(R.id.color)
-        when (cachedCollection.meta.collectionType) {
+        when (cachedCollection.collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 title.setHint(R.string.create_calendar_display_name_hint)
 
@@ -200,7 +200,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         meta.mtime = System.currentTimeMillis()
 
         if (ok) {
-            when (meta.collectionType) {
+            when (cachedCollection.collectionType) {
                 Constants.ETEBASE_TYPE_CALENDAR, Constants.ETEBASE_TYPE_TASKS -> {
                     val view = v.findViewById<View>(R.id.color)
                     val color = (view.background as ColorDrawable).color

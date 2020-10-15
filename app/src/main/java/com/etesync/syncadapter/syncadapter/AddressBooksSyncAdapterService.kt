@@ -77,7 +77,7 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
                 val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
                 val colMgr = etebase.collectionManager
 
-                collections = etebaseLocalCache.collectionList(colMgr).filter { it.meta.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK }
+                collections = etebaseLocalCache.collectionList(colMgr).filter { it.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK }
             }
 
             for (collection in collections) {
