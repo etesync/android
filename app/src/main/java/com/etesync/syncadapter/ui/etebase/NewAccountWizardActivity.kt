@@ -120,9 +120,6 @@ class WizardCheckFragment : Fragment() {
             } catch (e: Exception) {
                 uiThread {
                     reportErrorHelper(requireContext(), e)
-                }
-            } finally {
-                uiThread {
                     loadingModel.setLoading(false)
                 }
             }
