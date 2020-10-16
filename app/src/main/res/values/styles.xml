@@ -33,6 +33,7 @@
     <color name="primaryTextColor">#000000</color>
 
     <color name="errorColor">#d32f2f</color>
+    <color name="infoColor">#E8F4FD</color>
 
 
     <!-- app theme -->

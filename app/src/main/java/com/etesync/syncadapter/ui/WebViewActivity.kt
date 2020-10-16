@@ -198,10 +198,15 @@ class WebViewActivity : BaseActivity() {
                     Constants.dashboard,
                     Constants.webUri.buildUpon().appendEncodedPath("tos/").build(),
                     Constants.webUri.buildUpon().appendEncodedPath("about/").build(),
+                    Constants.pricing,
             )
             val accountsUri = Constants.webUri.buildUpon().appendEncodedPath("accounts/").build()
 
-            return allowedUris(allowedUris, uri) || uri.host == accountsUri.host && uri.path!!.startsWith(accountsUri.path!!)
+            return allowedUris(allowedUris, uri) || (
+                    uri.host == accountsUri.host && uri.path!!.startsWith(accountsUri.path!!)
+                    ) || (
+                    uri.host == Constants.etebaseDashboardPrefix.host && uri.path!!.startsWith(Constants.etebaseDashboardPrefix.path!!)
+                    )
         }
     }
 }
