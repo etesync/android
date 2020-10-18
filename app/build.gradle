@@ -122,6 +122,9 @@ android {
         buildTypes.release.signingConfig = null
     }
     compileOptions {
+        // enable because ical4android requires desugaring
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -135,6 +138,8 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.5'
+
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
     implementation "com.etesync:journalmanager:1.1.1"
