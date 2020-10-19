@@ -34,10 +34,7 @@ import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.WebViewActivity
-import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder
-import com.etesync.syncadapter.ui.setup.CreateAccountFragment
-import com.etesync.syncadapter.ui.setup.DetectConfigurationFragment
-import com.etesync.syncadapter.ui.setup.LoginCredentialsFragment
+import com.etesync.syncadapter.ui.setup.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import net.cachapa.expandablelayout.ExpandableLayout
@@ -190,7 +187,7 @@ class SignupDoFragment(private val signupCredentials: SignupCredentials) : Dialo
 }
 
 class ConfigurationViewModel : ViewModel() {
-    private val account = MutableLiveData<BaseConfigurationFinder.Configuration>()
+    val account = MutableLiveData<BaseConfigurationFinder.Configuration>()
     private var asyncTask: Future<Unit>? = null
 
     fun signup(context: Context, credentials: SignupCredentials) {
@@ -203,6 +200,34 @@ class ConfigurationViewModel : ViewModel() {
                 val client = Client.create(httpClient, uri.toString())
                 val user = User(credentials.userName, credentials.email)
                 val etebase = Account.signup(client, user, credentials.password)
+                etebaseSession = etebase.save(null)
+            } catch (e: EtebaseException) {
+                exception = e
+            }
+
+            uiThread {
+                account.value = BaseConfigurationFinder.Configuration(
+                        uri,
+                        credentials.userName,
+                        etebaseSession,
+                        null,
+                        null,
+                        exception
+                )
+            }
+        }
+    }
+
+    // We just need it for the migration - maybe merge it with login later on
+    fun login(context: Context, credentials: LoginCredentials) {
+        asyncTask = doAsync {
+            val httpClient = HttpClient.Builder(context).build().okHttpClient
+            val uri = credentials.uri ?: URI(Constants.etebaseServiceUrl)
+            var etebaseSession: String? = null
+            var exception: Throwable? = null
+            try {
+                val client = Client.create(httpClient, uri.toString())
+                val etebase = Account.login(client, credentials.userName, credentials.password)
                 etebaseSession = etebase.save(null)
             } catch (e: EtebaseException) {
                 exception = e

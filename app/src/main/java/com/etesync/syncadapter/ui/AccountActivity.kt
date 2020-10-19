@@ -160,6 +160,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         if (settings.isLegacy) {
             val invitations = menu.findItem(R.id.invitations)
             invitations.setVisible(false)
+            menu.findItem(R.id.migration_v2).setVisible(true)
         }
         return true
     }
@@ -192,6 +193,10 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             }
             R.id.invitations -> {
                 val intent = InvitationsActivity.newIntent(this, account)
+                startActivity(intent)
+            }
+            R.id.migration_v2 -> {
+                val intent = MigrateV2Activity.newIntent(this, account)
                 startActivity(intent)
             }
             else -> return super.onOptionsItemSelected(item)

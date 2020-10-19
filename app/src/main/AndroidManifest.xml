@@ -246,6 +246,10 @@
             android:exported="false"
             />
         <activity
+            android:name=".ui.MigrateV2Activity"
+            android:exported="false"
+            />
+        <activity
             android:name=".ui.ViewCollectionActivity"
             android:exported="false"
             />
