@@ -35,7 +35,7 @@ class NewAccountWizardActivity : BaseActivity() {
 
         account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)!!
 
-        setContentView(R.layout.etebase_collection_activity)
+        setContentView(R.layout.etebase_fragment_activity)
 
         if (savedInstanceState == null) {
             setTitle(R.string.account_wizard_collections_title)

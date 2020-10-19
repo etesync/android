@@ -30,7 +30,7 @@ class CollectionActivity() : BaseActivity() {
         val colUid = intent.extras!!.getString(EXTRA_COLLECTION_UID)
         val colType = intent.extras!!.getString(EXTRA_COLLECTION_TYPE)
 
-        setContentView(R.layout.etebase_collection_activity)
+        setContentView(R.layout.etebase_fragment_activity)
 
         if (savedInstanceState == null) {
             model.loadAccount(this, account)
