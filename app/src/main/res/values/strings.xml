@@ -97,7 +97,8 @@
     <string name="migrate_v2_wizard_migrate_title">Migrating…</string>
     <string name="migrate_v2_wizard_migrate_progress">Migrating collection %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress_entries">Migrated entries %d/%d</string>
-    <string name="migrate_v2_wizard_migrate_progress_done">Done.\nModification time missing for %d entries (set to "now").\nIgnored %d malformed entries (probably safe to ignore).</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Your account has been migrated.\nPlease verify everything was copied over correctly, and remove your old account once done.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">Ignored %d malformed entries (probably safe to ignore).</string>
 
     <!-- AccountUpdateService -->
 

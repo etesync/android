@@ -714,10 +714,14 @@ class MigrateCollectionsDoFragment(private val etebase: EtebaseAccount,
                 }
 
                 uiThread {
+                    var message = getString(R.string.migrate_v2_wizard_migrate_progress_done)
+                    if (malformed > 0) {
+                        message += "\n\n" + getString(R.string.migrate_v2_wizard_migrate_progress_done_malformed, malformed)
+                    }
                     AlertDialog.Builder(requireContext())
                             .setIcon(R.drawable.ic_info_dark)
                             .setTitle(R.string.migrate_v2_wizard_migrate_title)
-                            .setMessage(getString(R.string.migrate_v2_wizard_migrate_progress_done, badMtime, malformed))
+                            .setMessage(message)
                             .setPositiveButton(android.R.string.yes) { _, _ -> }
                             .setOnDismissListener {
                                 requireFragmentManager().beginTransaction()
