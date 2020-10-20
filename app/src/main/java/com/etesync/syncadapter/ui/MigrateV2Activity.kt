@@ -724,17 +724,17 @@ class MigrateCollectionsDoFragment(private val etebase: EtebaseAccount,
                             .setMessage(message)
                             .setPositiveButton(android.R.string.yes) { _, _ -> }
                             .setOnDismissListener {
-                                requireFragmentManager().beginTransaction()
-                                        .replace(android.R.id.content, CreateAccountFragment.newInstance(configurationModel.account.value!!))
-                                        .addToBackStack(null)
-                                        .commitAllowingStateLoss()
+                                requireFragmentManager().commit {
+                                    replace(android.R.id.content, CreateAccountFragment.newInstance(configurationModel.account.value!!))
+                                    addToBackStack(null)
+                                }
+                                dismissAllowingStateLoss()
                             }
                             .show()
                 }
             } catch (e: Exception) {
-                uiThread { reportErrorHelper(requireContext(), e) }
-            } finally {
                 uiThread {
+                    reportErrorHelper(requireContext(), e)
                     dismissAllowingStateLoss()
                 }
             }
