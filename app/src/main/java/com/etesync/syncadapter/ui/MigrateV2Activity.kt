@@ -427,7 +427,7 @@ class WizardCollectionsFragment(private val accountV1: Account, private val eteb
 
     private fun initUi(inflater: LayoutInflater, v: View) {
         v.findViewById<Button>(R.id.button_create).setOnClickListener {
-            MigrateCollectionsDoFragment(etebase, info, this.migrateJournals).show(requireFragmentManager(), null)
+            MigrateCollectionsDoFragment(etebase, this.migrateJournals).show(parentFragmentManager, null)
         }
 
         v.findViewById<Button>(R.id.button_skip).setOnClickListener {
@@ -583,7 +583,7 @@ class WizardCollectionsFragment(private val accountV1: Account, private val eteb
 }
 
 
-class MigrateCollectionsDoFragment(private val etebase: EtebaseAccount, private val info: AccountActivity.AccountInfo,
+class MigrateCollectionsDoFragment(private val etebase: EtebaseAccount,
                                    private val migrateJournals: HashMap<String, AccountActivity.CollectionListItemInfo>) : DialogFragment() {
     private val configurationModel: ConfigurationViewModel by activityViewModels()
     private lateinit var progress: ProgressDialog
