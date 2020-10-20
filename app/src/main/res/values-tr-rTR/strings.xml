@@ -384,9 +384,8 @@
     <string name="skip">Atla</string>
     <string name="create">Oluştur</string>
     <string name="collection_members_add_read_only">Salt okunur</string>
-    <string name="migrate_v2_wizard_migrate_progress_done">Bitti.
-\n%d girdi için değişiklik zamanı eksik (şimdi olarak ayarlandı).
-\n%d hatalı biçimlendirilmiş girdi yok sayıldı (yok sayılmaları muhtemelen güvenli).</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Hesabınız taşındı.
+\nLütfen her şeyin doğru bir şekilde kopyalandığını doğrulayın ve işiniz bittiğinde eski hesabınızı kaldırın.</string>
     <string name="migrate_v2_wizard_migrate_progress_entries">Taşınan girdiler %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress">Koleksiyon taşınıyor %d/%d</string>
     <string name="migrate_v2_wizard_migrate_title">Taşınıyor…</string>
@@ -394,4 +393,5 @@
 \nDevam etmek için, lütfen aşağıdan yeni bir EteSync 2.0 hesabına kaydolmak veya mevcut bir hesapla oturum açmak seçeneklerinden birini seçin.</string>
     <string name="migrate_v2_wizard_welcome_body">Bu araç verilerinizi EteSync 2.0\'a taşımanıza yardımcı olacaktır. Taşıma herhangi bir veriyi silmez. Verilerinizi yalnızca yeni EteSync 2.0 sunucusuna kopyalar. Bu, taşıma esnasında veri kaybı riski olmadığı anlamına gelir.</string>
     <string name="migrate_v2_wizard_welcome_title">EteSync 2.0\'a Taşıma</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">%d hatalı biçimlendirilmiş girdi yok sayıldı (yok sayılmaları muhtemelen güvenli).</string>
 </resources>
