@@ -21,7 +21,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
 
-        versionCode 200
+        versionCode 20000
         versionName "2.0.0"
 
         buildConfigField "boolean", "customCerts", "true"
