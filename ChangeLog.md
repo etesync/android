@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.1.0
+* Change the crash reporting to not rely on email (use HTTP instead)
+
 ## Version 2.0.0
 * EteSync 2.0 support \o/
 
