@@ -35,6 +35,7 @@ public class Constants {
     public static final Uri faqUri = webUri.buildUpon().appendEncodedPath("faq/").build();
     public static final Uri helpUri = webUri.buildUpon().appendEncodedPath("user-guide/android/").build();
     public static final Uri forgotPassword = faqUri.buildUpon().fragment("forgot-password").build();
+    public static final String crashReportingUrl = "https://www.etesync.com/crash/android-syncadapter/report/";
 
     public static final Uri serviceUrl = Uri.parse((DEBUG_REMOTE_URL == null) ? "https://api.etesync.com/" : DEBUG_REMOTE_URL);
     public static final String etebaseServiceUrl = (DEBUG_REMOTE_URL == null) ? "https://api.etebase.com/partner/etesync/" : DEBUG_REMOTE_URL;

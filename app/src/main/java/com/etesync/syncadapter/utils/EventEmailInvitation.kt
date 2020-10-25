@@ -15,15 +15,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun emailSupportsAttachments(context: Context): Boolean {
-    return !arrayOf(
-            "ch.protonmail.android",
-            "de.tutao.tutanota"
-    ).any{
-        packageInstalled(context, it)
-    }
-}
-
 class EventEmailInvitation constructor(val context: Context, val account: Account) {
     fun createIntent(event: Event, icsContent: String): Intent? {
         val intent = Intent(Intent.ACTION_SEND)

@@ -3,11 +3,10 @@ package com.etesync.syncadapter;
 import android.content.Context;
 
 import org.acra.config.CoreConfigurationBuilder;
-import org.acra.config.MailSenderConfigurationBuilder;
-import org.acra.config.NotificationConfigurationBuilder;
+import org.acra.config.DialogConfigurationBuilder;
+import org.acra.config.HttpSenderConfigurationBuilder;
 import org.acra.data.StringFormat;
-
-import static com.etesync.syncadapter.utils.EventEmailInvitationKt.emailSupportsAttachments;
+import org.acra.sender.HttpSender;
 
 public class AcraConfiguration {
     public static CoreConfigurationBuilder getConfig(Context context) {
@@ -15,17 +14,14 @@ public class AcraConfiguration {
                 .setBuildConfigClass(BuildConfig.class)
                 .setLogcatArguments("-t", "500", "-v", "time")
                 .setReportFormat(StringFormat.JSON);
-        builder.getPluginConfigurationBuilder(MailSenderConfigurationBuilder.class)
-                .setMailTo("reports@etesync.com")
-                .setResSubject(R.string.crash_email_subject)
-                .setReportFileName("ACRA-report.stacktrace.json")
-                .setReportAsFile(emailSupportsAttachments(context))
+        builder.getPluginConfigurationBuilder(HttpSenderConfigurationBuilder.class)
+                .setUri(Constants.crashReportingUrl)
+                .setHttpMethod(HttpSender.Method.POST)
                 .setEnabled(true);
-        builder.getPluginConfigurationBuilder(NotificationConfigurationBuilder.class)
+        builder.getPluginConfigurationBuilder(DialogConfigurationBuilder.class)
                 .setResTitle(R.string.crash_title)
                 .setResText(R.string.crash_message)
-                .setResChannelName(R.string.notification_channel_crash_reports)
-                .setSendOnClick(true)
+                .setResCommentPrompt(R.string.crash_email_body)
                 .setEnabled(true);
 
         return builder;

@@ -148,9 +148,9 @@ dependencies {
     def etebaseVersion = '2.3.0'
     implementation "com.etebase:client:$etebaseVersion"
 
-    def acraVersion = '5.3.0'
-    implementation "ch.acra:acra-mail:$acraVersion"
-    implementation "ch.acra:acra-notification:$acraVersion"
+    def acraVersion = '5.7.0'
+    implementation "ch.acra:acra-http:$acraVersion"
+    implementation "ch.acra:acra-dialog:$acraVersion"
     def supportVersion = '1.0.0'
     implementation "androidx.legacy:legacy-support-core-ui:$supportVersion"
     implementation "androidx.core:core:$supportVersion"
