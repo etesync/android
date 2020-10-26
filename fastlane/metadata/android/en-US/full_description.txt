@@ -1,4 +1,4 @@
-Secure, end-to-end encrypted, and privacy respecting sync for Android, the desktop and the web. Currently supports calendars, contacts and tasks (using OpenTasks), with more on the way.
+Secure, end-to-end encrypted, and privacy respecting sync for your contacts, calendars, and tasks (using Tasks.org and OpenTasks). For notes, please use the EteSync Notes application.
 
 In order to use this application you need to have an account with EteSync (paid hosting), or run your own instance (free and open source). Check out https://www.etesync.com/ for more information.
 
