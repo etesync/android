@@ -52,6 +52,7 @@ import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.etesync.syncadapter.utils.packageInstalled
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import org.acra.ACRA
 import org.jetbrains.anko.doAsync
 import tourguide.tourguide.ToolTip
 import java.util.logging.Level
@@ -104,6 +105,9 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         account = intent.getParcelableExtra(EXTRA_ACCOUNT)
         title = account.name
         settings = AccountSettings(this, account)
+
+        // Set it for ACRA in case we crash in any of the user views
+        ACRA.getErrorReporter().putCustomData("username", account.name)
 
         setContentView(R.layout.activity_account)
 
