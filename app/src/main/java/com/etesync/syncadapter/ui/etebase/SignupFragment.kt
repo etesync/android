@@ -73,7 +73,7 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         val login = v.findViewById<Button>(R.id.login)
         login.setOnClickListener {
             parentFragmentManager.commit {
-                replace(android.R.id.content, LoginCredentialsFragment(editUserName.editText?.text.toString(), editPassword.editText?.text.toString()))
+                replace(android.R.id.content, LoginCredentialsFragment.newInstance(editUserName.editText?.text.toString(), editPassword.editText?.text.toString()))
             }
         }
 
