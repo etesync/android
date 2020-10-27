@@ -251,7 +251,13 @@ class PrettyFragment(private val mainFragment: CollectionItemFragment, private v
 
                     setTextViewText(view, R.id.title, event.summary)
 
-                    setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(event.dtStart?.date?.time!!, event.dtEnd?.date!!.time, event.isAllDay(), context))
+                    val dtStart = event.dtStart?.date?.time
+                    val dtEnd = event.dtEnd?.date?.time
+                    if ((dtStart == null) || (dtEnd == null)) {
+                        setTextViewText(view, R.id.when_datetime, getString(R.string.loading_error_title))
+                    } else {
+                        setTextViewText(view, R.id.when_datetime, getDisplayedDatetime(dtStart, dtEnd, event.isAllDay(), context))
+                    }
 
                     setTextViewText(view, R.id.where, event.location)
 
