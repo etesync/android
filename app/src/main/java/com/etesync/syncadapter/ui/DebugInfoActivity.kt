@@ -66,7 +66,7 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
 
     fun onShare(item: MenuItem) {
         ACRA.getErrorReporter().putCustomData("debug_info", report)
-        ACRA.getErrorReporter().handleException(null)
+        ACRA.getErrorReporter().handleException(intent.extras?.getSerializable(KEY_THROWABLE) as Throwable?)
         ACRA.getErrorReporter().removeCustomData("debug_info")
     }
 
