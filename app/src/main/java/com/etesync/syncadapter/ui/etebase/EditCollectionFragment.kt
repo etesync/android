@@ -15,6 +15,7 @@ import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.BaseActivity
@@ -167,11 +168,14 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
                 activity?.finish()
             } catch (e: EtebaseException) {
                 uiThread {
-                    AlertDialog.Builder(requireContext())
-                            .setIcon(R.drawable.ic_info_dark)
-                            .setTitle(R.string.exception)
-                            .setMessage(e.localizedMessage)
-                            .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                    Logger.log.warning(e.localizedMessage)
+                    context?.let { context ->
+                        AlertDialog.Builder(context)
+                                .setIcon(R.drawable.ic_info_dark)
+                                .setTitle(R.string.exception)
+                                .setMessage(e.localizedMessage)
+                                .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                    }
                 }
             } finally {
                 uiThread {
