@@ -234,9 +234,10 @@ class ImportFragment(private val account: Account, private val uid: String, priv
 
                     val localCalendar: LocalCalendar?
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, uid!!)
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, uid)
                         if (localCalendar == null) {
-                            throw FileNotFoundException("Failed to load local resource.")
+                            result.e = FileNotFoundException("Failed to load local resource.")
+                            return result
                         }
                     } catch (e: CalendarStorageException) {
                         Logger.log.info("Fail" + e.localizedMessage)
@@ -292,9 +293,10 @@ class ImportFragment(private val account: Account, private val uid: String, priv
                     provider?.let {
                         val localTaskList: LocalTaskList?
                         try {
-                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, uid!!)
+                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, uid)
                             if (localTaskList == null) {
-                                throw FileNotFoundException("Failed to load local resource.")
+                                result.e = FileNotFoundException("Failed to load local resource.")
+                                return result
                             }
                         } catch (e: FileNotFoundException) {
                             Logger.log.info("Fail" + e.localizedMessage)
@@ -341,9 +343,10 @@ class ImportFragment(private val account: Account, private val uid: String, priv
                         return result
                     }
 
-                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, uid!!)
+                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, uid)
                     if (localAddressBook == null) {
-                        throw FileNotFoundException("Failed to load local address book.")
+                        result.e = FileNotFoundException("Failed to load local address book.")
+                        return result
                     }
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
