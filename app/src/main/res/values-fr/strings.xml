@@ -166,7 +166,7 @@
     <string name="app_settings_force_language">Forcer la langue</string>
     <string name="sync_calendar_attendees_email_content" formatted="false">Vous avez été invité·e à l\'évènement suivant :
 \n
-\n% s
+\n%s
 \nQuand : %s
 \nOù : %s
 \nParticipants : %s
