@@ -23,8 +23,10 @@ import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.DebugInfoActivity
 import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder.Configuration
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
-class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallbacks<Configuration> {
+class DetectConfigurationFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
@@ -40,14 +42,22 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
         super.onCreate(savedInstanceState)
 
         Logger.log.fine("DetectConfigurationFragment: loading")
-        loaderManager.initLoader(0, arguments, this)
+
+        if (savedInstanceState == null) {
+            findConfiguration(requireArguments().getParcelable(ARG_LOGIN_CREDENTIALS)!!)
+        }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Configuration> {
-        return ServerConfigurationLoader(requireContext(), args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials)
+    private fun findConfiguration(credentials: LoginCredentials) {
+        doAsync {
+            val data = BaseConfigurationFinder(requireContext(), credentials).findInitialConfiguration()
+            uiThread {
+                onLoadFinished(data)
+            }
+        }
     }
 
-    override fun onLoadFinished(loader: Loader<Configuration>, data: Configuration?) {
+    private fun onLoadFinished(data: Configuration?) {
         if (data != null) {
             if (data.isFailed) {
                 Logger.log.warning("Failed login configuration ${data.error?.localizedMessage}")
@@ -75,13 +85,10 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
         dismissAllowingStateLoss()
     }
 
-    override fun onLoaderReset(loader: Loader<Configuration>) {}
-
-
     class NothingDetectedFragment : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return AlertDialog.Builder(activity!!)
+            return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.setting_up_encryption)
                     .setIcon(R.drawable.ic_error_dark)
                     .setMessage(requireArguments().getString(KEY_LOGS))
@@ -101,17 +108,6 @@ class DetectConfigurationFragment : DialogFragment(), LoaderManager.LoaderCallba
                 fragment.arguments = args
                 return fragment
             }
-        }
-    }
-
-    internal class ServerConfigurationLoader(context: Context, val credentials: LoginCredentials) : AsyncTaskLoader<Configuration>(context) {
-
-        override fun onStartLoading() {
-            forceLoad()
-        }
-
-        override fun loadInBackground(): Configuration? {
-            return BaseConfigurationFinder(context, credentials).findInitialConfiguration()
         }
     }
 
