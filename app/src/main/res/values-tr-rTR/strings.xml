@@ -176,7 +176,7 @@
     <string name="sync_error_contacts">Kişileri eşzamanlama başarısız oldu (%s)</string>
     <string name="sync_error_permissions_text">Ek izinler gerekli</string>
     <string name="sync_error_permissions">EteSync izinleri</string>
-    <string name="debug_info_more_data_shared">Paylaş düğmesine tıklamak, aşağıdaki verilerin yanı sıra bazı ek hata ayıklama bilgilerinin ekli olduğu e-posta uygulamasını açacaktır. Bazı hassas bilgiler içerebilir, bu nedenle lütfen göndermeden önce inceleyin.</string>
+    <string name="debug_info_more_data_shared">Paylaş düğmesine tıklamak, bazı ek hata ayıklama bilgilerinin yanı sıra aşağıdaki verileri geliştiricilere gönderecektir. Lütfen bunun bazı özel bilgiler içerebileceğini unutmayın.</string>
     <string name="journal_entries_loading">Değişiklik günlüğü girdileri yükleniyor...</string>
     <string name="journal_entries_list_empty">Koleksiyon boş.
 \nBelki hala eşzamanlanıyordur\?</string>
@@ -386,7 +386,7 @@
     <string name="collection_members_add_read_only">Salt okunur</string>
     <string name="migrate_v2_wizard_migrate_progress_done">Hesabınız taşındı.
 \nLütfen her şeyin doğru bir şekilde kopyalandığını doğrulayın ve işiniz bittiğinde eski hesabınızı kaldırın.</string>
-    <string name="migrate_v2_wizard_migrate_progress_entries">Taşınan girdiler %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Taşınan girdi %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress">Koleksiyon taşınıyor %d/%d</string>
     <string name="migrate_v2_wizard_migrate_title">Taşınıyor…</string>
     <string name="migrate_v2_wizard_welcome_body_extra">Bu biraz zaman alabileceğinden lütfen iyi bir internet bağlantınız ve yeterli piliniz olduğundan emin olun.
