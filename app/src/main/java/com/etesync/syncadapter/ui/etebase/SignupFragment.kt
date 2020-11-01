@@ -44,7 +44,9 @@ import org.jetbrains.anko.uiThread
 import java.net.URI
 import java.util.concurrent.Future
 
-class SignupFragment(private val initialUsername: String?, private val initialPassword: String?) : Fragment() {
+class SignupFragment : Fragment() {
+    internal var initialUsername: String? = null
+    internal var initialPassword: String? = null
     internal lateinit var editUserName: TextInputLayout
     internal lateinit var editEmail: TextInputLayout
     internal lateinit var editPassword: TextInputLayout
@@ -81,7 +83,7 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         createAccount.setOnClickListener {
             val credentials = validateData()
             if (credentials != null) {
-                SignupDoFragment(credentials).show(requireFragmentManager(), null)
+                SignupDoFragment.newInstance(credentials).show(requireFragmentManager(), null)
             }
         }
 
@@ -146,12 +148,23 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
 
         return if (valid) SignupCredentials(uri, userName, email, password) else null
     }
+
+    companion object {
+        fun newInstance(initialUsername: String?, initialPassword: String?): SignupFragment {
+            val ret = SignupFragment()
+            ret.initialUsername = initialUsername
+            ret.initialPassword = initialPassword
+            return ret
+        }
+    }
 }
 
 
 
-class SignupDoFragment(private val signupCredentials: SignupCredentials) : DialogFragment() {
+class SignupDoFragment: DialogFragment() {
     private val model: ConfigurationViewModel by viewModels()
+
+    private lateinit var signupCredentials: SignupCredentials
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
@@ -182,6 +195,14 @@ class SignupDoFragment(private val signupCredentials: SignupCredentials) : Dialo
                 }
                 dismissAllowingStateLoss()
             }
+        }
+    }
+
+    companion object {
+        fun newInstance(signupCredentials: SignupCredentials): SignupDoFragment {
+            val ret = SignupDoFragment()
+            ret.signupCredentials = signupCredentials
+            return ret
         }
     }
 }

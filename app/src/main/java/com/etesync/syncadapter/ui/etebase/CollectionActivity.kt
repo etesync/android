@@ -52,7 +52,7 @@ class CollectionActivity() : BaseActivity() {
                         val cachedCollection = CachedCollection(it.colMgr.create(colType, meta, ""), meta, colType)
                         uiThread {
                             supportFragmentManager.commit {
-                                replace(R.id.fragment_container, EditCollectionFragment(cachedCollection, true))
+                                replace(R.id.fragment_container, EditCollectionFragment.newInstance(cachedCollection, true))
                             }
                         }
                     }

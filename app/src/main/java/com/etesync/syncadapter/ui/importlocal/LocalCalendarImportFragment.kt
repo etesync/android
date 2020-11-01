@@ -23,7 +23,10 @@ import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.resource.LocalEvent
 
 
-class LocalCalendarImportFragment(private val account: Account, private val uid: String) : ListFragment() {
+class LocalCalendarImportFragment : ListFragment() {
+    private lateinit var account: Account
+    private lateinit var uid: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -249,8 +252,11 @@ class LocalCalendarImportFragment(private val account: Account, private val uid:
 
     companion object {
 
-        fun newInstance(account: Account, info: CollectionInfo): LocalCalendarImportFragment {
-            return LocalCalendarImportFragment(account, info.uid!!)
+        fun newInstance(account: Account, uid: String): LocalCalendarImportFragment {
+            val ret = LocalCalendarImportFragment()
+            ret.account = account
+            ret.uid = uid
+            return ret
         }
     }
 }

@@ -114,7 +114,7 @@ class ViewCollectionFragment : Fragment() {
             R.id.on_edit -> {
                 if (cachedCollection.col.accessLevel == CollectionAccessLevel.Admin) {
                     parentFragmentManager.commit {
-                        replace(R.id.fragment_container, EditCollectionFragment(cachedCollection))
+                        replace(R.id.fragment_container, EditCollectionFragment.newInstance(cachedCollection))
                         addToBackStack(EditCollectionFragment::class.java.name)
                     }
                 } else {

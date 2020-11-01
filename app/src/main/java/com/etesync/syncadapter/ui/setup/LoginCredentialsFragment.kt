@@ -56,7 +56,7 @@ class LoginCredentialsFragment : Fragment() {
         val createAccount = v.findViewById<View>(R.id.create_account) as Button
         createAccount.setOnClickListener {
             parentFragmentManager.commit {
-                replace(android.R.id.content, SignupFragment(editUserName.text.toString(), editUrlPassword.editText?.text.toString()))
+                replace(android.R.id.content, SignupFragment.newInstance(editUserName.text.toString(), editUrlPassword.editText?.text.toString()))
             }
         }
 

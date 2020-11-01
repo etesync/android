@@ -35,7 +35,10 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 
-class ImportFragment(private val account: Account, private val uid: String, private val enumType: CollectionInfo.Type) : DialogFragment() {
+class ImportFragment : DialogFragment() {
+    private lateinit var account: Account
+    private lateinit var uid: String
+    private lateinit var enumType: CollectionInfo.Type
 
     private var inputStream: InputStream? = null
 
@@ -435,7 +438,11 @@ class ImportFragment(private val account: Account, private val uid: String, priv
         private val TAG_PROGRESS_MAX = "progressMax"
 
         fun newInstance(account: Account, info: CollectionInfo): ImportFragment {
-            return ImportFragment(account, info.uid!!, info.enumType!!)
+            val ret = ImportFragment()
+            ret.account = account
+            ret.uid = info.uid!!
+            ret.enumType = info.enumType!!
+            return ret
         }
 
         fun newInstance(account: Account, cachedCollection: CachedCollection): ImportFragment {
@@ -445,7 +452,11 @@ class ImportFragment(private val account: Account, private val uid: String, priv
                 ETEBASE_TYPE_ADDRESS_BOOK -> CollectionInfo.Type.ADDRESS_BOOK
                 else -> throw Exception("Got unsupported collection type")
             }
-            return ImportFragment(account, cachedCollection.col.uid, enumType)
+            val ret = ImportFragment()
+            ret.account = account
+            ret.uid = cachedCollection.col.uid
+            ret.enumType = enumType
+            return ret
         }
     }
 }

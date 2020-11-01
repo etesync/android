@@ -24,11 +24,14 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import yuku.ambilwarna.AmbilWarnaDialog
 
-class EditCollectionFragment(private val cachedCollection: CachedCollection, private val isCreating: Boolean = false) : Fragment() {
+class EditCollectionFragment : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
     private val itemsModel: ItemsViewModel by activityViewModels()
     private val loadingModel: LoadingViewModel by viewModels()
+
+    private lateinit var cachedCollection: CachedCollection
+    private var isCreating: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ret = inflater.inflate(R.layout.activity_create_collection, container, false)
@@ -259,5 +262,14 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
             etebaseLocalCache.collectionSet(colMgr, col)
         }
         collectionModel.loadCollection(model.value!!, col.uid)
+    }
+
+    companion object {
+        fun newInstance(cachedCollection: CachedCollection, isCreating: Boolean = false): EditCollectionFragment {
+            val ret = EditCollectionFragment()
+            ret.cachedCollection = cachedCollection
+            ret.isCreating = isCreating
+            return ret
+        }
     }
 }

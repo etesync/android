@@ -31,7 +31,10 @@ import com.etesync.syncadapter.resource.LocalGroup
 import java.util.*
 
 
-class LocalContactImportFragment(private val account: Account, private val uid: String) : Fragment() {
+class LocalContactImportFragment : Fragment() {
+    private lateinit var account: Account
+    private lateinit var uid: String
+
     private var recyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -316,8 +319,11 @@ class LocalContactImportFragment(private val account: Account, private val uid: 
 
     companion object {
 
-        fun newInstance(account: Account, info: CollectionInfo): LocalContactImportFragment {
-            return LocalContactImportFragment(account, info.uid!!)
+        fun newInstance(account: Account, uid: String): LocalContactImportFragment {
+            val ret = LocalContactImportFragment()
+            ret.account = account
+            ret.uid = uid
+            return ret
         }
     }
 }

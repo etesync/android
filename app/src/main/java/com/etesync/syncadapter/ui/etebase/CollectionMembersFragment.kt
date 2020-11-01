@@ -105,7 +105,7 @@ class CollectionMembersFragment : Fragment() {
                     val username = view.findViewById<EditText>(R.id.username).text.toString()
                     val readOnly = view.findViewById<CheckBox>(R.id.read_only).isChecked
 
-                    val frag = AddMemberFragment(model.value!!, collectionModel.value!!, username, if (readOnly) CollectionAccessLevel.ReadOnly else CollectionAccessLevel.ReadWrite)
+                    val frag = AddMemberFragment.newInstance(model.value!!, collectionModel.value!!, username, if (readOnly) CollectionAccessLevel.ReadOnly else CollectionAccessLevel.ReadWrite)
                     frag.show(childFragmentManager, null)
                 }
                 .setNegativeButton(android.R.string.no) { _, _ -> }
@@ -114,7 +114,12 @@ class CollectionMembersFragment : Fragment() {
     }
 }
 
-class AddMemberFragment(private val accountHolder: AccountHolder, private val cachedCollection: CachedCollection, private val username: String, private val accessLevel: CollectionAccessLevel) : DialogFragment() {
+class AddMemberFragment : DialogFragment() {
+    private lateinit var accountHolder: AccountHolder
+    private lateinit var cachedCollection: CachedCollection
+    private lateinit var username: String
+    private lateinit var accessLevel: CollectionAccessLevel
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(context)
         progress.setTitle(R.string.collection_members_adding)
@@ -173,5 +178,17 @@ class AddMemberFragment(private val accountHolder: AccountHolder, private val ca
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
         dismiss()
+    }
+
+    companion object {
+        fun newInstance(accountHolder: AccountHolder, cachedCollection: CachedCollection,
+                        username: String, accessLevel: CollectionAccessLevel): AddMemberFragment {
+            val ret = AddMemberFragment()
+            ret.accountHolder = accountHolder
+            ret.cachedCollection = cachedCollection
+            ret.username = username
+            ret.accessLevel = accessLevel
+            return ret
+        }
     }
 }

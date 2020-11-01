@@ -37,9 +37,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Future
 
-class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
+class CollectionItemFragment : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
+
+    private lateinit var cachedItem: CachedItem
 
     private var emailInvitationEvent: Event? = null
     private var emailInvitationEventString: String? = null
@@ -156,6 +158,14 @@ class CollectionItemFragment(private val cachedItem: CachedItem) : Fragment() {
                 .create()
         dialog.show()
     }
+
+    companion object {
+        fun newInstance(cachedItem: CachedItem): CollectionItemFragment {
+            val ret = CollectionItemFragment()
+            ret.cachedItem = cachedItem
+            return ret
+        }
+    }
 }
 
 private class TabsAdapter(fm: FragmentManager, private val mainFragment: CollectionItemFragment, private val context: Context, private val cachedCollection: CachedCollection, private val cachedItem: CachedItem) : FragmentPagerAdapter(fm) {
@@ -177,17 +187,18 @@ private class TabsAdapter(fm: FragmentManager, private val mainFragment: Collect
 
     override fun getItem(position: Int): Fragment {
         return if (position == 0) {
-            PrettyFragment(mainFragment, cachedCollection, cachedItem.content)
+            PrettyFragment.newInstance(mainFragment, cachedCollection, cachedItem.content)
         } else if (position == 1) {
-            TextFragment(cachedItem.content)
+            TextFragment.newInstance(cachedItem.content)
         } else {
-            ItemRevisionsListFragment(cachedCollection, cachedItem)
+            ItemRevisionsListFragment.newInstance(cachedCollection, cachedItem)
         }
     }
 }
 
 
-class TextFragment(private val content: String) : Fragment() {
+class TextFragment : Fragment() {
+    private lateinit var content: String
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.text_fragment, container, false)
 
@@ -197,10 +208,21 @@ class TextFragment(private val content: String) : Fragment() {
 
         return v
     }
+
+    companion object {
+        fun newInstance(content: String): TextFragment {
+            val ret = TextFragment()
+            ret.content = content
+            return ret
+        }
+    }
 }
 
-class PrettyFragment(private val mainFragment: CollectionItemFragment, private val cachedCollection: CachedCollection, private val content: String) : Fragment() {
+class PrettyFragment : Fragment() {
     private var asyncTask: Future<Unit>? = null
+    private lateinit var mainFragment: CollectionItemFragment
+    private lateinit var cachedCollection: CachedCollection
+    private lateinit var content: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v: View? = null
@@ -482,6 +504,14 @@ class PrettyFragment(private val mainFragment: CollectionItemFragment, private v
     }
 
     companion object {
+        fun newInstance(mainFragment: CollectionItemFragment, cachedCollection: CachedCollection, content: String): PrettyFragment {
+            val ret = PrettyFragment()
+            ret.mainFragment= mainFragment
+            ret.cachedCollection = cachedCollection
+            ret.content = content
+            return ret
+        }
+
         private fun addInfoItem(context: Context, parent: ViewGroup, type: String, label: String?, value: String?): View {
             val layout = parent.findViewById<View>(R.id.container) as ViewGroup
             val infoItem = LayoutInflater.from(context).inflate(R.layout.contact_info_item, layout, false)

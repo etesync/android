@@ -60,7 +60,7 @@ class MigrateV2Activity : BaseActivity() {
         if (savedInstanceState == null) {
             setTitle(R.string.migrate_v2_wizard_welcome_title)
             supportFragmentManager.commit {
-                replace(R.id.fragment_container, WizardWelcomeFragment(accountV1))
+                replace(R.id.fragment_container, WizardWelcomeFragment.newInstance(accountV1))
             }
         }
     }
@@ -85,7 +85,9 @@ fun reportErrorHelper(context: Context, e: Throwable) {
             .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
 }
 
-class WizardWelcomeFragment(private val accountV1: Account) : Fragment() {
+class WizardWelcomeFragment : Fragment() {
+    internal lateinit var accountV1: Account
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ret = inflater.inflate(R.layout.migrate_v2_wizard_welcome, container, false)
 
@@ -101,27 +103,37 @@ class WizardWelcomeFragment(private val accountV1: Account) : Fragment() {
     private fun initUi(inflater: LayoutInflater, v: View) {
         v.findViewById<Button>(R.id.signup).setOnClickListener {
             parentFragmentManager.commit {
-                replace(R.id.fragment_container, SignupFragment(accountV1))
+                replace(R.id.fragment_container, SignupFragment.newInstance(accountV1))
                 addToBackStack(null)
             }
         }
 
         v.findViewById<Button>(R.id.login).setOnClickListener {
             parentFragmentManager.commit {
-                replace(R.id.fragment_container, LoginFragment(accountV1))
+                replace(R.id.fragment_container, LoginFragment.newInstance(accountV1))
                 addToBackStack(null)
             }
         }
     }
+
+    companion object {
+        fun newInstance(accountV1: Account): WizardWelcomeFragment {
+            val ret = WizardWelcomeFragment()
+            ret.accountV1 = accountV1
+            return ret
+        }
+    }
 }
 
-class SignupFragment(private val accountV1: Account) : Fragment() {
+class SignupFragment : Fragment() {
     internal lateinit var editUserName: TextInputLayout
     internal lateinit var editEmail: TextInputLayout
     internal lateinit var editPassword: TextInputLayout
 
     internal lateinit var showAdvanced: CheckedTextView
     internal lateinit var customServer: TextInputEditText
+
+    internal lateinit var accountV1: Account
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -145,7 +157,7 @@ class SignupFragment(private val accountV1: Account) : Fragment() {
         createAccount.setOnClickListener {
             val credentials = validateData()
             if (credentials != null) {
-                SignupDoFragment(accountV1, credentials).show(requireFragmentManager(), null)
+                SignupDoFragment.newInstance(accountV1, credentials).show(requireFragmentManager(), null)
             }
         }
 
@@ -210,10 +222,21 @@ class SignupFragment(private val accountV1: Account) : Fragment() {
 
         return if (valid) SignupCredentials(uri, userName, email, password) else null
     }
+
+    companion object {
+        fun newInstance(accountV1: Account): SignupFragment {
+            val ret = SignupFragment()
+            ret.accountV1 = accountV1
+            return ret
+        }
+    }
 }
 
-class SignupDoFragment(private val accountV1: Account, private val signupCredentials: SignupCredentials) : DialogFragment() {
+class SignupDoFragment : DialogFragment() {
     private val model: ConfigurationViewModel by activityViewModels()
+
+    internal lateinit var accountV1: Account
+    internal lateinit var signupCredentials: SignupCredentials
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
@@ -273,7 +296,7 @@ class SignupDoFragment(private val accountV1: Account, private val signupCredent
                         val etebase = EtebaseAccount.restore(client, it.etebaseSession!!, null)
                         uiThread {
                             fragmentManager?.commit {
-                                replace(R.id.fragment_container, WizardCollectionsFragment(accountV1, etebase))
+                                replace(R.id.fragment_container, WizardCollectionsFragment.newInstance(accountV1, etebase))
                                 addToBackStack(null)
                             }
                             dismissAllowingStateLoss()
@@ -282,16 +305,26 @@ class SignupDoFragment(private val accountV1: Account, private val signupCredent
                 } }
         }
     }
+
+    companion object {
+        fun newInstance(accountV1: Account, signupCredentials: SignupCredentials): SignupDoFragment {
+            val ret = SignupDoFragment()
+            ret.accountV1 = accountV1
+            ret.signupCredentials = signupCredentials
+            return ret
+        }
+    }
 }
 
 
-class LoginFragment(private val accountV1: Account) : Fragment() {
+class LoginFragment() : Fragment() {
     internal lateinit var editUserName: EditText
     internal lateinit var editUrlPassword: TextInputLayout
 
     internal lateinit var showAdvanced: CheckedTextView
     internal lateinit var customServer: EditText
 
+    internal lateinit var accountV1: Account
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.login_credentials_fragment, container, false)
@@ -307,7 +340,7 @@ class LoginFragment(private val accountV1: Account) : Fragment() {
         login.setOnClickListener {
             val credentials = validateLoginData()
             if (credentials != null)
-                LoginDoFragment(accountV1, credentials).show(fragmentManager!!, null)
+                LoginDoFragment.newInstance(accountV1, credentials).show(fragmentManager!!, null)
         }
 
         val forgotPassword = v.findViewById<View>(R.id.forgot_password) as TextView
@@ -365,10 +398,21 @@ class LoginFragment(private val accountV1: Account) : Fragment() {
 
         return if (valid) LoginCredentials(uri, userName, password) else null
     }
+
+    companion object {
+        fun newInstance(accountV1: Account): LoginFragment {
+            val ret = LoginFragment()
+            ret.accountV1 = accountV1
+            return ret
+        }
+    }
 }
 
-class LoginDoFragment(private val accountV1: Account, private val loginCredentials: LoginCredentials) : DialogFragment() {
+class LoginDoFragment() : DialogFragment() {
     private val model: ConfigurationViewModel by activityViewModels()
+
+    internal lateinit var accountV1: Account
+    internal lateinit var loginCredentials: LoginCredentials
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
@@ -397,7 +441,7 @@ class LoginDoFragment(private val accountV1: Account, private val loginCredentia
                         val etebase = EtebaseAccount.restore(client, it.etebaseSession!!, null)
                         uiThread {
                             fragmentManager?.commit {
-                                replace(R.id.fragment_container, WizardCollectionsFragment(accountV1, etebase))
+                                replace(R.id.fragment_container, WizardCollectionsFragment.newInstance(accountV1, etebase))
                                 addToBackStack(null)
                             }
                             dismissAllowingStateLoss()
@@ -406,12 +450,24 @@ class LoginDoFragment(private val accountV1: Account, private val loginCredentia
                 } }
         }
     }
+
+    companion object {
+        fun newInstance(accountV1: Account, loginCredentials: LoginCredentials): LoginDoFragment {
+            val ret = LoginDoFragment()
+            ret.accountV1 = accountV1
+            ret.loginCredentials = loginCredentials
+            return ret
+        }
+    }
 }
 
-class WizardCollectionsFragment(private val accountV1: Account, private val etebase: EtebaseAccount) : Fragment() {
+class WizardCollectionsFragment() : Fragment() {
     private val loadingModel: LoadingViewModel by viewModels()
     private lateinit var info: AccountActivity.AccountInfo
     private val migrateJournals = HashMap<String, AccountActivity.CollectionListItemInfo>()
+
+    internal lateinit var accountV1: Account
+    internal lateinit var etebase: EtebaseAccount
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ret = inflater.inflate(R.layout.migrate_v2_collections, container, false)
@@ -427,7 +483,7 @@ class WizardCollectionsFragment(private val accountV1: Account, private val eteb
 
     private fun initUi(inflater: LayoutInflater, v: View) {
         v.findViewById<Button>(R.id.button_create).setOnClickListener {
-            MigrateCollectionsDoFragment(etebase, this.migrateJournals).show(parentFragmentManager, null)
+            MigrateCollectionsDoFragment.newInstance(etebase, this.migrateJournals).show(parentFragmentManager, null)
         }
 
         v.findViewById<Button>(R.id.button_skip).setOnClickListener {
@@ -580,14 +636,25 @@ class WizardCollectionsFragment(private val accountV1: Account, private val eteb
             return v
         }
     }
+
+    companion object {
+        fun newInstance(accountV1: Account, etebase: EtebaseAccount): WizardCollectionsFragment {
+            val ret = WizardCollectionsFragment()
+            ret.accountV1 = accountV1
+            ret.etebase = etebase
+            return ret
+        }
+    }
 }
 
 
-class MigrateCollectionsDoFragment(private val etebase: EtebaseAccount,
-                                   private val migrateJournals: HashMap<String, AccountActivity.CollectionListItemInfo>) : DialogFragment() {
+class MigrateCollectionsDoFragment : DialogFragment() {
     private val configurationModel: ConfigurationViewModel by activityViewModels()
     private lateinit var progress: ProgressDialog
     private val CHUNK_SIZE = 20
+
+    internal lateinit var etebase: EtebaseAccount
+    internal lateinit var migrateJournals: HashMap<String, AccountActivity.CollectionListItemInfo>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         progress = ProgressDialog(activity)
@@ -738,6 +805,17 @@ class MigrateCollectionsDoFragment(private val etebase: EtebaseAccount,
                     dismissAllowingStateLoss()
                 }
             }
+        }
+    }
+
+
+    companion object {
+        fun newInstance(etebase: EtebaseAccount,
+                        migrateJournals: HashMap<String, AccountActivity.CollectionListItemInfo>): MigrateCollectionsDoFragment {
+            val ret = MigrateCollectionsDoFragment()
+            ret.etebase = etebase
+            ret.migrateJournals = migrateJournals
+            return ret
         }
     }
 }

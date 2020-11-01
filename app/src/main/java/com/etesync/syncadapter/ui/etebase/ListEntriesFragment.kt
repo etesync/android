@@ -71,7 +71,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val item = listAdapter?.getItem(position) as CachedItem
         activity?.supportFragmentManager?.commit {
-            replace(R.id.fragment_container, CollectionItemFragment(item))
+            replace(R.id.fragment_container, CollectionItemFragment.newInstance(item))
             addToBackStack(EditCollectionFragment::class.java.name)
         }
     }

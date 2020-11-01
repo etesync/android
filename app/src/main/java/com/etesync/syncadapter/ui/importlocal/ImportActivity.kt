@@ -46,13 +46,13 @@ class ImportActivity : BaseActivity(), SelectImportMethod, DialogInterface {
         if (info.enumType == CollectionInfo.Type.CALENDAR) {
             supportFragmentManager.beginTransaction()
                     .replace(android.R.id.content,
-                            LocalCalendarImportFragment.newInstance(account, info))
+                            LocalCalendarImportFragment.newInstance(account, info.uid!!))
                     .addToBackStack(LocalCalendarImportFragment::class.java.name)
                     .commit()
         } else if (info.enumType == CollectionInfo.Type.ADDRESS_BOOK) {
             supportFragmentManager.beginTransaction()
                     .replace(android.R.id.content,
-                            LocalContactImportFragment.newInstance(account, info))
+                            LocalContactImportFragment.newInstance(account, info.uid!!))
                     .addToBackStack(LocalContactImportFragment::class.java.name)
                     .commit()
         }
