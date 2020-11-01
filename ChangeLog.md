@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.1.3
+* Fix crashes on older Android devices
+* Fix crashes with some screen not loading for some users.
+
 ## Version 2.1.2
 * Fix crash when generating email invitations while using a French locale
 * Uptdate etebase dep to fix issue with custom urls not ending with a slash.
