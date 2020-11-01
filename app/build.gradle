@@ -145,7 +145,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
     implementation "com.etesync:journalmanager:1.1.1"
-    def etebaseVersion = '2.3.1'
+    def etebaseVersion = '2.3.2'
     implementation "com.etebase:client:$etebaseVersion"
 
     def acraVersion = '5.7.0'
