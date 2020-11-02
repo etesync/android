@@ -571,7 +571,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                     break
                 }
                 Logger.log.info("Added/changed resource with UUID: " + local.uuid)
-                local.clearDirty(local.uuid!!)
+                local.clearDirty(local.uuid)
             }
             if (left > 0) {
                 localDirty = localDirty.drop(left)
