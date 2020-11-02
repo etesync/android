@@ -10,7 +10,6 @@ package com.etesync.syncadapter.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.app.LoaderManager
 import android.content.*
 import android.content.ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE
 import android.net.Uri
@@ -22,9 +21,14 @@ import android.provider.ContactsContract
 import android.text.TextUtils
 import android.view.*
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.observe
 import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
 import at.bitfire.vcard4android.ContactsStorageException
 import com.etebase.client.CollectionAccessLevel
@@ -54,10 +58,12 @@ import com.google.android.material.snackbar.Snackbar
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.acra.ACRA
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import tourguide.tourguide.ToolTip
 import java.util.logging.Level
 
-class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, LoaderManager.LoaderCallbacks<AccountActivity.AccountInfo>, Refreshable {
+class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, Refreshable {
+    private val model: AccountInfoViewModel by viewModels()
 
     private lateinit var account: Account
     private lateinit var settings: AccountSettings
@@ -143,7 +149,13 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         }
 
         // load CardDAV/CalDAV journals
-        loaderManager.initLoader(0, intent.extras, this)
+        if (savedInstanceState == null) {
+            model.initialize(this, account)
+            model.loadAccount()
+            model.observe(this) {
+                updateUi(it)
+            }
+        }
 
         if (!HintManager.getHintSeen(this, HINT_VIEW_COLLECTION)) {
             ShowcaseBuilder.getBuilder(this)
@@ -281,15 +293,11 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountInfo> {
-        return AccountLoader(this, account)
-    }
-
     override fun refresh() {
-        loaderManager.restartLoader(0, intent.extras, this)
+        model.loadAccount()
     }
 
-    override fun onLoadFinished(loader: Loader<AccountInfo>, info: AccountInfo) {
+    fun updateUi(info: AccountInfo) {
         accountInfo = info
 
         if (info.carddav != null) {
@@ -340,41 +348,47 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         }
     }
 
-    override fun onLoaderReset(loader: Loader<AccountInfo>) {
-        if (listCardDAV != null)
-            listCardDAV!!.adapter = null
 
-        if (listCalDAV != null)
-            listCalDAV!!.adapter = null
-
-        if (listTaskDAV != null)
-            listTaskDAV!!.adapter = null
-    }
-
-
-    private class AccountLoader(context: Context, private val account: Account) : AsyncTaskLoader<AccountInfo>(context), AccountUpdateService.RefreshingStatusListener, ServiceConnection, SyncStatusObserver {
+    class AccountInfoViewModel : ViewModel(), AccountUpdateService.RefreshingStatusListener, ServiceConnection, SyncStatusObserver {
+        private val holder = MutableLiveData<AccountActivity.AccountInfo>()
+        private lateinit var context: Context
+        private lateinit var account: Account
         private var davService: AccountUpdateService.InfoBinder? = null
         private var syncStatusListener: Any? = null
 
-        override fun onStartLoading() {
+        fun initialize(context: Context, account: Account) {
+            this.context = context
+            this.account = account
+
             syncStatusListener = ContentResolver.addStatusChangeListener(SYNC_OBSERVER_TYPE_ACTIVE, this)
 
             context.bindService(Intent(context, AccountUpdateService::class.java), this, Context.BIND_AUTO_CREATE)
         }
 
-        override fun onStopLoading() {
+        fun loadAccount() {
+            doAsync {
+                val info = doLoad()
+                uiThread {
+                    holder.value = info
+                }
+            }
+        }
+
+        override fun onCleared() {
             davService?.removeRefreshingStatusListener(this)
             context.unbindService(this)
 
-            if (syncStatusListener != null)
+            if (syncStatusListener != null) {
                 ContentResolver.removeStatusChangeListener(syncStatusListener)
+                syncStatusListener = null
+            }
         }
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             davService = service as AccountUpdateService.InfoBinder
             davService!!.addRefreshingStatusListener(this, false)
 
-            forceLoad()
+            loadAccount()
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -382,18 +396,19 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
         }
 
         override fun onDavRefreshStatusChanged(id: Long, refreshing: Boolean) {
-            forceLoad()
+            loadAccount()
         }
 
         override fun onStatusChanged(which: Int) {
-            forceLoad()
+            loadAccount()
         }
 
         private fun getLegacyJournals(data: MyEntityDataStore, serviceEntity: ServiceEntity): List<CollectionListItemInfo> {
             return JournalEntity.getJournals(data, serviceEntity).map {
                 val info = it.info
                 val isAdmin = it.isOwner(account.name)
-                CollectionListItemInfo(it.uid, info.enumType!!, info.displayName!!, info.description ?: "", info.color, it.isReadOnly, isAdmin, info)
+                CollectionListItemInfo(it.uid, info.enumType!!, info.displayName!!, info.description
+                        ?: "", info.color, it.isReadOnly, isAdmin, info)
             }
         }
 
@@ -425,8 +440,8 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             }
         }
 
-        override fun loadInBackground(): AccountInfo {
-            val info = AccountInfo()
+        private fun doLoad(): AccountActivity.AccountInfo {
+            val info = AccountActivity.AccountInfo()
             val settings: AccountSettings
             try {
                 settings = AccountSettings(context, account)
@@ -442,7 +457,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                     when (service) {
                         CollectionInfo.Type.ADDRESS_BOOK -> {
                             info.carddav = AccountInfo.ServiceInfo()
-                            info.carddav!!.refreshing = davService != null && davService!!.isRefreshing(id) || ContentResolver.isSyncActive(account, App.addressBooksAuthority)
+                            info.carddav!!.refreshing = ContentResolver.isSyncActive(account, App.addressBooksAuthority)
                             info.carddav!!.infos = getLegacyJournals(data, serviceEntity)
 
                             val accountManager = AccountManager.get(context)
@@ -458,16 +473,14 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
                         }
                         CollectionInfo.Type.CALENDAR -> {
                             info.caldav = AccountInfo.ServiceInfo()
-                            info.caldav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                    ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
+                            info.caldav!!.refreshing = ContentResolver.isSyncActive(account, CalendarContract.AUTHORITY)
                             info.caldav!!.infos = getLegacyJournals(data, serviceEntity)
                         }
                         CollectionInfo.Type.TASKS -> {
                             info.taskdav = AccountInfo.ServiceInfo()
-                            info.taskdav!!.refreshing = davService != null && davService!!.isRefreshing(id) ||
-                                    TASK_PROVIDERS.any {
-                                        ContentResolver.isSyncActive(account, it.authority)
-                                    }
+                            info.taskdav!!.refreshing = TASK_PROVIDERS.any {
+                                ContentResolver.isSyncActive(account, it.authority)
+                            }
                             info.taskdav!!.infos = getLegacyJournals(data, serviceEntity)
                         }
                     }
@@ -507,6 +520,12 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
 
             return info
         }
+
+        fun observe(owner: LifecycleOwner, observer: (AccountActivity.AccountInfo) -> Unit) =
+                holder.observe(owner, observer)
+
+        val value: AccountActivity.AccountInfo?
+            get() = holder.value
     }
 
 
