@@ -1,0 +1,2 @@
+* Event invitations: only send invitations if we are the organizers
+* Fix rare crash when pushing changes with EteSync 1.0 accounts

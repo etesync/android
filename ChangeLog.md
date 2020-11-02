@@ -1,6 +1,10 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.1.4
+* Event invitations: only send invitations if we are the organizers
+* Fix rare crash when pushing changes with EteSync 1.0 accounts
+
 ## Version 2.1.3
 * Fix crashes on older Android devices
 * Fix crashes with some screen not loading for some users.
