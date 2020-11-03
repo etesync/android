@@ -89,7 +89,7 @@
     <string name="login_encryption_password">Verschlüsselungs-Passwort</string>
     <string name="login_encryption_check_password">* Bitte überprüfen Sie das Passwort mehrfach, da es nicht geändert werden kann, sollte es falsch sein.</string>
     <string name="login_password_required">Passwort benötigt</string>
-    <string name="login_login">Anmeldenm</string>
+    <string name="login_login">Anmelden</string>
     <string name="login_signup">Registrieren</string>
     <string name="login_finish">Fertigstellen</string>
     <string name="login_back">Zurück</string>
