@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="notification_channel_sync_status_desc">Informačné správy o stave ako napríklad sumár zmien pri synchronizácii</string>
+    <string name="notification_channel_sync_status">Správy o stave</string>
+    <string name="notification_channel_sync_warnings">Varovania k synchronizácii</string>
+    <string name="notification_channel_sync_errors_desc">Dôležité chyby zastavujúce synchronizáciu, ako napríklad neočakávaná odpoveď servera</string>
+    <string name="notification_channel_sync_errors">Chyby pri synchronizácii</string>
+    <string name="notification_channel_sync">Synchronizácia</string>
+    <string name="notification_channel_general">Iné dôležité správy</string>
+    <string name="notification_channel_debugging">Hľadanie chýb</string>
+    <string name="retry">Skúsiť znovu</string>
+    <string name="skip">Preskočiť</string>
+    <string name="create">Vytvoriť</string>
+    <string name="send">Odoslať</string>
+    <string name="please_wait">Čakajte prosím…</string>
+    <string name="manage_accounts">Spravovať účty</string>
+    <string name="help">Pomoc</string>
+    <string name="address_books_authority_title">Zoznamy kontaktov</string>
+    <string name="account_title_address_book">EteSync Kontakty</string>
+    <string name="app_name">EteSync</string>
+</resources>
