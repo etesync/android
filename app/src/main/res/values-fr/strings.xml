@@ -192,4 +192,7 @@
     <string name="notification_channel_debugging">Débogage</string>
     <string name="notification_channel_crash_reports">Rapports de plantage</string>
     <string name="app_name">EteSync</string>
+    <string name="retry">Réessayer</string>
+    <string name="skip">Passer</string>
+    <string name="create">Créer</string>
 </resources>
