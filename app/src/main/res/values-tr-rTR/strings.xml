@@ -386,7 +386,7 @@
     <string name="collection_members_add_read_only">Salt okunur</string>
     <string name="migrate_v2_wizard_migrate_progress_done">Hesabınız taşındı.
 \nLütfen her şeyin doğru bir şekilde kopyalandığını doğrulayın ve işiniz bittiğinde eski hesabınızı kaldırın.</string>
-    <string name="migrate_v2_wizard_migrate_progress_entries">Taşınan girdi %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Taşınan girdiler %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress">Koleksiyon taşınıyor %d/%d</string>
     <string name="migrate_v2_wizard_migrate_title">Taşınıyor…</string>
     <string name="migrate_v2_wizard_welcome_body_extra">Bu biraz zaman alabileceğinden lütfen iyi bir internet bağlantınız ve yeterli piliniz olduğundan emin olun.
