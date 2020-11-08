@@ -129,6 +129,8 @@ class SyncNotification(internal val context: Context, internal val notificationT
             val detailsIntent: Intent
             if (e is Exceptions.UnauthorizedException) {
                 detailsIntent = Intent(this, AccountSettingsActivity::class.java)
+            } else if (e is PermissionDeniedException || e is UnauthorizedException) {
+                detailsIntent = Intent(this, AccountSettingsActivity::class.java)
             } else if (e is Exceptions.UserInactiveException) {
                 WebViewActivity.openUrl(this, Constants.dashboard)
                 return
