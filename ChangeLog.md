@@ -1,6 +1,11 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.1.5
+* Improve error handling in sync and import
+* Update translations
+* Fix some crashes
+
 ## Version 2.1.4
 * Event invitations: only send invitations if we are the organizers
 * Fix rare crash when pushing changes with EteSync 1.0 accounts
