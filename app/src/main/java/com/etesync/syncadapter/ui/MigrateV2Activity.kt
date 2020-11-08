@@ -766,7 +766,7 @@ class MigrateCollectionsDoFragment : DialogFragment() {
 
                         if (toPush.size == CHUNK_SIZE) {
                             uiThread {
-                                progress.setMessage(getString(R.string.migrate_v2_wizard_migrate_progress, i, total) + "\n" +
+                                progress.setMessage(context?.getString(R.string.migrate_v2_wizard_migrate_progress, i, total) + "\n" +
                                         getString(R.string.migrate_v2_wizard_migrate_progress_entries, itemDone, entries.size))
                             }
                             itemMgr.batch(toPush.toTypedArray())
