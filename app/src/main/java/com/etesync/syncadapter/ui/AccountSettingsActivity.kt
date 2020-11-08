@@ -90,7 +90,7 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
         if (settings == null) {
-            activity!!.finish()
+            activity?.finish()
             return
         }
         // Category: dashboard
@@ -107,12 +107,15 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
                     }
                 } catch (e: EtebaseException) {
                     uiThread {
-                        AlertDialog.Builder(requireContext())
-                                .setIcon(R.drawable.ic_error_dark)
-                                .setTitle(R.string.exception)
-                                .setMessage(e.localizedMessage)
-                                .setPositiveButton(android.R.string.yes) { _, _ -> }
-                                .show()
+                        val context = context
+                        if (context != null) {
+                            AlertDialog.Builder(context)
+                                    .setIcon(R.drawable.ic_error_dark)
+                                    .setTitle(R.string.exception)
+                                    .setMessage(e.localizedMessage)
+                                    .setPositiveButton(android.R.string.yes) { _, _ -> }
+                                    .show()
+                        }
                     }
                 }
             }
