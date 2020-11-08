@@ -238,11 +238,14 @@ class EditCollectionFragment : Fragment() {
                     }
                 } catch (e: EtebaseException) {
                     uiThread {
-                        AlertDialog.Builder(requireContext())
-                                .setIcon(R.drawable.ic_info_dark)
-                                .setTitle(R.string.exception)
-                                .setMessage(e.localizedMessage)
-                                .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                        val context = context
+                        if (context != null) {
+                            AlertDialog.Builder(requireContext())
+                                    .setIcon(R.drawable.ic_info_dark)
+                                    .setTitle(R.string.exception)
+                                    .setMessage(e.localizedMessage)
+                                    .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                        }
                     }
                 } finally {
                     uiThread {
