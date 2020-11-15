@@ -14,7 +14,7 @@
     <string name="manage_accounts">Behandle kontoer</string>
     <string name="please_wait">Vent …</string>
     <string name="send">Send</string>
-    <string name="notification_channel_crash_reports">Kræsjrapporter</string>
+    <string name="notification_channel_crash_reports">Krasjrapporter</string>
     <string name="notification_channel_debugging">Avlusing</string>
     <string name="notification_channel_general">Andre viktige meldinger</string>
     <string name="notification_channel_sync">Synkronisering</string>
@@ -25,7 +25,7 @@
     <string name="notification_channel_sync_status">Statusmeldinger</string>
     <string name="notification_channel_sync_status_desc">Informative statusmeldinger, som sammendrag av synkroniseringsendringer</string>
     <!-- Crash -->
-    <string name="crash_title">EteSync har kræsjet!</string>
+    <string name="crash_title">EteSync har krasjet!</string>
     <string name="crash_message">Send feilmeldingen til utvikleren.</string>
     <string name="crash_email_subject">EteSync-feilsporingsinfo</string>
     <string name="crash_email_body">Hvis mulig, ta med annen relevant info, som f.eks. hva du gjorde for å utløse feilen.</string>
