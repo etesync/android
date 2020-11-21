@@ -13,7 +13,7 @@
     <string name="about_license_info_no_warranty">本程序不附带任何担保。这是一款自由软件，你可以有条件地传播它。</string>
     <!--global settings-->
     <string name="logging_to_external_storage">记录日志到外部存储 %s</string>
-    <string name="logging_to_external_storage_warning">请尽快删除日志！</string>
+    <string name="logging_to_external_storage_warning">禁用会删除日志</string>
     <string name="logging_couldnt_create_file">无法创建外部日志文件 %s</string>
     <string name="logging_no_external_storage">找不到外部存储</string>
     <!--AccountsActivity-->
@@ -78,7 +78,7 @@
     <string name="settings_title">设置：%s</string>
     <string name="settings_authentication">认证</string>
     <string name="settings_password">密码</string>
-    <string name="settings_enter_password">输入密码</string>
+    <string name="settings_enter_password">输入你的密码：</string>
     <string name="settings_sync">同步</string>
     <string name="settings_sync_interval_contacts">通讯录自动同步间隔</string>
     <string name="settings_sync_summary_manually">手动同步</string>
@@ -104,18 +104,18 @@
     <string name="create_addressbook">创建通讯录</string>
     <string name="create_addressbook_display_name_hint">我的通讯录</string>
     <string name="create_collection_creating">正在创建集合</string>
-    <string name="create_collection_display_name">集合显示名称（标题）</string>
+    <string name="create_collection_display_name">显示这个集合的名称（标题）：</string>
     <string name="create_collection_display_name_required">请输入标题</string>
-    <string name="create_collection_description">简介（可选）</string>
+    <string name="create_collection_description">描述（可选）：</string>
     <string name="create_collection_create">创建</string>
     <string name="delete_collection">删除集合</string>
     <string name="delete_collection_confirm_title">你确定吗？</string>
     <string name="delete_collection_confirm_warning">这个集合 %s 及其所有数据将会从服务器删除。</string>
     <string name="delete_collection_deleting_collection">正在删除集合</string>
     <!--ExceptionInfoFragment-->
-    <string name="exception">出现错误</string>
-    <string name="exception_httpexception">出现 HTTP 错误</string>
-    <string name="exception_ioexception">出现 I/O 错误</string>
+    <string name="exception">发生错误。</string>
+    <string name="exception_httpexception">发生 HTTP 错误。</string>
+    <string name="exception_ioexception">发生 I/O 错误。</string>
     <string name="exception_show_details">显示详情</string>
     <!--sync errors and DebugInfoActivity-->
     <string name="debug_info_title">调试信息</string>
