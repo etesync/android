@@ -141,17 +141,15 @@ class LocalContact : AndroidContact, LocalAddress {
         super.insertDataRows(batch)
 
         if (contact?.unknownProperties != null) {
-            val op: BatchOperation.Operation
-            val builder = ContentProviderOperation.newInsert(dataSyncURI())
+            var builder = BatchOperation.CpoBuilder.newInsert(dataSyncURI())
             if (id == null) {
-                op = BatchOperation.Operation(builder, UnknownProperties.RAW_CONTACT_ID, 0)
+                builder = builder.withValue(UnknownProperties.RAW_CONTACT_ID, 0)
             } else {
-                op = BatchOperation.Operation(builder)
-                builder.withValue(UnknownProperties.RAW_CONTACT_ID, id)
+                builder = builder.withValue(UnknownProperties.RAW_CONTACT_ID, id)
             }
             builder.withValue(UnknownProperties.MIMETYPE, UnknownProperties.CONTENT_ITEM_TYPE)
                     .withValue(UnknownProperties.UNKNOWN_PROPERTIES, contact?.unknownProperties)
-            batch.enqueue(op)
+            batch.enqueue(builder)
         }
 
     }
@@ -166,7 +164,7 @@ class LocalContact : AndroidContact, LocalAddress {
         return this.add()
     }
 
-    override fun buildContact(builder: ContentProviderOperation.Builder, update: Boolean) {
+    override fun buildContact(builder: BatchOperation.CpoBuilder, update: Boolean) {
         super.buildContact(builder, update)
         builder.withValue(ContactsContract.RawContacts.DIRTY, if (saveAsDirty) 1 else 0)
     }
@@ -202,10 +200,10 @@ class LocalContact : AndroidContact, LocalAddress {
         if (batch == null)
             addressBook.provider!!.update(rawContactSyncURI(), values, null, null)
         else {
-            val builder = ContentProviderOperation
+            val builder = BatchOperation.CpoBuilder
                     .newUpdate(rawContactSyncURI())
-                    .withValues(values)
-            batch.enqueue(BatchOperation.Operation(builder))
+                    .withValue(COLUMN_HASHCODE, hashCode)
+            batch.enqueue(builder)
         }
     }
 
@@ -223,33 +221,28 @@ class LocalContact : AndroidContact, LocalAddress {
 
 
     fun addToGroup(batch: BatchOperation, groupID: Long) {
-        batch.enqueue(BatchOperation.Operation(
-                ContentProviderOperation.newInsert(dataSyncURI())
+        batch.enqueue(BatchOperation.CpoBuilder.newInsert(dataSyncURI())
                         .withValue(GroupMembership.MIMETYPE, GroupMembership.CONTENT_ITEM_TYPE)
                         .withValue(GroupMembership.RAW_CONTACT_ID, id)
                         .withValue(GroupMembership.GROUP_ROW_ID, groupID)
-        ))
+        )
         groupMemberships.add(groupID)
 
-        batch.enqueue(BatchOperation.Operation(
-                ContentProviderOperation.newInsert(dataSyncURI())
+        batch.enqueue(BatchOperation.CpoBuilder.newInsert(dataSyncURI())
                         .withValue(CachedGroupMembership.MIMETYPE, CachedGroupMembership.CONTENT_ITEM_TYPE)
                         .withValue(CachedGroupMembership.RAW_CONTACT_ID, id)
                         .withValue(CachedGroupMembership.GROUP_ID, groupID)
-                        .withYieldAllowed(true)
-        ))
+        )
         cachedGroupMemberships.add(groupID)
     }
 
     fun removeGroupMemberships(batch: BatchOperation) {
-        batch.enqueue(BatchOperation.Operation(
-                ContentProviderOperation.newDelete(dataSyncURI())
+        batch.enqueue(BatchOperation.CpoBuilder.newDelete(dataSyncURI())
                         .withSelection(
                                 Data.RAW_CONTACT_ID + "=? AND " + Data.MIMETYPE + " IN (?,?)",
                                 arrayOf(id.toString(), GroupMembership.CONTENT_ITEM_TYPE, CachedGroupMembership.CONTENT_ITEM_TYPE)
                         )
-                        .withYieldAllowed(true)
-        ))
+        )
         groupMemberships.clear()
         cachedGroupMemberships.clear()
     }

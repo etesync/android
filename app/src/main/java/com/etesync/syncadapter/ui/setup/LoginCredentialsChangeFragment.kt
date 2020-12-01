@@ -47,7 +47,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Configuration> {
-        return ServerConfigurationLoader(context!!, args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials)
+        return ServerConfigurationLoader(requireContext(), (args!!.getParcelable(ARG_LOGIN_CREDENTIALS) as LoginCredentials?)!!)
     }
 
     override fun onLoadFinished(loader: Loader<Configuration>, data: Configuration?) {

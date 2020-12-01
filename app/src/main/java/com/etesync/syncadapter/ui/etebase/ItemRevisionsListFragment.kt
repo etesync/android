@@ -98,7 +98,7 @@ class ItemRevisionsListFragment : ListFragment(), AdapterView.OnItemClickListene
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.journal_viewer_list_item, parent, false)!!
 
-            val item = getItem(position)
+            val item = getItem(position)!!
 
             setItemView(v, cachedCollection.collectionType, item)
 

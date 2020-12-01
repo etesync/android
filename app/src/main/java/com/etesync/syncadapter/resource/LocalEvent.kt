@@ -83,7 +83,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
         weAreOrganizer = isOrganizer != null && isOrganizer != 0
     }
 
-    override fun buildEvent(recurrence: Event?, builder: ContentProviderOperation.Builder) {
+    override fun buildEvent(recurrence: Event?, builder: BatchOperation.CpoBuilder) {
         super.buildEvent(recurrence, builder)
 
         val buildException = recurrence != null
@@ -101,7 +101,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
                     .withValue(COLUMN_ETAG, eTag)
     }
 
-    override fun insertReminder(batch: BatchOperation, idxEvent: Int, alarm: VAlarm) {
+    override fun insertReminder(batch: BatchOperation, idxEvent: Int?, alarm: VAlarm) {
         // We only support DISPLAY and AUDIO alarms so modify when inserting
         val action = alarm.action
         val modifiedAlarm = when (action?.value) {
@@ -133,7 +133,7 @@ class LocalEvent : AndroidEvent, LocalResource<Event> {
 
     override fun legacyPrepareForUpload(fileName_: String?) {
         var uid: String? = null
-        val c = calendar.provider.query(eventSyncURI(), arrayOf(COLUMN_UID), null, null, null)
+        val c = calendar.provider.query(eventSyncURI(), arrayOf(COLUMN_UID), null, null, null)!!
         if (c.moveToNext())
             uid = c.getString(0)
         if (uid == null)

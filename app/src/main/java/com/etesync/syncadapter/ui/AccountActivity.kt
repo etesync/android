@@ -108,7 +108,7 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = intent.getParcelableExtra(EXTRA_ACCOUNT)
+        account = intent.getParcelableExtra(EXTRA_ACCOUNT)!!
         title = account.name
         settings = AccountSettings(this, account)
 

@@ -68,7 +68,7 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)
+        account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)!!
         info = intent.extras!!.getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
 
         refresh()

@@ -31,7 +31,7 @@ class WebViewActivity : BaseActivity() {
         mToolbar = supportActionBar
         mToolbar!!.setDisplayHomeAsUpEnabled(true)
 
-        var uri = intent.getParcelableExtra<Uri>(KEY_URL)
+        var uri = intent.getParcelableExtra<Uri>(KEY_URL)!!
         uri = addQueryParams(uri)
         mWebView = findViewById<View>(R.id.webView) as WebView
         mProgressBar = findViewById<View>(R.id.progressBar) as ProgressBar

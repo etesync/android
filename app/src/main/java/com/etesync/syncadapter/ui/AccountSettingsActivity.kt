@@ -42,7 +42,7 @@ class AccountSettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = intent.getParcelableExtra(KEY_ACCOUNT)
+        account = intent.getParcelableExtra(KEY_ACCOUNT)!!
         title = getString(R.string.settings_title, account.name)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -85,7 +85,7 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
-        return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
+        return AccountSettingsLoader(requireContext(), (args!!.getParcelable(KEY_ACCOUNT) as Account?)!!)
     }
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
@@ -197,7 +197,7 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
-        return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
+        return AccountSettingsLoader(context!!, (args!!.getParcelable(KEY_ACCOUNT) as? Account)!!)
     }
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {

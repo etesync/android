@@ -100,7 +100,7 @@ class AboutActivity : BaseActivity() {
         }
 
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<Spanned> {
-            return LicenseLoader(context!!, args!!.getString(KEY_FILE_NAME))
+            return LicenseLoader(requireContext(), args!!.getString(KEY_FILE_NAME)!!)
         }
 
         override fun onLoadFinished(loader: Loader<Spanned>, license: Spanned) {
