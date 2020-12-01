@@ -1,6 +1,13 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.2.0
+* Support resizable activities
+* Update ical4android dep - should fix issues with duplicate tasks and events
+* Update vcard4android dep
+* Update gradle and sdk version
+* Update translations
+
 ## Version 2.1.5
 * Improve error handling in sync and import
 * Update translations

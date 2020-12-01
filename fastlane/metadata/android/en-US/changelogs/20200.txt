@@ -1,0 +1,5 @@
+* Support resizable activities
+* Update ical4android dep - should fix issues with duplicate tasks and events
+* Update vcard4android dep
+* Update gradle and sdk version
+* Update translations
