@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.2.1
+* Fix crash when importing events and also when syncing legacy events
+
 ## Version 2.2.0
 * Support resizable activities
 * Update ical4android dep - should fix issues with duplicate tasks and events
