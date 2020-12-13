@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.2.2
+* Fix "potential vendor bugs" message constantly showing.
+
 ## Version 2.2.1
 * Fix crash when importing events and also when syncing legacy events
 
