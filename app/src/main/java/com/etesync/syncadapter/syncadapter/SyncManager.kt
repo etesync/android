@@ -651,7 +651,7 @@ constructor(protected val context: Context, protected val account: Account, prot
             item = cacheItem.item
             itemUpdateMtime(item)
         } else {
-            val uid = UUID.randomUUID().toString()
+            val uid = local.uuid ?: UUID.randomUUID().toString()
             val meta = ItemMetadata()
             meta.name = uid
             meta.mtime = System.currentTimeMillis()
