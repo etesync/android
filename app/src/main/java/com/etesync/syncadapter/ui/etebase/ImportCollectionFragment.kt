@@ -57,14 +57,14 @@ class ImportCollectionFragment : Fragment() {
         img.setImageResource(R.drawable.ic_account_circle_white)
         text.setText(R.string.import_button_local)
         card.setOnClickListener {
-            if (cachedCollection.meta.collectionType == Constants.ETEBASE_TYPE_CALENDAR) {
+            if (cachedCollection.collectionType == Constants.ETEBASE_TYPE_CALENDAR) {
                 parentFragmentManager.commit {
-                    replace(R.id.fragment_container, LocalCalendarImportFragment(accountHolder.account, cachedCollection.col.uid))
+                    replace(R.id.fragment_container, LocalCalendarImportFragment.newInstance(accountHolder.account, cachedCollection.col.uid))
                     addToBackStack(null)
                 }
-            } else if (cachedCollection.meta.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK) {
+            } else if (cachedCollection.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK) {
                 parentFragmentManager.commit {
-                    replace(R.id.fragment_container, LocalContactImportFragment(accountHolder.account, cachedCollection.col.uid))
+                    replace(R.id.fragment_container, LocalContactImportFragment.newInstance(accountHolder.account, cachedCollection.col.uid))
                     addToBackStack(null)
                 }
             }
@@ -72,7 +72,7 @@ class ImportCollectionFragment : Fragment() {
             (activity as? BaseActivity?)?.supportActionBar?.setTitle(R.string.import_select_account)
         }
 
-        if (collectionModel.value!!.meta.collectionType == Constants.ETEBASE_TYPE_TASKS) {
+        if (collectionModel.value!!.collectionType == Constants.ETEBASE_TYPE_TASKS) {
             card.visibility = View.GONE
         }
     }

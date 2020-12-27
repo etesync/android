@@ -31,7 +31,7 @@ class WebViewActivity : BaseActivity() {
         mToolbar = supportActionBar
         mToolbar!!.setDisplayHomeAsUpEnabled(true)
 
-        var uri = intent.getParcelableExtra<Uri>(KEY_URL)
+        var uri = intent.getParcelableExtra<Uri>(KEY_URL)!!
         uri = addQueryParams(uri)
         mWebView = findViewById<View>(R.id.webView) as WebView
         mProgressBar = findViewById<View>(R.id.progressBar) as ProgressBar
@@ -166,7 +166,7 @@ class WebViewActivity : BaseActivity() {
         fun openUrl(context: Context, uri: Uri) {
             if (isAllowedUrl(uri)) {
                 val intent = Intent(context, WebViewActivity::class.java)
-                intent.putExtra(WebViewActivity.KEY_URL, uri)
+                intent.putExtra(KEY_URL, uri)
                 context.startActivity(intent)
             } else {
                 try {
@@ -191,10 +191,22 @@ class WebViewActivity : BaseActivity() {
         }
 
         private fun isAllowedUrl(uri: Uri): Boolean {
-            val allowedUris = arrayOf(Constants.faqUri, Constants.helpUri, Constants.registrationUrl, Constants.dashboard, Constants.webUri.buildUpon().appendEncodedPath("tos/").build(), Constants.webUri.buildUpon().appendEncodedPath("about/").build())
+            val allowedUris = arrayOf(
+                    Constants.faqUri,
+                    Constants.helpUri,
+                    Constants.registrationUrl,
+                    Constants.dashboard,
+                    Constants.webUri.buildUpon().appendEncodedPath("tos/").build(),
+                    Constants.webUri.buildUpon().appendEncodedPath("about/").build(),
+                    Constants.pricing,
+            )
             val accountsUri = Constants.webUri.buildUpon().appendEncodedPath("accounts/").build()
 
-            return allowedUris(allowedUris, uri) || uri.host == accountsUri.host && uri.path!!.startsWith(accountsUri.path!!)
+            return allowedUris(allowedUris, uri) || (
+                    uri.host == accountsUri.host && uri.path!!.startsWith(accountsUri.path!!)
+                    ) || (
+                    uri.host == Constants.etebaseDashboardPrefix.host && uri.path!!.startsWith(Constants.etebaseDashboardPrefix.path!!)
+                    )
         }
     }
 }

@@ -424,7 +424,7 @@ class LocalAddressBook(
         val values = ContentValues(1)
         values.put(Groups.TITLE, title)
         val uri = provider.insert(syncAdapterURI(Groups.CONTENT_URI), values)
-        return ContentUris.parseId(uri)
+        return ContentUris.parseId(uri!!)
     }
 
     fun removeEmptyGroups() {

@@ -1,0 +1,3 @@
+* Improve error handling in sync and import
+* Update translations
+* Fix some crashes

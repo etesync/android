@@ -94,7 +94,7 @@ class StartupDialogFragment : DialogFragment() {
 
             // Vendor specific bugs
             val manu = Build.MANUFACTURER
-            if (!HintManager.getHintSeen(context, HINT_BATTERY_OPTIMIZATIONS) && (manu.equals("Xiaomi", ignoreCase = true) || manu.equals("Huawei", ignoreCase = true)) && !Build.DISPLAY.contains("lineage")) {
+            if (!HintManager.getHintSeen(context, HINT_VENDOR_SPECIFIC_BUGS) && (manu.equals("Xiaomi", ignoreCase = true) || manu.equals("Huawei", ignoreCase = true)) && !Build.DISPLAY.contains("lineage")) {
                 dialogs.add(StartupDialogFragment.instantiate(Mode.VENDOR_SPECIFIC_BUGS))
             }
 

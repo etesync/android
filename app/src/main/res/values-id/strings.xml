@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_license_info_no_warranty">Program ini dilengkapi dengan BENAR-BENAR TIDAK ADA GARANSI. Ini adalah perangkat lunak gratis, dan Anda dipersilakan untuk mendistribusikannya dalam kondisi tertentu.</string>
+    <string name="about_license_terms">Persyaratan lisensi</string>
+    <string name="startup_vendor_specific_bugs_open_faq">Buka FAQ</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync telah mendeteksi Anda menggunakan versi Android yang mungkin berisi bug khusus vendor.
+\nSilakan lihat FAQ untuk informasi lebih lanjut.</string>
+    <string name="startup_vendor_specific_bugs">Potensi Kesalahan dari Vendor</string>
+    <string name="startup_development_version_give_feedback">Berikan umpan balik</string>
+    <string name="startup_development_version_message">Ini adalah versi pengembangan dari EteSync. Ketahuilah bahwa hal-hal yang mungkin tidak bekerja seperti yang diharapkan. Tolong beri kami umpan balik yang konstruktif untuk meningkatkan EteSync.</string>
+    <string name="startup_development_version">Rilis Pratinjau EteSync</string>
+    <string name="startup_dont_show_again">Jangan tampilkan lagi</string>
+    <string name="startup_battery_optimization_disable">Matikan untuk EteSync</string>
+    <string name="startup_battery_optimization">Pengoptimalan Baterai</string>
+    <string name="startup_battery_optimization_message">Android dapat menonaktifkan/mengurangi sinkronisasi EteSync setelah beberapa hari. Untuk mencegah hal ini, matikan pengoptimalan baterai.</string>
+    <string name="tourguide_title">Tahukah kamu\?</string>
+    <string name="crash_email_body">Jika memungkinkan, harap sertakan informasi lain yang relevan seperti apa yang Anda lakukan yang memicu kesalahan ini.</string>
+    <string name="crash_title">EteSync telah rusak!</string>
+    <string name="notification_channel_sync_status_desc">Pesan status informasi seperti ringkasan perubahan sinkronisasi</string>
+    <string name="notification_channel_sync_status">Pesan status</string>
+    <string name="notification_channel_sync_warnings_desc">Masalah sinkronisasi non-fatal seperti perubahan koleksi baca-saja yang diberhentikan</string>
+    <string name="notification_channel_sync_warnings">Peringatan sinkronisasi</string>
+    <string name="notification_channel_sync_errors_desc">Kesalahan penting yang menghentikan sinkronisasi seperti balasan server yang tidak terduga</string>
+    <string name="notification_channel_sync_errors">Kesalahan sinkronisasi</string>
+    <string name="notification_channel_sync">Sinkronisasi</string>
+    <string name="notification_channel_general">Pesan penting lainnya</string>
+    <string name="notification_channel_debugging">Debugging</string>
+    <string name="notification_channel_crash_reports">Laporan Kerusakan</string>
+    <string name="retry">Mencoba kembali</string>
+    <string name="skip">Lewati</string>
+    <string name="create">Buat</string>
+    <string name="send">Kirim</string>
+    <string name="please_wait">Tunggu sebentar…</string>
+    <string name="manage_accounts">Kelola akun</string>
+    <string name="help">Bantuan</string>
+    <string name="address_books_authority_title">Buku alamat</string>
+    <string name="account_title_address_book">Buku alamat EteSync</string>
+    <string name="app_name">EteSync</string>
+</resources>

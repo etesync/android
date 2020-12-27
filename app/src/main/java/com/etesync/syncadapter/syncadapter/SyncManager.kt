@@ -571,7 +571,7 @@ constructor(protected val context: Context, protected val account: Account, prot
                     break
                 }
                 Logger.log.info("Added/changed resource with UUID: " + local.uuid)
-                local.clearDirty(local.uuid!!)
+                local.clearDirty(local.uuid)
             }
             if (left > 0) {
                 localDirty = localDirty.drop(left)
@@ -644,15 +644,48 @@ constructor(protected val context: Context, protected val account: Account, prot
         item.meta = meta
     }
 
+    private fun prepareLocalItemForUpload(colUid: String, local: T): Item {
+        val cacheItem = if (local.fileName != null) etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!) else null
+        val item: Item
+        if (cacheItem != null) {
+            item = cacheItem.item
+            itemUpdateMtime(item)
+        } else {
+            val uid = local.uuid ?: UUID.randomUUID().toString()
+            val meta = ItemMetadata()
+            meta.name = uid
+            meta.mtime = System.currentTimeMillis()
+            item = itemMgr.create(meta, "")
+
+            local.prepareForUpload(item.uid, uid)
+        }
+
+        try {
+            item.setContent(local.content)
+        } catch (e: Exception) {
+            Logger.log.warning("Failed creating local entry ${local.uuid}")
+            if (local is LocalContact) {
+                Logger.log.warning("Contact with title ${local.contact?.displayName}")
+            } else if (local is LocalEvent) {
+                Logger.log.warning("Event with title ${local.event?.summary}")
+            } else if (local is LocalTask) {
+                Logger.log.warning("Task with title ${local.task?.summary}")
+            }
+            throw e
+        }
+
+        return item
+    }
+
     private fun createPushItems(): List<Item> {
         val ret = LinkedList<Item>()
         val colUid = cachedCollection.col.uid
 
         synchronized(etebaseLocalCache) {
             for (local in localDeleted!!) {
-                val item = etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!)!!.item
-                itemUpdateMtime(item)
+                val item = prepareLocalItemForUpload(colUid, local)
                 item.delete()
+
                 ret.add(item)
 
                 if (ret.size == MAX_PUSH) {
@@ -663,34 +696,7 @@ constructor(protected val context: Context, protected val account: Account, prot
 
         synchronized(etebaseLocalCache) {
             for (local in localDirty) {
-                val cacheItem = if (local.fileName != null) etebaseLocalCache.itemGet(itemMgr, colUid, local.fileName!!) else null
-                val item: Item
-                if (cacheItem != null) {
-                    item = cacheItem.item
-                    itemUpdateMtime(item)
-                } else {
-                    val uid = UUID.randomUUID().toString()
-                    val meta = ItemMetadata()
-                    meta.name = uid
-                    meta.mtime = System.currentTimeMillis()
-                    item = itemMgr.create(meta, "")
-
-                    local.prepareForUpload(item.uid, uid)
-                }
-
-                try {
-                    item.setContent(local.content)
-                } catch (e: Exception) {
-                    Logger.log.warning("Failed creating local entry ${local.uuid}")
-                    if (local is LocalContact) {
-                        Logger.log.warning("Contact with title ${local.contact?.displayName}")
-                    } else if (local is LocalEvent) {
-                        Logger.log.warning("Event with title ${local.event?.summary}")
-                    } else if (local is LocalTask) {
-                        Logger.log.warning("Task with title ${local.task?.summary}")
-                    }
-                    throw e
-                }
+                val item = prepareLocalItemForUpload(colUid, local)
 
                 ret.add(item)
 

@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -68,7 +69,7 @@ class ViewCollectionFragment : Fragment() {
 
         val colorSquare = container.findViewById<View>(R.id.color)
         val color = LocalCalendar.parseColor(meta.color)
-        when (meta.collectionType) {
+        when (cachedCollection.collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 colorSquare.setBackgroundColor(color)
             }
@@ -108,13 +109,17 @@ class ViewCollectionFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val cachedCollection = collectionModel.value!!
+        val cachedCollection = collectionModel.value
+        if (cachedCollection == null) {
+            Toast.makeText(context, R.string.loading_error_title, Toast.LENGTH_LONG).show()
+            return super.onOptionsItemSelected(item)
+        }
 
         when (item.itemId) {
             R.id.on_edit -> {
                 if (cachedCollection.col.accessLevel == CollectionAccessLevel.Admin) {
                     parentFragmentManager.commit {
-                        replace(R.id.fragment_container, EditCollectionFragment(cachedCollection))
+                        replace(R.id.fragment_container, EditCollectionFragment.newInstance(cachedCollection))
                         addToBackStack(EditCollectionFragment::class.java.name)
                     }
                 } else {

@@ -1,6 +1,50 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.2.3
+* Fix issues with the Tasks.org integration and subtasks (due to rewriting UIDs).
+
+## Version 2.2.2
+* Fix "potential vendor bugs" message constantly showing.
+
+## Version 2.2.1
+* Fix crash when importing events and also when syncing legacy events
+
+## Version 2.2.0
+* Support resizable activities
+* Update ical4android dep - should fix issues with duplicate tasks and events
+* Update vcard4android dep
+* Update gradle and sdk version
+* Update translations
+
+## Version 2.1.5
+* Improve error handling in sync and import
+* Update translations
+* Fix some crashes
+
+## Version 2.1.4
+* Event invitations: only send invitations if we are the organizers
+* Fix rare crash when pushing changes with EteSync 1.0 accounts
+
+## Version 2.1.3
+* Fix crashes on older Android devices
+* Fix crashes with some screen not loading for some users.
+
+## Version 2.1.2
+* Fix crash when generating email invitations while using a French locale
+* Uptdate etebase dep to fix issue with custom urls not ending with a slash.
+
+## Version 2.1.1
+* Debug info: fix manually sending of crash reports to have visual feedback.
+* Debug info: fix manually sending of crash reports to include more crash information.
+* Fixed a few crashes that were happening in some rare cases.
+
+## Version 2.1.0
+* Change the crash reporting to not rely on email (use HTTP instead)
+
+## Version 2.0.0
+* EteSync 2.0 support \o/
+
 ## Version 1.16.2
 * Update OkHttp3 dependency.
 

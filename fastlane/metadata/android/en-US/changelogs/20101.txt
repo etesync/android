@@ -1,0 +1,3 @@
+* Debug info: fix manually sending of crash reports to have visual feedback.
+* Debug info: fix manually sending of crash reports to include more crash information.
+* Fixed a few crashes that were happening in some rare cases.

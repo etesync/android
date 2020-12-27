@@ -1,127 +1,127 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">帮助</string>
-  <string name="manage_accounts">管理账户</string>
-  <string name="please_wait">请稍等...</string>
-  <string name="send">发送</string>
-  <!--startup dialogs-->
-  <string name="startup_battery_optimization">电池优化</string>
-  <string name="startup_dont_show_again">不再显示</string>
-  <!--AboutActivity-->
-  <string name="about_license_terms">许可协议</string>
-  <string name="about_license_info_no_warranty">本程序不附带任何担保。这是一款自由软件，你可以有条件地传播它。</string>
-  <!--global settings-->
-  <string name="logging_to_external_storage">记录日志到外部存储 %s</string>
-  <string name="logging_to_external_storage_warning">请尽快删除日志！</string>
-  <string name="logging_couldnt_create_file">无法创建外部日志文件 %s</string>
-  <string name="logging_no_external_storage">找不到外部存储</string>
-  <!--AccountsActivity-->
-  <string name="navigation_drawer_open">打开导航抽屉</string>
-  <string name="navigation_drawer_close">关闭导航抽屉</string>
-  <string name="navigation_drawer_about">关于 / 许可</string>
-  <string name="navigation_drawer_settings">设置</string>
-  <string name="navigation_drawer_external_links">外部链接</string>
-  <string name="navigation_drawer_website">应用网站</string>
-  <string name="navigation_drawer_faq">常见问题</string>
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <string name="app_settings">设置</string>
-  <string name="app_settings_user_interface">用户界面</string>
-  <string name="app_settings_reset_hints">重设提示</string>
-  <string name="app_settings_reset_hints_summary">重新显示之前忽略过的提示</string>
-  <string name="app_settings_reset_hints_success">所有提示将会再次显示</string>
-  <string name="app_settings_connection">连接</string>
-  <string name="app_settings_override_proxy">覆盖代理设置</string>
-  <string name="app_settings_override_proxy_on">使用自定义代理设置</string>
-  <string name="app_settings_override_proxy_off">使用系统默认代理设置</string>
-  <string name="app_settings_override_proxy_host">HTTP 代理主机名</string>
-  <string name="app_settings_override_proxy_port">HTTP 代理端口</string>
-  <string name="app_settings_security">安全</string>
-  <string name="app_settings_distrust_system_certs">不信任系统证书</string>
-  <string name="app_settings_distrust_system_certs_on">系统和用户增加的发布者不会被信任</string>
-  <string name="app_settings_distrust_system_certs_off">系统和用户增加的发布者会被信任（推荐）</string>
-  <string name="app_settings_reset_certificates">重设证书信任状态</string>
-  <string name="app_settings_reset_certificates_summary">重设所有自定义证书的信任状态</string>
-  <string name="app_settings_reset_certificates_success">所有自定义证书已清除</string>
-  <string name="app_settings_debug">调试</string>
-  <string name="app_settings_log_to_external_storage">外部文件日志</string>
-  <string name="app_settings_log_to_external_storage_on">记录日志到外部存储（如果可用）</string>
-  <string name="app_settings_log_to_external_storage_off">外部文件日志已禁用</string>
-  <string name="app_settings_show_debug_info">显示调试信息</string>
-  <string name="app_settings_show_debug_info_details">查看软件和配置信息</string>
-  <!--AccountActivity-->
-  <string name="account_synchronize_now"> 立即同步</string>
-  <string name="account_synchronizing_now">正在同步</string>
-  <string name="account_settings">账户设置</string>
-  <string name="account_delete">删除账户</string>
-  <string name="account_delete_confirmation_title">真的要删除账户吗？</string>
-  <string name="account_delete_confirmation_text">所有通讯录、日历和任务列表的本机存储将被删除。</string>
-  <!--PermissionsActivity-->
-  <string name="permissions_calendar">日历权限</string>
-  <string name="permissions_calendar_request">请求日历权限</string>
-  <string name="permissions_contacts">通讯录权限</string>
-  <string name="permissions_contacts_request">请求通讯录权限</string>
-  <string name="permissions_opentasks">OpenTasks 权限</string>
-  <string name="permissions_opentasks_request">请求 OpenTasks 权限</string>
-  <!--AddAccountActivity-->
-  <string name="login_title">增加账户</string>
-  <string name="login_email_address">Email 地址</string>
-  <string name="login_email_address_error">请输入有效 Email 地址</string>
-  <string name="login_password">密码</string>
-  <string name="login_password_required">请输入密码</string>
-  <string name="login_back">返回</string>
-  <string name="login_configuration_detection">正在配置</string>
-  <string name="login_querying_server">正在与服务器通信，请稍等...</string>
-  <string name="login_view_logs">查看日志</string>
-  <!--AccountSettingsActivity-->
-  <string name="settings_title">设置：%s</string>
-  <string name="settings_authentication">认证</string>
-  <string name="settings_password">密码</string>
-  <string name="settings_enter_password">输入密码</string>
-  <string name="settings_sync">同步</string>
-  <string name="settings_sync_interval_contacts">通讯录自动同步间隔</string>
-  <string name="settings_sync_summary_manually">手动同步</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s 钟或本地修改后</string>
-  <string name="settings_sync_summary_not_available">不可用</string>
-  <string name="settings_sync_interval_calendars">日历自动同步间隔</string>
-  <string-array name="settings_sync_interval_names">
-    <item>手动同步</item>
-    <item>每 15 分钟</item>
-    <item>每 1 小时</item>
-    <item>每 2 小时</item>
-    <item>每 4 小时</item>
-    <item>每 24 小时</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">只在 WiFi 下同步</string>
-  <string name="settings_sync_wifi_only_on">同步只在 WiFi 连接下进行</string>
-  <string name="settings_sync_wifi_only_off">同步不受数据连接类型限制</string>
-  <string name="settings_sync_wifi_only_ssid">WiFi SSID 限制</string>
-  <string name="settings_sync_wifi_only_ssid_on">同步只在 %s 网络下进行</string>
-  <string name="settings_sync_wifi_only_ssid_off">任何 WiFi 网络下均会同步</string>
-  <string name="settings_sync_wifi_only_ssid_message">输入 WiFi 网络的名称 (SSID) ，即可限制同步只在此网络下进行。留空则不限制。</string>
-  <!--collection management-->
-  <string name="create_addressbook">创建通讯录</string>
-  <string name="create_addressbook_display_name_hint">我的通讯录</string>
-  <string name="create_collection_creating">正在创建集合</string>
-  <string name="create_collection_display_name">集合显示名称（标题）</string>
-  <string name="create_collection_display_name_required">请输入标题</string>
-  <string name="create_collection_description">简介（可选）</string>
-  <string name="create_collection_create">创建</string>
-  <string name="delete_collection">删除集合</string>
-  <string name="delete_collection_confirm_title">你确定吗？</string>
-  <string name="delete_collection_confirm_warning">这个集合 %s 及其所有数据将会从服务器删除。</string>
-  <string name="delete_collection_deleting_collection">正在删除集合</string>
-  <!--ExceptionInfoFragment-->
-  <string name="exception">出现错误</string>
-  <string name="exception_httpexception">出现 HTTP 错误</string>
-  <string name="exception_ioexception">出现 I/O 错误</string>
-  <string name="exception_show_details">显示详情</string>
-  <!--sync errors and DebugInfoActivity-->
-  <string name="debug_info_title">调试信息</string>
-  <string name="sync_error_calendar">日历同步失败（%s）</string>
-  <string name="sync_error">%s时错误</string>
-  <string name="sync_error_http_dav">%s时服务器错误</string>
-  <string name="sync_error_local_storage">%s时数据库错误</string>
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">帮助</string>
+    <string name="manage_accounts">管理账户</string>
+    <string name="please_wait">请稍等…</string>
+    <string name="send">发送</string>
+    <!--startup dialogs-->
+    <string name="startup_battery_optimization">电池优化</string>
+    <string name="startup_dont_show_again">不再显示</string>
+    <!--AboutActivity-->
+    <string name="about_license_terms">许可协议</string>
+    <string name="about_license_info_no_warranty">本程序不附带任何担保。这是一款自由软件，你可以有条件地传播它。</string>
+    <!--global settings-->
+    <string name="logging_to_external_storage">记录日志到外部存储 %s</string>
+    <string name="logging_to_external_storage_warning">禁用会删除日志</string>
+    <string name="logging_couldnt_create_file">无法创建外部日志文件 %s</string>
+    <string name="logging_no_external_storage">找不到外部存储</string>
+    <!--AccountsActivity-->
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="navigation_drawer_about">关于 / 许可</string>
+    <string name="navigation_drawer_settings">设置</string>
+    <string name="navigation_drawer_external_links">外部链接</string>
+    <string name="navigation_drawer_website">应用网站</string>
+    <string name="navigation_drawer_faq">常见问题</string>
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <string name="app_settings">设置</string>
+    <string name="app_settings_user_interface">用户界面</string>
+    <string name="app_settings_reset_hints">重设提示</string>
+    <string name="app_settings_reset_hints_summary">重新显示之前忽略过的提示</string>
+    <string name="app_settings_reset_hints_success">所有提示将会再次显示</string>
+    <string name="app_settings_connection">连接</string>
+    <string name="app_settings_override_proxy">覆盖代理设置</string>
+    <string name="app_settings_override_proxy_on">使用自定义代理设置</string>
+    <string name="app_settings_override_proxy_off">使用系统默认代理设置</string>
+    <string name="app_settings_override_proxy_host">HTTP 代理主机名</string>
+    <string name="app_settings_override_proxy_port">HTTP 代理端口</string>
+    <string name="app_settings_security">安全</string>
+    <string name="app_settings_distrust_system_certs">不信任系统证书</string>
+    <string name="app_settings_distrust_system_certs_on">系统和用户增加的发布者不会被信任</string>
+    <string name="app_settings_distrust_system_certs_off">系统和用户增加的发布者会被信任（推荐）</string>
+    <string name="app_settings_reset_certificates">重设证书信任状态</string>
+    <string name="app_settings_reset_certificates_summary">重设所有自定义证书的信任状态</string>
+    <string name="app_settings_reset_certificates_success">所有自定义证书已清除</string>
+    <string name="app_settings_debug">调试</string>
+    <string name="app_settings_log_to_external_storage">外部文件日志</string>
+    <string name="app_settings_log_to_external_storage_on">记录日志到外部存储（如果可用）</string>
+    <string name="app_settings_log_to_external_storage_off">外部文件日志已禁用</string>
+    <string name="app_settings_show_debug_info">显示调试信息</string>
+    <string name="app_settings_show_debug_info_details">查看软件和配置信息</string>
+    <!--AccountActivity-->
+    <string name="account_synchronize_now"> 立即同步</string>
+    <string name="account_synchronizing_now">正在同步</string>
+    <string name="account_settings">账户设置</string>
+    <string name="account_delete">删除账户</string>
+    <string name="account_delete_confirmation_title">真的要删除账户吗？</string>
+    <string name="account_delete_confirmation_text">所有通讯录、日历和任务列表的本机存储将被删除。</string>
+    <!--PermissionsActivity-->
+    <string name="permissions_calendar">日历权限</string>
+    <string name="permissions_calendar_request">请求日历权限</string>
+    <string name="permissions_contacts">通讯录权限</string>
+    <string name="permissions_contacts_request">请求通讯录权限</string>
+    <string name="permissions_opentasks">OpenTasks 权限</string>
+    <string name="permissions_opentasks_request">请求 OpenTasks 权限</string>
+    <!--AddAccountActivity-->
+    <string name="login_title">增加账户</string>
+    <string name="login_email_address">Email 地址</string>
+    <string name="login_email_address_error">需要有效的 Email 地址</string>
+    <string name="login_password">密码</string>
+    <string name="login_password_required">请输入密码</string>
+    <string name="login_back">返回</string>
+    <string name="login_configuration_detection">正在配置</string>
+    <string name="login_querying_server">正在与服务器通信，请稍等...</string>
+    <string name="login_view_logs">查看日志</string>
+    <!--AccountSettingsActivity-->
+    <string name="settings_title">设置：%s</string>
+    <string name="settings_authentication">认证</string>
+    <string name="settings_password">密码</string>
+    <string name="settings_enter_password">输入你的密码：</string>
+    <string name="settings_sync">同步</string>
+    <string name="settings_sync_interval_contacts">通讯录自动同步间隔</string>
+    <string name="settings_sync_summary_manually">手动同步</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s 钟或本地修改后</string>
+    <string name="settings_sync_summary_not_available">不可用</string>
+    <string name="settings_sync_interval_calendars">日历自动同步间隔</string>
+    <string-array name="settings_sync_interval_names">
+        <item>手动同步</item>
+        <item>每 15 分钟</item>
+        <item>每 1 小时</item>
+        <item>每 2 小时</item>
+        <item>每 4 小时</item>
+        <item>每 24 小时</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">只在 WiFi 下同步</string>
+    <string name="settings_sync_wifi_only_on">同步只在 WiFi 连接下进行</string>
+    <string name="settings_sync_wifi_only_off">同步不受数据连接类型限制</string>
+    <string name="settings_sync_wifi_only_ssid">WiFi SSID 限制</string>
+    <string name="settings_sync_wifi_only_ssid_on">同步只在 %s 网络下进行</string>
+    <string name="settings_sync_wifi_only_ssid_off">任何 WiFi 网络下均会同步</string>
+    <string name="settings_sync_wifi_only_ssid_message">输入 WiFi 网络的名称 (SSID) ，即可限制同步只在此网络下进行。留空则不限制。</string>
+    <!--collection management-->
+    <string name="create_addressbook">创建通讯录</string>
+    <string name="create_addressbook_display_name_hint">我的通讯录</string>
+    <string name="create_collection_creating">正在创建集合</string>
+    <string name="create_collection_display_name">显示这个集合的名称（标题）：</string>
+    <string name="create_collection_display_name_required">请输入标题</string>
+    <string name="create_collection_description">描述（可选）：</string>
+    <string name="create_collection_create">创建</string>
+    <string name="delete_collection">删除集合</string>
+    <string name="delete_collection_confirm_title">你确定吗？</string>
+    <string name="delete_collection_confirm_warning">这个集合 %s 及其所有数据将会从服务器删除。</string>
+    <string name="delete_collection_deleting_collection">正在删除集合</string>
+    <!--ExceptionInfoFragment-->
+    <string name="exception">发生错误。</string>
+    <string name="exception_httpexception">发生 HTTP 错误。</string>
+    <string name="exception_ioexception">发生 I/O 错误。</string>
+    <string name="exception_show_details">显示详情</string>
+    <!--sync errors and DebugInfoActivity-->
+    <string name="debug_info_title">调试信息</string>
+    <string name="sync_error_calendar">日历同步失败（%s）</string>
+    <string name="sync_error">%s时错误</string>
+    <string name="sync_error_http_dav">%s时服务器错误</string>
+    <string name="sync_error_local_storage">%s时数据库错误</string>
+    <!--cert4android-->
 </resources>

@@ -71,7 +71,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val item = listAdapter?.getItem(position) as CachedItem
         activity?.supportFragmentManager?.commit {
-            replace(R.id.fragment_container, CollectionItemFragment(item))
+            replace(R.id.fragment_container, CollectionItemFragment.newInstance(item))
             addToBackStack(EditCollectionFragment::class.java.name)
         }
     }
@@ -83,9 +83,9 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.journal_viewer_list_item, parent, false)!!
 
-            val item = getItem(position)
+            val item = getItem(position)!!
 
-            setItemView(v, cachedCollection.meta.collectionType, item)
+            setItemView(v, cachedCollection.collectionType, item)
 
             /* FIXME: handle entry error:
             val entryError = data.select(EntryErrorEntity::class.java).where(EntryErrorEntity.ENTRY.eq(entryEntity)).limit(1).get().firstOrNull()

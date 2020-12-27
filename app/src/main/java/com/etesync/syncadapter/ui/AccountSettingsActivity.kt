@@ -17,20 +17,24 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.TextUtils
 import android.view.MenuItem
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NavUtils
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import androidx.preference.*
 import at.bitfire.ical4android.TaskProvider.Companion.TASK_PROVIDERS
+import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.ui.setup.LoginCredentials
 import com.etesync.syncadapter.ui.setup.LoginCredentialsChangeFragment
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class AccountSettingsActivity : BaseActivity() {
     private lateinit var account: Account
@@ -38,7 +42,7 @@ class AccountSettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = intent.getParcelableExtra(KEY_ACCOUNT)
+        account = intent.getParcelableExtra(KEY_ACCOUNT)!!
         title = getString(R.string.settings_title, account.name)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -81,18 +85,40 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
-        return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
+        return AccountSettingsLoader(requireContext(), (args!!.getParcelable(KEY_ACCOUNT) as Account?)!!)
     }
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
         if (settings == null) {
-            activity!!.finish()
+            activity?.finish()
             return
         }
         // Category: dashboard
         val prefManageAccount = findPreference("manage_account")
         prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            Toast.makeText(requireContext(), "Not yet supported", Toast.LENGTH_LONG).show()
+            doAsync {
+                try {
+
+                    val httpClient = HttpClient.Builder(requireContext()).build()
+                    val etebase = EtebaseLocalCache.getEtebase(requireContext(), httpClient.okHttpClient, settings)
+                    val url = etebase.fetchDashboardUrl()
+                    uiThread {
+                        WebViewActivity.openUrl(requireActivity(), url.toUri())
+                    }
+                } catch (e: EtebaseException) {
+                    uiThread {
+                        val context = context
+                        if (context != null) {
+                            AlertDialog.Builder(context)
+                                    .setIcon(R.drawable.ic_error_dark)
+                                    .setTitle(R.string.exception)
+                                    .setMessage(e.localizedMessage)
+                                    .setPositiveButton(android.R.string.yes) { _, _ -> }
+                                    .show()
+                        }
+                    }
+                }
+            }
             true
         }
 
@@ -171,7 +197,7 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
-        return AccountSettingsLoader(context!!, args!!.getParcelable(KEY_ACCOUNT) as Account)
+        return AccountSettingsLoader(context!!, (args!!.getParcelable(KEY_ACCOUNT) as? Account)!!)
     }
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {

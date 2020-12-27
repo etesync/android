@@ -15,6 +15,7 @@ import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.CachedCollection
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.BaseActivity
@@ -23,11 +24,14 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import yuku.ambilwarna.AmbilWarnaDialog
 
-class EditCollectionFragment(private val cachedCollection: CachedCollection, private val isCreating: Boolean = false) : Fragment() {
+class EditCollectionFragment : Fragment() {
     private val model: AccountViewModel by activityViewModels()
     private val collectionModel: CollectionViewModel by activityViewModels()
     private val itemsModel: ItemsViewModel by activityViewModels()
     private val loadingModel: LoadingViewModel by viewModels()
+
+    private lateinit var cachedCollection: CachedCollection
+    private var isCreating: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val ret = inflater.inflate(R.layout.activity_create_collection, container, false)
@@ -47,7 +51,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         cachedCollection.let {
             var titleId: Int = R.string.create_calendar
             if (isCreating) {
-                when (cachedCollection.meta.collectionType) {
+                when (cachedCollection.collectionType) {
                     Constants.ETEBASE_TYPE_CALENDAR -> {
                         titleId = R.string.create_calendar
                     }
@@ -75,7 +79,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         desc.setText(meta.description)
 
         val colorSquare = v.findViewById<View>(R.id.color)
-        when (cachedCollection.meta.collectionType) {
+        when (cachedCollection.collectionType) {
             Constants.ETEBASE_TYPE_CALENDAR -> {
                 title.setHint(R.string.create_calendar_display_name_hint)
 
@@ -167,11 +171,14 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
                 activity?.finish()
             } catch (e: EtebaseException) {
                 uiThread {
-                    AlertDialog.Builder(requireContext())
-                            .setIcon(R.drawable.ic_info_dark)
-                            .setTitle(R.string.exception)
-                            .setMessage(e.localizedMessage)
-                            .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                    Logger.log.warning(e.localizedMessage)
+                    context?.let { context ->
+                        AlertDialog.Builder(context)
+                                .setIcon(R.drawable.ic_info_dark)
+                                .setTitle(R.string.exception)
+                                .setMessage(e.localizedMessage)
+                                .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                    }
                 }
             } finally {
                 uiThread {
@@ -200,7 +207,7 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
         meta.mtime = System.currentTimeMillis()
 
         if (ok) {
-            when (meta.collectionType) {
+            when (cachedCollection.collectionType) {
                 Constants.ETEBASE_TYPE_CALENDAR, Constants.ETEBASE_TYPE_TASKS -> {
                     val view = v.findViewById<View>(R.id.color)
                     val color = (view.background as ColorDrawable).color
@@ -231,11 +238,14 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
                     }
                 } catch (e: EtebaseException) {
                     uiThread {
-                        AlertDialog.Builder(requireContext())
-                                .setIcon(R.drawable.ic_info_dark)
-                                .setTitle(R.string.exception)
-                                .setMessage(e.localizedMessage)
-                                .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                        val context = context
+                        if (context != null) {
+                            AlertDialog.Builder(requireContext())
+                                    .setIcon(R.drawable.ic_info_dark)
+                                    .setTitle(R.string.exception)
+                                    .setMessage(e.localizedMessage)
+                                    .setPositiveButton(android.R.string.yes) { _, _ -> }.show()
+                        }
                     }
                 } finally {
                     uiThread {
@@ -255,5 +265,14 @@ class EditCollectionFragment(private val cachedCollection: CachedCollection, pri
             etebaseLocalCache.collectionSet(colMgr, col)
         }
         collectionModel.loadCollection(model.value!!, col.uid)
+    }
+
+    companion object {
+        fun newInstance(cachedCollection: CachedCollection, isCreating: Boolean = false): EditCollectionFragment {
+            val ret = EditCollectionFragment()
+            ret.cachedCollection = cachedCollection
+            ret.isCreating = isCreating
+            return ret
+        }
     }
 }

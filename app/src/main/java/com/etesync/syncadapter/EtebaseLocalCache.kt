@@ -4,6 +4,7 @@ import android.content.Context
 import com.etebase.client.*
 import com.etebase.client.Collection
 import com.etebase.client.exceptions.EtebaseException
+import com.etebase.client.exceptions.UrlParseException
 import okhttp3.OkHttpClient
 import java.io.File
 import java.util.*
@@ -43,13 +44,13 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
         return fsCache._unstable_collectionList(colMgr).filter {
             withDeleted || !it.isDeleted
         }.map{
-            CachedCollection(it, it.meta)
+            CachedCollection(it, it.meta, it.collectionType)
         }
     }
 
     fun collectionGet(colMgr: CollectionManager, colUid: String): CachedCollection {
         return fsCache.collectionGet(colMgr, colUid).let {
-            CachedCollection(it, it.meta)
+            CachedCollection(it, it.meta, it.collectionType)
         }
     }
 
@@ -58,7 +59,11 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     }
 
     fun collectionUnset(colMgr: CollectionManager, colUid: String) {
-        fsCache.collectionUnset(colMgr, colUid)
+        try {
+            fsCache.collectionUnset(colMgr, colUid)
+        } catch (e: UrlParseException) {
+            // Ignore, as it just means the file doesn't exist
+        }
     }
 
     fun itemList(itemMgr: ItemManager, colUid: String, withDeleted: Boolean = false): List<CachedItem> {
@@ -119,6 +124,6 @@ class EtebaseLocalCache private constructor(context: Context, username: String) 
     }
 }
 
-data class CachedCollection(val col: Collection, val meta: CollectionMetadata)
+data class CachedCollection(val col: Collection, val meta: ItemMetadata, val collectionType: String)
 
 data class CachedItem(val item: Item, val meta: ItemMetadata, val content: String)

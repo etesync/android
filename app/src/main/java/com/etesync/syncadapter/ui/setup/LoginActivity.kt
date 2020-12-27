@@ -30,7 +30,7 @@ class LoginActivity : BaseActivity() {
         if (savedInstanceState == null)
         // first call, add fragment
             supportFragmentManager.beginTransaction()
-                    .replace(android.R.id.content, LoginCredentialsFragment(null, null))
+                    .replace(android.R.id.content, LoginCredentialsFragment())
                     .commit()
 
     }

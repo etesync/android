@@ -21,8 +21,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
 
-        versionCode 200
-        versionName "2.0.0"
+        versionCode 20203
+        versionName "2.2.3"
 
         buildConfigField "boolean", "customCerts", "true"
     }
@@ -122,6 +122,9 @@ android {
         buildTypes.release.signingConfig = null
     }
     compileOptions {
+        // enable because ical4android requires desugaring
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -130,20 +133,24 @@ android {
         jvmTarget = "1.8"
     }
 
-    dataBinding.enabled = true
+    buildFeatures {
+         dataBinding = true
+    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
 
     implementation "com.etesync:journalmanager:1.1.1"
-    def etebaseVersion = '0.2.2'
+    def etebaseVersion = '2.3.2'
     implementation "com.etebase:client:$etebaseVersion"
 
-    def acraVersion = '5.3.0'
-    implementation "ch.acra:acra-mail:$acraVersion"
-    implementation "ch.acra:acra-notification:$acraVersion"
+    def acraVersion = '5.7.0'
+    implementation "ch.acra:acra-http:$acraVersion"
+    implementation "ch.acra:acra-dialog:$acraVersion"
     def supportVersion = '1.0.0'
     implementation "androidx.legacy:legacy-support-core-ui:$supportVersion"
     implementation "androidx.core:core:$supportVersion"

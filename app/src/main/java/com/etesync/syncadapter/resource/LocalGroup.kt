@@ -135,23 +135,20 @@ class LocalGroup : AndroidGroup, LocalAddress {
         val batch = BatchOperation(addressBook.provider!!)
 
         // delete cached group memberships
-        batch.enqueue(BatchOperation.Operation(
-                ContentProviderOperation.newDelete(addressBook.syncAdapterURI(ContactsContract.Data.CONTENT_URI))
+        batch.enqueue(BatchOperation.CpoBuilder.newDelete(addressBook.syncAdapterURI(ContactsContract.Data.CONTENT_URI))
                         .withSelection(
                                 CachedGroupMembership.MIMETYPE + "=? AND " + CachedGroupMembership.GROUP_ID + "=?",
                                 arrayOf(CachedGroupMembership.CONTENT_ITEM_TYPE, id.toString())
                         )
-        ))
+        )
 
         // insert updated cached group memberships
         for (member in getMembers())
-            batch.enqueue(BatchOperation.Operation(
-                    ContentProviderOperation.newInsert(addressBook.syncAdapterURI(ContactsContract.Data.CONTENT_URI))
+            batch.enqueue(BatchOperation.CpoBuilder.newInsert(addressBook.syncAdapterURI(ContactsContract.Data.CONTENT_URI))
                             .withValue(CachedGroupMembership.MIMETYPE, CachedGroupMembership.CONTENT_ITEM_TYPE)
                             .withValue(CachedGroupMembership.RAW_CONTACT_ID, member)
                             .withValue(CachedGroupMembership.GROUP_ID, id)
-                            .withYieldAllowed(true)
-            ))
+            )
 
         batch.commit()
     }
@@ -214,11 +211,9 @@ class LocalGroup : AndroidGroup, LocalAddress {
                     .forEach { it.updateHashCode(batch) }
 
         // remove pending memberships
-        batch.enqueue(BatchOperation.Operation(
-                ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(Groups.CONTENT_URI, id)))
+        batch.enqueue(BatchOperation.CpoBuilder.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(Groups.CONTENT_URI, id)))
                         .withValue(COLUMN_PENDING_MEMBERS, null)
-                        .withYieldAllowed(true)
-        ))
+        )
     }
 
 

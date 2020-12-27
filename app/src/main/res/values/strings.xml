@@ -38,8 +38,7 @@
     <!-- Crash -->
     <string name="crash_title">EteSync crashed!</string>
     <string name="crash_message">Please send stack trace to developers.</string>
-    <string name="crash_email_subject">EteSync Debug Info</string>
-    <string name="crash_email_body">If possible, please include any other relevant info, such as what you did before this happened.</string>
+    <string name="crash_email_body">If possible, please include any other relevant info such as what you did before this happened.</string>
 
     <!-- tourguide -->
     <string name="tourguide_title">Did you know?</string>
@@ -89,6 +88,16 @@
     <!-- Account Wizard -->
     <string name="account_wizard_collections_title">Welcome to EteSync!</string>
     <string name="account_wizard_collections_body">In order to start using EteSync you need to create collections to store your data. Click "Create" to create a default calendar, address book and a task list for you.</string>
+
+    <!-- Migrate v2 Wizard -->
+    <string name="migrate_v2_wizard_welcome_title">EteSync 2.0 Migration</string>
+    <string name="migrate_v2_wizard_welcome_body">This tool will help you migrate your data to EteSync 2.0. The migration doesn\'t delete any data. It only copies your data over to the new EteSync 2.0 server. This means that there is no risk of data-loss in the migration.</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Please make sure you have a good internet connection and enough battery as this may take a while.\nTo continue, please choose below whether you would like to signup for a new EteSync 2.0 account, or login using an existing one.</string>
+    <string name="migrate_v2_wizard_migrate_title">Migrating…</string>
+    <string name="migrate_v2_wizard_migrate_progress">Migrating collection %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Migrated entries %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Your account has been migrated.\nPlease verify everything was copied over correctly, and remove your old account once done.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">Ignored %d malformed entries (probably safe to ignore).</string>
 
     <!-- AccountUpdateService -->
 
@@ -368,7 +377,7 @@
     <!-- sync errors and DebugInfoActivity -->
     <string name="authority_log_provider" translatable="false">com.etesync.syncadapter.log</string>
     <string name="debug_info_title">Debug info</string>
-    <string name="debug_info_more_data_shared">Clicking \"Share\" will open the e-mail app with the data below, as well as some additional debug info, attached. It may contain some sensitive info, so please review it before sending.</string>
+    <string name="debug_info_more_data_shared">Clicking \"Share\" will open your e-mail app with the data below, as well as some additional debug info, attached. It may contain some private info.</string>
     <string name="sync_error_permissions">EteSync permissions</string>
     <string name="sync_error_permissions_text">Additional permissions required</string>
     <string name="sync_error_generic">Sync failed (%s)</string>

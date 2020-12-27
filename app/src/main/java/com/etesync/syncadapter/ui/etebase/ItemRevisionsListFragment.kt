@@ -28,10 +28,13 @@ import java.util.*
 import java.util.concurrent.Future
 
 
-class ItemRevisionsListFragment(private val cachedCollection: CachedCollection, private val cachedItem: CachedItem) : ListFragment(), AdapterView.OnItemClickListener {
+class ItemRevisionsListFragment : ListFragment(), AdapterView.OnItemClickListener {
     private val model: AccountViewModel by activityViewModels()
     private val revisionsModel: RevisionsViewModel by viewModels()
     private var state: Parcelable? = null
+
+    private lateinit var cachedCollection: CachedCollection
+    private lateinit var cachedItem: CachedItem
 
     private var emptyTextView: TextView? = null
 
@@ -83,7 +86,7 @@ class ItemRevisionsListFragment(private val cachedCollection: CachedCollection, 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val item = listAdapter?.getItem(position) as CachedItem
         activity?.supportFragmentManager?.commit {
-            replace(R.id.fragment_container, CollectionItemFragment(item))
+            replace(R.id.fragment_container, CollectionItemFragment.newInstance(item))
             addToBackStack(null)
         }
     }
@@ -95,9 +98,9 @@ class ItemRevisionsListFragment(private val cachedCollection: CachedCollection, 
             if (v == null)
                 v = LayoutInflater.from(context).inflate(R.layout.journal_viewer_list_item, parent, false)!!
 
-            val item = getItem(position)
+            val item = getItem(position)!!
 
-            setItemView(v, cachedCollection.meta.collectionType, item)
+            setItemView(v, cachedCollection.collectionType, item)
 
             /* FIXME: handle entry error:
             val entryError = data.select(EntryErrorEntity::class.java).where(EntryErrorEntity.ENTRY.eq(entryEntity)).limit(1).get().firstOrNull()
@@ -108,6 +111,15 @@ class ItemRevisionsListFragment(private val cachedCollection: CachedCollection, 
              */
 
             return v
+        }
+    }
+
+    companion object {
+        fun newInstance(cachedCollection: CachedCollection, cachedItem: CachedItem): ItemRevisionsListFragment {
+            val ret = ItemRevisionsListFragment()
+            ret.cachedCollection = cachedCollection
+            ret.cachedItem = cachedItem
+            return ret
         }
     }
 }

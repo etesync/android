@@ -29,6 +29,11 @@
         android:title="@string/invitations_title"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/migration_v2"
+        android:title="@string/migrate_v2_wizard_welcome_title"
+        android:visible="false"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/delete_account"
           android:title="@string/account_delete"
           app:showAsAction="never"/>

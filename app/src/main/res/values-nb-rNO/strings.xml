@@ -14,7 +14,7 @@
     <string name="manage_accounts">Behandle kontoer</string>
     <string name="please_wait">Vent …</string>
     <string name="send">Send</string>
-    <string name="notification_channel_crash_reports">Kræsjrapporter</string>
+    <string name="notification_channel_crash_reports">Krasjrapporter</string>
     <string name="notification_channel_debugging">Avlusing</string>
     <string name="notification_channel_general">Andre viktige meldinger</string>
     <string name="notification_channel_sync">Synkronisering</string>
@@ -25,7 +25,7 @@
     <string name="notification_channel_sync_status">Statusmeldinger</string>
     <string name="notification_channel_sync_status_desc">Informative statusmeldinger, som sammendrag av synkroniseringsendringer</string>
     <!-- Crash -->
-    <string name="crash_title">EteSync har kræsjet!</string>
+    <string name="crash_title">EteSync har krasjet!</string>
     <string name="crash_message">Send feilmeldingen til utvikleren.</string>
     <string name="crash_email_subject">EteSync-feilsporingsinfo</string>
     <string name="crash_email_body">Hvis mulig, ta med annen relevant info, som f.eks. hva du gjorde for å utløse feilen.</string>
@@ -126,9 +126,9 @@
     <string name="collection_members_title">Medlemmer</string>
     <string name="collection_members_list_loading">Laster inn medlemmer …</string>
     <string name="collection_members_list_empty">Ingen medlemmer</string>
-    <string name="collection_members_add">Legg til medlem</string>
+    <string name="collection_members_add">Inviter bruker</string>
     <string name="collection_members_add_error">Feil oppstod under tillegging av medlem</string>
-    <string name="collection_members_adding">Legger til medlem</string>
+    <string name="collection_members_adding">Inviterer brukre</string>
     <string name="trust_fingerprint_title">Kontroller sikkerhetsfingeravtrykk</string>
     <string name="trust_fingerprint_body">Kontroller %s sitt fingeravtrykk for å bekrefte at krypteringen er sikker.</string>
     <string name="collection_members_error_user_not_found">Brukeren (%s) finnes ikke</string>
@@ -179,7 +179,7 @@
     <string name="login_custom_server_error">Ugyldig nettadresse finnet, glemte du å ta med https://\?</string>
     <string name="login_toggle_advanced">Vis avanserte innstillinger</string>
     <string name="login_encryption_password">Krypteringspassord</string>
-    <string name="login_encryption_check_password">* Dobbeltsjekk passordet, siden det ikke kan gjenopprettes hvis det er feil!</string>
+    <string name="login_encryption_check_password">* Husk passordet ditt, det kan ikke gjenopprettes hvis du mister det!</string>
     <string name="login_encryption_extra_info">Dette passordet bruker til å kryptere dataen din, i motsetning til det forrige, som brukes til å logge inn på tjenesten.
 \nDu bes om å sette et eget krypteringspassord av sikkerhetsgrunner. For mer info, sjekk ofte stilte spørsmål her: %s</string>
     <string name="login_password_required">Passord kreves</string>
@@ -279,7 +279,7 @@
     <string name="delete_collection_deleting_collection">Sletter samling</string>
     <!-- JournalViewer -->
     <string name="journal_entries_list_empty">Samlingen er tom.
-\n(Kanskje den fortsatt synkroniserer\?)</string>
+\nKanskje den fortsatt synkroniserer\?</string>
     <string name="journal_entries_loading">Laster endringsloggsoppføringer …</string>
     <!-- ExceptionInfoFragment -->
     <string name="exception">En feil har oppstått.</string>
@@ -288,7 +288,7 @@
     <string name="exception_show_details">Vis detaljer</string>
     <!-- sync errors and DebugInfoActivity -->
     <string name="debug_info_title">Feilsporingsinfo</string>
-    <string name="debug_info_more_data_shared">Når du klikker på del vil e-postprogrammet åpnes med dataene under, i tillegg til noe ekstra feilsporingsinfo, vedlagt. Det kan kanskje inneholde sensitiv info, så sjekk alt før du sender.</string>
+    <string name="debug_info_more_data_shared">Når du klikker på «Del» vil dataene under bli sendt til utviklerne, i tillegg til noe ekstra feilsporingsinfo, vedlagt. Merk at forsendelsen kan inneholde sensitiv info.</string>
     <string name="sync_error_permissions">EteSync-tillatelser</string>
     <string name="sync_error_permissions_text">Ekstra tillatelser kreves</string>
     <string name="sync_error_calendar">Kalendersynkronisering mislyktes (%s)</string>
@@ -365,7 +365,7 @@
     <string name="sync_error_generic">Kunne ikke synkronisere (%s)</string>
     <string name="signup_password_restrictions">Passordet må være minst 8 tegn langt</string>
     <string name="signup_title">Skriv inn innloggingsdetaljer</string>
-    <string name="login_username_error">Et gyldig brukernavn kreves</string>
+    <string name="login_username_error">Brukernavnet må være minst 6 tegn, og bestå av kun bokstaver, tall og ./-/_.</string>
     <string name="login_username">Bruikernavn</string>
     <string name="journal_item_tab_revisions">Revisjoner</string>
     <string name="invitations_reject">Avslå</string>
@@ -378,4 +378,21 @@
     <string name="collection_members_no_access">Kun administratorer kan håndtere samlingsmedlemskap. Ønsker du å forlate denne samlingen\?</string>
     <string name="collection_members_remove_admin">Fjerning av tilganger for administratorer støttes ikke.</string>
     <string name="edit_owner_only_anon">Kun eiere av denne samlingen kan redigere den.</string>
+    <string name="collection_members_add_success">Invitasjon sendt. Brukeren vil bli lagt til når invitasjonen har blitt godkjent.</string>
+    <string name="collection_members_add_read_only">Skrivebeskyttet</string>
+    <string name="account_wizard_collections_body">For å kunne bruke EteSync må du opprette samlinger å lagre dataen din i. Klikk «Opprett» for å opprette en forvalgt kalender, adressebok og gjøremålsliste.</string>
+    <string name="account_wizard_collections_title">Velkommen til EteSync.</string>
+    <string name="retry">Prøv igjen</string>
+    <string name="skip">Hopp over</string>
+    <string name="create">Opprett</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Migrerer oppføring %d/%d</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Forsikre deg om at du har god tilknytning til Internett, og nok batteri, siden dette kan ta sin tid.
+\nFor å fortsette, velg hvorvidt du ønsker å registrere en ny EteSync 2.0-konto, eller logge inn med en eksisterende konto.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">Ignorerte %d feilformaterte oppføringer (antagelig trygt å se bort fra).</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Kontoen din har blitt migrert.
+\nBekreft at alt ble flyttet over på riktig vis, og fjern din gamle konto når du er ferdig.</string>
+    <string name="migrate_v2_wizard_migrate_progress">Migrerer samling %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_title">Migrerer …</string>
+    <string name="migrate_v2_wizard_welcome_body">Dette verktøyet hjelper deg å migrere din data til EteSync 2.0. Migrasjonen sletter ingen data, den kopierer kun data over til den nye EteSync 2.0-tjeneren. Dette betyr at det ikke er muligheter for datatap under migrasjonen.</string>
+    <string name="migrate_v2_wizard_welcome_title">EteSync 2.0-migrasjon</string>
 </resources>

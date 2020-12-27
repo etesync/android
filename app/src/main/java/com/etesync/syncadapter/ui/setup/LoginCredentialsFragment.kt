@@ -29,12 +29,15 @@ import net.cachapa.expandablelayout.ExpandableLayout
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.net.URI
 
-class LoginCredentialsFragment(private val initialUsername: String?, private val initialPassword: String?) : Fragment() {
+class LoginCredentialsFragment : Fragment() {
     internal lateinit var editUserName: EditText
     internal lateinit var editUrlPassword: TextInputLayout
 
     internal lateinit var showAdvanced: CheckedTextView
     internal lateinit var customServer: EditText
+
+    internal var initialUsername: String? = null
+    internal var initialPassword: String? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,7 +56,7 @@ class LoginCredentialsFragment(private val initialUsername: String?, private val
         val createAccount = v.findViewById<View>(R.id.create_account) as Button
         createAccount.setOnClickListener {
             parentFragmentManager.commit {
-                replace(android.R.id.content, SignupFragment(editUserName.text.toString(), editUrlPassword.editText?.text.toString()))
+                replace(android.R.id.content, SignupFragment.newInstance(editUserName.text.toString(), editUrlPassword.editText?.text.toString()))
             }
         }
 
@@ -118,5 +121,14 @@ class LoginCredentialsFragment(private val initialUsername: String?, private val
         }
 
         return if (valid) LoginCredentials(uri, userName, password) else null
+    }
+
+    companion object {
+        fun newInstance(initialUsername: String?, initialPassword: String?): LoginCredentialsFragment {
+            val ret = LoginCredentialsFragment()
+            ret.initialUsername = initialUsername
+            ret.initialPassword = initialPassword
+            return ret
+        }
     }
 }

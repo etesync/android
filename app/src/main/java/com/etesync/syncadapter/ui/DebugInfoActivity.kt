@@ -27,9 +27,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import at.bitfire.ical4android.TaskProvider.ProviderName
 import at.bitfire.vcard4android.ContactsStorageException
+import com.etesync.journalmanager.Exceptions.HttpException
 import com.etesync.syncadapter.*
 import com.etesync.syncadapter.Constants.KEY_ACCOUNT
-import com.etesync.journalmanager.Exceptions.HttpException
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.EntryEntity
 import com.etesync.syncadapter.model.JournalEntity
@@ -66,7 +66,11 @@ class DebugInfoActivity : BaseActivity(), LoaderManager.LoaderCallbacks<String> 
 
     fun onShare(item: MenuItem) {
         ACRA.getErrorReporter().putCustomData("debug_info", report)
-        ACRA.getErrorReporter().handleSilentException(null)
+        val account: Account? = intent.extras?.getParcelable(KEY_ACCOUNT)
+        if (account != null) {
+            ACRA.getErrorReporter().putCustomData("username", account.name)
+        }
+        ACRA.getErrorReporter().handleException(intent.extras?.getSerializable(KEY_THROWABLE) as Throwable?)
         ACRA.getErrorReporter().removeCustomData("debug_info")
     }
 

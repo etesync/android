@@ -12,10 +12,7 @@ import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.net.Uri
 import android.text.TextUtils
-import at.bitfire.ical4android.AndroidTask
-import at.bitfire.ical4android.AndroidTaskFactory
-import at.bitfire.ical4android.AndroidTaskList
-import at.bitfire.ical4android.Task
+import at.bitfire.ical4android.*
 import com.etesync.syncadapter.log.Logger
 import org.dmfs.tasks.contract.TaskContract
 import java.io.ByteArrayOutputStream
@@ -75,7 +72,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
         task?.sequence = values.getAsInteger(COLUMN_SEQUENCE)
     }
 
-    override fun buildTask(builder: ContentProviderOperation.Builder, update: Boolean) {
+    override fun buildTask(builder: BatchOperation.CpoBuilder, update: Boolean) {
         super.buildTask(builder, update)
         builder.withValue(TaskContract.Tasks._SYNC_ID, fileName)
                 .withValue(COLUMN_UID, task?.uid)
@@ -98,7 +95,7 @@ class LocalTask : AndroidTask, LocalResource<Task> {
 
     override fun legacyPrepareForUpload(fileName_: String?) {
         var uid: String? = null
-        val c = taskList.provider.client.query(taskSyncURI(), arrayOf(COLUMN_UID), null, null, null)
+        val c = taskList.provider.client.query(taskSyncURI(), arrayOf(COLUMN_UID), null, null, null)!!
         if (c.moveToNext())
             uid = c.getString(0)
         if (uid == null)

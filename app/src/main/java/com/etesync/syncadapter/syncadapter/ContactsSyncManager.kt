@@ -102,11 +102,9 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                 val currentGroups = contact.getGroupMemberships()
                 for (groupID in SetUtils.disjunction(cachedGroups, currentGroups)) {
                     Logger.log.fine("Marking group as dirty: " + groupID!!)
-                    batch.enqueue(BatchOperation.Operation(
-                            ContentProviderOperation.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(ContactsContract.Groups.CONTENT_URI, groupID)))
+                    batch.enqueue(BatchOperation.CpoBuilder.newUpdate(addressBook.syncAdapterURI(ContentUris.withAppendedId(ContactsContract.Groups.CONTENT_URI, groupID)))
                                     .withValue(ContactsContract.Groups.DIRTY, 1)
-                                    .withYieldAllowed(true)
-                    ))
+                    )
                 }
             } catch (ignored: FileNotFoundException) {
             }

@@ -26,10 +26,11 @@ import com.etebase.client.FetchOptions
 import com.etebase.client.exceptions.ConnectionException
 import com.etebase.client.exceptions.TemporaryServerErrorException
 import com.etebase.client.exceptions.UnauthorizedException
-import com.etesync.syncadapter.*
 import com.etesync.journalmanager.Crypto
 import com.etesync.journalmanager.Exceptions
 import com.etesync.journalmanager.JournalManager
+import com.etesync.syncadapter.*
+import com.etesync.syncadapter.Constants.COLLECTION_TYPES
 import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.CollectionInfo
 import com.etesync.syncadapter.model.JournalEntity
@@ -243,7 +244,6 @@ abstract class SyncAdapterService : Service() {
                     return
                 }
 
-
                 val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
                 synchronized(etebaseLocalCache) {
                     val cacheAge = 5 * 1000 // 5 seconds - it's just a hack for burst fetching
@@ -259,7 +259,7 @@ abstract class SyncAdapterService : Service() {
                     var stoken = etebaseLocalCache.loadStoken()
                     var done = false
                     while (!done) {
-                        val colList = colMgr.list(FetchOptions().stoken(stoken))
+                        val colList = colMgr.list(COLLECTION_TYPES, FetchOptions().stoken(stoken))
                         for (col in colList.data) {
                             etebaseLocalCache.collectionSet(colMgr, col)
                         }

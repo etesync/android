@@ -1,0 +1,1 @@
+* Change the crash reporting to not rely on email (use HTTP instead)

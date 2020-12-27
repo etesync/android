@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.ListFragment
 import androidx.fragment.app.activityViewModels
@@ -19,6 +21,7 @@ import com.etebase.client.FetchOptions
 import com.etebase.client.SignedInvitation
 import com.etebase.client.Utils
 import com.etesync.syncadapter.R
+import com.etesync.syncadapter.syncadapter.requestSync
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -88,6 +91,10 @@ class InvitationsListFragment : ListFragment(), AdapterView.OnItemClickListener 
                 }
                 .setPositiveButton(R.string.invitations_accept) { dialogInterface, i ->
                     invitationsModel.accept(model.value!!, invitation)
+                    val applicationContext = activity?.applicationContext
+                    if (applicationContext != null) {
+                        requestSync(applicationContext, model.value!!.account)
+                    }
                 }
                 .show()
         return

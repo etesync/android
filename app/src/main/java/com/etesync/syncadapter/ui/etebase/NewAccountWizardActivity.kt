@@ -16,9 +16,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.etebase.client.Collection
-import com.etebase.client.CollectionMetadata
 import com.etebase.client.FetchOptions
+import com.etebase.client.ItemMetadata
 import com.etebase.client.exceptions.EtebaseException
+import com.etesync.syncadapter.Constants.*
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.syncadapter.requestSync
 import com.etesync.syncadapter.ui.BaseActivity
@@ -34,7 +35,7 @@ class NewAccountWizardActivity : BaseActivity() {
 
         account = intent.extras!!.getParcelable(EXTRA_ACCOUNT)!!
 
-        setContentView(R.layout.etebase_collection_activity)
+        setContentView(R.layout.etebase_fragment_activity)
 
         if (savedInstanceState == null) {
             setTitle(R.string.account_wizard_collections_title)
@@ -106,7 +107,7 @@ class WizardCheckFragment : Fragment() {
         loadingModel.setLoading(true)
         doAsync {
             try {
-                val collections = colMgr.list(FetchOptions().limit(1))
+                val collections = colMgr.list(COLLECTION_TYPES, FetchOptions().limit(1))
                 uiThread {
                     if (collections.data.size > 0) {
                         activity?.finish()
@@ -119,9 +120,6 @@ class WizardCheckFragment : Fragment() {
             } catch (e: Exception) {
                 uiThread {
                     reportErrorHelper(requireContext(), e)
-                }
-            } finally {
-                uiThread {
                     loadingModel.setLoading(false)
                 }
             }
@@ -175,16 +173,17 @@ class WizardFragment : Fragment() {
         doAsync {
             try {
                 val baseMeta = listOf(
-                    Pair("etebase.vcard", "My Contacts"),
-                    Pair("etebase.vevent", "My Calendar"),
-                    Pair("etebase.vtodo", "My Tasks"),
+                    Pair(ETEBASE_TYPE_ADDRESS_BOOK, "My Contacts"),
+                    Pair(ETEBASE_TYPE_CALENDAR, "My Calendar"),
+                    Pair(ETEBASE_TYPE_TASKS, "My Tasks"),
                 )
 
                 baseMeta.forEach {
-                    val meta = CollectionMetadata(it.first, it.second)
+                    val meta = ItemMetadata()
+                    meta.name = it.second
                     meta.mtime = System.currentTimeMillis()
 
-                    val col = colMgr.create(meta, "")
+                    val col = colMgr.create(it.first, meta, "")
                     uploadCollection(accountHolder, col)
                 }
                 requestSync(requireContext(), accountHolder.account)

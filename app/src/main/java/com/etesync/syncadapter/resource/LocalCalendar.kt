@@ -10,7 +10,6 @@ package com.etesync.syncadapter.resource
 
 import android.accounts.Account
 import android.content.ContentProviderClient
-import android.content.ContentProviderOperation
 import android.content.ContentUris
 import android.content.ContentValues
 import android.net.Uri
@@ -24,7 +23,6 @@ import com.etesync.syncadapter.log.Logger
 import com.etesync.syncadapter.model.JournalEntity
 import com.etesync.syncadapter.resource.LocalEvent.Companion.COLUMN_UID
 import org.apache.commons.lang3.StringUtils
-import org.dmfs.tasks.contract.TaskContract
 import java.util.*
 import java.util.logging.Level
 
@@ -210,15 +208,15 @@ class LocalCalendar private constructor(
                 cursor2!!.close()
                 val batch = BatchOperation(provider)
                 // re-schedule original event and set it to DIRTY
-                batch.enqueue(BatchOperation.Operation(
-                        ContentProviderOperation.newUpdate(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, originalID)))
+                batch.enqueue(
+                        BatchOperation.CpoBuilder.newUpdate(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, originalID)))
                                 .withValue(LocalEvent.COLUMN_SEQUENCE, originalSequence + 1)
                                 .withValue(Events.DIRTY, 1)
-                ))
+                )
                 // remove exception
-                batch.enqueue(BatchOperation.Operation(
-                        ContentProviderOperation.newDelete(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, id)))
-                ))
+                batch.enqueue(
+                        BatchOperation.CpoBuilder.newDelete(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, id)))
+                )
                 batch.commit()
             }
             cursor!!.close()
@@ -242,16 +240,14 @@ class LocalCalendar private constructor(
 
                 val batch = BatchOperation(provider)
                 // original event to DIRTY
-                batch.enqueue(BatchOperation.Operation(
-                        ContentProviderOperation.newUpdate(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, originalID)))
+                batch.enqueue(BatchOperation.CpoBuilder.newUpdate(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, originalID)))
                                 .withValue(Events.DIRTY, 1)
-                ))
+                )
                 // increase SEQUENCE and set DIRTY to 0
-                batch.enqueue(BatchOperation.Operation(
-                        ContentProviderOperation.newUpdate(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, id)))
+                batch.enqueue(BatchOperation.CpoBuilder.newUpdate(syncAdapterURI(ContentUris.withAppendedId(Events.CONTENT_URI, id)))
                                 .withValue(LocalEvent.COLUMN_SEQUENCE, sequence + 1)
                                 .withValue(Events.DIRTY, 0)
-                ))
+                )
                 batch.commit()
             }
             cursor!!.close()

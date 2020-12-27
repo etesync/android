@@ -35,7 +35,10 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 
-class ImportFragment(private val account: Account, private val uid: String, private val enumType: CollectionInfo.Type) : DialogFragment() {
+class ImportFragment : DialogFragment() {
+    private lateinit var account: Account
+    private lateinit var uid: String
+    private lateinit var enumType: CollectionInfo.Type
 
     private var inputStream: InputStream? = null
 
@@ -234,9 +237,10 @@ class ImportFragment(private val account: Account, private val uid: String, priv
 
                     val localCalendar: LocalCalendar?
                     try {
-                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, uid!!)
+                        localCalendar = LocalCalendar.findByName(account, provider, LocalCalendar.Factory, uid)
                         if (localCalendar == null) {
-                            throw FileNotFoundException("Failed to load local resource.")
+                            result.e = FileNotFoundException("Failed to load local resource.")
+                            return result
                         }
                     } catch (e: CalendarStorageException) {
                         Logger.log.info("Fail" + e.localizedMessage)
@@ -292,9 +296,10 @@ class ImportFragment(private val account: Account, private val uid: String, priv
                     provider?.let {
                         val localTaskList: LocalTaskList?
                         try {
-                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, uid!!)
+                            localTaskList = LocalTaskList.findByName(account, it, LocalTaskList.Factory, uid)
                             if (localTaskList == null) {
-                                throw FileNotFoundException("Failed to load local resource.")
+                                result.e = FileNotFoundException("Failed to load local resource.")
+                                return result
                             }
                         } catch (e: FileNotFoundException) {
                             Logger.log.info("Fail" + e.localizedMessage)
@@ -341,9 +346,10 @@ class ImportFragment(private val account: Account, private val uid: String, priv
                         return result
                     }
 
-                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, uid!!)
+                    val localAddressBook = LocalAddressBook.findByUid(context, provider, account, uid)
                     if (localAddressBook == null) {
-                        throw FileNotFoundException("Failed to load local address book.")
+                        result.e = FileNotFoundException("Failed to load local address book.")
+                        return result
                     }
 
                     for (contact in contacts.filter { contact -> !contact.group }) {
@@ -432,17 +438,25 @@ class ImportFragment(private val account: Account, private val uid: String, priv
         private val TAG_PROGRESS_MAX = "progressMax"
 
         fun newInstance(account: Account, info: CollectionInfo): ImportFragment {
-            return ImportFragment(account, info.uid!!, info.enumType!!)
+            val ret = ImportFragment()
+            ret.account = account
+            ret.uid = info.uid!!
+            ret.enumType = info.enumType!!
+            return ret
         }
 
         fun newInstance(account: Account, cachedCollection: CachedCollection): ImportFragment {
-            val enumType = when (cachedCollection.meta.collectionType) {
+            val enumType = when (cachedCollection.collectionType) {
                 ETEBASE_TYPE_CALENDAR -> CollectionInfo.Type.CALENDAR
                 ETEBASE_TYPE_TASKS -> CollectionInfo.Type.TASKS
                 ETEBASE_TYPE_ADDRESS_BOOK -> CollectionInfo.Type.ADDRESS_BOOK
                 else -> throw Exception("Got unsupported collection type")
             }
-            return ImportFragment(account, cachedCollection.col.uid, enumType)
+            val ret = ImportFragment()
+            ret.account = account
+            ret.uid = cachedCollection.col.uid
+            ret.enumType = enumType
+            return ret
         }
     }
 }

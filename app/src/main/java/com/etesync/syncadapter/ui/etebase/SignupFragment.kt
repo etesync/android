@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckedTextView
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -32,10 +33,8 @@ import com.etebase.client.exceptions.EtebaseException
 import com.etesync.syncadapter.Constants
 import com.etesync.syncadapter.HttpClient
 import com.etesync.syncadapter.R
-import com.etesync.syncadapter.ui.setup.BaseConfigurationFinder
-import com.etesync.syncadapter.ui.setup.CreateAccountFragment
-import com.etesync.syncadapter.ui.setup.DetectConfigurationFragment
-import com.etesync.syncadapter.ui.setup.LoginCredentialsFragment
+import com.etesync.syncadapter.ui.WebViewActivity
+import com.etesync.syncadapter.ui.setup.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import net.cachapa.expandablelayout.ExpandableLayout
@@ -45,7 +44,9 @@ import org.jetbrains.anko.uiThread
 import java.net.URI
 import java.util.concurrent.Future
 
-class SignupFragment(private val initialUsername: String?, private val initialPassword: String?) : Fragment() {
+class SignupFragment : Fragment() {
+    internal var initialUsername: String? = null
+    internal var initialPassword: String? = null
     internal lateinit var editUserName: TextInputLayout
     internal lateinit var editEmail: TextInputLayout
     internal lateinit var editPassword: TextInputLayout
@@ -62,6 +63,9 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         editPassword = v.findViewById(R.id.url_password)
         showAdvanced = v.findViewById(R.id.show_advanced)
         customServer = v.findViewById(R.id.custom_server)
+        v.findViewById<TextView>(R.id.trial_notice).setOnClickListener {
+            WebViewActivity.openUrl(requireContext(), Constants.pricing)
+        }
 
         if (savedInstanceState == null) {
             editUserName.editText?.setText(initialUsername ?: "")
@@ -71,7 +75,7 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         val login = v.findViewById<Button>(R.id.login)
         login.setOnClickListener {
             parentFragmentManager.commit {
-                replace(android.R.id.content, LoginCredentialsFragment(editUserName.editText?.text.toString(), editPassword.editText?.text.toString()))
+                replace(android.R.id.content, LoginCredentialsFragment.newInstance(editUserName.editText?.text.toString(), editPassword.editText?.text.toString()))
             }
         }
 
@@ -79,7 +83,7 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
         createAccount.setOnClickListener {
             val credentials = validateData()
             if (credentials != null) {
-                SignupDoFragment(credentials).show(requireFragmentManager(), null)
+                SignupDoFragment.newInstance(credentials).show(requireFragmentManager(), null)
             }
         }
 
@@ -144,12 +148,23 @@ class SignupFragment(private val initialUsername: String?, private val initialPa
 
         return if (valid) SignupCredentials(uri, userName, email, password) else null
     }
+
+    companion object {
+        fun newInstance(initialUsername: String?, initialPassword: String?): SignupFragment {
+            val ret = SignupFragment()
+            ret.initialUsername = initialUsername
+            ret.initialPassword = initialPassword
+            return ret
+        }
+    }
 }
 
 
 
-class SignupDoFragment(private val signupCredentials: SignupCredentials) : DialogFragment() {
+class SignupDoFragment: DialogFragment() {
     private val model: ConfigurationViewModel by viewModels()
+
+    private lateinit var signupCredentials: SignupCredentials
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val progress = ProgressDialog(activity)
@@ -182,10 +197,18 @@ class SignupDoFragment(private val signupCredentials: SignupCredentials) : Dialo
             }
         }
     }
+
+    companion object {
+        fun newInstance(signupCredentials: SignupCredentials): SignupDoFragment {
+            val ret = SignupDoFragment()
+            ret.signupCredentials = signupCredentials
+            return ret
+        }
+    }
 }
 
 class ConfigurationViewModel : ViewModel() {
-    private val account = MutableLiveData<BaseConfigurationFinder.Configuration>()
+    val account = MutableLiveData<BaseConfigurationFinder.Configuration>()
     private var asyncTask: Future<Unit>? = null
 
     fun signup(context: Context, credentials: SignupCredentials) {
@@ -198,6 +221,34 @@ class ConfigurationViewModel : ViewModel() {
                 val client = Client.create(httpClient, uri.toString())
                 val user = User(credentials.userName, credentials.email)
                 val etebase = Account.signup(client, user, credentials.password)
+                etebaseSession = etebase.save(null)
+            } catch (e: EtebaseException) {
+                exception = e
+            }
+
+            uiThread {
+                account.value = BaseConfigurationFinder.Configuration(
+                        uri,
+                        credentials.userName,
+                        etebaseSession,
+                        null,
+                        null,
+                        exception
+                )
+            }
+        }
+    }
+
+    // We just need it for the migration - maybe merge it with login later on
+    fun login(context: Context, credentials: LoginCredentials) {
+        asyncTask = doAsync {
+            val httpClient = HttpClient.Builder(context).build().okHttpClient
+            val uri = credentials.uri ?: URI(Constants.etebaseServiceUrl)
+            var etebaseSession: String? = null
+            var exception: Throwable? = null
+            try {
+                val client = Client.create(httpClient, uri.toString())
+                val etebase = Account.login(client, credentials.userName, credentials.password)
                 etebaseSession = etebase.save(null)
             } catch (e: EtebaseException) {
                 exception = e
