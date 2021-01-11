@@ -192,7 +192,7 @@ class LocalCalendarImportFragment : ListFragment() {
                 return
             }
 
-            if (progressDialog.isShowing && !activity.isDestroyed) {
+            if (progressDialog.isShowing && !activity.isDestroyed && !activity.isFinishing) {
                 progressDialog.dismiss()
             }
             onImportResult(result)
