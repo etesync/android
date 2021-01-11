@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.2.4
+* Import: fix crashes for some users after import finishes.
+
 ## Version 2.2.3
 * Fix issues with the Tasks.org integration and subtasks (due to rewriting UIDs).
 
