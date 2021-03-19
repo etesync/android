@@ -121,4 +121,26 @@
     <string name="collection_members_add_read_only">Baca saja</string>
     <string name="collection_members_add">Undang pengguna</string>
     <string name="collection_members_list_empty">Tidak ada anggota</string>
+    <string name="app_settings_reset_hints">Setel ulang petunjuk</string>
+    <string name="app_settings_notification_settings_summary">Atur notifikasi saluran dan pengaturannya</string>
+    <string name="app_settings_notification_settings">Pengaturan notifikasi</string>
+    <string name="app_settings_user_interface">Antarmuka pengguna</string>
+    <string name="app_settings">Pengaturan</string>
+    <string name="account_list_empty">Selamat datang di EteSync!</string>
+    <string name="navigation_drawer_contact">Kontak</string>
+    <string name="navigation_drawer_report_issue">Laporkan masalah</string>
+    <string name="navigation_drawer_guide">Panduan pengguna</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <string name="navigation_drawer_website">Situs web</string>
+    <string name="navigation_drawer_external_links">Tautan berguna</string>
+    <string name="navigation_drawer_settings">Pengaturan</string>
+    <string name="navigation_drawer_about">Tentang / Lisensi</string>
+    <string name="navigation_drawer_close">Tutup jendela navigasi</string>
+    <string name="navigation_drawer_open">Buka jendela navigasi</string>
+    <string name="logging_no_external_storage">Penyimpanan eksternal tidak ditemukan</string>
+    <string name="logging_couldnt_create_file">Tidak dapat membuat log file external: %s</string>
+    <string name="logging_to_external_storage_warning">Menonaktifkan akan menghapus log</string>
+    <string name="logging_to_external_storage">Masuk ke penyimpanan eksternal: %s</string>
+    <string name="logging_davdroid_file_logging">File logging EteSync AKTIF</string>
+    <string name="crash_message">Mohon kirim kumpulan pelacak ke pengembang.</string>
 </resources>
