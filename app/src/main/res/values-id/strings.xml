@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="about_license_info_no_warranty">Program hadir BENAR-BENAR TANPA GARANSI. Ini adalah perangkat lunak gratis, dan Anda dipersilakan untuk mendistribusikannya dalam kondisi tertentu.</string>
     <string name="about_license_terms">Ketentuan lisensi</string>
     <string name="startup_vendor_specific_bugs_open_faq">Buka FAQ</string>
@@ -143,4 +143,226 @@
     <string name="logging_to_external_storage">Masuk ke penyimpanan eksternal: %s</string>
     <string name="logging_davdroid_file_logging">File logging EteSync AKTIF</string>
     <string name="crash_message">Mohon kirim kumpulan pelacak ke pengembang.</string>
+    <string name="wrong_encryption_password_content">Galat integritas saat mengakses akun, Anda mungkin memasukkan kata sandi enkripsi yang salah. 
+\nHarap dicatat bahwa nama pengguna peka huruf besar/kecil, jadi silakan juga mencoba kapitalisasi yang berbeda.
+\n
+\nGalat: %s</string>
+    <string name="settings_sync_interval">Interval sinkronisasi</string>
+    <string name="settings_sync">Sinkronisasi</string>
+    <string name="settings_enter_encryption_password">Masukkan kata sandi enkripsi Anda:</string>
+    <string name="settings_encryption_password_summary">Ubah kata sandi enkripsi Anda</string>
+    <string name="settings_encryption_password">Kata Sandi Enkripsi</string>
+    <string name="settings_enter_password">Masukkan kata sandi Anda:</string>
+    <string name="settings_password_summary">Gunakan kata sandi otentikasi yang berbeda</string>
+    <string name="settings_password">Kata Sandi Otentikasi</string>
+    <string name="settings_encryption">Enkripsi</string>
+    <string name="settings_manage_account_summary">Ubah informasi pembayaran Anda, paket dan pengaturan akun lainnya</string>
+    <string name="settings_account_dashboard">Dasbor akun</string>
+    <string name="settings_manage_account">Kelola Akun</string>
+    <string name="settings_title">Pengaturan: %s</string>
+    <string name="choose_file">Pilih file</string>
+    <string name="import_account_top_notice">Pilih akun untuk mengimpor semua entri.</string>
+    <string name="import_permission_required">Izin penyimpanan baca diperlukan untuk impor.</string>
+    <string name="change_encryption_password_title">Ubah Sandi Enkripsi</string>
+    <string name="signup_password_restrictions">Kata sandi harus setidaknya 8 karakter</string>
+    <string name="signup_title">Masukkan Detail Pendaftaran</string>
+    <string name="setting_up_encryption">Menyiapkan enkripsi</string>
+    <string name="login_view_logs">Lihat log</string>
+    <string name="login_wrong_username_or_password">Tak bisa mengotentikasi (mungkin nama pengguna atau kata sandi salah).
+\nApakah Anda terdaftar\?</string>
+    <string name="login_encryption_extra_info">* Kata sandi ini digunakan untuk mengenkripsi data Anda, bukan yang digunakan untuk masuk ke layanan.
+\nAnda diminta untuk memilih kata sandi enkripsi terpisah untuk alasan keamanan. Untuk informasi lebih lanjut, lihat FAQ di: %s</string>
+    <string name="collection_members_list_loading">Memuat anggota...</string>
+    <string name="collection_members_title">Anggota</string>
+    <string name="use_native_apps_body">EteSync terintegrasi dengan Android, cukup gunakan aplikasi buku alamat dan kalender Anda yang ada!
+\n
+\nUntuk informasi lebih lanjut, silakan lihat panduan pengguna.</string>
+    <string name="members_old_journals_not_allowed">Berbagi jurnal gaya lama tidak diperbolehkan. Untuk berbagi jurnal ini, buat yang baru, dan salin kontennya menggunakan dialog \"impor\". Jika Anda mengalami masalah, silakan hubungi dukungan.</string>
+    <string name="account_showcase_import">Untuk mengimpor kontak dan kalender ke EteSync, Anda perlu mengklik menu, dan memilih \"Impor\".</string>
+    <string name="settings_sync_wifi_only_ssid_message">Masukkan nama jaringan WiFi (SSID) untuk membatasi sinkronisasi ke jaringan ini, atau biarkan kosong untuk semua koneksi WiFi.</string>
+    <string name="settings_sync_wifi_only_ssid_off">Semua koneksi WiFi dapat digunakan</string>
+    <string name="settings_sync_wifi_only_ssid_on">Hanya akan disinkronkan melalui %s</string>
+    <string name="settings_sync_wifi_only_ssid">Pembatasan SSID WiFi</string>
+    <string name="settings_sync_wifi_only_off">Jenis koneksi tidak dipertimbangkan</string>
+    <string name="settings_sync_wifi_only_on">Sinkronisasi dibatasi untuk koneksi WiFi</string>
+    <string name="settings_sync_wifi_only">Sinkronkan melalui WiFi saja</string>
+    <string name="settings_sync_summary_not_available">Tidak tersedia</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s dan segera pada perubahan lokal</string>
+    <string name="settings_sync_summary_manually">Hanya secara manual</string>
+    <string name="debug_info_more_data_shared">Mengklik bagikan akan mengirim data kepada pengembang, serta beberapa informasi debug tambahan, terlampir. Harap dicatat bahwa informasi tersebut mungkin berisi beberapa informasi pribadi.</string>
+    <string name="journal_entries_loading">Memuat entri log perubahan...</string>
+    <string name="journal_entries_list_empty">Koleksi kosong.
+\nMungkin masih menyinkronkan\?</string>
+    <string name="delete_collection_confirm_warning">Koleksi ini (%s) dan semua datanya akan dihapus dari server.</string>
+    <string name="create_addressbook">Buat buku alamat</string>
+    <string name="settings_taskdav">Tugas</string>
+    <string name="settings_caldav">Kalendar</string>
+    <string name="settings_carddav">Kontak</string>
+    <string name="sync_error_journal_readonly">Jurnal read only</string>
+    <string name="sync_error_permission_denied">Izin ditolak: %s</string>
+    <string name="sync_phase_prepare_fetch">Menyiapkan fetch</string>
+    <string name="edit_owner_only_anon">Hanya pemilik koleksi ini yang diperbolehkan mengeditnya.</string>
+    <string name="edit_owner_only">Hanya pemilik koleksi ini (%s) yang diizinkan untuk mengeditnya.</string>
+    <string name="not_allowed_title">Tidak Diizinkan</string>
+    <string name="members_owner_only">Hanya pemilik koleksi ini (%s) yang diizinkan untuk melihat anggotanya.</string>
+    <string name="tasks_not_showing">* Log hanya ditampilkan jika penyedia tugas diinstal.</string>
+    <string name="account_showcase_view_collection">Anda dapat mengklik item untuk melihat koleksi. Dari sana Anda dapat melihat jurnal, impor, dan banyak lagi ...</string>
+    <string name="account_delete_collection_last_text">Menghapus koleksi terakhir tidak diperbolehkan, harap buat yang baru jika Anda ingin menghapus yang ini.</string>
+    <string name="app_settings_force_language">Bahasa Paksa</string>
+    <string name="app_settings_log_verbose">Verbose logging</string>
+    <string name="app_settings_log_to_external_storage_off">Aktifkan untuk menyimpan pesan log ke file</string>
+    <string name="app_settings_log_to_external_storage_on">Nonaktifkan untuk menyembunyikan pemberitahuan dan menghapus log</string>
+    <string name="app_settings_log_to_external_storage">Log ke file</string>
+    <string name="app_settings_debug">Debugging</string>
+    <string name="app_settings_reset_certificates_success">Semua sertifikat kustom telah dibersihkan</string>
+    <string name="app_settings_reset_certificates_summary">Menyetel ulang kepercayaan dari semua sertifikat khusus</string>
+    <string name="app_settings_reset_certificates">Setel ulang sertifikat (tidak) tepercaya</string>
+    <string name="app_settings_distrust_system_certs_off">Sistem dan CA yang ditambahkan pengguna akan dipercaya (disarankan)</string>
+    <string name="app_settings_distrust_system_certs_on">Sistem dan CA yang ditambahkan pengguna tidak akan dipercaya</string>
+    <string name="app_settings_distrust_system_certs">Cabut kepercayaan sertifikat sistem</string>
+    <string name="app_settings_prefer_tasksorg_snack">Anda mungkin perlu menghapus dan menambahkan kembali akun untuk menerapkan perubahan ini.</string>
+    <string name="app_settings_prefer_tasksorg_off">Akan menyinkronkan tugas dengan OpenTasks jika tersedia</string>
+    <string name="app_settings_prefer_tasksorg_on">Akan menyinkronkan tugas dengan Tasks.org jika tersedia</string>
+    <string name="app_settings_reset_hints_summary">Mengaktifkan kembali petunjuk yang ditutup sebelumnya</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">Mengabaikan entri cacat %d (mungkin aman untuk diabaikan).</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Akun Anda telah dimigrasikan.
+\nPastikan semuanya disalin dengan benar, dan hapus akun yang lama setelah selesai.</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Entri yang dimigrasikan %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress">Memigrasi koleksi %d / %d</string>
+    <string name="migrate_v2_wizard_migrate_title">Memigrasi…</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Pastikan Anda memiliki koneksi internet yang baik dan baterai yang cukup karena ini mungkin memakan waktu cukup lama.
+\nUntuk melanjutkan, silakan pilih di bawah ini apakah Anda ingin membuat EteSync 2.0 baru, atau login menggunakan akun yang sudah ada.</string>
+    <string name="migrate_v2_wizard_welcome_body">Alat ini akan membantu memigrasikan data Anda ke EteSync 2.0. Migrasi tidak menghapus data apa pun. Ia hanya menyalin data Anda ke server EteSync 2.0 baru. Ini artinya tidak ada risiko kehilangan data dalam migrasi.</string>
+    <string name="account_wizard_collections_body">Untuk mulai menggunakan EteSync, Anda perlu membuat koleksi untuk menyimpan data Anda. Klik Buat untuk membuat kalender default, buku alamat, dan daftar tugas.</string>
+    <string name="accounts_global_sync_disabled">Sinkronisasi otomatis seluruh sistem dinonaktifkan</string>
+    <string name="change_encryption_password_success_body">Kata sandi enkripsi berhasil diubah!</string>
+    <string name="change_encryption_password_success_title">Perubahan Kata Sandi Enkripsi</string>
+    <string name="change_encryption_password_are_you_sure">Yakin ingin melanjutkan\? Proses ini tidak dapat dihentikan setengah jalan atau dibatalkan, dan mungkin agak lama untuk diselesaikan.</string>
+    <string name="change_encryption_password_new_password">Kata Sandi Enkripsi Baru</string>
+    <string name="show_fingperprint_title">Sidik jari saya</string>
+    <string name="account_tasks_not_showing">* Tidak menyinkronkan tugas (instal penyedia)</string>
+    <string name="sync_phase_prepare_local">Menyiapkan entri lokal</string>
+    <string name="loading">Memuat...</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync menemukan sertifikat yang tidak dikenal. Apakah Anda ingin mempercayainya\?</string>
+    <string name="certificate_notification_connection_security">EteSync: Keamanan koneksi</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">Anda telah diundang ke acara berikut:
+\n
+\n%s
+\nWaktu: %s
+\nTempat: %s
+\nPeserta: %s
+\n
+\n--
+\nDikirim oleh EteSync - sinkronisasi data terenkripsi dan pribadi yang aman dan menyeluruh.
+\nDapatkan di https://www.EteSync.com</string>
+    <string name="sync_journal_readonly_message">Jurnal hanya read only sehingga semua perubahan Anda (%d) telah dikembalikan.</string>
+    <string name="loading_error_title">Galat Pemuatan</string>
+    <string name="notification_channel_description">Notifikasi EteSync</string>
+    <string name="notification_channel_name">EteSync</string>
+    <string name="event_info_organizer">Pengelola:</string>
+    <string name="exception_ioexception">Timbul galat I/O.</string>
+    <string name="exception_httpexception">Timbul galat HTTP.</string>
+    <string name="exception">Telah terjadi kesalahan.</string>
+    <string name="debug_info_title">Info debug</string>
+    <string name="sync_error_local_storage">Database error saat %s</string>
+    <string name="sync_error_unavailable">Tidak dapat terhubung ke server ketika %s</string>
+    <string name="sync_error_http_dav">Galat server saat %s</string>
+    <string name="sync_error_integrity">Galat integritas saat %s</string>
+    <string name="sync_error">Galat saat %s</string>
+    <string name="sync_error_tasks">Sinkronisasi tugas gagal (%s)</string>
+    <string name="sync_error_contacts">Sinkronisasi kontak gagal (%s)</string>
+    <string name="sync_error_calendar">Sinkronisasi kalender gagal (%s)</string>
+    <string name="sync_error_generic">Sinkronisasi gagal (%s)</string>
+    <string name="sync_error_permissions_text">Izin tambahan harus diisi</string>
+    <string name="sync_error_permissions">Izin EteSync</string>
+    <string name="sync_phase_journals">menyinkronkan jurnal</string>
+    <string name="sync_phase_prepare">Menyiapkan sinkronisasi</string>
+    <string name="use_native_apps_title">Tahukah kamu\?</string>
+    <string name="change_journal_title">Ganti jurnal</string>
+    <string name="app_settings_show_debug_info">Tampilkan info debug</string>
+    <string name="app_settings_log_verbose_summary">Log Verbose mungkin berisi informasi privat</string>
+    <string name="app_settings_show_debug_info_details">Lihat/bagikan detail perangkat lunak dan konfigurasi</string>
+    <string name="app_settings_sync">Sinkron</string>
+    <string name="app_settings_reset_hints_success">Semua petunjuk akan ditampilkan lagi</string>
+    <string name="migrate_v2_wizard_welcome_title">Migrasi EteSync 2.0</string>
+    <string name="app_settings_force_language_default">Otomatis</string>
+    <string name="app_settings_prefer_tasksorg">Pilih Tasks.org sebagai penyedia tugas</string>
+    <string name="app_settings_override_proxy_port">Port proksi HTTP</string>
+    <string name="app_settings_override_proxy_host">Nama host proksi HTTP</string>
+    <string name="app_settings_override_proxy_off">Gunakan pengaturan proxy default sistem</string>
+    <string name="app_settings_override_proxy_on">Gunakan pengaturan proksi kustom</string>
+    <string name="app_settings_override_proxy">Ganti pengaturan proksi</string>
+    <string name="app_settings_connection">Koneksi</string>
+    <string name="app_settings_change_notification">Tampilkan pemberitahuan perubahan</string>
+    <string name="accounts_showcase_add">Anda perlu menambahkan akun untuk menggunakan EteSync. Klik di sini untuk menambahkannya...</string>
+    <string name="account_synchronizing_now">Menyinkronkan sekarang</string>
+    <string name="account_synchronize_now">Sinkronisasi sekarang</string>
+    <string name="account_wizard_collections_title">Selamat datang di EteSync!</string>
+    <string name="accounts_missing_permissions">Izin hilang: %s</string>
+    <string name="account_settings">Pengaturan akun</string>
+    <string name="accounts_global_sync_enable">Aktifkan</string>
+    <string name="account_click_install_tasks">Klik di sini untuk memasang OpenTasks!</string>
+    <string name="app_settings_security">Keamanan</string>
+    <string name="exception_show_details">Tampilkan detil</string>
+    <string name="create_tasklist_display_name_hint">Daftar tugas saya</string>
+    <string name="create_tasklist">Buat daftar tugas</string>
+    <string name="create_calendar_display_name_hint">Kalendar saya</string>
+    <string name="create_calendar">Buat kalendar</string>
+    <string name="create_addressbook_display_name_hint">Buku alamat saya</string>
+    <string name="delete_collection_confirm_title">Anda yakin\?</string>
+    <string name="delete_collection">Hapus</string>
+    <string name="create_collection_create">Simpan</string>
+    <string name="view_collection_members">Atur Anggota</string>
+    <string name="view_collection_import">Impor</string>
+    <string name="view_collection_edit">Sunting</string>
+    <string name="create_collection_description">Deskripsi (opsional):</string>
+    <string name="create_collection_display_name_required">Judul harus diisi</string>
+    <string name="create_collection_display_name">Nama tampilan (judul) koleksi ini:</string>
+    <string name="create_collection_creating">Membuat koleksi</string>
+    <string name="create_collection_color">Atur warna koleksi</string>
+    <string name="edit_collection">Sunting koleksi</string>
+    <string name="install_opentasks">Pasang OpenTasks</string>
+    <string name="install_tasksorg">Pasang Tasks.org</string>
+    <string name="delete_collection_deleting_collection">Menghapus koleksi</string>
+    <string name="import_dialog_title">Impor</string>
+    <string name="login_user_info_error_title">Galat Saat Menyetel Info Pengguna</string>
+    <string name="login_password_required">Kata sandi diperlukan</string>
+    <string name="login_signup">Daftar</string>
+    <string name="login_login">Masuk</string>
+    <string name="login_service_details_description">Ini adalah kata sandi login Anda, *bukan* kata sandi enkripsi Anda!</string>
+    <string name="login_encryption_account_label">Akun:</string>
+    <string name="login_enter_encryption_details">Sandi Enkripsi Rahasia</string>
+    <string name="login_enter_service_details">Masukkan Detail Login</string>
+    <string name="login_back">Kembali</string>
+    <string name="login_finish">Selesai</string>
+    <string name="login_forgot_password">Lupa kata sandi\?</string>
+    <string name="account_owner">Pemilik: %s</string>
+    <string name="setting_up_encryption_content">Harap tunggu, sedang mengatur enkripsi…</string>
+    <string name="sync_calendar_attendees_email_subject" formatted="false">Undangan: %s @ %s</string>
+    <string name="calendar_attendees_send_email_action">Kirim undangan</string>
+    <string name="sync_calendar_attendees_notification_content">Kirim undangan ke tamu\?</string>
+    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_error_unauthorized">Autentikasi gagal</string>
+    <string name="sync_phase_post_processing">pasca pemrosesan</string>
+    <string name="sync_phase_push_entries">mendorong entri</string>
+    <string name="sync_phase_apply_local_entries">menerapkan ulang entri lokal</string>
+    <string name="sync_phase_apply_remote_entries">menerapkan entri jarak jauh</string>
+    <string name="sync_phase_fetch_entries">mengambil entri jarak jauh</string>
+    <string name="sync_phase_create_local_entries">Membuat entri lokal</string>
+    <string name="sync_successfully_calendar" formatted="false">Kalender \"%s\" diubah (%s)</string>
+    <string name="sync_error_user_inactive">Pengguna tidak aktif</string>
+    <string name="sync_journal_readonly">Jurnal \"%s\" hanya baca</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s diperbarui.
+\n%s dihapus.</string>
+    <string name="sync_successfully_modified" formatted="false">%s diubah.</string>
+    <string name="sync_successfully_tasks" formatted="false">Tugas \"%s\" diubah (%s)</string>
+    <string name="sync_successfully_contacts" formatted="false">Kontak diubah (%s)</string>
+    <string name="wrong_encryption_password">Kata sandi enkripsi salah</string>
+    <string name="account_creation_failed">Gagal membuat akun</string>
+    <string name="account_delete_collection_last_title">Tidak dapat menghapus koleksi terakhir</string>
+    <string name="account_delete_confirmation_text">Semua salinan lokal dari buku alamat, kalender dan daftar tugas akan dihapus.</string>
+    <string name="account_delete_confirmation_title">Yakin ingin menghapus akun\?</string>
+    <string name="account_show_fingerprint">Tampilkan sidik jari</string>
+    <string name="account_delete">Hapus akun</string>
+    <string name="navigation_drawer_subtitle">Adaptor Sinkronisasi Aman</string>
 </resources>
