@@ -94,4 +94,17 @@
     <string name="skip">Пропустить</string>
     <string name="create">Создать</string>
     <string name="account_title_address_book">Адресная книга EteSync</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Ваш аккаунт перенесли.
+\nПожалуйста, убедитесь, что все было скопировано правильно, и удалите вашу старую учетную запись, как только это будет сделано.</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Перенесенные записи %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress">Перемещение коллекции %d/%d</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Пожалуйста, убедитесь, что у вас есть достаточное количество батареи и надежное подключение к Интернету, так как это может занять некоторое время.
+\nДля продолжения, пожалуйста, выберите ниже, хотите ли Вы зарегистрироваться в новой учетной записи EteSync 2.0 или войти, используя существующую.</string>
+    <string name="migrate_v2_wizard_migrate_title">Миграция…</string>
+    <string name="migrate_v2_wizard_welcome_body">Этот инструмент поможет вам перенести данные на EteSync 2.0. При миграции данные не удаляются. Он только копирует данные на новый сервер EteSync 2.0. Это означает, что при переносе нет риска потери данных.</string>
+    <string name="migrate_v2_wizard_welcome_title">Миграция EteSync 2.0</string>
+    <string name="account_wizard_collections_body">Для того, чтобы начать использовать EteSync, необходимо создать коллекции для хранения данных. Нажмите кнопку Создать, чтобы создать календарь по умолчанию, адресную книгу и список задач для вас.</string>
+    <string name="account_wizard_collections_title">Добро пожаловать в EteSync!</string>
+    <string name="accounts_missing_permissions">Отсутствующие разрешения: %s</string>
+    <string name="accounts_showcase_add">Для использования EteSync необходимо добавить аккаунт. Нажмите здесь, чтобы добавить один...</string>
 </resources>
