@@ -66,8 +66,8 @@
     <string name="permissions_opentasks_request">请求 OpenTasks 权限</string>
     <!--AddAccountActivity-->
     <string name="login_title">增加账户</string>
-    <string name="login_email_address">Email 地址</string>
-    <string name="login_email_address_error">需要有效的 Email 地址</string>
+    <string name="login_email_address">电子邮件</string>
+    <string name="login_email_address_error">需要有效的电子邮件</string>
     <string name="login_password">密码</string>
     <string name="login_password_required">请输入密码</string>
     <string name="login_back">返回</string>
