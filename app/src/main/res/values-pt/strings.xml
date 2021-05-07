@@ -115,7 +115,7 @@
     <string name="loading">A carregar...</string>
     <string name="loading_error_content">Atualizar</string>
     <string name="open_url_no_activity">Falha ao abrir link:o link não é compatível!</string>
-    <string name="import_button_file">De arquivo</string>
+    <string name="import_button_file">De ficheiro</string>
     <string name="import_select_account">Selecionar conta</string>
     <string name="event_info_organizer">Organizador:</string>
     <string name="notification_channel_name">EteSync</string>
@@ -133,7 +133,7 @@
     <string name="login_username">Nome de utilizador(a)</string>
     <string name="login_username_error">O nome de utilizador deve ter pelo menos 6 caracteres e consistir apenas de letras, dígitos e ./-/_.</string>
     <string name="signup_title">Insira os detalhes de inscrição</string>
-    <string name="signup_password_restrictions">A senha deve ter pelo menos 8 caracteres</string>
+    <string name="signup_password_restrictions">A palavra-passe deve ter pelo menos 8 caracteres</string>
     <string name="sync_error_generic">Falha de sincronização (%s)</string>
     <string name="sync_error_permission_denied">Permissão negada: %s</string>
     <string name="account_wizard_collections_body">Para começar o usar o EteSync, deve criar coleções para armazenar os seus dados. Clique em Criar para definir um calendário padrão, um livro de endereços e uma lista de tarefas.</string>
@@ -246,13 +246,13 @@
 \nPara mais informações, consulte o manuel do utilizador.</string>
     <string name="import_permission_required">Permissão de leitura de armazenamento necessária para importação.</string>
     <string name="import_dialog_adding_entries">A adicionar registos...</string>
-    <string name="import_dialog_loading_file">A carregar arquivo (poderá demorar)...</string>
+    <string name="import_dialog_loading_file">A carregar ficheiro (poderá demorar)...</string>
     <string name="import_dialog_failed_body">Reason: %s
 \nReportar à equipa de desenvolvimento\?</string>
     <string name="import_dialog_failed_title">Importação falhou</string>
     <string name="import_dialog_title">Importar</string>
     <string name="login_user_info_error_title">Error ao definir detalhes do utilizador</string>
-    <string name="change_encryption_password_success_body">A senha de encriptação foi alterada com sucesso!</string>
+    <string name="change_encryption_password_success_body">A palavra-passe de encriptação foi alterada com sucesso!</string>
     <string name="change_encryption_password_are_you_sure">Pretende continuar\? Este processo não pode ser interrompido nem revertido e poderá demorar um pouco a concluir.</string>
     <string name="change_encryption_password_new_password">Nova senha de encriptação</string>
     <string name="change_encryption_password_title">Alterar senha de encriptação</string>
@@ -270,7 +270,7 @@
     <string name="login_signup">Registar-se</string>
     <string name="login_login">Iniciar sessão</string>
     <string name="login_encryption_enter_password">Está logado como \"%s\". Por favor digite a senha de encriptação para continuar, ou faça logout no menu lateral.</string>
-    <string name="login_encryption_set_new_password">Por favor defina a sua senha de encriptação abaixo e certifique-se de que está correta, porque *não* poderá ser recuperada se perdida!</string>
+    <string name="login_encryption_set_new_password">Por favor, define a sua palavra-passe de encriptação abaixo e certifique-se de que está correta, porque *não* poderá ser recuperada se perdida!</string>
     <string name="login_encryption_password">Senha de encriptação</string>
     <string name="login_toggle_advanced">Mostrar configurações avançadas</string>
     <string name="login_custom_server_error">URL inválido, esqueceu de incluir https://\?</string>
