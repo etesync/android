@@ -88,6 +88,7 @@
   <string-array name="settings_sync_interval_names">
     <item>Manuális</item>
     <item>15 percenként</item>
+    <item>30 percenként</item>
     <item>Óránként</item>
     <item>2 óránként</item>
     <item>4 óránként</item>

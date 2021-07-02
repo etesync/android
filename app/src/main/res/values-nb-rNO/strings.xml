@@ -240,6 +240,7 @@
     <string-array name="settings_sync_interval_names">
         <item>Bare manuelt</item>
         <item>Hvert 15. minutt</item>
+        <item>Hvert 30. minutt</item>
         <item>Hver time</item>
         <item>Annenhver time</item>
         <item>Hver 4. time</item>
