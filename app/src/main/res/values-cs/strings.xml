@@ -88,6 +88,7 @@
   <string-array name="settings_sync_interval_names">
     <item>Pouze manuálně</item>
     <item>Každých 15 minut</item>
+    <item>Každých 30 minut</item>
     <item>Každou hodinu</item>
     <item>Každé 2 hodiny</item>
     <item>Každé 4 hodiny</item>

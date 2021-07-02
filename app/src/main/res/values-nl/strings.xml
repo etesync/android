@@ -82,6 +82,7 @@
     <string-array name="settings_sync_interval_names">
         <item>Alleen handmatig</item>
         <item>Elke 15 minuten</item>
+        <item>Elke 30 minuten</item>
         <item>Elk uur</item>
         <item>Elke 2 uur</item>
         <item>Elke 4 uur</item>

@@ -88,6 +88,7 @@
   <string-array name="settings_sync_interval_names">
     <item>手動のみ</item>
     <item>15 分ごと</item>
+    <item>30 分ごと</item>
     <item>1 時間ごと</item>
     <item>2 時間ごと</item>
     <item>4 時間ごと</item>

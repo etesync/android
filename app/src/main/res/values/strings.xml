@@ -316,6 +316,7 @@
     <string-array name="settings_sync_interval_seconds" translateable="false">
         <item>-1</item>
         <item>900</item>
+        <item>1800</item>
         <item>3600</item>
         <item>7200</item>
         <item>14400</item>
@@ -324,6 +325,7 @@
     <string-array name="settings_sync_interval_names">
         <item>Only manually</item>
         <item>Every 15 minutes</item>
+        <item>Every 30 minutes</item>
         <item>Every hour</item>
         <item>Every 2 hours</item>
         <item>Every 4 hours</item>

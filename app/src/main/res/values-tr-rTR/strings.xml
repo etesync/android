@@ -75,6 +75,7 @@
     <string-array name="settings_sync_interval_names">
         <item>Sadece elle</item>
         <item>Her 15 dakikada bir</item>
+        <item>Her 30 dakikada bir</item>
         <item>Her saatte bir</item>
         <item>Her 2 saatte bir</item>
         <item>Her 4 saatte bir</item>
