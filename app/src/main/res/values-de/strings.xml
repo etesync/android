@@ -34,7 +34,7 @@
     <string name="navigation_drawer_guide">Benutzerhandbuch</string>
     <string name="navigation_drawer_report_issue">Fehler melden</string>
     <string name="navigation_drawer_contact">Entwickler kontaktieren</string>
-    <string name="account_list_empty">Willkommen bei EteSync!\n\nFügen Sie ein Konto hinzu, um zu beginnen.</string>
+    <string name="account_list_empty">Willkommen bei EteSync!</string>
     <!-- AccountUpdateService -->
     <!-- AppSettingsActivity -->
     <string name="app_settings">Einstellungen</string>
@@ -84,10 +84,10 @@
     <!-- AddAccountActivity -->
     <string name="login_title">Konto hinzufügen</string>
     <string name="login_email_address">E-Mail-Adresse</string>
-    <string name="login_email_address_error">Gültige E-Mail-Adresse benötigt</string>
+    <string name="login_email_address_error">Gültige E-Mail erforderlich</string>
     <string name="login_password">Passwort</string>
     <string name="login_encryption_password">Verschlüsselungs-Passwort</string>
-    <string name="login_encryption_check_password">* Bitte überprüfen Sie das Passwort mehrfach, da es nicht geändert werden kann, sollte es falsch sein.</string>
+    <string name="login_encryption_check_password">* Bitte stellen Sie sicher, dass Sie sich Ihr Passwort merken, da es bei Verlust nicht wiederhergestellt werden kann!</string>
     <string name="login_password_required">Passwort benötigt</string>
     <string name="login_login">Anmelden</string>
     <string name="login_signup">Registrieren</string>
@@ -99,7 +99,8 @@
     <string name="login_service_details_description">Dies ist Ihr Anmelde-Passwort, *nicht* Ihr Verschlüsselungs-Passwort!</string>
     <string name="login_configuration_detection">Ressourcen-Erkennung</string>
     <string name="login_querying_server">Serverinformationen werden abgerufen. Bitte warten …</string>
-    <string name="login_wrong_username_or_password">Authentifizierung fehlgeschlagen (vermutlich aufgrund eines falschen Nutzernamens oder Passworts).</string>
+    <string name="login_wrong_username_or_password">Konnte nicht authentifiziert werden (wahrscheinlich falscher Benutzername oder falsches Passwort).
+\nHaben Sie sich registriert\?</string>
     <string name="login_view_logs">Logs anzeigen</string>
     <string name="setting_up_encryption">Verschlüsselung einstellen</string>
     <string name="setting_up_encryption_content">Bitte warten, Verschlüsselung wird eingestellt…</string>
@@ -182,11 +183,177 @@
     <string name="sync_error_user_inactive">Nutzer ist inaktiv</string>
     <!-- Calendar invites -->
     <string name="sync_calendar_attendees_notification_content">Einladungen an Gäste versenden?</string>
-    <string name="calendar_attendees_send_email_action">Versende Einladungen</string>
+    <string name="calendar_attendees_send_email_action">Einladungen senden</string>
     <string name="sync_calendar_attendees_email_subject" formatted="false">Einladung: %s @ %s</string>
     <string name="sync_calendar_attendees_email_content" formatted="false">Sie wurden zu folgender Veranstaltung eingeladen:\n\n%s\nWann: %s\nWo: %s\nTeilnehmer: %s\n\n--\nGesendet mit EteSync - sichere, Ende-zu-Ende verschlüsselte und private Datensynchronisation.\nErhältlich unter https://www.EteSync.com</string>
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Verbindungs-Sicherheit</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync hat ein unbekanntes Zertifikat vorgefunden. Wollen Sie ihm vertrauen?</string>
     <string name="app_settings_log_verbose">Ausführliche Protokollierung</string>
+    <string name="tasks_not_showing">* Das Protokoll wird nur angezeigt, wenn ein Aufgabenanbieter installiert ist.</string>
+    <string name="account_tasks_not_showing">* Aufgaben werden nicht synchronisiert (installieren Sie einen Anbieter)</string>
+    <string name="app_settings_prefer_tasksorg_off">Synchronisiert Aufgaben mit OpenTasks, falls verfügbar</string>
+    <string name="app_settings_prefer_tasksorg_on">Synchronisiert Aufgaben mit Tasks.org, falls verfügbar</string>
+    <string name="app_settings_prefer_tasksorg">Aufgabenanbieter Tasks.org bevorzugen</string>
+    <string name="app_settings_sync">Synchronisation</string>
+    <string name="startup_vendor_specific_bugs_open_faq">FAQ öffnen</string>
+    <string name="app_name">EteSync</string>
+    <string name="notification_channel_description">EteSync-Benachrichtigungen</string>
+    <string name="notification_channel_name">EteSync</string>
+    <string name="event_info_organizer">Organisator:</string>
+    <string name="import_select_account">Konto auswählen</string>
+    <string name="import_button_local">Von Konto</string>
+    <string name="import_button_file">Aus Datei</string>
+    <string name="open_url_no_activity">Öffnen des Links ist fehlgeschlagen: Link wird nicht unterstützt!</string>
+    <string name="loading_error_title">Ladefehler</string>
+    <string name="loading">Wird geladen ...</string>
+    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_journal_readonly_message">Das Journal ist nur lesbar, daher wurden alle Ihre Änderungen (%d) rückgängig gemacht.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s aktualisiert.
+\n%s gelöscht.</string>
+    <string name="sync_successfully_modified" formatted="false">%s geändert.</string>
+    <string name="sync_successfully_contacts" formatted="false">Kontakte geändert (%s)</string>
+    <string name="sync_error_permission_denied">Berechtigung verweigert: %s</string>
+    <string name="sync_error_journal_readonly">Journal ist nur lesbar</string>
+    <string name="sync_error_tasks">Aufgaben-Synchronisation fehlgeschlagen (%s)</string>
+    <string name="sync_error_generic">Synchronisation fehlgeschlagen (%s)</string>
+    <string name="journal_entries_loading">Änderungsprotokolleinträge werden geladen ...</string>
+    <string name="journal_entries_list_empty">Sammlung ist leer.
+\nVielleicht wird es noch synchronisiert\?</string>
+    <string name="view_collection_members">Mitglieder verwalten</string>
+    <string name="view_collection_import">Importieren</string>
+    <string name="view_collection_edit">Bearbeiten</string>
+    <string name="edit_collection">Sammlung bearbeiten</string>
+    <string name="install_opentasks">OpenTasks installieren</string>
+    <string name="install_tasksorg">Tasks.org installieren</string>
+    <string name="create_tasklist_display_name_hint">Meine Aufgabenliste</string>
+    <string name="create_tasklist">Aufgabenliste erstellen</string>
+    <string name="settings_taskdav">Aufgaben</string>
+    <string name="settings_sync_interval">Synchronisationsintervall</string>
+    <string name="settings_manage_account">Konto verwalten</string>
+    <string name="choose_file">Datei auswählen</string>
+    <string name="import_account_top_notice">Bitte wählen Sie ein Konto aus, von dem alle Einträge importiert werden sollen.</string>
+    <string name="import_dialog_success">%1$d Einträge verarbeitet.
+\nHinzugefügt: %2$d
+\nGeändert: %3$d
+\nÜbersprungen (fehlgeschlagen): %4$d</string>
+    <string name="import_dialog_adding_entries">Einträge werden hinzugefügt ...</string>
+    <string name="import_dialog_loading_file">Datei wird geladen (kann eine Weile dauern) ...</string>
+    <string name="import_dialog_failed_body">Grund: %s
+\nAn Entwickler melden\?</string>
+    <string name="import_dialog_failed_title">Importieren fehlgeschlagen</string>
+    <string name="import_dialog_title">Importieren</string>
+    <string name="login_user_info_error_title">Fehler beim Festlegen der Benutzerinformationen</string>
+    <string name="change_encryption_password_success_body">Das Verschlüsselungspasswort wurde erfolgreich geändert!</string>
+    <string name="change_encryption_password_are_you_sure">Sind Sie sicher, dass Sie fortfahren möchten\? Der Vorgang kann nicht auf halbem Weg gestoppt oder rückgängig gemacht werden und kann eine Weile dauern, bis er abgeschlossen ist.</string>
+    <string name="change_encryption_password_new_password">Neues Verschlüsselungspasswort</string>
+    <string name="change_encryption_password_title">Verschlüsselungspasswort ändern</string>
+    <string name="signup_password_restrictions">Das Passwort sollte mindestens 8 Zeichen lang sein</string>
+    <string name="signup_title">Registrierungsdetails eingeben</string>
+    <string name="wrong_encryption_password">Falsches Verschlüsselungspasswort</string>
+    <string name="account_creation_failed">Kontoerstellung fehlgeschlagen</string>
+    <string name="login_forgot_password">Passwort vergessen\?</string>
+    <string name="login_encryption_extra_info">* Dieses Passwort wird zur Verschlüsselung Ihrer Daten verwendet, im Gegensatz zum vorherigen, das zur Anmeldung beim Dienst verwendet wird.
+\nAus Sicherheitsgründen werden Sie aufgefordert, ein separates Verschlüsselungspasswort auszuwählen. Weitere Informationen finden Sie in den FAQ unter: %s</string>
+    <string name="login_encryption_set_new_password">Bitte legen Sie Ihr Verschlüsselungspasswort unten fest, und stellen Sie sicher, dass Sie es richtig eingegeben haben, da es bei Verlust *nicht* wiederhergestellt werden kann!</string>
+    <string name="login_toggle_advanced">Erweiterte Einstellungen anzeigen</string>
+    <string name="login_custom_server_error">Ungültige URL gefunden, haben Sie vergessen, https:// anzugeben\?</string>
+    <string name="login_custom_server">EteSync-Server-URL</string>
+    <string name="login_username_error">Der Benutzername sollte mindestens 6 Zeichen lang sein und nur aus Buchstaben, Ziffern und ./-/_ bestehen.</string>
+    <string name="login_username">Benutzername</string>
+    <string name="permissions_tasks_org_request">Tasks.org-Berechtigungen anfordern</string>
+    <string name="permissions_tasks_org_details">Um Aufgaben mit Ihren lokalen Aufgabenlisten zu synchronisieren, muss EteSync auf Tasks.org zugreifen.</string>
+    <string name="permissions_tasks_org">Tasks.org-Berechtigungen</string>
+    <string name="journal_item_restore_dialog_body">Der Eintrag wurde erfolgreich in den vorherigen Zustand wiederhergestellt.</string>
+    <string name="journal_item_restore_action">Zustand wiederherstellen</string>
+    <string name="journal_item_member_count">Mitgliederanzahl</string>
+    <string name="journal_item_member">Mitglied</string>
+    <string name="journal_item_relation">Beziehung</string>
+    <string name="journal_item_birthday">Geburtstag</string>
+    <string name="journal_item_anniversary">Jubiläum</string>
+    <string name="journal_item_website">Webseite</string>
+    <string name="journal_item_note">Hinweis</string>
+    <string name="journal_item_address">Adresse</string>
+    <string name="journal_item_nickname">Spitzname</string>
+    <string name="journal_item_impp">Sofortnachrichten</string>
+    <string name="journal_item_organization">Organisation</string>
+    <string name="journal_item_email">E-Mail</string>
+    <string name="journal_item_phone">Telefon</string>
+    <string name="journal_item_reminders">Erinnerungen</string>
+    <string name="journal_item_attendees">Teilnehmer</string>
+    <string name="journal_item_tab_raw">Roh</string>
+    <string name="journal_item_tab_revisions">Revisionen</string>
+    <string name="about">Über</string>
+    <string name="invitations_reject">Ablehnen</string>
+    <string name="invitations_accept">Annehmen</string>
+    <string name="invitations_accept_reject_dialog">Möchten Sie die Einladung annehmen oder ablehnen\?</string>
+    <string name="invitations_list_empty">Keine Einladungen</string>
+    <string name="invitations_loading">Einladungen werden geladen ...</string>
+    <string name="invitations_title">Einladungen</string>
+    <string name="collection_members_leave">Verlassen</string>
+    <string name="collection_members_remove_title">Mitglied entfernen</string>
+    <string name="collection_members_remove_error">Fehler beim Entfernen eines Mitglieds</string>
+    <string name="collection_members_removing">Mitglied wird entfernt</string>
+    <string name="collection_members_error_user_not_found">Benutzer (%s) nicht gefunden</string>
+    <string name="trust_fingerprint_body">Überprüfen Sie den Sicherheitsfingerabdruck von %s, um sicherzustellen, dass die Verschlüsselung sicher ist.</string>
+    <string name="trust_fingerprint_title">Sicherheitsfingerabdruck verifizieren</string>
+    <string name="collection_members_add_success">Einladung gesendet. Der Benutzer wird hinzugefügt, sobald die Einladung angenommen wurde.</string>
+    <string name="collection_members_adding">Benutzer wird eingeladen</string>
+    <string name="collection_members_add_error">Fehler beim Hinzufügen eines Mitglieds</string>
+    <string name="collection_members_add_read_only">Nur lesen</string>
+    <string name="collection_members_add">Benutzer einladen</string>
+    <string name="collection_members_list_empty">Keine Mitglieder</string>
+    <string name="collection_members_list_loading">Mitglieder werden geladen ...</string>
+    <string name="collection_members_title">Mitglieder</string>
+    <string name="use_native_apps_title">Wussten Sie schon\?</string>
+    <string name="edit_owner_only_anon">Nur der Eigentümer dieser Sammlung darf sie bearbeiten.</string>
+    <string name="edit_owner_only">Nur der Eigentümer dieser Sammlung (%s) darf sie bearbeiten.</string>
+    <string name="not_allowed_title">Nicht erlaubt</string>
+    <string name="members_owner_only">Nur der Eigentümer dieser Sammlung (%s) darf ihre Mitglieder sehen.</string>
+    <string name="account_owner">Eigentümer: %s</string>
+    <string name="change_journal_title">Journal ändern</string>
+    <string name="show_fingperprint_title">Mein Fingerabdruck</string>
+    <string name="account_click_install_tasks">Klicken Sie hier, um OpenTasks zu installieren!</string>
+    <string name="account_showcase_view_collection">Sie können auf ein Element klicken, um die Sammlung anzusehen. Von dort aus können Sie das Journal ansehen, importieren und vieles mehr ...</string>
+    <string name="account_show_fingerprint">Fingerabdruck anzeigen</string>
+    <string name="app_settings_change_notification">Änderungsbenachrichtigungen anzeigen</string>
+    <string name="app_settings_force_language_default">Automatisch</string>
+    <string name="app_settings_force_language">Sprache erzwingen</string>
+    <string name="app_settings_log_verbose_summary">Ausführliche Protokolle können private Informationen enthalten</string>
+    <string name="app_settings_prefer_tasksorg_snack">Möglicherweise müssen Sie Ihr Konto entfernen und neu hinzufügen, damit diese Änderungen wirksam werden.</string>
+    <string name="app_settings_notification_settings_summary">Verwalten von Benachrichtigungskanälen und deren Einstellungen</string>
+    <string name="app_settings_notification_settings">Benachrichtigungseinstellungen</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">%d fehlerhafte Einträge ignoriert (wahrscheinlich sicher zu ignorieren).</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Ihr Konto wurde migriert.
+\nBitte überprüfen Sie, ob alles korrekt kopiert wurde, und entfernen Sie Ihr altes Konto, sobald dies geschehen ist.</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Migrierte Einträge %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress">Sammlung %d/%d wird migriert</string>
+    <string name="migrate_v2_wizard_migrate_title">Wird migriert …</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Bitte stellen Sie sicher, dass Sie eine gute Internetverbindung und genügend Akku haben, da dies eine Weile dauern kann.
+\nUm fortzufahren, wählen Sie bitte unten, ob Sie sich für ein neues EteSync 2.0-Konto registrieren oder mit einem bestehenden Konto anmelden möchten.</string>
+    <string name="migrate_v2_wizard_welcome_body">Mit diesem Werkzeug können Sie Ihre Daten auf EteSync 2.0 migrieren. Bei der Migration werden keine Daten gelöscht. Es werden lediglich Ihre Daten auf den neuen EteSync 2.0 Server kopiert. Somit besteht bei der Migration kein Risiko eines Datenverlustes.</string>
+    <string name="migrate_v2_wizard_welcome_title">EteSync 2.0 Migration</string>
+    <string name="account_wizard_collections_body">Um mit der Nutzung von EteSync zu beginnen, müssen Sie Sammlungen zum Speichern Ihrer Daten erstellen. Klicken Sie auf Erstellen, um einen Standardkalender, ein Adressbuch und eine Aufgabenliste für Sie zu erstellen.</string>
+    <string name="account_wizard_collections_title">Willkommen bei EteSync!</string>
+    <string name="accounts_missing_permissions">Fehlende Berechtigungen: %s</string>
+    <string name="accounts_showcase_add">Sie müssen ein Konto hinzufügen, um EteSync verwenden zu können. Klicken Sie hier, um eines hinzuzufügen ...</string>
+    <string name="accounts_global_sync_enable">Aktivieren</string>
+    <string name="accounts_global_sync_disabled">Systemweite automatische Synchronisation ist deaktiviert</string>
+    <string name="tourguide_title">Wussten Sie schon\?</string>
+    <string name="crash_email_body">Wenn möglich, fügen Sie bitte weitere relevante Informationen bei, z. B. was Sie getan haben, um diesen Fehler auszulösen.</string>
+    <string name="crash_message">Bitte senden Sie die Stapelrückverfolgung an die Entwickler.</string>
+    <string name="crash_title">EteSync ist abgestürzt!</string>
+    <string name="notification_channel_sync_status">Statusmeldungen</string>
+    <string name="notification_channel_sync_warnings_desc">Nicht schwerwiegende Synchronisationsprobleme wie verworfene Änderungen von schreibgeschützten Sammlungen</string>
+    <string name="notification_channel_sync_warnings">Synchronisationswarnungen</string>
+    <string name="notification_channel_sync_errors_desc">Wichtige Fehler, die die Synchronisation stoppen, wie unerwartete Serverantworten</string>
+    <string name="notification_channel_sync_errors">Synchronisationsfehler</string>
+    <string name="notification_channel_sync">Synchronisation</string>
+    <string name="notification_channel_general">Andere wichtige Meldungen</string>
+    <string name="notification_channel_crash_reports">Absturzberichte</string>
+    <string name="retry">Wiederholen</string>
+    <string name="skip">Überspringen</string>
+    <string name="create">Erstellen</string>
+    <string name="address_books_authority_title">Adressbücher</string>
+    <string name="account_title_address_book">EteSync Adressbuch</string>
 </resources>

@@ -1,37 +1,334 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
-  <string name="help">Ajuda</string>
-  <!--startup dialogs-->
-  <!--AboutActivity-->
-  <!--global settings-->
-  <!--AccountsActivity-->
-  <!--AccountUpdateService-->
-  <!--AppSettingsActivity-->
-  <!--AccountActivity-->
-  <!--PermissionsActivity-->
-  <!--AddAccountActivity-->
-  <!--AccountSettingsActivity-->
-  <string name="settings_authentication">Autenticação</string>
-  <string name="settings_password">Senha</string>
-  <string name="settings_enter_password">Informe sua senha:</string>
-  <string name="settings_sync">Sincronização</string>
-  <string name="settings_sync_interval_contacts">Intervalo de sincronização dos contatos</string>
-  <string name="settings_sync_summary_manually">Manualmente apenas</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + imediatamente em alterações locais</string>
-  <string name="settings_sync_summary_not_available">Não avaliado</string>
-  <string name="settings_sync_interval_calendars">Intervalo de sincronização do calendário</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Apenas manualmente</item>
-    <item>A cada 15 minutos</item>
-    <item>A cada 30 minutos</item>
-    <item>A cada hora</item>
-    <item>A cada 2 horas</item>
-    <item>A cada 4 horas</item>
-    <item>Diáriamente</item>
-  </string-array>
-  <!--collection management-->
-  <!--ExceptionInfoFragment-->
-  <!--sync errors and DebugInfoActivity-->
-  <!--cert4android-->
+    <!--common strings-->
+    <string name="help">Ajuda</string>
+    <!--startup dialogs-->
+    <!--AboutActivity-->
+    <!--global settings-->
+    <!--AccountsActivity-->
+    <!--AccountUpdateService-->
+    <!--AppSettingsActivity-->
+    <!--AccountActivity-->
+    <!--PermissionsActivity-->
+    <!--AddAccountActivity-->
+    <!--AccountSettingsActivity-->
+    <string name="settings_authentication">Autenticação</string>
+    <string name="settings_password">Senha</string>
+    <string name="settings_enter_password">Introduza a sua palavra-passe:</string>
+    <string name="settings_sync">Sincronização</string>
+    <string name="settings_sync_interval_contacts">Intervalo de sincronização dos contatos</string>
+    <string name="settings_sync_summary_manually">Manualmente apenas</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + imediatamente em alterações locais</string>
+    <string name="settings_sync_summary_not_available">Não avaliado</string>
+    <string name="settings_sync_interval_calendars">Intervalo de sincronização do calendário</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Apenas manualmente</item>
+        <item>A cada 15 minutos</item>
+        <item>A cada hora</item>
+        <item>A cada 2 horas</item>
+        <item>A cada 4 horas</item>
+        <item>Diáriamente</item>
+    </string-array>
+    <!--collection management-->
+    <!--ExceptionInfoFragment-->
+    <!--sync errors and DebugInfoActivity-->
+    <!--cert4android-->
+    <string name="settings_sync_wifi_only">Sincronizar apenas via WiFi</string>
+    <string name="settings_sync_wifi_only_on">Sincronização restrita a conexões WiFi</string>
+    <string name="settings_sync_wifi_only_off">O tipo de ligação não tido em consideração</string>
+    <string name="settings_sync_wifi_only_ssid">Restrição WiFi SSID</string>
+    <string name="settings_sync_wifi_only_ssid_on">Sincronizará apenas em %s</string>
+    <string name="settings_sync_wifi_only_ssid_message">Introduza o nome (SSID) da rede WiFi para restringir a sincronização a esta rede, ou deixe em branco para todas as conexões WiFi.</string>
+    <string name="settings_carddav">Contactos</string>
+    <string name="settings_caldav">Calendário</string>
+    <string name="settings_taskdav">Tarefas</string>
+    <string name="create_calendar">Criar calendário</string>
+    <string name="create_calendar_display_name_hint">Meu Calendário</string>
+    <string name="create_tasklist">Criar lista de tarefas</string>
+    <string name="create_tasklist_display_name_hint">Minhas Tarefas</string>
+    <string name="install_tasksorg">Instalar Tasks.org</string>
+    <string name="install_opentasks">Instalar OpenTasks</string>
+    <string name="edit_collection">Editar coleção</string>
+    <string name="create_collection_color">Definir a cor da coleção</string>
+    <string name="create_collection_creating">A criar coleção</string>
+    <string name="create_collection_display_name_required">Título é obrigatório</string>
+    <string name="create_collection_description">Descrição (opcional):</string>
+    <string name="view_collection_edit">Editar</string>
+    <string name="view_collection_import">Importar</string>
+    <string name="view_collection_members">Gerir membros</string>
+    <string name="create_collection_create">Gravar</string>
+    <string name="delete_collection">Apagar</string>
+    <string name="delete_collection_confirm_title">Tem a certeza\?</string>
+    <string name="delete_collection_confirm_warning">Esta coleção (%s) e todos os seus dados serão removidos do servidor.</string>
+    <string name="delete_collection_deleting_collection">A eliminar coleção</string>
+    <string name="journal_entries_list_empty">A coleção está vazia.
+\nTalvez ainda esteja a sincronizar\?</string>
+    <string name="journal_entries_loading">A carregar registos de alteração...</string>
+    <string name="exception">Ocorreu um erro.</string>
+    <string name="exception_httpexception">Ocorreu um erro HTTP.</string>
+    <string name="exception_ioexception">Ocorreu um erro de I/O.</string>
+    <string name="exception_show_details">Exibir detalhes</string>
+    <string name="debug_info_title">Informação de depuração</string>
+    <string name="debug_info_more_data_shared">Clicando em partilhar, os dados abaixo, assim como algumas informações adicionais de debug, serão enviadas à equipa de desenvolvimento. Por favor, note que poderá conter alguma informação privada.</string>
+    <string name="sync_error_permissions">Permissões EteSync</string>
+    <string name="sync_error_permissions_text">Necessárias permissões adicionais</string>
+    <string name="sync_error_calendar">Sincronização de calendário falhou (%s)</string>
+    <string name="sync_error_contacts">Sincronização de contactos falhou (%s)</string>
+    <string name="sync_error_tasks">Sincronização de tarefas falhou (%s)</string>
+    <string name="sync_error">Erro durante %s</string>
+    <string name="sync_error_integrity">Erro de integridade enquanto %s</string>
+    <string name="sync_error_http_dav">Erro do servidor enquanto %s</string>
+    <string name="sync_error_unavailable">Não foi possível conectar-se ao servidor enquanto %s</string>
+    <string name="sync_error_local_storage">Erro na base de dados enquanto %s</string>
+    <string name="sync_error_journal_readonly">Diário é apenas para leitura</string>
+    <string name="sync_phase_prepare">a preparar sincronização</string>
+    <string name="sync_phase_journals">a sincronizar diários</string>
+    <string name="sync_phase_prepare_local">a preparar registos locais</string>
+    <string name="sync_phase_create_local_entries">a criar registos locais</string>
+    <string name="sync_phase_post_processing">pós-processamento</string>
+    <string name="sync_error_unauthorized">Falha de autenticação</string>
+    <string name="sync_error_user_inactive">Utilizador inativo</string>
+    <string name="sync_successfully_calendar" formatted="false">Calendário \"%s\" modificado (%s)</string>
+    <string name="sync_successfully_contacts" formatted="false">Contactos modificados (%s)</string>
+    <string name="sync_successfully_tasks" formatted="false">Tarefas \"%s\" modificadas (%s)</string>
+    <string name="sync_successfully_modified" formatted="false">%s modificado.</string>
+    <string name="sync_successfully_modified_full" formatted="false">%s atualizado.
+\n%s eliminado.</string>
+    <string name="sync_journal_readonly">Diário \"%s\" é somente de leitura</string>
+    <string name="sync_journal_readonly_message">O diário é somente para leitura, pelo que todas as suas alterações (%d) foram revertidas.</string>
+    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_content">Enviar convites aos convidados\?</string>
+    <string name="calendar_attendees_send_email_action">Enviar convites</string>
+    <string name="sync_calendar_attendees_email_subject" formatted="false">Convite: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_content" formatted="false">Foi convidado para o seguinte evento:
+\n
+\n%s
+\nQuando: %s
+\nOnde: %s
+\nParticipantes: %s
+\n
+\n--
+\nEnviado por EteSync - sincronização de dados segura, cifrada e privada.
+\nObtenha-o em https://www.EteSync.com</string>
+    <string name="certificate_notification_connection_security">EteSync: Segurança de conexão</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync encontrou um certificado desconhecido. Pretende confiar no certificado\?</string>
+    <string name="loading">A carregar...</string>
+    <string name="loading_error_content">Atualizar</string>
+    <string name="open_url_no_activity">Falha ao abrir link:o link não é compatível!</string>
+    <string name="import_button_file">De ficheiro</string>
+    <string name="import_select_account">Selecionar conta</string>
+    <string name="event_info_organizer">Organizador:</string>
+    <string name="notification_channel_name">EteSync</string>
+    <string name="notification_channel_description">Notificações EteSync</string>
+    <string name="edit_owner_only_anon">Apenas o proprietário desta coleção pode editá-la.</string>
+    <string name="collection_members_remove_admin">A remoção de acesso a administradores não é atualmente suportada.</string>
+    <string name="collection_members_leave">Sair</string>
+    <string name="invitations_title">Convites</string>
+    <string name="invitations_loading">A carregar convites...</string>
+    <string name="invitations_list_empty">Sem convites</string>
+    <string name="invitations_accept_reject_dialog">Pretende aceitar ou rejeitar o convite\?</string>
+    <string name="invitations_accept">Aceitar</string>
+    <string name="invitations_reject">Rejeitar</string>
+    <string name="journal_item_tab_revisions">Revisões</string>
+    <string name="login_username">Nome de utilizador(a)</string>
+    <string name="login_username_error">O nome de utilizador deve ter pelo menos 6 caracteres e consistir apenas de letras, dígitos e ./-/_.</string>
+    <string name="signup_title">Insira os detalhes de inscrição</string>
+    <string name="signup_password_restrictions">A palavra-passe deve ter pelo menos 8 caracteres</string>
+    <string name="sync_error_generic">Falha de sincronização (%s)</string>
+    <string name="sync_error_permission_denied">Permissão negada: %s</string>
+    <string name="account_wizard_collections_body">Para começar o usar o EteSync, deve criar coleções para armazenar os seus dados. Clique em Criar para definir um calendário padrão, um livro de endereços e uma lista de tarefas.</string>
+    <string name="collection_members_add_success">Convite enviado. O utilizador será adicionado assim que o convite for aceite.</string>
+    <string name="collection_members_add_read_only">Apenas leitura</string>
+    <string name="migrate_v2_wizard_welcome_body">Esta ferramenta ajuda-o a migrar os seus dados para o EteSync 2.0. A migração não elimina quaisquer dados. Apenas copia os dados para o novo servidor EteSync 2.0. Isto significa que não há risco de perda de dados durante a migração.</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Por favor, certifique-se de que tem uma conexão de Internet estável e bateria suficiente, esta operação poderá demorar.
+\nPara continuar, por favor escolher abaixo se pretende registar uma nova conta EteSync 2.0 ou se pretende autenticar-se utilizando uma conta existente.</string>
+    <string name="accounts_global_sync_disabled">A sincronização automática de todo o sistema está desativada</string>
+    <string name="navigation_drawer_external_links">Links úteis</string>
+    <string name="navigation_drawer_subtitle">Adaptador de sincronização segura</string>
+    <string name="navigation_drawer_close">Fechar menu de navegação</string>
+    <string name="navigation_drawer_open">Abrir menu de navegação</string>
+    <string name="logging_couldnt_create_file">Não foi possível criar um ficheiro de registo externo: %s</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync detectou que está a utilizar uma versão do Android que pode conter bugs específicos de fornecedor. 
+\nPor favor, leia o nosso FAQ para obter mais informações.</string>
+    <string name="startup_vendor_specific_bugs">Potenciais bugs de fornecedor</string>
+    <string name="startup_development_version_message">Esta é uma versão de desenvolvimento do EteSync. Esteja ciente que as coisas poderão não funcionar conforme esperado. Dê-nos um feedback construtivo para melhorar o EteSync.</string>
+    <string name="startup_battery_optimization_disable">Desligar para EteSync</string>
+    <string name="crash_message">Por favor, envie o stack trace para a equipa de desenvolvimento.</string>
+    <string name="accounts_global_sync_enable">Permitir</string>
+    <string name="navigation_drawer_website">Website</string>
+    <string name="logging_no_external_storage">Armazenamento externo não encontrado</string>
+    <string name="logging_to_external_storage_warning">A desativação irá remover os registos de log</string>
+    <string name="logging_davdroid_file_logging">Log de ficheiros do EteSync ativo</string>
+    <string name="about_license_terms">Termos da licença</string>
+    <string name="startup_development_version">Versão de antevisão do EteSync</string>
+    <string name="startup_battery_optimization_message">O Android poderá inabilitar a sincronização do EteSync após alguns dias. Como prevenção, desativar a otimização de bateria.</string>
+    <string name="startup_battery_optimization">Otimização de bateria</string>
+    <string name="tourguide_title">Sabia que\?</string>
+    <string name="crash_email_body">Se possível, por favor incluir quaisquer outras informações relavantes, como o que fez para desencadear este erro.</string>
+    <string name="notification_channel_sync_status_desc">Mensagens de estado informativas, como o resumo de alterações de sincronização</string>
+    <string name="notification_channel_sync_status">Mensagens de estado</string>
+    <string name="notification_channel_sync_warnings">Avisos de sincronização</string>
+    <string name="notification_channel_sync_errors_desc">Erros relevantes que interrompem a sincronização, como respostas inesperadas do servidor</string>
+    <string name="notification_channel_sync_errors">Erros de sincronização</string>
+    <string name="notification_channel_debugging">Depuração</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="skip">Avançar</string>
+    <string name="create">Criar</string>
+    <string name="address_books_authority_title">Livro de endereços</string>
+    <string name="account_title_address_book">Livro de Endereços EteSync</string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed">%d registos ignorados (provavelmente seguros de ignorar).</string>
+    <string name="account_tasks_not_showing">* Sem sincronização de tarefas (instalar um provedor)</string>
+    <string name="account_click_install_tasks">Clicar aqui para instalar o OpenTasks!</string>
+    <string name="account_delete_confirmation_text">Todas as cópias locais de livro de enderenços, calendários e listas de tarefas serão eliminadas.</string>
+    <string name="account_delete_confirmation_title">Deseja realmente remover a conta\?</string>
+    <string name="account_delete">Remover conta</string>
+    <string name="account_settings">Configurações de conta</string>
+    <string name="account_synchronizing_now">A sincronizar</string>
+    <string name="account_synchronize_now">Sincronizar agora</string>
+    <string name="app_settings_force_language_default">Automático</string>
+    <string name="app_settings_force_language">Forçar idioma</string>
+    <string name="app_settings_show_debug_info_details">Ver/partilhar detalhes e configurações do software</string>
+    <string name="app_settings_show_debug_info">Mostrar informação de depuração</string>
+    <string name="app_settings_log_to_external_storage_off">Ativar para gravar mensagens de log para ficheiro</string>
+    <string name="app_settings_log_to_external_storage_on">Desativar para ocultar a notificação e eliminar os registos de log</string>
+    <string name="app_settings_debug">Depuração</string>
+    <string name="app_settings_reset_certificates_success">Todos os certificados personalizados foram limpos</string>
+    <string name="app_settings_reset_certificates_summary">Repõe confiança de todos os certificados personalizados</string>
+    <string name="app_settings_security">Segurança</string>
+    <string name="app_settings_override_proxy_port">Porta HTTP do proxy</string>
+    <string name="app_settings_override_proxy_host">Host name do proxy HTTP</string>
+    <string name="app_settings_override_proxy_off">Utilizar configurações de proxy padrão</string>
+    <string name="app_settings_override_proxy_on">Utilizar configurações de proxy personalizadas</string>
+    <string name="app_settings_override_proxy">Substituir configurações do proxy</string>
+    <string name="app_settings_connection">Ligação</string>
+    <string name="app_settings_prefer_tasksorg_snack">Para que as alterações surtam efeito, poderá ter de remover e re-adicionar a sua conta.</string>
+    <string name="app_settings_prefer_tasksorg_off">Sincronizará tarefas com OpenTasks, se disponível</string>
+    <string name="app_settings_prefer_tasksorg_on">Sincronizará tarefas com Task.org, se disponível</string>
+    <string name="app_settings_prefer_tasksorg">Preferir provedor de tarefas Task.org</string>
+    <string name="app_settings_sync">Sincronizar</string>
+    <string name="app_settings_reset_hints_success">Todas as sugestões serão novamente exibidas</string>
+    <string name="app_settings_reset_hints_summary">Reativar sugestões previamente dispensadas</string>
+    <string name="app_settings_reset_hints">Redefinir sugestões</string>
+    <string name="app_settings_notification_settings_summary">Gerir canais de notificação e respetivas configurações</string>
+    <string name="app_settings_notification_settings">Configuração de notificações</string>
+    <string name="app_settings_user_interface">Interface de utilizador</string>
+    <string name="app_settings">Configurações</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">A sua conta foi migrada.
+\nPor favor verifique que tudo foi copiado corretamente e proceda à remoção da sua antiga conta.</string>
+    <string name="migrate_v2_wizard_migrate_progress_entries">Registos migrados %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_progress">A migrar coleção %d/%d</string>
+    <string name="migrate_v2_wizard_migrate_title">A migrar…</string>
+    <string name="migrate_v2_wizard_welcome_title">Migração para EteSync 2.0</string>
+    <string name="account_wizard_collections_title">Bem vindo ao EteSync!</string>
+    <string name="accounts_missing_permissions">Permissões em falta: %s</string>
+    <string name="accounts_showcase_add">É necessária uma conta de utilizador para usar o EteSync. Clique aqui para adicionar...</string>
+    <string name="account_list_empty">Bem vindo ao EteSync!</string>
+    <string name="navigation_drawer_contact">Contacto</string>
+    <string name="navigation_drawer_report_issue">Reportar problema</string>
+    <string name="navigation_drawer_guide">Guia do utilizador</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <string name="navigation_drawer_settings">Definições</string>
+    <string name="navigation_drawer_about">Sobre / Licença</string>
+    <string name="startup_vendor_specific_bugs_open_faq">FAQ</string>
+    <string name="startup_development_version_give_feedback">Dar feedback</string>
+    <string name="startup_dont_show_again">Não mostrar novamente</string>
+    <string name="app_name">EteSync</string>
+    <string name="notification_channel_sync">Sincronização</string>
+    <string name="notification_channel_general">Outras notificações importantes</string>
+    <string name="notification_channel_crash_reports">Relatórios de falha</string>
+    <string name="send">Enviar</string>
+    <string name="please_wait">Por favor aguarde…</string>
+    <string name="manage_accounts">Gestão de contas</string>
+    <string name="create_collection_display_name">Nome de exibição (título) desta coleção:</string>
+    <string name="loading_error_title">Erro de carregamento</string>
+    <string name="use_native_apps_body">O EteSync integra perfeitamente com o Android, pode continuar a utilizar as suas aplicações de calendário e contactos.
+\n
+\nPara mais informações, consulte o manuel do utilizador.</string>
+    <string name="import_permission_required">Permissão de leitura de armazenamento necessária para importação.</string>
+    <string name="import_dialog_adding_entries">A adicionar registos...</string>
+    <string name="import_dialog_loading_file">A carregar ficheiro (poderá demorar)...</string>
+    <string name="import_dialog_failed_body">Reason: %s
+\nReportar à equipa de desenvolvimento\?</string>
+    <string name="import_dialog_failed_title">Importação falhou</string>
+    <string name="import_dialog_title">Importar</string>
+    <string name="login_user_info_error_title">Error ao definir detalhes do utilizador</string>
+    <string name="change_encryption_password_success_body">A palavra-passe de encriptação foi alterada com sucesso!</string>
+    <string name="change_encryption_password_are_you_sure">Pretende continuar\? Este processo não pode ser interrompido nem revertido e poderá demorar um pouco a concluir.</string>
+    <string name="change_encryption_password_new_password">Nova senha de encriptação</string>
+    <string name="change_encryption_password_title">Alterar senha de encriptação</string>
+    <string name="wrong_encryption_password">Senha de encriptação errada</string>
+    <string name="account_creation_failed">Falha na criação de conta</string>
+    <string name="login_view_logs">Ver registos de log</string>
+    <string name="login_wrong_username_or_password">Não foi possível autenticar (provavelmente nome de utilizador ou senha errados).
+\nJá se registou\?</string>
+    <string name="login_forgot_password">Esqueceu a sua senha\?</string>
+    <string name="login_service_details_description">Esta é a sua senha de autenticação, *não* a senha de encriptação!</string>
+    <string name="login_encryption_account_label">Conta:</string>
+    <string name="login_enter_encryption_details">Senha secreta de encriptação</string>
+    <string name="login_enter_service_details">Insira os detalhes de autenticação</string>
+    <string name="login_back">Retroceder</string>
+    <string name="login_signup">Registar-se</string>
+    <string name="login_login">Iniciar sessão</string>
+    <string name="login_encryption_enter_password">Está logado como \"%s\". Por favor digite a senha de encriptação para continuar, ou faça logout no menu lateral.</string>
+    <string name="login_encryption_set_new_password">Por favor, define a sua palavra-passe de encriptação abaixo e certifique-se de que está correta, porque *não* poderá ser recuperada se perdida!</string>
+    <string name="login_encryption_password">Senha de encriptação</string>
+    <string name="login_toggle_advanced">Mostrar configurações avançadas</string>
+    <string name="login_custom_server_error">URL inválido, esqueceu de incluir https://\?</string>
+    <string name="login_custom_server">URL do servidor EteSync</string>
+    <string name="login_password">Senha</string>
+    <string name="login_email_address_error">E-mail válido necessário</string>
+    <string name="login_email_address">E-mail</string>
+    <string name="login_title">Adicionar Conta</string>
+    <string name="permissions_tasks_org_request">Solicitar permissões do Tasks.org</string>
+    <string name="permissions_tasks_org_details">Para sincronizar tarefas com suas listas de tarefas locais, a EteSync precisa de acesso ao Tasks.org.</string>
+    <string name="permissions_tasks_org">Permissões Tasks.org</string>
+    <string name="permissions_opentasks_request">Solicite permissões OpenTasks</string>
+    <string name="permissions_opentasks_details">Para sincronizar tarefas com suas listas de tarefas locais, o EteSync precisa de acesso ao OpenTasks.</string>
+    <string name="permissions_opentasks">Permissões OpenTasks</string>
+    <string name="permissions_contacts_request">Solicitar permissões de contatos</string>
+    <string name="permissions_contacts">Permissões de contactos</string>
+    <string name="permissions_calendar_request">Solicitar permissões de calendário</string>
+    <string name="permissions_calendar_details">Para sincronizar eventos de calendário com calendários locais, o EteSync precisa de aceder aos seus calendários.</string>
+    <string name="permissions_calendar">Permissões de calendário</string>
+    <string name="permissions_title">Permissões EteSync</string>
+    <string name="journal_item_restore_dialog_body">Restauro de registo ao estado anterior concluído com sucesso.</string>
+    <string name="journal_item_restore_action">Repôr estado</string>
+    <string name="journal_item_member_count">Contagem de membros</string>
+    <string name="journal_item_member">Membro</string>
+    <string name="journal_item_relation">Relação</string>
+    <string name="journal_item_birthday">Data de nascimento</string>
+    <string name="journal_item_anniversary">Aniversário</string>
+    <string name="journal_item_website">Website</string>
+    <string name="journal_item_note">Observação</string>
+    <string name="journal_item_address">Endereço</string>
+    <string name="journal_item_nickname">Alcunha</string>
+    <string name="journal_item_impp">Mensagens instantâneas</string>
+    <string name="journal_item_organization">Organização</string>
+    <string name="journal_item_email">E-mail</string>
+    <string name="journal_item_phone">Telefone</string>
+    <string name="journal_item_reminders">Lembretes</string>
+    <string name="journal_item_attendees">Participantes</string>
+    <string name="journal_item_tab_raw">Raw</string>
+    <string name="about">Sobre</string>
+    <string name="collection_members_no_access">Apenas administradores estão autorizados a gerir as associações de coleções. Pretende sair da coleção\?</string>
+    <string name="collection_members_remove">Pretende revogar as permissões de acesso de %s\?
+\nPor favor, esteja ciente que um utilizador malicioso poderia reter acesso às chaves criptográficas. Consulte o FAQ para obter mais informações.</string>
+    <string name="collection_members_remove_title">Remover membro</string>
+    <string name="collection_members_remove_error">Erro ao remover membro</string>
+    <string name="collection_members_removing">A remover membro</string>
+    <string name="collection_members_error_user_not_found">Utilizador (%s) não encontrado</string>
+    <string name="collection_members_adding">A convidar utilizador</string>
+    <string name="collection_members_add_error">Erro ao adicionar membro</string>
+    <string name="collection_members_add">Convidar utilizador</string>
+    <string name="collection_members_list_empty">Sem membros</string>
+    <string name="collection_members_list_loading">A carregar membros...</string>
+    <string name="collection_members_title">Membros</string>
+    <string name="use_native_apps_title">Sabia que\?</string>
+    <string name="not_allowed_title">Não permitido</string>
+    <string name="account_owner">Dono: %s</string>
+    <string name="account_showcase_import">Para importar contactos e calendários para o EteSync, deve abrir o menu e escolher a opção \"Importar\".</string>
+    <string name="account_delete_collection_last_title">Não é possível eliminar a última coleção</string>
+    <string name="app_settings_change_notification">Mostrar notificações de alteração</string>
+    <string name="app_settings_distrust_system_certs">Rejeitar certificados do sistema</string>
+    <string name="crash_title">EteSync falhou!</string>
 </resources>

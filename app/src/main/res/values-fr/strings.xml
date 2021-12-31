@@ -67,7 +67,7 @@
     <!--AddAccountActivity-->
     <string name="login_title">Ajouter un compte</string>
     <string name="login_email_address">Adresse courriel</string>
-    <string name="login_email_address_error">Une adresse courriel valide est requise</string>
+    <string name="login_email_address_error">Un courriel valide est requis</string>
     <string name="login_password">Mot de passe</string>
     <string name="login_password_required">Mot de passe requis</string>
     <string name="login_back">Retour</string>
