@@ -194,6 +194,7 @@
     <string-array name="settings_sync_interval_names">
         <item>Tylko ręcznie</item>
         <item>Co 15 minut</item>
+        <item>Co 30 minut</item>
         <item>Co godzinę</item>
         <item>Co 2 godziny</item>
         <item>Co 4 godziny</item>

@@ -86,6 +86,7 @@
     <string-array name="settings_sync_interval_names">
         <item>Solo manualmente</item>
         <item>Ogni 15 minuti</item>
+        <item>Ogni 30 minuti</item>
         <item>Ogni ora</item>
         <item>Ogni 2 ore</item>
         <item>Ogni 4 ore</item>

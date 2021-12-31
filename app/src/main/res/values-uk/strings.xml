@@ -24,6 +24,7 @@
   <string-array name="settings_sync_interval_names">
     <item>Лише вручну</item>
     <item>Кожних 15 хвилин</item>
+    <item>Кожних 30 хвилин</item>
     <item>Щогодини</item>
     <item>Кожних 2 години</item>
     <item>Кожних 4 години</item>

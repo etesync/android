@@ -75,6 +75,7 @@
   <string-array name="settings_sync_interval_names">
     <item>Kun manuelt</item>
     <item>Hver 15. minut</item>
+    <item>Hver 30. minut</item>
     <item>En gang i timen</item>
     <item>En gang hver 2. time</item>
     <item>En gang hver 4. time</item>
