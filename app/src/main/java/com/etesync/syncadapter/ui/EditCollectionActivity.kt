@@ -42,6 +42,8 @@ class EditCollectionActivity : CreateCollectionActivity() {
             }
             CollectionInfo.Type.ADDRESS_BOOK -> {
             }
+            null -> {
+            }
         }
 
         val edit = findViewById<View>(R.id.display_name) as EditText

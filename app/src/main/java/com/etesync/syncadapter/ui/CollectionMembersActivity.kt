@@ -47,6 +47,8 @@ class CollectionMembersActivity : BaseActivity(), Refreshable {
             CollectionInfo.Type.ADDRESS_BOOK -> {
                 colorSquare.visibility = View.GONE
             }
+            null -> {
+            }
         }
         findViewById<View>(R.id.progressBar).visibility = View.GONE
 

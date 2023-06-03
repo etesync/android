@@ -76,6 +76,8 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
             CollectionInfo.Type.ADDRESS_BOOK -> {
                 colorSquare.visibility = View.GONE
             }
+            null -> {
+            }
         }
 
         LoadCountTask().execute()
@@ -244,6 +246,8 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                         e.printStackTrace()
                     }
                 }
+                null -> {
+                }
             }
             return count
         }
@@ -267,6 +271,8 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
                     CollectionInfo.Type.ADDRESS_BOOK -> {
                         stats.text = String.format(Locale.getDefault(), "Contacts: %d, Journal Entries: %d",
                                 result, entryCount)
+                    }
+                    null -> {
                     }
                 }
             }

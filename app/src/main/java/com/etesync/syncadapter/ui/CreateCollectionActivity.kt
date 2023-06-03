@@ -82,6 +82,8 @@ open class CreateCollectionActivity : BaseActivity() {
                 val colorGroup = findViewById<View>(R.id.color_group)
                 colorGroup.visibility = View.GONE
             }
+            null -> {
+            }
         }
     }
 
@@ -120,6 +122,10 @@ open class CreateCollectionActivity : BaseActivity() {
                     info.color = (view.background as ColorDrawable).color
                 }
                 CollectionInfo.Type.ADDRESS_BOOK -> {
+                }
+                CollectionInfo.Type.TASKS -> {
+                }
+                null -> {
                 }
             }
 
