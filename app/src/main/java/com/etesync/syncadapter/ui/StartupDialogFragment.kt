@@ -68,6 +68,7 @@ class StartupDialogFragment : DialogFragment() {
                     .setNeutralButton(R.string.startup_vendor_specific_bugs_open_faq) { dialog, which -> WebViewActivity.openUrl(context!!, Constants.faqUri.buildUpon().encodedFragment("vendor-issues").build()) }
                     .setNegativeButton(R.string.startup_dont_show_again) { dialog, which -> HintManager.setHintSeen(context!!, HINT_VENDOR_SPECIFIC_BUGS, true) }
                     .create()
+            StartupDialogFragment.Mode.GOOGLE_PLAY_ACCOUNTS_REMOVED -> {}
         }
 
         throw IllegalArgumentException(/* illegal mode argument */)

@@ -153,6 +153,8 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
                 CollectionInfo.Type.ADDRESS_BOOK -> {
                     prefix = "FN:"
                 }
+                null -> {
+                }
             }
 
             var content = getLine(fullContent, prefix)

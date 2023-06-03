@@ -74,7 +74,7 @@ class AboutActivity : BaseActivity() {
 
         @SuppressLint("SetTextI18n")
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val info = components[arguments!!.getInt(KEY_POSITION)]
+            val info = components[requireArguments().getInt(KEY_POSITION)]
 
             val v = inflater.inflate(R.layout.about_component, container, false)
 

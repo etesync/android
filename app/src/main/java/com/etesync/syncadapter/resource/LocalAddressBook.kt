@@ -204,7 +204,7 @@ class LocalAddressBook(
                     if (provider != null) {
                         val values = ContentValues(1)
                         values.put(RawContacts.ACCOUNT_NAME, newAccountName)
-                        provider.update(syncAdapterURI(RawContacts.CONTENT_URI), values, RawContacts.ACCOUNT_NAME + "=? AND " + RawContacts.ACCOUNT_TYPE + "=?",
+                        (provider as ContentProviderClient).update(syncAdapterURI(RawContacts.CONTENT_URI), values, RawContacts.ACCOUNT_NAME + "=? AND " + RawContacts.ACCOUNT_TYPE + "=?",
                                 arrayOf(account.name, account.type))
                     }
                 } catch (e: RemoteException) {
@@ -235,7 +235,7 @@ class LocalAddressBook(
                     if (provider != null) {
                         val values = ContentValues(1)
                         values.put(RawContacts.ACCOUNT_NAME, newAccountName)
-                        provider.update(syncAdapterURI(RawContacts.CONTENT_URI), values, RawContacts.ACCOUNT_NAME + "=? AND " + RawContacts.ACCOUNT_TYPE + "=?",
+                        (provider as ContentProviderClient).update(syncAdapterURI(RawContacts.CONTENT_URI), values, RawContacts.ACCOUNT_NAME + "=? AND " + RawContacts.ACCOUNT_TYPE + "=?",
                                 arrayOf(account.name, account.type))
                     }
                 } catch (e: RemoteException) {
@@ -423,7 +423,7 @@ class LocalAddressBook(
 
         val values = ContentValues(1)
         values.put(Groups.TITLE, title)
-        val uri = provider.insert(syncAdapterURI(Groups.CONTENT_URI), values)
+        val uri = (provider as ContentProviderClient).insert(syncAdapterURI(Groups.CONTENT_URI), values)
         return ContentUris.parseId(uri!!)
     }
 

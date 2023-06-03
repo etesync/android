@@ -146,6 +146,8 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                     }
                 }
             }
+            null -> {
+            }
         }
 
         val dialog = AlertDialog.Builder(this)
@@ -230,6 +232,8 @@ class JournalItemActivity : BaseActivity(), Refreshable {
                 CollectionInfo.Type.TASKS -> {
                     v = inflater.inflate(R.layout.task_info, container, false)
                     asyncTask = loadTaskTask(v)
+                }
+                null -> {
                 }
             }
 

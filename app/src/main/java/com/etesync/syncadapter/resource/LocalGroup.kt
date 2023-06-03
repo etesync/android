@@ -8,6 +8,7 @@
 
 package com.etesync.syncadapter.resource
 
+import android.content.ContentProviderClient
 import android.content.ContentProviderOperation
 import android.content.ContentUris
 import android.content.ContentValues
@@ -44,7 +45,7 @@ class LocalGroup : AndroidGroup, LocalAddress {
                     "$COLUMN_PENDING_MEMBERS IS NOT NULL", null,
                     null
             )?.use { cursor ->
-                val batch = BatchOperation(addressBook.provider)
+                val batch = BatchOperation(addressBook.provider as ContentProviderClient)
                 while (cursor.moveToNext()) {
                     val id = cursor.getLong(0)
 
