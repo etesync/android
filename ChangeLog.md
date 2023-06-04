@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.4.0
+* Update compile and target SDK versions
+
 ## Version 2.3.0
 * Sync: add an option to sync every 30 minutes
 * Update translations
