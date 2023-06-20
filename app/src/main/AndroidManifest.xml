@@ -10,6 +10,10 @@
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:installLocation="internalOnly">
+    <queries>
+        <package android:name="org.dmfs.tasks" />
+        <package android:name="org.tasks" />
+    </queries>
 
     <!-- normal permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
