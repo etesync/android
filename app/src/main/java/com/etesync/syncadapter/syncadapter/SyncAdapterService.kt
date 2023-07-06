@@ -170,7 +170,7 @@ abstract class SyncAdapterService : Service() {
                     .setLargeIcon(App.getLauncherBitmap(context))
                     .setContentTitle(context.getString(R.string.sync_error_permissions))
                     .setContentText(context.getString(R.string.sync_error_permissions_text))
-                    .setContentIntent(PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setContentIntent(PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
                     .setCategory(NotificationCompat.CATEGORY_ERROR)
                     .build()
             val nm = NotificationManagerCompat.from(context)

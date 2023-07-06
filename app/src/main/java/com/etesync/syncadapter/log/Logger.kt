@@ -95,7 +95,7 @@ object Logger : SharedPreferences.OnSharedPreferenceChangeListener {
                         .setCategory(NotificationCompat.CATEGORY_STATUS)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setSubText(context.getString(R.string.logging_to_external_storage_warning))
-                        .setContentIntent(PendingIntent.getActivity(context, 0, prefIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                        .setContentIntent(PendingIntent.getActivity(context, 0, prefIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
                         .setStyle(NotificationCompat.BigTextStyle()
                                 .bigText(context.getString(R.string.logging_to_external_storage, logDir.path)))
                         .setOngoing(true)

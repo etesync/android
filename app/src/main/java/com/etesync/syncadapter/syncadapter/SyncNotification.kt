@@ -105,7 +105,7 @@ class SyncNotification(internal val context: Context, internal val notificationT
                 .setAutoCancel(true)
                 .setCategory(category)
                 .setSmallIcon(icon)
-                .setContentIntent(PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentIntent(PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
 
         if (bigText != null)
             builder.setStyle(NotificationCompat.BigTextStyle()
