@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.4.2
+* Fix sync adapter crashes with Android 12 and 13
+
 ## Version 2.4.1
 * Fix sync with Tasks.org and OpenTasks - many thanks to @Sch1nken!
 
