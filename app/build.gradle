@@ -19,8 +19,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 33
 
-        versionCode 20402
-        versionName "2.4.2"
+        versionCode 20403
+        versionName "2.4.3"
 
         buildConfigField "boolean", "customCerts", "true"
     }
