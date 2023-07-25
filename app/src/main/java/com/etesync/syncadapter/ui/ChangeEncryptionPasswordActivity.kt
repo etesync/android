@@ -72,7 +72,7 @@ open class ChangeEncryptionPasswordActivity : BaseActivity() {
             val httpClient = HttpClient.Builder(this@ChangeEncryptionPasswordActivity).setForeground(true).build().okHttpClient
 
             try {
-                Logger.log.info("Logging in with old password")
+                Logger.log.info("Loging in with old password")
                 val client = Client.create(httpClient, settings.uri?.toString())
                 val etebase = com.etebase.client.Account.login(client, account.name, old_password)
                 Logger.log.info("Login successful")
