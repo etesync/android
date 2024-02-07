@@ -36,8 +36,9 @@
     -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
 
-    <!-- Used for external log and vcf import. -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<!-- Used for external log and vcf import. Permissions changed for SDK >= 33. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <!-- other permissions -->
     <!-- android.permission-group.CONTACTS -->
