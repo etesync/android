@@ -10,6 +10,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
@@ -63,7 +64,11 @@ class ImportFragment : DialogFragment() {
 
     @TargetApi(Build.VERSION_CODES.M)
     private fun requestPermissions() {
-        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+        if (SDK_INT <= 32) {
+            requestPermissions(kotlin.arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+        } else {
+            requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), 0)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
