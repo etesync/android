@@ -1,6 +1,9 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.4.4
+* Fix error when importing from file in Android 13+
+
 ## Version 2.4.3
 * Fix task sync adapter issues when no tasks are found
 * Add required notifications permissions to app manifest
