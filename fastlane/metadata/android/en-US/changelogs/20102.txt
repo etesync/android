@@ -1,2 +1,2 @@
 * Fix crash when generating email invitations while using a French locale
-* Uptdate etebase dep to fix issue with custom urls not ending with a slash.
+* Update etebase dep to fix issue with custom urls not ending with a slash.
