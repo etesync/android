@@ -7,7 +7,7 @@ import tourguide.tourguide.TourGuide
 
 object ShowcaseBuilder {
     fun getBuilder(activity: Activity): TourGuide {
-        val ret = TourGuide.init(activity).with(TourGuide.Technique.Click)
+        val ret = TourGuide.init(activity).with(TourGuide.Technique.CLICK)
                 .setPointer(Pointer())
         ret.setOverlay(Overlay().setOnClickListener { ret.cleanUp() })
 
