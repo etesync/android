@@ -61,10 +61,10 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
                 val settings: AccountSettings
 
                 try {
-                    settings = AccountSettings(activity!!, account)
+                    settings = AccountSettings(requireActivity(), account)
                 } catch (e: InvalidAccountException) {
                     Logger.log.log(Level.INFO, "Account is invalid or doesn't exist (anymore)", e)
-                    activity!!.finish()
+                    requireActivity().finish()
                     return
                 }
 
@@ -82,7 +82,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
     class NothingDetectedFragment : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return AlertDialog.Builder(activity!!)
+            return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.setting_up_encryption)
                     .setIcon(R.drawable.ic_error_dark)
                     .setMessage(R.string.login_wrong_username_or_password)

@@ -41,7 +41,7 @@ class StartupDialogFragment : DialogFragment() {
 
         val mode = Mode.valueOf(arguments!!.getString(ARGS_MODE)!!)
         when (mode) {
-            StartupDialogFragment.Mode.BATTERY_OPTIMIZATIONS -> return AlertDialog.Builder(activity!!)
+            StartupDialogFragment.Mode.BATTERY_OPTIMIZATIONS -> return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.startup_battery_optimization)
                     .setMessage(R.string.startup_battery_optimization_message)
                     .setPositiveButton(android.R.string.ok) { dialog, which -> }
@@ -54,14 +54,14 @@ class StartupDialogFragment : DialogFragment() {
                     .setNegativeButton(R.string.startup_dont_show_again) { dialog, which -> HintManager.setHintSeen(context!!, HINT_BATTERY_OPTIMIZATIONS, true) }
                     .create()
 
-            StartupDialogFragment.Mode.DEVELOPMENT_VERSION -> return AlertDialog.Builder(activity!!)
+            StartupDialogFragment.Mode.DEVELOPMENT_VERSION -> return AlertDialog.Builder(requireActivity())
                     .setIcon(R.mipmap.ic_launcher)
                     .setTitle(R.string.startup_development_version)
                     .setMessage(R.string.startup_development_version_message)
                     .setPositiveButton(android.R.string.ok) { dialog, which -> }
                     .setNeutralButton(R.string.startup_development_version_give_feedback) { dialog, which -> startActivity(Intent(Intent.ACTION_VIEW, Constants.feedbackUri)) }
                     .create()
-            StartupDialogFragment.Mode.VENDOR_SPECIFIC_BUGS -> return AlertDialog.Builder(activity!!)
+            StartupDialogFragment.Mode.VENDOR_SPECIFIC_BUGS -> return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.startup_vendor_specific_bugs)
                     .setMessage(R.string.startup_vendor_specific_bugs_message)
                     .setPositiveButton(android.R.string.ok) { dialog, which -> }

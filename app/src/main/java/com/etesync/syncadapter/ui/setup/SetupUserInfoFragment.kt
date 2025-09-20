@@ -81,7 +81,7 @@ class SetupUserInfoFragment : DialogFragment() {
             if (result.exception == null) {
                 settings.keyPair = result.keyPair
             } else {
-                val dialog = AlertDialog.Builder(activity!!)
+                val dialog = AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.login_user_info_error_title)
                         .setIcon(R.drawable.ic_error_dark)
                         .setMessage(result.exception.localizedMessage)

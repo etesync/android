@@ -48,7 +48,7 @@ class LocalContactImportFragment : Fragment() {
         recyclerView = view.findViewById<View>(R.id.recyclerView) as RecyclerView
 
         recyclerView!!.layoutManager = LinearLayoutManager(activity)
-        recyclerView!!.addItemDecoration(DividerItemDecoration(activity!!))
+        recyclerView!!.addItemDecoration(DividerItemDecoration(requireActivity()))
         return view
     }
 

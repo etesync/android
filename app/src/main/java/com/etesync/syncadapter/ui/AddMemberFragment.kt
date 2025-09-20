@@ -80,14 +80,14 @@ class AddMemberFragment : DialogFragment() {
                 val view = LayoutInflater.from(context).inflate(R.layout.fingerprint_alertdialog, null)
                 (view.findViewById<View>(R.id.body) as TextView).text = getString(R.string.trust_fingerprint_body, memberEmail)
                 (view.findViewById<View>(R.id.fingerprint) as TextView).text = fingerprint
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                         .setIcon(R.drawable.ic_fingerprint_dark)
                         .setTitle(R.string.trust_fingerprint_title)
                         .setView(view)
                         .setPositiveButton(android.R.string.ok) { _, _ -> MemberAddSecond().execute() }
                         .setNegativeButton(android.R.string.cancel) { _, _ -> dismiss() }.show()
             } else {
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                         .setIcon(R.drawable.ic_error_dark)
                         .setTitle(R.string.collection_members_add_error)
                         .setMessage(result.throwable.message)
@@ -131,7 +131,7 @@ class AddMemberFragment : DialogFragment() {
             if (result.throwable == null) {
                 (activity as Refreshable).refresh()
             } else {
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                         .setIcon(R.drawable.ic_error_dark)
                         .setTitle(R.string.collection_members_add_error)
                         .setMessage(result.throwable.message)

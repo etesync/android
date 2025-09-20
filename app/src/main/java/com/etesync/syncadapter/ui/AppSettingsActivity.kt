@@ -176,7 +176,7 @@ class AppSettingsActivity : BaseActivity() {
         }
 
         private fun resetCertificates() {
-            if (CustomCertManager.resetCertificates(activity!!))
+            if (CustomCertManager.resetCertificates(requireActivity()))
                 Snackbar.make(requireView(), getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
         }
 

@@ -122,7 +122,7 @@ class ImportFragment : DialogFragment() {
                         val uri = data.data!!
                         Logger.log.info("Starting import into ${uid} from file ${uri}")
                         try {
-                            inputStream = activity!!.contentResolver.openInputStream(uri)
+                            inputStream = requireActivity().contentResolver.openInputStream(uri)
 
                             Thread(ImportEntriesLoader()).start()
                         } catch (e: Exception) {
@@ -163,7 +163,7 @@ class ImportFragment : DialogFragment() {
                 return
             }
 
-            activity!!.runOnUiThread { setDialogAddEntries(dialog as ProgressDialog, length) }
+            requireActivity().runOnUiThread { setDialogAddEntries(dialog as ProgressDialog, length) }
         }
 
         private fun entryProcessed() {
@@ -171,7 +171,7 @@ class ImportFragment : DialogFragment() {
                 return
             }
 
-            activity!!.runOnUiThread {
+            requireActivity().runOnUiThread {
                 val dialog = dialog as ProgressDialog
 
                 dialog.incrementProgressBy(1)
@@ -181,7 +181,7 @@ class ImportFragment : DialogFragment() {
         override fun run() {
             val result = loadInBackground()
 
-            activity!!.runOnUiThread { loadFinished(result) }
+            requireActivity().runOnUiThread { loadFinished(result) }
         }
 
         fun loadInBackground(): ImportResult {

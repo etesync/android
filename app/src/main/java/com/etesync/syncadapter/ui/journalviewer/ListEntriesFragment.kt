@@ -47,7 +47,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        activity!!.title = info.displayName
+        requireActivity().title = info.displayName
         val view = inflater.inflate(R.layout.journal_viewer_list, container, false)
 
         //This is instead of setEmptyText() function because of Google bug

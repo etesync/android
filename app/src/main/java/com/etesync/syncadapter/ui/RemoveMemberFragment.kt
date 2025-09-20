@@ -66,7 +66,7 @@ class RemoveMemberFragment : DialogFragment() {
             if (result.throwable == null) {
                 (activity as Refreshable).refresh()
             } else {
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                         .setIcon(R.drawable.ic_error_dark)
                         .setTitle(R.string.collection_members_remove_error)
                         .setMessage(result.throwable.message)

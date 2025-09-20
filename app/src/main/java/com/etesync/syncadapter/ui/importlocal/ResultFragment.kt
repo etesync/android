@@ -44,7 +44,7 @@ class ResultFragment : DialogFragment() {
                     }
                     .create()
         } else {
-            return AlertDialog.Builder(activity!!)
+            return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.import_dialog_title)
                     .setIcon(R.drawable.ic_import_export_black)
                     .setMessage(getString(R.string.import_dialog_success, result!!.total, result!!.added, result!!.updated, result!!.skipped))

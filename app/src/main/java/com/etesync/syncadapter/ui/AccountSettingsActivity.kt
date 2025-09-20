@@ -125,7 +125,7 @@ class AccountSettingsFragment() : PreferenceFragmentCompat(), LoaderManager.Load
         // Category: encryption
         val prefEncryptionPassword = findPreference("password")
         prefEncryptionPassword.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            startActivity(ChangeEncryptionPasswordActivity.newIntent(activity!!, account))
+            startActivity(ChangeEncryptionPasswordActivity.newIntent(requireActivity(), account))
             true
         }
 
@@ -202,14 +202,14 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {
         if (settings == null) {
-            activity!!.finish()
+            requireActivity().finish()
             return
         }
 
         // Category: dashboard
         val prefManageAccount = findPreference("manage_account")
         prefManageAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            WebViewActivity.openUrl(activity!!, Constants.dashboard.buildUpon().appendQueryParameter("email", account.name).build())
+            WebViewActivity.openUrl(requireActivity(), Constants.dashboard.buildUpon().appendQueryParameter("email", account.name).build())
             true
         }
 
@@ -225,7 +225,7 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
         // Category: encryption
         val prefEncryptionPassword = findPreference("encryption_password")
         prefEncryptionPassword.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            startActivity(ChangeEncryptionPasswordActivity.newIntent(activity!!, account))
+            startActivity(ChangeEncryptionPasswordActivity.newIntent(requireActivity(), account))
             true
         }
 

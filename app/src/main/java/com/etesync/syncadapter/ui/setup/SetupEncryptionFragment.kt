@@ -55,7 +55,7 @@ class SetupEncryptionFragment : DialogFragment() {
         override fun onPostExecute(result: Configuration) {
             if (config.error != null && config.error is Exceptions.IntegrityException) {
                 Logger.log.severe("Wrong encryption password.")
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.wrong_encryption_password)
                         .setIcon(R.drawable.ic_error_dark)
                         .setMessage(getString(R.string.wrong_encryption_password_content, config.error!!.localizedMessage))
@@ -65,12 +65,12 @@ class SetupEncryptionFragment : DialogFragment() {
             } else {
                 try {
                     if (createAccount(config.userName, config)) {
-                        activity!!.setResult(Activity.RESULT_OK)
-                        activity!!.finish()
+                        requireActivity().setResult(Activity.RESULT_OK)
+                        requireActivity().finish()
                     }
                 } catch (e: InvalidAccountException) {
                     Logger.log.severe("Account creation failed!")
-                    AlertDialog.Builder(activity!!)
+                    AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.account_creation_failed)
                             .setIcon(R.drawable.ic_error_dark)
                             .setMessage(e.localizedMessage)
