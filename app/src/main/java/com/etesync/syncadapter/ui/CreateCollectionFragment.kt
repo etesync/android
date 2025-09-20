@@ -37,8 +37,8 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = arguments!!.getParcelable(ARG_ACCOUNT)!!
-        info = arguments!!.getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
+        account = requireArguments().getParcelable(ARG_ACCOUNT)!!
+        info = requireArguments().getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
 
         loaderManager.initLoader(0, null, this)
     }

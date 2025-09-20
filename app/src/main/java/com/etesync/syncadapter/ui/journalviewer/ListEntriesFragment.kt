@@ -42,8 +42,8 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = (requireContext().applicationContext as App).data
-        account = arguments!!.getParcelable(ViewCollectionActivity.EXTRA_ACCOUNT)!!
-        info = arguments!!.getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
+        account = requireArguments().getParcelable(ViewCollectionActivity.EXTRA_ACCOUNT)!!
+        info = requireArguments().getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

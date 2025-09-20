@@ -36,7 +36,7 @@ class SetupUserInfoFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        account = arguments!!.getParcelable(KEY_ACCOUNT)!!
+        account = requireArguments().getParcelable(KEY_ACCOUNT)!!
 
         try {
             settings = AccountSettings(requireContext(), account)

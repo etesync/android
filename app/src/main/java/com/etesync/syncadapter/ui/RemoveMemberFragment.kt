@@ -19,9 +19,9 @@ class RemoveMemberFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val account = arguments!!.getParcelable<Account>(Constants.KEY_ACCOUNT)
-        info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
-        memberEmail = arguments!!.getString(KEY_MEMBER)
+        val account = requireArguments().getParcelable<Account>(Constants.KEY_ACCOUNT)
+        info = requireArguments().getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
+        memberEmail = requireArguments().getString(KEY_MEMBER)
         try {
             settings = AccountSettings(requireContext(), account!!)
         } catch (e: InvalidAccountException) {

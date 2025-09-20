@@ -29,7 +29,7 @@ class EncryptionDetailsFragment : Fragment() {
         val btnBack = v.findViewById<View>(R.id.back) as Button
         btnBack.setOnClickListener { requireFragmentManager().popBackStack() }
 
-        val config = arguments!!.getSerializable(KEY_CONFIG) as BaseConfigurationFinder.Configuration
+        val config = requireArguments().getSerializable(KEY_CONFIG) as BaseConfigurationFinder.Configuration
 
         val encryptionFormInfo = v.findViewById<View>(R.id.encryption_form_info) as TextView
         if (config.userInfo == null) {

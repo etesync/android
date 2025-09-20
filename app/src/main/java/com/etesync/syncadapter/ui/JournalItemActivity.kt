@@ -192,7 +192,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
             val tv = v.findViewById<View>(R.id.content) as TextView
 
-            val syncEntry = arguments!!.getSerializable(KEY_SYNC_ENTRY) as SyncEntry
+            val syncEntry = requireArguments().getSerializable(KEY_SYNC_ENTRY) as SyncEntry
             tv.text = syncEntry.content
 
             return v
@@ -217,8 +217,8 @@ class JournalItemActivity : BaseActivity(), Refreshable {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             var v: View? = null
 
-            info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
-            syncEntry = arguments!!.getSerializable(KEY_SYNC_ENTRY) as SyncEntry
+            info = requireArguments().getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
+            syncEntry = requireArguments().getSerializable(KEY_SYNC_ENTRY) as SyncEntry
 
             when (info.enumType) {
                 CollectionInfo.Type.ADDRESS_BOOK -> {

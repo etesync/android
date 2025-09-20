@@ -115,7 +115,7 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
     class ConfirmDeleteCollectionFragment : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val collectionInfo = arguments!!.getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
+            val collectionInfo = requireArguments().getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
             val name = if (TextUtils.isEmpty(collectionInfo.displayName)) collectionInfo.uid else collectionInfo.displayName
 
             return AlertDialog.Builder(requireContext())

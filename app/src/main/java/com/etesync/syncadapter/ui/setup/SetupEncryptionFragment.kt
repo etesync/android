@@ -47,7 +47,7 @@ class SetupEncryptionFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SetupEncryptionLoader(requireContext(), arguments!!.getSerializable(KEY_CONFIG) as Configuration).execute()
+        SetupEncryptionLoader(requireContext(), requireArguments().getSerializable(KEY_CONFIG) as Configuration).execute()
     }
 
     private inner class SetupEncryptionLoader(internal val context: Context, internal val config: Configuration) : AsyncTask<Void, Void, Configuration>() {

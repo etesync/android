@@ -39,7 +39,7 @@ class StartupDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         isCancelable = false
 
-        val mode = Mode.valueOf(arguments!!.getString(ARGS_MODE)!!)
+        val mode = Mode.valueOf(requireArguments().getString(ARGS_MODE)!!)
         when (mode) {
             StartupDialogFragment.Mode.BATTERY_OPTIMIZATIONS -> return AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.startup_battery_optimization)

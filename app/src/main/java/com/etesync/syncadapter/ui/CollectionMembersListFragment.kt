@@ -35,8 +35,8 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = (requireContext().applicationContext as App).data
-        account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)!!
-        info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
+        account = requireArguments().getParcelable(Constants.KEY_ACCOUNT)!!
+        info = requireArguments().getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
         journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
     }
 

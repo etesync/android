@@ -43,7 +43,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
         super.onCreate(savedInstanceState)
 
         loaderManager.initLoader(0, arguments, this)
-        account = arguments!!.getParcelable(ARG_ACCOUNT)!!
+        account = requireArguments().getParcelable(ARG_ACCOUNT)!!
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Configuration> {
@@ -88,7 +88,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
                     .setMessage(R.string.login_wrong_username_or_password)
                     .setNeutralButton(R.string.login_view_logs) { dialog, which ->
                         val intent = DebugInfoActivity.newIntent(context, this::class.toString())
-                        intent.putExtra(DebugInfoActivity.KEY_LOGS, arguments!!.getString(KEY_LOGS))
+                        intent.putExtra(DebugInfoActivity.KEY_LOGS, requireArguments().getString(KEY_LOGS))
                         startActivity(intent)
                     }
                     .setPositiveButton(android.R.string.ok) { dialog, which ->
