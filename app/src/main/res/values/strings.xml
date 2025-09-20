@@ -405,21 +405,21 @@
     <string name="sync_phase_post_processing">post processing</string>
     <string name="sync_error_unauthorized">Authentication failed</string>
     <string name="sync_error_user_inactive">User is inactive</string>
-    <string name="sync_successfully_calendar" formatted="false">Calendar \"%s\" modified (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Contacts modified (%s)</string>
-    <string name="sync_successfully_tasks" formatted="false">Tasks \"%s\" modified (%s)</string>
-    <string name="sync_successfully_modified" formatted="false">%s modified.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s updated.\n%s deleted.</string>
+    <string name="sync_successfully_calendar">Calendar \"%s\" modified (%s)</string>
+    <string name="sync_successfully_contacts">Contacts modified (%s)</string>
+    <string name="sync_successfully_tasks">Tasks \"%s\" modified (%s)</string>
+    <string name="sync_successfully_modified">%s modified.</string>
+    <string name="sync_successfully_modified_full">%s updated.\n%s deleted.</string>
     <string name="sync_journal_readonly">Journal \"%s\" is read only</string>
     <string name="sync_journal_readonly_message">The journal is read only so all of your changes (%d) have been reverted.</string>
 
 
     <!-- Calendar invites -->
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_calendar_attendees_notification_content">Send invitations to guests?</string>
     <string name="calendar_attendees_send_email_action">Send invitations</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Invitation: %s @ %s</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">You have been invited to the following event:\n\n%s\nWhen: %s\nWhere: %s\nAttendees: %s\n\n--\nSent by EteSync - secure, end-to-end encrypted and private data sync.\nGet it at https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_subject">Invitation: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_content">You have been invited to the following event:\n\n%s\nWhen: %s\nWhere: %s\nAttendees: %s\n\n--\nSent by EteSync - secure, end-to-end encrypted and private data sync.\nGet it at https://www.EteSync.com</string>
 
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Connection security</string>

@@ -165,7 +165,7 @@
     <string name="app_settings_change_notification">Afficher les notifications de changement</string>
     <string name="app_settings_force_language_default">Auto</string>
     <string name="app_settings_force_language">Forcer la langue</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Vous avez été invité·e à l\'évènement suivant :
+    <string name="sync_calendar_attendees_email_content">Vous avez été invité·e à l\'évènement suivant :
 \n
 \n%s
 \nQuand : %s
@@ -175,7 +175,7 @@
 \n-
 \nEnvoyé par EteSync – synchronisation sécurisée, chiffrée de bout en bout et privée des données.
 \nObtenez-le sur https://www.EteSync.com</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Invitation : %s @ %s</string>
+    <string name="sync_calendar_attendees_email_subject">Invitation : %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Envoyer des invitations</string>
     <string name="debug_info_more_data_shared">Cliquez sur Partager pour ouvrir l\'application de messagerie avec les données ci-dessous, ainsi que des informations de débogage supplémentaires, jointes. Il peut contenir des informations sensibles, veuillez donc l\'examiner avant de l\'envoyer.</string>
     <string name="journal_item_email">Courriel</string>

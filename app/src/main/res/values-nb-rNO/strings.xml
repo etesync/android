@@ -313,19 +313,19 @@
     <string name="sync_phase_post_processing">etterbehandling</string>
     <string name="sync_error_unauthorized">Innlogging mislyktes</string>
     <string name="sync_error_user_inactive">Brukeren er inaktiv</string>
-    <string name="sync_successfully_calendar" formatted="false">Kalender «%s» endret (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Kontakter endret (%s)</string>
-    <string name="sync_successfully_tasks" formatted="false">Gjøremålene «%s» er endret (%s)</string>
-    <string name="sync_successfully_modified" formatted="false">%s endret.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s oppdatert.\n%s slettet.</string>
+    <string name="sync_successfully_calendar">Kalender «%s» endret (%s)</string>
+    <string name="sync_successfully_contacts">Kontakter endret (%s)</string>
+    <string name="sync_successfully_tasks">Gjøremålene «%s» er endret (%s)</string>
+    <string name="sync_successfully_modified">%s endret.</string>
+    <string name="sync_successfully_modified_full">%s oppdatert.\n%s slettet.</string>
     <string name="sync_journal_readonly">Journalen \"%s\" er skrivebeskyttet</string>
     <string name="sync_journal_readonly_message">Journalen er skrivebeskyttet, så alle endringene dine (%d) har blitt omgjort.</string>
     <!-- Calendar invites -->
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_calendar_attendees_notification_content">Send invitasjoner til gjester?</string>
     <string name="calendar_attendees_send_email_action">Send invitasjoner</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Invitasjon: %s @ %s</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Du har blitt invitert til følgende hendelse:\n\n%s\nNår: %s\nHvor: %s\nDeltakere: %s\n\n--\nSendt med EteSync - sikker, ende-til-ende-kryptert og privat synkronisering.\nFå det på https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_subject">Invitasjon: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_content">Du har blitt invitert til følgende hendelse:\n\n%s\nNår: %s\nHvor: %s\nDeltakere: %s\n\n--\nSendt med EteSync - sikker, ende-til-ende-kryptert og privat synkronisering.\nFå det på https://www.EteSync.com</string>
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Tilkoblingssikkerhet</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync har mottatt et ukjent sertifikat. Ønsker du å klarere det?</string>

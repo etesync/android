@@ -71,18 +71,18 @@
     <string name="manage_accounts">ניהול חשבונות</string>
     <string name="help">עזרה</string>
     <string name="address_books_authority_title">אנשי קשר</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">הזמנה: ‪%s‬ @ %s‬</string>
+    <string name="sync_calendar_attendees_email_subject">הזמנה: ‪%s‬ @ %s‬</string>
     <string name="calendar_attendees_send_email_action">שלח הזמנות</string>
     <string name="sync_calendar_attendees_notification_content">האם לשלוח הזמנות לאורחים\?</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">‪%s‬</string>
+    <string name="sync_calendar_attendees_notification_title">‪%s‬</string>
     <string name="sync_journal_readonly_message">האוסף הוא לקריאה בלבד, כך שכל השינויים ‪(%d)‬ שביצעת בוטלו.</string>
     <string name="sync_journal_readonly">יומן ‪\"%s\"‬ הוא לקריאה בלבד.</string>
-    <string name="sync_successfully_modified_full" formatted="false">‪%s‬ עודכן.
+    <string name="sync_successfully_modified_full">‪%s‬ עודכן.
 \n‪%s‬ נמחק.</string>
-    <string name="sync_successfully_modified" formatted="false">‪%s‬ שונה.</string>
-    <string name="sync_successfully_tasks" formatted="false">משימות \"%s\" שונו (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">אנשי הקשר שונו (%s‪‬)</string>
-    <string name="sync_successfully_calendar" formatted="false">לוח השנה \"%s\" שונה (%s)</string>
+    <string name="sync_successfully_modified">‪%s‬ שונה.</string>
+    <string name="sync_successfully_tasks">משימות \"%s\" שונו (%s)</string>
+    <string name="sync_successfully_contacts">אנשי הקשר שונו (%s‪‬)</string>
+    <string name="sync_successfully_calendar">לוח השנה \"%s\" שונה (%s)</string>
     <string name="sync_error_user_inactive">המשתמש אינו פעיל</string>
     <string name="sync_error_unauthorized">האימות נכשל</string>
     <string name="sync_phase_post_processing">לאחר עיבוד</string>
@@ -313,7 +313,7 @@
     <string name="loading">טוען…</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync נתקלה באישור לא ידוע. האם אתה רוצה לתת אמון\?</string>
     <string name="certificate_notification_connection_security">EteSync: אבטחת חיבור</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">הוזמנת לאירוע הבא:
+    <string name="sync_calendar_attendees_email_content">הוזמנת לאירוע הבא:
 \n
 \n‪%s‬
 \nמתי: ‪%s‬

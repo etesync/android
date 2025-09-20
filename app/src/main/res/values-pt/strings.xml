@@ -88,19 +88,19 @@
     <string name="sync_phase_post_processing">pós-processamento</string>
     <string name="sync_error_unauthorized">Falha de autenticação</string>
     <string name="sync_error_user_inactive">Utilizador inativo</string>
-    <string name="sync_successfully_calendar" formatted="false">Calendário \"%s\" modificado (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Contactos modificados (%s)</string>
-    <string name="sync_successfully_tasks" formatted="false">Tarefas \"%s\" modificadas (%s)</string>
-    <string name="sync_successfully_modified" formatted="false">%s modificado.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s atualizado.
+    <string name="sync_successfully_calendar">Calendário \"%s\" modificado (%s)</string>
+    <string name="sync_successfully_contacts">Contactos modificados (%s)</string>
+    <string name="sync_successfully_tasks">Tarefas \"%s\" modificadas (%s)</string>
+    <string name="sync_successfully_modified">%s modificado.</string>
+    <string name="sync_successfully_modified_full">%s atualizado.
 \n%s eliminado.</string>
     <string name="sync_journal_readonly">Diário \"%s\" é somente de leitura</string>
     <string name="sync_journal_readonly_message">O diário é somente para leitura, pelo que todas as suas alterações (%d) foram revertidas.</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_calendar_attendees_notification_content">Enviar convites aos convidados\?</string>
     <string name="calendar_attendees_send_email_action">Enviar convites</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Convite: %s @ %s</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Foi convidado para o seguinte evento:
+    <string name="sync_calendar_attendees_email_subject">Convite: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_content">Foi convidado para o seguinte evento:
 \n
 \n%s
 \nQuando: %s

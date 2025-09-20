@@ -184,8 +184,8 @@
     <!-- Calendar invites -->
     <string name="sync_calendar_attendees_notification_content">Einladungen an Gäste versenden?</string>
     <string name="calendar_attendees_send_email_action">Einladungen senden</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Einladung: %s @ %s</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Sie wurden zu folgender Veranstaltung eingeladen:\n\n%s\nWann: %s\nWo: %s\nTeilnehmer: %s\n\n--\nGesendet mit EteSync - sichere, Ende-zu-Ende verschlüsselte und private Datensynchronisation.\nErhältlich unter https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_subject">Einladung: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_content">Sie wurden zu folgender Veranstaltung eingeladen:\n\n%s\nWann: %s\nWo: %s\nTeilnehmer: %s\n\n--\nGesendet mit EteSync - sichere, Ende-zu-Ende verschlüsselte und private Datensynchronisation.\nErhältlich unter https://www.EteSync.com</string>
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Verbindungs-Sicherheit</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync hat ein unbekanntes Zertifikat vorgefunden. Wollen Sie ihm vertrauen?</string>
@@ -207,12 +207,12 @@
     <string name="open_url_no_activity">Öffnen des Links ist fehlgeschlagen: Link wird nicht unterstützt!</string>
     <string name="loading_error_title">Ladefehler</string>
     <string name="loading">Wird geladen ...</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Das Journal ist nur lesbar, daher wurden alle Ihre Änderungen (%d) rückgängig gemacht.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s aktualisiert.
+    <string name="sync_successfully_modified_full">%s aktualisiert.
 \n%s gelöscht.</string>
-    <string name="sync_successfully_modified" formatted="false">%s geändert.</string>
-    <string name="sync_successfully_contacts" formatted="false">Kontakte geändert (%s)</string>
+    <string name="sync_successfully_modified">%s geändert.</string>
+    <string name="sync_successfully_contacts">Kontakte geändert (%s)</string>
     <string name="sync_error_permission_denied">Berechtigung verweigert: %s</string>
     <string name="sync_error_journal_readonly">Journal ist nur lesbar</string>
     <string name="sync_error_tasks">Aufgaben-Synchronisation fehlgeschlagen (%s)</string>

@@ -260,10 +260,10 @@
     <string name="sync_phase_post_processing">przetwarzanie końcowe</string>
     <string name="sync_error_unauthorized">Weryfikacja nie powiodła się</string>
     <string name="sync_error_user_inactive">Użytkownik jest nieaktywny</string>
-    <string name="sync_successfully_calendar" formatted="false">Kalendarz \"%s\" został zmodyfikowany (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Kontakty zostały zmodyfikowane (%s)</string>
-    <string name="sync_successfully_modified" formatted="false">%s został zmodyfikowany.</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s został zaktualizowany.\n%s został usunięty.</string>
+    <string name="sync_successfully_calendar">Kalendarz \"%s\" został zmodyfikowany (%s)</string>
+    <string name="sync_successfully_contacts">Kontakty zostały zmodyfikowane (%s)</string>
+    <string name="sync_successfully_modified">%s został zmodyfikowany.</string>
+    <string name="sync_successfully_modified_full">%s został zaktualizowany.\n%s został usunięty.</string>
     <!-- cert4android -->
     <string name="certificate_notification_connection_security">EteSync: Bezpieczeństwo połączenia</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync otrzymał nieznany certyfikat. Czy chcesz mu zaufać?</string>
@@ -300,7 +300,7 @@
     <string name="notification_channel_description">Powiadomienia EteSync</string>
     <string name="notification_channel_name">EteSync</string>
     <string name="open_url_no_activity">Nie udało się otworzyć linku: link nie jest obsługiwany!</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Zostałeś zaproszony na następujące wydarzenie:
+    <string name="sync_calendar_attendees_email_content">Zostałeś zaproszony na następujące wydarzenie:
 \n
 \n%s
 \nKiedy: %s
@@ -310,13 +310,13 @@
 \n--
 \nWysłane przez EteSync - bezpieczna, szyfrowana end-to-end i prywatna synchronizacja danych.
 \nWejdź na https://www.EteSync.com</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Zaproszenie: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_subject">Zaproszenie: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Wyślij zaproszenia</string>
     <string name="sync_calendar_attendees_notification_content">Wysłać gościom zaproszenia\?</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Dziennik zmian jest tylko do odczytu, więc wszystkie Twoje zmiany (%d) zostały cofnięte.</string>
     <string name="sync_journal_readonly">Dziennik zmian \"%s\" jest tylko do odczytu</string>
-    <string name="sync_successfully_tasks" formatted="false">Zadania \"%s\" zmodyfikowane (%s)</string>
+    <string name="sync_successfully_tasks">Zadania \"%s\" zmodyfikowane (%s)</string>
     <string name="sync_error_permission_denied">Brak uprawnień: %s</string>
     <string name="sync_error_journal_readonly">Dziennik zmian jest tylko do odczytu</string>
     <string name="sync_error_tasks">Synchronizacja zadań nie powiodła się (%s)</string>

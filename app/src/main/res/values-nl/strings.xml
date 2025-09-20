@@ -235,7 +235,7 @@
     <string name="loading">Aan het laden...</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync heeft een onbekend certificaat tegengekomen. Wilt u het vertrouwen\?</string>
     <string name="certificate_notification_connection_security">EteSync: Verbindingsveiligheid</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">U bent uitgenodigd op het volgende evenement:
+    <string name="sync_calendar_attendees_email_content">U bent uitgenodigd op het volgende evenement:
 \n
 \n%s
 \nWanneer: %s
@@ -245,18 +245,18 @@
 \n--
 \nVerstuurd door EteSync - veilige, end-to-end encrypted en private data sync.
 \nVerkrijg het via https://www.EteSync.com</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Uitnodiging: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_subject">Uitnodiging: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Verzend uitnodigingen</string>
     <string name="sync_calendar_attendees_notification_content">Uitnodigingen naar gasten versturen\?</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Het logboek is enkel-lezen dus al uw aanpassingen (%d) zijn ongedaan gemaakt.</string>
     <string name="sync_journal_readonly">Logboek \"%s\" is enkel-lezen</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s geupdate.
+    <string name="sync_successfully_modified_full">%s geupdate.
 \n%s verwijderd.</string>
-    <string name="sync_successfully_modified" formatted="false">%s gewijzigd.</string>
-    <string name="sync_successfully_tasks" formatted="false">Takes \"%s\" gewijzigd (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Contacten gewijzigd (%s)</string>
-    <string name="sync_successfully_calendar" formatted="false">Kalender \"%s\" werd gewijzigd (%s)</string>
+    <string name="sync_successfully_modified">%s gewijzigd.</string>
+    <string name="sync_successfully_tasks">Takes \"%s\" gewijzigd (%s)</string>
+    <string name="sync_successfully_contacts">Contacten gewijzigd (%s)</string>
+    <string name="sync_successfully_calendar">Kalender \"%s\" werd gewijzigd (%s)</string>
     <string name="sync_error_user_inactive">Gebruiker is non-actief</string>
     <string name="sync_error_unauthorized">Authenticatie mislukt</string>
     <string name="sync_phase_post_processing">aan het naverwerken</string>

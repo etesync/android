@@ -136,7 +136,7 @@
     <string name="loading">Yükleniyor...</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync bilinmeyen bir sertifikayla karşılaştı. Güvenmek ister misiniz\?</string>
     <string name="certificate_notification_connection_security">EteSync: Bağlantı güvenliği</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Aşağıdaki etkinliğe davet edildiniz:
+    <string name="sync_calendar_attendees_email_content">Aşağıdaki etkinliğe davet edildiniz:
 \n
 \n%s
 \nNe zaman: %s
@@ -146,18 +146,18 @@
 \n--
 \nEteSync ile gönderildi - güvenli, uçtan uca şifreli ve özel veri eşzamanlama.
 \nhttps://www.EteSync.com adresinden edinin</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Davet: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_subject">Davet: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Davet gönder</string>
     <string name="sync_calendar_attendees_notification_content">Misafirlere davet gönderilsin mi\?</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Günlük salt okunur olduğundan tüm değişiklikleriniz (%d) geri alındı.</string>
     <string name="sync_journal_readonly">Günlük \"%s\" salt okunur</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s güncellendi.
+    <string name="sync_successfully_modified_full">%s güncellendi.
 \n%s silindi.</string>
-    <string name="sync_successfully_modified" formatted="false">%s değiştirildi.</string>
-    <string name="sync_successfully_tasks" formatted="false">Görevler \"%s\" değiştirildi (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Kişiler değiştirildi (%s)</string>
-    <string name="sync_successfully_calendar" formatted="false">Takvim \"%s\" değiştirildi (%s)</string>
+    <string name="sync_successfully_modified">%s değiştirildi.</string>
+    <string name="sync_successfully_tasks">Görevler \"%s\" değiştirildi (%s)</string>
+    <string name="sync_successfully_contacts">Kişiler değiştirildi (%s)</string>
+    <string name="sync_successfully_calendar">Takvim \"%s\" değiştirildi (%s)</string>
     <string name="sync_error_user_inactive">Kullanıcı etkin değil</string>
     <string name="sync_error_unauthorized">Kimlik doğrulama başarısız oldu</string>
     <string name="sync_phase_post_processing">son işlemler uygulanıyor</string>

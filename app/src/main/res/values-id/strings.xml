@@ -245,7 +245,7 @@
     <string name="loading">Memuat...</string>
     <string name="trust_certificate_unknown_certificate_found">EteSync menemukan sertifikat yang tidak dikenal. Apakah Anda ingin mempercayainya\?</string>
     <string name="certificate_notification_connection_security">EteSync: Keamanan koneksi</string>
-    <string name="sync_calendar_attendees_email_content" formatted="false">Anda telah diundang ke acara berikut:
+    <string name="sync_calendar_attendees_email_content">Anda telah diundang ke acara berikut:
 \n
 \n%s
 \nWaktu: %s
@@ -338,10 +338,10 @@
     <string name="login_forgot_password">Lupa kata sandi\?</string>
     <string name="account_owner">Pemilik: %s</string>
     <string name="setting_up_encryption_content">Harap tunggu, sedang mengatur enkripsi…</string>
-    <string name="sync_calendar_attendees_email_subject" formatted="false">Undangan: %s @ %s</string>
+    <string name="sync_calendar_attendees_email_subject">Undangan: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Kirim undangan</string>
     <string name="sync_calendar_attendees_notification_content">Kirim undangan ke tamu\?</string>
-    <string name="sync_calendar_attendees_notification_title" formatted="false">%s</string>
+    <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_error_unauthorized">Autentikasi gagal</string>
     <string name="sync_phase_post_processing">pasca pemrosesan</string>
     <string name="sync_phase_push_entries">mendorong entri</string>
@@ -349,14 +349,14 @@
     <string name="sync_phase_apply_remote_entries">menerapkan entri jarak jauh</string>
     <string name="sync_phase_fetch_entries">mengambil entri jarak jauh</string>
     <string name="sync_phase_create_local_entries">Membuat entri lokal</string>
-    <string name="sync_successfully_calendar" formatted="false">Kalender \"%s\" diubah (%s)</string>
+    <string name="sync_successfully_calendar">Kalender \"%s\" diubah (%s)</string>
     <string name="sync_error_user_inactive">Pengguna tidak aktif</string>
     <string name="sync_journal_readonly">Jurnal \"%s\" hanya baca</string>
-    <string name="sync_successfully_modified_full" formatted="false">%s diperbarui.
+    <string name="sync_successfully_modified_full">%s diperbarui.
 \n%s dihapus.</string>
-    <string name="sync_successfully_modified" formatted="false">%s diubah.</string>
-    <string name="sync_successfully_tasks" formatted="false">Tugas \"%s\" diubah (%s)</string>
-    <string name="sync_successfully_contacts" formatted="false">Kontak diubah (%s)</string>
+    <string name="sync_successfully_modified">%s diubah.</string>
+    <string name="sync_successfully_tasks">Tugas \"%s\" diubah (%s)</string>
+    <string name="sync_successfully_contacts">Kontak diubah (%s)</string>
     <string name="wrong_encryption_password">Kata sandi enkripsi salah</string>
     <string name="account_creation_failed">Gagal membuat akun</string>
     <string name="account_delete_collection_last_title">Tidak dapat menghapus koleksi terakhir</string>
