@@ -11,6 +11,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+    namespace 'com.etesync.syncadapter'
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
@@ -109,6 +110,7 @@ android {
     buildFeatures {
          dataBinding = true
          viewBinding = true
+         buildConfig = true
     }
     lint {
         disable 'GoogleAppIndexingWarning', 'GradleDependency', 'GradleDynamicVersion', 'IconColors', 'IconLauncherShape', 'IconMissingDensityFolder', 'ImpliedQuantity', 'MissingQuantity', 'MissingTranslation', 'ExtraTranslation', 'Recycle', 'RtlEnabled', 'RtlHardcoded', 'Typos', 'RestrictedApi'
