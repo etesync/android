@@ -92,7 +92,7 @@ class AppSettingsActivity : BaseActivity() {
             prefPreferTasksOrg.isChecked = context!!.defaultSharedPreferences.getBoolean(App.PREFER_TASKSORG, false)
             prefPreferTasksOrg.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 context!!.defaultSharedPreferences.edit().putBoolean(App.PREFER_TASKSORG, newValue as Boolean).apply()
-                Snackbar.make(view!!, getString(R.string.app_settings_prefer_tasksorg_snack), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), getString(R.string.app_settings_prefer_tasksorg_snack), Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -105,7 +105,7 @@ class AppSettingsActivity : BaseActivity() {
                 try {
                     URI(null, host, null, null)
                 } catch (e: URISyntaxException) {
-                    Snackbar.make(view!!, e.localizedMessage, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(requireView(), e.localizedMessage, Snackbar.LENGTH_LONG).show()
                     return@OnPreferenceChangeListener false
                 }
 
@@ -168,7 +168,7 @@ class AppSettingsActivity : BaseActivity() {
 
         private fun resetHints() {
             HintManager.resetHints(context!!)
-            Snackbar.make(view!!, R.string.app_settings_reset_hints_success, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(requireView(), R.string.app_settings_reset_hints_success, Snackbar.LENGTH_LONG).show()
         }
 
         private fun setDistrustSystemCerts(distrust: Boolean) {
@@ -177,7 +177,7 @@ class AppSettingsActivity : BaseActivity() {
 
         private fun resetCertificates() {
             if (CustomCertManager.resetCertificates(activity!!))
-                Snackbar.make(view!!, getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), getString(R.string.app_settings_reset_certificates_success), Snackbar.LENGTH_LONG).show()
         }
 
         private inner class LanguageTask internal constructor(private val mListPreference: ListPreference) : AsyncTask<Void, Void, LanguageUtils.LocaleList>() {

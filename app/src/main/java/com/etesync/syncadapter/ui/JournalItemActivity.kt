@@ -395,7 +395,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
 
         private fun showGroup(contact: Contact) {
-            val view = this.view!!
+            val view = requireView()
 
             val mainCard = view.findViewById<View>(R.id.main_card) as ViewGroup
 
@@ -408,7 +408,7 @@ class JournalItemActivity : BaseActivity(), Refreshable {
 
 
         private fun showContact(contact: Contact) {
-            val view = this.view!!
+            val view = requireView()
             val mainCard = view.findViewById<View>(R.id.main_card) as ViewGroup
             val aboutCard = view.findViewById<View>(R.id.about_card) as ViewGroup
             aboutCard.findViewById<View>(R.id.title_container).visibility = View.VISIBLE
