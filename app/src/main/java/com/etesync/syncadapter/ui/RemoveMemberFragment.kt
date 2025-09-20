@@ -23,7 +23,7 @@ class RemoveMemberFragment : DialogFragment() {
         info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
         memberEmail = arguments!!.getString(KEY_MEMBER)
         try {
-            settings = AccountSettings(context!!, account!!)
+            settings = AccountSettings(requireContext(), account!!)
         } catch (e: InvalidAccountException) {
             e.printStackTrace()
         }

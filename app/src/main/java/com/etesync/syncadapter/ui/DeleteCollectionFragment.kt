@@ -52,7 +52,7 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Exception> {
         account = args!!.getParcelable(ARG_ACCOUNT)!!
         collectionInfo = args.getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
-        return DeleteCollectionLoader(context!!, account, collectionInfo)
+        return DeleteCollectionLoader(requireContext(), account, collectionInfo)
     }
 
     override fun onLoadFinished(loader: Loader<Exception>, exception: Exception?) {
@@ -118,7 +118,7 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
             val collectionInfo = arguments!!.getSerializable(ARG_COLLECTION_INFO) as CollectionInfo
             val name = if (TextUtils.isEmpty(collectionInfo.displayName)) collectionInfo.uid else collectionInfo.displayName
 
-            return AlertDialog.Builder(context!!)
+            return AlertDialog.Builder(requireContext())
                     .setTitle(R.string.delete_collection_confirm_title)
                     .setMessage(getString(R.string.delete_collection_confirm_warning, name))
                     .setPositiveButton(android.R.string.yes) { dialog, _ ->

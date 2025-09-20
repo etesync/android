@@ -197,7 +197,7 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<AccountSettings> {
-        return AccountSettingsLoader(context!!, (args!!.getParcelable(KEY_ACCOUNT) as? Account)!!)
+        return AccountSettingsLoader(requireContext(), (args!!.getParcelable(KEY_ACCOUNT) as? Account)!!)
     }
 
     override fun onLoadFinished(loader: Loader<AccountSettings>, settings: AccountSettings?) {

@@ -89,9 +89,9 @@ class AppSettingsActivity : BaseActivity() {
             }
 
             prefPreferTasksOrg = findPreference("prefer_tasksorg") as SwitchPreferenceCompat
-            prefPreferTasksOrg.isChecked = context!!.defaultSharedPreferences.getBoolean(App.PREFER_TASKSORG, false)
+            prefPreferTasksOrg.isChecked = requireContext().defaultSharedPreferences.getBoolean(App.PREFER_TASKSORG, false)
             prefPreferTasksOrg.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                context!!.defaultSharedPreferences.edit().putBoolean(App.PREFER_TASKSORG, newValue as Boolean).apply()
+                requireContext().defaultSharedPreferences.edit().putBoolean(App.PREFER_TASKSORG, newValue as Boolean).apply()
                 Snackbar.make(requireView(), getString(R.string.app_settings_prefer_tasksorg_snack), Snackbar.LENGTH_LONG).show()
                 true
             }
@@ -146,7 +146,7 @@ class AppSettingsActivity : BaseActivity() {
 
 
             val prefChangeNotification = findPreference("show_change_notification") as SwitchPreferenceCompat
-            prefChangeNotification.isChecked = context!!.defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
+            prefChangeNotification.isChecked = requireContext().defaultSharedPreferences.getBoolean(App.CHANGE_NOTIFICATION, true)
 
             initSelectLanguageList()
         }
@@ -167,7 +167,7 @@ class AppSettingsActivity : BaseActivity() {
         }
 
         private fun resetHints() {
-            HintManager.resetHints(context!!)
+            HintManager.resetHints(requireContext())
             Snackbar.make(requireView(), R.string.app_settings_reset_hints_success, Snackbar.LENGTH_LONG).show()
         }
 
@@ -183,7 +183,7 @@ class AppSettingsActivity : BaseActivity() {
         private inner class LanguageTask internal constructor(private val mListPreference: ListPreference) : AsyncTask<Void, Void, LanguageUtils.LocaleList>() {
 
             override fun doInBackground(vararg voids: Void): LanguageUtils.LocaleList {
-                return LanguageUtils.getAppLanguages(context!!)
+                return LanguageUtils.getAppLanguages(requireContext())
 
             }
 
@@ -198,7 +198,7 @@ class AppSettingsActivity : BaseActivity() {
                     val value = newValue.toString()
                     if (value == (preference as ListPreference).value) return@OnPreferenceChangeListener true
 
-                    LanguageUtils.setLanguage(context!!, value)
+                    LanguageUtils.setLanguage(requireContext(), value)
 
                     settings.putString(App.FORCE_LANGUAGE, newValue.toString())
 

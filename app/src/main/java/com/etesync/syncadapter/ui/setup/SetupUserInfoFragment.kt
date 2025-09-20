@@ -39,7 +39,7 @@ class SetupUserInfoFragment : DialogFragment() {
         account = arguments!!.getParcelable(KEY_ACCOUNT)!!
 
         try {
-            settings = AccountSettings(context!!, account)
+            settings = AccountSettings(requireContext(), account)
         } catch (e: Exception) {
             e.printStackTrace()
         }

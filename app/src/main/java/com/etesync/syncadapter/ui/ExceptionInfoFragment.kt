@@ -31,7 +31,7 @@ class ExceptionInfoFragment : DialogFragment() {
         else if (exception is IOException)
             title = R.string.exception_ioexception
 
-        val dialog = AlertDialog.Builder(context!!)
+        val dialog = AlertDialog.Builder(requireContext())
                 .setIcon(R.drawable.ic_error_dark)
                 .setTitle(title)
                 .setMessage("${exception.javaClass.canonicalName}\n" + exception.localizedMessage)

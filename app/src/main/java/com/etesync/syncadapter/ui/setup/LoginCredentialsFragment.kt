@@ -68,7 +68,7 @@ class LoginCredentialsFragment : Fragment() {
         }
 
         val forgotPassword = v.findViewById<View>(R.id.forgot_password) as TextView
-        forgotPassword.setOnClickListener { WebViewActivity.openUrl(context!!, Constants.forgotPassword) }
+        forgotPassword.setOnClickListener { WebViewActivity.openUrl(requireContext(), Constants.forgotPassword) }
 
         val advancedLayout = v.findViewById<View>(R.id.advanced_layout) as ExpandableLayout
 

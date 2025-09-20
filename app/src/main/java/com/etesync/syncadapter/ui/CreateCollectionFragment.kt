@@ -55,7 +55,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
 
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Exception> {
-        return CreateCollectionLoader(context!!, account, info)
+        return CreateCollectionLoader(requireContext(), account, info)
     }
 
     override fun onLoadFinished(loader: Loader<Exception>, exception: Exception?) {

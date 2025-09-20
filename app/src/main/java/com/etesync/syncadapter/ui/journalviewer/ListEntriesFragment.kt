@@ -41,7 +41,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        data = (context!!.applicationContext as App).data
+        data = (requireContext().applicationContext as App).data
         account = arguments!!.getParcelable(ViewCollectionActivity.EXTRA_ACCOUNT)!!
         info = arguments!!.getSerializable(EXTRA_COLLECTION_INFO) as CollectionInfo
     }
@@ -68,7 +68,7 @@ class ListEntriesFragment : ListFragment(), AdapterView.OnItemClickListener {
             val entries = loadEntries()
 
             uiThread {
-                val listAdapter = EntriesListAdapter(context!!)
+                val listAdapter = EntriesListAdapter(requireContext())
                 setListAdapter(listAdapter)
 
                 listAdapter.addAll(entries)

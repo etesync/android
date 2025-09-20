@@ -59,7 +59,7 @@ class LocalContactImportFragment : Fragment() {
     }
 
     protected fun importAccount() {
-        val provider = context!!.contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
+        val provider = requireContext().contentResolver.acquireContentProviderClient(ContactsContract.RawContacts.CONTENT_URI)
         val cursor: Cursor?
         try {
             cursor = provider!!.query(ContactsContract.RawContacts.CONTENT_URI,
@@ -82,7 +82,7 @@ class LocalContactImportFragment : Fragment() {
             if (account == null || !(account.name == accountName && account.type == accountType)) {
                 if (accountName != null && accountType != null) {
                     account = Account(accountName, accountType)
-                    localAddressBooks.add(LocalAddressBook(context!!, account, provider))
+                    localAddressBooks.add(LocalAddressBook(requireContext(), account, provider))
                 }
             }
         }
@@ -90,7 +90,7 @@ class LocalContactImportFragment : Fragment() {
         cursor.close()
         provider.release()
 
-        recyclerView!!.adapter = ImportContactAdapter(context!!, localAddressBooks, object : OnAccountSelected {
+        recyclerView!!.adapter = ImportContactAdapter(requireContext(), localAddressBooks, object : OnAccountSelected {
             override fun accountSelected(index: Int) {
                 ImportContacts().execute(localAddressBooks[index])
             }

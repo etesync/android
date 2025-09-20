@@ -43,11 +43,11 @@ class LocalCalendarImportFragment : ListFragment() {
     }
 
     protected fun importAccount() {
-        val calendarAccountList = CalendarAccount.loadAll(context!!.contentResolver)
+        val calendarAccountList = CalendarAccount.loadAll(requireContext().contentResolver)
 
         val listCalendar = listView as ExpandableListView
 
-        val adapter = ExpandableListAdapter(context!!, calendarAccountList)
+        val adapter = ExpandableListAdapter(requireContext(), calendarAccountList)
         listCalendar.setAdapter(adapter)
 
         listCalendar.setOnChildClickListener { aExpandableListView, aView, groupPosition, childPosition, aL ->
@@ -202,7 +202,7 @@ class LocalCalendarImportFragment : ListFragment() {
             val result = ResultFragment.ImportResult()
             try {
                 val localCalendar = LocalCalendar.findByName(account,
-                        context!!.contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!,
+                        requireContext().contentResolver.acquireContentProviderClient(CalendarContract.CONTENT_URI)!!,
                         LocalCalendar.Factory, uid)
                 val localEvents = fromCalendar.findAll()
                 val total = localEvents.size

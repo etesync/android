@@ -48,10 +48,10 @@ class StartupDialogFragment : DialogFragment() {
                     .setNeutralButton(R.string.startup_battery_optimization_disable) { dialog, which ->
                         val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
                                 Uri.parse("package:" + BuildConfig.APPLICATION_ID))
-                        if (intent.resolveActivity(context!!.packageManager) != null)
-                            context!!.startActivity(intent)
+                        if (intent.resolveActivity(requireContext().packageManager) != null)
+                            requireContext().startActivity(intent)
                     }
-                    .setNegativeButton(R.string.startup_dont_show_again) { dialog, which -> HintManager.setHintSeen(context!!, HINT_BATTERY_OPTIMIZATIONS, true) }
+                    .setNegativeButton(R.string.startup_dont_show_again) { dialog, which -> HintManager.setHintSeen(requireContext(), HINT_BATTERY_OPTIMIZATIONS, true) }
                     .create()
 
             StartupDialogFragment.Mode.DEVELOPMENT_VERSION -> return AlertDialog.Builder(requireActivity())
@@ -65,8 +65,8 @@ class StartupDialogFragment : DialogFragment() {
                     .setTitle(R.string.startup_vendor_specific_bugs)
                     .setMessage(R.string.startup_vendor_specific_bugs_message)
                     .setPositiveButton(android.R.string.ok) { dialog, which -> }
-                    .setNeutralButton(R.string.startup_vendor_specific_bugs_open_faq) { dialog, which -> WebViewActivity.openUrl(context!!, Constants.faqUri.buildUpon().encodedFragment("vendor-issues").build()) }
-                    .setNegativeButton(R.string.startup_dont_show_again) { dialog, which -> HintManager.setHintSeen(context!!, HINT_VENDOR_SPECIFIC_BUGS, true) }
+                    .setNeutralButton(R.string.startup_vendor_specific_bugs_open_faq) { dialog, which -> WebViewActivity.openUrl(requireContext(), Constants.faqUri.buildUpon().encodedFragment("vendor-issues").build()) }
+                    .setNegativeButton(R.string.startup_dont_show_again) { dialog, which -> HintManager.setHintSeen(requireContext(), HINT_VENDOR_SPECIFIC_BUGS, true) }
                     .create()
             StartupDialogFragment.Mode.GOOGLE_PLAY_ACCOUNTS_REMOVED -> {}
         }

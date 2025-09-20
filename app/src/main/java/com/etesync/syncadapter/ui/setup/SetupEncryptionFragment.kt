@@ -47,7 +47,7 @@ class SetupEncryptionFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SetupEncryptionLoader(context!!, arguments!!.getSerializable(KEY_CONFIG) as Configuration).execute()
+        SetupEncryptionLoader(requireContext(), arguments!!.getSerializable(KEY_CONFIG) as Configuration).execute()
     }
 
     private inner class SetupEncryptionLoader(internal val context: Context, internal val config: Configuration) : AsyncTask<Void, Void, Configuration>() {
@@ -126,7 +126,7 @@ class SetupEncryptionFragment : DialogFragment() {
         // add entries for account to service DB
         Logger.log.log(Level.INFO, "Writing account configuration to database", config)
         try {
-            val settings = AccountSettings(context!!, account)
+            val settings = AccountSettings(requireContext(), account)
 
             settings.authToken = config.authtoken!!
             if (config.keyPair != null) {
@@ -148,7 +148,7 @@ class SetupEncryptionFragment : DialogFragment() {
             TASK_PROVIDERS.forEach {
                 // enable task sync if OpenTasks is installed
                 // further changes will be handled by PackageChangedReceiver
-                TaskProviderHandling.updateTaskSync(context!!, it)
+                TaskProviderHandling.updateTaskSync(requireContext(), it)
             }
 
         } catch (e: InvalidAccountException) {

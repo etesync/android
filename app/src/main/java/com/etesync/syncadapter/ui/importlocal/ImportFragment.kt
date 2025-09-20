@@ -188,7 +188,7 @@ class ImportFragment : DialogFragment() {
             val result = ImportResult()
 
             try {
-                val context = context!!
+                val context = requireContext()
                 val importReader = InputStreamReader(inputStream)
 
                 if (enumType == CollectionInfo.Type.CALENDAR) {

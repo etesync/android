@@ -34,7 +34,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        data = (context!!.applicationContext as App).data
+        data = (requireContext().applicationContext as App).data
         account = arguments!!.getParcelable(Constants.KEY_ACCOUNT)!!
         info = arguments!!.getSerializable(Constants.KEY_COLLECTION_INFO) as CollectionInfo
         journalEntity = JournalModel.Journal.fetch(data, info.getServiceEntity(data), info.uid)
@@ -52,7 +52,7 @@ class CollectionMembersListFragment : ListFragment(), AdapterView.OnItemClickLis
     override fun refresh() {
         asyncTask = doAsync {
             try {
-                val settings = AccountSettings(context!!, account)
+                val settings = AccountSettings(requireContext(), account)
                 val httpClient = HttpClient.Builder(context, settings).build().okHttpClient
                 val journalsManager = JournalManager(httpClient, settings.uri?.toHttpUrlOrNull()!!)
 
