@@ -64,7 +64,7 @@ class CreateCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
         val parent = activity
         if (parent != null) {
             if (exception != null)
-                fragmentManager!!.beginTransaction()
+                requireFragmentManager().beginTransaction()
                         .add(ExceptionInfoFragment.newInstance(exception, account), null)
                         .commitAllowingStateLoss()
             else

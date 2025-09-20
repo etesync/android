@@ -54,7 +54,7 @@ class LoginCredentialsChangeFragment : DialogFragment(), LoaderManager.LoaderCal
         if (data != null) {
             if (data.isFailed)
             // no service found: show error message
-                fragmentManager!!.beginTransaction()
+                requireFragmentManager().beginTransaction()
                         .add(NothingDetectedFragment.newInstance(data.error!!.localizedMessage), null)
                         .commitAllowingStateLoss()
             else {

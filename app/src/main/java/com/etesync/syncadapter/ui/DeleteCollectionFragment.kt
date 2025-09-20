@@ -59,7 +59,7 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
         dismissAllowingStateLoss()
 
         if (exception != null)
-            fragmentManager!!.beginTransaction()
+            requireFragmentManager().beginTransaction()
                     .add(ExceptionInfoFragment.newInstance(exception, account), null)
                     .commitAllowingStateLoss()
         else {
@@ -124,7 +124,7 @@ class DeleteCollectionFragment : DialogFragment(), LoaderManager.LoaderCallbacks
                     .setPositiveButton(android.R.string.yes) { dialog, _ ->
                         val frag = DeleteCollectionFragment()
                         frag.arguments = arguments
-                        frag.show(fragmentManager!!, null)
+                        frag.show(requireFragmentManager(), null)
                     }
                     .setNegativeButton(android.R.string.no) { _, _ -> dismiss() }
                     .create()

@@ -340,7 +340,7 @@ class LoginFragment() : Fragment() {
         login.setOnClickListener {
             val credentials = validateLoginData()
             if (credentials != null)
-                LoginDoFragment.newInstance(accountV1, credentials).show(fragmentManager!!, null)
+                LoginDoFragment.newInstance(accountV1, credentials).show(requireFragmentManager(), null)
         }
 
         val forgotPassword = v.findViewById<View>(R.id.forgot_password) as TextView

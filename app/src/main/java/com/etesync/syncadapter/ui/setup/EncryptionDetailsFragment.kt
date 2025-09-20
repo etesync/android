@@ -27,7 +27,7 @@ class EncryptionDetailsFragment : Fragment() {
         val v = inflater.inflate(R.layout.login_encryption_details, container, false)
 
         val btnBack = v.findViewById<View>(R.id.back) as Button
-        btnBack.setOnClickListener { fragmentManager!!.popBackStack() }
+        btnBack.setOnClickListener { requireFragmentManager().popBackStack() }
 
         val config = arguments!!.getSerializable(KEY_CONFIG) as BaseConfigurationFinder.Configuration
 
@@ -50,7 +50,7 @@ class EncryptionDetailsFragment : Fragment() {
                 return@OnClickListener
             }
 
-            SetupEncryptionFragment.newInstance(config).show(fragmentManager!!, null)
+            SetupEncryptionFragment.newInstance(config).show(requireFragmentManager(), null)
         })
 
         return v

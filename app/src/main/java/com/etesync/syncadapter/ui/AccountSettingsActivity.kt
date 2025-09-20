@@ -217,7 +217,7 @@ class LegacyAccountSettingsFragment : PreferenceFragmentCompat(), LoaderManager.
         val prefPassword = findPreference("password") as EditTextPreference
         prefPassword.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val credentials = if (newValue != null) LoginCredentials(settings.uri, account.name, newValue as String) else null
-            LoginCredentialsChangeFragment.newInstance(account, credentials!!).show(fragmentManager!!, null)
+            LoginCredentialsChangeFragment.newInstance(account, credentials!!).show(requireFragmentManager(), null)
             loaderManager.restartLoader(0, arguments, this@LegacyAccountSettingsFragment)
             false
         }
