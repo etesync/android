@@ -1,6 +1,11 @@
 # Changelog
 *NOTE:* may be removed in the future in favor of the fastlane changelog.
 
+## Version 2.5.0
+* Remove unused READ_MEDIA_IMAGES permission.
+* Fix build with latest Android SDKs
+* Bump target SDK
+
 ## Version 2.4.4
 * Fix error when importing from file in Android 13+
 
