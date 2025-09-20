@@ -17,7 +17,7 @@ android {
         applicationId "com.etesync.syncadapter"
 
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 36
 
         versionCode 20404
         versionName "2.4.4"
