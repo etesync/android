@@ -1,16 +1,11 @@
 package com.etesync.syncadapter.ui.importlocal
 
-import android.Manifest
 import android.accounts.Account
-import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.provider.ContactsContract
@@ -49,27 +44,7 @@ class ImportFragment : DialogFragment() {
         retainInstance = true
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            chooseFile()
-        } else {
-            val data = ImportResult()
-            data.e = Exception(getString(R.string.import_permission_required))
-            onImportResult(data)
 
-            dismissAllowingStateLoss()
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private fun requestPermissions() {
-        if (SDK_INT <= 32) {
-            requestPermissions(kotlin.arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
-        } else {
-            requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), 0)
-        }
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -82,11 +57,7 @@ class ImportFragment : DialogFragment() {
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
 
         if (savedInstanceState == null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions()
-            } else {
-                chooseFile()
-            }
+            chooseFile()
         } else {
             setDialogAddEntries(progress, savedInstanceState.getInt(TAG_PROGRESS_MAX))
         }
