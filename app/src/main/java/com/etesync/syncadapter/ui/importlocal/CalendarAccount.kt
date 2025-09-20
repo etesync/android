@@ -70,7 +70,7 @@ class CalendarAccount protected constructor(val account: Account) {
                 if (calendarAccount == null ||
                         calendarAccount.accountName != accountName ||
                         calendarAccount.accountType != accountType) {
-                    calendarAccount = CalendarAccount(Account(accountName, accountType))
+                    calendarAccount = CalendarAccount(Account(accountName!!, accountType!!))
                     calendarAccounts.add(calendarAccount)
                 }
 
