@@ -147,7 +147,7 @@ class App : Application() {
     }
 
     /** Init the preferences version of the app.
-     * This is used to initialise the first version if not alrady set.  */
+     * This is used to initialise the first version if not already set.  */
     private fun initPrefVersion() {
         val prefs = getSharedPreferences("app", Context.MODE_PRIVATE)
         if (prefs.getInt(PREF_VERSION, 0) == 0) {
