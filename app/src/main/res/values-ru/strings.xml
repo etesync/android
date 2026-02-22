@@ -62,8 +62,7 @@
     <string name="logging_to_external_storage">Логирование на внешнее хранилище: %s</string>
     <string name="logging_davdroid_file_logging">Логирование файлов EteSync включено</string>
     <string name="about_license_info_no_warranty">Эта программа поставляется СОВЕРШЕННО БЕЗ ГАРАНТИЙ. Это бесплатное программное обеспечение, и вы можете распространять его при определенных условиях.</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync обнаружил, что вы используете версию Android, которая может содержать ошибки производителя.
-\nПожалуйста, посмотрите FAQ для получения дополнительной информации.</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync обнаружил, что вы используете версию Android, которая может содержать ошибки производителя.\nПожалуйста, посмотрите FAQ для получения дополнительной информации.</string>
     <string name="startup_vendor_specific_bugs">Возможные ошибки поставщика</string>
     <string name="startup_development_version_message">Это разрабатываемая версия EteSync. Имейте в виду, что все может работать не так, как ожидалось. Пожалуйста, дайте нам конструктивный отзыв для улучшения EteSync.</string>
     <string name="startup_battery_optimization_disable">Выключить для EteSync</string>
