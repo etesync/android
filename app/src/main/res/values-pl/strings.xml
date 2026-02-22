@@ -25,7 +25,7 @@
     <string name="logging_davdroid_file_logging">Plik logów EteSync</string>
     <string name="logging_to_external_storage">Logowanie do zewnątrznej pamięci: %s</string>
     <string name="logging_to_external_storage_warning">Wyłączenie spowoduje usunięcie logów</string>
-    <string name="logging_couldnt_create_file">Nie można stworzyć zewnętrznego pliku logów: %s</string>
+    <string name="logging_couldnt_create_file">Nie można stworzyć zewnętrznego pliku logów: %s</string>
     <string name="logging_no_external_storage">Zewnętrzna pamięć nie została odnaleziona</string>
     <!-- AccountsActivity -->
     <string name="navigation_drawer_open">Otwórz menu nawigacji</string>
@@ -38,7 +38,7 @@
     <string name="navigation_drawer_faq">FAQ</string>
     <string name="navigation_drawer_guide">Podręcznik Użytkowania</string>
     <string name="navigation_drawer_report_issue">Zgłoś błąd</string>
-    <string name="navigation_drawer_contact">Skontaktuj się z programistą</string>
+    <string name="navigation_drawer_contact">Skontaktuj się z programistą</string>
     <string name="account_list_empty">Witaj w EteSync!</string>
     <string name="accounts_global_sync_disabled">Ogólnosystemowa automatyczna synchronizacja jest wyłączona</string>
     <string name="accounts_global_sync_enable">Włącz</string>
@@ -52,14 +52,14 @@
     <string name="app_settings_reset_hints_success">Wszystkie wskazówki pojawią się ponownie</string>
     <string name="app_settings_connection">Łączność</string>
     <string name="app_settings_override_proxy">Nadpisz ustawienia proxy</string>
-    <string name="app_settings_override_proxy_on">Użyj niestandardowych ustawień proxy </string>
+    <string name="app_settings_override_proxy_on">Użyj niestandardowych ustawień proxy</string>
     <string name="app_settings_override_proxy_off">Użyj systemowych ustawień proxy</string>
     <string name="app_settings_override_proxy_host">Nazwa hosta HTTP proxy</string>
     <string name="app_settings_override_proxy_port">Port HTTP proxy</string>
     <string name="app_settings_security">Bezpieczeństwo</string>
     <string name="app_settings_distrust_system_certs">Usuń certyfikaty systemowe</string>
-    <string name="app_settings_distrust_system_certs_on">CA systemowe i użytkownika nie zostaną dodane</string>
-    <string name="app_settings_distrust_system_certs_off">CA systemowe i użytkownika zostaną dodane (zalecane)</string>
+    <string name="app_settings_distrust_system_certs_on">CA systemowe i użytkownika nie zostaną dodane</string>
+    <string name="app_settings_distrust_system_certs_off">CA systemowe i użytkownika zostaną dodane (zalecane)</string>
     <string name="app_settings_reset_certificates">Zresetuj (nie)zaufane certyfikaty</string>
     <string name="app_settings_reset_certificates_summary">Resetuje zaufanie do wszystkich niestandardowych certyfikatów</string>
     <string name="app_settings_reset_certificates_success">Wszystkie niestandardowe certyfikaty zostały wyczyszczone</string>
@@ -67,7 +67,7 @@
     <string name="app_settings_log_to_external_storage">Loguj do zewnętrznego pliku</string>
     <string name="app_settings_log_to_external_storage_on">Logowanie do zewnętrznej pamięci (jeśli jest dostępna)</string>
     <string name="app_settings_log_to_external_storage_off">Logowanie do zewnętrznego pliku jest niedostępne</string>
-    <string name="app_settings_show_debug_info">Pokaż informacje debugowania</string>
+    <string name="app_settings_show_debug_info">Pokaż informacje debugowania</string>
     <string name="app_settings_show_debug_info_details">Przeglądaj/udostępnij oprogramowanie i szczegóły konfiguracji</string>
     <string name="app_settings_force_language">Wymuś język</string>
     <string name="app_settings_force_language_default">Automatyczny</string>
@@ -77,11 +77,11 @@
     <string name="account_settings">Ustawienia konta</string>
     <string name="account_delete">Usuń konto</string>
     <string name="account_show_fingerprint">Pokaż Odcisk</string>
-    <string name="account_delete_confirmation_title">Naprawdę chcesz usunąć konto?</string>
+    <string name="account_delete_confirmation_title">Naprawdę chcesz usunąć konto?</string>
     <string name="account_delete_confirmation_text">Wszystkie lokalne kopie książek adresowych, kalendarzy i list zadań zostaną usunięte.</string>
     <string name="account_delete_collection_last_title">Nie można usunąć ostatniej kolekcji</string>
     <string name="account_delete_collection_last_text">Usunięcie ostatniej kolekcji nie jest dozwolone - proszę utworzyć nową, aby móc usunąć obecną.</string>
-    <string name="account_showcase_view_collection">Możesz dotknąć obiektu, aby przejrzeć kolekcję. Dzięki temu zobaczysz dzienniki, zaimportujesz pliki oraz wiele więcej...</string>
+    <string name="account_showcase_view_collection">Możesz dotknąć obiektu, aby przejrzeć kolekcję. Dzięki temu zobaczysz dzienniki, zaimportujesz pliki oraz wiele więcej...</string>
     <string name="show_fingperprint_title">Mój Odcisk</string>
     <!-- ViewCollection -->
     <string name="change_journal_title">Zmień Dzienniki</string>
@@ -90,7 +90,7 @@
     <string name="members_owner_only">Tylko właściciel tej kolekcji (%s) może zobaczyć jej członków.</string>
     <string name="not_allowed_title">Niedozwolone</string>
     <string name="edit_owner_only">Tylko właściciel tej kolekcji (%s) może ją edytować.</string>
-    <string name="members_old_journals_not_allowed">Udostępnianie dzienników ze starym stylem nie jest dozwolone. Jeżeli chcesz go udostępnić, musisz stworzyć nowy oraz skopiować kontekst starego do nowego poprzez użycie okna /"Importuj/". Jeżeli doświadczasz jakichkolwiek problemów, proszę skontaktować się ze wsparciem.</string>
+    <string name="members_old_journals_not_allowed">Udostępnianie dzienników ze starym stylem nie jest dozwolone. Jeżeli chcesz go udostępnić, musisz stworzyć nowy oraz skopiować kontekst starego do nowego poprzez użycie okna /Importuj/. Jeżeli doświadczasz jakichkolwiek problemów, proszę skontaktować się ze wsparciem.</string>
     <!-- CollectionMembers -->
     <string name="collection_members_title">Członkowie</string>
     <string name="collection_members_list_loading">Wczytywanie członków...</string>
@@ -99,12 +99,12 @@
     <string name="collection_members_add_error">Wystąpił błąd podczas dodawania członka</string>
     <string name="collection_members_adding">Zapraszanie użytkownika</string>
     <string name="trust_fingerprint_title">Zweryfikuj odcisk bezpieczeństwa</string>
-    <string name="trust_fingerprint_body">Weryfikuje odcisk bezpieczeństwa użytkownika /"%s/", aby upewnić się, iż szyfrowanie jest bezpieczne.</string>
+    <string name="trust_fingerprint_body">Weryfikuje odcisk bezpieczeństwa użytkownika /%s/, aby upewnić się, iż szyfrowanie jest bezpieczne.</string>
     <string name="collection_members_error_user_not_found">Nie znaleziono użytkownika (%s)</string>
     <string name="collection_members_removing">Usuwanie członka</string>
     <string name="collection_members_remove_error">Wystąpił błąd podczas usuwania członka</string>
     <string name="collection_members_remove_title">Usuń członka</string>
-    <string name="collection_members_remove">Czy chcesz odwołać dostęp użytkownika %s?\n Proszę być świadomym, iż złośliwy użytkownik może potencjalnie zachować dostęp do kluczy szyfrowania. W celu uzyskania informacji, proszę zapoznać się z FAQ.</string>
+    <string name="collection_members_remove">Czy chcesz odwołać dostęp użytkownika %s?\n Proszę być świadomym, iż złośliwy użytkownik może potencjalnie zachować dostęp do kluczy szyfrowania. W celu uzyskania informacji, proszę zapoznać się z FAQ.</string>
     <!-- JournalItemActivity -->
     <string name="about">O aplikacji</string>
     <string name="journal_item_tab_main">Główne</string>
@@ -157,16 +157,12 @@
     <string name="login_encryption_account_label">Konto:</string>
     <string name="login_service_details_description">Służy ono do zalogowania się, *nie jest* szyfrowanym hasłem!</string>
     <string name="login_forgot_password">Zapomniałeś hasła?</string>
-    <string name="login_configuration_detection">Wykrywanie Konfiguracji</string>
-    <string name="login_querying_server">Proszę czekać, odpytywanie serwera…</string>
     <string name="login_wrong_username_or_password">Nie można uwierzytelnić (prawdopodobnie błędna nazwa użytkownika lub hasło).
 \nCzy zarejestrowałeś się\?</string>
     <string name="login_view_logs">Zobacz logi</string>
     <string name="setting_up_encryption">Ustawianie Szyfrowania</string>
     <string name="setting_up_encryption_content">Proszę czekać, ustawianie szyfrowania…</string>
     <string name="account_creation_failed">Tworzenie konta nie powiodło się</string>
-    <!-- SetupUserInfoFragment -->
-    <string name="login_encryption_error_title">Błąd szyfrowania</string>
     <!-- ImportFragment -->
     <string name="import_dialog_title">Importuj</string>
     <string name="import_dialog_failed_title">Importowanie nie powiodło się</string>
@@ -177,7 +173,6 @@
     <string name="choose_file">Wybierz plik</string>
     <!-- AccountSettingsActivity -->
     <string name="settings_title">Ustawienia: %s</string>
-    <string name="settings_authentication">Weryfikacja</string>
     <string name="settings_encryption">Szyfrowanie</string>
     <string name="settings_password">Hasło</string>
     <string name="settings_password_summary">Zmień hasło weryfikacji</string>
@@ -186,11 +181,9 @@
     <string name="settings_encryption_password_summary">Zmień swoje hasło szyfrowania</string>
     <string name="settings_enter_encryption_password">Wprowadź obecne hasło szyfrowania:</string>
     <string name="settings_sync">Synchronizacja</string>
-    <string name="settings_sync_interval_contacts">Okres synchronizacji kontaktów</string>
     <string name="settings_sync_summary_manually">Tylko ręcznie</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s oraz natychmiast przy zmianach lokalnych</string>
     <string name="settings_sync_summary_not_available">Niedostępne</string>
-    <string name="settings_sync_interval_calendars">Okres synchronizacji kalendarzy</string>
     <string-array name="settings_sync_interval_names">
         <item>Tylko ręcznie</item>
         <item>Co 15 minut</item>
@@ -399,4 +392,8 @@
     <string name="retry">Ponów</string>
     <string name="skip">Pomiń</string>
     <string name="create">Utwórz</string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="account_type" translatable="false"></string>
 </resources>
