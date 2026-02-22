@@ -363,4 +363,8 @@
     <string name="invitations_title">Convites</string>
     <string name="login_encryption_check_password">* Certifique-se que lembra da sua senha, pois não pode ser recuperada!</string>
     <string name="startup_development_version">Lançamento de prévia do EteSync</string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="account_type" translatable="false"></string>
 </resources>
