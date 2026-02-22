@@ -80,12 +80,10 @@
     <string name="skip">Пропустить</string>
     <string name="create">Создать</string>
     <string name="account_title_address_book">Адресная книга EteSync</string>
-    <string name="migrate_v2_wizard_migrate_progress_done">Ваш аккаунт перенесли.
-\nПожалуйста, убедитесь, что все было скопировано правильно, и удалите вашу старую учетную запись, как только это будет сделано.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Ваш аккаунт перенесли.\nПожалуйста, убедитесь, что все было скопировано правильно, и удалите вашу старую учетную запись, как только это будет сделано.</string>
     <string name="migrate_v2_wizard_migrate_progress_entries">Перенесенные записи %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress">Перемещение коллекции %d/%d</string>
-    <string name="migrate_v2_wizard_welcome_body_extra">Пожалуйста, убедитесь, что у вас есть достаточное количество батареи и надежное подключение к Интернету, так как это может занять некоторое время.
-\nДля продолжения, пожалуйста, выберите ниже, хотите ли Вы зарегистрироваться в новой учетной записи EteSync 2.0 или войти, используя существующую.</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Пожалуйста, убедитесь, что у вас есть достаточное количество батареи и надежное подключение к Интернету, так как это может занять некоторое время.\nДля продолжения, пожалуйста, выберите ниже, хотите ли Вы зарегистрироваться в новой учетной записи EteSync 2.0 или войти, используя существующую.</string>
     <string name="migrate_v2_wizard_migrate_title">Миграция…</string>
     <string name="migrate_v2_wizard_welcome_body">Этот инструмент поможет вам перенести данные на EteSync 2.0. При миграции данные не удаляются. Он только копирует данные на новый сервер EteSync 2.0. Это означает, что при переносе нет риска потери данных.</string>
     <string name="migrate_v2_wizard_welcome_title">Миграция EteSync 2.0</string>
