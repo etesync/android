@@ -341,4 +341,6 @@
     <string name="startup_development_version_message"></string>
     <string name="about_license_info_no_warranty"></string>
     <string name="startup_development_version"></string>
+    <string name="migrate_v2_wizard_migrate_progress_entries"></string>
+    <string name="migrate_v2_wizard_welcome_body_extra"></string>
 </resources>
