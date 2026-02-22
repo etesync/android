@@ -341,4 +341,30 @@
     <string name="create">Erstellen</string>
     <string name="address_books_authority_title">Adressbücher</string>
     <string name="account_title_address_book">EteSync Adressbuch</string>
+    <string name="startup_vendor_specific_bugs_message"></string>
+    <string name="use_native_apps_body"></string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="notification_channel_sync_status_desc"></string>
+    <string name="wrong_encryption_password_content"></string>
+    <string name="collection_members_remove"></string>
+    <string name="sync_journal_readonly"></string>
+    <string name="debug_info_more_data_shared"></string>
+    <string name="settings_account_dashboard"></string>
+    <string name="notification_channel_debugging"></string>
+    <string name="sync_successfully_calendar"></string>
+    <string name="journal_item_tab_main"></string>
+    <string name="sync_successfully_tasks"></string>
+    <string name="collection_members_remove_admin"></string>
+    <string name="account_showcase_import"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="change_encryption_password_success_title"></string>
+    <string name="settings_manage_account_summary"></string>
+    <string name="members_old_journals_not_allowed"></string>
+    <string name="journal_item_job_description"></string>
+    <string name="collection_members_no_access"></string>
+    <string name="loading_error_content"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="import_permission_required"></string>
+    <string name="account_type" translatable="false"></string>
+    <string name="login_encryption_enter_password"></string>
 </resources>
