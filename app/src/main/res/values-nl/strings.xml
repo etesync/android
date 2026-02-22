@@ -65,20 +65,15 @@
     <string name="login_password">Wachtwoord</string>
     <string name="login_password_required">Wachtwoord vereist</string>
     <string name="login_back">Terug</string>
-    <string name="login_configuration_detection">Configuratie detectie</string>
-    <string name="login_querying_server">Even geduld, verzoek naar server...</string>
     <string name="login_view_logs">Bekijk logs</string>
     <!--AccountSettingsActivity-->
     <string name="settings_title">Instellingen: %s</string>
-    <string name="settings_authentication">Authenticatie</string>
     <string name="settings_password">Wachtwoord</string>
     <string name="settings_enter_password">Wachtwoord invoeren:</string>
     <string name="settings_sync">Synchronisatie</string>
-    <string name="settings_sync_interval_contacts">Contacten verversen</string>
     <string name="settings_sync_summary_manually">Alleen handmatig</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + meteen na wijziging</string>
     <string name="settings_sync_summary_not_available">Niet beschikbaar</string>
-    <string name="settings_sync_interval_calendars">Agenda\'s verversen</string>
     <string-array name="settings_sync_interval_names">
         <item>Alleen handmatig</item>
         <item>Elke 15 minuten</item>
@@ -127,15 +122,14 @@
     <string name="about">Over</string>
     <string name="invitations_reject">Verwerp</string>
     <string name="invitations_accept">Accepteer</string>
-    <string name="invitations_accept_reject_dialog">Wilt u de uitnodiging accepteren of verwerpen\?</string>
+    <string name="invitations_accept_reject_dialog">Wilt u de uitnodiging accepteren of verwerpen?</string>
     <string name="invitations_list_empty">Geen uitnodigingen</string>
     <string name="invitations_loading">Bezig met laden van uitnodigingen...</string>
     <string name="invitations_title">Uitnodigingen</string>
     <string name="collection_members_leave">Verlaat</string>
-    <string name="collection_members_no_access">Enkel admins mogen lidmaatschap van verzamelingen beheren. Zou u graag de verzameling verlaten\?</string>
+    <string name="collection_members_no_access">Enkel admins mogen lidmaatschap van verzamelingen beheren. Zou u graag de verzameling verlaten?</string>
     <string name="collection_members_remove_admin">Het verwijderen van toegang van admins is momenteel niet ondersteund.</string>
-    <string name="collection_members_remove">Zou u %s\'s toegang willen intrekken\?
-\nWeet dat een kwaadaardige gebruiken potentieel toegang zou kunnen behouden tot encryptiesleutels. Kijk in de veelgestelde vragen voor meer informatie.</string>
+    <string name="collection_members_remove">Zou u %s\'s toegang willen intrekken?\nWeet dat een kwaadaardige gebruiken potentieel toegang zou kunnen behouden tot encryptiesleutels. Kijk in de veelgestelde vragen voor meer informatie.</string>
     <string name="collection_members_remove_title">Verwijder lid</string>
     <string name="collection_members_remove_error">Fout bij het verwijderen van lid</string>
     <string name="collection_members_removing">Lid aan het verwijderen</string>
@@ -148,10 +142,8 @@
     <string name="collection_members_list_empty">Geen leden</string>
     <string name="collection_members_list_loading">Laden van members...</string>
     <string name="collection_members_title">Leden</string>
-    <string name="use_native_apps_body">EteSync integreert naadloos met Android, dus gebruik gewoon je bestaande adresboek en kalenderapplicaties!
-\n
-\nVoor meer informatie, bekijk onze gebruikersgids.</string>
-    <string name="use_native_apps_title">Wist je dat\?</string>
+    <string name="use_native_apps_body">EteSync integreert naadloos met Android, dus gebruik gewoon je bestaande adresboek en kalenderapplicaties!\n\nVoor meer informatie, bekijk onze gebruikersgids.</string>
+    <string name="use_native_apps_title">Wist je dat?</string>
     <string name="members_old_journals_not_allowed">Het delen van klassieke journalen is niet toegestaan. Om dit journaal te delen, maak een nieuwe aan en kopieer de inhoud via de \"importeer\" dialoog. Indien u hierbij problemen ondervind, contacteer a.u.b. de ondersteuning.</string>
     <string name="edit_owner_only_anon">Enkel de eigenaar van deze verzameling mag aanpassingen maken.</string>
     <string name="edit_owner_only">Enkel de eigenaar van deze verzameling (%s) mag aanpassingen maken.</string>
@@ -197,17 +189,15 @@
     <string name="navigation_drawer_subtitle">Beveiligde Sync Adapter</string>
     <string name="logging_davdroid_file_logging">EteSync file logging staat AAN</string>
     <string name="startup_vendor_specific_bugs_open_faq">Open Veelgestelde Vragen (FAQ)</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync heeft gedecteerd dat u een Android versie gebruikt dat mogelijk verkoper-specifieke bugs bevat.
-\nKijk a.u.b. naar de veelgestelde vragen voor meer informatie.</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync heeft gedecteerd dat u een Android versie gebruikt dat mogelijk verkoper-specifieke bugs bevat.\nKijk a.u.b. naar de veelgestelde vragen voor meer informatie.</string>
     <string name="startup_vendor_specific_bugs">Potentiele Verkoper Bugs</string>
     <string name="startup_development_version_give_feedback">Geef feedback</string>
     <string name="startup_development_version_message">Dit is een development versie van EteSync. Wees u ervan bewust dat sommige zaken niet zullen werken zoals verwacht. Geef ons a.u.b. constructieve feedback om EteSync te verbeteren.</string>
     <string name="startup_development_version">EteSync Voorbeeld Release</string>
     <string name="startup_battery_optimization_disable">Schakel uit voor EteSync</string>
     <string name="startup_battery_optimization_message">Android kan mogelijk de EteSync synchronisatie uitschakelen/verminderen na een aantal dagen. Om dit te voorkomen, schakel batterij-optimalisatie uit.</string>
-    <string name="tourguide_title">Wist je dat\?</string>
+    <string name="tourguide_title">Wist je dat?</string>
     <string name="crash_email_body">Indien mogelijk, vermeld a.u.b. elke mogelijks relevante informatie zoals wat u deed dat de error veroorzaakte.</string>
-    <string name="crash_email_subject">EteSync Debug Informatie</string>
     <string name="crash_message">Zend a.u.b. de stack trace naar de ontwikkelaars.</string>
     <string name="crash_title">EteSync is gecrasht!</string>
     <string name="notification_channel_sync_status_desc">Informatieve statusberichten zoals de samenvatting van de sync veranderingen</string>
@@ -233,26 +223,16 @@
     <string name="loading_error_content">Vernieuw</string>
     <string name="loading_error_title">Fout Bij Laden</string>
     <string name="loading">Aan het laden...</string>
-    <string name="trust_certificate_unknown_certificate_found">EteSync heeft een onbekend certificaat tegengekomen. Wilt u het vertrouwen\?</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync heeft een onbekend certificaat tegengekomen. Wilt u het vertrouwen?</string>
     <string name="certificate_notification_connection_security">EteSync: Verbindingsveiligheid</string>
-    <string name="sync_calendar_attendees_email_content">U bent uitgenodigd op het volgende evenement:
-\n
-\n%s
-\nWanneer: %s
-\nWaar: %s
-\nAanwezigen: %s
-\n
-\n--
-\nVerstuurd door EteSync - veilige, end-to-end encrypted en private data sync.
-\nVerkrijg het via https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_content">U bent uitgenodigd op het volgende evenement:\n\n%s\nWanneer: %s\nWaar: %s\nAanwezigen: %s\n\n--\nVerstuurd door EteSync - veilige, end-to-end encrypted en private data sync.\nVerkrijg het via https://www.EteSync.com</string>
     <string name="sync_calendar_attendees_email_subject">Uitnodiging: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Verzend uitnodigingen</string>
-    <string name="sync_calendar_attendees_notification_content">Uitnodigingen naar gasten versturen\?</string>
+    <string name="sync_calendar_attendees_notification_content">Uitnodigingen naar gasten versturen?</string>
     <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Het logboek is enkel-lezen dus al uw aanpassingen (%d) zijn ongedaan gemaakt.</string>
     <string name="sync_journal_readonly">Logboek \"%s\" is enkel-lezen</string>
-    <string name="sync_successfully_modified_full">%s geupdate.
-\n%s verwijderd.</string>
+    <string name="sync_successfully_modified_full">%s geupdate.\n%s verwijderd.</string>
     <string name="sync_successfully_modified">%s gewijzigd.</string>
     <string name="sync_successfully_tasks">Takes \"%s\" gewijzigd (%s)</string>
     <string name="sync_successfully_contacts">Contacten gewijzigd (%s)</string>
@@ -280,8 +260,7 @@
     <string name="sync_error_permissions">EteSync permissies</string>
     <string name="debug_info_more_data_shared">Op delen klikken zal de email app openen met onderstaande data, samen met bijkomstige debug informatie in bijlage. Het bevat mogelijk gevoelige informatie, dus bekijk het eerst alvorens te versturen.</string>
     <string name="journal_entries_loading">Laden van de change log boekingen...</string>
-    <string name="journal_entries_list_empty">Verzameling is leeg.
-\nMisschien is het nog aan het synchroniseren\?</string>
+    <string name="journal_entries_list_empty">Verzameling is leeg.\nMisschien is het nog aan het synchroniseren?</string>
     <string name="view_collection_members">Beheer Leden</string>
     <string name="view_collection_import">Importeer</string>
     <string name="view_collection_edit">Wijzig</string>
@@ -308,35 +287,27 @@
     <string name="choose_file">Kies bestand</string>
     <string name="import_account_top_notice">Kies een ander account om alle boekingen van te importeren.</string>
     <string name="import_permission_required">Toegang om opslag te lezen is vereist om te importeren.</string>
-    <string name="import_dialog_success">Verwerkt: %1$d boekingen.
-\nToegevoegd: %2$d
-\nGewijzigd: %3$d
-\nOvergeslagen (mislukt): %4$d</string>
+    <string name="import_dialog_success">Verwerkt: %1$d boekingen.\nToegevoegd: %2$d\nGewijzigd: %3$d\nOvergeslagen (mislukt): %4$d</string>
     <string name="import_dialog_adding_entries">Boekingen aan het toevoegen...</string>
     <string name="import_dialog_loading_file">File aan het laden (dit kan even duren)...</string>
-    <string name="import_dialog_failed_body">Reden: %s
-\nRapporteer aan ontwikkelaars\?</string>
+    <string name="import_dialog_failed_body">Reden: %s\nRapporteer aan ontwikkelaars?</string>
     <string name="import_dialog_failed_title">Importeren Mislukt</string>
     <string name="import_dialog_title">Importeer</string>
     <string name="login_user_info_error_title">Fout Bij Opzetten Gebruikersinformatie</string>
     <string name="change_encryption_password_success_body">Encryptiewachtwoord werd succesvol veranderd!</string>
     <string name="change_encryption_password_success_title">Encryptiewachtwoord Verandering</string>
-    <string name="change_encryption_password_are_you_sure">Bent u zeker dat u wilt verdergaan\? Het proces kan niet halfweg worden onderbroken of kan niet ongedaan gemaakt worden, en kan even duren.</string>
+    <string name="change_encryption_password_are_you_sure">Bent u zeker dat u wilt verdergaan? Het proces kan niet halfweg worden onderbroken of kan niet ongedaan gemaakt worden, en kan even duren.</string>
     <string name="change_encryption_password_new_password">Nieuw Encryptiewachtwoord</string>
     <string name="change_encryption_password_title">Wijzig Encryptiewachtwoord</string>
     <string name="signup_password_restrictions">Wachtwoord moet minstens 8 karakters lang zijn</string>
     <string name="signup_title">Geef Aanmeldgegevens In</string>
-    <string name="wrong_encryption_password_content">Verkreeg een integriteitsfout tijdens het ophalen van uw account, wat hoogstwaarschijnlijk betekent dat u het verkeerde encryptiewachtwoord hebt opgegeven.
-\nBemerk dat de gebruikersnaam hoofdlettergevoelig is, dus probeer ook verschillende versies zoals het schrijven van de eerste letter als hoofdletter.
-\n
-\nError: %s</string>
+    <string name="wrong_encryption_password_content">Verkreeg een integriteitsfout tijdens het ophalen van uw account, wat hoogstwaarschijnlijk betekent dat u het verkeerde encryptiewachtwoord hebt opgegeven.\nBemerk dat de gebruikersnaam hoofdlettergevoelig is, dus probeer ook verschillende versies zoals het schrijven van de eerste letter als hoofdletter.\n\nError: %s</string>
     <string name="wrong_encryption_password">Verkeerd ecryptiewachtwoord</string>
     <string name="account_creation_failed">Accountcreatie mislukt</string>
     <string name="setting_up_encryption_content">Even geduld, encryptie aan het instellen…</string>
     <string name="setting_up_encryption">Encryptie instellen</string>
-    <string name="login_wrong_username_or_password">Kan niet authenticeren (waarschijnlijk verkeerde gebruikersnaam of wachtwoord).
-\nBent u al geregistreerd\?</string>
-    <string name="login_forgot_password">Wachtwoord vergeten\?</string>
+    <string name="login_wrong_username_or_password">Kan niet authenticeren (waarschijnlijk verkeerde gebruikersnaam of wachtwoord).\nBent u al geregistreerd?</string>
+    <string name="login_forgot_password">Wachtwoord vergeten?</string>
     <string name="login_service_details_description">Dit is uw login wachtwoord, *niet* uw encryptiewachtwoord!</string>
     <string name="login_encryption_account_label">Account:</string>
     <string name="login_enter_encryption_details">Geheim Encryptiewachtwoord</string>
@@ -344,14 +315,13 @@
     <string name="login_finish">Beëindigen</string>
     <string name="login_signup">Aanmelden</string>
     <string name="login_login">Inloggen</string>
-    <string name="login_encryption_extra_info">* Dit wachtwoord wordt gebruikt om je data te encrypteren, in tegenstelling tot de vorige, welke gebruikt wordt om in te loggen op de dients.
-\nU wordt gevraagd om een apart encryptiewachtwoord te kiezen voor veiligheidsredenen. Voor meer informatie, bekijk de FAQ: %s</string>
+    <string name="login_encryption_extra_info">* Dit wachtwoord wordt gebruikt om je data te encrypteren, in tegenstelling tot de vorige, welke gebruikt wordt om in te loggen op de dients.\nU wordt gevraagd om een apart encryptiewachtwoord te kiezen voor veiligheidsredenen. Voor meer informatie, bekijk de FAQ: %s</string>
     <string name="login_encryption_check_password">* Zorg er a.u.b. voor dat u uw wachtwoord onthoudt, aangezien het niet kan hersteld worden indien verloren!</string>
     <string name="login_encryption_enter_password">U bent ingelogd als \"%s\". Gelieve uw encryptiewachtwoord in te geven om verder te gaan, of meld u af via het zijmenu.</string>
     <string name="login_encryption_set_new_password">Stel a.u.b. uw encryptiewachtwoord hieronder in, en wees er zeker van dat het correct is aangezien het *niet* hersteld kan worden indien verloren!</string>
     <string name="login_encryption_password">Encryptiewachtwoord</string>
     <string name="login_toggle_advanced">Toon geavanceerde instellingen</string>
-    <string name="login_custom_server_error">Ongeldige URL gevonden, bent u vergeten om https:// toe te voegen\?</string>
+    <string name="login_custom_server_error">Ongeldige URL gevonden, bent u vergeten om https:// toe te voegen?</string>
     <string name="login_custom_server">EteSync Server URL</string>
     <string name="login_username_error">Geldige gebruikersnaam vereist</string>
     <string name="login_username">Gebruikersnaam</string>
