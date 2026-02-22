@@ -3,8 +3,7 @@
     <string name="about_license_info_no_warranty">Program hadir BENAR-BENAR TANPA GARANSI. Ini adalah perangkat lunak gratis, dan Anda dipersilakan untuk mendistribusikannya dalam kondisi tertentu.</string>
     <string name="about_license_terms">Ketentuan lisensi</string>
     <string name="startup_vendor_specific_bugs_open_faq">Buka FAQ</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync telah mendeteksi Anda menggunakan versi Android yang mungkin berisi bug khusus vendor.
-\nSilakan lihat FAQ untuk informasi lebih lanjut.</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync telah mendeteksi Anda menggunakan versi Android yang mungkin berisi bug khusus vendor.\nSilakan lihat FAQ untuk informasi lebih lanjut.</string>
     <string name="startup_vendor_specific_bugs">Potensi Kesalahan dari Vendor</string>
     <string name="startup_development_version_give_feedback">Berikan umpan balik</string>
     <string name="startup_development_version_message">Ini adalah versi pengembangan dari EteSync. Hal-hal yang mungkin tidak bekerja seperti yang diharapkan. Tolong beri kami umpan balik yang konstruktif untuk meningkatkan EteSync.</string>
@@ -13,7 +12,7 @@
     <string name="startup_battery_optimization_disable">Matikan untuk EteSync</string>
     <string name="startup_battery_optimization">Pengoptimalan Baterai</string>
     <string name="startup_battery_optimization_message">Android dapat menonaktifkan/mengurangi sinkronisasi EteSync setelah beberapa hari. Untuk mencegahnya, matikan pengoptimalan baterai.</string>
-    <string name="tourguide_title">Tahukah kamu\?</string>
+    <string name="tourguide_title">Tahukah kamu?</string>
     <string name="crash_email_body">Jika memungkinkan, harap sertakan informasi lain yang relevan seperti apa yang Anda lakukan yang memicu kesalahan ini.</string>
     <string name="crash_title">EteSync rusak!</string>
     <string name="notification_channel_sync_status_desc">Pesan status informasi seperti ringkasan perubahan sinkronisasi</string>
