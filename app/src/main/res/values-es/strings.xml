@@ -365,4 +365,6 @@
     <string name="invitations_title"></string>
     <string name="login_encryption_check_password"></string>
     <string name="startup_development_version"></string>
+    <string name="migrate_v2_wizard_migrate_progress_entries"></string>
+    <string name="migrate_v2_wizard_welcome_body_extra"></string>
 </resources>
