@@ -27,7 +27,6 @@
     <!-- Crash -->
     <string name="crash_title">EteSync har krasjet!</string>
     <string name="crash_message">Send feilmeldingen til utvikleren.</string>
-    <string name="crash_email_subject">EteSync-feilsporingsinfo</string>
     <string name="crash_email_body">Hvis mulig, ta med annen relevant info, som f.eks. hva du gjorde for å utløse feilen.</string>
     <!-- tourguide -->
     <string name="tourguide_title">Visste du at?</string>
@@ -192,8 +191,6 @@
     <string name="login_encryption_account_label">Konto:</string>
     <string name="login_service_details_description">Dette er innloggingspassordet ditt, *ikke* krypteringspassordet!</string>
     <string name="login_forgot_password">Glemt passord?</string>
-    <string name="login_configuration_detection">Oppdag oppsett</string>
-    <string name="login_querying_server">Vent, kontakter tjeneren …</string>
     <string name="login_wrong_username_or_password">Kunne ikke logge inn (sannsynligvis feil brukernavn eller passord).\nHar du registrert deg?</string>
     <string name="login_view_logs">Vis logger</string>
     <string name="setting_up_encryption">Setter opp kryptering</string>
@@ -267,7 +264,7 @@
     <string name="edit_collection">Endre samling</string>
     <string name="create_collection_color">Sett samlingens farge</string>
     <string name="create_collection_creating">Oppretter samling</string>
-    <string name="create_collection_display_name">Visningsnavn (tittel) på denne samlingen:</string>
+    <string name="create_collection_display_name">Visningsnavn (tittel) på denne samlingen:</string>
     <string name="create_collection_display_name_required">Tittel kreves</string>
     <string name="create_collection_description">Beskrivelse (valgfritt):</string>
     <string name="view_collection_edit">Endre</string>
@@ -387,8 +384,7 @@
     <string name="skip">Hopp over</string>
     <string name="create">Opprett</string>
     <string name="migrate_v2_wizard_migrate_progress_entries">Migrerer oppføring %d/%d</string>
-    <string name="migrate_v2_wizard_welcome_body_extra">Forsikre deg om at du har god tilknytning til Internett, og nok batteri, siden dette kan ta sin tid.
-\nFor å fortsette, velg hvorvidt du ønsker å registrere en ny EteSync 2.0-konto, eller logge inn med en eksisterende konto.</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Forsikre deg om at du har god tilknytning til Internett, og nok batteri, siden dette kan ta sin tid.\nFor å fortsette, velg hvorvidt du ønsker å registrere en ny EteSync 2.0-konto, eller logge inn med en eksisterende konto.</string>
     <string name="migrate_v2_wizard_migrate_progress_done_malformed">Ignorerte %d feilformaterte oppføringer (antagelig trygt å se bort fra).</string>
     <string name="migrate_v2_wizard_migrate_progress_done">Kontoen din har blitt migrert.
 \nBekreft at alt ble flyttet over på riktig vis, og fjern din gamle konto når du er ferdig.</string>
@@ -396,4 +392,8 @@
     <string name="migrate_v2_wizard_migrate_title">Migrerer …</string>
     <string name="migrate_v2_wizard_welcome_body">Dette verktøyet hjelper deg å migrere din data til EteSync 2.0. Migrasjonen sletter ingen data, den kopierer kun data over til den nye EteSync 2.0-tjeneren. Dette betyr at det ikke er muligheter for datatap under migrasjonen.</string>
     <string name="migrate_v2_wizard_welcome_title">EteSync 2.0-migrasjon</string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="account_type" translatable="false"></string>
 </resources>
