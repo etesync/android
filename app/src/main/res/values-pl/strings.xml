@@ -372,8 +372,4 @@
     <string name="retry">Ponów</string>
     <string name="skip">Pomiń</string>
     <string name="create">Utwórz</string>
-    <string name="authority_log_provider" translatable="false"></string>
-    <string name="address_books_authority" translatable="false"></string>
-    <string name="account_type_address_book" translatable="false"></string>
-    <string name="account_type" translatable="false"></string>
 </resources>

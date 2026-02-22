@@ -354,17 +354,4 @@
     <string name="retry">Opnieuw proberen</string>
     <string name="skip">Sla over</string>
     <string name="create">Maak</string>
-    <string name="authority_log_provider" translatable="false"></string>
-    <string name="migrate_v2_wizard_migrate_progress_done"></string>
-    <string name="migrate_v2_wizard_migrate_progress_done_malformed"></string>
-    <string name="address_books_authority" translatable="false"></string>
-    <string name="migrate_v2_wizard_welcome_body"></string>
-    <string name="collection_members_add_read_only"></string>
-    <string name="migrate_v2_wizard_migrate_progress"></string>
-    <string name="migrate_v2_wizard_migrate_title"></string>
-    <string name="migrate_v2_wizard_welcome_title"></string>
-    <string name="account_type_address_book" translatable="false"></string>
-    <string name="account_type" translatable="false"></string>
-    <string name="migrate_v2_wizard_migrate_progress_entries"></string>
-    <string name="migrate_v2_wizard_welcome_body_extra"></string>
 </resources>

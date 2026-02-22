@@ -305,42 +305,4 @@
     <string name="trust_certificate_unknown_certificate_found">EteSync נתקלה באישור לא ידוע. האם אתה רוצה לתת אמון?</string>
     <string name="certificate_notification_connection_security">EteSync: אבטחת חיבור</string>
     <string name="sync_calendar_attendees_email_content">הוזמנת לאירוע הבא:\n\n‪%s‬\nמתי: ‪%s‬\nאיפה: ‪‬%s‬\nמשתתפים: ‪‬%s‬‪\n\n--\nנשלח על-ידי EteSync - סינכרון נתונים מאובטח ופרטי מקצה לקצה.\nhttps://www.EteSync.com</string>
-    <string name="sync_phase_apply_local_entries"></string>
-    <string name="authority_log_provider" translatable="false"></string>
-    <string name="notification_channel_sync_status_desc"></string>
-    <string name="sync_phase_push_entries"></string>
-    <string name="migrate_v2_wizard_migrate_progress_done"></string>
-    <string name="wrong_encryption_password_content"></string>
-    <string name="create"></string>
-    <string name="migrate_v2_wizard_migrate_progress_done_malformed"></string>
-    <string name="settings_account_dashboard"></string>
-    <string name="app_settings_distrust_system_certs_on"></string>
-    <string name="app_settings_override_proxy_port"></string>
-    <string name="address_books_authority" translatable="false"></string>
-    <string name="sync_phase_prepare_local"></string>
-    <string name="retry"></string>
-    <string name="collection_members_add_success"></string>
-    <string name="skip"></string>
-    <string name="account_wizard_collections_title"></string>
-    <string name="account_tasks_not_showing"></string>
-    <string name="account_wizard_collections_body"></string>
-    <string name="migrate_v2_wizard_welcome_body"></string>
-    <string name="collection_members_add_read_only"></string>
-    <string name="members_old_journals_not_allowed"></string>
-    <string name="migrate_v2_wizard_migrate_progress"></string>
-    <string name="account_title_address_book"></string>
-    <string name="migrate_v2_wizard_migrate_title"></string>
-    <string name="import_dialog_success"></string>
-    <string name="settings_sync_interval"></string>
-    <string name="migrate_v2_wizard_welcome_title"></string>
-    <string name="account_type_address_book" translatable="false"></string>
-    <string name="app_settings_override_proxy_host"></string>
-    <string name="app_settings_distrust_system_certs_off"></string>
-    <string name="app_name"></string>
-    <string name="account_type" translatable="false"></string>
-    <string name="startup_development_version_message"></string>
-    <string name="about_license_info_no_warranty"></string>
-    <string name="startup_development_version"></string>
-    <string name="migrate_v2_wizard_migrate_progress_entries"></string>
-    <string name="migrate_v2_wizard_welcome_body_extra"></string>
 </resources>
