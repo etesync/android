@@ -365,4 +365,6 @@
     <string name="migrate_v2_wizard_welcome_title"></string>
     <string name="account_type_address_book" translatable="false"></string>
     <string name="account_type" translatable="false"></string>
+    <string name="migrate_v2_wizard_migrate_progress_entries"></string>
+    <string name="migrate_v2_wizard_welcome_body_extra"></string>
 </resources>
