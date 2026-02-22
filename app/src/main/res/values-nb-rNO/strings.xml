@@ -39,8 +39,7 @@
     <string name="startup_development_version_message">Dette er en utviklerversjon av EteSync. Det kan hende at ting ikke virker som de skal. Send gjerne konstruktive tilbakemeldinger for å forbedre EteSync.</string>
     <string name="startup_development_version_give_feedback">Gi tilbakemelding</string>
     <string name="startup_vendor_specific_bugs">Potensielle leverandørfeil</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync har oppdaget at du bruker en Android-versjon som kan inneholde leverandørspesifikke feil.
-\nSe ofte stilte spørsmål (O-S-S) for mer info.</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync har oppdaget at du bruker en Android-versjon som kan inneholde leverandørspesifikke feil.\nSe ofte stilte spørsmål (O-S-S) for mer info.</string>
     <string name="startup_vendor_specific_bugs_open_faq">Åpne O-S-S</string>
     <!-- AboutActivity -->
     <string name="about_license_terms">Lisensbetingelser</string>
@@ -134,8 +133,7 @@
     <string name="collection_members_removing">Fjerner medlem</string>
     <string name="collection_members_remove_error">Kunne ikke fjerne medlem</string>
     <string name="collection_members_remove_title">Fjern medlem</string>
-    <string name="collection_members_remove">Vil du fjerne %s sin tilgang\?
-\nVær klar over at en ondsinnet bruker potensielt kan beholde tilgang til krypteringsnøkler. Se ofte stilte spørsmål for mer info.</string>
+    <string name="collection_members_remove">Vil du fjerne %s sin tilgang?\nVær klar over at en ondsinnet bruker potensielt kan beholde tilgang til krypteringsnøkler. Se ofte stilte spørsmål for mer info.</string>
     <!-- JournalItemActivity -->
     <string name="about">Om</string>
     <string name="journal_item_tab_main">Forside</string>
@@ -175,12 +173,11 @@
     <string name="login_email_address_error">Gyldig e-postadresse kreves</string>
     <string name="login_password">Passord</string>
     <string name="login_custom_server">EteSync-tjenernettadresse</string>
-    <string name="login_custom_server_error">Ugyldig nettadresse finnet, glemte du å ta med https://\?</string>
+    <string name="login_custom_server_error">Ugyldig nettadresse finnet, glemte du å ta med https://?</string>
     <string name="login_toggle_advanced">Vis avanserte innstillinger</string>
     <string name="login_encryption_password">Krypteringspassord</string>
     <string name="login_encryption_check_password">* Husk passordet ditt, det kan ikke gjenopprettes hvis du mister det!</string>
-    <string name="login_encryption_extra_info">Dette passordet bruker til å kryptere dataen din, i motsetning til det forrige, som brukes til å logge inn på tjenesten.
-\nDu bes om å sette et eget krypteringspassord av sikkerhetsgrunner. For mer info, sjekk ofte stilte spørsmål her: %s</string>
+    <string name="login_encryption_extra_info">Dette passordet bruker til å kryptere dataen din, i motsetning til det forrige, som brukes til å logge inn på tjenesten.\nDu bes om å sette et eget krypteringspassord av sikkerhetsgrunner. For mer info, sjekk ofte stilte spørsmål her: %s</string>
     <string name="login_password_required">Passord kreves</string>
     <string name="login_login">Logg inn</string>
     <string name="login_signup">Registrer deg</string>
@@ -197,9 +194,7 @@
     <string name="setting_up_encryption_content">Vennligst vent, setter opp kryptering…</string>
     <string name="account_creation_failed">Kunne ikke opprette konto</string>
     <string name="wrong_encryption_password">Feil krypteringspassord</string>
-    <string name="wrong_encryption_password_content">Mottok en integritetsfeil ved tilgang til kontoen din, noe som mest sannsynlig skyldes at du skrev inn feil krypteringspassord.
-\nMerk at brukernavnet skiller mellom store og små bokstaver, så prøv gjerne andre kombinasjoner, skriv for eksempel første bokstav som stor bokstav.
-\neil: %s</string>
+    <string name="wrong_encryption_password_content">Mottok en integritetsfeil ved tilgang til kontoen din, noe som mest sannsynlig skyldes at du skrev inn feil krypteringspassord.\nMerk at brukernavnet skiller mellom store og små bokstaver, så prøv gjerne andre kombinasjoner, skriv for eksempel første bokstav som stor bokstav.\neil: %s</string>
     <!-- ChangeEncryptionPasswordActivity -->
     <string name="change_encryption_password_title">Endre krypteringspassord</string>
     <string name="change_encryption_password_new_password">Nytt krypteringspassord</string>
@@ -276,8 +271,7 @@
     <string name="delete_collection_confirm_warning">Denne samlingen (%s) og alle dens data vil slettes fra tjeneren.</string>
     <string name="delete_collection_deleting_collection">Sletter samling</string>
     <!-- JournalViewer -->
-    <string name="journal_entries_list_empty">Samlingen er tom.
-\nKanskje den fortsatt synkroniserer\?</string>
+    <string name="journal_entries_list_empty">Samlingen er tom.\nKanskje den fortsatt synkroniserer?</string>
     <string name="journal_entries_loading">Laster endringsloggsoppføringer …</string>
     <!-- ExceptionInfoFragment -->
     <string name="exception">En feil har oppstått.</string>
@@ -347,10 +341,8 @@
     <string name="permissions_tasks_org_request">Forespør tilgang til Tasks.org</string>
     <string name="permissions_tasks_org_details">For å synkronisere gjøremål med din lokale gjøremålsliste, trenger EteSync tilgang til Tasks.org.</string>
     <string name="permissions_tasks_org">Tasks.org-tilganger</string>
-    <string name="use_native_apps_body">EteSync integrerer seg sømløst med Android, slik at du kan bruke eksisterende kontaktliste og kalenderprogrammer.
-\n
-\nFor mer info, sjekk ut brukerveiledningen.</string>
-    <string name="use_native_apps_title">Visste du at\?</string>
+    <string name="use_native_apps_body">EteSync integrerer seg sømløst med Android, slik at du kan bruke eksisterende kontaktliste og kalenderprogrammer.\n\nFor mer info, sjekk ut brukerveiledningen.</string>
+    <string name="use_native_apps_title">Visste du at?</string>
     <string name="tasks_not_showing">* Loggføring vises kun hvis en gjøremålstilbyder er installert.</string>
     <string name="account_tasks_not_showing">* Synkroniserer ikke gjøremål (installer en tilbyder)</string>
     <string name="app_settings_prefer_tasksorg_snack">Det kan hende du må fjerne og legge til kontoen din igjen før endringene trer i effekt.</string>
@@ -368,12 +360,12 @@
     <string name="journal_item_tab_revisions">Revisjoner</string>
     <string name="invitations_reject">Avslå</string>
     <string name="invitations_accept">Godta</string>
-    <string name="invitations_accept_reject_dialog">Ønsker du å godta eller avslå invitasjonen\?</string>
+    <string name="invitations_accept_reject_dialog">Ønsker du å godta eller avslå invitasjonen?</string>
     <string name="invitations_list_empty">Ingen invitasjoner</string>
     <string name="invitations_loading">Laster inn invitasjoner …</string>
     <string name="invitations_title">Invitasjoner</string>
     <string name="collection_members_leave">Forlat</string>
-    <string name="collection_members_no_access">Kun administratorer kan håndtere samlingsmedlemskap. Ønsker du å forlate denne samlingen\?</string>
+    <string name="collection_members_no_access">Kun administratorer kan håndtere samlingsmedlemskap. Ønsker du å forlate denne samlingen?</string>
     <string name="collection_members_remove_admin">Fjerning av tilganger for administratorer støttes ikke.</string>
     <string name="edit_owner_only_anon">Kun eiere av denne samlingen kan redigere den.</string>
     <string name="collection_members_add_success">Invitasjon sendt. Brukeren vil bli lagt til når invitasjonen har blitt godkjent.</string>
@@ -386,8 +378,7 @@
     <string name="migrate_v2_wizard_migrate_progress_entries">Migrerer oppføring %d/%d</string>
     <string name="migrate_v2_wizard_welcome_body_extra">Forsikre deg om at du har god tilknytning til Internett, og nok batteri, siden dette kan ta sin tid.\nFor å fortsette, velg hvorvidt du ønsker å registrere en ny EteSync 2.0-konto, eller logge inn med en eksisterende konto.</string>
     <string name="migrate_v2_wizard_migrate_progress_done_malformed">Ignorerte %d feilformaterte oppføringer (antagelig trygt å se bort fra).</string>
-    <string name="migrate_v2_wizard_migrate_progress_done">Kontoen din har blitt migrert.
-\nBekreft at alt ble flyttet over på riktig vis, og fjern din gamle konto når du er ferdig.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Kontoen din har blitt migrert.\nBekreft at alt ble flyttet over på riktig vis, og fjern din gamle konto når du er ferdig.</string>
     <string name="migrate_v2_wizard_migrate_progress">Migrerer samling %d/%d</string>
     <string name="migrate_v2_wizard_migrate_title">Migrerer …</string>
     <string name="migrate_v2_wizard_welcome_body">Dette verktøyet hjelper deg å migrere din data til EteSync 2.0. Migrasjonen sletter ingen data, den kopierer kun data over til den nye EteSync 2.0-tjeneren. Dette betyr at det ikke er muligheter for datatap under migrasjonen.</string>
