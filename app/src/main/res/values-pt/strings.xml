@@ -299,4 +299,61 @@
     <string name="app_settings_change_notification">Mostrar notificações de alteração</string>
     <string name="app_settings_distrust_system_certs">Rejeitar certificados do sistema</string>
     <string name="crash_title">EteSync falhou!</string>
+    <string name="sync_phase_apply_local_entries"></string>
+    <string name="app_settings_reset_certificates"></string>
+    <string name="app_settings_log_verbose_summary"></string>
+    <string name="setting_up_encryption"></string>
+    <string name="tasks_not_showing"></string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="change_journal_title"></string>
+    <string name="settings_encryption_password_summary"></string>
+    <string name="settings_encryption"></string>
+    <string name="sync_phase_push_entries"></string>
+    <string name="wrong_encryption_password_content"></string>
+    <string name="members_owner_only"></string>
+    <string name="show_fingperprint_title"></string>
+    <string name="choose_file"></string>
+    <string name="trust_fingerprint_body"></string>
+    <string name="settings_title"></string>
+    <string name="settings_account_dashboard"></string>
+    <string name="app_settings_distrust_system_certs_on"></string>
+    <string name="journal_item_tab_main"></string>
+    <string name="edit_owner_only"></string>
+    <string name="app_settings_log_verbose"></string>
+    <string name="login_password_required"></string>
+    <string name="sync_phase_fetch_entries"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="settings_enter_encryption_password"></string>
+    <string name="login_finish"></string>
+    <string name="settings_password_summary"></string>
+    <string name="change_encryption_password_success_title"></string>
+    <string name="notification_channel_sync_warnings_desc"></string>
+    <string name="settings_manage_account_summary"></string>
+    <string name="import_account_top_notice"></string>
+    <string name="setting_up_encryption_content"></string>
+    <string name="members_old_journals_not_allowed"></string>
+    <string name="trust_fingerprint_title"></string>
+    <string name="settings_sync_wifi_only_ssid_off"></string>
+    <string name="journal_item_job_description"></string>
+    <string name="create_addressbook"></string>
+    <string name="import_button_local"></string>
+    <string name="app_settings_log_to_external_storage"></string>
+    <string name="account_delete_collection_last_text"></string>
+    <string name="account_showcase_view_collection"></string>
+    <string name="sync_phase_prepare_fetch"></string>
+    <string name="account_show_fingerprint"></string>
+    <string name="login_encryption_extra_info"></string>
+    <string name="import_dialog_success"></string>
+    <string name="settings_sync_interval"></string>
+    <string name="settings_manage_account"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="create_addressbook_display_name_hint"></string>
+    <string name="app_settings_distrust_system_certs_off"></string>
+    <string name="permissions_contacts_details"></string>
+    <string name="account_type" translatable="false"></string>
+    <string name="logging_to_external_storage"></string>
+    <string name="about_license_info_no_warranty"></string>
+    <string name="settings_encryption_password"></string>
+    <string name="sync_phase_apply_remote_entries"></string>
+    <string name="login_encryption_check_password"></string>
 </resources>
