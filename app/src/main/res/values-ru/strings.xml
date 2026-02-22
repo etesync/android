@@ -35,7 +35,7 @@
     <string name="startup_development_version">Предварительная версия EteSync</string>
     <string name="startup_dont_show_again">Больше не показывать</string>
     <string name="startup_battery_optimization">Оптимизация батареи</string>
-    <string name="tourguide_title">Знаете ли вы\?</string>
+    <string name="tourguide_title">Знаете ли вы?</string>
     <string name="notification_channel_sync_errors">Ошибки синхронизации</string>
     <string name="notification_channel_sync">Синхронизация</string>
     <string name="notification_channel_general">Другие важные сообщения</string>
