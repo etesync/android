@@ -339,4 +339,8 @@
     <string name="account_show_fingerprint">Tampilkan sidik jari</string>
     <string name="account_delete">Hapus akun</string>
     <string name="navigation_drawer_subtitle">Adaptor Sinkronisasi Aman</string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="account_type" translatable="false"></string>
 </resources>
