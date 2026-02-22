@@ -58,20 +58,15 @@
     <string name="login_password">Parola</string>
     <string name="login_password_required">Parola zorunludur</string>
     <string name="login_back">Geri</string>
-    <string name="login_configuration_detection">Konfigürasyon keşfi</string>
-    <string name="login_querying_server">Lütfen bekleyin, sunucu sorgulanıyor…</string>
     <string name="login_view_logs">Günlükleri görüntüle</string>
     <!--AccountSettingsActivity-->
     <string name="settings_title">Ayarlar: %s</string>
-    <string name="settings_authentication">Doğrulama</string>
     <string name="settings_password">Parola</string>
     <string name="settings_enter_password">Parola girin:</string>
     <string name="settings_sync">Eşzamanlama</string>
-    <string name="settings_sync_interval_contacts">Kişiler senk. aralığı</string>
     <string name="settings_sync_summary_manually">Yalnızca elle</string>
     <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + yerel değişikliklerde hemen</string>
     <string name="settings_sync_summary_not_available">Mevcut değil</string>
-    <string name="settings_sync_interval_calendars">Takvimler senk. aralığı</string>
     <string-array name="settings_sync_interval_names">
         <item>Sadece elle</item>
         <item>Her 15 dakikada bir</item>
@@ -121,8 +116,7 @@
     <string name="account_title_address_book">EteSync Adres Defteri</string>
     <string name="app_name">EteSync</string>
     <string name="notification_channel_sync_errors_desc">Beklenmeyen sunucu yanıtları gibi eşzamanlamayı durduran önemli hatalar</string>
-    <string name="login_wrong_username_or_password">Kimlik doğrulanamadı (muhtemelen yanlış kullanıcı adı veya parola).
-\nKaydoldunuz mu\?</string>
+    <string name="login_wrong_username_or_password">Kimlik doğrulanamadı (muhtemelen yanlış kullanıcı adı veya parola).\nKaydoldunuz mu?</string>
     <string name="login_signup">Kaydol</string>
     <string name="notification_channel_description">EteSync bildirimleri</string>
     <string name="notification_channel_name">EteSync</string>
@@ -134,26 +128,16 @@
     <string name="loading_error_content">Yenile</string>
     <string name="loading_error_title">Yükleme Hatası</string>
     <string name="loading">Yükleniyor...</string>
-    <string name="trust_certificate_unknown_certificate_found">EteSync bilinmeyen bir sertifikayla karşılaştı. Güvenmek ister misiniz\?</string>
+    <string name="trust_certificate_unknown_certificate_found">EteSync bilinmeyen bir sertifikayla karşılaştı. Güvenmek ister misiniz?</string>
     <string name="certificate_notification_connection_security">EteSync: Bağlantı güvenliği</string>
-    <string name="sync_calendar_attendees_email_content">Aşağıdaki etkinliğe davet edildiniz:
-\n
-\n%s
-\nNe zaman: %s
-\nNerede: %s
-\nKatılanlar: %s
-\n
-\n--
-\nEteSync ile gönderildi - güvenli, uçtan uca şifreli ve özel veri eşzamanlama.
-\nhttps://www.EteSync.com adresinden edinin</string>
+    <string name="sync_calendar_attendees_email_content">Aşağıdaki etkinliğe davet edildiniz:\n\n%s\nNe zaman: %s\nNerede: %s\nKatılanlar: %s\n\n--\nEteSync ile gönderildi - güvenli, uçtan uca şifreli ve özel veri eşzamanlama.\nhttps://www.EteSync.com adresinden edinin</string>
     <string name="sync_calendar_attendees_email_subject">Davet: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Davet gönder</string>
-    <string name="sync_calendar_attendees_notification_content">Misafirlere davet gönderilsin mi\?</string>
+    <string name="sync_calendar_attendees_notification_content">Misafirlere davet gönderilsin mi?</string>
     <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Günlük salt okunur olduğundan tüm değişiklikleriniz (%d) geri alındı.</string>
     <string name="sync_journal_readonly">Günlük \"%s\" salt okunur</string>
-    <string name="sync_successfully_modified_full">%s güncellendi.
-\n%s silindi.</string>
+    <string name="sync_successfully_modified_full">%s güncellendi.\n%s silindi.</string>
     <string name="sync_successfully_modified">%s değiştirildi.</string>
     <string name="sync_successfully_tasks">Görevler \"%s\" değiştirildi (%s)</string>
     <string name="sync_successfully_contacts">Kişiler değiştirildi (%s)</string>
@@ -179,8 +163,7 @@
     <string name="sync_error_permissions">EteSync izinleri</string>
     <string name="debug_info_more_data_shared">Paylaş düğmesine tıklamak, bazı ek hata ayıklama bilgilerinin yanı sıra aşağıdaki verileri geliştiricilere gönderecektir. Lütfen bunun bazı özel bilgiler içerebileceğini unutmayın.</string>
     <string name="journal_entries_loading">Değişiklik günlüğü girdileri yükleniyor...</string>
-    <string name="journal_entries_list_empty">Koleksiyon boş.
-\nBelki hala eşzamanlanıyordur\?</string>
+    <string name="journal_entries_list_empty">Koleksiyon boş.\nBelki hala eşzamanlanıyordur?</string>
     <string name="view_collection_members">Üyeleri Yönet</string>
     <string name="view_collection_import">İçe aktar</string>
     <string name="view_collection_edit">Düzenle</string>
@@ -207,45 +190,37 @@
     <string name="choose_file">Dosya seç</string>
     <string name="import_account_top_notice">Lütfen tüm girdilerini içe aktaracağınız bir hesap seçin.</string>
     <string name="import_permission_required">İçe aktarma için depolamayı okuma izni gereklidir.</string>
-    <string name="import_dialog_success">%1$d girdi işlendi.
-\nEklendi: %2$d
-\nDeğiştirildi: %3$d
-\nAtlandı (başarısız oldu): %4$d</string>
+    <string name="import_dialog_success">%1$d girdi işlendi.\nEklendi: %2$d\nDeğiştirildi: %3$d\nAtlandı (başarısız oldu): %4$d</string>
     <string name="import_dialog_adding_entries">Girdiler ekleniyor...</string>
     <string name="import_dialog_loading_file">Dosya yükleniyor (biraz zaman alabilir)...</string>
-    <string name="import_dialog_failed_body">Nedeni: %s
-\nGeliştiricilere bildirilsin mi\?</string>
+    <string name="import_dialog_failed_body">Nedeni: %s\nGeliştiricilere bildirilsin mi?</string>
     <string name="import_dialog_failed_title">İçe Aktarma Başarısız</string>
     <string name="import_dialog_title">İçe Aktar</string>
     <string name="login_user_info_error_title">Kullanıcı Bilgilerini Ayarlama Hatası</string>
     <string name="change_encryption_password_success_body">Şifreleme parolası başarıyla değiştirildi!</string>
     <string name="change_encryption_password_success_title">Şifreleme Parolası Değişikliği</string>
-    <string name="change_encryption_password_are_you_sure">Devam etmek istediğinizden emin misiniz\? İşlem yarı yolda durdurulamaz veya geri alınamaz ve tamamlanması biraz zaman alabilir.</string>
+    <string name="change_encryption_password_are_you_sure">Devam etmek istediğinizden emin misiniz? İşlem yarı yolda durdurulamaz veya geri alınamaz ve tamamlanması biraz zaman alabilir.</string>
     <string name="change_encryption_password_new_password">Yeni şifreleme parolası</string>
     <string name="change_encryption_password_title">Şifreleme Parolasını Değiştir</string>
-    <string name="wrong_encryption_password_content">Hesabınıza erişirken bir bütünlük hatası alındı, bu büyük olasılıkla yanlış şifreleme parolası girdiğiniz anlamına gelir.
-\nLütfen kullanıcı adının büyük/küçük harfe duyarlı olduğunu unutmayın, bu nedenle lütfen farklı durumları deneyin, örneğin ilk karakteri büyük harf yapın.
-\n
-\nHata: %s</string>
+    <string name="wrong_encryption_password_content">Hesabınıza erişirken bir bütünlük hatası alındı, bu büyük olasılıkla yanlış şifreleme parolası girdiğiniz anlamına gelir.\nLütfen kullanıcı adının büyük/küçük harfe duyarlı olduğunu unutmayın, bu nedenle lütfen farklı durumları deneyin, örneğin ilk karakteri büyük harf yapın.\n\nHata: %s</string>
     <string name="wrong_encryption_password">Yanlış şifreleme parolası</string>
     <string name="account_creation_failed">Hesap oluşturma başarısız oldu</string>
     <string name="setting_up_encryption_content">Lütfen bekleyin, şifreleme ayarlanıyor…</string>
     <string name="setting_up_encryption">Şifrelemeyi ayarlama</string>
-    <string name="login_forgot_password">Parolanızı mı unuttunuz\?</string>
+    <string name="login_forgot_password">Parolanızı mı unuttunuz?</string>
     <string name="login_service_details_description">Bu sizin oturum açma parolanızdır, şifreleme parolanız *değil*!</string>
     <string name="login_encryption_account_label">Hesap:</string>
     <string name="login_enter_encryption_details">Gizli Şifreleme Parolası</string>
     <string name="login_enter_service_details">Oturum Açma Bilgilerini Girin</string>
     <string name="login_finish">Bitir</string>
     <string name="login_login">Oturum Aç</string>
-    <string name="login_encryption_extra_info">* Bu parola, hizmet üzerinde oturum açmak için kullanılan öncekinden farklı olarak verilerinizi şifrelemek için kullanılır.
-\nGüvenlik nedeniyle ayrı bir şifreleme parolası seçmeniz istenir. Daha fazla bilgi için lütfen SSS bölümüne bakın: %s</string>
+    <string name="login_encryption_extra_info">* Bu parola, hizmet üzerinde oturum açmak için kullanılan öncekinden farklı olarak verilerinizi şifrelemek için kullanılır.\nGüvenlik nedeniyle ayrı bir şifreleme parolası seçmeniz istenir. Daha fazla bilgi için lütfen SSS bölümüne bakın: %s</string>
     <string name="login_encryption_check_password">* Kaybolursa kurtarılamayacağı için lütfen parolanızı hatırladığınızdan emin olun!</string>
     <string name="login_encryption_enter_password">\"%s\" olarak oturum açtınız. Devam etmek için lütfen şifreleme parolanızı girin veya yan menüden oturumu kapatın.</string>
     <string name="login_encryption_set_new_password">Lütfen aşağıda şifreleme parolanızı belirleyin ve doğru parolayı girdiğinizden emin olun, çünkü kaybolursa kurtarılamaz!</string>
     <string name="login_encryption_password">Şifreleme Parolası</string>
     <string name="login_toggle_advanced">Gelişmiş ayarları göster</string>
-    <string name="login_custom_server_error">Geçersiz URL bulundu, https:// eklemeyi mi unuttunuz\?</string>
+    <string name="login_custom_server_error">Geçersiz URL bulundu, https:// eklemeyi mi unuttunuz?</string>
     <string name="login_custom_server">EteSync Sunucu URL\'si</string>
     <string name="permissions_tasks_org_request">Tasks.org izinlerini iste</string>
     <string name="permissions_tasks_org_details">Görevleri yerel görev listelerinizle eşzamanlamak için EteSync\'in Tasks.org\'a erişmesi gerekiyor.</string>
@@ -275,8 +250,7 @@
     <string name="journal_item_tab_raw">Ham</string>
     <string name="journal_item_tab_main">Ana</string>
     <string name="about">Hakkında</string>
-    <string name="collection_members_remove">%s\'in erişimini iptal etmek ister misiniz\?
-\nKötü niyetli bir kullanıcının, muhtemelen şifreleme anahtarlarına erişimi koruyabileceğini lütfen unutmayın. Daha fazla bilgi için lütfen SSS bölümüne bakın.</string>
+    <string name="collection_members_remove">%s\'in erişimini iptal etmek ister misiniz?\nKötü niyetli bir kullanıcının, muhtemelen şifreleme anahtarlarına erişimi koruyabileceğini lütfen unutmayın. Daha fazla bilgi için lütfen SSS bölümüne bakın.</string>
     <string name="collection_members_remove_title">Üyeyi kaldır</string>
     <string name="collection_members_remove_error">Üye kaldırılırken hata oluştu</string>
     <string name="collection_members_removing">Üye kaldırma</string>
@@ -289,10 +263,8 @@
     <string name="collection_members_list_empty">Üye yok</string>
     <string name="collection_members_list_loading">Üyeler yükleniyor...</string>
     <string name="collection_members_title">Üyeler</string>
-    <string name="use_native_apps_body">EteSync, Android ile sorunsuz bir şekilde bütünleşir, bu nedenle onu kullanmak için mevcut adres defteri ve takvim uygulamalarınızı kullanmanız yeterlidir!
-\n
-\nDaha fazla bilgi için lütfen kullanıcı rehberine bakın.</string>
-    <string name="use_native_apps_title">Biliyor musunuz\?</string>
+    <string name="use_native_apps_body">EteSync, Android ile sorunsuz bir şekilde bütünleşir, bu nedenle onu kullanmak için mevcut adres defteri ve takvim uygulamalarınızı kullanmanız yeterlidir!\n\nDaha fazla bilgi için lütfen kullanıcı rehberine bakın.</string>
+    <string name="use_native_apps_title">Biliyor musunuz?</string>
     <string name="members_old_journals_not_allowed">Eski tarz günlüklerin paylaşılmasına izin verilmiyor. Bu günlüğü paylaşmak için yeni bir tane oluşturun ve \"içe aktar\" iletişim kutusunu kullanarak içeriğini kopyalayın. Herhangi bir sorun yaşıyorsanız, lütfen desteğe başvurun.</string>
     <string name="edit_owner_only">Yalnızca bu koleksiyonun sahibinin (%s) onu düzenlemesine izin verilir.</string>
     <string name="not_allowed_title">İzin Yok</string>
@@ -343,8 +315,7 @@
     <string name="navigation_drawer_subtitle">Secure Sync Adapter</string>
     <string name="logging_davdroid_file_logging">EteSync dosya günlük kaydı AÇIK</string>
     <string name="startup_vendor_specific_bugs_open_faq">SSS\'yi aç</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync, sağlayıcıya özel hatalar içerebilecek bir Android sürümü kullandığınızı tespit etti.
-\nDaha fazla bilgi için lütfen SSS bölümüne bakın.</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync, sağlayıcıya özel hatalar içerebilecek bir Android sürümü kullandığınızı tespit etti.\nDaha fazla bilgi için lütfen SSS bölümüne bakın.</string>
     <string name="startup_vendor_specific_bugs">Muhtemel Sağlayıcı Hataları</string>
     <string name="startup_development_version_give_feedback">Geri bildirimde bulun</string>
     <string name="startup_development_version_message">Bu, EteSync\'in bir geliştirme sürümüdür. İşlerin beklendiği gibi çalışmayabileceğini unutmayın. EteSync\'i iyileştirmek için lütfen bize yapıcı geri bildirimde bulunun.</string>
@@ -352,9 +323,8 @@
     <string name="startup_battery_optimization_disable">EteSync için kapat</string>
     <string name="startup_battery_optimization_message">Android, birkaç gün sonra EteSync eşzamanlamasını devre dışı bırakabilir/azaltabilir. Bunu önlemek için pil iyileştirmesini kapatın.</string>
     <string name="startup_battery_optimization">Pil İyileştirmesi</string>
-    <string name="tourguide_title">Biliyor musunuz\?</string>
+    <string name="tourguide_title">Biliyor musunuz?</string>
     <string name="crash_email_body">Mümkünse, lütfen bu hatayı tetiklemek için yaptıklarınız gibi diğer ilişkili bilgileri ekleyin.</string>
-    <string name="crash_email_subject">EteSync Hata Ayıklama Bilgileri</string>
     <string name="crash_message">Lütfen yığın izlemesini geliştiricilere gönderin.</string>
     <string name="crash_title">EteSync çöktü!</string>
     <string name="notification_channel_sync_status_desc">Eşzamanlama değişiklik özeti gibi bilgilendirici durum mesajları</string>
@@ -370,12 +340,12 @@
     <string name="journal_item_tab_revisions">Düzeltmeler</string>
     <string name="invitations_reject">Reddet</string>
     <string name="invitations_accept">Kabul et</string>
-    <string name="invitations_accept_reject_dialog">Daveti kabul etmek mi yoksa reddetmek mi istiyorsunuz\?</string>
+    <string name="invitations_accept_reject_dialog">Daveti kabul etmek mi yoksa reddetmek mi istiyorsunuz?</string>
     <string name="invitations_list_empty">Davet yok</string>
     <string name="invitations_loading">Davetler yükleniyor...</string>
     <string name="invitations_title">Davetler</string>
     <string name="collection_members_leave">Ayrıl</string>
-    <string name="collection_members_no_access">Yalnızca yöneticilerin koleksiyon üyeliklerini yönetmesine izin verilir. Koleksiyondan ayrılmak ister misiniz\?</string>
+    <string name="collection_members_no_access">Yalnızca yöneticilerin koleksiyon üyeliklerini yönetmesine izin verilir. Koleksiyondan ayrılmak ister misiniz?</string>
     <string name="collection_members_remove_admin">Yöneticilere erişimin kaldırılması şu anda desteklenmiyor.</string>
     <string name="edit_owner_only_anon">Yalnızca bu koleksiyonun sahibinin onu düzenlemesine izin verilir.</string>
     <string name="collection_members_add_success">Davet gönderildi. Davet kabul edildikten sonra kullanıcı eklenecek.</string>
@@ -385,13 +355,11 @@
     <string name="skip">Atla</string>
     <string name="create">Oluştur</string>
     <string name="collection_members_add_read_only">Salt okunur</string>
-    <string name="migrate_v2_wizard_migrate_progress_done">Hesabınız taşındı.
-\nLütfen her şeyin doğru bir şekilde kopyalandığını doğrulayın ve işiniz bittiğinde eski hesabınızı kaldırın.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Hesabınız taşındı.\nLütfen her şeyin doğru bir şekilde kopyalandığını doğrulayın ve işiniz bittiğinde eski hesabınızı kaldırın.</string>
     <string name="migrate_v2_wizard_migrate_progress_entries">Taşınan girdiler %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress">Koleksiyon taşınıyor %d/%d</string>
     <string name="migrate_v2_wizard_migrate_title">Taşınıyor…</string>
-    <string name="migrate_v2_wizard_welcome_body_extra">Bu biraz zaman alabileceğinden lütfen iyi bir internet bağlantınız ve yeterli piliniz olduğundan emin olun.
-\nDevam etmek için, lütfen aşağıdan yeni bir EteSync 2.0 hesabına kaydolmak veya mevcut bir hesapla oturum açmak seçeneklerinden birini seçin.</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Bu biraz zaman alabileceğinden lütfen iyi bir internet bağlantınız ve yeterli piliniz olduğundan emin olun.\nDevam etmek için, lütfen aşağıdan yeni bir EteSync 2.0 hesabına kaydolmak veya mevcut bir hesapla oturum açmak seçeneklerinden birini seçin.</string>
     <string name="migrate_v2_wizard_welcome_body">Bu araç verilerinizi EteSync 2.0\'a taşımanıza yardımcı olacaktır. Taşıma herhangi bir veriyi silmez. Verilerinizi yalnızca yeni EteSync 2.0 sunucusuna kopyalar. Bu, taşıma esnasında veri kaybı riski olmadığı anlamına gelir.</string>
     <string name="migrate_v2_wizard_welcome_title">EteSync 2.0\'a Taşıma</string>
     <string name="migrate_v2_wizard_migrate_progress_done_malformed">%d hatalı biçimlendirilmiş girdi yok sayıldı (yok sayılmaları muhtemelen güvenli).</string>
