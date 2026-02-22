@@ -9,7 +9,7 @@
     <string name="please_wait">Proszę czekać…</string>
     <string name="send">Wyślij</string>
     <!-- tourguide -->
-    <string name="tourguide_title">Czy wiesz, że\?</string>
+    <string name="tourguide_title">Czy wiesz, że?</string>
     <!-- startup dialogs -->
     <string name="startup_battery_optimization">Optymalizacja Baterii</string>
     <string name="startup_battery_optimization_message">System Android może wyłączyć/zredukować synchronizację EteSync po kilku dniach. Aby temu zapobiec, wyłącz optymalizację baterii.</string>
@@ -157,8 +157,7 @@
     <string name="login_encryption_account_label">Konto:</string>
     <string name="login_service_details_description">Służy ono do zalogowania się, *nie jest* szyfrowanym hasłem!</string>
     <string name="login_forgot_password">Zapomniałeś hasła?</string>
-    <string name="login_wrong_username_or_password">Nie można uwierzytelnić (prawdopodobnie błędna nazwa użytkownika lub hasło).
-\nCzy zarejestrowałeś się\?</string>
+    <string name="login_wrong_username_or_password">Nie można uwierzytelnić (prawdopodobnie błędna nazwa użytkownika lub hasło).\nCzy zarejestrowałeś się?</string>
     <string name="login_view_logs">Zobacz logi</string>
     <string name="setting_up_encryption">Ustawianie Szyfrowania</string>
     <string name="setting_up_encryption_content">Proszę czekać, ustawianie szyfrowania…</string>
@@ -222,8 +221,7 @@
     <string name="delete_collection_confirm_warning">Kolekcja (%s) i jej wszystkie dane zostaną usunięte z serwera.</string>
     <string name="delete_collection_deleting_collection">Usuwanie kolekcji</string>
     <!-- JournalViewer -->
-    <string name="journal_entries_list_empty">Kolekcja jest pusta.
-\nMoże się wciąż synchronizuje\?</string>
+    <string name="journal_entries_list_empty">Kolekcja jest pusta.\nMoże się wciąż synchronizuje?</string>
     <string name="journal_entries_loading">Ładowanie wpisów dziennika zmian...</string>
     <!-- ExceptionInfoFragment -->
     <string name="exception">Wystąpił błąd.</string>
@@ -270,20 +268,17 @@
     <string name="import_select_account">Wybierz Konto</string>
     <!-- Event (from Etar) -->
     <string name="event_info_organizer">Organizator:</string>
-    <string name="startup_vendor_specific_bugs_message">EteSync wykrył, że używasz Androida mogącego zawierać błędy zewnętrznego dostawcy (nie jesteśmy w stanie ich naprawić).
-\nZerknij na FAQ po więcej informacji.</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync wykrył, że używasz Androida mogącego zawierać błędy zewnętrznego dostawcy (nie jesteśmy w stanie ich naprawić).\nZerknij na FAQ po więcej informacji.</string>
     <string name="app_settings_log_verbose_summary">Szczegółowe logi mogą zawierać prywatne informacje</string>
     <string name="app_settings_log_verbose">Szczegółowe logi zdarzeń</string>
     <string name="notification_channel_sync_warnings">Niekrytyczne problemy podczas synchronizacji</string>
     <string name="notification_channel_general">Inne istotne wiadomości</string>
     <string name="migrate_v2_wizard_migrate_progress_done_malformed">Zignorowano %d uszkodzonych wpisów (prawdopodobnie możesz to zignorować).</string>
-    <string name="migrate_v2_wizard_migrate_progress_done">Twoje konto zostało zmigrowane.
-\nSprawdź, czy wszystko zostało poprawnie skopiowane i usuń swoje stare konto.</string>
+    <string name="migrate_v2_wizard_migrate_progress_done">Twoje konto zostało zmigrowane.\nSprawdź, czy wszystko zostało poprawnie skopiowane i usuń swoje stare konto.</string>
     <string name="migrate_v2_wizard_migrate_progress_entries">Zmigrowano pozycji %d/%d</string>
     <string name="migrate_v2_wizard_migrate_progress">Migracja kolekcji %d/%d</string>
     <string name="migrate_v2_wizard_migrate_title">Migracja…</string>
-    <string name="migrate_v2_wizard_welcome_body_extra">Upewnij się, że masz dobre połączenie z Internetem i naładowaną baterię, ponieważ może to trochę potrwać.
-\nAby kontynuować, proszę wybrać poniżej, czy chcesz założyć nowe konto EteSync 2.0, czy zalogować się przy użyciu istniejącego konta.</string>
+    <string name="migrate_v2_wizard_welcome_body_extra">Upewnij się, że masz dobre połączenie z Internetem i naładowaną baterię, ponieważ może to trochę potrwać.\nAby kontynuować, proszę wybrać poniżej, czy chcesz założyć nowe konto EteSync 2.0, czy zalogować się przy użyciu istniejącego konta.</string>
     <string name="migrate_v2_wizard_welcome_body">To narzędzie pomoże Ci przenieść Twoje dane do EteSync 2.0. Migracja nie powoduje usunięcia żadnych danych. Jedynie kopiuje dane na nowy serwer EteSync 2.0. Oznacza to, że nie ma ryzyka utraty danych podczas migracji.</string>
     <string name="startup_vendor_specific_bugs">Potencjalne błędy zewnętrznego dostawcy</string>
     <string name="notification_channel_sync_status_desc">Informacyjne komunikaty o stanie, takie jak podsumowanie zsynchronizowanych zmian</string>
@@ -293,19 +288,10 @@
     <string name="notification_channel_description">Powiadomienia EteSync</string>
     <string name="notification_channel_name">EteSync</string>
     <string name="open_url_no_activity">Nie udało się otworzyć linku: link nie jest obsługiwany!</string>
-    <string name="sync_calendar_attendees_email_content">Zostałeś zaproszony na następujące wydarzenie:
-\n
-\n%s
-\nKiedy: %s
-\nGdzie: %s
-\nUczestnicy: %s
-\n
-\n--
-\nWysłane przez EteSync - bezpieczna, szyfrowana end-to-end i prywatna synchronizacja danych.
-\nWejdź na https://www.EteSync.com</string>
+    <string name="sync_calendar_attendees_email_content">Zostałeś zaproszony na następujące wydarzenie:\n\n%s\nKiedy: %s\nGdzie: %s\nUczestnicy: %s\n\n--\nWysłane przez EteSync - bezpieczna, szyfrowana end-to-end i prywatna synchronizacja danych.\nWejdź na https://www.EteSync.com</string>
     <string name="sync_calendar_attendees_email_subject">Zaproszenie: %s @ %s</string>
     <string name="calendar_attendees_send_email_action">Wyślij zaproszenia</string>
-    <string name="sync_calendar_attendees_notification_content">Wysłać gościom zaproszenia\?</string>
+    <string name="sync_calendar_attendees_notification_content">Wysłać gościom zaproszenia?</string>
     <string name="sync_calendar_attendees_notification_title">%s</string>
     <string name="sync_journal_readonly_message">Dziennik zmian jest tylko do odczytu, więc wszystkie Twoje zmiany (%d) zostały cofnięte.</string>
     <string name="sync_journal_readonly">Dziennik zmian \"%s\" jest tylko do odczytu</string>
@@ -325,20 +311,16 @@
     <string name="settings_account_dashboard">Panel konta</string>
     <string name="settings_manage_account">Zarządzaj kontem</string>
     <string name="import_account_top_notice">Wybierz konto, z którego chcesz zaimportować wpisy.</string>
-    <string name="import_dialog_failed_body">Powód: %s
-\nZgłosić programistom\?</string>
+    <string name="import_dialog_failed_body">Powód: %s\nZgłosić programistom?</string>
     <string name="login_user_info_error_title">Błąd podczas ustawiania informacji o użytkowniku</string>
     <string name="change_encryption_password_success_body">Hasło szyfrowania zostało zmienione!</string>
     <string name="change_encryption_password_success_title">Zmiana Hasła Szyfrowania</string>
-    <string name="change_encryption_password_are_you_sure">Czy na pewno chcesz kontynuować\? Procesu nie można zatrzymać w trakcie ani cofnąć, a jego ukończenie może trochę zająć.</string>
+    <string name="change_encryption_password_are_you_sure">Czy na pewno chcesz kontynuować? Procesu nie można zatrzymać w trakcie ani cofnąć, a jego ukończenie może trochę zająć.</string>
     <string name="change_encryption_password_new_password">Nowe Hasło Szyfrowania</string>
     <string name="signup_title">Wprowadź Dane Logowania</string>
     <string name="change_encryption_password_title">Zmień Hasło Szyfrowania</string>
     <string name="signup_password_restrictions">Hasło powinno mieć co najmniej 8 znaków</string>
-    <string name="wrong_encryption_password_content">Wystąpił błąd integralności podczas uzyskiwania dostępu do konta, co najprawdopodobniej oznacza, że wprowadziłeś nieprawidłowe hasło szyfrowania.
-\nPamiętaj, że w nazwie użytkownika rozróżniana jest wielkość liter, więc spróbuj użyć wielkich liter, na przykład wpisz pierwszą wielką literę.
-\n
-\nBłąd: %s</string>
+    <string name="wrong_encryption_password_content">Wystąpił błąd integralności podczas uzyskiwania dostępu do konta, co najprawdopodobniej oznacza, że wprowadziłeś nieprawidłowe hasło szyfrowania.\nPamiętaj, że w nazwie użytkownika rozróżniana jest wielkość liter, więc spróbuj użyć wielkich liter, na przykład wpisz pierwszą wielką literę.\n\nBłąd: %s</string>
     <string name="wrong_encryption_password">Niepoprawne hasło szyfrowania</string>
     <string name="login_encryption_enter_password">Jesteś zalogowany jako \"%s\". Podaj swoje hasło szyfrowania, aby kontynuować, lub wyloguj się z menu bocznego.</string>
     <string name="login_encryption_set_new_password">Ustaw swoje hasło szyfrowania poniżej i upewnij się, że je zapamiętałeś, ponieważ *nie można* go odzyskać jeśli zostanie utracone!</string>
@@ -352,19 +334,17 @@
     <string name="journal_item_tab_revisions">Rewizje</string>
     <string name="invitations_reject">Odrzuć</string>
     <string name="invitations_accept">Zaakceptuj</string>
-    <string name="invitations_accept_reject_dialog">Chcesz zaakceptować czy odrzucić zaproszenie\?</string>
+    <string name="invitations_accept_reject_dialog">Chcesz zaakceptować czy odrzucić zaproszenie?</string>
     <string name="invitations_list_empty">Brak zaproszeń</string>
     <string name="invitations_loading">Ładowanie zaproszeń...</string>
     <string name="invitations_title">Zaproszenia</string>
     <string name="collection_members_leave">Opuść</string>
-    <string name="collection_members_no_access">Tylko administratorzy mogą zarządzać członkostwami w kolekcji. Chcesz opuścić kolekcję\?</string>
+    <string name="collection_members_no_access">Tylko administratorzy mogą zarządzać członkostwami w kolekcji. Chcesz opuścić kolekcję?</string>
     <string name="collection_members_remove_admin">Usuwanie dostępu dla administratorów nie jest obecnie obsługiwane.</string>
     <string name="collection_members_add_success">Zaproszenie wysłane. Użytkownik zostanie dodany, gdy tylko zaakceptuje zaproszenie.</string>
     <string name="collection_members_add_read_only">Tylko do odczytu</string>
-    <string name="use_native_apps_body">EteSync bezproblemowo integruje się z systemem Android, więc aby z niego korzystać, wystarczy użyć istniejącej aplikacji z kontaktami i kalendarza!
-\n
-\nAby uzyskać więcej informacji, zapoznaj się z podręcznikiem użytkownika.</string>
-    <string name="use_native_apps_title">Czy wiesz, że\?</string>
+    <string name="use_native_apps_body">EteSync bezproblemowo integruje się z systemem Android, więc aby z niego korzystać, wystarczy użyć istniejącej aplikacji z kontaktami i kalendarza!\n\nAby uzyskać więcej informacji, zapoznaj się z podręcznikiem użytkownika.</string>
+    <string name="use_native_apps_title">Czy wiesz, że?</string>
     <string name="edit_owner_only_anon">Tylko właściciel tej kolekcji może ją edytować.</string>
     <string name="tasks_not_showing">* Dziennik jest wyświetlany tylko wtedy, gdy dostawca zadań jest zainstalowany.</string>
     <string name="account_tasks_not_showing">* Brak synchronizacji zadań (zainstaluj dostawcę)</string>
