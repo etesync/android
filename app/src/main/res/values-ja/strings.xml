@@ -1,128 +1,368 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
+    <!--common strings-->
   <string name="help">ヘルプ</string>
-  <string name="manage_accounts">アカウントの管理</string>
-  <string name="please_wait">しばらくお待ちください …</string>
-  <string name="send">送信</string>
-  <!--startup dialogs-->
+    <string name="manage_accounts">アカウントの管理</string>
+    <string name="please_wait">しばらくお待ちください …</string>
+    <string name="send">送信</string>
+    <!--startup dialogs-->
   <string name="startup_battery_optimization">バッテリー最適化</string>
-  <string name="startup_dont_show_again">次回から表示しない</string>
-  <!--AboutActivity-->
+    <string name="startup_dont_show_again">次回から表示しない</string>
+    <!--AboutActivity-->
   <string name="about_license_terms">ライセンス規約</string>
-  <string name="about_license_info_no_warranty">このプログラムは完全に無保証で提供されます。これはフリーソフトウェアで、特定の条件下での再頒布を歓迎します。</string>
-  <!--global settings-->
+    <string name="about_license_info_no_warranty">このプログラムは完全に無保証で提供されます。これはフリーソフトウェアで、特定の条件下での再頒布を歓迎します。</string>
+    <!--global settings-->
   <string name="logging_to_external_storage">外部ストレージにログ: %s</string>
-  <string name="logging_to_external_storage_warning">できる限り早くログを削除してください!</string>
-  <string name="logging_couldnt_create_file">外部ログファイルを作成できませんでした: %s</string>
-  <string name="logging_no_external_storage">外部ストレージが見つかりません</string>
-  <!--AccountsActivity-->
+    <string name="logging_to_external_storage_warning">できる限り早くログを削除してください!</string>
+    <string name="logging_couldnt_create_file">外部ログファイルを作成できませんでした: %s</string>
+    <string name="logging_no_external_storage">外部ストレージが見つかりません</string>
+    <!--AccountsActivity-->
   <string name="navigation_drawer_open">ナビゲーションドロワーを開く</string>
-  <string name="navigation_drawer_close">ナビゲーションドロワーを閉じる</string>
-  <string name="navigation_drawer_about">アプリについて / ライセンス</string>
-  <string name="navigation_drawer_settings">設定</string>
-  <string name="navigation_drawer_external_links">外部リンク</string>
-  <string name="navigation_drawer_website">Web サイト</string>
-  <string name="navigation_drawer_faq">FAQ</string>
-  <!--AccountUpdateService-->
+    <string name="navigation_drawer_close">ナビゲーションドロワーを閉じる</string>
+    <string name="navigation_drawer_about">アプリについて / ライセンス</string>
+    <string name="navigation_drawer_settings">設定</string>
+    <string name="navigation_drawer_external_links">外部リンク</string>
+    <string name="navigation_drawer_website">Web サイト</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <!--AccountUpdateService-->
   <!--AppSettingsActivity-->
   <string name="app_settings">設定</string>
-  <string name="app_settings_user_interface">ユーザーインターフェイス</string>
-  <string name="app_settings_reset_hints">ヒントをリセット</string>
-  <string name="app_settings_reset_hints_summary">以前非表示にしたヒントを、再度有効にします</string>
-  <string name="app_settings_reset_hints_success">すべてのヒントが再度表示されます</string>
-  <string name="app_settings_connection">接続</string>
-  <string name="app_settings_override_proxy">プロキシ設定を上書き</string>
-  <string name="app_settings_override_proxy_on">カスタムのプロキシ設定を使用する</string>
-  <string name="app_settings_override_proxy_off">システムデフォルトのプロキシ設定を使用する</string>
-  <string name="app_settings_override_proxy_host">HTTP プロキシのホスト名</string>
-  <string name="app_settings_override_proxy_port">HTTP プロキシのポート</string>
-  <string name="app_settings_security">セキュリティ</string>
-  <string name="app_settings_distrust_system_certs">システム証明書の信頼を解除</string>
-  <string name="app_settings_distrust_system_certs_on">システムとユーザーが追加したCAを信頼しない</string>
-  <string name="app_settings_distrust_system_certs_off">システムとユーザーが追加したCAを信頼する (推奨)</string>
-  <string name="app_settings_reset_certificates">(未)信頼済証明書をリセット</string>
-  <string name="app_settings_reset_certificates_summary">すべてのカスタム証明書の信頼をリセット</string>
-  <string name="app_settings_reset_certificates_success">すべてのカスタム証明書をクリアしました</string>
-  <string name="app_settings_debug">デバッグ</string>
-  <string name="app_settings_log_to_external_storage">外部ファイルにログ出力</string>
-  <string name="app_settings_log_to_external_storage_on">(可能な場合) 外部ストレージにログ出力します</string>
-  <string name="app_settings_log_to_external_storage_off">外部ファイルログ出力は無効です</string>
-  <string name="app_settings_show_debug_info">デバッグ情報を表示</string>
-  <string name="app_settings_show_debug_info_details">ソフトウェアと設定の詳細を表示/共有</string>
-  <!--AccountActivity-->
+    <string name="app_settings_user_interface">ユーザーインターフェイス</string>
+    <string name="app_settings_reset_hints">ヒントをリセット</string>
+    <string name="app_settings_reset_hints_summary">以前非表示にしたヒントを、再度有効にします</string>
+    <string name="app_settings_reset_hints_success">すべてのヒントが再度表示されます</string>
+    <string name="app_settings_connection">接続</string>
+    <string name="app_settings_override_proxy">プロキシ設定を上書き</string>
+    <string name="app_settings_override_proxy_on">カスタムのプロキシ設定を使用する</string>
+    <string name="app_settings_override_proxy_off">システムデフォルトのプロキシ設定を使用する</string>
+    <string name="app_settings_override_proxy_host">HTTP プロキシのホスト名</string>
+    <string name="app_settings_override_proxy_port">HTTP プロキシのポート</string>
+    <string name="app_settings_security">セキュリティ</string>
+    <string name="app_settings_distrust_system_certs">システム証明書の信頼を解除</string>
+    <string name="app_settings_distrust_system_certs_on">システムとユーザーが追加したCAを信頼しない</string>
+    <string name="app_settings_distrust_system_certs_off">システムとユーザーが追加したCAを信頼する (推奨)</string>
+    <string name="app_settings_reset_certificates">(未)信頼済証明書をリセット</string>
+    <string name="app_settings_reset_certificates_summary">すべてのカスタム証明書の信頼をリセット</string>
+    <string name="app_settings_reset_certificates_success">すべてのカスタム証明書をクリアしました</string>
+    <string name="app_settings_debug">デバッグ</string>
+    <string name="app_settings_log_to_external_storage">外部ファイルにログ出力</string>
+    <string name="app_settings_log_to_external_storage_on">(可能な場合) 外部ストレージにログ出力します</string>
+    <string name="app_settings_log_to_external_storage_off">外部ファイルログ出力は無効です</string>
+    <string name="app_settings_show_debug_info">デバッグ情報を表示</string>
+    <string name="app_settings_show_debug_info_details">ソフトウェアと設定の詳細を表示/共有</string>
+    <!--AccountActivity-->
   <string name="account_synchronize_now">今すぐ同期</string>
-  <string name="account_synchronizing_now">同期中</string>
-  <string name="account_settings">アカウント設定</string>
-  <string name="account_delete">アカウントを削除</string>
-  <string name="account_delete_confirmation_title">アカウントを削除してもよろしいですか?</string>
-  <string name="account_delete_confirmation_text">アドレス帳、カレンダー、タスクリストのローカルコピーがすべて削除されます。</string>
-  <!--PermissionsActivity-->
+    <string name="account_synchronizing_now">同期中</string>
+    <string name="account_settings">アカウント設定</string>
+    <string name="account_delete">アカウントを削除</string>
+    <string name="account_delete_confirmation_title">アカウントを削除してもよろしいですか?</string>
+    <string name="account_delete_confirmation_text">アドレス帳、カレンダー、タスクリストのローカルコピーがすべて削除されます。</string>
+    <!--PermissionsActivity-->
   <string name="permissions_calendar">カレンダー アクセス許可</string>
-  <string name="permissions_calendar_request">カレンダー アクセス許可の要求</string>
-  <string name="permissions_contacts">連絡先アクセス許可</string>
-  <string name="permissions_contacts_request">連絡先アクセス許可の要求</string>
-  <string name="permissions_opentasks">OpenTasks アクセス許可</string>
-  <string name="permissions_opentasks_request">OpenTasks アクセス許可の要求</string>
-  <!--AddAccountActivity-->
+    <string name="permissions_calendar_request">カレンダー アクセス許可の要求</string>
+    <string name="permissions_contacts">連絡先アクセス許可</string>
+    <string name="permissions_contacts_request">連絡先アクセス許可の要求</string>
+    <string name="permissions_opentasks">OpenTasks アクセス許可</string>
+    <string name="permissions_opentasks_request">OpenTasks アクセス許可の要求</string>
+    <!--AddAccountActivity-->
   <string name="login_title">アカウントを追加</string>
-  <string name="login_email_address">メールアドレス</string>
-  <string name="login_email_address_error">有効なメールアドレスが必要です</string>
-  <string name="login_password">パスワード</string>
-  <string name="login_password_required">パスワードが必要です</string>
-  <string name="login_back">戻る</string>
-  <string name="login_configuration_detection">設定の検出</string>
-  <string name="login_querying_server">しばらくお待ちください。サーバーに問い合わせ中…</string>
-  <string name="login_view_logs">ログを表示</string>
-  <!--AccountSettingsActivity-->
+    <string name="login_email_address">メールアドレス</string>
+    <string name="login_email_address_error">有効なメールアドレスが必要です</string>
+    <string name="login_password">パスワード</string>
+    <string name="login_password_required">パスワードが必要です</string>
+    <string name="login_back">戻る</string>
+    <string name="login_view_logs">ログを表示</string>
+    <!--AccountSettingsActivity-->
   <string name="settings_title">設定: %s</string>
-  <string name="settings_authentication">認証</string>
-  <string name="settings_password">パスワード</string>
-  <string name="settings_enter_password">パスワードを入力:</string>
-  <string name="settings_sync">同期</string>
-  <string name="settings_sync_interval_contacts">連絡先同期間隔</string>
-  <string name="settings_sync_summary_manually">手動のみ</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + ローカルの変更時はすぐに</string>
-  <string name="settings_sync_summary_not_available">利用不可</string>
-  <string name="settings_sync_interval_calendars">カレンダー同期間隔</string>
-  <string-array name="settings_sync_interval_names">
-    <item>手動のみ</item>
-    <item>15 分ごと</item>
-    <item>30 分ごと</item>
-    <item>1 時間ごと</item>
-    <item>2 時間ごと</item>
-    <item>4 時間ごと</item>
-    <item>1 日 1 回</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">WiFi でのみ同期</string>
-  <string name="settings_sync_wifi_only_on">同期は WiFi 接続に制限されます</string>
-  <string name="settings_sync_wifi_only_off">接続の種類は考慮されません</string>
-  <string name="settings_sync_wifi_only_ssid">WiFi SSID 制限</string>
-  <string name="settings_sync_wifi_only_ssid_on">%s でのみ同期します</string>
-  <string name="settings_sync_wifi_only_ssid_off">すべての WiFi 接続を使用することができます</string>
-  <string name="settings_sync_wifi_only_ssid_message">このネットワークで同期を制限する WiFi ネットワーク (SSID) の名前を入力してください。すべての WiFi 接続は空白のままにします。</string>
-  <!--collection management-->
+    <string name="settings_password">パスワード</string>
+    <string name="settings_enter_password">パスワードを入力:</string>
+    <string name="settings_sync">同期</string>
+    <string name="settings_sync_summary_manually">手動のみ</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s + ローカルの変更時はすぐに</string>
+    <string name="settings_sync_summary_not_available">利用不可</string>
+    <string-array name="settings_sync_interval_names">
+        <item>手動のみ</item>
+        <item>15 分ごと</item>
+        <item>30 分ごと</item>
+        <item>1 時間ごと</item>
+        <item>2 時間ごと</item>
+        <item>4 時間ごと</item>
+        <item>1 日 1 回</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">WiFi でのみ同期</string>
+    <string name="settings_sync_wifi_only_on">同期は WiFi 接続に制限されます</string>
+    <string name="settings_sync_wifi_only_off">接続の種類は考慮されません</string>
+    <string name="settings_sync_wifi_only_ssid">WiFi SSID 制限</string>
+    <string name="settings_sync_wifi_only_ssid_on">%s でのみ同期します</string>
+    <string name="settings_sync_wifi_only_ssid_off">すべての WiFi 接続を使用することができます</string>
+    <string name="settings_sync_wifi_only_ssid_message">このネットワークで同期を制限する WiFi ネットワーク (SSID) の名前を入力してください。すべての WiFi 接続は空白のままにします。</string>
+    <!--collection management-->
   <string name="create_addressbook">アドレス帳を作成</string>
-  <string name="create_addressbook_display_name_hint">マイ アドレス帳</string>
-  <string name="create_collection_creating">コレクションの作成中</string>
-  <string name="create_collection_display_name">このコレクションの表示名 (タイトル):</string>
-  <string name="create_collection_display_name_required">タイトルが必要です</string>
-  <string name="create_collection_description">説明 (オプション):</string>
-  <string name="create_collection_create">作成</string>
-  <string name="delete_collection">コレクションを削除</string>
-  <string name="delete_collection_confirm_title">よろしいですか?</string>
-  <string name="delete_collection_confirm_warning">このコレクション (%s) とそのすべてのデータがサーバーから削除されます。</string>
-  <string name="delete_collection_deleting_collection">コレクションの削除中</string>
-  <!--ExceptionInfoFragment-->
+    <string name="create_addressbook_display_name_hint">マイ アドレス帳</string>
+    <string name="create_collection_creating">コレクションの作成中</string>
+    <string name="create_collection_display_name">このコレクションの表示名 (タイトル):</string>
+    <string name="create_collection_display_name_required">タイトルが必要です</string>
+    <string name="create_collection_description">説明 (オプション):</string>
+    <string name="create_collection_create">作成</string>
+    <string name="delete_collection">コレクションを削除</string>
+    <string name="delete_collection_confirm_title">よろしいですか?</string>
+    <string name="delete_collection_confirm_warning">このコレクション (%s) とそのすべてのデータがサーバーから削除されます。</string>
+    <string name="delete_collection_deleting_collection">コレクションの削除中</string>
+    <!--ExceptionInfoFragment-->
   <string name="exception">エラーが発生しました。</string>
-  <string name="exception_httpexception">HTTP エラーが発生しました。</string>
-  <string name="exception_ioexception">I/O エラーが発生しました。</string>
-  <string name="exception_show_details">詳細を表示</string>
-  <!--sync errors and DebugInfoActivity-->
+    <string name="exception_httpexception">HTTP エラーが発生しました。</string>
+    <string name="exception_ioexception">I/O エラーが発生しました。</string>
+    <string name="exception_show_details">詳細を表示</string>
+    <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">デバッグ情報</string>
-  <string name="sync_error_calendar">カレンダーの同期に失敗しました (%s)</string>
-  <string name="sync_error">%s 時にエラー</string>
-  <string name="sync_error_http_dav">%s 時にサーバーエラー</string>
-  <string name="sync_error_local_storage">%s 時にデータベースエラー</string>
-  <!--cert4android-->
+    <string name="sync_error_calendar">カレンダーの同期に失敗しました (%s)</string>
+    <string name="sync_error">%s 時にエラー</string>
+    <string name="sync_error_http_dav">%s 時にサーバーエラー</string>
+    <string name="sync_error_local_storage">%s 時にデータベースエラー</string>
+    <!--cert4android-->
+<string name="journal_item_note"></string>
+    <string name="create_calendar"></string>
+    <string name="navigation_drawer_guide"></string>
+    <string name="invitations_accept_reject_dialog"></string>
+    <string name="sync_phase_apply_local_entries"></string>
+    <string name="app_settings_sync"></string>
+    <string name="journal_item_restore_dialog_body"></string>
+    <string name="app_settings_log_verbose_summary"></string>
+    <string name="sync_error_permissions_text"></string>
+    <string name="startup_vendor_specific_bugs_message"></string>
+    <string name="journal_item_tab_raw"></string>
+    <string name="sync_phase_post_processing"></string>
+    <string name="journal_entries_loading"></string>
+    <string name="create_tasklist"></string>
+    <string name="account_list_empty"></string>
+    <string name="collection_members_list_empty"></string>
+    <string name="import_dialog_failed_title"></string>
+    <string name="setting_up_encryption"></string>
+    <string name="login_encryption_set_new_password"></string>
+    <string name="sync_phase_prepare"></string>
+    <string name="use_native_apps_body"></string>
+    <string name="sync_successfully_contacts"></string>
+    <string name="tasks_not_showing"></string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="app_settings_notification_settings_summary"></string>
+    <string name="login_encryption_account_label"></string>
+    <string name="invitations_loading"></string>
+    <string name="app_settings_force_language"></string>
+    <string name="navigation_drawer_subtitle"></string>
+    <string name="journal_item_address"></string>
+    <string name="journal_item_birthday"></string>
+    <string name="change_journal_title"></string>
+    <string name="notification_channel_sync_status_desc"></string>
+    <string name="journal_item_tab_revisions"></string>
+    <string name="settings_encryption_password_summary"></string>
+    <string name="import_dialog_title"></string>
+    <string name="permissions_calendar_details"></string>
+    <string name="settings_encryption"></string>
+    <string name="view_collection_members"></string>
+    <string name="sync_phase_push_entries"></string>
+    <string name="login_forgot_password"></string>
+    <string name="journal_item_member_count"></string>
+    <string name="migrate_v2_wizard_migrate_progress_done"></string>
+    <string name="journal_item_restore_action"></string>
+    <string name="login_encryption_password"></string>
+    <string name="collection_members_leave"></string>
+    <string name="journal_item_organization"></string>
+    <string name="crash_message"></string>
+    <string name="accounts_missing_permissions"></string>
+    <string name="wrong_encryption_password_content"></string>
+    <string name="account_owner"></string>
+    <string name="sync_error_contacts"></string>
+    <string name="collection_members_remove"></string>
+    <string name="create"></string>
+    <string name="sync_successfully_modified_full"></string>
+    <string name="members_owner_only"></string>
+    <string name="journal_item_phone"></string>
+    <string name="certificate_notification_connection_security"></string>
+    <string name="install_opentasks"></string>
+    <string name="sync_journal_readonly"></string>
+    <string name="app_settings_notification_settings"></string>
+    <string name="show_fingperprint_title"></string>
+    <string name="logging_davdroid_file_logging"></string>
+    <string name="notification_channel_crash_reports"></string>
+    <string name="sync_calendar_attendees_email_content"></string>
+    <string name="choose_file"></string>
+    <string name="event_info_organizer"></string>
+    <string name="notification_channel_general"></string>
+    <string name="trust_fingerprint_body"></string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed"></string>
+    <string name="sync_error_permissions"></string>
+    <string name="startup_vendor_specific_bugs_open_faq"></string>
+    <string name="login_username_error"></string>
+    <string name="startup_battery_optimization_message"></string>
+    <string name="trust_certificate_unknown_certificate_found"></string>
+    <string name="import_dialog_failed_body"></string>
+    <string name="login_signup"></string>
+    <string name="debug_info_more_data_shared"></string>
+    <string name="settings_account_dashboard"></string>
+    <string name="sync_error_user_inactive"></string>
+    <string name="notification_channel_debugging"></string>
+    <string name="tourguide_title"></string>
+    <string name="sync_successfully_calendar"></string>
+    <string name="accounts_showcase_add"></string>
+    <string name="login_user_info_error_title"></string>
+    <string name="journal_item_tab_main"></string>
+    <string name="edit_owner_only"></string>
+    <string name="notification_channel_sync_warnings"></string>
+    <string name="settings_caldav"></string>
+    <string name="settings_carddav"></string>
+    <string name="invitations_reject"></string>
+    <string name="sync_successfully_tasks"></string>
+    <string name="app_settings_log_verbose"></string>
+    <string name="collection_members_remove_admin"></string>
+    <string name="accounts_global_sync_disabled"></string>
+    <string name="collection_members_remove_title"></string>
+    <string name="app_settings_force_language_default"></string>
+    <string name="permissions_title"></string>
+    <string name="calendar_attendees_send_email_action"></string>
+    <string name="account_showcase_import"></string>
+    <string name="sync_phase_fetch_entries"></string>
+    <string name="permissions_opentasks_details"></string>
+    <string name="navigation_drawer_contact"></string>
+    <string name="startup_development_version_give_feedback"></string>
+    <string name="settings_taskdav"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="settings_enter_encryption_password"></string>
+    <string name="login_finish"></string>
+    <string name="sync_phase_prepare_local"></string>
+    <string name="app_settings_prefer_tasksorg_off"></string>
+    <string name="retry"></string>
+    <string name="sync_phase_journals"></string>
+    <string name="accounts_global_sync_enable"></string>
+    <string name="startup_vendor_specific_bugs"></string>
+    <string name="create_calendar_display_name_hint"></string>
+    <string name="account_delete_collection_last_title"></string>
+    <string name="collection_members_add_success"></string>
+    <string name="settings_password_summary"></string>
+    <string name="collection_members_removing"></string>
+    <string name="collection_members_add"></string>
+    <string name="skip"></string>
+    <string name="account_wizard_collections_title"></string>
+    <string name="collection_members_add_error"></string>
+    <string name="login_username"></string>
+    <string name="login_enter_service_details"></string>
+    <string name="account_tasks_not_showing"></string>
+    <string name="login_enter_encryption_details"></string>
+    <string name="login_toggle_advanced"></string>
+    <string name="about"></string>
+    <string name="collection_members_error_user_not_found"></string>
+    <string name="account_wizard_collections_body"></string>
+    <string name="change_encryption_password_success_title"></string>
+    <string name="migrate_v2_wizard_welcome_body"></string>
+    <string name="notification_channel_sync_warnings_desc"></string>
+    <string name="signup_title"></string>
+    <string name="app_settings_change_notification"></string>
+    <string name="import_select_account"></string>
+    <string name="collection_members_add_read_only"></string>
+    <string name="journal_item_relation"></string>
+    <string name="login_custom_server_error"></string>
+    <string name="collection_members_adding"></string>
+    <string name="settings_manage_account_summary"></string>
+    <string name="signup_password_restrictions"></string>
+    <string name="permissions_tasks_org"></string>
+    <string name="import_account_top_notice"></string>
+    <string name="edit_collection"></string>
+    <string name="notification_channel_sync"></string>
+    <string name="setting_up_encryption_content"></string>
+    <string name="notification_channel_name"></string>
+    <string name="view_collection_import"></string>
+    <string name="members_old_journals_not_allowed"></string>
+    <string name="sync_calendar_attendees_notification_content"></string>
+    <string name="migrate_v2_wizard_migrate_progress"></string>
+    <string name="sync_successfully_modified"></string>
+    <string name="account_title_address_book"></string>
+    <string name="journal_item_attendees"></string>
+    <string name="sync_error_generic"></string>
+    <string name="install_tasksorg"></string>
+    <string name="trust_fingerprint_title"></string>
+    <string name="app_settings_prefer_tasksorg"></string>
+    <string name="change_encryption_password_are_you_sure"></string>
+    <string name="change_encryption_password_new_password"></string>
+    <string name="permissions_tasks_org_request"></string>
+    <string name="journal_item_job_description"></string>
+    <string name="sync_calendar_attendees_notification_title"></string>
+    <string name="sync_calendar_attendees_email_subject"></string>
+    <string name="collection_members_remove_error"></string>
+    <string name="import_button_local"></string>
+    <string name="journal_entries_list_empty"></string>
+    <string name="migrate_v2_wizard_migrate_title"></string>
+    <string name="sync_phase_create_local_entries"></string>
+    <string name="collection_members_no_access"></string>
+    <string name="navigation_drawer_report_issue"></string>
+    <string name="invitations_list_empty"></string>
+    <string name="sync_error_tasks"></string>
+    <string name="login_login"></string>
+    <string name="loading_error_title"></string>
+    <string name="invitations_accept"></string>
+    <string name="account_delete_collection_last_text"></string>
+    <string name="account_showcase_view_collection"></string>
+    <string name="sync_phase_prepare_fetch"></string>
+    <string name="journal_item_email"></string>
+    <string name="sync_journal_readonly_message"></string>
+    <string name="account_show_fingerprint"></string>
+    <string name="open_url_no_activity"></string>
+    <string name="not_allowed_title"></string>
+    <string name="journal_item_nickname"></string>
+    <string name="login_encryption_extra_info"></string>
+    <string name="loading_error_content"></string>
+    <string name="import_dialog_adding_entries"></string>
+    <string name="sync_error_journal_readonly"></string>
+    <string name="startup_battery_optimization_disable"></string>
+    <string name="journal_item_reminders"></string>
+    <string name="import_dialog_success"></string>
+    <string name="edit_owner_only_anon"></string>
+    <string name="sync_error_unauthorized"></string>
+    <string name="settings_sync_interval"></string>
+    <string name="migrate_v2_wizard_welcome_title"></string>
+    <string name="journal_item_anniversary"></string>
+    <string name="create_tasklist_display_name_hint"></string>
+    <string name="login_custom_server"></string>
+    <string name="import_button_file"></string>
+    <string name="login_wrong_username_or_password"></string>
+    <string name="account_click_install_tasks"></string>
+    <string name="sync_error_integrity"></string>
+    <string name="settings_manage_account"></string>
+    <string name="sync_error_permission_denied"></string>
+    <string name="use_native_apps_title"></string>
+    <string name="loading"></string>
+    <string name="app_settings_prefer_tasksorg_on"></string>
+    <string name="create_collection_color"></string>
+    <string name="collection_members_title"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="journal_item_member"></string>
+    <string name="import_permission_required"></string>
+    <string name="app_settings_prefer_tasksorg_snack"></string>
+    <string name="notification_channel_sync_errors"></string>
+    <string name="account_creation_failed"></string>
+    <string name="journal_item_impp"></string>
+    <string name="notification_channel_sync_status"></string>
+    <string name="crash_email_body"></string>
+    <string name="sync_error_unavailable"></string>
+    <string name="import_dialog_loading_file"></string>
+    <string name="notification_channel_description"></string>
+    <string name="permissions_contacts_details"></string>
+    <string name="app_name"></string>
+    <string name="account_type" translatable="false"></string>
+    <string name="permissions_tasks_org_details"></string>
+    <string name="startup_development_version_message"></string>
+    <string name="view_collection_edit"></string>
+    <string name="login_service_details_description"></string>
+    <string name="journal_item_website"></string>
+    <string name="change_encryption_password_title"></string>
+    <string name="wrong_encryption_password"></string>
+    <string name="notification_channel_sync_errors_desc"></string>
+    <string name="collection_members_list_loading"></string>
+    <string name="login_encryption_enter_password"></string>
+    <string name="address_books_authority_title"></string>
+    <string name="settings_encryption_password"></string>
+    <string name="change_encryption_password_success_body"></string>
+    <string name="sync_phase_apply_remote_entries"></string>
+    <string name="crash_title"></string>
+    <string name="invitations_title"></string>
+    <string name="login_encryption_check_password"></string>
+    <string name="startup_development_version"></string>
 </resources>
