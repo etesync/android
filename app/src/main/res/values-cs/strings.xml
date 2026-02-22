@@ -1,128 +1,368 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--common strings-->
+    <!--common strings-->
   <string name="help">Pomoc</string>
-  <string name="manage_accounts">Spravovat účty</string>
-  <string name="please_wait">Chvíli strpení ...</string>
-  <string name="send">Odeslat</string>
-  <!--startup dialogs-->
+    <string name="manage_accounts">Spravovat účty</string>
+    <string name="please_wait">Chvíli strpení ...</string>
+    <string name="send">Odeslat</string>
+    <!--startup dialogs-->
   <string name="startup_battery_optimization">Optimalizace využití baterie</string>
-  <string name="startup_dont_show_again">Již nezobrazovat</string>
-  <!--AboutActivity-->
+    <string name="startup_dont_show_again">Již nezobrazovat</string>
+    <!--AboutActivity-->
   <string name="about_license_terms">Licenční podmínky</string>
-  <string name="about_license_info_no_warranty">Tento program je distribuován BEZ JAKÉKOLIV ZÁRUKY. Je to volně dostupný software a lze jej za určitých podmínek dále distribuovat.</string>
-  <!--global settings-->
+    <string name="about_license_info_no_warranty">Tento program je distribuován BEZ JAKÉKOLIV ZÁRUKY. Je to volně dostupný software a lze jej za určitých podmínek dále distribuovat.</string>
+    <!--global settings-->
   <string name="logging_to_external_storage">Logování do externího úložiště: %s</string>
-  <string name="logging_to_external_storage_warning">Smazat logy jak nejdříve možno!</string>
-  <string name="logging_couldnt_create_file">Nelze vytvořit externí soubor logu: %s</string>
-  <string name="logging_no_external_storage">Externí úložiště nenalezeno</string>
-  <!--AccountsActivity-->
+    <string name="logging_to_external_storage_warning">Smazat logy jak nejdříve možno!</string>
+    <string name="logging_couldnt_create_file">Nelze vytvořit externí soubor logu: %s</string>
+    <string name="logging_no_external_storage">Externí úložiště nenalezeno</string>
+    <!--AccountsActivity-->
   <string name="navigation_drawer_open">Otevřít panel navigace</string>
-  <string name="navigation_drawer_close">Zavřít panel navigace</string>
-  <string name="navigation_drawer_about">O aplikaci / Licence</string>
-  <string name="navigation_drawer_settings">Nastavení</string>
-  <string name="navigation_drawer_external_links">Externí odkazy</string>
-  <string name="navigation_drawer_website">Webová stránka</string>
-  <string name="navigation_drawer_faq">FAQ</string>
-  <!--AccountUpdateService-->
+    <string name="navigation_drawer_close">Zavřít panel navigace</string>
+    <string name="navigation_drawer_about">O aplikaci / Licence</string>
+    <string name="navigation_drawer_settings">Nastavení</string>
+    <string name="navigation_drawer_external_links">Externí odkazy</string>
+    <string name="navigation_drawer_website">Webová stránka</string>
+    <string name="navigation_drawer_faq">FAQ</string>
+    <!--AccountUpdateService-->
   <!--AppSettingsActivity-->
   <string name="app_settings">Nastavení</string>
-  <string name="app_settings_user_interface">Uživatelské prostředí</string>
-  <string name="app_settings_reset_hints">Resetovat nápovědu</string>
-  <string name="app_settings_reset_hints_summary">Znovu povolí vypnuté texty nápovědy</string>
-  <string name="app_settings_reset_hints_success">Budou zobrazovány všechny texty nápovědy</string>
-  <string name="app_settings_connection">Připojení</string>
-  <string name="app_settings_override_proxy">Přepsat proxy nastavení</string>
-  <string name="app_settings_override_proxy_on">Použít vlastní proxy nastavení</string>
-  <string name="app_settings_override_proxy_off">Použít výchozí systémová proxy nastavení</string>
-  <string name="app_settings_override_proxy_host">HTTP proxy hostname</string>
-  <string name="app_settings_override_proxy_port">HTTP proxy port</string>
-  <string name="app_settings_security">Zabezpečení</string>
-  <string name="app_settings_distrust_system_certs">Nedůvěřovat systémovým certifikátům</string>
-  <string name="app_settings_distrust_system_certs_on">Systémovým a uživatelem přidaným CA nebude důvěřováno</string>
-  <string name="app_settings_distrust_system_certs_off">Systémovým a uživatelem přidaným CA bude důvěřováno (doporučeno)</string>
-  <string name="app_settings_reset_certificates">Resetovat (ne)důvěryhodné certifikáty</string>
-  <string name="app_settings_reset_certificates_summary">Resetovat důvěryhodnost všech vlastních certifikátů</string>
-  <string name="app_settings_reset_certificates_success">Všechny vlastní certifikáty byly resetovány</string>
-  <string name="app_settings_debug">Ladění</string>
-  <string name="app_settings_log_to_external_storage">Logovat do externího souboru</string>
-  <string name="app_settings_log_to_external_storage_on">Logování do externího úložiště (pokud dostupné)</string>
-  <string name="app_settings_log_to_external_storage_off">Logování do externího souboru je vypnuto</string>
-  <string name="app_settings_show_debug_info">Zobrazit ladící informace</string>
-  <string name="app_settings_show_debug_info_details">Zobrazit/sdílet software a detaily konfigurace</string>
-  <!--AccountActivity-->
+    <string name="app_settings_user_interface">Uživatelské prostředí</string>
+    <string name="app_settings_reset_hints">Resetovat nápovědu</string>
+    <string name="app_settings_reset_hints_summary">Znovu povolí vypnuté texty nápovědy</string>
+    <string name="app_settings_reset_hints_success">Budou zobrazovány všechny texty nápovědy</string>
+    <string name="app_settings_connection">Připojení</string>
+    <string name="app_settings_override_proxy">Přepsat proxy nastavení</string>
+    <string name="app_settings_override_proxy_on">Použít vlastní proxy nastavení</string>
+    <string name="app_settings_override_proxy_off">Použít výchozí systémová proxy nastavení</string>
+    <string name="app_settings_override_proxy_host">HTTP proxy hostname</string>
+    <string name="app_settings_override_proxy_port">HTTP proxy port</string>
+    <string name="app_settings_security">Zabezpečení</string>
+    <string name="app_settings_distrust_system_certs">Nedůvěřovat systémovým certifikátům</string>
+    <string name="app_settings_distrust_system_certs_on">Systémovým a uživatelem přidaným CA nebude důvěřováno</string>
+    <string name="app_settings_distrust_system_certs_off">Systémovým a uživatelem přidaným CA bude důvěřováno (doporučeno)</string>
+    <string name="app_settings_reset_certificates">Resetovat (ne)důvěryhodné certifikáty</string>
+    <string name="app_settings_reset_certificates_summary">Resetovat důvěryhodnost všech vlastních certifikátů</string>
+    <string name="app_settings_reset_certificates_success">Všechny vlastní certifikáty byly resetovány</string>
+    <string name="app_settings_debug">Ladění</string>
+    <string name="app_settings_log_to_external_storage">Logovat do externího souboru</string>
+    <string name="app_settings_log_to_external_storage_on">Logování do externího úložiště (pokud dostupné)</string>
+    <string name="app_settings_log_to_external_storage_off">Logování do externího souboru je vypnuto</string>
+    <string name="app_settings_show_debug_info">Zobrazit ladící informace</string>
+    <string name="app_settings_show_debug_info_details">Zobrazit/sdílet software a detaily konfigurace</string>
+    <!--AccountActivity-->
   <string name="account_synchronize_now">Synchronizovat nyní</string>
-  <string name="account_synchronizing_now">Probíhá synchronizace</string>
-  <string name="account_settings">Nastavení účtu</string>
-  <string name="account_delete">Smazat účet</string>
-  <string name="account_delete_confirmation_title">Opravdu smazat účet?</string>
-  <string name="account_delete_confirmation_text">Všechny místní kopie adresáře, kalendářů a úkolů budou smazány.</string>
-  <!--PermissionsActivity-->
+    <string name="account_synchronizing_now">Probíhá synchronizace</string>
+    <string name="account_settings">Nastavení účtu</string>
+    <string name="account_delete">Smazat účet</string>
+    <string name="account_delete_confirmation_title">Opravdu smazat účet?</string>
+    <string name="account_delete_confirmation_text">Všechny místní kopie adresáře, kalendářů a úkolů budou smazány.</string>
+    <!--PermissionsActivity-->
   <string name="permissions_calendar">Oprávnění pro kalendáře</string>
-  <string name="permissions_calendar_request">Vyžádat oprávnění kalendáře</string>
-  <string name="permissions_contacts">Oprávnění pro kontakty</string>
-  <string name="permissions_contacts_request">Vyžádat oprávnění kontaktů</string>
-  <string name="permissions_opentasks">Oprávnění pro OpenTasks</string>
-  <string name="permissions_opentasks_request">Vyžádat oprávnění OpenTasks</string>
-  <!--AddAccountActivity-->
+    <string name="permissions_calendar_request">Vyžádat oprávnění kalendáře</string>
+    <string name="permissions_contacts">Oprávnění pro kontakty</string>
+    <string name="permissions_contacts_request">Vyžádat oprávnění kontaktů</string>
+    <string name="permissions_opentasks">Oprávnění pro OpenTasks</string>
+    <string name="permissions_opentasks_request">Vyžádat oprávnění OpenTasks</string>
+    <!--AddAccountActivity-->
   <string name="login_title">Přidat účet</string>
-  <string name="login_email_address">Emailová adresa</string>
-  <string name="login_email_address_error">Vyžadován platný email</string>
-  <string name="login_password">Heslo</string>
-  <string name="login_password_required">Vyžadováno heslo</string>
-  <string name="login_back">Zpět</string>
-  <string name="login_configuration_detection">Vyhledání konfigurace</string>
-  <string name="login_querying_server">Chvíli strpení, probíhá dotazování serveru...</string>
-  <string name="login_view_logs">Prohlížet logy</string>
-  <!--AccountSettingsActivity-->
+    <string name="login_email_address">Emailová adresa</string>
+    <string name="login_email_address_error">Vyžadován platný email</string>
+    <string name="login_password">Heslo</string>
+    <string name="login_password_required">Vyžadováno heslo</string>
+    <string name="login_back">Zpět</string>
+    <string name="login_view_logs">Prohlížet logy</string>
+    <!--AccountSettingsActivity-->
   <string name="settings_title">Nastavení: %s</string>
-  <string name="settings_authentication">Ověření</string>
-  <string name="settings_password">Heslo</string>
-  <string name="settings_enter_password">Vložit své heslo:</string>
-  <string name="settings_sync">Synchronizace</string>
-  <string name="settings_sync_interval_contacts">Interval synchronizace kontaktů</string>
-  <string name="settings_sync_summary_manually">Pouze manuálně</string>
-  <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s a ihned při lokálních změnách</string>
-  <string name="settings_sync_summary_not_available">Nedostupný</string>
-  <string name="settings_sync_interval_calendars">Interval synchronizace kalendáře</string>
-  <string-array name="settings_sync_interval_names">
-    <item>Pouze manuálně</item>
-    <item>Každých 15 minut</item>
-    <item>Každých 30 minut</item>
-    <item>Každou hodinu</item>
-    <item>Každé 2 hodiny</item>
-    <item>Každé 4 hodiny</item>
-    <item>Jednou za den</item>
-  </string-array>
-  <string name="settings_sync_wifi_only">Synchronizovat pouze přes WiFi</string>
-  <string name="settings_sync_wifi_only_on">Synchronizace omezena na WiFi připojení</string>
-  <string name="settings_sync_wifi_only_off">Druh připojení není brán v potaz</string>
-  <string name="settings_sync_wifi_only_ssid">Omezení WiFi SSID</string>
-  <string name="settings_sync_wifi_only_ssid_on">Synchronizace pouze přes %s</string>
-  <string name="settings_sync_wifi_only_ssid_off">Použít všechna WiFi připojení</string>
-  <string name="settings_sync_wifi_only_ssid_message">Zadejte jméno WiFi sítě (SSID) pro omezení synchronizace na tutu síť, nebo ponechte prázdné pro použití všech WiFi připojení.</string>
-  <!--collection management-->
+    <string name="settings_password">Heslo</string>
+    <string name="settings_enter_password">Vložit své heslo:</string>
+    <string name="settings_sync">Synchronizace</string>
+    <string name="settings_sync_summary_manually">Pouze manuálně</string>
+    <string name="settings_sync_summary_periodically" tools:ignore="PluralsCandidate">%s a ihned při lokálních změnách</string>
+    <string name="settings_sync_summary_not_available">Nedostupný</string>
+    <string-array name="settings_sync_interval_names">
+        <item>Pouze manuálně</item>
+        <item>Každých 15 minut</item>
+        <item>Každých 30 minut</item>
+        <item>Každou hodinu</item>
+        <item>Každé 2 hodiny</item>
+        <item>Každé 4 hodiny</item>
+        <item>Jednou za den</item>
+    </string-array>
+    <string name="settings_sync_wifi_only">Synchronizovat pouze přes WiFi</string>
+    <string name="settings_sync_wifi_only_on">Synchronizace omezena na WiFi připojení</string>
+    <string name="settings_sync_wifi_only_off">Druh připojení není brán v potaz</string>
+    <string name="settings_sync_wifi_only_ssid">Omezení WiFi SSID</string>
+    <string name="settings_sync_wifi_only_ssid_on">Synchronizace pouze přes %s</string>
+    <string name="settings_sync_wifi_only_ssid_off">Použít všechna WiFi připojení</string>
+    <string name="settings_sync_wifi_only_ssid_message">Zadejte jméno WiFi sítě (SSID) pro omezení synchronizace na tutu síť, nebo ponechte prázdné pro použití všech WiFi připojení.</string>
+    <!--collection management-->
   <string name="create_addressbook">Vytvořit adresář</string>
-  <string name="create_addressbook_display_name_hint">Můj adresář</string>
-  <string name="create_collection_creating">Vytváření sbírky</string>
-  <string name="create_collection_display_name">Zobrazit jméno (nadpis) této sbírky:</string>
-  <string name="create_collection_display_name_required">Nadpis je vyžadován</string>
-  <string name="create_collection_description">Popis (volitelný):</string>
-  <string name="create_collection_create">Vytvořit</string>
-  <string name="delete_collection">Smazat sbírku</string>
-  <string name="delete_collection_confirm_title">Jste si jisti?</string>
-  <string name="delete_collection_confirm_warning">Tato sbírka (%s) a všechna její data budou odstraněna ze serveru.</string>
-  <string name="delete_collection_deleting_collection">Mazání sbírky</string>
-  <!--ExceptionInfoFragment-->
+    <string name="create_addressbook_display_name_hint">Můj adresář</string>
+    <string name="create_collection_creating">Vytváření sbírky</string>
+    <string name="create_collection_display_name">Zobrazit jméno (nadpis) této sbírky:</string>
+    <string name="create_collection_display_name_required">Nadpis je vyžadován</string>
+    <string name="create_collection_description">Popis (volitelný):</string>
+    <string name="create_collection_create">Vytvořit</string>
+    <string name="delete_collection">Smazat sbírku</string>
+    <string name="delete_collection_confirm_title">Jste si jisti?</string>
+    <string name="delete_collection_confirm_warning">Tato sbírka (%s) a všechna její data budou odstraněna ze serveru.</string>
+    <string name="delete_collection_deleting_collection">Mazání sbírky</string>
+    <!--ExceptionInfoFragment-->
   <string name="exception">Došlo k chybě.</string>
-  <string name="exception_httpexception">Došlo k HTTP chybě.</string>
-  <string name="exception_ioexception">Došlo k I/O chybě.</string>
-  <string name="exception_show_details">Zobrazit detaily</string>
-  <!--sync errors and DebugInfoActivity-->
+    <string name="exception_httpexception">Došlo k HTTP chybě.</string>
+    <string name="exception_ioexception">Došlo k I/O chybě.</string>
+    <string name="exception_show_details">Zobrazit detaily</string>
+    <!--sync errors and DebugInfoActivity-->
   <string name="debug_info_title">Ladící informace</string>
-  <string name="sync_error_calendar">Synchronizace kalendáře selhala (%s)</string>
-  <string name="sync_error">Chyba při %s</string>
-  <string name="sync_error_http_dav">Chyba serveru při %s</string>
-  <string name="sync_error_local_storage">Chyba databáze při %s</string>
-  <!--cert4android-->
+    <string name="sync_error_calendar">Synchronizace kalendáře selhala (%s)</string>
+    <string name="sync_error">Chyba při %s</string>
+    <string name="sync_error_http_dav">Chyba serveru při %s</string>
+    <string name="sync_error_local_storage">Chyba databáze při %s</string>
+    <!--cert4android-->
+<string name="journal_item_note"></string>
+    <string name="create_calendar"></string>
+    <string name="navigation_drawer_guide"></string>
+    <string name="invitations_accept_reject_dialog"></string>
+    <string name="sync_phase_apply_local_entries"></string>
+    <string name="app_settings_sync"></string>
+    <string name="journal_item_restore_dialog_body"></string>
+    <string name="app_settings_log_verbose_summary"></string>
+    <string name="sync_error_permissions_text"></string>
+    <string name="startup_vendor_specific_bugs_message"></string>
+    <string name="journal_item_tab_raw"></string>
+    <string name="sync_phase_post_processing"></string>
+    <string name="journal_entries_loading"></string>
+    <string name="create_tasklist"></string>
+    <string name="account_list_empty"></string>
+    <string name="collection_members_list_empty"></string>
+    <string name="import_dialog_failed_title"></string>
+    <string name="setting_up_encryption"></string>
+    <string name="login_encryption_set_new_password"></string>
+    <string name="sync_phase_prepare"></string>
+    <string name="use_native_apps_body"></string>
+    <string name="sync_successfully_contacts"></string>
+    <string name="tasks_not_showing"></string>
+    <string name="authority_log_provider" translatable="false"></string>
+    <string name="app_settings_notification_settings_summary"></string>
+    <string name="login_encryption_account_label"></string>
+    <string name="invitations_loading"></string>
+    <string name="app_settings_force_language"></string>
+    <string name="navigation_drawer_subtitle"></string>
+    <string name="journal_item_address"></string>
+    <string name="journal_item_birthday"></string>
+    <string name="change_journal_title"></string>
+    <string name="notification_channel_sync_status_desc"></string>
+    <string name="journal_item_tab_revisions"></string>
+    <string name="settings_encryption_password_summary"></string>
+    <string name="import_dialog_title"></string>
+    <string name="permissions_calendar_details"></string>
+    <string name="settings_encryption"></string>
+    <string name="view_collection_members"></string>
+    <string name="sync_phase_push_entries"></string>
+    <string name="login_forgot_password"></string>
+    <string name="journal_item_member_count"></string>
+    <string name="migrate_v2_wizard_migrate_progress_done"></string>
+    <string name="journal_item_restore_action"></string>
+    <string name="login_encryption_password"></string>
+    <string name="collection_members_leave"></string>
+    <string name="journal_item_organization"></string>
+    <string name="crash_message"></string>
+    <string name="accounts_missing_permissions"></string>
+    <string name="wrong_encryption_password_content"></string>
+    <string name="account_owner"></string>
+    <string name="sync_error_contacts"></string>
+    <string name="collection_members_remove"></string>
+    <string name="create"></string>
+    <string name="sync_successfully_modified_full"></string>
+    <string name="members_owner_only"></string>
+    <string name="journal_item_phone"></string>
+    <string name="certificate_notification_connection_security"></string>
+    <string name="install_opentasks"></string>
+    <string name="sync_journal_readonly"></string>
+    <string name="app_settings_notification_settings"></string>
+    <string name="show_fingperprint_title"></string>
+    <string name="logging_davdroid_file_logging"></string>
+    <string name="notification_channel_crash_reports"></string>
+    <string name="sync_calendar_attendees_email_content"></string>
+    <string name="choose_file"></string>
+    <string name="event_info_organizer"></string>
+    <string name="notification_channel_general"></string>
+    <string name="trust_fingerprint_body"></string>
+    <string name="migrate_v2_wizard_migrate_progress_done_malformed"></string>
+    <string name="sync_error_permissions"></string>
+    <string name="startup_vendor_specific_bugs_open_faq"></string>
+    <string name="login_username_error"></string>
+    <string name="startup_battery_optimization_message"></string>
+    <string name="trust_certificate_unknown_certificate_found"></string>
+    <string name="import_dialog_failed_body"></string>
+    <string name="login_signup"></string>
+    <string name="debug_info_more_data_shared"></string>
+    <string name="settings_account_dashboard"></string>
+    <string name="sync_error_user_inactive"></string>
+    <string name="notification_channel_debugging"></string>
+    <string name="tourguide_title"></string>
+    <string name="sync_successfully_calendar"></string>
+    <string name="accounts_showcase_add"></string>
+    <string name="login_user_info_error_title"></string>
+    <string name="journal_item_tab_main"></string>
+    <string name="edit_owner_only"></string>
+    <string name="notification_channel_sync_warnings"></string>
+    <string name="settings_caldav"></string>
+    <string name="settings_carddav"></string>
+    <string name="invitations_reject"></string>
+    <string name="sync_successfully_tasks"></string>
+    <string name="app_settings_log_verbose"></string>
+    <string name="collection_members_remove_admin"></string>
+    <string name="accounts_global_sync_disabled"></string>
+    <string name="collection_members_remove_title"></string>
+    <string name="app_settings_force_language_default"></string>
+    <string name="permissions_title"></string>
+    <string name="calendar_attendees_send_email_action"></string>
+    <string name="account_showcase_import"></string>
+    <string name="sync_phase_fetch_entries"></string>
+    <string name="permissions_opentasks_details"></string>
+    <string name="navigation_drawer_contact"></string>
+    <string name="startup_development_version_give_feedback"></string>
+    <string name="settings_taskdav"></string>
+    <string name="address_books_authority" translatable="false"></string>
+    <string name="settings_enter_encryption_password"></string>
+    <string name="login_finish"></string>
+    <string name="sync_phase_prepare_local"></string>
+    <string name="app_settings_prefer_tasksorg_off"></string>
+    <string name="retry"></string>
+    <string name="sync_phase_journals"></string>
+    <string name="accounts_global_sync_enable"></string>
+    <string name="startup_vendor_specific_bugs"></string>
+    <string name="create_calendar_display_name_hint"></string>
+    <string name="account_delete_collection_last_title"></string>
+    <string name="collection_members_add_success"></string>
+    <string name="settings_password_summary"></string>
+    <string name="collection_members_removing"></string>
+    <string name="collection_members_add"></string>
+    <string name="skip"></string>
+    <string name="account_wizard_collections_title"></string>
+    <string name="collection_members_add_error"></string>
+    <string name="login_username"></string>
+    <string name="login_enter_service_details"></string>
+    <string name="account_tasks_not_showing"></string>
+    <string name="login_enter_encryption_details"></string>
+    <string name="login_toggle_advanced"></string>
+    <string name="about"></string>
+    <string name="collection_members_error_user_not_found"></string>
+    <string name="account_wizard_collections_body"></string>
+    <string name="change_encryption_password_success_title"></string>
+    <string name="migrate_v2_wizard_welcome_body"></string>
+    <string name="notification_channel_sync_warnings_desc"></string>
+    <string name="signup_title"></string>
+    <string name="app_settings_change_notification"></string>
+    <string name="import_select_account"></string>
+    <string name="collection_members_add_read_only"></string>
+    <string name="journal_item_relation"></string>
+    <string name="login_custom_server_error"></string>
+    <string name="collection_members_adding"></string>
+    <string name="settings_manage_account_summary"></string>
+    <string name="signup_password_restrictions"></string>
+    <string name="permissions_tasks_org"></string>
+    <string name="import_account_top_notice"></string>
+    <string name="edit_collection"></string>
+    <string name="notification_channel_sync"></string>
+    <string name="setting_up_encryption_content"></string>
+    <string name="notification_channel_name"></string>
+    <string name="view_collection_import"></string>
+    <string name="members_old_journals_not_allowed"></string>
+    <string name="sync_calendar_attendees_notification_content"></string>
+    <string name="migrate_v2_wizard_migrate_progress"></string>
+    <string name="sync_successfully_modified"></string>
+    <string name="account_title_address_book"></string>
+    <string name="journal_item_attendees"></string>
+    <string name="sync_error_generic"></string>
+    <string name="install_tasksorg"></string>
+    <string name="trust_fingerprint_title"></string>
+    <string name="app_settings_prefer_tasksorg"></string>
+    <string name="change_encryption_password_are_you_sure"></string>
+    <string name="change_encryption_password_new_password"></string>
+    <string name="permissions_tasks_org_request"></string>
+    <string name="journal_item_job_description"></string>
+    <string name="sync_calendar_attendees_notification_title"></string>
+    <string name="sync_calendar_attendees_email_subject"></string>
+    <string name="collection_members_remove_error"></string>
+    <string name="import_button_local"></string>
+    <string name="journal_entries_list_empty"></string>
+    <string name="migrate_v2_wizard_migrate_title"></string>
+    <string name="sync_phase_create_local_entries"></string>
+    <string name="collection_members_no_access"></string>
+    <string name="navigation_drawer_report_issue"></string>
+    <string name="invitations_list_empty"></string>
+    <string name="sync_error_tasks"></string>
+    <string name="login_login"></string>
+    <string name="loading_error_title"></string>
+    <string name="invitations_accept"></string>
+    <string name="account_delete_collection_last_text"></string>
+    <string name="account_showcase_view_collection"></string>
+    <string name="sync_phase_prepare_fetch"></string>
+    <string name="journal_item_email"></string>
+    <string name="sync_journal_readonly_message"></string>
+    <string name="account_show_fingerprint"></string>
+    <string name="open_url_no_activity"></string>
+    <string name="not_allowed_title"></string>
+    <string name="journal_item_nickname"></string>
+    <string name="login_encryption_extra_info"></string>
+    <string name="loading_error_content"></string>
+    <string name="import_dialog_adding_entries"></string>
+    <string name="sync_error_journal_readonly"></string>
+    <string name="startup_battery_optimization_disable"></string>
+    <string name="journal_item_reminders"></string>
+    <string name="import_dialog_success"></string>
+    <string name="edit_owner_only_anon"></string>
+    <string name="sync_error_unauthorized"></string>
+    <string name="settings_sync_interval"></string>
+    <string name="migrate_v2_wizard_welcome_title"></string>
+    <string name="journal_item_anniversary"></string>
+    <string name="create_tasklist_display_name_hint"></string>
+    <string name="login_custom_server"></string>
+    <string name="import_button_file"></string>
+    <string name="login_wrong_username_or_password"></string>
+    <string name="account_click_install_tasks"></string>
+    <string name="sync_error_integrity"></string>
+    <string name="settings_manage_account"></string>
+    <string name="sync_error_permission_denied"></string>
+    <string name="use_native_apps_title"></string>
+    <string name="loading"></string>
+    <string name="app_settings_prefer_tasksorg_on"></string>
+    <string name="create_collection_color"></string>
+    <string name="collection_members_title"></string>
+    <string name="account_type_address_book" translatable="false"></string>
+    <string name="journal_item_member"></string>
+    <string name="import_permission_required"></string>
+    <string name="app_settings_prefer_tasksorg_snack"></string>
+    <string name="notification_channel_sync_errors"></string>
+    <string name="account_creation_failed"></string>
+    <string name="journal_item_impp"></string>
+    <string name="notification_channel_sync_status"></string>
+    <string name="crash_email_body"></string>
+    <string name="sync_error_unavailable"></string>
+    <string name="import_dialog_loading_file"></string>
+    <string name="notification_channel_description"></string>
+    <string name="permissions_contacts_details"></string>
+    <string name="app_name"></string>
+    <string name="account_type" translatable="false"></string>
+    <string name="permissions_tasks_org_details"></string>
+    <string name="startup_development_version_message"></string>
+    <string name="view_collection_edit"></string>
+    <string name="login_service_details_description"></string>
+    <string name="journal_item_website"></string>
+    <string name="change_encryption_password_title"></string>
+    <string name="wrong_encryption_password"></string>
+    <string name="notification_channel_sync_errors_desc"></string>
+    <string name="collection_members_list_loading"></string>
+    <string name="login_encryption_enter_password"></string>
+    <string name="address_books_authority_title"></string>
+    <string name="settings_encryption_password"></string>
+    <string name="change_encryption_password_success_body"></string>
+    <string name="sync_phase_apply_remote_entries"></string>
+    <string name="crash_title"></string>
+    <string name="invitations_title"></string>
+    <string name="login_encryption_check_password"></string>
+    <string name="startup_development_version"></string>
 </resources>
