@@ -55,7 +55,7 @@
     <string name="app_settings_reset_certificates">Vertrauen in Zertifikate zurücksetzen</string>
     <string name="app_settings_reset_certificates_summary">Setzt Vertrauen/Misstrauen in alle eigenen Zertifikate zurück</string>
     <string name="app_settings_reset_certificates_success">Alle eigenen Zertifikate wurden zurückgesetzt</string>
-    <string name="app_settings_debug">Debugging</string>
+    <string name="app_settings_debug">Fehlerbehebung</string>
     <string name="app_settings_log_to_external_storage">Log auf externen Speicher schreiben</string>
     <string name="app_settings_log_to_external_storage_on">Logging auf externen Speicher schreiben (wenn verfügbar)</string>
     <string name="app_settings_log_to_external_storage_off">Aktivieren, um Protokollnachrichten in Datei speichern</string>
@@ -124,7 +124,7 @@
         <item>Einmal täglich</item>
     </string-array>
     <string name="settings_sync_wifi_only">Nur über WLAN synchronisieren</string>
-    <string name="settings_sync_wifi_only_on">Synchronisation nur bei aktiver WLAN-Verbindung</string>
+    <string name="settings_sync_wifi_only_on">Synchronisation ist auf WLAN-Verbindungen beschränkt</string>
     <string name="settings_sync_wifi_only_off">Verbindungstyp wird nicht beachtet</string>
     <string name="settings_sync_wifi_only_ssid">WLAN-SSID-Einschränkung</string>
     <string name="settings_sync_wifi_only_ssid_on">Synchronisation nur über %s</string>
@@ -341,5 +341,27 @@
     <string name="create">Erstellen</string>
     <string name="address_books_authority_title">Adressbücher</string>
     <string name="account_title_address_book">EteSync Adressbuch</string>
-    <string name="startup_vendor_specific_bugs">Mögliche Fehler des Anbieters</string>
+    <string name="startup_vendor_specific_bugs">Mögliche Fehler seitens des Anbieters</string>
+    <string name="notification_channel_sync_status_desc">Informationsstatusmeldungen wie die Zusammenfassung der Synchronisierungsänderungen</string>
+    <string name="startup_vendor_specific_bugs_message">EteSync hat festgestellt, dass Sie eine Android-Version verwenden, die möglicherweise anbieterbezogene Fehler enthält.\nWeitere Informationen finden Sie in den FAQ.</string>
+    <string name="account_showcase_import">Um Kontakte und Kalender in EteSync zu importieren, müssen Sie auf das Menü klicken und „Importieren“ auswählen.</string>
+    <string name="members_old_journals_not_allowed">Das Teilen von Journalen im alten Stil ist nicht zulässig. Um dieses Journal zu teilen, erstellen Sie bitte ein neues und kopieren Sie dessen Inhalt über den Dialog „Importieren“ hinein. Sollten Probleme auftreten, wenden Sie sich bitte an den Support.</string>
+    <string name="use_native_apps_body">EteSync lässt sich nahtlos in Android integrieren. Um die App zu nutzen, verwenden Sie einfach Ihre vorhandenen Adressbuch- und Kalender-Apps!\n\nWeitere Informationen finden Sie im Benutzerhandbuch.</string>
+    <string name="collection_members_remove">Möchten Sie den Zugriff von %s widerrufen?\nBitte beachten Sie, dass ein böswilliger Benutzer möglicherweise weiterhin Zugriff auf die Verschlüsselungsschlüssel hat. Weitere Informationen finden Sie in den FAQ.</string>
+    <string name="collection_members_remove_admin">Das Entfernen des Zugriffs für Administratoren wird derzeit nicht unterstützt.</string>
+    <string name="collection_members_no_access">Nur Administratoren dürfen die Mitgliedschaft in Sammlungen verwalten. Möchten Sie die Sammlung verlassen?</string>
+    <string name="journal_item_tab_main">Haupt</string>
+    <string name="journal_item_job_description">Aufgabenbeschreibung</string>
+    <string name="login_encryption_enter_password">Sie sind als „%s“ angemeldet. Bitte geben Sie Ihr Verschlüsselungspasswort ein, um fortzufahren, oder melden Sie sich über das Seitenmenü ab.</string>
+    <string name="wrong_encryption_password_content">Beim Zugriff auf Ihr Konto ist ein Integritätsfehler aufgetreten, was höchstwahrscheinlich bedeutet, dass Sie das falsche Verschlüsselungspasswort eingegeben haben.\nBitte beachten Sie, dass bei der Eingabe des Benutzernamens die Groß- und Kleinschreibung beachtet werden muss. Probieren Sie daher bitte auch verschiedene Schreibweisen aus, beispielsweise mit einem Großbuchstaben am Anfang.\n\nFehler: %s</string>
+    <string name="change_encryption_password_success_title">Änderung des Verschlüsselungspassworts</string>
+    <string name="import_permission_required">Für den Import ist eine Leseberechtigung für den Speicher erforderlich.</string>
+    <string name="settings_account_dashboard">Kontoübersicht</string>
+    <string name="settings_manage_account_summary">Ändern Sie Ihre Zahlungsdaten, Ihren Tarif und andere Kontoeinstellungen</string>
+    <string name="debug_info_more_data_shared">Wenn Sie auf Teilen klicken, werden die unten aufgeführten Daten sowie einige zusätzliche Debug-Informationen als Anhang an die Entwickler gesendet. Bitte beachten Sie, dass diese möglicherweise private Informationen enthalten.</string>
+    <string name="sync_successfully_calendar">Kalender „%s“ geändert (%s)</string>
+    <string name="sync_successfully_tasks">Aufgaben „%s“ geändert (%s)</string>
+    <string name="sync_journal_readonly">Journal „%s“ ist nur lesbar</string>
+    <string name="loading_error_content">Auffrischen</string>
+    <string name="notification_channel_debugging">Fehlerbehebung</string>
 </resources>

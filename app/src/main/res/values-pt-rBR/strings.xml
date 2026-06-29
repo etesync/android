@@ -150,7 +150,7 @@
     <string name="navigation_drawer_subtitle">Adaptador de sincronização segura</string>
     <string name="journal_item_address">Endereço</string>
     <string name="journal_item_birthday">Data de nascimento</string>
-    <string name="change_journal_title">Alterar diário</string>
+    <string name="change_journal_title">Diário de alterações</string>
     <string name="notification_channel_sync_status_desc">Mensagens informacionais do estado, como o resumo das alterações da sincronização</string>
     <string name="journal_item_tab_revisions">Revisões</string>
     <string name="settings_encryption_password_summary">Altere sua senha de criptografia</string>
