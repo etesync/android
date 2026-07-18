@@ -28,11 +28,9 @@ import com.etesync.syncadapter.Constants.serviceUrl
 import com.etesync.syncadapter.R
 import com.etesync.syncadapter.ui.setup.LoginActivity
 import com.etesync.syncadapter.utils.HintManager
-import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import tourguide.tourguide.ToolTip
 
 class AccountsActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, SyncStatusObserver {
 
@@ -72,13 +70,6 @@ class AccountsActivity : BaseActivity(), NavigationView.OnNavigationItemSelected
         }
 
         PermissionsActivity.requestAllPermissions(this)
-
-        if (!HintManager.getHintSeen(this, HINT_ACCOUNT_ADD)) {
-            ShowcaseBuilder.getBuilder(this)
-                    .setToolTip(ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.accounts_showcase_add)).setGravity(Gravity.TOP or Gravity.LEFT))
-                    .playOn(fab)
-            HintManager.setHintSeen(this, HINT_ACCOUNT_ADD, true)
-        }
     }
 
     override fun onResume() {

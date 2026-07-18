@@ -17,9 +17,7 @@ import com.etesync.syncadapter.resource.LocalCalendar
 import com.etesync.syncadapter.ui.BaseActivity
 import com.etesync.syncadapter.ui.WebViewActivity
 import com.etesync.syncadapter.utils.HintManager
-import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import tourguide.tourguide.ToolTip
 import java.util.*
 
 class ViewCollectionFragment : Fragment() {
@@ -44,15 +42,6 @@ class ViewCollectionFragment : Fragment() {
 
     private fun initUi(inflater: LayoutInflater, container: View, cachedCollection: CachedCollection) {
         val title = container.findViewById<TextView>(R.id.display_name)
-        if (!HintManager.getHintSeen(requireContext(), HINT_IMPORT)) {
-            val tourGuide = ShowcaseBuilder.getBuilder(requireActivity())
-                    .setToolTip(ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_import)).setGravity(Gravity.BOTTOM))
-                    .setPointer(null)
-            tourGuide.mOverlay.setHoleRadius(0)
-            tourGuide.playOn(title)
-            HintManager.setHintSeen(requireContext(), HINT_IMPORT, true)
-        }
-
         val fab = container.findViewById<FloatingActionButton>(R.id.fab)
         fab?.setOnClickListener {
             AlertDialog.Builder(requireContext())
