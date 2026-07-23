@@ -179,66 +179,11 @@ class HttpClient private constructor(
             }
         }
 
-        fun build(): HttpClient {
-            val trustManager = certManager ?: {
-                val factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-                factory.init(null as KeyStore?)
-                factory.trustManagers.first() as X509TrustManager
-            }()
-
-            val hostnameVerifier = certManager?.hostnameVerifier(OkHostnameVerifier)
-                    ?: OkHostnameVerifier
-
-            var keyManager: KeyManager? = null
-            certificateAlias?.let { alias ->
-                try {
-                    val context = requireNotNull(context)
-
-                    // get provider certificate and private key
-                    val certs = KeyChain.getCertificateChain(context, alias) ?: return@let
-                    val key = KeyChain.getPrivateKey(context, alias) ?: return@let
-                    logger.fine("Using provider certificate $alias for authentication (chain length: ${certs.size})")
-
-                    // create Android KeyStore (performs key operations without revealing secret data to DAVx5)
-                    val keyStore = KeyStore.getInstance("AndroidKeyStore")
-                    keyStore.load(null)
-
-                    // create KeyManager
-                    keyManager = object: X509ExtendedKeyManager() {
-                        override fun getServerAliases(p0: String?, p1: Array<out Principal>?): Array<String>? = null
-                        override fun chooseServerAlias(p0: String?, p1: Array<out Principal>?, p2: Socket?) = null
-
-                        override fun getClientAliases(p0: String?, p1: Array<out Principal>?) =
-                                arrayOf(alias)
-
-                        override fun chooseClientAlias(p0: Array<out String>?, p1: Array<out Principal>?, p2: Socket?) =
-                                alias
-
-                        override fun getCertificateChain(forAlias: String?) =
-                                certs.takeIf { forAlias == alias }
-
-                        override fun getPrivateKey(forAlias: String?) =
-                                key.takeIf { forAlias == alias }
-                    }
-
-                    // HTTP/2 doesn't support client certificates (yet)
-                    // see https://tools.ietf.org/html/draft-ietf-httpbis-http2-secondary-certs-04
-                    orig.protocols(listOf(Protocol.HTTP_1_1))
-                } catch (e: Exception) {
-                    logger.log(Level.SEVERE, "Couldn't set up provider certificate authentication", e)
-                }
-            }
-
-            val sslContext = SSLContext.getInstance("TLS")
-            sslContext.init(
-                    if (keyManager != null) arrayOf(keyManager) else null,
-                    arrayOf(trustManager),
-                    null)
-            orig.sslSocketFactory(sslContext.socketFactory, trustManager)
-            orig.hostnameVerifier(hostnameVerifier)
-
-            return HttpClient(orig.build(), certManager)
-        }
+if (keyManager != null) {
+    synchronized(certManager) {
+        certManager.notify();
+    }
+}
 
     }
 
