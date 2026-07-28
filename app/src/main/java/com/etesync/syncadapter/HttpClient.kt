@@ -155,7 +155,6 @@ class HttpClient private constructor(
 
             return this
         }
-
 private class TokenAuthenticator internal constructor(internal val host: String?, internal val token: String?) : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
