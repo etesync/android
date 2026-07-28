@@ -156,28 +156,27 @@ class HttpClient private constructor(
             return this
         }
 
-        private class TokenAuthenticator internal constructor(internal val host: String?, internal val token: String?) : Interceptor {
-
-            @Throws(IOException::class)
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var request = chain.request()
-
-                /* Only add to the host we want. */
-                if (host == null || request.url.host == host) {
-                    if (token != null && request.header(HEADER_AUTHORIZATION) == null) {
-                        request = request.newBuilder()
-                                .header(HEADER_AUTHORIZATION, "Token $token")
-                                .build()
-                    }
-                }
-
-                return chain.proceed(request)
-            }
-
-            companion object {
-                protected val HEADER_AUTHORIZATION = "Authorization"
+private class TokenAuthenticator internal constructor(internal val host: String?, internal val token: String?) : Interceptor {
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var request = chain.request()
+        
+        /* Only add to the host we want. */
+        if (host == null || request.url.host == host) {
+            if (token != null && request.header(HEADER_AUTHORIZATION) == null) {
+                request = request.newBuilder()
+                        .sslContext(SSLContext.getInstance("TLS"), SSLSessionCache.nullSessionCache())
+                        .build()
             }
         }
+        
+        return chain.proceed(request)
+    }
+    
+    companion object {
+        protected val HEADER_AUTHORIZATION = "Authorization"
+    }
+}
 
 if (keyManager != null) {
     synchronized(certManager) {
