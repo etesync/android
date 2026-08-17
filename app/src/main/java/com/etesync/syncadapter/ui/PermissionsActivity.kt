@@ -11,6 +11,7 @@ package com.etesync.syncadapter.ui
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
@@ -86,7 +87,12 @@ class PermissionsActivity : BaseActivity() {
         private val REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124
 
         fun requestAllPermissions(activity: Activity) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) + TASK_PROVIDERS.flatMap { it.permissions.toList() }, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS)
+            var permissions = arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) + TASK_PROVIDERS.flatMap { it.permissions.toList() }
+            // Android 13+ (API 33) requires the notification permission at runtime; without it the
+            // app's sync/status notifications are silently dropped.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                permissions += Manifest.permission.POST_NOTIFICATIONS
+            ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS)
         }
     }
 }

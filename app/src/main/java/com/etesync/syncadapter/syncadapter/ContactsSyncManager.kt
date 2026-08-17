@@ -313,20 +313,24 @@ constructor(context: Context, account: Account, settings: AccountSettings, extra
                 return null
             }
 
-            val resourceClient = HttpClient.Builder(context).setForeground(false).build().okHttpClient
+            // Close the client so cert4android's CustomCertManager unbinds its service
+            // (otherwise the ServiceConnection leaks for every external resource fetched).
+            HttpClient.Builder(context).setForeground(false).build().use { httpClient ->
+                val resourceClient = httpClient.okHttpClient
 
-            try {
-                val response = resourceClient.newCall(Request.Builder()
-                        .get()
-                        .url(httpUrl)
-                        .build()).execute()
+                try {
+                    val response = resourceClient.newCall(Request.Builder()
+                            .get()
+                            .url(httpUrl)
+                            .build()).execute()
 
-                val body = response.body
-                if (body != null) {
-                    return body.bytes()
+                    val body = response.body
+                    if (body != null) {
+                        return body.bytes()
+                    }
+                } catch (e: IOException) {
+                    Logger.log.log(Level.SEVERE, "Couldn't download external resource", e)
                 }
-            } catch (e: IOException) {
-                Logger.log.log(Level.SEVERE, "Couldn't download external resource", e)
             }
 
             return null

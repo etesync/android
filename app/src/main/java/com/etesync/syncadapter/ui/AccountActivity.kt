@@ -53,7 +53,6 @@ import com.etesync.syncadapter.ui.etebase.CollectionActivity
 import com.etesync.syncadapter.ui.etebase.InvitationsActivity
 import com.etesync.syncadapter.ui.setup.SetupUserInfoFragment
 import com.etesync.syncadapter.utils.HintManager
-import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.etesync.syncadapter.utils.packageInstalled
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -62,7 +61,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tourguide.tourguide.ToolTip
 import java.util.logging.Level
 
 class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener, Refreshable {
@@ -158,13 +156,6 @@ class AccountActivity : BaseActivity(), Toolbar.OnMenuItemClickListener, PopupMe
             model.observe(this) {
                 updateUi(it)
             }
-        }
-
-        if (!HintManager.getHintSeen(this, HINT_VIEW_COLLECTION)) {
-            ShowcaseBuilder.getBuilder(this)
-                    .setToolTip(ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_view_collection)))
-                    .playOn(tbCardDAV)
-            HintManager.setHintSeen(this, HINT_VIEW_COLLECTION, true)
         }
 
         if (settings.isLegacy) {

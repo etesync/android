@@ -37,10 +37,8 @@ import com.etesync.syncadapter.resource.LocalTaskList
 import com.etesync.syncadapter.ui.importlocal.ImportActivity
 import com.etesync.syncadapter.ui.journalviewer.ListEntriesFragment
 import com.etesync.syncadapter.utils.HintManager
-import com.etesync.syncadapter.utils.ShowcaseBuilder
 import com.etesync.syncadapter.utils.TaskProviderHandling
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import tourguide.tourguide.ToolTip
 import java.io.FileNotFoundException
 import java.util.*
 
@@ -114,16 +112,6 @@ class ViewCollectionActivity : BaseActivity(), Refreshable {
         }
 
         refresh()
-
-        val title = findViewById<View>(R.id.display_name) as TextView
-        if (!HintManager.getHintSeen(this, HINT_IMPORT)) {
-            val tourGuide = ShowcaseBuilder.getBuilder(this)
-                    .setToolTip(ToolTip().setTitle(getString(R.string.tourguide_title)).setDescription(getString(R.string.account_showcase_import)).setGravity(Gravity.BOTTOM))
-                    .setPointer(null)
-            tourGuide.mOverlay.setHoleRadius(0)
-            tourGuide.playOn(title)
-            HintManager.setHintSeen(this, HINT_IMPORT, true)
-        }
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {

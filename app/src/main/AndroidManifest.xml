@@ -6,8 +6,7 @@
   ~ which accompanies this distribution, and is available at
   ~ http://www.gnu.org/licenses/gpl.html
 -->
-<manifest package="com.etesync.syncadapter"
-          xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:installLocation="internalOnly">
     <queries>
@@ -90,11 +89,19 @@
                 android:resource="@xml/account_authenticator"/>
         </service>
 
+        <!--
+             Sync adapter services must NOT be exported. They are bound by the system server
+             (SyncManager), which is exempt from the exported check, so the sync framework keeps
+             working without it. Exporting them hands the ISyncAdapter Binder to any local app,
+             which can then crash the sync process with a malformed transaction (NPE in
+             AbstractThreadedSyncAdapter.handleOnUnsyncableAccount).
+             See https://github.com/etesync/android/issues/295.
+        -->
+
         <!-- Normal account -->
         <service
             android:name=".syncadapter.CalendarsSyncAdapterService"
-            android:exported="true"
-            tools:ignore="ExportedService">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -105,8 +112,7 @@
         </service>
         <service
             android:name=".syncadapter.TasksSyncAdapterService"
-            android:exported="true"
-            tools:ignore="ExportedService">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
@@ -118,8 +124,7 @@
 
         <service
             android:name=".syncadapter.TasksOrgSyncAdapterService"
-            android:exported="true"
-            tools:ignore="ExportedService">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
@@ -150,8 +155,7 @@
             android:multiprocess="false"/>
         <service
             android:name=".syncadapter.AddressBooksSyncAdapterService"
-            android:exported="true"
-            tools:ignore="ExportedService">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
@@ -163,8 +167,7 @@
 
         <service
             android:name=".syncadapter.ContactsSyncAdapterService"
-            android:exported="true"
-            tools:ignore="ExportedService">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>

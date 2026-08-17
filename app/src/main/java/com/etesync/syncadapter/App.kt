@@ -90,7 +90,9 @@ class App : Application() {
             tasksFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
             tasksFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED)
             tasksFilter.addDataScheme("package")
-            registerReceiver(PackageChangedReceiver(), tasksFilter)
+            // Explicit export flag (required semantics on Android 14+); this receiver only needs
+            // the app's own process, so mark it not-exported.
+            ContextCompat.registerReceiver(this@App, PackageChangedReceiver(), tasksFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
 
             TASK_PROVIDERS.forEach {
                 // check whether a tasks app is currently installed

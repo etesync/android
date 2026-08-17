@@ -31,6 +31,9 @@
     <color name="secondaryLightColor">#81D4FA</color>
     <color name="secondaryDarkColor">#039BE5</color>
     <color name="primaryTextColor">#000000</color>
+    <!-- Previously provided transitively by the tourguide library's resources; defined
+         locally now that tourguide has been removed. Used by *_info_headline / contact_info layouts. -->
+    <color name="White">#FFFFFFFF</color>
 
     <color name="errorColor">#d32f2f</color>
     <color name="infoColor">#E8F4FD</color>

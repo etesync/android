@@ -73,11 +73,14 @@ class AddressBooksSyncAdapterService : SyncAdapterService() {
             val etebaseLocalCache = EtebaseLocalCache.getInstance(context, account.name)
             val collections: List<CachedCollection>
             synchronized(etebaseLocalCache) {
-                val httpClient = HttpClient.Builder(context, settings).setForeground(false).build()
-                val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
-                val colMgr = etebase.collectionManager
+                // Close the client so cert4android's CustomCertManager unbinds its service
+                // (otherwise the ServiceConnection leaks on every address-book sync).
+                HttpClient.Builder(context, settings).setForeground(false).build().use { httpClient ->
+                    val etebase = EtebaseLocalCache.getEtebase(context, httpClient.okHttpClient, settings)
+                    val colMgr = etebase.collectionManager
 
-                collections = etebaseLocalCache.collectionList(colMgr).filter { it.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK }
+                    collections = etebaseLocalCache.collectionList(colMgr).filter { it.collectionType == Constants.ETEBASE_TYPE_ADDRESS_BOOK }
+                }
             }
 
             for (collection in collections) {

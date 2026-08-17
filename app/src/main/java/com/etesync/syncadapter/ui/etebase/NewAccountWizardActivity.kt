@@ -1,6 +1,7 @@
 package com.etesync.syncadapter.ui.etebase
 
 import android.accounts.Account
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -61,6 +62,10 @@ class NewAccountWizardActivity : BaseActivity() {
 
 
 fun reportErrorHelper(context: Context, e: Throwable) {
+    // Don't add a dialog window to an activity that is already finishing/destroyed
+    // (the wizard may navigate away while this coroutine resumes) — it would leak the window.
+    if (context is Activity && (context.isFinishing || context.isDestroyed))
+        return
     AlertDialog.Builder(context)
             .setIcon(R.drawable.ic_info_dark)
             .setTitle(R.string.exception)
