@@ -51,7 +51,7 @@ public class DavResourceFinderTest {
         credentials = new LoginCredentials(URI.create("/"), "mock", "12345");
         finder = new BaseConfigurationFinder(getTargetContext(), credentials);
 
-        client = HttpClient.create(null);
+        client = new HttpClient.Builder(null, null, java.util.logging.Logger.getLogger(HttpClient.class.getName())).build().getOkHttpClient();
     }
 
     @After
@@ -106,7 +106,7 @@ public class DavResourceFinderTest {
                                 "</resourcetype>";
                         break;
                 }
-                App.Companion.getLog().info("Sending props: " + props);
+                java.util.logging.Logger.getLogger(DavResourceFinderTest.class.getName()).info("Sending props: " + props);
                 return new MockResponse()
                         .setResponseCode(207)
                         .setBody("<multistatus xmlns='DAV:' xmlns:CARD='urn:ietf:params:xml:ns:carddav'>" +
