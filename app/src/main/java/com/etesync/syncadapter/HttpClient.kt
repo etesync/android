@@ -30,6 +30,53 @@ import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import javax.net.ssl.*
 
+internal fun filterEnabledTlsProtocols(enabledProtocols: Array<String>): Array<String> {
+    val filteredProtocols = enabledProtocols.filterNot { protocol ->
+        protocol.startsWith("SSL") ||
+                protocol == "TLSv1" ||
+                protocol == "TLSv1.0" ||
+                protocol == "TLSv1.1"
+    }
+
+    if (filteredProtocols.isEmpty())
+        throw SSLException("No supported TLS protocols remain after filtering legacy protocols")
+
+    return filteredProtocols.toTypedArray()
+}
+
+internal class TlsProtocolFilteringSocketFactory internal constructor(
+        private val delegate: SSLSocketFactory
+) : SSLSocketFactory() {
+
+    override fun getDefaultCipherSuites(): Array<String> = delegate.defaultCipherSuites
+
+    override fun getSupportedCipherSuites(): Array<String> = delegate.supportedCipherSuites
+
+    override fun createSocket(): Socket = configure(delegate.createSocket())
+
+    override fun createSocket(host: String?, port: Int): Socket =
+            configure(delegate.createSocket(host, port))
+
+    override fun createSocket(host: String?, port: Int, localHost: java.net.InetAddress?, localPort: Int): Socket =
+            configure(delegate.createSocket(host, port, localHost, localPort))
+
+    override fun createSocket(host: java.net.InetAddress?, port: Int): Socket =
+            configure(delegate.createSocket(host, port))
+
+    override fun createSocket(host: java.net.InetAddress?, port: Int, localHost: java.net.InetAddress?, localPort: Int): Socket =
+            configure(delegate.createSocket(host, port, localHost, localPort))
+
+    override fun createSocket(socket: Socket?, host: String?, port: Int, autoClose: Boolean): Socket =
+            configure(delegate.createSocket(socket, host, port, autoClose))
+
+    private fun configure(socket: Socket): Socket {
+        val sslSocket = socket as? SSLSocket
+                ?: throw SSLException("TLS socket factory created a non-SSL socket")
+        sslSocket.enabledProtocols = filterEnabledTlsProtocols(sslSocket.enabledProtocols)
+        return sslSocket
+    }
+}
+
 class HttpClient private constructor(
         val okHttpClient: OkHttpClient,
         private val certManager: CustomCertManager?
@@ -234,7 +281,7 @@ class HttpClient private constructor(
                     if (keyManager != null) arrayOf(keyManager) else null,
                     arrayOf(trustManager),
                     null)
-            orig.sslSocketFactory(sslContext.socketFactory, trustManager)
+            orig.sslSocketFactory(TlsProtocolFilteringSocketFactory(sslContext.socketFactory), trustManager)
             orig.hostnameVerifier(hostnameVerifier)
 
             return HttpClient(orig.build(), certManager)
